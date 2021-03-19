@@ -18,7 +18,11 @@
 	"require": {
 		"php": ">=8.0",
 		"yiisoft/yii2": "dev-master",
-		"yiisoft/yii2-bootstrap": "~2.0.0"
+		"yiisoft/yii2-bootstrap": "~2.0.0",
+		"pozitronik/yii2-users-options": "2.0.1.7",
+		"pozitronik/yii2-references": "dev-master",
+		"pozitronik/yii2-badgewidget": "dev-php8",
+		"pozitronik/yii2-cachedwidget": "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
