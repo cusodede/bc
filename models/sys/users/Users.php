@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  * @property string $username Отображаемое имя пользователя
  * @property string $login Логин
  * @property string $password Хеш пароля
- * @property string $salt Unique random salt hash
+ * @property null|string $salt Unique random salt hash
  * @property string $email email
  * @property string $comment Служебный комментарий пользователя
  * @property string $create_date Дата регистрации
@@ -26,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property-read string $authKey
 
  * *************************
+ * todo: если salt пустой, то разрешаем вход по логину/паролю
  */
 class Users extends ActiveRecord {
 	use ARExtended;

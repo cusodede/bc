@@ -16,7 +16,7 @@ class m180930_093408_sys_users extends Migration {
 			'username' => $this->string(255)->notNull()->comment('Отображаемое имя пользователя'),
 			'login' => $this->string(64)->notNull()->comment('Логин'),
 			'password' => $this->string(255)->notNull()->comment('Хеш пароля'),
-			'salt' => $this->string(255)->notNull()->comment('Unique random salt hash'),
+			'salt' => $this->string(255)->null()->comment('Unique random salt hash'),
 			'email' => $this->string(255)->notNull()->comment('email'),
 			'comment' => $this->text()->null()->comment('Служебный комментарий пользователя'),
 			'create_date' => $this->dateTime()->notNull()->comment('Дата регистрации'),
