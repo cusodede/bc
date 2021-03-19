@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use app\models\user\User;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use \yii\gii\Module as GiiModule;
