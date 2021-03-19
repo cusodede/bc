@@ -1,11 +1,18 @@
 <?php
 declare(strict_types = 1);
 
+use yii\caching\FileCache;
+use yii\debug\Module as DebugModule;
+use \yii\gii\Module as GiiModule;
+use yii\log\FileTarget;
+use yii\swiftmailer\Mailer;
+
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
 
 $config = [
 	'id' => 'basic',
+	'name' => 'Beeline Cabinet',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log'],
 	'aliases' => [
@@ -15,43 +22,42 @@ $config = [
 	'components' => [
 		'request' => [
 			// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-			'cookieValidationKey' => 'hC4DfEU6Un4ReHxTMOfgT8zd4qRnA8W_',
+			'cookieValidationKey' => 'cjhjrnsczxj3tpmzyd5jgeceyekb0fyfyf_',
 		],
 		'cache' => [
-			'class' => 'yii\caching\FileCache',
+			'class' => FileCache::class,
+//			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
-			'identityClass' => 'app\models\User',
-			'enableAutoLogin' => true,
+			'identityClass' => User::class,//todo User class
+			'enableAutoLogin' => true
 		],
 		'errorHandler' => [
-			'errorAction' => 'site/error',
+			'errorAction' => 'site/error'
 		],
 		'mailer' => [
-			'class' => 'yii\swiftmailer\Mailer',
-			// send all mails to a file by default. You have to set
-			// 'useFileTransport' to false and configure a transport
-			// for the mailer to send real emails.
+			'class' => Mailer::class,
 			'useFileTransport' => true,
 		],
 		'log' => [
 			'traceLevel' => YII_DEBUG?3:0,
 			'targets' => [
 				[
-					'class' => 'yii\log\FileTarget',
+					'class' => FileTarget::class,
 					'levels' => ['error', 'warning'],
 				],
 			],
 		],
 		'db' => $db,
-		/*
 		'urlManager' => [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
+			'enableStrictParsing' => false,
 			'rules' => [
-			],
-		],
-		*/
+				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
+				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
+			]
+		]
 	],
 	'params' => $params,
 ];
@@ -60,15 +66,13 @@ if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
 	$config['bootstrap'][] = 'debug';
 	$config['modules']['debug'] = [
-		'class' => 'yii\debug\Module',
-		// uncomment the following to add your IP if you are not connecting from localhost.
+		'class' => DebugModule::class,
 		//'allowedIPs' => ['127.0.0.1', '::1'],
 	];
 
 	$config['bootstrap'][] = 'gii';
 	$config['modules']['gii'] = [
-		'class' => 'yii\gii\Module',
-		// uncomment the following to add your IP if you are not connecting from localhost.
+		'class' => GiiModule::class
 		//'allowedIPs' => ['127.0.0.1', '::1'],
 	];
 }
