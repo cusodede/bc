@@ -1,6 +1,10 @@
 <?php
 declare(strict_types = 1);
 
+use yii\caching\FileCache;
+use yii\log\FileTarget;
+use \yii\gii\Module as GiiModule;
+
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
 
@@ -12,16 +16,15 @@ $config = [
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
-		'@tests' => '@app/tests',
 	],
 	'components' => [
 		'cache' => [
-			'class' => 'yii\caching\FileCache',
+			'class' => FileCache::class,
 		],
 		'log' => [
 			'targets' => [
 				[
-					'class' => 'yii\log\FileTarget',
+					'class' => FileTarget::class,
 					'levels' => ['error', 'warning'],
 				],
 			],
@@ -29,20 +32,13 @@ $config = [
 		'db' => $db,
 	],
 	'params' => $params,
-	/*
-	'controllerMap' => [
-		'fixture' => [ // Fixture generation command line.
-			'class' => 'yii\faker\FixtureController',
-		],
-	],
-	*/
 ];
 
 if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
 	$config['bootstrap'][] = 'gii';
 	$config['modules']['gii'] = [
-		'class' => 'yii\gii\Module',
+		'class' => GiiModule::class,
 	];
 }
 
