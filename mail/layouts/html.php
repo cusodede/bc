@@ -5,9 +5,9 @@ use yii\mail\MessageInterface;
 use yii\web\View;
 
 /**
- * @var $this View view component instance
- * @var $message MessageInterface the message being composed
- * @var $content string main view render result
+ * @var View $this view component instance
+ * @var MessageInterface $message the message being composed
+ * @var string $content main view render result
  */
 ?>
 <?php $this->beginPage() ?>
