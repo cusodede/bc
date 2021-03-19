@@ -1,5 +1,6 @@
 #Установка
-
-  git pull https://github.com/pozitronik/bc.git
-  composer install
+~~~
+git clone https://github.com/pozitronik/bc.git
+composer install
+~~~
   
