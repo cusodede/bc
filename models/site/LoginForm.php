@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
-use app\models\user\User;
+use app\models\User;
 use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\base\Model;

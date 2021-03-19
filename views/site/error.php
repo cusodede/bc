@@ -3,11 +3,12 @@ declare(strict_types = 1);
 /**
  * Шаблон страницы ошибки
  * @var View $this
- * @var Throwable $exception
+ * @var HttpException $exception
  */
 
 use yii\helpers\Html;
 use yii\web\View;
+use yii\web\HttpException;
 
 $message = $exception->getMessage();
 $this->title = $message;
@@ -17,7 +18,7 @@ $this->title = $message;
     <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-trans text-center">
             <div class="panel-heading">
-                <h1 class="error-code text-primary"><?= Html::encode($exception->statusCode) ?></h1>
+				<h1 class="error-code text-primary"><?= Html::encode($exception->statusCode) ?></h1>
             </div>
             <div class="panel-body">
                 <p><?= nl2br(Html::encode($message)) ?></p>
