@@ -6,35 +6,45 @@ declare(strict_types = 1);
  * @var string $content
  */
 
+use app\assets\AppAsset;
+use app\models\sys\users\CurrentUser;
+use app\widgets\navbar\NavbarWidget;
+use pozitronik\helpers\Utils;
+use yii\bootstrap\Alert;
 use yii\helpers\Html;
 use yii\web\View;
-use app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
-<?php $this->beginPage() ?>
 <!DOCTYPE html>
+<?php $this->beginPage(); ?>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-	<meta charset="<?= Yii::$app->charset ?>">
+	<meta charset="<?= Yii::$app->charset ?>"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php $this->registerCsrfMetaTags() ?>
-	<title><?= Html::encode($this->title) ?></title>
-	<?php $this->head() ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="commit" content="<?= Utils::LastCommit() ?>">
+	<?= Html::csrfMetaTags() ?>
+	<title><?= $this->title ?></title>
+	<?php $this->head(); ?>
 </head>
 <body>
-<?php $this->beginBody() ?>
-
-<?= $content ?>
-
-<footer class="footer">
-	<div class="container">
-		<p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+<?php $this->beginBody(); ?>
+<div id="container" class="mainnav-fixed print-content navbar-fixed">
+	<?= NavbarWidget::widget([
+		'user' => CurrentUser::model()
+	]) ?>
+	<div class="boxed">
+		<div id="content-container">
+			<div id="page-content">
+				<?= Alert::widget() ?>
+				<?= $content ?>
+			</div>
+		</div>
 	</div>
-</footer>
-
-<?php $this->endBody() ?>
+	<button class="scroll-top btn"><i class="pci-chevron chevron-up"></i></button>
+</div>
+<?php $this->endBody(); ?>
 </body>
+<?php $this->endPage(); ?>
 </html>
-<?php $this->endPage() ?>
