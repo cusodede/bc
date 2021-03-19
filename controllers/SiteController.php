@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\site\LoginForm;
 use app\models\sys\users\CurrentUser;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
 use yii\web\Controller;
 use yii\web\ErrorAction;
@@ -49,6 +50,7 @@ class SiteController extends Controller {
 
 	/**
 	 * @return string|Response
+	 * @throws Throwable
 	 */
 	public function actionIndex() {
 		return CurrentUser::isGuest()?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):CurrentUser::goHome();
