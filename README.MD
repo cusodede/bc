@@ -1,4 +1,4 @@
-#Установка
+#РЈСЃС‚Р°РЅРѕРІРєР°
 
   git pull https://github.com/pozitronik/bc.git
   composer install
