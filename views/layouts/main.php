@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\AppAsset;
+use app\assets\NiftyAsset;
 use app\models\sys\users\CurrentUser;
 use app\widgets\navbar\NavbarWidget;
 use pozitronik\helpers\Utils;
@@ -15,6 +16,7 @@ use yii\helpers\Html;
 use yii\web\View;
 
 AppAsset::register($this);
+NiftyAsset::register($this);
 ?>
 <!DOCTYPE html>
 <?php $this->beginPage(); ?>

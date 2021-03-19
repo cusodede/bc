@@ -7,10 +7,12 @@ declare(strict_types = 1);
  */
 
 use app\assets\LoginAsset;
+use app\assets\NiftyAsset;
 use yii\helpers\Html;
 use yii\web\View;
 
 LoginAsset::register($this);
+NiftyAsset::register($this);
 ?>
 <!DOCTYPE html>
 <?php $this->beginPage(); ?>
