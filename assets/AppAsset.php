@@ -24,7 +24,8 @@ class AppAsset extends AssetBundle {
 	public function init():void {
 		$this->sourcePath = __DIR__.'/assets/app/';
 		$this->css = [
-			'css/site.css'
+			'css/site.css',
+			'css/navigation.css'
 		];
 
 		$this->depends = [
