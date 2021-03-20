@@ -20,18 +20,18 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
- *
- * @property int|null $position Должность/позиция
+ * @property null|string $update_password Свойство обновления пароля
  *
  * @property-read string $authKey
 
- * *************************
- * todo: если salt пустой, то разрешаем вход по логину/паролю
  */
 class Users extends ActiveRecord {
 	use ARExtended;
 
-	public const PROFILE_IMAGE_DIRECTORY = '@app/web/profile_photos/';
+	/**
+	 * @var null|string
+	 */
+	public $update_password;
 
 	/**
 	 * {@inheritdoc}
@@ -48,7 +48,7 @@ class Users extends ActiveRecord {
 			[['username', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
-			[['daddy', 'position'], 'integer'],
+			[['daddy'], 'integer'],
 			[['deleted'], 'boolean'],
 			[['deleted'], 'default', 'value' => false],
 			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
@@ -75,6 +75,7 @@ class Users extends ActiveRecord {
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
 			'deleted' => 'Флаг удаления',
+			'update_password' => 'Изменение пароля'
 		];
 	}
 
@@ -95,7 +96,7 @@ class Users extends ActiveRecord {
 				$this->salt = sha1(uniqid((string)mt_rand(), true));
 				$this->password = sha1($this->password.$this->salt);
 			}
-		} elseif (!empty($this->update_password)) {
+		} elseif (null !== $this->update_password) {
 			$this->salt = sha1(uniqid((string)mt_rand(), true));
 			$this->password = sha1($this->update_password.$this->salt);
 		}
