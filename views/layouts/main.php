@@ -29,7 +29,7 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody(); ?>
-<div id="container">
+<div id="container" class="mainnav-fixed print-content">
 	<?= NavbarWidget::widget([
 		'user' => CurrentUser::model()
 	]) ?>
