@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace app\widgets\navbar;
 
 use app\models\sys\users\Users;
-use pozitronik\widgets\CachedWidget;
+use yii\base\Widget;
 
 /**
  * Class NavbarWidget
  */
-class NavbarWidget extends CachedWidget {
+class NavbarWidget extends Widget {
 	public $user;
 
 	/**
