@@ -11,7 +11,6 @@ use app\assets\NiftyAsset;
 use app\models\sys\users\CurrentUser;
 use app\widgets\navbar\NavbarWidget;
 use pozitronik\helpers\Utils;
-use yii\bootstrap\Alert;
 use yii\helpers\Html;
 use yii\web\View;
 
@@ -39,7 +38,6 @@ NiftyAsset::register($this);
 	<div class="boxed">
 		<div id="content-container">
 			<div id="page-content">
-				<?= Alert::widget() ?>
 				<?= $content ?>
 			</div>
 		</div>
