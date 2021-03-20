@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\targets;
+namespace app\assets;
 
 use yii\web\AssetBundle;
 
