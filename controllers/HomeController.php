@@ -14,7 +14,7 @@ class HomeController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionHome() {
+	public function actionHome():string {
 		return $this->render('home');
 	}
 
