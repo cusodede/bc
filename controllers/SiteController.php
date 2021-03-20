@@ -31,6 +31,7 @@ class SiteController extends Controller {
 
 	/**
 	 * @return string|Response
+	 * @throws Throwable
 	 */
 	public function actionLogin() {
 		$this->layout = 'login';

@@ -7,7 +7,6 @@ use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -49,7 +48,6 @@ class UsersController extends Controller {
 	 * Редактирование пользователя
 	 * @param int $id
 	 * @return string|Response|null
-	 * @throws InvalidConfigException
 	 * @throws Throwable
 	 */
 	public function actionUpdate(int $id) {
