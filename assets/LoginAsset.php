@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
+use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
 use yii\bootstrap\BootstrapAsset;
@@ -12,15 +13,25 @@ use yii\bootstrap\BootstrapAsset;
  * @package app\assets
  */
 class LoginAsset extends AssetBundle {
-	public $sourcePath = __DIR__.'/assets/login/';
-	public $css = [
-		'css/login.css'
-	];
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function init():void {
+		$this->sourcePath = __DIR__.'/assets/login/';
+		$this->css = [
+			'css/login.css'
+		];
 
-	public $depends = [
-		AppAsset::class,
-		YiiAsset::class,
-		BootstrapAsset::class,
-	];
+		$this->depends = [
+			AppAsset::class,
+			YiiAsset::class,
+			BootstrapAsset::class,
+		];
+
+		$this->publishOptions = [
+			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
+		];
+		parent::init();
+	}
 }

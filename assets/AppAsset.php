@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
+use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
 use yii\bootstrap\BootstrapAsset;
@@ -16,12 +17,25 @@ use yii\bootstrap\BootstrapAsset;
  * Main application asset bundle.
  */
 class AppAsset extends AssetBundle {
-	public $sourcePath = __DIR__.'/assets/app/';
-	public $css = [
-		'css/site.css',
-	];
-	public $depends = [
-		YiiAsset::class,
-		BootstrapAsset::class,
-	];
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function init():void {
+		$this->sourcePath = __DIR__.'/assets/app/';
+		$this->css = [
+			'css/site.css'
+		];
+
+		$this->depends = [
+			YiiAsset::class,
+			BootstrapAsset::class,
+		];
+
+		$this->publishOptions = [
+			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
+		];
+		parent::init();
+	}
+
 }
