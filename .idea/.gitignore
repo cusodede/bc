@@ -1,9 +1,12 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-# Datasource local storage ignored files
-/../../../../../../:\LIFE\openserver\domains\bc\.idea/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+# Datasource local storage ignored files
 /dataSources
+/inspectionProfiles/
+/dataSources.xml
+/encodings.xml
+/php.xml
