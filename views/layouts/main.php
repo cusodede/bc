@@ -8,10 +8,10 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\models\sys\users\CurrentUser;
-use app\widgets\navbar\NavbarWidget;
 use pozitronik\helpers\Utils;
 use yii\helpers\Html;
 use yii\web\View;
+use yii\widgets\Menu;
 
 AppAsset::register($this);
 ?>
@@ -30,8 +30,12 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody(); ?>
 <div id="container" class="mainnav-fixed print-content">
-	<?= NavbarWidget::widget([
-		'user' => CurrentUser::model()
+	<?php /* SearchWidget::widget()  todo*/?>
+	<?= Menu::widget([
+		'items' => [
+			['label' => 'Home', 'url' => CurrentUser::homeUrl()],
+			['label' => CurrentUser::model()->username, 'url' => ["/users/profile", "id" => CurrentUser::model()->id]]
+		]
 	]) ?>
 	<div class="boxed">
 		<div id="content-container">
@@ -40,7 +44,6 @@ AppAsset::register($this);
 			</div>
 		</div>
 	</div>
-	<button class="scroll-top btn"><i class="pci-chevron chevron-up"></i></button>
 </div>
 <?php $this->endBody(); ?>
 </body>
