@@ -16,13 +16,10 @@ use yii\bootstrap\BootstrapAsset;
  * Main application asset bundle.
  */
 class AppAsset extends AssetBundle {
-	public $basePath = '@webroot';
-	public $baseUrl = '@web';
+	public $sourcePath = __DIR__.'/assets/app/';
 	public $css = [
 		'css/site.css',
 	];
-//	public $js = [
-//	];
 	public $depends = [
 		YiiAsset::class,
 		BootstrapAsset::class,

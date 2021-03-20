@@ -12,8 +12,7 @@ use yii\bootstrap\BootstrapAsset;
  * @package app\assets
  */
 class LoginAsset extends AssetBundle {
-	public $basePath = '@webroot';
-	public $baseUrl = '@web';
+	public $sourcePath = __DIR__.'/assets/login/';
 	public $css = [
 		'css/login.css'
 	];

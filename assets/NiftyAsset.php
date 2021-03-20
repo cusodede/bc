@@ -12,8 +12,7 @@ use yii\bootstrap\BootstrapAsset;
  * @package app\assets
  */
 class NiftyAsset extends AssetBundle {
-	public $basePath = '@webroot';
-	public $baseUrl = '@web/templates/nifty';
+	public $sourcePath = __DIR__.'/assets/nifty/';
 	public $css = [
 		'css/nifty.min.css'
 	];
