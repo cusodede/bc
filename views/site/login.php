@@ -15,7 +15,7 @@ use yii\helpers\Html;
 
 $this->title = 'Вход';
 ?>
-<div class="cls-content-sm panel">
+<div class="panel">
 	<div class="panel-body">
 		<?php $form = ActiveForm::begin(); ?>
 		<div class="form-group">
@@ -24,12 +24,12 @@ $this->title = 'Вход';
 		<div class="form-group">
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
 		</div>
-		<div class="checkbox pad-btm text-left">
+		<div class="form-group">
 			<?= $form->field($login, 'rememberMe')->checkbox() ?>
 		</div>
 		<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 		<?php ActiveForm::end(); ?>
+		<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link mar-rgt']) ?>
+		<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link mar-lft']) ?>
 	</div>
-	<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link mar-rgt']) ?>
-	<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link mar-lft']) ?>
 </div>
