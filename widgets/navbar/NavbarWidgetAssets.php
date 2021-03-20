@@ -14,7 +14,7 @@ class NavbarWidgetAssets extends AssetBundle {
 	/**
 	 * @inheritdoc
 	 */
-	public function init() {
+	public function init():void {
 		$this->depends = [AppAsset::class];
 		$this->sourcePath = __DIR__.'/assets';
 		$this->css = ['css/navbar.css'];
