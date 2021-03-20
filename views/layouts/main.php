@@ -7,7 +7,6 @@ declare(strict_types = 1);
  */
 
 use app\assets\AppAsset;
-use app\assets\NiftyAsset;
 use app\models\sys\users\CurrentUser;
 use app\widgets\navbar\NavbarWidget;
 use pozitronik\helpers\Utils;
@@ -15,7 +14,6 @@ use yii\helpers\Html;
 use yii\web\View;
 
 AppAsset::register($this);
-NiftyAsset::register($this);
 ?>
 <!DOCTYPE html>
 <?php $this->beginPage(); ?>
@@ -31,7 +29,7 @@ NiftyAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody(); ?>
-<div id="container" class="mainnav-fixed print-content navbar-fixed">
+<div id="container">
 	<?= NavbarWidget::widget([
 		'user' => CurrentUser::model()
 	]) ?>
