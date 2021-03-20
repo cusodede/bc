@@ -8,10 +8,14 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\models\sys\users\CurrentUser;
+use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 use yii\web\View;
-use yii\widgets\Menu;
 
 AppAsset::register($this);
 ?>
@@ -29,22 +33,70 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody(); ?>
-<div id="container" class="mainnav-fixed print-content">
-	<?php /* SearchWidget::widget()  todo*/?>
-	<?= Menu::widget([
+<div class="navigation">
+	<?php NavBar::begin([
+		'renderInnerContainer' => false,
+		'options' => [
+			'class' => 'navbar'
+		]
+	]); ?>
+	<?= Nav::widget([
 		'items' => [
-			['label' => 'Home', 'url' => CurrentUser::homeUrl()],
-			['label' => CurrentUser::model()->username, 'url' => ["/users/profile", "id" => CurrentUser::model()->id]]
+			[
+				'label' => 'Домой',
+				'url' => CurrentUser::homeUrl()
+			],
+			[
+				'label' => 'Пользователи',
+				'items' => [
+					[
+						'label' => 'Все',
+						'url' => ['users/index']
+					]
+				],
+			],
+			SearchWidget::widget(),
+			[
+				'label' => CurrentUser::model()->username,
+				'options' => [
+					'class' => 'pull-right'
+				],
+				'items' => [
+					'<li class="dropdown-header">'.CurrentUser::model()->comment.'</li>',
+					[
+						'label' => "Профиль",
+						'url' => '#',
+						'options' => [
+							'onclick' => new JsExpression('alert("!@")')
+						]
+					],
+					'<li class="divider"></li>',
+					[
+						'label' => 'Выход',
+						'url' => Url::to(['site/logout']),
+						'options' => [
+							'class' => 'pull-right'
+						]
+					],
+				],
+			],
+
+		],
+		'options' => [
+			'class' => 'nav-pills pull-left'
 		]
 	]) ?>
-	<div class="boxed">
-		<div id="content-container">
-			<div id="page-content">
-				<?= $content ?>
-			</div>
+	<?php NavBar::end(); ?>
+</div>
+<div class="clearfix"></div>
+<div class="boxed">
+	<div id="content-container">
+		<div id="page-content">
+			<?= $content ?>
 		</div>
 	</div>
 </div>
+
 <?php $this->endBody(); ?>
 </body>
 <?php $this->endPage(); ?>
