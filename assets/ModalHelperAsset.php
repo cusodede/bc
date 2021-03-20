@@ -15,9 +15,9 @@ class ModalHelperAsset extends AssetBundle {
 	 */
 	public function init():void {
 		$this->sourcePath = __DIR__.'/assets/modalHelper/';
-		$this->css = [
-			'css/modalHelper.css'
-		];
+//		$this->css = [
+//			'css/modalHelper.css'
+//		];
 		$this->js = [
 			'js/modalHelper.js'
 		];
