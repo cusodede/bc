@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\users;
 
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
 use yii\web\Response;
 
@@ -14,9 +15,19 @@ class CurrentUser {
 
 	/**
 	 * Отправляет на домашнюю страницу
+	 * @return Response
+	 * @throws Throwable
 	 */
 	public static function goHome():Response {
-		return Yii::$app->response->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.homepage', ['home/home']));
+		return Yii::$app->response->redirect(self::homeUrl());
+	}
+
+	/**
+	 * @return array
+	 * @throws Throwable
+	 */
+	public static function homeUrl():array {
+		return ArrayHelper::getValue(Yii::$app->params, 'user.homepage', ['home/home']);
 	}
 
 	/**
