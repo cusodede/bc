@@ -18,17 +18,6 @@ use yii\web\Response;
 class UsersController extends Controller {
 
 	/**
-	 * Макро обновления данных юзера
-	 * @param Users $user
-	 * @return bool
-	 * @throws InvalidConfigException
-	 * @throws Throwable
-	 */
-	private static function tryUpdate(Users $user):bool {
-		return (null !== ($updateArray = Yii::$app->request->post($user->formName()))) && $user->updateModel($updateArray);
-	}
-
-	/**
 	 * Основной список пользователей
 	 * @return string
 	 * @throws Throwable
@@ -51,7 +40,6 @@ class UsersController extends Controller {
 	 */
 	public function actionProfile(int $id):?string {
 		if (null === $user = Users::findModel($id, new NotFoundHttpException())) return null;
-
 		return $this->render('profile', [
 			'model' => $user
 		]);
@@ -66,7 +54,7 @@ class UsersController extends Controller {
 	 */
 	public function actionUpdate(int $id) {
 		if (null === $user = Users::findModel($id, new NotFoundHttpException())) return null;
-		if (self::tryUpdate($user)) {
+		if (Yii::$app->request->isPost && $user->load(Yii::$app->request->post()) && $user->save()) {
 			return $this->redirect(['users/profile', 'id' => $id]);
 		}
 		return $this->render('update', [
