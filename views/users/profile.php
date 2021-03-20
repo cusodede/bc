@@ -7,15 +7,11 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use yii\data\ActiveDataProvider;
 use yii\web\View;
 use yii\helpers\Html;
 
 $this->title = "Профиль пользователя {$model->username}";
 $this->params['breadcrumbs'][] = $this->title;
-
-$this->registerJs("graphControl = new GraphControl(_.$('user-profile-tree-container'), '-1', $model->id); graphControl.network.on('afterDrawing', function() {graphControl.fitAnimated()})", View::POS_END);
-$this->registerJs("$('#user-profile-tree-container').css({'position':'relative'}) ", View::POS_END);
 ?>
 <div class="panel panel-default profile-panel">
 	<div class="panel-heading">
