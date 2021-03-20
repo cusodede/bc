@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 use app\models\User;
+use kartik\grid\Module as GridModule;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use \yii\gii\Module as GiiModule;
@@ -20,7 +21,13 @@ $config = [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
 	],
+	'modules' => [
+		'gridview' => [
+			'class' => GridModule::class
+		],
+	],
 	'components' => [
+
 		'request' => [
 			'cookieValidationKey' => 'cjhjrnsczxj3tpmzyd5jgeceyekb0fyfyf_',
 		],
