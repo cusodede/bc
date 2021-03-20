@@ -1,0 +1,36 @@
+.search-box {
+	margin: 3px 5px 0px 5px;
+	min-width: 500px;
+}
+
+.search-box .form-control {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	border-top-color: currentcolor;
+	border-right-color: currentcolor;
+	border-bottom-color: currentcolor;
+	border-left-color: currentcolor;
+	font-size: 13px;
+	height: 52px;
+	margin: 0;
+	padding: 0;
+}
+
+.suggestion-item {
+	white-space: normal !important;
+	padding: 3px 10px;
+}
+
+.suggestion-header {
+	border-bottom: 1px solid #CCCCCC;
+	margin: 0 !important;
+	padding: 10px;
+}
+
+.suggestion-name {
+	float: left;
+}
+
+.suggestion-links {
+	float: right;
+}
