@@ -1,6 +1,7 @@
 # Установка
 ~~~
 git clone https://github.com/pozitronik/bc.git
+cd bc
 composer install
 ~~~
 подключаем БД в web.php
