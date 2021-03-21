@@ -39,6 +39,11 @@ class UsersController extends Controller {
 	 */
 	public function actionProfile(int $id):?string {
 		if (null === $user = Users::findModel($id, new NotFoundHttpException())) return null;
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/profile', [
+				'model' => $user
+			]);
+		}
 		return $this->render('profile', [
 			'model' => $user
 		]);

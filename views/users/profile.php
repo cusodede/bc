@@ -13,6 +13,7 @@ use yii\helpers\Html;
 $this->title = "Профиль пользователя {$model->username}";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="panel panel-default profile-panel">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?= Html::encode($this->title) ?></h3>

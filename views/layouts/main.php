@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\AppAsset;
+use app\assets\ModalHelperAsset;
 use app\models\sys\users\CurrentUser;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
@@ -18,6 +19,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 
 AppAsset::register($this);
+ModalHelperAsset::register($this);
 ?>
 <!DOCTYPE html>
 <?php $this->beginPage(); ?>
@@ -67,7 +69,7 @@ AppAsset::register($this);
 						'label' => "Профиль",
 						'url' => '#',
 						'options' => [
-							'onclick' => new JsExpression('alert("!@")')
+							'onclick' => new JsExpression('AjaxModal("'.Url::to(['users/profile', 'id' => CurrentUser::Id()]).'", "users-modal-profile-'.CurrentUser::Id().'")')
 						]
 					],
 					'<li class="divider"></li>',
