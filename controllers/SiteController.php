@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\site\LoginForm;
-use app\models\sys\users\CurrentUser;
+use app\models\sys\users\CurrentUserHelper;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
@@ -37,7 +37,7 @@ class SiteController extends Controller {
 		$this->layout = 'login';
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->doLogin()) {
-			return CurrentUser::goHome();
+			return CurrentUserHelper::goHome();
 		}
 		return $this->render('login', [
 			'login' => $model
@@ -54,7 +54,7 @@ class SiteController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionIndex() {
-		return CurrentUser::isGuest()?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):CurrentUser::goHome();
+		return CurrentUserHelper::isGuest()?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):CurrentUserHelper::goHome();
 	}
 
 	/**

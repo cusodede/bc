@@ -55,7 +55,7 @@ class Users extends ActiveRecord {
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
-			[['daddy'], 'default', 'value' => CurrentUser::Id()],
+			[['daddy'], 'default', 'value' => CurrentUserHelper::Id()],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()]//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
 		];
 	}

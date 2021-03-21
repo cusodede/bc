@@ -9,9 +9,9 @@ use Yii;
 use yii\web\Response;
 
 /**
- * Class CurrentUser
+ * Class CurrentUserHelper
  */
-class CurrentUser {
+class CurrentUserHelper {
 
 	/**
 	 * Отправляет на домашнюю страницу

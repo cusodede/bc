@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
-use app\models\sys\users\CurrentUser;
+use app\models\sys\users\CurrentUserHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
 use yii\bootstrap\Nav;
@@ -46,7 +46,7 @@ ModalHelperAsset::register($this);
 		'items' => [
 			[
 				'label' => 'Домой',
-				'url' => CurrentUser::homeUrl()
+				'url' => CurrentUserHelper::homeUrl()
 			],
 			[
 				'label' => 'Пользователи',
@@ -59,17 +59,17 @@ ModalHelperAsset::register($this);
 			],
 			SearchWidget::widget(),
 			[
-				'label' => CurrentUser::model()->username,
+				'label' => CurrentUserHelper::model()->username,
 				'options' => [
 					'class' => 'pull-right'
 				],
 				'items' => [
-					'<li class="dropdown-header">'.CurrentUser::model()->comment.'</li>',
+					'<li class="dropdown-header">'.CurrentUserHelper::model()->comment.'</li>',
 					[
 						'label' => "Профиль",
 						'url' => '#',
 						'options' => [
-							'onclick' => new JsExpression('AjaxModal("'.Url::to(['users/profile', 'id' => CurrentUser::Id()]).'", "users-modal-profile-'.CurrentUser::Id().'")')
+							'onclick' => new JsExpression('AjaxModal("'.Url::to(['users/profile', 'id' => CurrentUserHelper::Id()]).'", "users-modal-profile-'.CurrentUserHelper::Id().'")')
 						]
 					],
 					'<li class="divider"></li>',
