@@ -38,31 +38,31 @@ class AjaxController extends Controller {
 	}
 
 	/**
-	 * Аяксовый поиск пользователя в Select2
+	 * Аяксовый поиск пользователя в глобальной искалке
 	 * @param string|null $term
+	 * @param int $limit
 	 * @return string[][]
 	 */
-	public function actionSearchUsers(?string $term):array {
-		$out = ['results' => ['id' => '', 'text' => '']];
-		if (null !== $term) {
-			$tableName = Users::tableName();
-			$data = Users::find()
-				->select(["{$tableName}.id", "{$tableName}.username as text"])
-				->where(['like', "{$tableName}.username", "%$term%", false])
-				->active()
-				->distinct()
-				->asArray()
-				->all();
-			$out['results'] = array_values($data);
-		}
-		return $out;
+	public function actionSearchUsers(?string $term, int $limit = 5):array {
+		$tableName = Users::tableName();
+		/** @var Users[] $found */
+		$found = Users::find()
+			->select(["{$tableName}.id", "{$tableName}.username as name"])
+			->where(['like', "{$tableName}.username", "%$term%", false])
+			->active()
+			->distinct()
+			->limit($limit)
+			->asArray()
+			->all();
+		return $found;
 	}
 
 	/**
 	 * Применение настроек
 	 * @return array
 	 */
-	public function actionSetSystemOption():array {
+	public
+	function actionSetSystemOption():array {
 		$valueType = Yii::$app->request->post('type', 'string');
 		switch ($valueType) {//JS types
 			default:
