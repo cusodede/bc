@@ -10,7 +10,7 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
 
-$userTemplate = '<div class="suggestion-item"><div class="suggestion-name">{{name}}</div><div class="suggestion-links"><a href="'.Url::to(['user/profile']).'?id={{id}}" class="dashboard-button btn btn-xs btn-info pull-left">Профиль<a/></div><div class="clearfix"></div>';
+$userTemplate = '<div class="suggestion-item"><div class="suggestion-name">{{name}}</div><div class="suggestion-links"><a href="'.Url::to(['users/profile']).'?id={{id}}" class="dashboard-button btn btn-xs btn-info pull-left">Профиль<a/></div><div class="clearfix"></div>';
 
 ?>
 <?= Typeahead::widget([
