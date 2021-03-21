@@ -4,16 +4,6 @@
 }
 
 .search-box .form-control {
-	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-	border: medium none;
-	border-top-color: currentcolor;
-	border-right-color: currentcolor;
-	border-bottom-color: currentcolor;
-	border-left-color: currentcolor;
-	font-size: 13px;
-	height: 52px;
-	margin: 0;
-	padding: 0;
 }
 
 .suggestion-item {
