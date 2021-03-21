@@ -19,6 +19,9 @@ class ModalHelperAsset extends AssetBundle {
 		$this->js = [
 			'js/modalHelper.js'
 		];
+		$this->css = [
+			'css/modalHelper.css'
+		];
 		$this->publishOptions = [
 			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
 		];
