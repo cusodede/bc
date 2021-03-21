@@ -12,6 +12,8 @@ yii migrate
 yii service/init
 ~~~
 
+Вход - admin/admin
+
 # Соглашения по структуре
 ## Всему своё место:
 
