@@ -61,4 +61,8 @@ public function actionProfile(int $id):?string {
 **LoadModal()**: загружает в тело существующей модалки новый контент из renderAjax-вью.<br />
 **AjaxModal()**: загружает renderAjax-вью в контейнер с прелоадером (контейнер создастся, если не существует).
 
-**
+**Системные настройки**: @vendor/pozitronik/yii2-options/src/models/SysOptions.php<br />
+Штука для хранения key-value параметров в БД с промежуточным кешированием. Предназначена для выноса параметров из конфига, например, для изменения через интерфейс. Вся дока внутри.
+
+**Пользовательские настройки**: @vendor/pozitronik/yii2-users-options/src/models/UsersOptions.php<br />
+Штука для хранение key-value per user параметров в БД с промежуточным кешированием. Этакие серверные кукисы.
