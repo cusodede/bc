@@ -10,8 +10,6 @@ use yii\web\Controller;
  * Class ServiceController
  */
 class ServiceController extends Controller {
-//	todo: action list generator in trait
-//	todo: url-generation like ServiceController::url(string $actionName, array $parameters = []])
 
 	/**
 	 * @return string|Response
