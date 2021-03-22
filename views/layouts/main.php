@@ -64,6 +64,10 @@ ModalHelperAsset::register($this);
 					[
 						'label' => 'Протокол сбоев',
 						'url' => SysExceptionsModule::to('index')
+					],
+					[
+						'label' => 'Процессы на БД',
+						'url' => Url::to(['/db/process-list'])
 					]
 				],
 			],
