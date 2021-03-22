@@ -53,7 +53,7 @@ ModalHelperAsset::register($this);
 				'items' => [
 					[
 						'label' => 'Все',
-						'url' => ['users/index']
+						'url' => Url::to(['users/index'])
 					]
 				],
 			],

@@ -6,6 +6,7 @@ namespace app\models\sys\users;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Response;
 
 /**
@@ -27,7 +28,7 @@ class CurrentUserHelper {
 	 * @throws Throwable
 	 */
 	public static function homeUrl():array {
-		return ArrayHelper::getValue(Yii::$app->params, 'user.homepage', ['home/home']);
+		return ArrayHelper::getValue(Yii::$app->params, 'user.homepage', Url::to(['home/home']));
 	}
 
 	/**
