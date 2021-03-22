@@ -22,7 +22,8 @@
 		"pozitronik/yii2-users-options": "dev-master",
 		"pozitronik/yii2-options": "dev-master",
 		"pozitronik/yii2-references": "dev-master",
-		"pozitronik/yii2-badgewidget": "dev-php8",
+		"pozitronik/yii2-exceptionslogger": "dev-master",
+		"pozitronik/yii2-badgewidget": "dev-master",
 		"pozitronik/yii2-cachedwidget": "dev-master",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "*"
