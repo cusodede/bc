@@ -11,7 +11,6 @@ use yii\web\Response;
 
 /**
  * Class DbController
- * @package app\controllers\admin
  */
 class DbController extends Controller {
 
