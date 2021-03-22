@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\site\LoginForm;
 use app\models\sys\users\CurrentUserHelper;
+use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
@@ -17,6 +18,7 @@ use yii\web\Response;
  * @package app\controllers
  */
 class SiteController extends Controller {
+	use ControllerTrait;
 
 	/**
 	 * @inheritdoc

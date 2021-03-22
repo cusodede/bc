@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
+use pozitronik\core\traits\ControllerTrait;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -15,6 +16,7 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends Controller {
+	use ControllerTrait;
 
 	/**
 	 * Основной список пользователей

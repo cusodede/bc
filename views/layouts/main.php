@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
+use app\controllers\SiteController;
+use app\controllers\UsersController;
 use app\models\sys\users\CurrentUserHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
@@ -18,6 +20,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
+use app\controllers\DbController;
 
 AppAsset::register($this);
 ModalHelperAsset::register($this);
@@ -54,7 +57,7 @@ ModalHelperAsset::register($this);
 				'items' => [
 					[
 						'label' => 'Все',
-						'url' => Url::to(['users/index'])//todo: разобраться с чуваками про генерацию урлов
+						'url' => UsersController::to('index')
 					]
 				],
 			],
@@ -67,7 +70,7 @@ ModalHelperAsset::register($this);
 					],
 					[
 						'label' => 'Процессы на БД',
-						'url' => Url::to(['/db/process-list'])
+						'url' => DbController::to('process-list')
 					]
 				],
 			],
@@ -89,7 +92,7 @@ ModalHelperAsset::register($this);
 					'<li class="divider"></li>',
 					[
 						'label' => 'Выход',
-						'url' => Url::to(['site/logout']),
+						'url' => SiteController::to('logout'),
 						'options' => [
 							'class' => 'pull-right'
 						]

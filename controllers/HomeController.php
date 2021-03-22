@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use pozitronik\core\traits\ControllerTrait;
 use yii\web\Controller;
 
 /**
@@ -10,6 +11,7 @@ use yii\web\Controller;
  * @package app\controllers
  */
 class HomeController extends Controller {
+	use ControllerTrait;
 
 	/**
 	 * @return string

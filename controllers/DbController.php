@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use pozitronik\core\models\DbMonitor;
+use pozitronik\core\traits\ControllerTrait;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
@@ -13,7 +14,7 @@ use yii\web\Response;
  * Class DbController
  */
 class DbController extends Controller {
-
+	use ControllerTrait;
 	/**
 	 * Список процессов на базе данных
 	 * @return string
