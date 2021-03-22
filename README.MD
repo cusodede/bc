@@ -6,8 +6,9 @@ composer install
 ~~~
 подключаем БД в web.php
 ~~~
-yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/src/migrations
-yii migrate --migrationPath=@vendor/pozitronik/yii2-options/src/migrations
+yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations
+yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations
+yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations
 yii migrate
 yii service/init
 ~~~
