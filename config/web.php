@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\User;
 use kartik\grid\Module as GridModule;
+use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use \yii\gii\Module as GiiModule;
@@ -25,6 +26,11 @@ $config = [
 		'gridview' => [
 			'class' => GridModule::class
 		],
+		'sysexceptions' => [
+			'class' => SysExceptionsModule::class,
+			'defaultRoute' => 'index'
+		]
+
 	],
 	'components' => [
 
