@@ -11,6 +11,7 @@ use app\assets\ModalHelperAsset;
 use app\models\sys\users\CurrentUserHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
+use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\helpers\Html;
@@ -53,7 +54,16 @@ ModalHelperAsset::register($this);
 				'items' => [
 					[
 						'label' => 'Все',
-						'url' => Url::to(['users/index'])
+						'url' => Url::to(['users/index'])//todo: разобраться с чуваками про генерацию урлов
+					]
+				],
+			],
+			[
+				'label' => 'Система',
+				'items' => [
+					[
+						'label' => 'Протокол сбоев',
+						'url' => SysExceptionsModule::to('index')
 					]
 				],
 			],
