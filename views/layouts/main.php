@@ -47,7 +47,7 @@ ModalHelperAsset::register($this);
 		'items' => [
 			[
 				'label' => 'Домой',
-				'url' => CurrentUserHelper::homeUrl()
+				'url' => Url::home()
 			],
 			[
 				'label' => 'Пользователи',
