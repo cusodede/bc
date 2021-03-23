@@ -9,6 +9,7 @@ composer install
 yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations
 yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations
 yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations
+yii migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations
 yii migrate
 yii service/init
 ~~~
