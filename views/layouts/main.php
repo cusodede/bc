@@ -12,6 +12,7 @@ use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\models\sys\users\CurrentUserHelper;
 use app\widgets\search\SearchWidget;
+use pozitronik\filestorage\FSModule;
 use pozitronik\helpers\Utils;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap\Nav;
@@ -71,6 +72,10 @@ ModalHelperAsset::register($this);
 					[
 						'label' => 'Процессы на БД',
 						'url' => DbController::to('process-list')
+					],
+					[
+						'label' => 'Файловый менеджер',
+						'url' => FSModule::to('index')
 					]
 				],
 			],
