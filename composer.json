@@ -25,6 +25,7 @@
 		"pozitronik/yii2-exceptionslogger": "dev-master",
 		"pozitronik/yii2-badgewidget": "dev-master",
 		"pozitronik/yii2-cachedwidget": "dev-master",
+		"pozitronik/yii2-filestorage": "dev-master",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "*"
 	},
