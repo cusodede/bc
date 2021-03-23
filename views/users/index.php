@@ -8,10 +8,10 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\controllers\UsersController;
 use app\models\sys\users\UsersSearch;
 use pozitronik\helpers\Utils;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
 use yii\web\View;
 use kartik\grid\GridView;
 use yii\bootstrap\Html;
@@ -24,9 +24,9 @@ use yii\bootstrap\Html;
 	'panel' => [
 		'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']).")":" (нет пользователей)"),
 	],
-	'summary' => null !== $searchModel?Html::a('Новый пользователь', Url::to(['users/create']), ['class' => 'btn btn-success summary-content']):null,
+	'summary' => null !== $searchModel?Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success summary-content']):null,
 	'showOnEmpty' => true,
-	'emptyText' => Html::a('Новый пользователь', Url::to(['users/create']), ['class' => 'btn btn-success']),
+	'emptyText' => Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success']),
 	'toolbar' => false,
 	'export' => false,
 	'resizableColumns' => true,

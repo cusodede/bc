@@ -86,7 +86,7 @@ ModalHelperAsset::register($this);
 						'label' => "Профиль",
 						'url' => '#',
 						'options' => [
-							'onclick' => new JsExpression('AjaxModal("'.Url::to(['users/profile', 'id' => CurrentUserHelper::Id()]).'", "users-modal-profile-'.CurrentUserHelper::Id().'")')
+							'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => CurrentUserHelper::Id()]).'", "users-modal-profile-'.CurrentUserHelper::Id().'")')
 						]
 					],
 					'<li class="divider"></li>',
