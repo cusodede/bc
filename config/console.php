@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
 use \yii\gii\Module as GiiModule;
@@ -16,6 +17,19 @@ $config = [
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
+	],
+	'modules' => [
+		'filestorage' => [
+			'class' => FSModule::class,
+			'defaultRoute' => 'index',
+			'params' => [
+				'tableName' => 'sys_file_storage',//используемая таблица хранения метаданных
+				'tableNameTags' => 'sys_file_storage_tags',//используемая таблица хранения тегов
+				'base_dir' => '@app/web/uploads/',//каталог хранения файлов
+				'models_subdirs' => true,//файлы каждой модели кладутся в подкаталог с именем модели
+				'name_subdirs_length' => 2//если больше 0, то файлы загружаются в подкаталоги по именам файлов (параметр регулирует длину имени подкаталогов)
+			]
+		]
 	],
 	'components' => [
 		'cache' => [

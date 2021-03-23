@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\User;
 use kartik\grid\Module as GridModule;
+use pozitronik\filestorage\FSModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
@@ -29,8 +30,18 @@ $config = [
 		'sysexceptions' => [
 			'class' => SysExceptionsModule::class,
 			'defaultRoute' => 'index'
+		],
+		'filestorage' => [
+			'class' => FSModule::class,
+			'defaultRoute' => 'index',
+			'params' => [
+				'tableName' => 'sys_file_storage',//используемая таблица хранения метаданных
+				'tableNameTags' => 'sys_file_storage_tags',//используемая таблица хранения тегов
+				'base_dir' => '@app/web/uploads/',//каталог хранения файлов
+				'models_subdirs' => true,//файлы каждой модели кладутся в подкаталог с именем модели
+				'name_subdirs_length' => 2//если больше 0, то файлы загружаются в подкаталоги по именам файлов (параметр регулирует длину имени подкаталогов)
+			]
 		]
-
 	],
 	'components' => [
 
