@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\User;
 use kartik\grid\Module as GridModule;
+use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\caching\FileCache;
@@ -75,6 +76,9 @@ $config = [
 					'levels' => ['error', 'warning'],
 				],
 			],
+		],
+		'sse' => [
+			'class' => LibSSE::class
 		],
 		'db' => $db,
 		'urlManager' => [
