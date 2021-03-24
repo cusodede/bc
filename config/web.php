@@ -9,7 +9,9 @@ use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use \yii\gii\Module as GiiModule;
 use yii\log\FileTarget;
+use yii\rest\UrlRule;
 use yii\swiftmailer\Mailer;
+use yii\web\JsonParser;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
@@ -44,9 +46,11 @@ $config = [
 		]
 	],
 	'components' => [
-
 		'request' => [
 			'cookieValidationKey' => 'cjhjrnsczxj3tpmzyd5jgeceyekb0fyfyf_',
+			'parsers' => [
+				'application/json' => JsonParser::class
+			]
 		],
 		'cache' => [
 			'class' => FileCache::class,
@@ -78,8 +82,9 @@ $config = [
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
 			'rules' => [
-				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
-				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
+				['class' => UrlRule::class, 'controller' => 'api/users'],
+//				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
+//				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
 			]
 		]
 	],
