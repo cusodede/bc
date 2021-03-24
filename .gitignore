@@ -1,7 +1,5 @@
 /composer.lock
 /vendor
 /.idea/bc.iml
-/controllers/TestController.php
-/views/test/
 /web/assets/
 /web/uploads/
