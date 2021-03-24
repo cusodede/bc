@@ -79,6 +79,15 @@ ModalHelperAsset::register($this);
 					]
 				],
 			],
+			[
+				'label' => 'REST API',
+				'items' => [
+					[
+						'label' => 'Пользователи',
+						'url' => '/api/users',
+					]
+				]
+			],
 			SearchWidget::widget(),
 			[
 				'label' => CurrentUserHelper::model()->username,
