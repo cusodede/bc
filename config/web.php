@@ -5,7 +5,9 @@ use app\models\User;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
+use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
+use pozitronik\widgets\GridConfig;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use \yii\gii\Module as GiiModule;
@@ -44,6 +46,9 @@ $config = [
 				'models_subdirs' => true,//файлы каждой модели кладутся в подкаталог с именем модели
 				'name_subdirs_length' => 2//если больше 0, то файлы загружаются в подкаталоги по именам файлов (параметр регулирует длину имени подкаталогов)
 			]
+		],
+		'gridconfig' => [
+			'class' => GridConfigModule::class
 		]
 	],
 	'components' => [
