@@ -26,6 +26,7 @@
 		"pozitronik/yii2-badgewidget": "dev-master",
 		"pozitronik/yii2-cachedwidget": "dev-master",
 		"pozitronik/yii2-filestorage": "dev-master",
+		"pozitronik/yii2-grid-config": "dev-master",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "*",
 		"odannyc/yii2-sse": "dev-master"
