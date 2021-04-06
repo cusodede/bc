@@ -91,7 +91,9 @@ class PermissionsAR extends ActiveRecord {
 			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
 			->where(['directPermissions.user_id' => $user_id])
 			->orWhere(['collectionPermissions.user_id' => $user_id])
-			->orderBy(['priority', 'id'])
+			->orderBy([
+				'priority' => SORT_DESC,
+				'id' => SORT_ASC])
 			->all();
 	}
 
