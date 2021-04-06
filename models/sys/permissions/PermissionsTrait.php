@@ -6,13 +6,14 @@ namespace app\models\sys\permissions;
 use app\models\core\CacheHelper;
 use app\models\sys\users\Users;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
 use yii\caching\TagDependency;
 
 /**
  * Class Permissions
  * Управление правами доступа
- * @property $id Model primary key attribute name
+ * @property int $id Model primary key attribute name
  */
 trait PermissionsTrait {
 	/**
@@ -24,7 +25,7 @@ trait PermissionsTrait {
 	 * @param string[] $permissions Названия прав, к которым проверяются доступы
 	 * @param int $logic Логика проверки
 	 * @return bool
-	 *
+	 * @throws Throwable
 	 */
 	public function hasPermission(array $permissions, int $logic = Permissions::LOGIC_OR):bool {
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, func_get_args(), ['id' => $this->id]);
