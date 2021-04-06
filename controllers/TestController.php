@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\sse\MessageEventHandler;
+use app\models\sys\users\CurrentUserHelper;
 use app\models\sys\users\Users;
 use pozitronik\core\models\SqlDebugInfo;
 use pozitronik\core\traits\ControllerTrait;
@@ -80,4 +81,10 @@ class TestController extends Controller {
 		return $this->render('sse-client');
 	}
 
+	/**
+	 * Тесты доступов
+	 */
+	public function actionPermissions():void {
+		Utils::log(CurrentUserHelper::model()->allPermissions());
+	}
 }
