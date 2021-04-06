@@ -24,7 +24,7 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
  */
-class PermissionsAR extends ActiveRecord {
+abstract class PermissionsAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
