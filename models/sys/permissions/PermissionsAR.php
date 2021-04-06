@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  * @property string|null $comment Описание доступа
  * @property int $priority Приоритет использования (больше - выше)
  */
-class Permissions extends ActiveRecord {
+class PermissionsAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
