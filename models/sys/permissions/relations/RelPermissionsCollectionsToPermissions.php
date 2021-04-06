@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\relations;
 
+use app\models\sys\permissions\Permissions;
+use app\models\sys\permissions\PermissionsCollections;
+use pozitronik\core\traits\Relations;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -11,8 +15,13 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $collection_id Ключ группы доступа
  * @property int $permission_id Ключ правила доступа
+ *
+ * @property PermissionsCollections $relatedPermissionsCollections Связанная группа доступов
+ * @property Permissions $relatedPermissions Связанный доступ
  */
 class RelPermissionsCollectionsToPermissions extends ActiveRecord {
+	use Relations;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -40,5 +49,19 @@ class RelPermissionsCollectionsToPermissions extends ActiveRecord {
 			'collection_id' => 'Collection ID',
 			'permission_id' => 'Permission ID',
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollections():ActiveQuery {
+		return $this->hasMany(PermissionsCollections::class, ['id' => 'collection_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissions():ActiveQuery {
+		return $this->hasMany(Permissions::class, ['id' => 'permission_id']);
 	}
 }
