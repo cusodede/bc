@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
+use app\models\sys\permissions\PermissionsTrait;
 use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
@@ -27,6 +28,7 @@ use yii\db\ActiveRecord;
  */
 class Users extends ActiveRecord {
 	use ARExtended;
+	use PermissionsTrait;
 
 	/**
 	 * @var null|string
