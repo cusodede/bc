@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\relations;
 
+use app\models\sys\permissions\PermissionsCollections;
+use app\models\sys\users\Users;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -11,6 +14,9 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $user_id Ключ объекта доступа
  * @property int $collection_id Ключ группы доступа
+ *
+ * @property Users $relatedUsers Связанная модель пользователя
+ * @property PermissionsCollections $relatedPermissionsCollections Связанная группа доступа
  */
 class RelUsersToPermissionsCollections extends ActiveRecord {
 	/**
@@ -41,4 +47,19 @@ class RelUsersToPermissionsCollections extends ActiveRecord {
 			'collection_id' => 'Collection ID',
 		];
 	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsers():ActiveQuery {
+		return $this->hasMany(Users::class, ['id' => 'user_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollections():ActiveQuery {
+		return $this->hasMany(PermissionsCollections::class, ['id' => 'collection_id']);
+	}
+
 }
