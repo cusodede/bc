@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
+use app\models\sys\permissions\relations\RelUsersToPermissions;
+use app\models\sys\permissions\relations\RelUsersToPermissionsCollections;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -15,6 +19,10 @@ use yii\db\ActiveRecord;
  * @property string|null $verb REST-метод, для которого устанавливается доступ
  * @property string|null $comment Описание доступа
  * @property int $priority Приоритет использования (больше - выше)
+ *
+ * @property RelUsersToPermissions[] $relatedUsersToPermissions Связь к промежуточной таблице к правам доступа
+ * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
+ * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
  */
 class PermissionsAR extends ActiveRecord {
 	/**
@@ -51,4 +59,40 @@ class PermissionsAR extends ActiveRecord {
 			'priority' => 'Priority',
 		];
 	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersToPermissions():ActiveQuery {
+		return $this->hasMany(RelUsersToPermissions::class, ['permission_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollectionsToPermissions():ActiveQuery {
+		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['permission_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersToPermissionsCollections():ActiveQuery {
+		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
+	}
+
+	/**
+	 * @param int $user_id
+	 * @return self[]
+	 */
+	public static function allUserPermissions(int $user_id):array {
+		return self::find()
+			->distinct()
+			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
+			->where(['directPermissions.user_id' => $user_id])
+			->orWhere(['collectionPermissions.user_id' => $user_id])
+			->orderBy(['priority', 'id'])
+			->all();
+	}
+
 }
