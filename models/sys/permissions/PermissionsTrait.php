@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions;
 
 use app\models\core\CacheHelper;
-use app\models\sys\users\Users;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
@@ -56,9 +55,9 @@ trait PermissionsTrait {
 	/**
 	 * Все доступы пользователя, отсортированные по приоритету от большего к меньшему
 	 * Учитываются доступы групп пользователя + прямые доступы, без разделения
-	 * @param Users|null $user Модель пользователя, null - текущий
 	 * @param bool $force false (default): получить кешированный набор прав; true: получить актуальный набор прав с обновлением кеша
 	 * @return self[]
+	 * @throws Throwable
 	 */
 	public function allPermissions(bool $force = false):array {
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, func_get_args(), ['id' => $this->id]);

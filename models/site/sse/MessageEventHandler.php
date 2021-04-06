@@ -15,14 +15,14 @@ class MessageEventHandler extends SSEBase {
 	/**
 	 * @inheritDoc
 	 */
-	public function check() {
+	public function check():bool {
 		return true;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function update() {
+	public function update():string {
 		return "Update ".self::$i++;
 	}
 }

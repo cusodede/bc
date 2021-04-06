@@ -29,7 +29,7 @@ class TestController extends Controller {
 	 * @throws ReflectionException
 	 * @throws UnknownClassException
 	 */
-	public function actionIndex() {
+	public function actionIndex():string {
 		$actions = self::GetControllerActions();
 		return $this->render('index', [
 			'actions' => $actions
@@ -68,7 +68,7 @@ class TestController extends Controller {
 	/**
 	 *
 	 */
-	public function actionSse() {
+	public function actionSse():void {
 		/** @noinspection PhpUndefinedFieldInspection */
 		$sse = Yii::$app->sse;
 		$sse->addEventListener('message', new MessageEventHandler());
@@ -78,7 +78,7 @@ class TestController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionSseClient() {
+	public function actionSseClient():string {
 		return $this->render('sse-client');
 	}
 
