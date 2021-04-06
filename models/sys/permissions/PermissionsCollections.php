@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -11,6 +13,9 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string|null $name Название группы доступа
  * @property string|null $comment Описание группы доступа
+ *
+ * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
+ * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  */
 class PermissionsCollections extends ActiveRecord {
 	/**
@@ -41,4 +46,19 @@ class PermissionsCollections extends ActiveRecord {
 			'comment' => 'Comment',
 		];
 	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollectionsToPermissions():ActiveQuery {
+		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['collection_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissions():ActiveQuery {
+		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedPermissionsCollectionsToPermissions');
+	}
+
 }
