@@ -69,6 +69,7 @@ class TestController extends Controller {
 	 *
 	 */
 	public function actionSse() {
+		/** @noinspection PhpUndefinedFieldInspection */
 		$sse = Yii::$app->sse;
 		$sse->addEventListener('message', new MessageEventHandler());
 		$sse->start();
