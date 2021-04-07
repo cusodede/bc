@@ -15,8 +15,8 @@ use yii\db\ActiveRecord;
  * @property int $user_id Ключ объекта доступа
  * @property int $permission_id Ключ правила доступа
  *
- * @property Users $relatedUsers Связанная модель пользователя
- * @property PermissionsAR $relatedPermissions Связанное право доступа
+ * @property null|Users $relatedUsers Связанная модель пользователя
+ * @property null|PermissionsAR $relatedPermissions Связанное право доступа
  */
 class RelUsersToPermissions extends ActiveRecord {
 	/**
@@ -52,13 +52,13 @@ class RelUsersToPermissions extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUsers():ActiveQuery {
-		return $this->hasMany(Users::class, ['id' => 'user_id']);
+		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissions():ActiveQuery {
-		return $this->hasMany(PermissionsAR::class, ['id' => 'permission_id']);
+		return $this->hasOne(PermissionsAR::class, ['id' => 'permission_id']);
 	}
 }
