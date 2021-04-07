@@ -17,17 +17,11 @@ use yii\widgets\ActiveForm;
 	<div class="panel-heading">
 	</div>
 	<div class="panel-body">
-		<?= $this->render('subviews/editPanelBody', [
-			'model' => $model,
-			'form' => $form
-		]) ?>
+		<?= $this->render('subviews/editPanelBody', compact('model', 'form')) ?>
 
 	</div>
 	<div class="panel-footer">
-		<?= $this->render('subviews/editPanelFooter', [
-			'model' => $model,
-			'form' => $form
-		]) ?>
+		<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
 		<div class="clearfix"></div>
 	</div>
 </div>

@@ -34,9 +34,6 @@ use yii\widgets\ActiveForm;
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => 'permissions-collections-modal-edit', 'action' => PermissionsCollectionsController::to('edit', ['id' => $model->id])]) ?>
-<?= $this->render('../subviews/editPanelBody', [
-	'model' => $model,
-	'form' => $form
-]) ?>
+<?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
