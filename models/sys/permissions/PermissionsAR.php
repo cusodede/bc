@@ -6,6 +6,7 @@ namespace app\models\sys\permissions;
 use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
 use app\models\sys\permissions\relations\RelUsersToPermissions;
 use app\models\sys\permissions\relations\RelUsersToPermissionsCollections;
+use app\models\sys\users\Users;
 use pozitronik\core\traits\ARExtended;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -24,6 +25,8 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissions[] $relatedUsersToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
+ * @property Users[] $relatedUsers Связь к пользователям, имеющим этот доступ напрямую
+ * @property PermissionsCollectionsAR[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
  */
 abstract class PermissionsAR extends ActiveRecord {
 	use ARExtended;
@@ -83,20 +86,19 @@ abstract class PermissionsAR extends ActiveRecord {
 		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
 
+
 	/**
-	 * @param int $user_id
-	 * @return self[]
+	 * @return ActiveQuery
 	 */
-	public static function allUserPermissions(int $user_id):array {
-		return self::find()
-			->distinct()
-			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
-			->where(['directPermissions.user_id' => $user_id])
-			->orWhere(['collectionPermissions.user_id' => $user_id])
-			->orderBy([
-				'priority' => SORT_DESC,
-				'id' => SORT_ASC])
-			->all();
+	public function getRelatedUsers():ActiveQuery {
+		return $this->hasMany(Users::class, ['id' => 'user_id'])->via('relatedUsersToPermissions');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollections():ActiveQuery {
+		return $this->hasMany(PermissionsCollectionsAR::class, ['id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
 
 }
