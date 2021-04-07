@@ -9,7 +9,7 @@ namespace app\models\core;
  */
 class TemporaryHelper {
 
-	const VERBS = [
+	public const VERBS = [
 		'GET' => 'GET',
 		'HEAD' => 'HEAD',
 		'POST' => 'POST',

@@ -19,7 +19,7 @@ class PermissionsController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	public function actions() {
+	public function actions():array {
 		$defaultEditableActionConfig = [
 			'class' => EditableColumnAction::class,
 			'modelClass' => PermissionsSearch::class,
