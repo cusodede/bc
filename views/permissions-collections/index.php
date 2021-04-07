@@ -7,10 +7,12 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\ModalHelperAsset;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
+use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
@@ -18,8 +20,9 @@ use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\web\View;
-
+ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
 	'id' => 'permissions-index-grid',
@@ -41,6 +44,17 @@ use yii\web\View;
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
+			[
+				'class' => ActionColumn::class,
+				'template' => '{edit}',
+				'buttons' => [
+					'edit' => static function(string $url, PermissionsCollections $model) {
+						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', 'permissions-collections-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+				],
+			],
 			'name',
 			'comment',
 			[
