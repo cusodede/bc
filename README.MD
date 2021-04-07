@@ -96,6 +96,7 @@ public function actionProfile(int $id):?string {
 		return $this->hasMany(PermissionsCollectionsAR::class, ['id' => 'permission_collection_id'])->via('%relation_to_permission_collections_name%');
 	}
 	```
+	*Пояснение:* типы данных для атрибута связи и его геттера в Yii *не совпадают*. Функция всегда возвращает ActiveQuery, а атрибут — результат его выполнения (one()/all() для hasOne()/hasMany()). Таким образом, можно (и нужно) использовать атрибут и его геттер по назначению, в соответствии с этим соглашением. 
  
 **```via()``` или ```viaTable()```?**<br />
 Только ```via()```.<br />
