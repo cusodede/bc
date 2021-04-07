@@ -13,4 +13,20 @@ final class Permissions extends PermissionsAR {
 	public const LOGIC_AND = 1;
 	/*Ни одно из перечисленных прав*/
 	public const LOGIC_NOT = 2;
+
+	/**
+	 * @param int $user_id
+	 * @return self[]
+	 */
+	public static function allUserPermissions(int $user_id):array {
+		return self::find()
+			->distinct()
+			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
+			->where(['directPermissions.user_id' => $user_id])
+			->orWhere(['collectionPermissions.user_id' => $user_id])
+			->orderBy([
+				'priority' => SORT_DESC,
+				'id' => SORT_ASC])
+			->all();
+	}
 }
