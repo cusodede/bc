@@ -6,6 +6,7 @@ namespace app\models\sys\permissions;
 use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
 use app\models\sys\permissions\relations\RelUsersToPermissions;
 use app\models\sys\permissions\relations\RelUsersToPermissionsCollections;
+use pozitronik\core\traits\ARExtended;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -25,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
  */
 abstract class PermissionsAR extends ActiveRecord {
+	use ARExtended;
 	/**
 	 * {@inheritdoc}
 	 */
