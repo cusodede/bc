@@ -25,10 +25,7 @@ class PermissionsSearch extends Permissions {
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
 			'attributes' => [
-				'id',
-				'username',
-				'login',
-				'email',
+				'id'
 			]
 		]);
 
