@@ -8,7 +8,6 @@ declare(strict_types = 1);
  */
 
 use app\controllers\PermissionsController;
-use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
@@ -44,7 +43,7 @@ use yii\web\View;
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsersToPermissionsCollections',
-				'value' => static function(Permissions $permission) {
+				'value' => static function(PermissionsSearch $permission) {
 					return BadgeWidget::widget([
 						'models' => $permission->relatedPermissionsCollections,
 						'attribute' => 'name'
@@ -55,7 +54,7 @@ use yii\web\View;
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsers',
-				'value' => static function(Permissions $permission) {
+				'value' => static function(PermissionsSearch $permission) {
 					return BadgeWidget::widget([
 						'models' => $permission->relatedUsers,
 						'attribute' => 'username'
