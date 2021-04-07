@@ -16,7 +16,7 @@ class PermissionsSearch extends Permissions {
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = Permissions::find()->active();
+		$query = self::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
