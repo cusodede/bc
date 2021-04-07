@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 		'attribute' => 'name',
 		'itemsSeparator' => '',
 	]),
-	'footer' => $this->render('../subviews/editFooter', [
+	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => 'permissions-modal-edit'
 	]),//post button outside the form
@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => 'permissions-modal-edit', 'action' => PermissionsController::to('edit', ['id' => $model->id])]) ?>
-<?= $this->render('../subviews/editPanel', [
+<?= $this->render('../subviews/editPanelBody', [
 	'model' => $model,
 	'form' => $form
 ]) ?>
