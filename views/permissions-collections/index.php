@@ -8,6 +8,7 @@ declare(strict_types = 1);
  */
 
 use app\controllers\PermissionsCollectionsController;
+use app\controllers\PermissionsController;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
 use kartik\grid\DataColumn;
@@ -28,10 +29,14 @@ use yii\web\View;
 		'panel' => [
 			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['группа', 'группы', 'групп']).")":" (нет групп)"),
 		],
+		'toolbar' => [
+			[
+				'content' => Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn pull-left btn-info'])
+			]
+		],
 		'summary' => null !== $searchModel?Html::a('Новая группа', PermissionsCollectionsController::to('create'), ['class' => 'btn btn-success summary-content']):null,
 		'showOnEmpty' => true,
 		'emptyText' => Html::a('Новая группа', PermissionsCollectionsController::to('create'), ['class' => 'btn btn-success']),
-		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
