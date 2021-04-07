@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions\active_record;
 
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
+use pozitronik\core\traits\ARExtended;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -18,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  */
 class PermissionsCollections extends ActiveRecord {
+	use ARExtended;
 	/**
 	 * {@inheritdoc}
 	 */
