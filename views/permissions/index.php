@@ -9,14 +9,21 @@ declare(strict_types = 1);
 
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\models\core\TemporaryHelper;
+use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
+use kartik\editable\Editable;
 use kartik\grid\DataColumn;
+use kartik\grid\EditableColumn;
 use kartik\grid\GridView;
+use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\grid_config\GridConfig;
+use pozitronik\helpers\ArrayHelper;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
+use yii\web\Controller;
 use yii\web\View;
 
 ?>
@@ -40,11 +47,102 @@ use yii\web\View;
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
-			'name',
-			'priority',
-			'controller',
-			'action',
-			'verb',
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_TEXT
+					];
+				},
+				'attribute' => 'name',
+				'format' => 'text'
+			],
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_TEXTAREA,
+					];
+				},
+				'attribute' => 'comment',
+				'format' => 'text'
+			],
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_SPIN,
+						'options' => [
+							'pluginOptions' => [
+								'min' => Permissions::PRIORITY_MIN,
+								'max' => Permissions::PRIORITY_MAX
+							]
+						]
+					];
+				},
+				'attribute' => 'priority',
+				'format' => 'text'
+			],
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_SELECT2,
+						'options' => [
+							'data' => ArrayHelper::map(ControllerHelper::GetControllersList('@app/controllers', null, [Controller::class]), 'id', 'id'),
+							'pluginOptions' => [
+								'allowClear' => true
+							]
+						]
+					];
+				},
+				'attribute' => 'controller',
+				'format' => 'text'
+			],
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editAction'),
+						],
+						'inputType' => Editable::INPUT_TEXT
+					];
+				},
+				'attribute' => 'action',
+				'format' => 'text'
+			],
+			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_SELECT2,
+						'options' => [
+							'data' => TemporaryHelper::VERBS,
+							'pluginOptions' => [
+								'allowClear' => true
+							]
+						]
+					];
+				},
+				'attribute' => 'verb',
+				'format' => 'text'
+			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsersToPermissionsCollections',
