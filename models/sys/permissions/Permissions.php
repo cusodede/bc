@@ -3,10 +3,13 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+
+use app\models\sys\permissions\active_record\Permissions as ActiveRecordPermissions;
+
 /**
  * Class Permissions
  */
-final class Permissions extends PermissionsAR {
+final class Permissions extends ActiveRecordPermissions {
 	/*Любое из перечисленных прав*/
 	public const LOGIC_OR = 0;
 	/*Все перечисленные права*/

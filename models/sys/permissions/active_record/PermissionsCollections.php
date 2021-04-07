@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\sys\permissions;
+namespace app\models\sys\permissions\active_record;
 
-use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
+use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -15,9 +15,9 @@ use yii\db\ActiveRecord;
  * @property string|null $comment Описание группы доступа
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
- * @property PermissionsAR[] $relatedPermissions Входящие в группу доступа права доступа
+ * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  */
-class PermissionsCollectionsAR extends ActiveRecord {
+class PermissionsCollections extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
@@ -58,7 +58,7 @@ class PermissionsCollectionsAR extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissions():ActiveQuery {
-		return $this->hasMany(PermissionsAR::class, ['id' => 'permission_id'])->via('relatedPermissionsCollectionsToPermissions');
+		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
 
 }

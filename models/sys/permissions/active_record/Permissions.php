@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\sys\permissions;
+namespace app\models\sys\permissions\active_record;
 
-use app\models\sys\permissions\relations\RelPermissionsCollectionsToPermissions;
-use app\models\sys\permissions\relations\RelUsersToPermissions;
-use app\models\sys\permissions\relations\RelUsersToPermissionsCollections;
+use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
+use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
+use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\users\Users;
 use pozitronik\core\traits\ARExtended;
 use yii\db\ActiveQuery;
@@ -26,9 +26,9 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
  * @property Users[] $relatedUsers Связь к пользователям, имеющим этот доступ напрямую
- * @property PermissionsCollectionsAR[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
+ * @property PermissionsCollections[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
  */
-abstract class PermissionsAR extends ActiveRecord {
+abstract class Permissions extends ActiveRecord {
 	use ARExtended;
 	/**
 	 * {@inheritdoc}
@@ -98,7 +98,7 @@ abstract class PermissionsAR extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollections():ActiveQuery {
-		return $this->hasMany(PermissionsCollectionsAR::class, ['id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
+		return $this->hasMany(PermissionsCollections::class, ['id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
 
 }

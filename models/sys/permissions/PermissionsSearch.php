@@ -3,12 +3,13 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\sys\permissions\active_record\Permissions;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class PermissionsSearch
  */
-class PermissionsSearch extends PermissionsAR {
+class PermissionsSearch extends Permissions {
 
 	/**
 	 * @param array $params

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\sys\permissions\relations;
+namespace app\models\sys\permissions\active_record\relations;
 
-use app\models\sys\permissions\PermissionsCollectionsAR;
+use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  * @property int $collection_id Ключ группы доступа
  *
  * @property null|Users $relatedUsers Связанная модель пользователя
- * @property null|PermissionsCollectionsAR $relatedPermissionsCollections Связанная группа доступа
+ * @property null|PermissionsCollections $relatedPermissionsCollections Связанная группа доступа
  */
 class RelUsersToPermissionsCollections extends ActiveRecord {
 	/**
@@ -59,7 +59,7 @@ class RelUsersToPermissionsCollections extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollections():ActiveQuery {
-		return $this->hasOne(PermissionsCollectionsAR::class, ['id' => 'collection_id']);
+		return $this->hasOne(PermissionsCollections::class, ['id' => 'collection_id']);
 	}
 
 }
