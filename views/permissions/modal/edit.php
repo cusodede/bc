@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
 		'backdrop' => true
 	],
 	'options' => [
-		'class' => 'target-modal-detail modal-dialog-large',
+		'class' => 'modal-dialog-large',
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => 'permissions-modal-edit', 'action' => PermissionsController::to('edit', ['id' => $model->id])]) ?>
