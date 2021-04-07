@@ -16,8 +16,8 @@ use yii\db\ActiveRecord;
  * @property int $collection_id Ключ группы доступа
  * @property int $permission_id Ключ правила доступа
  *
- * @property PermissionsCollectionsAR $relatedPermissionsCollections Связанная группа доступов
- * @property PermissionsAR $relatedPermissions Связанный доступ
+ * @property null|PermissionsCollectionsAR $relatedPermissionsCollections Связанная группа доступов
+ * @property null|PermissionsAR $relatedPermissions Связанный доступ
  */
 class RelPermissionsCollectionsToPermissions extends ActiveRecord {
 	use Relations;
@@ -55,13 +55,13 @@ class RelPermissionsCollectionsToPermissions extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollections():ActiveQuery {
-		return $this->hasMany(PermissionsCollectionsAR::class, ['id' => 'collection_id']);
+		return $this->hasOne(PermissionsCollectionsAR::class, ['id' => 'collection_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissions():ActiveQuery {
-		return $this->hasMany(PermissionsAR::class, ['id' => 'permission_id']);
+		return $this->hasOne(PermissionsAR::class, ['id' => 'permission_id']);
 	}
 }
