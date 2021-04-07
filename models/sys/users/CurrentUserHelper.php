@@ -6,7 +6,6 @@ namespace app\models\sys\users;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
-use yii\helpers\Url;
 use yii\web\Response;
 
 /**
