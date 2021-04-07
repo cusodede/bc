@@ -17,6 +17,10 @@ final class Permissions extends ActiveRecordPermissions {
 	/*Ни одно из перечисленных прав*/
 	public const LOGIC_NOT = 2;
 
+	/*Минимальный/максимальный приоритет*/
+	public const PRIORITY_MIN = 0;
+	public const PRIORITY_MAX = 100;
+
 	/**
 	 * @param int $user_id
 	 * @return self[]
