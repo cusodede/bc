@@ -8,10 +8,13 @@ declare(strict_types = 1);
  */
 
 use app\controllers\PermissionsController;
+use app\models\sys\permissions\PermissionsAR;
 use app\models\sys\permissions\PermissionsSearch;
+use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\web\View;
@@ -31,6 +34,35 @@ use yii\web\View;
 		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
-		'responsive' => true
+		'responsive' => true,
+		'columns' => [
+			'name',
+			'priority',
+			'controller',
+			'action',
+			'verb',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'relatedUsersToPermissionsCollections',
+				'value' => static function(PermissionsAR $permission) {
+					return BadgeWidget::widget([
+						'models' => $permission->relatedPermissionsCollections,
+						'attribute' => 'name'
+					]);
+				},
+				'format' => 'raw'
+			],
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'relatedUsers',
+				'value' => static function(PermissionsAR $permission) {
+					return BadgeWidget::widget([
+						'models' => $permission->relatedUsers,
+						'attribute' => 'username'
+					]);
+				},
+				'format' => 'raw'
+			]
+		]
 	])
 ]) ?>
