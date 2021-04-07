@@ -26,10 +26,9 @@ class UsersSearch extends Users {
 	/**
 	 * @param array $params
 	 * @param int[] $allowedGroups
-	 * @param bool $pagination
 	 * @return ActiveDataProvider
 	 */
-	public function search(array $params, array $allowedGroups = [], $pagination = true):ActiveDataProvider {
+	public function search(array $params, array $allowedGroups = []):ActiveDataProvider {
 		$query = Users::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
@@ -47,7 +46,6 @@ class UsersSearch extends Users {
 		]);
 
 		$this->load($params);
-		if (false === $pagination) $dataProvider->pagination = $pagination;
 
 		if (!$this->validate()) return $dataProvider;
 
