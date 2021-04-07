@@ -28,7 +28,7 @@ use yii\db\ActiveRecord;
  * @property Users[] $relatedUsers Связь к пользователям, имеющим этот доступ напрямую
  * @property PermissionsCollections[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
  */
-abstract class Permissions extends ActiveRecord {
+class Permissions extends ActiveRecord {
 	use ARExtended;
 	/**
 	 * {@inheritdoc}
