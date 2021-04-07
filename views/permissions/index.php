@@ -7,25 +7,26 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\ModalHelperAsset;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\models\core\TemporaryHelper;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\editable\Editable;
+use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\EditableColumn;
 use kartik\grid\GridView;
-use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\ArrayHelper;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
-use yii\web\Controller;
+use yii\web\JsExpression;
 use yii\web\View;
 
+ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
 	'id' => 'permissions-index-grid',
@@ -47,6 +48,17 @@ use yii\web\View;
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
+			[
+				'class' => ActionColumn::class,
+				'template' => '{edit}',
+				'buttons' => [
+					'edit' => static function(string $url, PermissionsSearch $model) {
+						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', 'permissions-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+				],
+			],
 			[
 				'class' => EditableColumn::class,
 				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
@@ -101,7 +113,7 @@ use yii\web\View;
 						],
 						'inputType' => Editable::INPUT_SELECT2,
 						'options' => [
-							'data' => ArrayHelper::map(ControllerHelper::GetControllersList('@app/controllers', null, [Controller::class]), 'id', 'id'),
+							'data' => TemporaryHelper::GetControllersList(),
 							'pluginOptions' => [
 								'allowClear' => true
 							]

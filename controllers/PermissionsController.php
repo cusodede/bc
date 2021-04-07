@@ -3,12 +3,16 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class PermissionsController
@@ -47,6 +51,9 @@ class PermissionsController extends Controller {
 		]);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function actionIndex():string {
 		$params = Yii::$app->request->queryParams;
 		$searchModel = new PermissionsSearch();
@@ -54,5 +61,25 @@ class PermissionsController extends Controller {
 		$dataProvider = $searchModel->search($params);
 
 		return $this->render('index', compact('searchModel', 'dataProvider'));
+	}
+
+	/**
+	 * @param int $id
+	 * @return string|Response
+	 * @throws Throwable
+	 */
+	public function actionEdit(int $id) {
+		if (null === $permission = Permissions::findModel($id, new NotFoundHttpException())) return null;
+		if ($permission->updateModel(Yii::$app->request->post($permission->formName()))) {
+			return $this->redirect('index');
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/edit', [
+				'model' => $permission
+			]);
+		}
+		return $this->render('edit', [
+			'model' => $permission
+		]);
 	}
 }
