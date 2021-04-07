@@ -15,8 +15,8 @@ use yii\db\ActiveRecord;
  * @property int $user_id Ключ объекта доступа
  * @property int $collection_id Ключ группы доступа
  *
- * @property Users $relatedUsers Связанная модель пользователя
- * @property PermissionsCollectionsAR $relatedPermissionsCollections Связанная группа доступа
+ * @property null|Users $relatedUsers Связанная модель пользователя
+ * @property null|PermissionsCollectionsAR $relatedPermissionsCollections Связанная группа доступа
  */
 class RelUsersToPermissionsCollections extends ActiveRecord {
 	/**
@@ -52,14 +52,14 @@ class RelUsersToPermissionsCollections extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUsers():ActiveQuery {
-		return $this->hasMany(Users::class, ['id' => 'user_id']);
+		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollections():ActiveQuery {
-		return $this->hasMany(PermissionsCollectionsAR::class, ['id' => 'collection_id']);
+		return $this->hasOne(PermissionsCollectionsAR::class, ['id' => 'collection_id']);
 	}
 
 }
