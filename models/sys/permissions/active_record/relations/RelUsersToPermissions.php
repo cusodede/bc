@@ -5,6 +5,7 @@ namespace app\models\sys\permissions\active_record\relations;
 
 use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\users\Users;
+use pozitronik\core\traits\Relations;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -19,6 +20,8 @@ use yii\db\ActiveRecord;
  * @property null|Permissions $relatedPermissions Связанное право доступа
  */
 class RelUsersToPermissions extends ActiveRecord {
+	use Relations;
+
 	/**
 	 * {@inheritdoc}
 	 */
