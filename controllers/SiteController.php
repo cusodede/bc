@@ -52,10 +52,10 @@ class SiteController extends Controller {
 	}
 
 	/**
-	 * @return string|Response
+	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionIndex() {
+	public function actionIndex():Response {
 		return CurrentUserHelper::isGuest()?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):CurrentUserHelper::goHome();
 	}
 

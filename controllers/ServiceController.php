@@ -14,9 +14,9 @@ class ServiceController extends Controller {
 	use ControllerTrait;
 	
 	/**
-	 * @return string|Response
+	 * @return string
 	 */
-	public function actionIndex() {
+	public function actionIndex():string {
 		return $this->render('index');
 	}
 

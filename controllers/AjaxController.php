@@ -46,7 +46,7 @@ class AjaxController extends Controller {
 	public function actionSearchUsers(?string $term, int $limit = 5):array {
 		$tableName = Users::tableName();
 		/** @var Users[] $found */
-		$found = Users::find()
+		return Users::find()
 			->select(["{$tableName}.id", "{$tableName}.username as name"])
 			->where(['like', "{$tableName}.username", "%$term%", false])
 			->active()
@@ -54,7 +54,6 @@ class AjaxController extends Controller {
 			->limit($limit)
 			->asArray()
 			->all();
-		return $found;
 	}
 
 	/**
