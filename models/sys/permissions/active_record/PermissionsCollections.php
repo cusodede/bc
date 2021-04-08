@@ -6,6 +6,7 @@ namespace app\models\sys\permissions\active_record;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -68,6 +69,7 @@ class PermissionsCollections extends ActiveRecord {
 
 	/**
 	 * @param array $relatedPermissions
+	 * @throws Throwable
 	 */
 	public function setRelatedPermissions(array $relatedPermissions):void {
 		RelPermissionsCollectionsToPermissions::linkModels($this, $relatedPermissions);
