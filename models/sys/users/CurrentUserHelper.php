@@ -27,7 +27,7 @@ class CurrentUserHelper {
 	 * @throws Throwable
 	 */
 	public static function homeUrl():array {
-		return ArrayHelper::getValue(Yii::$app->params, 'user.homepage', ['home/home']);
+		return (array)ArrayHelper::getValue(Yii::$app->params, 'user.homepage', ['home/home']);
 	}
 
 	/**
