@@ -31,7 +31,8 @@
 		"kartik-v/yii2-widget-typeahead": "dev-master",
 		"kartik-v/yii2-editable": "dev-master",
 		"kartik-v/yii2-widget-touchspin": "dev-master",
-		"odannyc/yii2-sse": "dev-master"
+		"odannyc/yii2-sse": "dev-master",
+		"2amigos/yii2-multi-select-widget" : "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
