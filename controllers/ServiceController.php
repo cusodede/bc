@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use pozitronik\core\traits\ControllerTrait;
-use yii\base\Response;
 use yii\web\Controller;
 
 /**
