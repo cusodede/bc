@@ -9,7 +9,7 @@ use app\models\sys\permissions\active_record\Permissions as ActiveRecordPermissi
 /**
  * Class Permissions
  */
-final class Permissions extends ActiveRecordPermissions {
+class Permissions extends ActiveRecordPermissions {
 	/*Любое из перечисленных прав*/
 	public const LOGIC_OR = 0;
 	/*Все перечисленные права*/
