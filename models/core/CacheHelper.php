@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\core;
 
-use pozitronik\sys_exceptions\models\SysExceptions;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -17,13 +15,9 @@ trait CacheHelper {
 	 * @param array $parameters Массив аргументов функции (всегда func_get_args())
 	 * @param array $attributes Массив дополнительных аргументов, для включения в подпись
 	 * @return string
-	 * @throws Throwable
 	 */
 	public static function MethodParametersSignature(array $parameters, array $attributes = []):string {
-		if (false === $value = serialize($parameters + $attributes)) {
-			SysExceptions::log(new RuntimeException("Переданный набор параметров не может быть сериализован"), true);
-		}
-		return $value;
+		return serialize($parameters + $attributes);
 	}
 
 	/**
