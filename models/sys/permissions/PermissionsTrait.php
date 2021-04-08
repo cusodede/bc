@@ -86,7 +86,7 @@ trait PermissionsTrait {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissions():ActiveQuery {
-		return $this->hasMany(RelUsersToPermissions::class, ['permission_id' => 'permission_id'])->via('relatedUsersToPermissions');
+		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedUsersToPermissions');
 	}
 
 	/**
@@ -94,6 +94,7 @@ trait PermissionsTrait {
 	 */
 	public function setRelatedPermissions(array $relatedPermissions):void {
 		//todo
+		//todo: очищать кеш
 	}
 
 	/**
@@ -107,7 +108,7 @@ trait PermissionsTrait {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollections():ActiveQuery {
-		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'collection_id'])->via('relatedUsersToPermissionsCollections');
+		return $this->hasMany(PermissionsCollections::class, ['id' => 'collection_id'])->via('relatedUsersToPermissionsCollections');
 	}
 
 	/**
@@ -115,6 +116,7 @@ trait PermissionsTrait {
 	 */
 	public function setRelatedPermissionsCollections(array $relatedPermissionsCollections):void {
 		//todo
+		//todo: очищать кеш
 	}
 
 }
