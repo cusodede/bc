@@ -52,16 +52,16 @@ ModalHelperAsset::register($this);
 				'class' => ActionColumn::class,
 				'template' => '{edit}',
 				'buttons' => [
-					'edit' => static function(string $url, PermissionsSearch $model) {
+					'edit' => static function(string $url, Permissions $model) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', 'permissions-modal-edit-{$model->id}');event.preventDefault();")
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
@@ -74,7 +74,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
@@ -87,7 +87,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
@@ -106,7 +106,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
@@ -125,7 +125,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editAction'),
@@ -138,7 +138,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(PermissionsSearch $permission, int $key, int $index) {
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
@@ -158,7 +158,7 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsersToPermissionsCollections',
-				'value' => static function(PermissionsSearch $permission) {
+				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'models' => $permission->relatedPermissionsCollections,
 						'attribute' => 'name'
@@ -169,7 +169,7 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsers',
-				'value' => static function(PermissionsSearch $permission) {
+				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'models' => $permission->relatedUsers,
 						'attribute' => 'username'

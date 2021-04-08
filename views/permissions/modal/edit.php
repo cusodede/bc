@@ -6,7 +6,6 @@ declare(strict_types = 1);
  * @var Permissions $model
  */
 
-use app\controllers\PermissionsController;
 use app\models\sys\permissions\Permissions;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap\Modal;
@@ -15,7 +14,7 @@ use yii\widgets\ActiveForm;
 
 ?>
 <?php Modal::begin([
-	'id' => "permissions-modal-edit-{$model->id}",
+	'id' => "{$model->formName()}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
 	'header' => BadgeWidget::widget([
 		'models' => $model,
@@ -24,7 +23,7 @@ use yii\widgets\ActiveForm;
 	]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
-		'form' => 'permissions-modal-edit'
+		'form' => "{$model->formName()}-modal-edit"
 	]),//post button outside the form
 	'clientOptions' => [
 		'backdrop' => true
@@ -33,7 +32,7 @@ use yii\widgets\ActiveForm;
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => 'permissions-modal-edit', 'action' => PermissionsController::to('edit', ['id' => $model->id])]) ?>
+<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-edit"]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
