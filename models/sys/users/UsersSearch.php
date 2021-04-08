@@ -6,10 +6,7 @@ namespace app\models\sys\users;
 use yii\data\ActiveDataProvider;
 
 /**
- * UsersSearch represents the model behind the search form about `app\models\users\Users`.
  * Class UsersSearch
- * @package app\models\users
- *
  */
 class UsersSearch extends Users {
 
