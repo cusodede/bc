@@ -13,6 +13,7 @@ use dosamigos\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
 use yii\web\View;
+
 $this->registerCss(".ms-container {width:100%}");
 
 ?>
@@ -33,7 +34,7 @@ $this->registerCss(".ms-container {width:100%}");
 			'options' => [
 				'multiple' => true,
 			],
-			'data' => ArrayHelper::getColumn(Permissions::find()->all(), 'name'),
+			'data' => ArrayHelper::map(Permissions::find()->all(), 'id', 'name'),
 		]) ?>
 	</div>
 </div>
