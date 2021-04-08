@@ -27,7 +27,7 @@ class User extends BaseObject implements IdentityInterface {
 	 * @inheritdoc
 	 */
 	public static function findIdentity($id) {
-		self::fillUserData(Users::findModel($id));
+		self::fillUserData(Users::findOne($id));
 		return new static(self::$users);
 	}
 
