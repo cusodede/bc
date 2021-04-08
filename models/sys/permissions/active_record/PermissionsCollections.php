@@ -5,6 +5,7 @@ namespace app\models\sys\permissions\active_record;
 
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use pozitronik\core\traits\ARExtended;
+use pozitronik\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -17,9 +18,11 @@ use yii\db\ActiveRecord;
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
+ * @property-read Permissions[] $unrelatedPermissions Права доступа, которые не включены в набор
  */
 class PermissionsCollections extends ActiveRecord {
 	use ARExtended;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -61,6 +64,13 @@ class PermissionsCollections extends ActiveRecord {
 	 */
 	public function getRelatedPermissions():ActiveQuery {
 		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedPermissionsCollectionsToPermissions');
+	}
+
+	/**
+	 * @return Permissions[]
+	 */
+	public function getUnrelatedPermissions():array {
+		return Permissions::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedPermissions, 'id')])->all();
 	}
 
 }
