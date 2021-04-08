@@ -50,7 +50,7 @@ ModalHelperAsset::register($this);
 				'buttons' => [
 					'edit' => static function(string $url, PermissionsCollections $model) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', 'permissions-collections-modal-edit-{$model->id}');event.preventDefault();")
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
