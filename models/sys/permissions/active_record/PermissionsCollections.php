@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
-use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use yii\db\ActiveQuery;
@@ -22,7 +22,7 @@ use yii\db\ActiveRecord;
  * @property-read Permissions[] $unrelatedPermissions Права доступа, которые не включены в набор
  */
 class PermissionsCollections extends ActiveRecord {
-	use ARExtended;
+	use ActiveRecordTrait;
 
 	/**
 	 * {@inheritdoc}

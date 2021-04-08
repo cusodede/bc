@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use pozitronik\core\traits\ControllerTrait;
+use pozitronik\sys_exceptions\models\SysExceptions;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -34,47 +35,38 @@ class UsersController extends Controller {
 	}
 
 	/**
-	 * Профиль пользователя
 	 * @param int $id
-	 * @return string|null
+	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function actionProfile(int $id):?string {
-		if (null === $user = Users::findModel($id, new NotFoundHttpException())) return null;
+	public function actionEdit(int $id) {
+		if (null === $user = Users::findOne($id)) {
+			SysExceptions::log(new NotFoundHttpException());
+		}
+
+		if ($user->updateModelFromPost()) return $this->redirect('index');
+
 		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/profile', [
+			return $this->renderAjax('modal/edit', [
 				'model' => $user
 			]);
 		}
-		return $this->render('profile', [
+		return $this->render('edit', [
 			'model' => $user
 		]);
 	}
 
+
 	/**
-	 * Редактирование пользователя
 	 * @param int $id
-	 * @return string|Response|null
+	 * @return Response|null
 	 * @throws Throwable
 	 */
-	public function actionUpdate(int $id) {
-		if (null === $user = Users::findModel($id, new NotFoundHttpException())) return null;
-		if (Yii::$app->request->isPost && $user->load(Yii::$app->request->post()) && $user->save()) {
-			return $this->redirect(['users/profile', 'id' => $id]);
+	public function actionDelete(int $id):?Response {
+		if (null === $user = Users::findOne($id)) {
+			SysExceptions::log(new NotFoundHttpException());
 		}
-		return $this->render('update', [
-			'model' => $user
-		]);
-
-	}
-
-	/**
-	 * @param int $id
-	 * @return Response
-	 * @throws Throwable
-	 */
-	public function actionDelete(int $id):Response {
-		if (null !== $user = Users::findModel($id, new NotFoundHttpException())) $user->safeDelete();
+		$user->safeDelete();
 		return $this->redirect('index');
 	}
 

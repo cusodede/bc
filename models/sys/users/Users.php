@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\PermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 
@@ -11,6 +12,7 @@ use app\models\sys\users\active_record\Users as ActiveRecordUsers;
  */
 class Users extends ActiveRecordUsers {
 	use PermissionsTrait;
+	use ActiveRecordTrait;
 
 	/**
 	 * @param string $login

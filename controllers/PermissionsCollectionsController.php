@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
 use pozitronik\core\traits\ControllerTrait;
+use pozitronik\sys_exceptions\models\SysExceptions;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -36,8 +37,10 @@ class PermissionsCollectionsController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionEdit(int $id) {
-		if (null === $permission = PermissionsCollections::findModel($id, new NotFoundHttpException())) return null;
-		if ($permission->updateModel(Yii::$app->request->post($permission->formName()))) {
+		if (null === $permission = PermissionsCollections::findOne($id)){
+			SysExceptions::log(new NotFoundHttpException());
+		}
+		if ($permission->updateModelFromPost(Yii::$app->request->post())) {
 			return $this->redirect('index');
 		}
 		if (Yii::$app->request->isAjax) {

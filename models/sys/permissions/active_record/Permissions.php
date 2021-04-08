@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\users\Users;
-use pozitronik\core\traits\ARExtended;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -29,7 +29,7 @@ use yii\db\ActiveRecord;
  * @property PermissionsCollections[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
  */
 class Permissions extends ActiveRecord {
-	use ARExtended;
+	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */

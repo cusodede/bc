@@ -11,6 +11,7 @@ use Throwable;
 use Yii;
 use yii\caching\TagDependency;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * Class Permissions
@@ -36,7 +37,6 @@ trait PermissionsTrait {
 	 */
 	public function hasPermission(array $permissions, int $logic = Permissions::LOGIC_OR):bool {
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, func_get_args(), ['id' => $this->id]);
-		$cacheTag = CacheHelper::MethodSignature(__METHOD__, ['id' => $this->id]);
 		return Yii::$app->cache->getOrSet($cacheKey, function() use ($permissions, $logic) {
 			$result = false;
 			$allUserPermissionsNames = ArrayHelper::getColumn(self::allPermissions(), 'name');
@@ -56,7 +56,7 @@ trait PermissionsTrait {
 				}
 			}
 			return ($logic === Permissions::LOGIC_NOT)?true:$result;
-		}, null, new TagDependency(['tags' => $cacheTag]));//тег ставится на все варианты запроса ролей пользователя для сброса скопом
+		}, null, new TagDependency(['tags' => CacheHelper::MethodSignature('Users::hasPermission', ['id' => $this->id])]));//тег ставится на все варианты запроса ролей пользователя для сброса скопом
 
 	}
 
@@ -68,11 +68,11 @@ trait PermissionsTrait {
 	 * @throws Throwable
 	 */
 	public function allPermissions(bool $force = false):array {
-		$cacheKey = CacheHelper::MethodSignature(__METHOD__, func_get_args(), ['id' => $this->id]);
+		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', func_get_args(), ['id' => $this->id]);
 		if ($force) Yii::$app->cache->delete($cacheKey);
 		return Yii::$app->cache->getOrSet($cacheKey, function() {
 			return Permissions::allUserPermissions($this->id);
-		});
+		}, null, new TagDependency(['tags' => $cacheKey]));
 	}
 
 	/**
@@ -91,10 +91,16 @@ trait PermissionsTrait {
 
 	/**
 	 * @param Permissions[] $relatedPermissions
+	 * @throws Throwable
 	 */
-	public function setRelatedPermissions(array $relatedPermissions):void {
-		//todo
-		//todo: очищать кеш
+	public function setRelatedPermissions($relatedPermissions):void {
+		/** @var ActiveRecord $this */
+		if (empty($relatedPermissions)) {
+			RelUsersToPermissions::clearLinks($this);
+		} else {
+			RelUsersToPermissions::linkModels($this, $relatedPermissions);
+		}
+		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id])]);
 	}
 
 	/**
@@ -113,10 +119,16 @@ trait PermissionsTrait {
 
 	/**
 	 * @param PermissionsCollections[] $relatedPermissionsCollections
+	 * @throws Throwable
 	 */
-	public function setRelatedPermissionsCollections(array $relatedPermissionsCollections):void {
-		//todo
-		//todo: очищать кеш
+	public function setRelatedPermissionsCollections($relatedPermissionsCollections):void {
+		/** @var ActiveRecord $this */
+		if (empty($relatedPermissionsCollections)) {
+			RelUsersToPermissionsCollections::clearLinks($this);
+		} else {
+			RelUsersToPermissionsCollections::linkModels($this, $relatedPermissionsCollections);
+		}
+		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id])]);
 	}
 
 }

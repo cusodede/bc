@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\sys\users\active_record;
 
 use app\models\sys\users\CurrentUserHelper;
-use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 
@@ -27,7 +26,6 @@ use yii\db\ActiveRecord;
 
  */
 class Users extends ActiveRecord {
-	use ARExtended;
 
 	/**
 	 * @var null|string
