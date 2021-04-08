@@ -70,10 +70,13 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @param array $relatedPermissions
 	 * @throws Throwable
-	 * fixme: пустой массив не применяется
 	 */
-	public function setRelatedPermissions(array $relatedPermissions):void {
-		RelPermissionsCollectionsToPermissions::linkModels($this, $relatedPermissions);
+	public function setRelatedPermissions($relatedPermissions):void {
+		if (empty($relatedPermissions)) {
+			RelPermissionsCollectionsToPermissions::clearLinks($this);
+		} else {
+			RelPermissionsCollectionsToPermissions::linkModels($this, $relatedPermissions);
+		}
 	}
 
 	/**
