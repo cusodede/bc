@@ -67,10 +67,18 @@ class PermissionsCollections extends ActiveRecord {
 	}
 
 	/**
+	 * @param array $relatedPermissions
+	 */
+	public function setRelatedPermissions(array $relatedPermissions):void {
+		RelPermissionsCollectionsToPermissions::linkModels($this, $relatedPermissions);
+	}
+
+	/**
 	 * @return Permissions[]
 	 */
 	public function getUnrelatedPermissions():array {
 		return Permissions::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedPermissions, 'id')])->all();
 	}
+
 
 }
