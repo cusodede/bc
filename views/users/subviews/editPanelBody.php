@@ -7,8 +7,8 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\sys\permissions\active_record\Permissions;
-use app\models\sys\permissions\active_record\PermissionsCollections;
+use app\models\sys\permissions\Permissions;
+use app\models\sys\permissions\PermissionsCollections;
 use dosamigos\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
