@@ -8,15 +8,22 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\ModalHelperAsset;
 use app\controllers\UsersController;
+use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
+use kartik\grid\ActionColumn;
+use kartik\grid\DataColumn;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
+use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
 use yii\bootstrap\Html;
 
+ModalHelperAsset::register($this);
 ?>
 
 <?= GridConfig::widget([
@@ -33,6 +40,40 @@ use yii\bootstrap\Html;
 		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
-		'responsive' => true
+		'responsive' => true,
+		'columns' => [
+			[
+				'class' => ActionColumn::class,
+				'template' => '{edit}',
+				'buttons' => [
+					'edit' => static function(string $url, Users $model) {
+						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+				],
+			],
+			'id',
+			'username',
+			'login',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'create_date',
+				'format' => 'datetime'
+			],
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'allUserPermission',
+				'format' => 'raw',
+				'value' => static function(Users $user) {
+					return BadgeWidget::widget([
+						'models' => $user->allPermissions(),
+						'attribute' => 'name'
+					]);
+				}
+			]
+
+
+		]
 	])
 ]) ?>
