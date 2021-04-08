@@ -8,7 +8,7 @@ use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_exceptions\models\SysExceptions;
+use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -71,7 +71,7 @@ class PermissionsController extends Controller {
 	 */
 	public function actionEdit(int $id) {
 		if (null === $permission = Permissions::findOne($id)) {
-			SysExceptions::log(new NotFoundHttpException());
+			throw new LoggedException(new NotFoundHttpException());
 		}
 		if ($permission->updateModel(Yii::$app->request->post($permission->formName()))) {
 			return $this->redirect('index');

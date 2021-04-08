@@ -9,6 +9,7 @@ use app\models\sys\users\Users;
 use pozitronik\core\models\SqlDebugInfo;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\Utils;
+use pozitronik\sys_exceptions\models\LoggedException;
 use pozitronik\sys_exceptions\models\SysExceptions;
 use ReflectionException;
 use RuntimeException;
@@ -49,7 +50,7 @@ class TestController extends Controller {
 		} catch (Throwable $t) {
 			SysExceptions::log($t);//just silently log exception
 			SysExceptions::log(new RuntimeException("Someone tried divide to zero"), false, true);//silently log own exception and mark it as known error
-			SysExceptions::log(new RuntimeException("It prohibited by mathematics"), true);//log own exception and throw it
+			throw new LoggedException(new RuntimeException("It prohibited by mathematics"));//log own exception and throw it
 		}
 	}
 

@@ -6,7 +6,7 @@ namespace app\controllers;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use pozitronik\core\traits\ControllerTrait;
-use pozitronik\sys_exceptions\models\SysExceptions;
+use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -41,7 +41,7 @@ class UsersController extends Controller {
 	 */
 	public function actionEdit(int $id) {
 		if (null === $user = Users::findOne($id)) {
-			SysExceptions::log(new NotFoundHttpException());
+			throw new LoggedException(new NotFoundHttpException());
 		}
 
 		if ($user->updateModelFromPost()) return $this->redirect('index');
@@ -56,15 +56,14 @@ class UsersController extends Controller {
 		]);
 	}
 
-
 	/**
 	 * @param int $id
-	 * @return Response|null
+	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionDelete(int $id):?Response {
+	public function actionDelete(int $id):Response {
 		if (null === $user = Users::findOne($id)) {
-			SysExceptions::log(new NotFoundHttpException());
+			throw new LoggedException(new NotFoundHttpException());
 		}
 		$user->safeDelete();
 		return $this->redirect('index');
