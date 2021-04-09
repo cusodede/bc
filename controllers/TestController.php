@@ -20,7 +20,7 @@ use yii\web\Controller;
 
 /**
  * Class TestController
- * Контроллер на потестировать какие-то штуки. Естественно, в репу он попадать не должен
+ * Контроллер на потестировать какие-то штуки.
  */
 class TestController extends Controller {
 	use ControllerTrait;
@@ -88,5 +88,13 @@ class TestController extends Controller {
 	 */
 	public function actionPermissions():void {
 		Utils::log(CurrentUserHelper::model()->allPermissions());
+	}
+
+	/**
+	 * Проверка доступа
+	 * @return string
+	 */
+	public function actionPermissionTest():string {
+		return $this->render('permission-test');
 	}
 }
