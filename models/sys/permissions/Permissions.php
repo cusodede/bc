@@ -20,6 +20,9 @@ class Permissions extends ActiveRecordPermissions {
 	public const PRIORITY_MIN = 0;
 	public const PRIORITY_MAX = 100;
 
+	/*Параметры разрешения, для которых пустой фильтр приравнивается к любому значению*/
+	public const ALLOWED_EMPTY_PARAMS = ['action', 'verb'];
+
 	/**
 	 * @param int $user_id
 	 * @param string[] $permissionFilters
@@ -35,7 +38,13 @@ class Permissions extends ActiveRecordPermissions {
 				'priority' => SORT_DESC,
 				'id' => SORT_ASC]);
 		foreach ($permissionFilters as $paramName => $paramValue) {
-			$query->andFilterWhere([self::tableName().".".$paramName => $paramValue]);
+			$paramValues = [$paramValue];
+			/*для перечисленных параметров пустое значение приравнивается к любому*/
+			if (in_array($paramName, self::ALLOWED_EMPTY_PARAMS)) {
+				$paramValues[] = null;
+			}
+			$query->andWhere([self::tableName().".".$paramName => $paramValues]);
+
 		}
 		return $query->all();
 	}
