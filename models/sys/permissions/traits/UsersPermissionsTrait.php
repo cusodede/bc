@@ -138,6 +138,7 @@ trait UsersPermissionsTrait {
 	 * Есть ли у пользователя доступ к экшену
 	 * @param Action $action
 	 * @return bool
+	 * @throws Throwable
 	 */
 	public function hasActionPermission(Action $action):bool {
 		$verb = Yii::$app->request->method;

@@ -18,7 +18,7 @@ class PermissionsCollections extends ActiveRecordPermissionsCollections {
 	 *    - право есть в группе прав, назначенной пользователю
 	 * @inheritDoc
 	 */
-	public function afterSave($insert, $changedAttributes) {
+	public function afterSave($insert, $changedAttributes):void {
 		if (false === $insert) {
 			$usersInGroup = ArrayHelper::getColumn($this->relatedUsers, 'id');
 			foreach ($usersInGroup as $userId) {

@@ -44,7 +44,7 @@ class Permissions extends ActiveRecordPermissions {
 		foreach ($permissionFilters as $paramName => $paramValue) {
 			$paramValues = [$paramValue];
 			/*для перечисленных параметров пустое значение приравнивается к любому*/
-			if (in_array($paramName, self::ALLOWED_EMPTY_PARAMS)) {
+			if (in_array($paramName, self::ALLOWED_EMPTY_PARAMS, true)) {
 				$paramValues[] = null;
 			}
 			$query->andWhere([self::tableName().".".$paramName => $paramValues]);
@@ -59,7 +59,7 @@ class Permissions extends ActiveRecordPermissions {
 	 *    - право есть в  группе прав, назначенной пользователю
 	 * @inheritDoc
 	 */
-	public function afterSave($insert, $changedAttributes) {
+	public function afterSave($insert, $changedAttributes):void {
 		if (false === $insert && [] !== $changedAttributes) {
 			$usersIds = array_unique(array_merge(
 				ArrayHelper::getColumn($this->relatedUsers, 'id'),
