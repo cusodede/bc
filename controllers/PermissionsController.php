@@ -30,7 +30,7 @@ class PermissionsController extends Controller {
 			'modelClass' => Permissions::class,
 			'showModelErrors' => true,
 		];
-
+		/*@see https://webtips.krajee.com/setup-editable-column-grid-view-manipulate-records/*/
 		return ArrayHelper::merge(parent::actions(), [
 			/**
 			 * Можно назначить один экшен на все поля, которым не требуется специализированный обработчик,
@@ -42,9 +42,9 @@ class PermissionsController extends Controller {
 				'class' => EditableColumnAction::class,
 				'modelClass' => Permissions::class,
 				'showModelErrors' => true,
-//				'outputValue' => function(PermissionsSearch $model, string $attribute, int $key, int $index) {
-//					if ('' === $model->$attribute && null !== $model->controller) {
-//						return 'Все';
+//				'outputValue' => function(Permissions $model, string $attribute, int $key, int $index) {
+//					if (in_array($attribute, Permissions::ALLOWED_EMPTY_PARAMS)) {
+//						return "*";
 //					}
 //					return '';
 //				},
