@@ -27,7 +27,7 @@ class PermissionsController extends Controller {
 	public function actions():array {
 		$defaultEditableActionConfig = [
 			'class' => EditableColumnAction::class,
-			'modelClass' => PermissionsSearch::class,
+			'modelClass' => Permissions::class,
 			'showModelErrors' => true,
 		];
 
@@ -40,7 +40,7 @@ class PermissionsController extends Controller {
 			'editDefault' => $defaultEditableActionConfig,
 			'editAction' => [
 				'class' => EditableColumnAction::class,
-				'modelClass' => PermissionsSearch::class,
+				'modelClass' => Permissions::class,
 				'showModelErrors' => true,
 //				'outputValue' => function(PermissionsSearch $model, string $attribute, int $key, int $index) {
 //					if ('' === $model->$attribute && null !== $model->controller) {
