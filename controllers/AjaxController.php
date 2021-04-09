@@ -3,7 +3,10 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\sys\permissions\Permissions;
+use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\users\Users;
+use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_options\models\SysOptions;
 use Yii;
 use yii\filters\ContentNegotiator;
@@ -14,6 +17,7 @@ use yii\web\Response;
  * Class AjaxController
  */
 class AjaxController extends Controller {
+	use ControllerTrait;
 
 	/**
 	 * {@inheritDoc}
@@ -45,10 +49,46 @@ class AjaxController extends Controller {
 	 */
 	public function actionSearchUsers(?string $term, int $limit = 5):array {
 		$tableName = Users::tableName();
-		/** @var Users[] $found */
 		return Users::find()
 			->select(["{$tableName}.id", "{$tableName}.username as name"])
 			->where(['like', "{$tableName}.username", "%$term%", false])
+			->active()
+			->distinct()
+			->limit($limit)
+			->asArray()
+			->all();
+	}
+
+	/**
+	 * Аяксовый поиск доступа по имени в глобальной искалке
+	 * @param string|null $term
+	 * @param int $limit
+	 * @return string[][]
+	 */
+	public function actionSearchPermissions(?string $term, int $limit = 5):array {
+		$tableName = Permissions::tableName();
+		return Permissions::find()
+			->select(["{$tableName}.id", "{$tableName}.name as name", "{$tableName}.controller as controller"])
+			->where(['like', "{$tableName}.name", "%$term%", false])
+			->orWhere(['like', "{$tableName}.controller", "%$term%", false])
+			->active()
+			->distinct()
+			->limit($limit)
+			->asArray()
+			->all();
+	}
+
+	/**
+	 * Аяксовый поиск группы доступов по имени в глобальной искалке
+	 * @param string|null $term
+	 * @param int $limit
+	 * @return string[][]
+	 */
+	public function actionSearchPermissionsCollections(?string $term, int $limit = 5):array {
+		$tableName = PermissionsCollections::tableName();
+		return PermissionsCollections::find()
+			->select(["{$tableName}.id", "{$tableName}.name as name"])
+			->where(['like', "{$tableName}.name", "%$term%", false])
 			->active()
 			->distinct()
 			->limit($limit)

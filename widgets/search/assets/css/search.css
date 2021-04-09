@@ -21,6 +21,11 @@
 	float: left;
 }
 
+.suggestion-secondary {
+	float: left;
+	font-size: smaller;
+}
+
 .suggestion-links {
 	float: right;
 }
