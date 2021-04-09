@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\core\TemporaryHelper;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\users\Users;
@@ -49,9 +50,11 @@ class AjaxController extends Controller {
 	 */
 	public function actionSearchUsers(?string $term, int $limit = 5):array {
 		$tableName = Users::tableName();
+		$t_term = TemporaryHelper::SwitchKeyboard($term);
 		return Users::find()
 			->select(["{$tableName}.id", "{$tableName}.username as name"])
-			->where(['like', "{$tableName}.username", "%$term%", false])
+			->orWhere(['like', "{$tableName}.username", "%$term%", false])
+			->orWhere(['like', "{$tableName}.username", "%$t_term%", false])
 			->active()
 			->distinct()
 			->limit($limit)
@@ -67,10 +70,13 @@ class AjaxController extends Controller {
 	 */
 	public function actionSearchPermissions(?string $term, int $limit = 5):array {
 		$tableName = Permissions::tableName();
+		$t_term = TemporaryHelper::SwitchKeyboard($term);
 		return Permissions::find()
 			->select(["{$tableName}.id", "{$tableName}.name as name", "{$tableName}.controller as controller"])
-			->where(['like', "{$tableName}.name", "%$term%", false])
+			->orWhere(['like', "{$tableName}.name", "%$term%", false])
 			->orWhere(['like', "{$tableName}.controller", "%$term%", false])
+			->orWhere(['like', "{$tableName}.name", "%$t_term%", false])
+			->orWhere(['like', "{$tableName}.controller", "%$t_term%", false])
 			->active()
 			->distinct()
 			->limit($limit)
@@ -86,9 +92,11 @@ class AjaxController extends Controller {
 	 */
 	public function actionSearchPermissionsCollections(?string $term, int $limit = 5):array {
 		$tableName = PermissionsCollections::tableName();
+		$t_term = TemporaryHelper::SwitchKeyboard($term);
 		return PermissionsCollections::find()
 			->select(["{$tableName}.id", "{$tableName}.name as name"])
-			->where(['like', "{$tableName}.name", "%$term%", false])
+			->orWhere(['like', "{$tableName}.name", "%$term%", false])
+			->orWhere(['like', "{$tableName}.name", "%$t_term%", false])
 			->active()
 			->distinct()
 			->limit($limit)
