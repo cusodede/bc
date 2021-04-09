@@ -71,7 +71,7 @@ trait UsersPermissionsTrait {
 	 * @throws Throwable
 	 */
 	public function allPermissions(bool $force = false):array {
-		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', func_get_args(), ['id' => $this->id]);
+		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]);
 		if ($force) Yii::$app->cache->delete($cacheKey);
 		return Yii::$app->cache->getOrSet($cacheKey, function() {
 			return Permissions::allUserPermissions($this->id);
