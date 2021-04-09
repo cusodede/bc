@@ -43,12 +43,12 @@ class PermissionsController extends Controller {
 				'class' => EditableColumnAction::class,
 				'modelClass' => Permissions::class,
 				'showModelErrors' => true,
-//				'outputValue' => function(Permissions $model, string $attribute, int $key, int $index) {
-//					if (in_array($attribute, Permissions::ALLOWED_EMPTY_PARAMS)) {
-//						return "*";
-//					}
-//					return '';
-//				},
+				'outputValue' => function(Permissions $model, string $attribute, int $key, int $index) {
+					if (in_array($attribute, Permissions::ALLOWED_EMPTY_PARAMS) && empty($model->$attribute)) {
+						return "Любой";
+					}
+					return '';
+				},
 			]
 		]);
 	}
