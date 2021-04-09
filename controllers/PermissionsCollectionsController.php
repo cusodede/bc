@@ -37,19 +37,38 @@ class PermissionsCollectionsController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionEdit(int $id) {
-		if (null === $permission = PermissionsCollections::findOne($id)){
+		if (null === $permissionsCollections = PermissionsCollections::findOne($id)){
 			throw new LoggedException(new NotFoundHttpException());
 		}
-		if ($permission->updateModelFromPost()) {
+		if ($permissionsCollections->updateModelFromPost()) {
 			return $this->redirect('index');
 		}
 		if (Yii::$app->request->isAjax) {
 			return $this->renderAjax('modal/edit', [
-				'model' => $permission
+				'model' => $permissionsCollections
 			]);
 		}
 		return $this->render('edit', [
-			'model' => $permission
+			'model' => $permissionsCollections
+		]);
+	}
+
+	/**
+	 * @return string|Response
+	 * @throws Throwable
+	 */
+	public function actionCreate() {
+		$permissionsCollections = new PermissionsCollections();
+		if ($permissionsCollections->createModelFromPost()) {
+			return $this->redirect('index');
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/create', [
+				'model' => $permissionsCollections
+			]);
+		}
+		return $this->render('create', [
+			'model' => $permissionsCollections
 		]);
 	}
 }

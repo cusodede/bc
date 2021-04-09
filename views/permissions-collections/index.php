@@ -22,6 +22,7 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+
 ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
@@ -37,9 +38,15 @@ ModalHelperAsset::register($this);
 				'content' => Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn pull-left btn-info'])
 			]
 		],
-		'summary' => null !== $searchModel?Html::a('Новая группа', PermissionsCollectionsController::to('create'), ['class' => 'btn btn-success summary-content']):null,
+		'summary' => null !== $searchModel?Html::a('Новая группа', PermissionsCollectionsController::to('create'), [
+			'class' => 'btn btn-success summary-content',
+			'onclick' => new JsExpression("AjaxModal('".PermissionsCollectionsController::to('create')."', 'PermissionsCollections-modal-create-new');event.preventDefault();")
+		]):null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новая группа', PermissionsCollectionsController::to('create'), ['class' => 'btn btn-success']),
+		'emptyText' => Html::a('Новая группа', PermissionsCollectionsController::to('create'), [
+			'class' => 'btn btn-success',
+			'onclick' => new JsExpression("AjaxModal('".PermissionsCollectionsController::to('create')."', 'PermissionsCollections-modal-create-new');event.preventDefault();")
+		]),
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
