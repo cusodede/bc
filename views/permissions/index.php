@@ -121,8 +121,10 @@ ModalHelperAsset::register($this);
 						'options' => [
 							'data' => TemporaryHelper::GetControllersList(),
 							'pluginOptions' => [
+								'multiple' => false,
 								'allowClear' => true,
-								'placeholder' => ''
+								'placeholder' => '',
+								'tags' => true
 							]
 						]
 					];
@@ -154,8 +156,10 @@ ModalHelperAsset::register($this);
 						'options' => [
 							'data' => TemporaryHelper::VERBS,
 							'pluginOptions' => [
+								'multiple' => false,
 								'allowClear' => true,
-								'placeholder' => ''
+								'placeholder' => '',
+								'tags' => true
 							]
 						]
 					];
