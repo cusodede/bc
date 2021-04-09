@@ -11,6 +11,7 @@ use app\models\sys\permissions\PermissionsCollections;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
+use yii\base\Action;
 use yii\caching\TagDependency;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -131,6 +132,18 @@ trait UsersPermissionsTrait {
 			RelUsersToPermissionsCollections::linkModels($this, $relatedPermissionsCollections);
 		}
 		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id])]);
+	}
+
+	/**
+	 * Есть ли у пользователя доступ к экшену
+	 * @param Action $action
+	 * @return bool
+	 */
+	public function hasActionPermission(Action $action):bool {
+		return [] !== Permissions::allUserPermissions($this->id, [
+				'controller' => $action->controller->id,
+				'action' => $action->id,
+			]);
 	}
 
 }
