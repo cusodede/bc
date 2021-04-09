@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
+use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
@@ -67,8 +68,12 @@ ModalHelperAsset::register($this);
 				'label' => 'Система',
 				'items' => [
 					[
-						'label' => 'Редактор доступов',
+						'label' => 'Редактор разрешений',
 						'url' => PermissionsController::to('index')
+					],
+					[
+						'label' => 'Группы разрешений',
+						'url' => PermissionsCollectionsController::to('index')
 					],
 					[
 						'label' => 'Протокол сбоев',
