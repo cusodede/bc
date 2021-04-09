@@ -26,7 +26,7 @@ use yii\web\View;
 ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
-	'id' => 'permissions-index-grid',
+	'id' => 'permissions-collections-index-grid',
 	'grid' => GridView::begin([
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
