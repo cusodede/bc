@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\sse\MessageEventHandler;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\CurrentUserHelper;
 use app\models\sys\users\Users;
 use pozitronik\core\models\SqlDebugInfo;
@@ -24,6 +25,18 @@ use yii\web\Controller;
  */
 class TestController extends Controller {
 	use ControllerTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors() {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+
+	}
 
 	/**
 	 * @return string
