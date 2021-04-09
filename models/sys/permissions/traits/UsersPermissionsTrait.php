@@ -6,6 +6,8 @@ namespace app\models\sys\permissions\traits;
 use app\models\core\CacheHelper;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
+use app\models\sys\permissions\Permissions;
+use app\models\sys\permissions\PermissionsCollections;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
