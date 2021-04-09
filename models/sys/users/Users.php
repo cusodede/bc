@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\users;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\sys\permissions\UsersPermissionsTrait;
+use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 
 /**

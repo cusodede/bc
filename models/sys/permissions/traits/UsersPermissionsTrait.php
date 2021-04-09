@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\sys\permissions;
+namespace app\models\sys\permissions\traits;
 
 use app\models\core\CacheHelper;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
