@@ -7,6 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
+use app\models\sys\permissions\Permissions as ParentPermissions;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -30,6 +31,7 @@ use yii\db\ActiveRecord;
  */
 class Permissions extends ActiveRecord {
 	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -47,6 +49,7 @@ class Permissions extends ActiveRecord {
 			[['name'], 'string', 'max' => 128],
 			[['controller', 'action', 'verb'], 'string', 'max' => 255],
 			[['name'], 'unique'],
+			[ParentPermissions::ALLOWED_EMPTY_PARAMS, 'default', 'value' => null]
 		];
 	}
 
@@ -87,7 +90,6 @@ class Permissions extends ActiveRecord {
 	public function getRelatedUsersToPermissionsCollections():ActiveQuery {
 		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'collection_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
-
 
 	/**
 	 * @return ActiveQuery
