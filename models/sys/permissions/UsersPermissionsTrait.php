@@ -23,7 +23,7 @@ use yii\db\ActiveRecord;
  * @property Permissions[] $relatedPermissions Назначенные напрямую доступы
  * @property PermissionsCollections[] $relatedPermissionsCollections Назначенные напрямую доступы
  */
-trait PermissionsTrait {
+trait UsersPermissionsTrait {
 	/**
 	 * Проверяет, имеет ли пользователь указанный набор прав с указанной логикой проверки.
 	 * Примеры:
