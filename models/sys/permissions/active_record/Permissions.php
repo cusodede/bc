@@ -21,7 +21,7 @@ use yii\db\ActiveRecord;
  * @property string|null $action Действие, для которого устанавливается доступ, null для всех действий контроллера
  * @property string|null $verb REST-метод, для которого устанавливается доступ
  * @property string|null $comment Описание доступа
- * @property int $priority Приоритет использования (больше - выше)
+ * @property int $priority Приоритет использования (больше - выше) {unused}
  *
  * @property RelUsersToPermissions[] $relatedUsersToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
