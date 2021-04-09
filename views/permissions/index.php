@@ -36,9 +36,15 @@ ModalHelperAsset::register($this);
 		'panel' => [
 			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']).")":" (нет разрешений)"),
 		],
-		'summary' => null !== $searchModel?Html::a('Новое разрешение', PermissionsController::to('create'), ['class' => 'btn btn-success summary-content']):null,
+		'summary' => null !== $searchModel?Html::a('Новое разрешение', PermissionsController::to('create'), [
+			'class' => 'btn btn-success',
+			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
+		]):null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новое разрешение', PermissionsController::to('create'), ['class' => 'btn btn-success']),
+		'emptyText' => Html::a('Новое разрешение', PermissionsController::to('create'), [
+			'class' => 'btn btn-success',
+			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
+		]),
 		'toolbar' => [
 			[
 				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn pull-left btn-info'])

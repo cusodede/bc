@@ -11,6 +11,7 @@ use pozitronik\helpers\ArrayHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -73,7 +74,7 @@ class PermissionsController extends Controller {
 		if (null === $permission = Permissions::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
-		if ($permission->updateModel(Yii::$app->request->post($permission->formName()))) {
+		if ($permission->updateModelFromPost()) {
 			return $this->redirect('index');
 		}
 		if (Yii::$app->request->isAjax) {
@@ -82,6 +83,26 @@ class PermissionsController extends Controller {
 			]);
 		}
 		return $this->render('edit', [
+			'model' => $permission
+		]);
+	}
+
+	/**
+	 * @return string|Response
+	 * @throws Throwable
+	 * @throws Exception
+	 */
+	public function actionCreate() {
+		$permission = new Permissions();
+		if ($permission->createModelFromPost()) {
+			return $this->redirect('index');
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/create', [
+				'model' => $permission
+			]);
+		}
+		return $this->render('create', [
 			'model' => $permission
 		]);
 	}
