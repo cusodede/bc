@@ -56,12 +56,14 @@ class Permissions extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'name' => 'Name',
-			'controller' => 'Controller',
-			'action' => 'Action',
-			'verb' => 'Verb',
-			'comment' => 'Comment',
-			'priority' => 'Priority',
+			'name' => 'Название',
+			'controller' => 'Контроллер',
+			'action' => 'Действие',
+			'verb' => 'Тип запроса',
+			'comment' => 'Комментарий',
+			'priority' => 'Приоритет',
+			'relatedUsersToPermissionsCollections' => 'Входит в наборы',
+			'relatedUsers' => 'Назначено пользователям'
 		];
 	}
 
