@@ -140,10 +140,24 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 */
 	public function hasActionPermission(Action $action):bool {
-		return [] !== Permissions::allUserPermissions($this->id, [
-				'controller' => $action->controller->id,
-				'action' => $action->id,
-			]);
+		$verb = Yii::$app->request->method;
+		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
+			'id' => $this->id,
+			'controller' => $action->controller->id,
+			'action' => $action->id,
+			'verb' => $verb
+		]);
+		return Yii::$app->cache->getOrSet($cacheKey, function() use ($action, $verb) {
+			return [] !== Permissions::allUserPermissions($this->id, [
+					'controller' => $action->controller->id,
+					'action' => $action->id,
+					'verb' => $verb
+				]);
+		}, null, new TagDependency([
+			'tags' => [
+				CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]),//сброс кеша при изменении прав пользователя
+			]
+		]));
 	}
 
 }
