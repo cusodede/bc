@@ -69,4 +69,24 @@ class UsersController extends Controller {
 		return $this->redirect('index');
 	}
 
+	/**
+	 * Профиль пользователя
+	 * @param int $id
+	 * @return string|null
+	 * @throws Throwable
+	 */
+	public function actionProfile(int $id):?string {
+		if (null === $user = Users::findOne($id)) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/profile', [
+				'model' => $user
+			]);
+		}
+		return $this->render('profile', [
+			'model' => $user
+		]);
+	}
+
 }
