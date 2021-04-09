@@ -40,7 +40,7 @@ class PermissionsCollectionsController extends Controller {
 		if (null === $permission = PermissionsCollections::findOne($id)){
 			throw new LoggedException(new NotFoundHttpException());
 		}
-		if ($permission->updateModelFromPost(Yii::$app->request->post())) {
+		if ($permission->updateModelFromPost()) {
 			return $this->redirect('index');
 		}
 		if (Yii::$app->request->isAjax) {
