@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\sys\permissions\active_record\PermissionsCollections;
+use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
