@@ -47,6 +47,7 @@ class Permissions extends ActiveRecord {
 		return [
 			[['comment'], 'string'],
 			[['priority'], 'integer'],
+			[['priority'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 128],
 			[['controller', 'action', 'verb'], 'string', 'max' => 255],
 			[['name'], 'unique'],
