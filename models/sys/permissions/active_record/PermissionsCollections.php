@@ -5,6 +5,8 @@ namespace app\models\sys\permissions\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
+use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
+use app\models\sys\users\Users;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use yii\db\ActiveQuery;
@@ -18,7 +20,9 @@ use yii\db\ActiveRecord;
  * @property string|null $comment Описание группы доступа
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
+ * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к промежуточной таблице к пользователям
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
+ * @property Users[] $relatedUsers Все пользователи, у которых есть эта группа доступа
  * @property-read Permissions[] $unrelatedPermissions Права доступа, которые не включены в набор
  */
 class PermissionsCollections extends ActiveRecord {
@@ -56,6 +60,13 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
+	public function getRelatedUsersToPermissionsCollections():ActiveQuery {
+		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
 	public function getRelatedPermissionsCollectionsToPermissions():ActiveQuery {
 		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['collection_id' => 'id']);
 	}
@@ -86,5 +97,11 @@ class PermissionsCollections extends ActiveRecord {
 		return Permissions::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedPermissions, 'id')])->all();
 	}
 
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsers():ActiveQuery {
+		return $this->hasMany(Users::class, ['id' => 'user_id'])->via('relatedUsersToPermissionsCollections');
+	}
 
 }
