@@ -53,11 +53,6 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'controller')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
 		<?= $form->field($model, 'comment')->textarea() ?>
 	</div>
 </div>
