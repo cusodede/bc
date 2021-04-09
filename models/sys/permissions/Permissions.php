@@ -3,7 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\core\CacheHelper;
 use app\models\sys\permissions\active_record\Permissions as ActiveRecordPermissions;
+use pozitronik\helpers\ArrayHelper;
+use Yii;
+use yii\caching\TagDependency;
 
 /**
  * Class Permissions
@@ -47,5 +51,25 @@ class Permissions extends ActiveRecordPermissions {
 
 		}
 		return $query->all();
+	}
+
+	/**
+	 * При изменении права, нужно удалить кеши прав всем пользователям, у которых:
+	 *    - право назначено напрямую
+	 *    - право есть в  группе прав, назначенной пользователю
+	 * @inheritDoc
+	 */
+	public function afterSave($insert, $changedAttributes) {
+		if (false === $insert && [] !== $changedAttributes) {
+			$usersIds = array_unique(array_merge(
+				ArrayHelper::getColumn($this->relatedUsers, 'id'),
+				ArrayHelper::getColumn($this->relatedUsersViaPermissionsCollections, 'id')
+			));
+
+			foreach ($usersIds as $userId) {
+				TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $userId])]);
+			}
+		}
+		parent::afterSave($insert, $changedAttributes);
 	}
 }
