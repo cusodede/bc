@@ -65,7 +65,7 @@ class Permissions extends ActiveRecord {
 			'name' => 'Название',
 			'controller' => 'Контроллер',
 			'action' => 'Действие',
-			'verb' => 'Тип запроса',
+			'verb' => 'Метод запроса',
 			'comment' => 'Комментарий',
 			'priority' => 'Приоритет',
 			'relatedUsersToPermissionsCollections' => 'Входит в наборы',
