@@ -27,6 +27,18 @@ class Permissions extends ActiveRecordPermissions {
 	/*Параметры разрешения, для которых пустой фильтр приравнивается к любому значению*/
 	public const ALLOWED_EMPTY_PARAMS = ['action', 'verb'];
 
+	/*
+	 * Пути к расположениям контроллеров, для подсказок в выбиралках.
+	 * Формат:
+	 * 	алиас каталога => префикс id
+	 * Так проще и быстрее, чем пытаться вычислять префикс из контроллера (в нём id появляется только в момент вызова,
+	 * и зависит от множества настроек), учитывая, что это нужно только в админке, и только в выбиралке.
+	 */
+	public const CONTROLLER_DIRS = [
+		'@app/controllers' => '',
+		'@app/controllers/api' => 'api'
+	];
+
 	/**
 	 * @param int $user_id
 	 * @param string[] $permissionFilters
