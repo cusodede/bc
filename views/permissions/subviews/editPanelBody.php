@@ -31,7 +31,10 @@ use yii\web\View;
 		<?= $form->field($model, 'controller')->widget(Select2::class, [
 			'data' => TemporaryHelper::GetControllersList(Permissions::CONTROLLER_DIRS),
 			'pluginOptions' => [
-				'allowClear' => true
+				'multiple' => false,
+				'allowClear' => true,
+				'placeholder' => '',
+				'tags' => true
 			]
 		]) ?>
 	</div>
@@ -46,7 +49,10 @@ use yii\web\View;
 		<?= $form->field($model, 'verb')->widget(Select2::class, [
 			'data' => TemporaryHelper::VERBS,
 			'pluginOptions' => [
-				'allowClear' => true
+				'multiple' => false,
+				'allowClear' => true,
+				'placeholder' => '',
+				'tags' => true
 			]
 		]) ?>
 	</div>
