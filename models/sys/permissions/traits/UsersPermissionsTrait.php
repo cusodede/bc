@@ -30,8 +30,8 @@ trait UsersPermissionsTrait {
 	/**
 	 * Проверяет, имеет ли пользователь указанный набор прав с указанной логикой проверки.
 	 * Примеры:
-	 * Permissions::has(['execute_order_66'])
-	 * Permissions::has(['rule_galaxy', 'lose_arm'], self::LOGIC_AND)
+	 * $user->hasPermission(['execute_order_66'])
+	 * $user->hasPermission(['rule_galaxy', 'lose_arm'], Permissions::LOGIC_AND)
 	 *
 	 * @param string[] $permissions Названия прав, к которым проверяются доступы
 	 * @param int $logic Логика проверки
