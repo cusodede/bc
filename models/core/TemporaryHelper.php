@@ -27,15 +27,24 @@ class TemporaryHelper {
 	 * @return string[]
 	 * @throws Throwable
 	 */
-	public static function GetControllersList():array {
-		return ArrayHelper::map(ControllerHelper::GetControllersList('@app/controllers', null, [Controller::class]), 'id', 'id');
+	public static function GetControllersList(array $controllerDirs = ['@app/controllers']):array {
+		$result = [];
+		foreach ($controllerDirs as $controllerDir => $idPrefix) {
+			$controllers = ControllerHelper::GetControllersList((string)$controllerDir, null, [Controller::class]);
+			$result[$controllerDir] = ArrayHelper::map($controllers, function(Controller $model) use ($idPrefix) {
+				return ('' === $idPrefix)?$model->id:$idPrefix.'/'.$model->id;
+			}, function(Controller $model) use ($idPrefix) {
+				return ('' === $idPrefix)?$model->id:$idPrefix.'/'.$model->id;
+			});
+		}
+		return $result;
 	}
 
 	/**
 	 * @param string $term
 	 * @return string
 	 */
-	public static function SwitchKeyboard(string $term) {
+	public static function SwitchKeyboard(string $term):string {
 		$converter = [
 			/*'f' => 'а', ',' => 'б', 'd' => 'в', 'u' => 'г', 'l' => 'д', 't' => 'е', '`' => 'ё',
 			';' => 'ж', 'p' => 'з', 'b' => 'и', 'q' => 'й', 'r' => 'к', 'k' => 'л', 'v' => 'м',
