@@ -49,6 +49,7 @@ class Permissions extends ActiveRecord {
 			[['priority'], 'integer'],
 			[['priority'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 128],
+			[['name'], 'required'],
 			[['controller', 'action', 'verb'], 'string', 'max' => 255],
 			[['name'], 'unique'],
 			[ParentPermissions::ALLOWED_EMPTY_PARAMS, 'default', 'value' => null]

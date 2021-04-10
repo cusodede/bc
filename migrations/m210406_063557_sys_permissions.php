@@ -13,7 +13,7 @@ class m210406_063557_sys_permissions extends Migration {
 	public function safeUp() {
 		$this->createTable('sys_permissions', [
 			'id' => $this->primaryKey(),
-			'name' => $this->string(128)->comment('Название доступа'),
+			'name' => $this->string(128)->notNull()->comment('Название доступа'),
 			'controller' => $this->string()->null()->comment('Контроллер, к которому устанавливается доступ, null для внутреннего доступа'),
 			'action' => $this->string()->null()->comment('Действие, для которого устанавливается доступ, null для всех действий контроллера'),
 			'verb' => $this->string()->null()->comment('REST-метод, для которого устанавливается доступ'),
@@ -35,7 +35,7 @@ class m210406_063557_sys_permissions extends Migration {
 
 		$this->createTable('sys_permissions_collections', [
 			'id' => $this->primaryKey(),
-			'name' => $this->string(128)->comment('Название группы доступа'),
+			'name' => $this->string(128)->notNull()->comment('Название группы доступа'),
 			'comment' => $this->text()->null()->comment('Описание группы доступа')
 		]);
 
