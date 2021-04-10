@@ -30,21 +30,21 @@ $this->registerCss(".ms-container {width:100%}");
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
+		<?= ([] === $permissionsList = ArrayHelper::map(Permissions::find()->all(), 'id', 'name'))?'Доступы не созданы':$form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
 			'options' => [
 				'multiple' => true,
 			],
-			'data' => ArrayHelper::map(Permissions::find()->all(), 'id', 'name'),
+			'data' => $permissionsList,
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'relatedPermissionsCollections')->widget(MultiSelectListBox::class, [
+		<?= ([] === $permissionsCollectionsList = ArrayHelper::map(PermissionsCollections::find()->all(), 'id', 'name'))?'Группы доступов не созданы':$form->field($model, 'relatedPermissionsCollections')->widget(MultiSelectListBox::class, [
 			'options' => [
 				'multiple' => true,
 			],
-			'data' => ArrayHelper::map(PermissionsCollections::find()->all(), 'id', 'name'),
+			'data' => $permissionsCollectionsList,
 		]) ?>
 	</div>
 </div>
