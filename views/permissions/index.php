@@ -119,7 +119,7 @@ ModalHelperAsset::register($this);
 						],
 						'inputType' => Editable::INPUT_SELECT2,
 						'options' => [
-							'data' => TemporaryHelper::GetControllersList(),
+							'data' => TemporaryHelper::GetControllersList(Permissions::CONTROLLER_DIRS),
 							'pluginOptions' => [
 								'multiple' => false,
 								'allowClear' => true,
