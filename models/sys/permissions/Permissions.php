@@ -11,6 +11,9 @@ use yii\caching\TagDependency;
 
 /**
  * Class Permissions
+ * todo:
+ * 3) Генератор разрешений (консольный)
+ * 4) Флаг deleted
  */
 class Permissions extends ActiveRecordPermissions {
 	/*Любое из перечисленных прав*/
