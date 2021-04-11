@@ -3,12 +3,13 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var PermissionsCollections $model
+ * @var Users $model
  * @var ActiveForm $form
  */
 
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
+use app\models\sys\users\Users;
 use dosamigos\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
