@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record;
 
-use app\models\sys\users\CurrentUserHelper;
 use pozitronik\helpers\DateHelper;
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -13,24 +13,15 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $username Отображаемое имя пользователя
  * @property string $login Логин
- * @property string $password Хеш пароля
+ * @property string $password Хеш пароля либо сам пароль (если $salt пустой)
  * @property null|string $salt Unique random salt hash
  * @property string $email email
  * @property string $comment Служебный комментарий пользователя
  * @property string $create_date Дата регистрации
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
- * @property null|string $update_password Свойство обновления пароля
- *
- * @property-read string $authKey
-
  */
 class Users extends ActiveRecord {
-
-	/**
-	 * @var null|string
-	 */
-	public $update_password;
 
 	/**
 	 * {@inheritdoc}
@@ -54,7 +45,7 @@ class Users extends ActiveRecord {
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
-			[['daddy'], 'default', 'value' => CurrentUserHelper::Id()],
+			[['daddy'], 'default', 'value' => Yii::$app->user->id],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()]//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
 		];
 	}
@@ -68,15 +59,14 @@ class Users extends ActiveRecord {
 			'username' => 'Имя пользователя',
 			'login' => 'Логин',
 			'password' => 'Пароль',
-			'salt' => 'Unique random salt hash',
+			'salt' => 'Соль',
 			'email' => 'Почтовый адрес',
 			'comment' => 'Служебный комментарий пользователя',
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
 			'deleted' => 'Флаг удаления',
-			'update_password' => 'Изменение пароля'
+			'update_password' => 'Новый пароль'
 		];
 	}
-
 
 }
