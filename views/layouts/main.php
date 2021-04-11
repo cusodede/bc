@@ -12,7 +12,7 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
-use app\models\sys\users\CurrentUserHelper;
+use app\models\sys\users\Users;
 use app\widgets\search\SearchWidget;
 use pozitronik\filestorage\FSModule;
 use pozitronik\helpers\Utils;
@@ -100,17 +100,17 @@ ModalHelperAsset::register($this);
 			],
 			SearchWidget::widget(),
 			[
-				'label' => CurrentUserHelper::model()->username,
+				'label' => Users::Current()->username,
 				'options' => [
 					'class' => 'pull-right'
 				],
 				'items' => [
-					'<li class="dropdown-header">'.CurrentUserHelper::model()->comment.'</li>',
+					'<li class="dropdown-header">'.Users::Current()->comment.'</li>',
 					[
 						'label' => "Профиль",
 						'url' => '#',
 						'options' => [
-							'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => CurrentUserHelper::Id()]).'", "users-modal-profile-'.CurrentUserHelper::Id().'")')
+							'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')
 						]
 					],
 					'<li class="divider"></li>',
