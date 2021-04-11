@@ -89,4 +89,26 @@ class UsersController extends Controller {
 		]);
 	}
 
+	/**
+	 * @param int $id
+	 * @return string|Response
+	 * @throws LoggedException
+	 */
+	public function actionUpdatePassword(int $id) {
+		if (null === $user = Users::findOne($id)) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+		if ($user->updatePassword(Yii::$app->request->post())) {
+			return $this->redirect(['profile', 'id' => $user->id]);
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/update-password', [
+				'model' => $user
+			]);
+		}
+		return $this->render('update-password', [
+			'model' => $user
+		]);
+	}
+
 }
