@@ -13,14 +13,14 @@ class Users extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function modelName() {
+	public static function modelName():string {
 		return 'users';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function primaryKey() {
+	public static function primaryKey():array {
 		return ['id'];
 	}
 }

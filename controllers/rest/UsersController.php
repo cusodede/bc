@@ -17,7 +17,7 @@ class UsersController extends Controller {
 	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	public function actionIndex() {
+	public function actionIndex():string {
 
 		$dataProvider = new RestDataProvider(['query' => Users::find()]);
 
