@@ -44,11 +44,16 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}',
+				'template' => '{edit}{update-password}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+					'update-password' => static function(string $url, Users $model) {
+						return Html::a('<i class="glyphicon glyphicon-lock"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
