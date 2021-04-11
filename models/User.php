@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
  * Class User
  * Расширяет свойства Yii::$app->user->identity
  * @package app\models
+ * @deprecated
  */
 class User extends BaseObject implements IdentityInterface {
 	private static $users = [];
