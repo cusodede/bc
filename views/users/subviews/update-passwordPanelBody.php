@@ -15,9 +15,9 @@ use yii\web\View;
 
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'password')->textInput(['value' => '']); ?>
+		<?= $form->field($model, 'password')->textInput(['value' => '']) ?>
 	</div>
 	<div class="col-md-12">
-		<?= $form->field($model, 'newPassword')->textInput(); ?>
+		<?= $form->field($model, 'newPassword')->textInput() ?>
 	</div>
 </div>
