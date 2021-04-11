@@ -24,6 +24,7 @@ $config = [
 	'name' => 'Beeline Cabinet',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log'],
+	'homeUrl' => ['home/home'],
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
