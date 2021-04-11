@@ -28,9 +28,6 @@ use yii\widgets\ActiveForm;
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-update-password"]); ?>
-<?= $this->render('../subviews/update-passwordPanelBody', [
-	'model' => $model,
-	'form' => $form
-]) ?>
+<?= $this->render('../subviews/update-passwordPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
