@@ -5,7 +5,6 @@ namespace app\controllers;
 
 use app\models\core\sse\MessageEventHandler;
 use app\models\sys\permissions\filters\PermissionFilter;
-use app\models\sys\users\CurrentUserHelper;
 use app\models\sys\users\Users;
 use pozitronik\core\models\SqlDebugInfo;
 use pozitronik\core\traits\ControllerTrait;
@@ -100,7 +99,7 @@ class TestController extends Controller {
 	 * Тесты доступов
 	 */
 	public function actionPermissions():void {
-		Utils::log(CurrentUserHelper::model()->allPermissions());
+		Utils::log(Users::Current()->allPermissions());
 	}
 
 	/**
