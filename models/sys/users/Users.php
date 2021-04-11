@@ -6,13 +6,54 @@ namespace app\models\sys\users;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
+use Exception;
+use pozitronik\sys_exceptions\models\LoggedException;
+use Yii;
+use yii\filters\auth\HttpBearerAuth;
+use yii\web\IdentityInterface;
 
 /**
  * Class Users
+ * Авторизация, идентификация, доступы, прочие пользовательские функции, не относящиеся к ActiveRecord
+ *
+ * @property-read bool $isSaltedPassword Для удобства разрешено не использовать соль при установлении пароля
+ * @property string $newPassword Атрибут для обновления пароля
+ * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  */
-class Users extends ActiveRecordUsers {
+class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
 	use ActiveRecordTrait;
+
+	public $newPassword;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels(), [
+			'newPassword' => 'Новый пароль'
+		]);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function rules():array {
+		return array_merge(parent::rules(), [
+			[['newPassword'], 'string', 'max' => 255]
+		]);
+	}
+
+	/**
+	 * @return static
+	 * @throws LoggedException
+	 */
+	public static function Current():self {
+		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
+			throw new LoggedException(new Exception('Пользователь не авторизован'));
+		}
+		return $user;
+	}
 
 	/**
 	 * @param string $login
@@ -23,17 +64,52 @@ class Users extends ActiveRecordUsers {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public static function findIdentity($id) {
+		return static::findOne($id);
+	}
+
+	/**
+	 * Finds an identity by the given token.
+	 * @param string $token the token to be looked for
+	 * @param null|HttpBearerAuth $type the type of the token. The value of this parameter depends on the implementation.
+	 * For example, [[\yii\filters\auth\HttpBearerAuth]] will set this parameter to be `yii\filters\auth\HttpBearerAuth`.
+	 * @return IdentityInterface|null the identity object that matches the given token.
+	 * Null should be returned if such an identity cannot be found
+	 * or the identity is not in an active state (disabled, deleted, etc.)
+	 */
+	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
+		return static::findOne(['access_token' => $token]);
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function generateSalt():string {
+		return sha1(uniqid((string)mt_rand(), true));
+	}
+
+	/**
+	 * @param string $password
+	 * @return string
+	 */
+	private function doSalt(string $password):string {
+		return sha1($password.$this->salt);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function beforeValidate():bool {
 		if ($this->isNewRecord) {
 			if (null === $this->salt) {
-				$this->salt = sha1(uniqid((string)mt_rand(), true));
-				$this->password = sha1($this->password.$this->salt);
+				$this->salt = self::generateSalt();
+				$this->password = $this->doSalt($this->password);
 			}
-		} elseif (null !== $this->update_password) {
-			$this->salt = sha1(uniqid((string)mt_rand(), true));
-			$this->password = sha1($this->update_password.$this->salt);
+		} elseif (null !== $this->newPassword) {
+			$this->salt = self::generateSalt();
+			$this->password = $this->doSalt($this->newPassword);
 		}
 		return parent::beforeValidate();
 	}
@@ -44,4 +120,59 @@ class Users extends ActiveRecordUsers {
 	public function getAuthKey():string {
 		return md5($this->id.md5($this->login));
 	}
+
+	/**
+	 * Returns an ID that can uniquely identify a user identity.
+	 * @return int an ID that uniquely identifies a user identity.
+	 */
+	public function getId():int {
+		return $this->id;
+	}
+
+	/**
+	 * Validates the given auth key.
+	 *
+	 * @param string $authKey the given auth key
+	 * @return bool whether the given auth key is valid.
+	 * @see getAuthKey()
+	 */
+	public function validateAuthKey($authKey):bool {
+		return $this->authKey === $authKey;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsSaltedPassword():bool {
+		return null !== $this->salt;
+	}
+
+	/**
+	 * Функция для смены пароля
+	 * @param array $postData Массив данных формы
+	 * @param bool $validateOldPassword Проверять ли совпадение старого пароля (можно отключить для админа или обладателя специфического права)
+	 * @return bool
+	 */
+	public function updatePassword(array $postData, bool $validateOldPassword = true):bool {
+		$validationUser = new self();
+		if (false === $validationUser->load($postData)) return false;
+		$validationUser->salt = $this->salt;
+		if ($validateOldPassword && false === $this->validatePassword($validationUser->password)) {
+			$this->addError('password', 'Неверный пароль');
+			return false;
+		}
+		$this->newPassword = $validationUser->newPassword;
+		return $this->save();
+	}
+
+	/**
+	 * Проверка пароля.
+	 * Учитывает наличие соли; если соли нет, то сверяемся только с паролем (удобно для сброса УД прямо в БД)
+	 * @param string $password password to validate
+	 * @return bool if password provided is valid for current user
+	 */
+	public function validatePassword(string $password):bool {
+		return $this->isSaltedPassword?sha1($password.$this->salt) === $this->password:$this->password === $password;
+	}
+
 }
