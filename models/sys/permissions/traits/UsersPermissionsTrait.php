@@ -24,9 +24,20 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissions[] $relatedUsersToPermissions Связь к промежуточной таблице пользовательских доступов
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к промежуточной таблице наборов пользовательских доступов
  * @property Permissions[] $relatedPermissions Назначенные напрямую доступы
- * @property PermissionsCollections[] $relatedPermissionsCollections Назначенные напрямую доступы
+ * @property PermissionsCollections[] $relatedPermissionsCollections Назначенные группы разрешений
  */
 trait UsersPermissionsTrait {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels(), [
+			'relatedPermissions' => 'Прямые разрешения',
+			'relatedPermissionsCollections' => 'Группы разрешений',
+		]);
+	}
+
 	/**
 	 * Проверяет, имеет ли пользователь указанный набор прав с указанной логикой проверки.
 	 * Примеры:
