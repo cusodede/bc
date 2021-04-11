@@ -152,6 +152,7 @@ trait UsersPermissionsTrait {
 	 * @throws Throwable
 	 */
 	public function hasActionPermission(Action $action):bool {
+		if (in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true)) return true;
 		$verb = Yii::$app->request->method;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,
