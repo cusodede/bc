@@ -85,6 +85,18 @@ $config = [
 		'sse' => [
 			'class' => LibSSE::class
 		],
+		'rest' => [
+			'class' => Connection::class,
+			'baseUrl' => 'http://bc/api',
+//			 'auth' => function (Connection $db) {
+//			      return 'admin: admin';
+//			 },
+			// 'auth' => 'Bearer: <mytoken>',
+			// 'usePluralisation' => false,
+			// 'useFilterKeyword' => false,
+			// 'enableExceptions' => true,
+			 'itemsProperty' => 'items'
+		],
 		'db' => $db,
 		'urlManager' => [
 			'enablePrettyUrl' => true,
