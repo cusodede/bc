@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\filters;
 
-use app\models\sys\users\CurrentUserHelper;
+use app\models\sys\users\Users;
 use Throwable;
 use Yii;
 use yii\base\Action;
@@ -37,7 +37,7 @@ class PermissionFilter extends ActionFilter {
 	 * @throws Throwable
 	 */
 	public function beforeAction($action):bool {
-		$user = CurrentUserHelper::model();
+		$user = Users::Current();
 		if (true === $user->hasActionPermission($action)) return true;
 
 		if ($this->denyCallback !== null) {
