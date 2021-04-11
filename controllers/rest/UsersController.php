@@ -5,7 +5,6 @@ namespace app\controllers\rest;
 
 use app\models\rest\Users;
 use simialbi\yii2\rest\RestDataProvider;
-use Yii;
 use yii\web\Controller;
 
 /**
@@ -17,8 +16,6 @@ class UsersController extends Controller {
 	 * @return string
 	 */
 	public function actionIndex() {
-		$params = Yii::$app->request->queryParams;
-		$t = Users::find()->all();
 
 		$dataProvider = new RestDataProvider(['query' => Users::find()]);
 
