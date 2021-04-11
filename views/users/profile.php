@@ -10,8 +10,6 @@ use app\models\sys\users\Users;
 use yii\web\View;
 use yii\helpers\Html;
 
-$this->title = "Профиль пользователя {$model->username}";
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="panel panel-default profile-panel">

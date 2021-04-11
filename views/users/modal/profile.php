@@ -10,8 +10,6 @@ use app\models\sys\users\Users;
 use yii\bootstrap\Modal;
 use yii\web\View;
 
-$this->title = "Профиль пользователя {$model->username}";
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php Modal::begin([
