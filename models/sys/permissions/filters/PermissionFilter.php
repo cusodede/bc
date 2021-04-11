@@ -40,7 +40,7 @@ class PermissionFilter extends ActionFilter {
 		$user = Users::Current();
 		if (true === $user->hasActionPermission($action)) return true;
 
-		if ($this->denyCallback !== null) {
+		if (null !== $this->denyCallback) {
 			call_user_func($this->denyCallback, $user, $action);
 		} else {
 			$this->denyAccess();
@@ -51,7 +51,7 @@ class PermissionFilter extends ActionFilter {
 	/**
 	 * @throws ForbiddenHttpException if the user is already logged in or in case of detached User component.
 	 */
-	protected function denyAccess() {
+	protected function denyAccess():void {
 		throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
 	}
 
