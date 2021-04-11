@@ -12,23 +12,16 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-update-password"]); ?>
-	<div class="panel">
-		<div class="panel-heading">
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-md-12">
-					<?= $form->field($model, 'password')->textInput(['value' => '']); ?>
-				</div>
-				<div class="col-md-12">
-					<?= $form->field($model, 'newPassword')->textInput(); ?>
-				</div>
-				<div class="panel-footer">
-
-					<div class="clearfix"></div>
-				</div>
-			</div>
-		</div>
+<?php $form = ActiveForm::begin(); ?>
+<div class="panel">
+	<div class="panel-heading">
 	</div>
+	<div class="panel-body">
+		<?= $this->render('subviews/update-passwordPanelBody', compact('model', 'form')) ?>
+	</div>
+	<div class="panel-footer">
+		<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
+		<div class="clearfix"></div>
+	</div>
+</div>
 <?php ActiveForm::end(); ?>

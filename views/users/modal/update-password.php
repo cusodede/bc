@@ -9,6 +9,7 @@ declare(strict_types = 1);
 use app\models\sys\users\Users;
 use yii\bootstrap\Modal;
 use yii\web\View;
+use yii\widgets\ActiveForm;
 
 ?>
 
@@ -26,8 +27,10 @@ use yii\web\View;
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?= $this->render('../update-password', [
-	'model' => $model
+<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-update-password"]); ?>
+<?= $this->render('../subviews/update-passwordPanelBody', [
+	'model' => $model,
+	'form' => $form
 ]) ?>
-
+<?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
