@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-use app\models\User;
+use app\models\sys\users\Users;
+use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
 use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
-use pozitronik\widgets\GridConfig;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
-use \yii\gii\Module as GiiModule;
+use yii\gii\Module as GiiModule;
 use yii\log\FileTarget;
 use yii\rest\UrlRule;
 use yii\swiftmailer\Mailer;
@@ -63,7 +63,7 @@ $config = [
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
-			'identityClass' => User::class,//todo User class
+			'identityClass' => Users::class,
 			'enableAutoLogin' => true
 		],
 		'errorHandler' => [
