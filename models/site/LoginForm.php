@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
-use app\models\User;
+use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\base\Model;
@@ -11,7 +11,7 @@ use yii\base\Model;
 /**
  * LoginForm is the model behind the login form.
  *
- * @property User|null $user
+ * @property Users|null $user
  * @property string $login
  * @property string $password
  * @property bool $rememberMe
@@ -22,9 +22,9 @@ class LoginForm extends Model {
 	public $login;
 	public $password;
 	public $rememberMe = true;
-	public $email;
 	public $restore = false;
 
+	/** @var null|Users */
 	private $_user;
 
 	/**
@@ -34,10 +34,16 @@ class LoginForm extends Model {
 		return [
 			[['login', 'password'], 'required'],
 			['rememberMe', 'boolean'],
-			['email', 'email'],
-			['password', 'validatePassword'],
-			['login', 'validateLogin']
-		];
+			[['password'], function(string $attribute):void {
+				if (!$this->hasErrors() && (null === $this->user || false === $this->user->validatePassword($this->password))) {
+					$this->addError($attribute, 'Неправильные логин или пароль.');
+				}
+			}],
+			[['login'], function(string $attribute):void {
+				if (!$this->hasErrors() && null !== $this->user && $this->user->deleted) {
+					$this->addError($attribute, 'Пользователь заблокирован');
+				}
+			}]];
 	}
 
 	/**
@@ -52,52 +58,21 @@ class LoginForm extends Model {
 	}
 
 	/**
-	 * Validates the password.
-	 * This method serves as the inline validation for password.
-	 *
-	 * @param string $attribute the attribute currently being validated
-	 * @internal param array $params the additional name-value pairs given in the rule
-	 */
-	public function validatePassword(string $attribute):void {
-		if (!$this->hasErrors()) {
-			$user = $this->getUser();
-			if (!$user || !$user->validatePassword($this->password)) {
-				$this->addError($attribute, 'Неправильные логин или пароль.');
-			}
-		}
-	}
-
-	/**
-	 * @return User|null
-	 */
-	public function getUser():?User {
-		if (null === $this->_user) {
-			$this->_user = User::findByLogin($this->login);
-		}
-		return $this->_user;
-	}
-
-	/**
-	 * Validates the username.
-	 * Пользователь может быть на модерации, таких пускать нельзя
-	 *
-	 * @param string $attribute the attribute currently being validated
-	 * @internal param array $params the additional name-value pairs given in the rule
-	 */
-	public function validateLogin(string $attribute):void {
-		if (!$this->hasErrors()) {
-			$user = $this->getUser();
-			if (null !== $user && $user->CurrentUser->deleted) {
-				$this->addError($attribute, 'Пользователь заблокирован');
-			}
-		}
-	}
-
-	/**
 	 * Logs in a user using the provided username and password.
 	 * @return bool whether the user is logged in successfully
 	 */
 	public function doLogin():bool {
-		return ($this->validate() && Yii::$app->user->login($this->getUser(), $this->rememberMe?DateHelper::SECONDS_IN_MONTH:0));
+		return ($this->validate() && Yii::$app->user->login($this->user, $this->rememberMe?DateHelper::SECONDS_IN_MONTH:0));
 	}
+
+	/**
+	 * @return Users|null
+	 */
+	public function getUser():?Users {
+		if (null === $this->_user) {
+			$this->_user = Users::findByLogin($this->login);
+		}
+		return $this->_user;
+	}
+
 }
