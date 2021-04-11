@@ -6,6 +6,7 @@ namespace app\models\sys\permissions;
 use app\models\core\CacheHelper;
 use app\models\sys\permissions\active_record\Permissions as ActiveRecordPermissions;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
 use yii\caching\TagDependency;
 
@@ -30,17 +31,21 @@ class Permissions extends ActiveRecordPermissions {
 	/*Параметры разрешения, для которых пустой фильтр приравнивается к любому значению*/
 	public const ALLOWED_EMPTY_PARAMS = ['action', 'verb'];
 
-	/*
-	 * Пути к расположениям контроллеров, для подсказок в выбиралках.
-	 * Формат:
-	 * 	алиас каталога => префикс id
-	 * Так проще и быстрее, чем пытаться вычислять префикс из контроллера (в нём id появляется только в момент вызова,
-	 * и зависит от множества настроек), учитывая, что это нужно только в админке, и только в выбиралке.
+	public const COMPONENT_NAME = 'permissions';
+	public const GRANT_ALL= 'grantAll';
+	public const CONTROLLER_DIRS = 'controllerDirs';
+
+	/**
+	 * Возвращает значение конфига для компонента
+	 * @param string $parameter
+	 * @param mixed $default
+	 * @return mixed
+	 * @throws Throwable
+	 * @noinspection PhpReturnDocTypeMismatchInspection Проверено, в $default мы можем задать что угодно
 	 */
-	public const CONTROLLER_DIRS = [
-		'@app/controllers' => '',
-		'@app/controllers/api' => 'api'
-	];
+	public static function ConfigurationParameter(string $parameter, $default = null) {
+		return ArrayHelper::getValue(Yii::$app->components, self::COMPONENT_NAME.".".$parameter, $default);
+	}
 
 	/**
 	 * @param int $user_id
