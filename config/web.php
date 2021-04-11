@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
@@ -96,7 +97,7 @@ $config = [
 			// 'usePluralisation' => false,
 			// 'useFilterKeyword' => false,
 			// 'enableExceptions' => true,
-			 'itemsProperty' => 'items'
+			'itemsProperty' => 'items'
 		],
 		'db' => $db,
 		'urlManager' => [
@@ -108,6 +109,21 @@ $config = [
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
 			]
+		],
+		'permissions' => [
+			'class' => Permissions::class,
+			/*
+			 * Пути к расположениям контроллеров, для подсказок в выбиралках.
+			 * Формат:
+			 * 	алиас каталога => префикс id
+			 * Так проще и быстрее, чем пытаться вычислять префикс из контроллера (в нём id появляется только в момент вызова,
+			 * и зависит от множества настроек), учитывая, что это нужно только в админке, и только в выбиралке.
+			 */
+			'controllerDirs' => [
+				'@app/controllers' => '',
+				'@app/controllers/api' => 'api'
+			],
+			'grantAll' => [1]/*User ids, that receive all permissions by default*/
 		]
 	],
 	'params' => $params,
