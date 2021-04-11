@@ -5,6 +5,7 @@ namespace app\controllers\rest;
 
 use app\models\rest\Users;
 use simialbi\yii2\rest\RestDataProvider;
+use yii\base\InvalidConfigException;
 use yii\web\Controller;
 
 /**
@@ -14,6 +15,7 @@ class UsersController extends Controller {
 
 	/**
 	 * @return string
+	 * @throws InvalidConfigException
 	 */
 	public function actionIndex() {
 
