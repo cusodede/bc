@@ -55,7 +55,9 @@ trait UsersPermissionsTrait {
 			$result = false;
 			$allUserPermissionsNames = ArrayHelper::getColumn(self::allPermissions(), 'name');
 			foreach ($permissions as $current_permission_name) {
-				$result = in_array(trim($current_permission_name), $allUserPermissionsNames, true);
+				if (false === $result = $this->isAllPermissionsGranted()) {
+					$result = in_array(trim($current_permission_name), $allUserPermissionsNames, true);
+				}
 
 				switch ($logic) {
 					case Permissions::LOGIC_OR:
@@ -152,7 +154,7 @@ trait UsersPermissionsTrait {
 	 * @throws Throwable
 	 */
 	public function hasActionPermission(Action $action):bool {
-		if (in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true)) return true;
+		if ($this->isAllPermissionsGranted()) return true;
 		$verb = Yii::$app->request->method;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,
@@ -171,6 +173,15 @@ trait UsersPermissionsTrait {
 				CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]),//сброс кеша при изменении прав пользователя
 			]
 		]));
+	}
+
+	/**
+	 * Проверяет перегрузку доступов через конфиг
+	 * @return bool
+	 * @throws Throwable
+	 */
+	private function isAllPermissionsGranted():bool {
+		return in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true);
 	}
 
 }
