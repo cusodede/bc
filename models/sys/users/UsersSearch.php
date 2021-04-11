@@ -3,12 +3,13 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
+use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class UsersSearch
  */
-class UsersSearch extends Users {
+class UsersSearch extends ActiveRecordUsers {
 
 	/**
 	 * @inheritdoc
