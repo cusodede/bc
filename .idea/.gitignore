@@ -1,6 +1,5 @@
 # Default ignored files
 /shelf/
-/workspace.xml
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
@@ -8,6 +7,5 @@
 /dataSources
 /inspectionProfiles/
 /dataSources.xml
-/encodings.xml
 /php.xml
-/modules.xml
+/workspace.xml
