@@ -44,7 +44,7 @@ ModalHelperAsset::register($this);
 
 <body>
 <?php $this->beginBody(); ?>
-<?php if (ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false) || Yii::$app->user->isGuest): ?>
+<?php if (Yii::$app->user->isGuest || ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false)): ?>
 	<div class="panel panel-trans text-center">
 		<div class="panel-heading">
 			<h1 class="error-code text-primary">Не пущу!</h1>
