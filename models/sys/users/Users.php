@@ -172,7 +172,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @return bool if password provided is valid for current user
 	 */
 	public function validatePassword(string $password):bool {
-		return $this->isSaltedPassword?sha1($password.$this->salt) === $this->password:$this->password === $password;
+		return $this->isSaltedPassword?$this->doSalt($password) === $this->password:$this->password === $password;
 	}
 
 }
