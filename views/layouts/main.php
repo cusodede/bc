@@ -19,6 +19,7 @@ use pozitronik\helpers\Utils;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -40,106 +41,66 @@ ModalHelperAsset::register($this);
 	<title><?= $this->title ?></title>
 	<?php $this->head(); ?>
 </head>
+
 <body>
 <?php $this->beginBody(); ?>
-<div class="navigation">
-	<?php NavBar::begin([
-		'renderInnerContainer' => false,
-		'options' => [
-			'class' => 'navbar'
-		]
-	]); ?>
-	<?= Nav::widget([
-		'items' => [
-			[
-				'label' => 'Домой',
-				'url' => Url::home()
-			],
-			[
-				'label' => 'Пользователи',
-				'items' => [
-					[
-						'label' => 'Все',
-						'url' => UsersController::to('index')
-					]
-				],
-			],
-			[
-				'label' => 'Система',
-				'items' => [
-					[
-						'label' => 'Редактор разрешений',
-						'url' => PermissionsController::to('index')
-					],
-					[
-						'label' => 'Группы разрешений',
-						'url' => PermissionsCollectionsController::to('index')
-					],
-					[
-						'label' => 'Протокол сбоев',
-						'url' => SysExceptionsModule::to('index')
-					],
-					[
-						'label' => 'Процессы на БД',
-						'url' => DbController::to('process-list')
-					],
-					[
-						'label' => 'Файловый менеджер',
-						'url' => FSModule::to('index')
-					]
-				],
-			],
-			[
-				'label' => 'REST API',
-				'items' => [
-					[
-						'label' => 'Пользователи',
-						'url' => '/api/users',
-					]
-				]
-			],
-			SearchWidget::widget(),
-			[
-				'label' => Users::Current()->username,
-				'options' => [
-					'class' => 'pull-right'
-				],
-				'items' => [
-					'<li class="dropdown-header">'.Users::Current()->comment.'</li>',
-					[
-						'label' => "Профиль",
-						'url' => '#',
-						'options' => [
-							'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')
-						]
-					],
-					'<li class="divider"></li>',
-					[
-						'label' => 'Выход',
-						'url' => SiteController::to('logout'),
-						'options' => [
-							'class' => 'pull-right'
-						]
-					],
-				],
-			],
-
-		],
-		'options' => [
-			'class' => 'nav-pills pull-left'
-		]
-	]) ?>
-	<?php NavBar::end(); ?>
-</div>
-<div class="clearfix"></div>
-<div class="boxed">
-	<div id="content-container">
-		<div id="page-content">
-			<?= $content ?>
+<?php if (ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false) || Yii::$app->user->isGuest): ?>
+	<div class="panel panel-trans text-center">
+		<div class="panel-heading">
+			<h1 class="error-code text-primary">Не пущу!</h1>
+		</div>
+		<div class="panel-body">
+			<p>Пользователь не авторизован</p>
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></i>
+			<div class="pad-top"><a class="btn-link text-semibold" href="/">Авторизоваться</a></div>
 		</div>
 	</div>
-</div>
-
+<?php else: ?>
+	<div class="navigation">
+		<?php NavBar::begin(['renderInnerContainer' => false,
+			'options' => ['class' => 'navbar']]); ?>
+		<?= Nav::widget(['items' => [['label' => 'Домой',
+			'url' => Url::home()],
+			['label' => 'Пользователи',
+				'items' => [['label' => 'Все',
+					'url' => UsersController::to('index')]],],
+			['label' => 'Система',
+				'items' => [['label' => 'Редактор разрешений',
+					'url' => PermissionsController::to('index')],
+					['label' => 'Группы разрешений',
+						'url' => PermissionsCollectionsController::to('index')],
+					['label' => 'Протокол сбоев',
+						'url' => SysExceptionsModule::to('index')],
+					['label' => 'Процессы на БД',
+						'url' => DbController::to('process-list')],
+					['label' => 'Файловый менеджер',
+						'url' => FSModule::to('index')]],],
+			['label' => 'REST API',
+				'items' => [['label' => 'Пользователи',
+					'url' => '/api/users',]]],
+			SearchWidget::widget(),
+			['label' => Users::Current()->username,
+				'options' => ['class' => 'pull-right'],
+				'items' => ['<li class="dropdown-header">'.Users::Current()->comment.'</li>',
+					['label' => "Профиль",
+						'url' => '#',
+						'options' => ['onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')]],
+					'<li class="divider"></li>',
+					['label' => 'Выход',
+						'url' => SiteController::to('logout'),
+						'options' => ['class' => 'pull-right']],],],],
+			'options' => ['class' => 'nav-pills pull-left']]) ?>
+		<?php NavBar::end(); ?>
+	</div>
+	<div class="clearfix"></div>
+	<div class="boxed">
+		<div id="content-container">
+			<div id="page-content">
+				<?= $content ?>
+			</div>
+		</div>
+	</div>
+<?php endif ?>
 <?php $this->endBody(); ?>
 </body>
 <?php $this->endPage(); ?>
