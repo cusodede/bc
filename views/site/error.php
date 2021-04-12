@@ -13,7 +13,7 @@ use yii\web\HttpException;
 $message = $exception->getMessage();
 $this->title = $message;
 ?>
-<hr class="new-section-sm bord-no">-
+
 <div class="row">
 	<div class="col-lg-6 col-lg-offset-3">
 		<div class="panel panel-trans text-center">
