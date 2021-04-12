@@ -9,6 +9,7 @@ use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -112,6 +113,8 @@ class UsersController extends Controller {
 	 * @param int $id
 	 * @return string|Response
 	 * @throws LoggedException
+	 * @throws Throwable
+	 * @throws Exception
 	 */
 	public function actionUpdatePassword(int $id) {
 		if (null === $user = Users::findOne($id)) {
