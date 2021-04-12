@@ -25,6 +25,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	use ActiveRecordTrait;
 
 	public $newPassword;
+	private const DEFAULT_PASSWORD = 'Qq123456';
 
 	/**
 	 * @inheritDoc
@@ -91,11 +92,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	}
 
 	/**
-	 * @param string $password
+	 * @param null|string $password
 	 * @return string
 	 */
-	private function doSalt(string $password):string {
-		return sha1($password.$this->salt);
+	private function doSalt(?string $password):?string {
+		return null === $password?null:sha1($password.$this->salt);
 	}
 
 	/**
@@ -103,6 +104,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function beforeValidate():bool {
 		if ($this->isNewRecord) {
+			$this->password = $this->password??self::DEFAULT_PASSWORD;
 			if (null === $this->salt) {
 				$this->salt = self::generateSalt();
 				$this->password = $this->doSalt($this->password);
