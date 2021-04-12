@@ -18,6 +18,6 @@ use yii\web\View;
 		<?= $form->field($model, 'password')->textInput(['value' => '']) ?>
 	</div>
 	<div class="col-md-12">
-		<?= $form->field($model, 'newPassword')->textInput() ?>
+		<?= $form->field($model, 'is_pwd_outdated')->checkbox() ?>
 	</div>
 </div>

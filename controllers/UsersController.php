@@ -117,7 +117,7 @@ class UsersController extends Controller {
 		if (null === $user = Users::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
-		if ($user->updatePassword(Yii::$app->request->post())) {
+		if ($user->updateModelFromPost()) {
 			return $this->redirect(['profile', 'id' => $user->id]);
 		}
 		if (Yii::$app->request->isAjax) {
