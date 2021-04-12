@@ -6,10 +6,10 @@ namespace app\models\sys\users;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
-use Exception;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
+use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
 
 /**
@@ -17,7 +17,6 @@ use yii\web\IdentityInterface;
  * Авторизация, идентификация, доступы, прочие пользовательские функции, не относящиеся к ActiveRecord
  *
  * @property-read bool $isSaltedPassword Для удобства разрешено не использовать соль при установлении пароля
- * @property string $newPassword Атрибут для обновления пароля
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
@@ -51,7 +50,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public static function Current():self {
 		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
-			throw new LoggedException(new Exception('Пользователь не авторизован'));
+			throw new LoggedException(new ForbiddenHttpException('Пользователь не авторизован'));
 		}
 		return $user;
 	}
@@ -105,13 +104,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public function beforeValidate():bool {
 		if ($this->isNewRecord) {
 			$this->password = $this->password??self::DEFAULT_PASSWORD;
+			$this->is_pwd_outdated = true;
 			if (null === $this->salt) {
 				$this->salt = self::generateSalt();
 				$this->password = $this->doSalt($this->password);
 			}
-		} elseif (null !== $this->newPassword) {
-			$this->salt = self::generateSalt();
-			$this->password = $this->doSalt($this->newPassword);
 		}
 		return parent::beforeValidate();
 	}
@@ -147,24 +144,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getIsSaltedPassword():bool {
 		return null !== $this->salt;
-	}
-
-	/**
-	 * Функция для смены пароля
-	 * @param array $postData Массив данных формы
-	 * @param bool $validateOldPassword Проверять ли совпадение старого пароля (можно отключить для админа или обладателя специфического права)
-	 * @return bool
-	 */
-	public function updatePassword(array $postData, bool $validateOldPassword = true):bool {
-		$validationUser = new self();
-		if (false === $validationUser->load($postData)) return false;
-		$validationUser->salt = $this->salt;
-		if ($validateOldPassword && false === $this->validatePassword($validationUser->password)) {
-			$this->addError('password', 'Неверный пароль');
-			return false;
-		}
-		$this->newPassword = $validationUser->newPassword;
-		return $this->save();
 	}
 
 	/**
