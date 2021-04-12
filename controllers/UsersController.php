@@ -57,6 +57,25 @@ class UsersController extends Controller {
 	}
 
 	/**
+	 * @return string|Response
+	 * @throws Throwable
+	 */
+	public function actionCreate() {
+		$user = new Users();
+		if ($user->createModelFromPost()) {
+			return $this->redirect('index');
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/create', [
+				'model' => $user
+			]);
+		}
+		return $this->render('create', [
+			'model' => $user
+		]);
+	}
+
+	/**
 	 * @param int $id
 	 * @return Response
 	 * @throws Throwable

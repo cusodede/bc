@@ -26,6 +26,16 @@ $this->registerCss(".ms-container {width:100%}");
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<?= $form->field($model, 'login')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'email')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?= $form->field($model, 'comment')->textarea() ?>
 	</div>
 </div>
