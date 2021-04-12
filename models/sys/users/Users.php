@@ -105,10 +105,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 		if ($this->isNewRecord) {
 			$this->password = $this->password??self::DEFAULT_PASSWORD;
 			$this->is_pwd_outdated = true;
-			if (null === $this->salt) {
-				$this->salt = self::generateSalt();
-				$this->password = $this->doSalt($this->password);
-			}
+
+		}
+		if (null === $this->salt) {
+			$this->salt = self::generateSalt();
+			$this->password = $this->doSalt($this->password);
 		}
 		return parent::beforeValidate();
 	}
