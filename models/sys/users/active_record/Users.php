@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $login Логин
  * @property string $password Хеш пароля либо сам пароль (если $salt пустой)
  * @property null|string $salt Unique random salt hash
+ * @property bool $is_pwd_outdated Пароль должен быть сменён пользователем
  * @property string $email email
  * @property string $comment Служебный комментарий пользователя
  * @property string $create_date Дата регистрации
@@ -39,8 +40,8 @@ class Users extends ActiveRecord {
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
 			[['daddy'], 'integer'],
-			[['deleted'], 'boolean'],
-			[['deleted'], 'default', 'value' => false],
+			[['deleted', 'is_pwd_outdated'], 'boolean'],
+			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
 			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
@@ -60,6 +61,7 @@ class Users extends ActiveRecord {
 			'login' => 'Логин',
 			'password' => 'Пароль',
 			'salt' => 'Соль',
+			'is_pwd_outdated' => 'Пользователь должен сменить пароль',
 			'email' => 'Почтовый адрес',
 			'comment' => 'Служебный комментарий пользователя',
 			'create_date' => 'Дата регистрации',
