@@ -107,7 +107,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 			$this->is_pwd_outdated = true;
 
 		}
-		if (null === $this->salt) {
+		if ($this->isAttributeUpdated('password')) {/*если пароль обновился, то пересолим*/
 			$this->salt = self::generateSalt();
 			$this->password = $this->doSalt($this->password);
 		}
