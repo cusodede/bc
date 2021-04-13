@@ -91,7 +91,7 @@ class SiteController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionIndex():Response {
-		return Yii::$app->user->isGuest?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):$this->redirect(Yii::$app->homeUrl);
+		return (Yii::$app->user->isGuest || ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false))?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):$this->redirect(Yii::$app->homeUrl);
 	}
 
 	/**
