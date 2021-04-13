@@ -122,10 +122,11 @@ ModalHelperAsset::register($this);
 						'<li class="dropdown-header">'.Users::Current()->comment.'</li>',
 						[
 							'label' => "Профиль",
-							'url' => '#',
+							'url' => UsersController::to('profile', ['id' => Yii::$app->user->id]),
 							'options' => [
-								'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')
-							]
+								'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "'.Users::Current()->formName().'-modal-profile-'.Yii::$app->user->id.'");event.preventDefault();')
+							],
+							'encode' => true
 						],
 						'<li class="divider"></li>',
 						[
