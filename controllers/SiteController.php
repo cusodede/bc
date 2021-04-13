@@ -23,6 +23,8 @@ use yii\web\UnauthorizedHttpException;
 class SiteController extends Controller {
 	use ControllerTrait;
 
+	public $layout = 'login';
+
 	/**
 	 * @inheritdoc
 	 */
@@ -39,7 +41,6 @@ class SiteController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionLogin() {
-		$this->layout = 'login';
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->doLogin()) {
 			if ($model->user->is_pwd_outdated) {
@@ -71,7 +72,6 @@ class SiteController extends Controller {
 	 * @throws LoggedException
 	 */
 	public function actionUpdatePassword() {
-		$this->layout = 'login';
 		/** @var Users|null $loggedUser */
 		if (null === $loggedUser = Yii::$app->user->identity) {
 			throw new LoggedException(new UnauthorizedHttpException('Пользователь не авторизован'));
