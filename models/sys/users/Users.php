@@ -93,7 +93,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @return string
 	 */
-	private static function generateSalt():string {
+	public static function generateSalt():string {
 		return sha1(uniqid((string)mt_rand(), true));
 	}
 
