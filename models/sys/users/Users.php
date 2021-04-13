@@ -23,7 +23,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
 	use ActiveRecordTrait;
 
-	public $newPassword;
 	private const DEFAULT_PASSWORD = 'Qq123456';
 
 	/**
