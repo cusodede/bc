@@ -57,39 +57,92 @@ ModalHelperAsset::register($this);
 	</div>
 <?php else: ?>
 	<div class="navigation">
-		<?php NavBar::begin(['renderInnerContainer' => false,
-			'options' => ['class' => 'navbar']]); ?>
-		<?= Nav::widget(['items' => [['label' => 'Домой',
-			'url' => Url::home()],
-			['label' => 'Пользователи',
-				'items' => [['label' => 'Все',
-					'url' => UsersController::to('index')]],],
-			['label' => 'Система',
-				'items' => [['label' => 'Редактор разрешений',
-					'url' => PermissionsController::to('index')],
-					['label' => 'Группы разрешений',
-						'url' => PermissionsCollectionsController::to('index')],
-					['label' => 'Протокол сбоев',
-						'url' => SysExceptionsModule::to('index')],
-					['label' => 'Процессы на БД',
-						'url' => DbController::to('process-list')],
-					['label' => 'Файловый менеджер',
-						'url' => FSModule::to('index')]],],
-			['label' => 'REST API',
-				'items' => [['label' => 'Пользователи',
-					'url' => '/api/users',]]],
-			SearchWidget::widget(),
-			['label' => Users::Current()->username,
-				'options' => ['class' => 'pull-right'],
-				'items' => ['<li class="dropdown-header">'.Users::Current()->comment.'</li>',
-					['label' => "Профиль",
-						'url' => '#',
-						'options' => ['onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')]],
-					'<li class="divider"></li>',
-					['label' => 'Выход',
-						'url' => SiteController::to('logout'),
-						'options' => ['class' => 'pull-right']],],],],
-			'options' => ['class' => 'nav-pills pull-left']]) ?>
+		<?php NavBar::begin([
+			'renderInnerContainer' => false,
+			'options' => [
+				'class' => 'navbar'
+			]
+		]); ?>
+		<?= Nav::widget([
+			'items' => [
+				[
+					'label' => 'Домой',
+					'url' => Url::home()
+				],
+				[
+					'label' => 'Пользователи',
+					'items' => [
+						[
+							'label' => 'Все',
+							'url' => UsersController::to('index')
+						]
+					],
+				],
+				[
+					'label' => 'Система',
+					'items' => [
+						[
+							'label' => 'Редактор разрешений',
+							'url' => PermissionsController::to('index')
+						],
+						[
+							'label' => 'Группы разрешений',
+							'url' => PermissionsCollectionsController::to('index')
+						],
+						[
+							'label' => 'Протокол сбоев',
+							'url' => SysExceptionsModule::to('index')
+						],
+						[
+							'label' => 'Процессы на БД',
+							'url' => DbController::to('process-list')
+						],
+						[
+							'label' => 'Файловый менеджер',
+							'url' => FSModule::to('index')
+						]
+					],
+				],
+				[
+					'label' => 'REST API',
+					'items' => [
+						[
+							'label' => 'Пользователи',
+							'url' => '/api/users',
+						]
+					]
+				],
+				SearchWidget::widget(),
+				[
+					'label' => Users::Current()->username,
+					'options' => [
+						'class' => 'pull-right'
+					],
+					'items' => [
+						'<li class="dropdown-header">'.Users::Current()->comment.'</li>',
+						[
+							'label' => "Профиль",
+							'url' => '#',
+							'options' => [
+								'onclick' => new JsExpression('AjaxModal("'.UsersController::to('profile', ['id' => Yii::$app->user->id]).'", "users-modal-profile-'.Yii::$app->user->id.'")')
+							]
+						],
+						'<li class="divider"></li>',
+						[
+							'label' => 'Выход',
+							'url' => SiteController::to('logout'),
+							'options' => [
+								'class' => 'pull-right'
+							]
+						],
+					],
+				],
+
+			],
+			'options' => [
+				'class' => 'nav-pills pull-left'
+			]
+		]) ?>
 		<?php NavBar::end(); ?>
 	</div>
 	<div class="clearfix"></div>
