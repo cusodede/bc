@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property string $username Отображаемое имя пользователя
  * @property string $login Логин
  * @property string $password Хеш пароля либо сам пароль (если $salt пустой)
+ * @property null|string $restore_code Код восстановления пароля, если запрошен
  * @property null|string $salt Unique random salt hash
  * @property bool $is_pwd_outdated Пароль должен быть сменён пользователем
  * @property string $email email
@@ -43,6 +44,7 @@ class Users extends ActiveRecord {
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
 			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
+			[['restore_code'], 'string', 'max' => 40],
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
@@ -60,6 +62,7 @@ class Users extends ActiveRecord {
 			'username' => 'Имя пользователя',
 			'login' => 'Логин',
 			'password' => 'Пароль',
+			'restore_code' => 'Код восстановления',
 			'salt' => 'Соль',
 			'is_pwd_outdated' => 'Пользователь должен сменить пароль при входе',
 			'email' => 'Почтовый адрес',
