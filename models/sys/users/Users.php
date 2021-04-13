@@ -63,6 +63,14 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	}
 
 	/**
+	 * @param string $email
+	 * @return Users|null
+	 */
+	public static function findByEmail(string $email):?Users {
+		return self::findOne(['email' => $email]);
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public static function findIdentity($id) {
