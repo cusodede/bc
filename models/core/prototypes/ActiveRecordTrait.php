@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\core\prototypes;
 
 use pozitronik\core\models\LCQuery;
+use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
 use yii\db\Exception as DbException;
@@ -131,6 +132,34 @@ trait ActiveRecordTrait {
 	public function setAndSaveAttributes(?array $values):void {
 		$this->setAttributes($values, false);
 		$this->save();
+	}
+
+	/**
+	 * Разница изменений атрибутов после обновления модели
+	 * @return array
+	 * @param bool $strict Строгое сравнение
+	 * @throws Throwable
+	 */
+	public function identifyUpdatedAttributes(bool $strict = true):array {
+		$changedAttributes = [];
+		foreach ($this->attributes as $name => $value) {
+			/** @noinspection TypeUnsafeComparisonInspection */
+			$changed = $strict?(ArrayHelper::getValue($this, "oldAttributes.$name") !== $value):(ArrayHelper::getValue($this, "oldAttributes.$name") != $value);
+			if ($changed) $changedAttributes[$name] = $value;//Нельзя использовать строгое сравнение из-за преобразований БД
+		}
+		return $changedAttributes;
+	}
+
+	/**
+	 * Изменилось ли значение атрибута после обновления модели
+	 * @param string $attribute
+	 * @param bool $strict Строгое сравнение
+	 * @return bool
+	 * @throws Throwable
+	 */
+	public function isAttributeUpdated(string $attribute, bool $strict = true):bool {
+		/** @noinspection TypeUnsafeComparisonInspection */
+		return $strict?(ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute):(ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
 	}
 
 }
