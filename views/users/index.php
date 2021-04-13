@@ -34,9 +34,15 @@ ModalHelperAsset::register($this);
 		'panel' => [
 			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']).")":" (нет пользователей)"),
 		],
-		'summary' => null !== $searchModel?Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success summary-content']):null,
+		'summary' => null !== $searchModel?Html::a('Новый пользователь', UsersController::to('create'), [
+			'class' => 'btn btn-success summary-content',
+			'onclick' => new JsExpression("AjaxModal('".UsersController::to('create')."', 'Users-modal-create-new');event.preventDefault();")
+		]):null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success']),
+		'emptyText' => Html::a('Новый пользователь', UsersController::to('create'), [
+			'class' => 'btn btn-success',
+			'onclick' => new JsExpression("AjaxModal('".UsersController::to('create')."', 'Users-modal-create-new');event.preventDefault();")
+		]),
 		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
@@ -77,7 +83,6 @@ ModalHelperAsset::register($this);
 					]);
 				}
 			]
-
 
 		]
 	])
