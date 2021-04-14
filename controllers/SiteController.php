@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\site\LoginForm;
+use app\models\site\RestorePasswordForm;
 use app\models\site\UpdatePasswordForm;
 use app\models\sys\users\Users;
 use pozitronik\core\traits\ControllerTrait;
@@ -13,6 +14,7 @@ use Throwable;
 use Yii;
 use yii\web\Controller;
 use yii\web\ErrorAction;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
 
@@ -37,10 +39,11 @@ class SiteController extends Controller {
 	}
 
 	/**
+	 * @param null|string $from Опциональная метка перехода. Заменить на флеш-оповещения, при необходимости.
 	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function actionLogin() {
+	public function actionLogin(?string $from = null) {
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->doLogin()) {
 			if ($model->user->is_pwd_outdated) {
@@ -49,7 +52,8 @@ class SiteController extends Controller {
 			return $this->redirect(Yii::$app->homeUrl);
 		}
 		return $this->render('login', [
-			'login' => $model
+			'login' => $model,
+			'from' => $from
 		]);
 	}
 
@@ -83,6 +87,49 @@ class SiteController extends Controller {
 		}
 		return $this->render('update-password', [
 			'model' => $updatePasswordModel
+		]);
+	}
+
+	/**
+	 * Запрос на восстановление пароля, доступно только неавторизованному пользователю или пользюку,
+	 * у которого протух пароль. Протухшим разрешаем потому, что они тоже могут забыть пароль.
+	 */
+	public function actionRestorePassword():string {
+		if (!(Yii::$app->user->isGuest || true === ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated'))) {
+			throw new LoggedException(new ForbiddenHttpException('Восстановление пароля недоступно после авторизации'));
+		}
+		$restorePasswordForm = new RestorePasswordForm();
+		if ($restorePasswordForm->load(Yii::$app->request->post())) {/*это постинг формы с емейлом*/
+			$restorePasswordForm->doSendCode();//не возвращает результат
+			return $this->render('restore-password-sent');
+		}
+
+		return $this->render('restore-password', [
+			'model' => $restorePasswordForm
+		]);
+
+	}
+
+	/**
+	 * @param string|null $code
+	 * @return Response
+	 */
+	public function actionResetPassword(?string $code = null):Response {
+		if (null === $code) return $this->redirect('restore-password');
+
+		/*Проверка наличия пользователя с указанным кодом восстановления*/
+		if (null === $restoredUser = Users::findByRestoreCode($code)) return $this->redirect('restore-password');
+
+		$resetPasswordForm = new UpdatePasswordForm([/*UpdatePasswordForm отвечает и за сброс*/
+			'user' => $restoredUser,
+		]);
+		if ($resetPasswordForm->load(Yii::$app->request->post()) && $resetPasswordForm->doUpdate(false)) {/*Данные пришли в посте и сброшены успешно*/
+			return $this->redirect(['site/login', 'from' => 'reset']);
+		}
+
+		return $this->render('reset-password', [
+			'model' => $resetPasswordForm,
+			'code' => $code
 		]);
 	}
 
