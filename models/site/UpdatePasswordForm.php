@@ -43,7 +43,7 @@ class UpdatePasswordForm extends Model {
 				}
 			}],
 			[['oldPassword'], function(string $attribute):void {
-				if ($this->requireOldPassword && !$this->hasErrors() && !$this->user->validatePassword($this->oldPassword)) {
+				if ($this->_requireOldPassword && !$this->hasErrors() && !$this->user->validatePassword($this->oldPassword)) {
 					$this->addError('oldPassword', 'Текущий пароль введён неверно');
 				}
 			}]
