@@ -101,7 +101,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public function beforeValidate():bool {
 		if ($this->isNewRecord) {
 			$this->password = $this->password??self::DEFAULT_PASSWORD;
-			$this->is_pwd_outdated = true;
+			/*Если пользователь был создан админом без пароля, то ставим флаг принудительной смены пароля*/
+			$this->is_pwd_outdated = $this->password = self::DEFAULT_PASSWORD;
 
 		}
 		if ($this->isAttributeUpdated('password')) {/*если пароль обновился, то пересолим*/
