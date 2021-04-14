@@ -16,6 +16,7 @@ use app\models\sys\users\Users;
 use app\widgets\search\SearchWidget;
 use pozitronik\filestorage\FSModule;
 use pozitronik\helpers\Utils;
+use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -79,7 +80,7 @@ ModalHelperAsset::register($this);
 					],
 				],
 				[
-					'label' => 'Система',
+					'label' => 'Доступы',
 					'items' => [
 						[
 							'label' => 'Редактор разрешений',
@@ -88,6 +89,15 @@ ModalHelperAsset::register($this);
 						[
 							'label' => 'Группы разрешений',
 							'url' => PermissionsCollectionsController::to('index')
+						],
+					],
+				],
+				[
+					'label' => 'Система',
+					'items' => [
+						[
+							'label' => 'Справочники',
+							'url' => ReferencesModule::to('references')
 						],
 						[
 							'label' => 'Протокол сбоев',

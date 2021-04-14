@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use pozitronik\references\ReferencesModule;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
@@ -51,7 +52,10 @@ $config = [
 		],
 		'gridconfig' => [
 			'class' => GridConfigModule::class
-		]
+		],
+		'references' => [
+			'class' => ReferencesModule::class
+		],
 	],
 	'components' => [
 		'request' => [
