@@ -56,7 +56,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $restoreCode
 	 * @return Users|null
 	 */
-	public static function findByRestoreCode(string $restoreCode) {
+	public static function findByRestoreCode(string $restoreCode):?Users {
 		return self::findOne(['restore_code' => $restoreCode]);
 	}
 
