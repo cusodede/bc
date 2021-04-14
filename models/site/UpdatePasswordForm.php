@@ -64,6 +64,7 @@ class UpdatePasswordForm extends Model {
 
 	/**
 	 * Обновляет пароль пользователя
+	 * @param bool $requireOldPassword Проверять ли наличие старого пароля перед заменой
 	 * @return bool
 	 */
 	public function doUpdate(bool $requireOldPassword = true):bool {
