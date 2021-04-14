@@ -14,11 +14,13 @@ use yii\base\Model;
  * @property string $oldPassword Предыдущий пароль
  * @property string $newPassword Новый пароль
  * @property string $newPasswordRepeat Повтор пароля для самопроверки
+ * @property bool $requireOldPassword Флаг проверки предыдущего пароля; нужен при сбросе забытого пароля
  */
 class UpdatePasswordForm extends Model {
 	public $oldPassword;
 	public $newPassword;
 	public $newPasswordRepeat;
+	public $requireOldPassword = true;
 
 	/** @var Users */
 	private $_user;
@@ -28,6 +30,7 @@ class UpdatePasswordForm extends Model {
 	 */
 	public function rules():array {
 		return [
+			[['requireOldPassword'], 'bool'],
 			[['oldPassword', 'newPassword', 'newPasswordRepeat'], 'required'],
 			[['newPasswordRepeat'], function(string $attribute):void {
 				if (!$this->hasErrors() && $this->newPassword !== $this->newPasswordRepeat) {
@@ -35,7 +38,7 @@ class UpdatePasswordForm extends Model {
 				}
 			}],
 			[['oldPassword'], function(string $attribute):void {
-				if (!$this->hasErrors() && !$this->user->validatePassword($this->oldPassword)) {
+				if ($this->requireOldPassword && !$this->hasErrors() && !$this->user->validatePassword($this->oldPassword)) {
 					$this->addError('oldPassword', 'Текущий пароль введён неверно');
 				}
 			}]
