@@ -15,6 +15,7 @@ use yii\base\Model;
  *
  * @property null|string $email Адрес, на который гость пробует восстановить пароль
  * @property null|string $restoreCode Код восстановления
+ * @property-read null|Users $restoreUser
  * @todo: капча
  */
 class RestorePasswordForm extends Model {
@@ -28,7 +29,7 @@ class RestorePasswordForm extends Model {
 		return [
 			[['email'], 'required', 'when' => function(string $attribute) {
 				return false;//todo
-			}]  ,
+			}],
 			[['email'], 'email'],
 
 		];
@@ -62,6 +63,13 @@ class RestorePasswordForm extends Model {
 				->setSubject('Запрос восстановления пароля')
 				->send();
 		}
+	}
+
+	/**
+	 * @return Users|null
+	 */
+	public function getRestoreUser():?Users {
+		return null === $this->restoreCode?null:Users::findByRestoreCode($this->restoreCode);
 	}
 
 }
