@@ -54,7 +54,7 @@ class SiteController extends Controller {
 		}
 		return $this->render('login', [
 			'login' => $model,
-			'from' => $from
+			'from' => $from /*unused, на будущее*/
 		]);
 	}
 
