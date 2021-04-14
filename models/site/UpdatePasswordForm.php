@@ -30,8 +30,11 @@ class UpdatePasswordForm extends Model {
 	 */
 	public function rules():array {
 		return [
-			[['requireOldPassword'], 'bool'],
-			[['oldPassword', 'newPassword', 'newPasswordRepeat'], 'required'],
+			[['requireOldPassword'], 'boolean'],
+			[['oldPassword'], 'required', 'when' => function(UpdatePasswordForm $model, string $attribute) {
+				return $model->requireOldPassword;
+			}],
+			[['newPassword', 'newPasswordRepeat'], 'required'],
 			[['newPasswordRepeat'], function(string $attribute):void {
 				if (!$this->hasErrors() && $this->newPassword !== $this->newPasswordRepeat) {
 					$this->addError('newPasswordRepeat', 'Введённые пароли должны совпадать');
