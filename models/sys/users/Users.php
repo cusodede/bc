@@ -25,6 +25,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	private const DEFAULT_PASSWORD = 'Qq123456';
 
+
 	/**
 	 * @inheritDoc
 	 */
@@ -68,6 +69,14 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public static function findByEmail(string $email):?Users {
 		return self::findOne(['email' => $email]);
+	}
+
+	/**
+	 * @param string $restoreCode
+	 * @return Users|null
+	 */
+	public static function findByRestoreCode(string $restoreCode) {
+		return self::findOne(['restore_code' => $restoreCode]);
 	}
 
 	/**
