@@ -14,13 +14,15 @@ use yii\base\Model;
  * @property string $oldPassword Предыдущий пароль
  * @property string $newPassword Новый пароль
  * @property string $newPasswordRepeat Повтор пароля для самопроверки
- * @property bool $requireOldPassword Флаг проверки предыдущего пароля; нужен при сбросе забытого пароля
  */
 class UpdatePasswordForm extends Model {
 	public $oldPassword;
 	public $newPassword;
 	public $newPasswordRepeat;
-	public $requireOldPassword = true;
+	/**
+	 * @var bool Необходимость указания старого пароля при сбросе
+	 */
+	private $_requireOldPassword = true;
 
 	/** @var Users */
 	private $_user;
@@ -32,7 +34,7 @@ class UpdatePasswordForm extends Model {
 		return [
 			[['requireOldPassword'], 'boolean'],
 			[['oldPassword'], 'required', 'when' => function(UpdatePasswordForm $model, string $attribute) {
-				return $model->requireOldPassword;
+				return $model->_requireOldPassword;
 			}],
 			[['newPassword', 'newPasswordRepeat'], 'required'],
 			[['newPasswordRepeat'], function(string $attribute):void {
@@ -64,7 +66,8 @@ class UpdatePasswordForm extends Model {
 	 * Обновляет пароль пользователя
 	 * @return bool
 	 */
-	public function doUpdate():bool {
+	public function doUpdate(bool $requireOldPassword = true):bool {
+		$this->_requireOldPassword = $requireOldPassword;
 		if ($this->validate()) {
 			$this->user->password = $this->newPassword;
 			$this->user->is_pwd_outdated = false;
