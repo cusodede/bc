@@ -14,24 +14,18 @@ use yii\base\Model;
  * Для защиты от перебора почт (хотя кому это нужно), результата у операции нет.
  *
  * @property null|string $email Адрес, на который гость пробует восстановить пароль
- * @property null|string $restoreCode Код восстановления
- * @property-read null|Users $restoreUser
  * @todo: капча
  */
 class RestorePasswordForm extends Model {
 	public $email;
-	public $restoreCode;
 
 	/**
 	 * @inheritDoc
 	 */
 	public function rules():array {
 		return [
-			[['email'], 'required', 'when' => function(string $attribute) {
-				return false;//todo
-			}],
-			[['email'], 'email'],
-
+			[['email'], 'required'],
+			[['email'], 'email']
 		];
 	}
 
@@ -56,20 +50,13 @@ class RestorePasswordForm extends Model {
 			if (!$user->save()) return;
 			Yii::$app->mailer->compose('site/restore-password', [
 				'user' => $user,
-				'restoreUrl' => SiteController::to('reset-password', ['code' => $user->restore_code])
+				'restoreUrl' => SiteController::to('reset-password', ['code' => $user->restore_code], true)
 			])
 				->setFrom('todo@config.param')/*todo*/
 				->setTo($user->email)
 				->setSubject('Запрос восстановления пароля')
 				->send();
 		}
-	}
-
-	/**
-	 * @return Users|null
-	 */
-	public function getRestoreUser():?Users {
-		return null === $this->restoreCode?null:Users::findByRestoreCode($this->restoreCode);
 	}
 
 }
