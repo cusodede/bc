@@ -6,6 +6,7 @@ declare(strict_types = 1);
  * @var View $this
  * @var ActiveForm $form
  * @var LoginForm $login
+ * @var null|string $from Опциональный ключ перехода
  */
 
 use app\models\site\LoginForm;
