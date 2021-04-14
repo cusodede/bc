@@ -113,9 +113,9 @@ class SiteController extends Controller {
 
 	/**
 	 * @param string|null $code
-	 * @return Response
+	 * @return string|Response
 	 */
-	public function actionResetPassword(?string $code = null):Response {
+	public function actionResetPassword(?string $code = null) {
 		if (null === $code) return $this->redirect('restore-password');
 
 		/*Проверка наличия пользователя с указанным кодом восстановления*/
