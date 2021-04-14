@@ -7,6 +7,9 @@ use simialbi\yii2\rest\ActiveRecord;
 
 /**
  * Class Users
+ * @property string $USER [char(32)]
+ * @property int $CURRENT_CONNECTIONS [bigint]
+ * @property int $TOTAL_CONNECTIONS [bigint]
  */
 class Users extends ActiveRecord {
 
