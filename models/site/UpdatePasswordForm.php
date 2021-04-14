@@ -32,7 +32,6 @@ class UpdatePasswordForm extends Model {
 	 */
 	public function rules():array {
 		return [
-			[['requireOldPassword'], 'boolean'],
 			[['oldPassword'], 'required', 'when' => function(UpdatePasswordForm $model, string $attribute) {
 				return $model->_requireOldPassword;
 			}],
