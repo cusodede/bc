@@ -25,25 +25,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	private const DEFAULT_PASSWORD = 'Qq123456';
 
-
-	/**
-	 * @inheritDoc
-	 */
-	public function attributeLabels():array {
-		return array_merge(parent::attributeLabels(), [
-			'newPassword' => 'Новый пароль'
-		]);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function rules():array {
-		return array_merge(parent::rules(), [
-			[['newPassword'], 'string', 'max' => 255]
-		]);
-	}
-
 	/**
 	 * @return static
 	 * @throws LoggedException
