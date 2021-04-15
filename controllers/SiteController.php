@@ -18,10 +18,16 @@ use yii\web\ErrorAction;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
+use yii2mod\swagger\SwaggerUIRenderer;
+use yii2mod\swagger\OpenAPIRenderer;
 
 /**
- * Class SiteController
- * @package app\controllers
+ * @SWG\Swagger(
+ *     basePath="/",
+ *     produces={"application/json"},
+ *     consumes={"application/x-www-form-urlencoded"},
+ *     @SWG\Info(version="1.0", title="Simple API"),
+ * )
  */
 class SiteController extends Controller {
 	use ControllerTrait;
@@ -35,7 +41,20 @@ class SiteController extends Controller {
 		return [
 			'error' => [
 				'class' => ErrorAction::class
-			]
+			],
+			'docs' => [
+				'class' => SwaggerUIRenderer::class,
+				'restUrl' => self::to('json-schema', [], true),
+			],
+			'json-schema' => [
+				'class' => OpenAPIRenderer::class,
+				'cache' => null,
+				// Тhe list of directories that contains the swagger annotations.
+				'scanDir' => [
+					Yii::getAlias('@app/controllers/api'),
+					Yii::getAlias('@app/definitions'),
+				],
+			],
 		];
 	}
 
