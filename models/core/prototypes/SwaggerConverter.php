@@ -8,9 +8,11 @@ use yii\base\Model;
 /**
  * Class SwaggerConverter
  * @property-write PHPDocParser[] $parsers
+ * @property bool $asCommentBlock Выводить генерацию в виде блока коментария
  */
 class SwaggerConverter extends Model {
 	public $parsers = [];
+	public $asCommentBlock = true;
 
 	/*Пока я не изучил спецификации, делаю только для примера*/
 	/**
@@ -44,6 +46,19 @@ class SwaggerConverter extends Model {
 	 * @return string
 	 */
 	public function __toString() {
+		if ($this->asCommentBlock) {
+			$output = [];
+			$output[] = "/**\n * ";
+			if ([] !== $definitions = $this->getDefinitions()) {
+				$output[] = implode("\n * ", $definitions);
+				$output[] = "\n *\n * ";
+			}
+			$output[] = implode("\n * ", $this->getProperties());
+			$output[] = "\n */";
+
+			return implode('', $output);
+		}
+
 		return implode("\n", $this->getDefinitions())."\n\n".implode("\n", $this->getProperties());
 	}
 
