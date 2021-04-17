@@ -48,7 +48,7 @@ class SwaggerController extends Controller {
 	private function fromModel(string $path):void {
 		try {
 			$fileContents = file($path);
-		} catch (Throwable $t) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $t) {
 			$fileContents = false;
 		}
 		if (false === $fileContents) {
