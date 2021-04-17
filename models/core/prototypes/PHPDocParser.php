@@ -34,7 +34,7 @@ class PHPDocParser extends Model {
 	/**
 	 * @inheritDoc
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['name', 'type', 'comment'], 'string'],
 			[['name'], 'required'],
@@ -62,12 +62,13 @@ class PHPDocParser extends Model {
 	 * @param string $typeString
 	 * @param string|null $type
 	 * @param bool $required
+	 * @throws Exception
 	 */
 	private static function checkType(string $typeString, ?string &$type, bool &$required):void {
 		$required = (false !== strpos($typeString, "null"));
 		$splitResult = explode("|", $typeString);
 
-		$types = array_filter($splitResult, function($value, $key) {
+		$types = array_filter($splitResult, static function($value, $key) {
 			return 'null' !== $value;
 		}, ARRAY_FILTER_USE_BOTH);
 		$type = array_shift($types);    /*todo: что делать, если тип не строгий? Пока беру первый, дальше посмотрю*/
@@ -84,6 +85,7 @@ class PHPDocParser extends Model {
 	 */
 	public function loadString(string $attributeString):bool {
 		/** @noinspection OnlyWritesOnParameterInspection {todo}*/
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		if (false === $matchResult = preg_match(self::PROPERTY_REGEXP, $attributeString, $matches)) return false;
 
 		self::checkType(ArrayHelper::getValue($matches, 1), $this->type, $this->required);
