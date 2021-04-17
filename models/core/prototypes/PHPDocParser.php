@@ -83,6 +83,7 @@ class PHPDocParser extends Model {
 	 * @throws Exception
 	 */
 	public function loadString(string $attributeString):bool {
+		/** @noinspection OnlyWritesOnParameterInspection {todo}*/
 		if (false === $matchResult = preg_match(self::PROPERTY_REGEXP, $attributeString, $matches)) return false;
 
 		self::checkType(ArrayHelper::getValue($matches, 1), $this->type, $this->required);
