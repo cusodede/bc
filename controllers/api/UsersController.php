@@ -5,7 +5,7 @@ namespace app\controllers\api;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
-use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
 use yii\filters\VerbFilter;
@@ -35,7 +35,7 @@ class UsersController extends ActiveController {
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class' => CompositeAuth::class,
+				'class' => HttpBearerAuth::class,
 			],
 			'rateLimiter' => [
 				'class' => RateLimiter::class,
