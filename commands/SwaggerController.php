@@ -51,9 +51,7 @@ class SwaggerController extends Controller {
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $t) {
 			$fileContents = false;
 		}
-		if (false === $fileContents) {
-			Console::output(Console::renderColoredString("%rФайл {$path} не найден.%n"));
-		} else {
+		if (false !== $fileContents) {
 			$parsers = [];
 			$properties = PHPDocParser::ExtractAttributeLines($fileContents);
 			foreach ($properties as $propertyLine) {
@@ -68,6 +66,8 @@ class SwaggerController extends Controller {
 				Console::output(Console::renderColoredString("%g{$converter}%n"));
 			}
 
+		} else {
+			Console::output(Console::renderColoredString("%rФайл {$path} не найден.%n"));
 		}
 	}
 
