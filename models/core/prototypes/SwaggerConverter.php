@@ -8,7 +8,7 @@ use yii\base\Model;
 /**
  * Class SwaggerConverter
  * @property-write PHPDocParser[] $parsers
- * @property bool $asCommentBlock Выводить генерацию в виде блока коментария
+ * @property bool $asCommentBlock Выводить генерацию в виде блока комментария
  */
 class SwaggerConverter extends Model {
 	public $parsers = [];
