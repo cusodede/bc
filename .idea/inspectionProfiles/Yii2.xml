@@ -1,6 +1,5 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0" is_locked="false">
-    <option name="myName" value="Yii2" />
     <inspection_tool class="AccessModifierPresentedInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AdditionOperationOnArraysInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="AliasFunctionsUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
