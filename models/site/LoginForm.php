@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
+use app\models\sys\users\active_record\UsersTokens;
 use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use Yii;
@@ -63,6 +64,31 @@ class LoginForm extends Model {
 	 */
 	public function doLogin():bool {
 		return ($this->validate() && Yii::$app->user->login($this->user, $this->rememberMe?DateHelper::SECONDS_IN_MONTH:0));
+	}
+
+	/**
+	 * Создаёт новый токен, возвращая его при успехе
+	 * @param string|null $userIP
+	 * @param string|null $userAgent
+	 * @return null|UsersTokens
+	 */
+	public function getToken(?string $userIP, ?string $userAgent):?UsersTokens {
+		if ($this->validate()) {
+			if ($this->user->is_pwd_outdated) {
+				$this->addError('password', 'Пароль пользователя просрочен и должен быть изменён.');
+				return null;
+			}
+
+			$token = new UsersTokens([
+				'user_id' => $this->user->id,
+				'ip' => $userIP,
+				'user_agent' => $userAgent
+			]);
+
+			if ($token->save()) return $token;
+			$this->addError('user', 'Что-то пошло не так');
+		}
+		return null;
 	}
 
 	/**
