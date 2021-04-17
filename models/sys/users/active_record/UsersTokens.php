@@ -35,6 +35,16 @@ class UsersTokens extends ActiveRecord {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function beforeValidate():bool {
+		if ($this->isNewRecord && (null === $this->auth_token)) {
+			$this->auth_token = self::GenerateToken();
+		}
+		return parent::beforeValidate();
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
@@ -45,11 +55,7 @@ class UsersTokens extends ActiveRecord {
 			[['auth_token'], 'string', 'max' => 40],
 			[['ip', 'user_agent'], 'string', 'max' => 255],
 			[['user_id', 'auth_token'], 'unique', 'targetAttribute' => ['user_id', 'auth_token']],
-			[['auth_token'], function(string $attribute):void {
-				if (!$this->hasErrors() && $this->isNewRecord && (null === $this->auth_token)) {
-					$this->auth_token = self::GenerateToken();
-				}
-			}]
+
 		];
 	}
 

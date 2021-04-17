@@ -5,13 +5,33 @@ namespace app\controllers\api;
 
 use app\models\core\Status;
 use app\models\site\LoginForm;
+use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
+use yii\filters\ContentNegotiator;
 use yii\rest\Controller;
+use yii\web\Response;
 
 /**
  * Class LoginController
  */
 class LoginController extends Controller {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'contentNegotiator' => [
+				'class' => ContentNegotiator::class,
+				'formats' => [
+					'application/json' => Response::FORMAT_JSON,
+					'application/xml' => Response::FORMAT_XML,
+				],
+			],
+		];
+
+	}
 
 	/**
 	 * @inheritDoc
@@ -24,10 +44,16 @@ class LoginController extends Controller {
 
 	/**
 	 * @return array
+	 * @throws Throwable
 	 */
-	public function index():array {
+	public function actionIndex():array {
 		$model = new LoginForm();
-		if ($model->load(Yii::$app->request->post())) {
+		$headersAuth = [
+			'login' => ArrayHelper::getValue(Yii::$app->request->headers, 'login'),
+			'password' => ArrayHelper::getValue(Yii::$app->request->headers, 'password')
+		];
+		/*Допускается авторизация из параметров, переданных в заголовке*/
+		if (!($model->load(Yii::$app->request->post()) || $model->load($headersAuth, ''))) {
 			return [
 				'status' => Status::STATUS_BAD_REQUEST,
 				'message' => "Need username and password.",

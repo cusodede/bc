@@ -7,7 +7,6 @@ use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
-use yii\filters\RateLimiter;
 use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
 use yii\web\Response;
@@ -36,10 +35,12 @@ class UsersController extends ActiveController {
 			],
 			'authenticator' => [
 				'class' => HttpBearerAuth::class,
+				'header' => 'Bearer',
+				'pattern' => null
 			],
-			'rateLimiter' => [
-				'class' => RateLimiter::class,
-			],
+//			'rateLimiter' => [
+//				'class' => RateLimiter::class,
+//			],
 			'access' => [
 				'class' => PermissionFilter::class
 			]
