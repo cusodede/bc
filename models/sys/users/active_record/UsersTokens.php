@@ -23,7 +23,7 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():string {
 		return 'sys_users_tokens';
 	}
 
@@ -37,7 +37,7 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['user_id', 'auth_token'], 'required'],
 			[['user_id'], 'integer'],
@@ -56,7 +56,7 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'user_id' => 'user id foreign key',
