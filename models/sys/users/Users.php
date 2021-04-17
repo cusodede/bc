@@ -77,7 +77,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * or the identity is not in an active state (disabled, deleted, etc.)
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::findOne(['access_token' => $token]);
+		return static::find()->joinWith('relatedUsersTokens')->where(['auth_token' => $token])->one();
 	}
 
 	/**
@@ -114,6 +114,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @return string
+	 * todo: unused
 	 */
 	public function getAuthKey():string {
 		return md5($this->id.md5($this->login));
