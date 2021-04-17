@@ -5,6 +5,7 @@ namespace app\models\sys\users\active_record;
 
 use pozitronik\helpers\DateHelper;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -22,6 +23,8 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
+ *
+ * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  */
 class Users extends ActiveRecord {
 
@@ -72,6 +75,13 @@ class Users extends ActiveRecord {
 			'deleted' => 'Флаг удаления',
 			'update_password' => 'Новый пароль'
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersTokens():ActiveQuery {
+		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
 	}
 
 }
