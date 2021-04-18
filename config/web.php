@@ -57,6 +57,10 @@ $config = [
 		'references' => [
 			'class' => ReferencesModule::class
 		],
+		'history' => [
+			'class' => HistoryModule::class,
+			'defaultRoute' => 'index'
+		],
 	],
 	'components' => [
 		'request' => [
@@ -91,9 +95,6 @@ $config = [
 		],
 		'sse' => [
 			'class' => LibSSE::class
-		],
-		'history' => [
-			'class' => HistoryModule::class
 		],
 		'rest' => [
 			'class' => Connection::class,
