@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use app\modules\history\HistoryModule;
 use pozitronik\references\ReferencesModule;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
@@ -25,7 +26,7 @@ $config = [
 	'id' => 'basic',
 	'name' => 'Beeline Cabinet',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log'],
+	'bootstrap' => ['log', 'history'],
 	'homeUrl' => ['home/home'],
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
@@ -90,6 +91,9 @@ $config = [
 		],
 		'sse' => [
 			'class' => LibSSE::class
+		],
+		'history' => [
+			'class' => HistoryModule::class
 		],
 		'rest' => [
 			'class' => Connection::class,
