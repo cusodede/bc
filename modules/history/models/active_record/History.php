@@ -14,8 +14,8 @@ use yii\db\ActiveRecord;
  * @property int|null $user id пользователя, совершившего изменение
  * @property string|null $model_class Класс (FQN, либо алиас, сопоставленный в конфиге)
  * @property int|null $model_key Первичный ключ модели, если есть. Составные ключи не поддерживаются.
- * @property resource|null $old_attributes Old serialized attributes
- * @property resource|null $new_attributes New serialized attributes
+ * @property string|null $old_attributes Old serialized attributes
+ * @property string|null $new_attributes New serialized attributes
  * @property string|null $relation_model Опциональная связанная модель (используется при построении представления истории)
  * @property string|null $scenario Опциональный сценарий события
  * @property string|null $event Событие, вызвавшее сохранение слепка истории
