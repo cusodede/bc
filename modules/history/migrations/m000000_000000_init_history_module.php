@@ -19,7 +19,7 @@ class m000000_000000_init_history_module extends Migration {
 			'id' => $this->primaryKey(),
 			'at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
 			'user' => $this->integer()->defaultValue(null),
-			'model' => $this->string(255)->null(),
+			'model_class' => $this->string(255)->null(),
 			'model_key' => $this->integer()->null(),
 			'old_attributes' => $this->binary()->comment('Old serialized attributes'),
 			'new_attributes' => $this->binary()->comment('New serialized attributes'),
@@ -31,13 +31,13 @@ class m000000_000000_init_history_module extends Migration {
 		]);
 
 		$this->createIndex('user', self::TABLE_NAME, 'user');
-		$this->createIndex('model', self::TABLE_NAME, 'model');
+		$this->createIndex('model_class', self::TABLE_NAME, 'model_class');
 		$this->createIndex('relation_model', self::TABLE_NAME, 'relation_model');
 		$this->createIndex('model_key', self::TABLE_NAME, 'model_key');
 		$this->createIndex('delegate', self::TABLE_NAME, 'delegate');
 		$this->createIndex('event', self::TABLE_NAME, 'event');
 		$this->createIndex('operation_identifier', self::TABLE_NAME, 'operation_identifier');
-		$this->createIndex('model_model_key', self::TABLE_NAME, ['model', 'model_key']);
+		$this->createIndex('model_class_model_key', self::TABLE_NAME, ['model_class', 'model_key']);
 
 		$this->createTable(self::TAGS_TABLE_NAME, [
 			'id' => $this->primaryKey(),
