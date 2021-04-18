@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $tag
  */
 class HistoryTags extends ActiveRecord {
+	public const TAG_CREATED = 'created';
 
 	/**
 	 * {@inheritDoc}
