@@ -69,7 +69,7 @@ ModalHelperAsset::register($this);
 			'items' => [
 				[
 					'label' => 'Домой',
-					'url' => Url::home()
+					'url' => Url::home(true)
 				],
 				[
 					'label' => 'Пользователи',
