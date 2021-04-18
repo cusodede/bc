@@ -422,7 +422,7 @@ class ActiveRecordHistory extends History {
 	public function getModelHistory(int $historyLevel = 0):array {
 		if ($this->loadedModel->isNewRecord) throw new InvalidConfigException('Provided model must have a primary key');
 		$resultModelData = $this->loadedModel->attributes;
-		$relationAttributes = $this->getModelRules('relations');
+		$relationAttributes = $this->getModelRules('relations', []);
 		foreach ($relationAttributes as $relationAttribute => $relationRule) {
 			if ((is_array($relationRule))) {
 				$resultModelData[$relationAttribute] = ArrayHelper::getColumn($this->loadedModel->$relationAttribute, array_shift($relationRule));
