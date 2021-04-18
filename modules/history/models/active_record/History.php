@@ -33,7 +33,7 @@ class History extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['user', 'model_key'], 'integer'],
 			[['old_attributes', 'new_attributes'], 'string'],
@@ -44,7 +44,7 @@ class History extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'at' => 'Время события',
