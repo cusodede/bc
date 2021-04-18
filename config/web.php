@@ -55,7 +55,8 @@ $config = [
 			'class' => GridConfigModule::class
 		],
 		'references' => [
-			'class' => ReferencesModule::class
+			'class' => ReferencesModule::class,
+			'defaultRoute' => 'references'
 		],
 		'history' => [
 			'class' => HistoryModule::class,
