@@ -13,9 +13,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * Class DefaultController
+ * Class IndexController
  */
-class DefaultController extends Controller {
+class IndexController extends Controller {
 
 	/**
 	 * @return string
