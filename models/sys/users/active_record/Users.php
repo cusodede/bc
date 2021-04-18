@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record;
 
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\db\ActiveQuery;
@@ -27,6 +28,17 @@ use yii\db\ActiveRecord;
  * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  */
 class Users extends ActiveRecord {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
+	}
 
 	/**
 	 * {@inheritdoc}
