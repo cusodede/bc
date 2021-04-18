@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
@@ -45,6 +46,16 @@ $config = [
 		],
 		'db' => $db,
 	],
+	'controllerMap' => [
+		'migrate' => [
+			'class' => MigrateController::class,
+			'templateFile' => '@app/migrations/template/default_migration_template.php',
+			'migrationNamespaces' => [
+				'app\modules\history\migrations'// <== именно неймспейс, не путь
+			],
+		],
+	],
+
 	'params' => $params,
 ];
 
