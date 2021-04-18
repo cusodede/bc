@@ -5,6 +5,7 @@ namespace app\modules\history\models\active_record;
 
 use app\modules\history\HistoryModule;
 use pozitronik\core\helpers\ModuleHelper;
+use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 
@@ -16,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property string $tag
  */
 class HistoryTags extends ActiveRecord {
+	use ARExtended;
 	public const TAG_CREATED = 'created';
 
 	/**
