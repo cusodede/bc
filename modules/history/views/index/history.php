@@ -25,7 +25,7 @@ use yii\widgets\LinkPager;
 		'pageSize' => 1,
 		'pageParam' => 'level',
 		'pageSizeParam' => false,
-//		'route' => HistoryModule::to(['/default/history', 'for' => $for, 'id' => $id])//todo: не знаю как, нет времени фиксить
+//		'route' => HistoryModule::to(['/index/history', 'for' => $for, 'id' => $id])//todo: не знаю как, нет времени фиксить
 	]),
 	'hideOnSinglePage' => false
 ]) ?>
