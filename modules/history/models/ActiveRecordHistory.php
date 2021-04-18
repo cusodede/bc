@@ -141,15 +141,16 @@ class ActiveRecordHistory extends History {
 
 	/**
 	 * @param null|string $key
-	 * @return int|string|null
+	 * @param mixed $default
+	 * @return int|string|null|array
 	 * @throws Throwable
 	 */
-	private function getModelRules(?string $key = null) {
+	private function getModelRules(?string $key = null, $default = null) {
 		$behaviors = $this->loadedModel->behaviors();
 		$keys = ArrayHelper::array_find_deep($behaviors, HistoryBehavior::class);
 		array_pop($keys);
 		if (null !== $key) $keys[] = $key;
-		return ArrayHelper::getValue($behaviors, implode('.', $keys));
+		return ArrayHelper::getValue($behaviors, implode('.', $keys), $default);
 	}
 
 	/**
