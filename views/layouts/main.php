@@ -40,7 +40,7 @@ ModalHelperAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="commit" content="<?= Utils::LastCommit() ?>">
 	<?= Html::csrfMetaTags() ?>
-	<title><?= $this->title ?></title>
+	<title><?= $this->title ?> [<?= Utils::LastCommit() ?>]</title>
 	<?php $this->head(); ?>
 </head>
 
