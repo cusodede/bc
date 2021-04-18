@@ -39,7 +39,7 @@ class IndexController extends Controller {
 	 */
 	public function actionShow(string $for, int $id):string {
 		$logger = new ActiveRecordHistory([
-			'model' => $for
+			'model_class' => $for
 		]);
 
 		return $this->render('timeline', [
@@ -58,7 +58,7 @@ class IndexController extends Controller {
 	 */
 	public function actionHistory(string $for, int $id, int $level = 0):string {
 		$logger = new ActiveRecordHistory([
-			'model' => $for
+			'model_class' => $for
 		]);
 		if (null === $logger->loadedModel) throw new InvalidConfigException("Model {$for} not found in application scope (module classNamesMap not configured?)");
 		if (null === $logger->loadedModel = $logger->loadedModel::findOne($id)) throw new NotFoundHttpException("Model {$for}:{$id} not found");

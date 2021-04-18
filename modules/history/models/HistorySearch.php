@@ -19,7 +19,7 @@ class HistorySearch extends History {
 	 */
 	public function rules():array {
 		return [
-			[['actions', 'user', 'at', 'model'], 'safe']
+			[['actions', 'user', 'at', 'model_class'], 'safe']
 		];
 	}
 

@@ -10,7 +10,6 @@ use app\modules\history\models\active_record\HistoryTags;
 use pozitronik\core\helpers\ModuleHelper;
 use pozitronik\helpers\ReflectionHelper;
 use pozitronik\helpers\ArrayHelper;
-use ReflectionClass;
 use ReflectionException;
 use Throwable;
 use Yii;
@@ -80,8 +79,8 @@ class ActiveRecordHistory extends History {
 			'user' => Yii::$app->user->id,//Предполагается, что фреймворк сконфигурирован с использованием user identity class
 			'model_class' => null === $model?null:$log->getStoredClassName($model),
 			'model_key' => is_numeric($model->primaryKey)?$model->primaryKey:null,//$pKey может быть массивом
-			'attributesOld' => $oldAttributes,
-			'attributesNew' => $newAttributes,
+			'old_attributes' => $log->serialize($oldAttributes),
+			'new_attributes' => $log->serialize($newAttributes),
 			'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
 			'event' => null === $event?null:$event->name,
 			'scenario' => $model->scenario,
@@ -103,7 +102,7 @@ class ActiveRecordHistory extends History {
 	public static function addTag(ActiveRecord $model, string $tag = HistoryTags::TAG_CREATED, ?string $operation_identifier = null):bool {
 		$log = new self(['storeShortClassNames' => ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), "storeShortClassNames", false)]);
 		if (null === $taggedRecord = self::find()->where([
-				'model' => $log->getStoredClassName($model),
+				'model_class' => $log->getStoredClassName($model),
 				'model_key' => is_numeric($model->primaryKey)?$model->primaryKey:null//$pKey может быть массивом
 			])->andFilterWhere(['operation_identifier' => $operation_identifier])
 				->orderBy(['id' => SORT_DESC])
@@ -122,14 +121,14 @@ class ActiveRecordHistory extends History {
 
 	/**
 	 * По параметрам, сохранённым в истории, пытается получить экземпляр класса.
-	 * Геттер описывается, как [[ReflectionClass|null]], но подразумевается экземпляр ActiveRecord
-	 * @return ReflectionClass|null
+	 * ReflectionHelper::LoadClassByName документируется, как [[ReflectionClass|null]], но подразумевается экземпляр ActiveRecord
+	 * @return ActiveRecord|null
 	 * @throws InvalidConfigException
 	 * @throws ReflectionException
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	public function getLoadedModel():?ReflectionClass {
+	public function getLoadedModel():?ActiveRecord {
 		return $this->_loadedModel??ReflectionHelper::LoadClassByName(self::ExpandClassName($this->model_class), null, false);
 	}
 
@@ -331,7 +330,7 @@ class ActiveRecordHistory extends History {
 		return self::find()
 			->where(['operation_identifier' => self::find()
 				->select(['operation_identifier'])
-				->where(['model' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])
+				->where(['model_class' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])
 				->groupBy(['operation_identifier'])
 				->orderBy(['MAX(id)' => SORT_DESC])
 				->offset($level - 1)
@@ -382,7 +381,7 @@ class ActiveRecordHistory extends History {
 	 * @throws InvalidConfigException
 	 */
 	public function getHistoryLevelCount():int {
-		return (int)self::find()->select('operation_identifier')->where(['model' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])->distinct()->count('operation_identifier');
+		return (int)self::find()->select('operation_identifier')->where(['model_class' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])->distinct()->count('operation_identifier');
 	}
 
 	/**
@@ -392,7 +391,7 @@ class ActiveRecordHistory extends History {
 	 * @throws InvalidConfigException
 	 */
 	private function getStepHistory(string $step_identifier):array {
-		return self::find()->where(['operation_identifier' => $step_identifier, 'model' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])->orderBy(['id' => SORT_DESC])->all();
+		return self::find()->where(['operation_identifier' => $step_identifier, 'model_class' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])->orderBy(['id' => SORT_DESC])->all();
 	}
 
 	/**
@@ -404,7 +403,7 @@ class ActiveRecordHistory extends History {
 	private function getModelHistoryStepsIdentifiers():array {
 		return ArrayHelper::keymap(self::find()
 			->select(['operation_identifier'])
-			->where(['model' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])
+			->where(['model_class' => $this->getStoredClassName(), 'model_key' => $this->loadedModel->primaryKey])
 			->groupBy(['operation_identifier'])
 			->orderBy(['MAX(id)' => SORT_DESC])
 			->asArray()
@@ -475,7 +474,7 @@ class ActiveRecordHistory extends History {
 	 */
 	public function getHistory(int $modelKey):ActiveQuery {
 		return self::find()
-			->where(['model' => null === $this->loadedModel?$this->model_class:$this->getStoredClassName(), 'model_key' => $modelKey])->orderBy('at');
+			->where(['model_class' => null === $this->loadedModel?$this->model_class:$this->getStoredClassName(), 'model_key' => $modelKey])->orderBy('at');
 	}
 
 	/**
@@ -499,7 +498,7 @@ class ActiveRecordHistory extends History {
 	 * @throws Throwable
 	 */
 	public function getTag():?string {
-		$ids = ArrayHelper::getColumn(self::find()->where(['model' => $this->model_class, 'model_key' => $this->model_key, 'operation_identifier' => $this->operation_identifier])->select('id')->asArray()->all(), 'id');
+		$ids = ArrayHelper::getColumn(self::find()->where(['model_class' => $this->model_class, 'model_key' => $this->model_key, 'operation_identifier' => $this->operation_identifier])->select('id')->asArray()->all(), 'id');
 		return ArrayHelper::getValue(HistoryTags::find()->where(['in', 'history', $ids])->one(), 'tag');
 	}
 
@@ -520,7 +519,7 @@ class ActiveRecordHistory extends History {
 	 */
 	public function getTagHistoryLevel(string $tag):?int {
 		/** @var self[] $modelHistory */
-		$modelHistory = self::find()->where(['model' => $this->getStoredClassName($this->loadedModel), 'model_key' => $this->loadedModel->primaryKey])->joinWith(['relHistoryTags'])->orderBy(['id' => SORT_DESC])->all();
+		$modelHistory = self::find()->where(['model_class' => $this->getStoredClassName($this->loadedModel), 'model_key' => $this->loadedModel->primaryKey])->joinWith(['relHistoryTags'])->orderBy(['id' => SORT_DESC])->all();
 		$result = 0;
 		$oi = '';
 		/** @noinspection PhpUnusedLocalVariableInspection */
