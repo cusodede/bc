@@ -7,6 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\users\Users;
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use yii\db\ActiveQuery;
@@ -27,6 +28,17 @@ use yii\db\ActiveRecord;
  */
 class PermissionsCollections extends ActiveRecord {
 	use ActiveRecordTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
+	}
 
 	/**
 	 * {@inheritdoc}

@@ -9,6 +9,7 @@ use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\permissions\Permissions as ParentPermissions;
 use app\models\sys\users\Users;
+use app\modules\history\behaviors\HistoryBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -32,6 +33,17 @@ use yii\db\ActiveRecord;
  */
 class Permissions extends ActiveRecord {
 	use ActiveRecordTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
+	}
 
 	/**
 	 * {@inheritdoc}
