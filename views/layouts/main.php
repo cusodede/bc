@@ -13,6 +13,7 @@ use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
+use app\modules\history\HistoryModule;
 use app\widgets\search\SearchWidget;
 use pozitronik\filestorage\FSModule;
 use pozitronik\helpers\Utils;
@@ -110,6 +111,10 @@ ModalHelperAsset::register($this);
 						[
 							'label' => 'Файловый менеджер',
 							'url' => FSModule::to('index')
+						],
+						[
+							'label' => 'История изменений',
+							'url' => HistoryModule::to('index')
 						]
 					],
 				],
