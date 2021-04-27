@@ -26,6 +26,9 @@ class UsersType extends ObjectType {
 					'login' => [
 						'type' => Type::string(),
 					],
+					'email' => [
+						'type' => Type::string(),
+					],
 					'create_date' => [
 						'type' => Type::string(),
 

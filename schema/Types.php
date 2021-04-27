@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace app\schema;
 
+
+use app\schema\mutations\UsersMutationType;
+
 /**
  * Class Types
  * @package app\schema
@@ -11,6 +14,9 @@ class Types {
 	private static $_tokens;
 	private static $_query;
 	private static $_users;
+
+	private static $_mutation;
+	private static $_usersMutation;
 
 	/**
 	 * @return QueryType
@@ -31,6 +37,20 @@ class Types {
 	 */
 	public static function tokens():TokensType {
 		return self::$_tokens?:(self::$_tokens = new TokensType());
+	}
+
+	/**
+	 * @return MutationType
+	 */
+	public static function mutation():MutationType {
+		return self::$_mutation?:(self::$_mutation = new MutationType());
+	}
+
+	/**
+	 * @return UsersMutationType
+	 */
+	public static function usersMutation():UsersMutationType {
+		return self::$_usersMutation?:(self::$_usersMutation = new UsersMutationType());
 	}
 
 }

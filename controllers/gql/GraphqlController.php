@@ -9,6 +9,7 @@ use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use Throwable;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\ActiveController;
 
@@ -24,7 +25,7 @@ class GraphqlController extends ActiveController {
 	 */
 	protected function verbs():array {
 		return [
-			'index' => ['POST', 'OPTIONS'],
+			'index' => ['POST', 'OPTIONS', 'GET'],
 		];
 	}
 
@@ -46,18 +47,18 @@ class GraphqlController extends ActiveController {
 		$variables = Yii::$app->request->get('variables', Yii::$app->request->post('variables'));
 		$operation = Yii::$app->request->get('operation', Yii::$app->request->post('operation'));
 
-		if (empty($query)) {
+		if (null == $query) {//multipart
 			$rawInput = file_get_contents('php://input');
 			$input = json_decode($rawInput, true);
-			$query = $input['query'];
-			$variables = $input['variables']??[];
-			$operation = $input['operation']??null;
+			$query = ArrayHelper::getValue($input, 'query');
+			$variables = ArrayHelper::getValue($input, 'variables', []);
+			$operation = ArrayHelper::getValue($input, 'operation');
 		}
 
 		// библиотека принимает в variables либо null, либо ассоциативный массив
 		// на строку будет ругаться
 
-		if (!empty($variables) && !is_array($variables)) {
+		if ([] !== $variables && !is_array($variables)) {
 			try {
 				$variables = Json::decode($variables);
 			} catch (Throwable $t) {
@@ -69,7 +70,7 @@ class GraphqlController extends ActiveController {
 
 		$schema = new Schema([
 			'query' => Types::query(),
-//			'mutation' => Types::mutation(),
+			'mutation' => Types::mutation(),
 		]);
 
 		// огонь!
