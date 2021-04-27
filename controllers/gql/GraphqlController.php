@@ -25,7 +25,7 @@ class GraphqlController extends ActiveController {
 	 */
 	protected function verbs():array {
 		return [
-			'index' => ['POST', 'OPTIONS', 'GET'],
+			'index' => ['POST', 'OPTIONS']
 		];
 	}
 
