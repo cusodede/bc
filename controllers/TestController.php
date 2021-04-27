@@ -109,4 +109,11 @@ class TestController extends Controller {
 	public function actionPermissionTest():string {
 		return $this->render('permission-test');
 	}
+
+	/**
+	 * @return string
+	 */
+	public function actionBadges() {
+		return $this->render('badges');
+	}
 }
