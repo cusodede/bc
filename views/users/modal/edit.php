@@ -17,9 +17,8 @@ use yii\widgets\ActiveForm;
 	'id' => "{$model->formName()}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
 	'header' => BadgeWidget::widget([
-		'models' => $model,
-		'attribute' => 'name',
-		'itemsSeparator' => '',
+		'items' => $model,
+		'subItem' => 'name'
 	]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,

@@ -64,13 +64,11 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(Users $user) {
 					return BadgeWidget::widget([
-						'models' => $user->allPermissions(),
-						'attribute' => 'name'
+						'items' => $user->allPermissions(),
+						'subItem' => 'name'
 					]);
 				}
 			]
-
-
 		]
 	])
 ]) ?>

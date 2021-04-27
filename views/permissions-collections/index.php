@@ -69,8 +69,8 @@ ModalHelperAsset::register($this);
 				'attribute' => 'relatedPermissions',
 				'value' => static function(PermissionsCollections $collections) {
 					return BadgeWidget::widget([
-						'models' => $collections->relatedPermissions,
-						'attribute' => 'name'
+						'items' => $collections->relatedPermissions,
+						'subItem' => 'name'
 					]);
 				},
 				'format' => 'raw'

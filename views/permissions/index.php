@@ -172,8 +172,8 @@ ModalHelperAsset::register($this);
 				'attribute' => 'relatedUsersToPermissionsCollections',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
-						'models' => $permission->relatedPermissionsCollections,
-						'attribute' => 'name'
+						'items' => $permission->relatedPermissionsCollections,
+						'subItem' => 'name'
 					]);
 				},
 				'format' => 'raw'
@@ -183,8 +183,8 @@ ModalHelperAsset::register($this);
 				'attribute' => 'relatedUsers',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
-						'models' => $permission->relatedUsers,
-						'attribute' => 'username'
+						'items' => $permission->relatedUsers,
+						'subItem' => 'username'
 					]);
 				},
 				'format' => 'raw'
