@@ -34,7 +34,8 @@
 		"odannyc/yii2-sse": "dev-master",
 		"2amigos/yii2-multi-select-widget" : "dev-master",
 		"simialbi/yii2-rest-client": "dev-master",
-		"yii2mod/yii2-swagger": "dev-master"
+		"yii2mod/yii2-swagger": "dev-master",
+		"webonyx/graphql-php": "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
