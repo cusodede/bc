@@ -40,7 +40,8 @@
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
 		"yiisoft/yii2-gii": "~2.0.0",
-		"yiisoft/yii2-faker": "~2.0.0"
+		"yiisoft/yii2-faker": "~2.0.0",
+		"phpunit/phpunit": "^9.5"
 	},
 	"config": {
 		"process-timeout": 1800,
@@ -55,7 +56,8 @@
 		"post-create-project-cmd": [
 			"yii\\composer\\Installer::postCreateProject",
 			"yii\\composer\\Installer::postInstall"
-		]
+		],
+		"test": "phpunit"
 	},
 	"extra": {
 		"yii\\composer\\Installer::postCreateProject": {
