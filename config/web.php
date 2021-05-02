@@ -4,6 +4,7 @@ declare(strict_types = 1);
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use app\modules\notifications\NotificationsModule;
 use pozitronik\references\ReferencesModule;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
@@ -60,6 +61,10 @@ $config = [
 		],
 		'history' => [
 			'class' => HistoryModule::class,
+			'defaultRoute' => 'index'
+		],
+		'notifications' => [
+			'class' => NotificationsModule::class,
 			'defaultRoute' => 'index'
 		],
 	],
