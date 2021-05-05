@@ -1,11 +1,10 @@
 # Установка
 ~~~
-git clone https://github.com/pozitronik/bc.git
-cd bc
-composer install
+composer create-project pozitronik/bc %yourappname%
 ~~~
-подключаем БД в web.php
+подключаем БД в db.php (шаблон конфига в db.php.sample)
 ~~~
+cd %yourappname%
 yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations
 yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations
 yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations
