@@ -60,7 +60,8 @@ class Permissions extends ActiveRecordPermissions {
 			->orWhere(['collectionPermissions.user_id' => $user_id])
 			->orderBy([
 				'priority' => SORT_DESC,
-				'id' => SORT_ASC]);
+				'id' => SORT_ASC
+			]);
 		foreach ($permissionFilters as $paramName => $paramValue) {
 			$paramValues = [$paramValue];
 			/*для перечисленных параметров пустое значение приравнивается к любому*/
