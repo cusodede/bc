@@ -50,9 +50,10 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * @param int $user_id
 	 * @param string[] $permissionFilters
+	 * @param bool $asArray
 	 * @return self[]
 	 */
-	public static function allUserPermissions(int $user_id, array $permissionFilters = []):array {
+	public static function allUserPermissions(int $user_id, array $permissionFilters = [], bool $asArray = true):array {
 		$query = self::find()
 			->distinct()
 			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
@@ -71,7 +72,7 @@ class Permissions extends ActiveRecordPermissions {
 			$query->andWhere([self::tableName().".".$paramName => $paramValues]);
 
 		}
-		return $query->all();
+		return $query->asArray($asArray)->all();
 	}
 
 	/**
