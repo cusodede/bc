@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers\gql;
 
 use app\schema\Types;
+use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -38,6 +39,7 @@ class GraphqlController extends ActiveController {
 
 	/**
 	 * @return array
+	 * @throws Exception
 	 */
 	public function actionIndex():array {
 		// сразу заложим возможность принимать параметры
@@ -47,7 +49,7 @@ class GraphqlController extends ActiveController {
 		$variables = Yii::$app->request->get('variables', Yii::$app->request->post('variables'));
 		$operation = Yii::$app->request->get('operation', Yii::$app->request->post('operation'));
 
-		if (null == $query) {//multipart
+		if (null === $query) {//multipart
 			$rawInput = file_get_contents('php://input');
 			$input = json_decode($rawInput, true);
 			$query = ArrayHelper::getValue($input, 'query');
@@ -61,7 +63,7 @@ class GraphqlController extends ActiveController {
 		if ([] !== $variables && !is_array($variables)) {
 			try {
 				$variables = Json::decode($variables);
-			} catch (Throwable $t) {
+			} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $t) {
 				$variables = null;
 			}
 		}
