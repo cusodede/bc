@@ -20,14 +20,14 @@ class Merch extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():string {
 		return 'merch';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['name', 'item_class', 'create_date'], 'required'],
 			[['name', 'deleted'], 'integer'],
@@ -39,7 +39,7 @@ class Merch extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'name' => 'Название товара',

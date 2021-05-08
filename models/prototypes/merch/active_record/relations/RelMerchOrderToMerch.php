@@ -20,14 +20,14 @@ class RelMerchOrderToMerch extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():string {
 		return 'relation_order_to_merch';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['order_id', 'merch_id'], 'required'],
 			[['order_id', 'merch_id'], 'integer'],
@@ -38,7 +38,7 @@ class RelMerchOrderToMerch extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'order_id' => 'Order ID',

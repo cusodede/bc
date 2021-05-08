@@ -32,14 +32,14 @@ class MerchOrder extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():string {
 		return 'merch_order';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['initiator', 'store', 'create_date', 'status'], 'required'],
 			[['initiator', 'store', 'status', 'deleted'], 'integer'],
@@ -50,7 +50,7 @@ class MerchOrder extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'initiator' => 'Заказчик',
