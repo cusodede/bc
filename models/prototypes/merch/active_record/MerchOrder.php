@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\prototypes\merch\active_record;
 
+use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
 use app\models\prototypes\seller\Store;
 use app\models\sys\users\Users;
@@ -15,8 +16,11 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $initiator Заказчик
  * @property int $store Магазин
+ * @property int $status Статус
  * @property string $create_date Дата регистрации
  * @property int $deleted
+ *
+ * @property RefMerchOrderStatuses|null $referenceMerchOrderStatuses Справочник статуса
  *
  * @property RelMerchOrderToMerch[] $relatedMerchOrderToMerch Связь к промежуточной таблице к товарам заказа
  * @property Merch[] $merch Товары в заказе
@@ -37,8 +41,8 @@ class MerchOrder extends ActiveRecord {
 	 */
 	public function rules() {
 		return [
-			[['initiator', 'store', 'create_date'], 'required'],
-			[['initiator', 'store', 'deleted'], 'integer'],
+			[['initiator', 'store', 'create_date', 'status'], 'required'],
+			[['initiator', 'store', 'status', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 		];
 	}
@@ -51,6 +55,7 @@ class MerchOrder extends ActiveRecord {
 			'id' => 'ID',
 			'initiator' => 'Заказчик',
 			'store' => 'Магазин',
+			'status' => 'Статус',
 			'create_date' => 'Дата регистрации',
 			'deleted' => 'Deleted',
 		];
@@ -82,5 +87,12 @@ class MerchOrder extends ActiveRecord {
 	 */
 	public function getStoreStore():ActiveQuery {
 		return $this->hasOne(Store::class, ['id' => 'store']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getReferenceMerchOrderStatuses():ActiveQuery {
+		return $this->hasOne(RefMerchOrderStatuses::class, ['id' => 'status']);
 	}
 }
