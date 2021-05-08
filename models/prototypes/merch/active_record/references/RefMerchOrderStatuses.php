@@ -6,19 +6,19 @@ namespace app\models\prototypes\merch\active_record\references;
 use pozitronik\references\models\CustomisableReference;
 
 /**
- * This is the model class for table "ref_merch_order_states".
+ * This is the model class for table "ref_merch_order_statuses".
  *
  * @property int $id
  * @property string $name
  * @property string|null $color
  * @property int $deleted
  */
-class RefMerchOrderStates extends CustomisableReference {
+class RefMerchOrderStatuses extends CustomisableReference {
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'ref_merch_order_states';
+		return 'ref_merch_order_statuses';
 	}
 
 	/**
