@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  * @property int $order_id
  * @property int $merch_id
  */
-class RelOrderMerch extends ActiveRecord {
+class RelMerchOrderToMerch extends ActiveRecord {
 	use Relations;
 
 	/**
