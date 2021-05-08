@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\prototypes\merch\active_record;
 
 use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
+use app\models\prototypes\seller\Store;
+use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -18,6 +20,9 @@ use yii\db\ActiveRecord;
  *
  * @property RelMerchOrderToMerch[] $relatedMerchOrderToMerch Связь к промежуточной таблице к товарам заказа
  * @property Merch[] $merch Товары в заказе
+ *
+ * @property Users $initiatorUser Пользователь, создавший заказ
+ * @property Store $storeStore Магазин поставки заказа
  */
 class MerchOrder extends ActiveRecord {
 	/**
@@ -63,5 +68,19 @@ class MerchOrder extends ActiveRecord {
 	 */
 	public function getMerch():ActiveQuery {
 		return $this->hasMany(Merch::class, ['id' => 'merch_id'])->via('relatedMerchOrderToMerch');
+	}
+
+	/**s
+	 * @return ActiveQuery
+	 */
+	public function getInitiatorUser():ActiveQuery {
+		return $this->hasOne(Users::class, ['id' => 'initiator']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getStoreStore():ActiveQuery {
+		return $this->hasOne(Store::class, ['id' => 'store']);
 	}
 }
