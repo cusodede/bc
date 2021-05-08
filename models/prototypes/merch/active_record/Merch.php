@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\prototypes\merch\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use yii\db\ActiveRecord;
 
 /**
@@ -15,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property int $deleted
  */
 class Merch extends ActiveRecord {
+	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */
