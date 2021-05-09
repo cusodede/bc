@@ -55,6 +55,7 @@ class DefaultController extends Controller {
 	/**
 	 * @return string
 	 * @throws InvalidConfigException
+	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
 	public function actionIndex():string {
 		$params = Yii::$app->request->queryParams;
