@@ -82,7 +82,7 @@ class TemporaryHelper {
 	/**
 	 * @see GridView::guessColumns
 	 * @param BaseDataProvider $dataProvider
-	 * @retun string[]
+	 * @return string[]
 	 */
 	public static function GuessDataProviderColumns(BaseDataProvider $dataProvider):array {
 		$columns = [];
@@ -90,7 +90,7 @@ class TemporaryHelper {
 		$model = reset($models);
 		if (is_array($model) || is_object($model)) {
 			foreach ($model as $name => $value) {
-				if ($value === null || is_scalar($value) || is_callable([$value, '__toString'])) {
+				if (null === $value || is_scalar($value) || is_callable([$value, '__toString'])) {
 					$columns[] = (string)$name;
 				}
 			}
