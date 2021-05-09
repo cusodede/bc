@@ -7,6 +7,7 @@ use pozitronik\helpers\ReflectionHelper;
 use ReflectionException as ReflectionExceptionAlias;
 use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\widgets\InputWidget;
 
 /**
@@ -16,6 +17,11 @@ use yii\widgets\InputWidget;
 class ActiveFieldMap extends InputWidget {
 
 	/**
+	 * @var ActiveRecord
+	 */
+	public $model;
+
+	/**
 	 * @param array $options
 	 * @return string
 	 * @throws ReflectionExceptionAlias
@@ -23,10 +29,20 @@ class ActiveFieldMap extends InputWidget {
 	 */
 	public function run() {
 		if (ReflectionHelper::IsInSubclassOf(ReflectionHelper::New($this->model), [ActiveRecord::class])) {
-			$type = $this->model->getTableSchema()->columns[$this->attribute]->type;
+			$type = ArrayHelper::getValue($this->model::getTableSchema(), "columns.{$this->attribute}.type", 'string');
+			switch ($type) {
+				default:
+				case 'string':
+					return $this->renderInputHtml('text');
+				case 'integer':
+					return $this->renderInputHtml('number');
+				case 'tinyint':
+					return $this->renderInputHtml('checkbox');
+				case 'datetime':
+					return $this->renderInputHtml('datetime-local');//не работает в fx, будет просто текстовое поле
+			}
 
 		}
-		return $this->renderInputHtml($type);
 
 	}
 
