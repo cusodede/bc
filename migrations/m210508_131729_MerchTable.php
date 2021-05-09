@@ -12,7 +12,7 @@ class m210508_131729_MerchTable extends Migration {
 	public function safeUp() {
 		$this->createTable('merch', [
 			'id' => $this->primaryKey(),
-			'name' => $this->integer()->notNull()->comment('Название товара'),
+			'name' => $this->string()->notNull()->comment('Название товара'),
 			'item_class' => $this->string()->notNull()->comment('Класс товара'),
 			'create_date' => $this->dateTime()->notNull()->comment('Дата регистрации'),
 			'deleted' => $this->boolean()->notNull()->defaultValue(0)
