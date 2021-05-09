@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\prototypes\merch\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 
 /**
@@ -29,9 +30,9 @@ class Merch extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'item_class', 'create_date'], 'required'],
+			[['name', 'item_class'], 'required'],
 			[['deleted'], 'boolean'],
-			[['create_date'], 'safe'],
+			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['name', 'item_class'], 'string', 'max' => 255],
 		];
 	}

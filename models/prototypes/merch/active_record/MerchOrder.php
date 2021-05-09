@@ -7,6 +7,7 @@ use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
 use app\models\prototypes\seller\Store;
 use app\models\sys\users\Users;
+use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -43,7 +44,7 @@ class MerchOrder extends ActiveRecord {
 		return [
 			[['initiator', 'store', 'create_date', 'status'], 'required'],
 			[['initiator', 'store', 'status', 'deleted'], 'integer'],
-			[['create_date'], 'safe'],
+			[['create_date'], 'default', 'value' => DateHelper::lcDate()]
 		];
 	}
 
