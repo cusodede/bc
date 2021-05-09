@@ -6,6 +6,7 @@ namespace app\models\core;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
+use yii\data\BaseDataProvider;
 use yii\web\Controller;
 
 /**
@@ -76,5 +77,24 @@ class TemporaryHelper {
 		];
 
 		return strtr($term, $converter);
+	}
+
+	/**
+	 * @see GridView::guessColumns
+	 * @param BaseDataProvider $dataProvider
+	 * @retun string[]
+	 */
+	public static function GuessDataProviderColumns(BaseDataProvider $dataProvider):array {
+		$columns = [];
+		$models = $dataProvider->getModels();
+		$model = reset($models);
+		if (is_array($model) || is_object($model)) {
+			foreach ($model as $name => $value) {
+				if ($value === null || is_scalar($value) || is_callable([$value, '__toString'])) {
+					$columns[] = (string)$name;
+				}
+			}
+		}
+		return $columns;
 	}
 }
