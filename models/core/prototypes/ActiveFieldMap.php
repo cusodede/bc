@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\models\core\prototypes;
 
 use pozitronik\helpers\ReflectionHelper;
-use ReflectionException as ReflectionExceptionAlias;
-use yii\base\UnknownClassException;
+use ReflectionClass;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\widgets\InputWidget;
@@ -17,17 +17,9 @@ use yii\widgets\InputWidget;
 class ActiveFieldMap extends InputWidget {
 
 	/**
-	 * @var ActiveRecord
+	 * @inheritDoc
 	 */
-	public $model;
-
-	/**
-	 * @param array $options
-	 * @return string
-	 * @throws ReflectionExceptionAlias
-	 * @throws UnknownClassException
-	 */
-	public function run() {
+	public function run():string {
 		if (ReflectionHelper::IsInSubclassOf(ReflectionHelper::New($this->model), [ActiveRecord::class])) {
 			$type = ArrayHelper::getValue($this->model::getTableSchema(), "columns.{$this->attribute}.type", 'string');
 			switch ($type) {
@@ -43,7 +35,7 @@ class ActiveFieldMap extends InputWidget {
 			}
 
 		}
-
+		throw new InvalidConfigException("Expected ActiveRecord, got ".(new ReflectionClass($this->model))->name);
 	}
 
 }
