@@ -13,6 +13,7 @@ use yii\widgets\InputWidget;
 /**
  * Class ActiveFieldMap
  * Генерирует соответствия ActiveField-виджетов по типам данных для создания дефолтных редакторов
+ * @property ActiveRecord $model
  */
 class ActiveFieldMap extends InputWidget {
 
@@ -21,6 +22,7 @@ class ActiveFieldMap extends InputWidget {
 	 */
 	public function run():string {
 		if (ReflectionHelper::IsInSubclassOf(ReflectionHelper::New($this->model), [ActiveRecord::class])) {
+
 			$type = ArrayHelper::getValue($this->model::getTableSchema(), "columns.{$this->attribute}.type", 'string');
 			switch ($type) {
 				default:
