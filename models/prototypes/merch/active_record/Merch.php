@@ -30,9 +30,9 @@ class Merch extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['name', 'item_class', 'create_date'], 'required'],
-			[['name', 'deleted'], 'integer'],
+			[['deleted'], 'boolean'],
 			[['create_date'], 'safe'],
-			[['item_class'], 'string', 'max' => 255],
+			[['name', 'item_class'], 'string', 'max' => 255],
 		];
 	}
 
