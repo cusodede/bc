@@ -15,7 +15,7 @@ use pozitronik\core\traits\ControllerTrait;
 class MerchController extends DefaultController {
 	use ControllerTrait;
 
-	public $modelClass = Merch::class;
-	public $modelSearchClass = MerchSearch::class;
+	public string $modelClass = Merch::class;
+	public string $modelSearchClass = MerchSearch::class;
 
 }
