@@ -46,9 +46,9 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @return ActiveRecordTrait
+	 * @return ActiveRecord
 	 */
-	private function getSearchModel():ActiveRecordTrait {
+	private function getSearchModel():ActiveRecord {
 		return (new $this->modelSearchClass());
 	}
 
