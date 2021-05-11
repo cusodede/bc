@@ -73,6 +73,25 @@ class DefaultController extends Controller {
 
 	/**
 	 * @param int $id
+	 * @return string
+	 * @throws Throwable
+	 */
+	public function actionView(int $id):string {
+		if (null === $model = $this->getModel()::findOne($id)) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/view', [
+				'model' => $model
+			]);
+		}
+		return $this->render('view', [
+			'model' => $model
+		]);
+	}
+
+	/**
+	 * @param int $id
 	 * @return string|Response
 	 * @throws Throwable
 	 */

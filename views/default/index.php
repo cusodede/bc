@@ -47,11 +47,16 @@ ModalHelperAsset::register($this);
 		'columns' => array_merge(TemporaryHelper::GuessDataProviderColumns($dataProvider), [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}',
+				'template' => '{edit}{view}',
 				'buttons' => [
 					'edit' => static function(string $url, Model $model) use ($modelName) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+					'view' => static function(string $url, Model $model) use ($modelName) {
+						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
