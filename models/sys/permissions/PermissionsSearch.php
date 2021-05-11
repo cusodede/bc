@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions;
 
 use yii\data\ActiveDataProvider;
-use app\models\sys\permissions\Permissions;
 use app\models\sys\users\active_record\Users;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 
