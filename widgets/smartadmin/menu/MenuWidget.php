@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace app\widgets\smartadmin\menu;
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\Menu as YiiMenuWidget;
 
@@ -31,11 +32,7 @@ class MenuWidget extends YiiMenuWidget
 	{
 		$render = parent::renderItem($item);
 
-		if (isset($item['iconClass'])) {
-			$icon = Html::tag('i', '', ['class' => "fal {$item['iconClass']}"]);
-		} else {
-			$icon = '';
-		}
+		$icon = (null === $itemClass = ArrayHelper::getValue($item, 'iconClass')) ? '' : Html::tag('i', '', ['class' => "fal {$itemClass}"]);
 
 		$tags = mb_strtolower($item['label']);
 
