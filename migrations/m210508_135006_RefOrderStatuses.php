@@ -14,6 +14,7 @@ class m210508_135006_RefOrderStatuses extends Migration {
 			'id' => $this->primaryKey(),
 			'name' => $this->string(255)->notNull(),
 			'color' => $this->string(255)->null(),
+			'textcolor' => $this->string(255)->null(),
 			'deleted' => $this->boolean()->notNull()->defaultValue(false)
 		]);
 
