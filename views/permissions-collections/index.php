@@ -66,7 +66,7 @@ ModalHelperAsset::register($this);
 			'comment',
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedPermissions',
+				'attribute' => 'permission',
 				'value' => static function(PermissionsCollections $collections) {
 					return BadgeWidget::widget([
 						'items' => $collections->relatedPermissions,

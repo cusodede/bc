@@ -65,8 +65,8 @@ class PermissionsCollections extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'name' => 'Name',
-			'comment' => 'Comment',
+			'name' => 'Название',
+			'comment' => 'Комментарий'
 		];
 	}
 
