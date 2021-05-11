@@ -27,7 +27,7 @@ class RefMerchOrderStatuses extends CustomisableReference {
 	public function rules():array {
 		return [
 			[['name'], 'required'],
-			[['deleted'], 'integer'],
+			[['id', 'deleted'], 'integer'],
 			[['name', 'color'], 'string', 'max' => 255],
 		];
 	}
