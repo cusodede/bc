@@ -9,6 +9,8 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
 
 /**
  * Class PermissionsSearch
+ * @property null|string $user
+ * @property null|string $collection
  */
 final class PermissionsSearch extends Permissions {
 

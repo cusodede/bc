@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 
 /**
  * Class PermissionsCollectionsSearch
+ * @property null|string $permission
  */
 class PermissionsCollectionsSearch extends PermissionsCollections {
 
