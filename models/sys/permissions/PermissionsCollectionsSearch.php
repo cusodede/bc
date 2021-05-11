@@ -11,12 +11,14 @@ use yii\data\ActiveDataProvider;
  */
 class PermissionsCollectionsSearch extends PermissionsCollections {
 
+	public $permission;
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
-			['name', 'string', 'max' => 128]
+			[['name', 'permission'], 'string', 'max' => 128]
 		];
 	}
 
@@ -36,6 +38,7 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 
 		if (!$this->validate()) return $dataProvider;
 
+		$query->joinWith(['relatedPermissions', 'relatedUsers']);
 		$this->filterData($query);
 
 		return $dataProvider;
@@ -46,7 +49,8 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 	 * @return void
 	 */
 	private function filterData($query):void {
-		$query->andFilterWhere(['like', self::tableName().'.name', $this->name]);
+		$query->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere(['like', Permissions::tableName().'.name', $this->permission]);
 	}
 
 	/**

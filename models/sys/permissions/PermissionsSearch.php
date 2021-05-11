@@ -39,13 +39,11 @@ final class PermissionsSearch extends Permissions {
 		]);
 
 		$this->setSort($dataProvider);
-
-		$query->joinWith(['relatedUsers', 'relatedPermissionsCollections']);
-
 		$this->load($params);
 
 		if (!$this->validate()) return $dataProvider;
 
+		$query->joinWith(['relatedUsers', 'relatedPermissionsCollections']);
 		$this->filterData($query);
 
 		return $dataProvider;
