@@ -180,7 +180,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsersToPermissionsCollections',
+				'attribute' => 'collection',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedPermissionsCollections,
@@ -191,7 +191,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsers',
+				'attribute' => 'user',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedUsers,

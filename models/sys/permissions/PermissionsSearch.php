@@ -4,11 +4,17 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions;
 
 use yii\data\ActiveDataProvider;
+use app\models\sys\permissions\Permissions;
+use app\models\sys\users\active_record\Users;
+use app\models\sys\permissions\active_record\PermissionsCollections;
 
 /**
  * Class PermissionsSearch
  */
 final class PermissionsSearch extends Permissions {
+
+	public $user;
+	public $collection;
 
 	/**
 	 * @inheritDoc
@@ -17,7 +23,7 @@ final class PermissionsSearch extends Permissions {
 		return [
 			['id', 'integer'],
 			['priority', 'integer', 'min' => 0, 'max' => 100],
-			[['name', 'controller', 'action', 'verb'], 'string', 'max' => 255]
+			[['name', 'controller', 'action', 'verb', 'user', 'collection'], 'string', 'max' => 255]
 		];
 	}
 
@@ -33,6 +39,9 @@ final class PermissionsSearch extends Permissions {
 		]);
 
 		$this->setSort($dataProvider);
+
+		$query->joinWith(['relatedUsers', 'relatedPermissionsCollections']);
+
 		$this->load($params);
 
 		if (!$this->validate()) return $dataProvider;
@@ -52,7 +61,9 @@ final class PermissionsSearch extends Permissions {
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere(['like', self::tableName().'.controller', $this->controller])
 			->andFilterWhere(['like', self::tableName().'.action', $this->action])
-			->andFilterWhere([self::tableName().'.verb' => $this->verb]);
+			->andFilterWhere([self::tableName().'.verb' => $this->verb])
+			->andFilterWhere(['like', Users::tableName().'.username', $this->user])
+			->andFilterWhere(['like', PermissionsCollections::tableName().'.name', $this->collection]);
 	}
 
 	/**
