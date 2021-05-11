@@ -21,7 +21,7 @@ class MenuWidget extends YiiMenuWidget
 	{
 		parent::init();
 
-		$this->linkTemplate = '<a href="{url}">{icon}<span class="nav-link-text">{label}</span></a>';
+		$this->linkTemplate = '<a href="{url}" data-filter-tags="{tags}">{icon}<span class="nav-link-text">{label}</span></a>';
 	}
 
 	/**
@@ -37,6 +37,8 @@ class MenuWidget extends YiiMenuWidget
 			$icon = '';
 		}
 
-		return strtr($render, ['{icon}' => $icon]);
+		$tags = mb_strtolower($item['label']);
+
+		return strtr($render, ['{icon}' => $icon, '{tags}' => $tags]);
 	}
 }
