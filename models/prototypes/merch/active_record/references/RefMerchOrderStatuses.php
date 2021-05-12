@@ -14,6 +14,10 @@ use pozitronik\references\models\CustomisableReference;
  * @property int $deleted
  */
 class RefMerchOrderStatuses extends CustomisableReference {
+
+	/*todo: возможно, тут лучше расширение для статусов*/
+	public $menuCaption = "Статусы заказов";
+
 	/**
 	 * {@inheritdoc}
 	 */
