@@ -50,7 +50,7 @@ var myapp_config = {
 	DEBUGGING MODE
 	debugState = true; will spit all debuging message inside browser console.
 	*/
-	debugState: true, // outputs debug information on browser console
+	debugState: false, // outputs debug information on browser console
 	/*
 	Turn on ripple effect for buttons and touch events
 	Dependency: 
@@ -107,7 +107,7 @@ var myapp_config = {
 	*    initApp.pushSettings("className1 className2") //sets value
 	*    var DB_string = initApp.getSettings(); //returns setting string
 	*/
-	storeLocally: true,
+	storeLocally: false,
 	/*
 	* Used with initApp.loadScripts
 	* DOC: Please leave it blank

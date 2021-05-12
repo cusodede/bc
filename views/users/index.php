@@ -21,7 +21,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
-use yii\bootstrap\Html;
+use yii\bootstrap4\Html;
 
 ModalHelperAsset::register($this);
 ?>

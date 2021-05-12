@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 
 use yii\web\View;
+
 ?>
 
 <aside class="page-sidebar">

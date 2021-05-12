@@ -24,9 +24,6 @@ use yii\widgets\ActiveForm;
 		'model' => $model,
 		'form' => "{$model->formName()}-modal-edit"
 	]),//post button outside the form
-	'dialogOptions' => [
-		'backdrop' => true
-	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]

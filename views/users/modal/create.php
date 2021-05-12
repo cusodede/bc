@@ -20,9 +20,6 @@ use yii\widgets\ActiveForm;
 		'model' => $model,
 		'form' => "{$model->formName()}-modal-create"
 	]),//post button outside the form
-//	'dialogOptions' => [
-//		'backdrop' => true
-//	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]
