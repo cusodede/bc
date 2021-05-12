@@ -12,6 +12,7 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
+use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\search\SearchWidget;
@@ -79,6 +80,10 @@ ModalHelperAsset::register($this);
 							'url' => UsersController::to('index')
 						]
 					],
+				],
+				[
+					'label' => 'Прототипирование',
+					'items' => DefaultController::MenuItems()
 				],
 				[
 					'label' => 'Доступы',
