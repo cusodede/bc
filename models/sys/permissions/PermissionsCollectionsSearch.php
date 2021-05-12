@@ -23,12 +23,19 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 		];
 	}
 
+	public function attributeLabels():array {
+		return parent::attributeLabels() + [
+				'name' => 'Название',
+				'permission' => 'Разрешения'
+			];
+	}
+
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = PermissionsCollections::find()->active();
+		$query = self::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
