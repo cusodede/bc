@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\web\View;
 
 ?>
@@ -15,7 +15,7 @@ use yii\web\View;
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-profile-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'clientOptions' => [
+	'dialogOptions' => [
 		'backdrop' => true
 	],
 	'options' => [

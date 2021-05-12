@@ -6,7 +6,7 @@
 	bottom: 0;
 	left: 0;
 	z-index: 1050;
-	background-image: url("../img/preloading.gif");
+	background-image: url("/img/theme/loading.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
 }
