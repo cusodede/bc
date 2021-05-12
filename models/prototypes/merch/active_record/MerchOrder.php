@@ -5,7 +5,7 @@ namespace app\models\prototypes\merch\active_record;
 
 use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
-use app\models\prototypes\seller\Store;
+use app\models\prototypes\seller\Stores;
 use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
@@ -27,7 +27,7 @@ use yii\db\ActiveRecord;
  * @property Merch[] $merch Товары в заказе
  *
  * @property Users $initiatorUser Пользователь, создавший заказ
- * @property Store $storeStore Магазин поставки заказа
+ * @property Stores $storeStore Магазин поставки заказа
  */
 class MerchOrder extends ActiveRecord {
 	/**
@@ -87,7 +87,7 @@ class MerchOrder extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getStoreStore():ActiveQuery {
-		return $this->hasOne(Store::class, ['id' => 'store']);
+		return $this->hasOne(Stores::class, ['id' => 'store']);
 	}
 
 	/**
