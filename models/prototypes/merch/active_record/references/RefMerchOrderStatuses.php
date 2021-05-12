@@ -21,15 +21,4 @@ class RefMerchOrderStatuses extends CustomisableReference {
 		return 'ref_merch_order_statuses';
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function rules():array {
-		return [
-			[['name'], 'required'],
-			[['id', 'deleted'], 'integer'],
-			[['name', 'color'], 'string', 'max' => 255],
-		];
-	}
-
 }
