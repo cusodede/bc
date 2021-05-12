@@ -16,10 +16,11 @@ class SmartAdminThemeAssets extends AssetBundle
 	public function init(): void
 	{
 		$this->depends = [YiiAsset::class];
-		$this->sourcePath = __DIR__ . '/assets/smartadmin';
+		$this->sourcePath = __DIR__ . '/assets/theme';
 		$this->css = [
 			'css/vendors.bundle.css',
 			'css/app.bundle.css',
+			'css/fa-solid.css',
 			'css/skins/skin-master.css',
 		];
 		$this->js = [
