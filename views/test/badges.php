@@ -17,18 +17,18 @@ BootstrapAsset::register($this);
 //	'outerPostfix' => fn($key) => "#{$key}",
 	'emptyText' => ['один', 'два', 'три'],
 	'visible' => 2,
-	'options' => function($key) {
+	'options' => static function($key) {
 		return ['style' => 'background:'.((0 === $key % 2)?'red':'green')];
 	},
-	'addon' => fn($visible, $hidden) => "{$hidden} не показано",
-	'addonOptions' => function($key) {
+	'addon' => static fn($visible, $hidden) => "{$hidden} не показано",
+	'addonOptions' => static function($key) {
 		return ['style' => 'background:'.((0 === $key % 2)?'red':'green')];
 	},
 //	'urlScheme' => ['users/view', 'id' => 'id'],
-	'tooltip' => function($key, $users) {
+	'tooltip' => static function($key, $users) {
 		return (string)$key;
 	},
-	'addonTooltip' => function(array $all, array $visible, array $hidden) {
+	'addonTooltip' => static function(array $all, array $visible, array $hidden) {
 		return implode(',', $hidden);
 	}
 ]) ?>
