@@ -26,7 +26,7 @@
 		"pozitronik/yii2-badgewidget": "dev-master",
 		"pozitronik/yii2-cachedwidget": "dev-master",
 		"pozitronik/yii2-filestorage": "dev-master",
-		"pozitronik/yii2-grid-config": "dev-bs4",
+		"pozitronik/yii2-grid-config": "dev-master",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "dev-master",
 		"kartik-v/yii2-editable": "dev-master",
@@ -83,10 +83,6 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-multi-select-widget"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/cusodede/yii2-grid-config"
 		}
 	]
 }
