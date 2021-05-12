@@ -113,7 +113,7 @@ class TestController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionBadges() {
+	public function actionBadges():string {
 		return $this->render('badges');
 	}
 }
