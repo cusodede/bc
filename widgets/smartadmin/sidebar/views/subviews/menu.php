@@ -12,7 +12,9 @@ use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
 
-echo MenuWidget::widget([
+?>
+
+<?= MenuWidget::widget([
 	'options' => [
 		'id' => 'js-nav-menu',
 		'class' => 'nav-menu'
@@ -89,4 +91,4 @@ echo MenuWidget::widget([
 			]
 		],
 	],
-]);
+]) ?>
