@@ -24,15 +24,9 @@ class m210513_113311_products extends Migration
 			'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания партнера'),
 		]);
 
-		$this->createIndex('idx-products-user_id', 'products', 'user_id');
 		$this->addForeignKey('fk-products-user_id', 'products', 'user_id', 'sys_users', 'id', 'CASCADE');
-
-		$this->createIndex('idx-products-type_id', 'products', 'type_id');
 		$this->addForeignKey('fk-products-type_id', 'products', 'type_id', 'ref_products_types', 'id', 'CASCADE');
-
-		$this->createIndex('idx-products-partner_id', 'products', 'partner_id');
 		$this->addForeignKey('fk-products-partner_id', 'products', 'partner_id', 'partners', 'id', 'CASCADE');
-
 		$this->createIndex('idx-products-deleted', 'products', 'deleted');
 	}
 
@@ -44,10 +38,6 @@ class m210513_113311_products extends Migration
 		$this->dropForeignKey('fk-products-user_id', 'products');
 		$this->dropForeignKey('fk-products-type_id', 'products');
 		$this->dropForeignKey('fk-products-partner_id', 'products');
-
-		$this->dropIndex('idx-products-user_id', 'products');
-		$this->dropIndex('idx-products-type_id', 'products');
-		$this->dropIndex('idx-products-partner_id', 'products');
 		$this->dropIndex('idx-products-deleted', 'products');
 
 		$this->dropTable('products');
