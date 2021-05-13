@@ -56,7 +56,12 @@ $config = [
 		],
 		'references' => [
 			'class' => ReferencesModule::class,
-			'defaultRoute' => 'references'
+			'defaultRoute' => 'references',
+			'params' => [
+				'baseDir' => [
+					'@app/models/ref_products_types/active_record/references'
+				],
+			],
 		],
 		'history' => [
 			'class' => HistoryModule::class,
