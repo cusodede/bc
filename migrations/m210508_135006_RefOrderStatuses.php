@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-use app\migrations\template\CustomisableReferenceMigration;
+use pozitronik\references\models\CustomisableReferenceMigration;
 
 /**
  * Class m210508_135006_RefOrderStatuses
