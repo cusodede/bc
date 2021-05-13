@@ -22,10 +22,12 @@ class SmartAdminThemeAssets extends AssetBundle
 			'css/app.bundle.css',
 			'css/fa-solid.css',
 			'css/skins/skin-master.css',
+			'css/notifications/toastr/toastr.css'
 		];
 		$this->js = [
 			'js/vendors.bundle.js',
-			'js/app.bundle.js'
+			'js/app.bundle.js',
+			'js/notifications/toastr/toastr.js'
 		];
 		$this->publishOptions = [
 			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
