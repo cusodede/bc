@@ -20,7 +20,7 @@ class RelStoresToSellers extends ActiveRecord {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'relation_store_to_seller';
+		return 'relation_stores_to_sellers';
 	}
 
 	/**
