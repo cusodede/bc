@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\status\models\traits;
 
+use app\models\sys\users\Users;
 use app\modules\status\models\Status;
 use app\modules\status\models\StatusModel;
 use app\modules\status\models\StatusRulesModel;
-use app\modules\targets\stubs\CurrentUser;
 use pozitronik\helpers\ReflectionHelper;
 use ReflectionException;
 use Throwable;
@@ -53,12 +53,10 @@ trait StatusesTrait {
 	public function getNextStatuses():array {
 		$fwdStatuses = (null === $nextStatuses = StatusRulesModel::getNextStatuses($this->className, $this->currentStatus))?$this->allStatuses:$nextStatuses;
 
-		$fwdStatuses = array_filter($fwdStatuses, function(StatusModel $statusModel) {
+		return array_filter($fwdStatuses, function(StatusModel $statusModel) {
 			/** @var ActiveRecord $this */
-			return $statusModel->isAllowed($this, CurrentUser::model());
+			return $statusModel->isAllowed($this, Users::Current());
 		}, ARRAY_FILTER_USE_BOTH);
-
-		return $fwdStatuses;
 	}
 
 	/**
@@ -96,6 +94,7 @@ trait StatusesTrait {
 			/** @var ActiveRecord $this */
 			return Status::setCurrentStatus($this, $status);
 		}
+		/** @var ActiveRecord $this */
 		$this->addError('currentStatusId', 'Нет права на изменение статуса.');
 		return false;
 	}
@@ -125,6 +124,7 @@ trait StatusesTrait {
 			$this->setCurrentStatusId($currentStatus->id);
 			return;
 		}
+		/** @var ActiveRecord $this */
 		$this->addError('currentStatus', 'Нет права на изменение статуса.');
 	}
 
@@ -151,6 +151,7 @@ trait StatusesTrait {
 	 * Status::getCurrentStatus работает альтернативно, но вариант с релейшеном корректнее архитектурно
 	 */
 	public function getRelStatus():ActiveQuery {
+		/** @var ActiveRecord $this */
 		return $this->hasOne(Status::class, [
 			'model_key' => 'id'
 		])->andOnCondition(['model_name' => $this->className]);
