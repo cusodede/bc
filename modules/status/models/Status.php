@@ -3,12 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\status\models;
 
-use app\models\Delegation;
-use app\modules\targets\stubs\CurrentUser;
+use app\models\sys\users\Users;
 use pozitronik\core\traits\ARExtended;
 use ReflectionClass;
 use Throwable;
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use yii\db\StaleObjectException;
@@ -104,8 +102,9 @@ class Status extends ActiveRecord {
 			$currentStatus->loadArray($attributes);
 		}
 		$currentStatus->status = $status;
-		$currentStatus->daddy = CurrentUser::Id();
-		$currentStatus->delegate = (false === $delegateId = Yii::$app->cache->get(Delegation::RELOGIN_PREFIX.Yii::$app->user->id))?null:$delegateId;
+		$currentStatus->daddy = Users::Current()->id;
+		/* не используется, осталось из TWS, может быть появится и у нас такой
+		 * $currentStatus->delegate = (false === $delegateId = Yii::$app->cache->get(Delegation::RELOGIN_PREFIX.Yii::$app->user->id))?null:$delegateId;*/
 		return ($currentStatus->isNewRecord)?$currentStatus->save():(1 === $currentStatus->update());
 	}
 }

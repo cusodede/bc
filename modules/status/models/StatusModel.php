@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\status\models;
 
-use app\modules\targets\stubs\TargetsUsers;
+use app\models\sys\users\Users;
 use yii\base\Model;
 
 /**
@@ -56,10 +56,10 @@ class StatusModel extends Model {
 	/**
 	 * Проверяет, доступен ли для выбора/применения статус $this в $model для пользователя $user
 	 * @param Model $model
-	 * @param TargetsUsers $user
+	 * @param Users $user
 	 * @return bool
 	 */
-	public function isAllowed(Model $model, TargetsUsers $user):bool {
+	public function isAllowed(Model $model, Users $user):bool {
 		if (is_callable($this->allowed)) {
 			return call_user_func($this->allowed, $model, $user);
 		}

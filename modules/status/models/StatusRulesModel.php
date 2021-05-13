@@ -59,6 +59,7 @@ class StatusRulesModel extends Model {
 	 */
 	public static function getStatus(string $className, ?int $currentStatusId):?StatusModel {
 		if (null === $rule = ArrayHelper::getValue(StatusModule::getClassRules($className), $currentStatusId)) return null;
+		/** @var array $rule */
 		return new StatusModel($currentStatusId, $rule);
 	}
 

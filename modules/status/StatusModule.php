@@ -7,6 +7,7 @@ use pozitronik\core\traits\ModuleExtended;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Module;
 
 /**
@@ -22,6 +23,8 @@ class StatusModule extends Module {
 	 * @throws Throwable
 	 */
 	public static function getClassRules(string $className):array {
-		return ArrayHelper::getValue(Yii::$app->modules, "statuses.params.rules.$className", []);
+		$rules = ArrayHelper::getValue(Yii::$app->modules, "statuses.params.rules.$className", []);
+		if (!is_array($rules)) throw new InvalidConfigException("Настройки статусов класса $className заданы некорректно");
+		return $rules;
 	}
 }
