@@ -1,8 +1,6 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\status\migrations;
-
 use yii\db\Migration;
 
 /**
