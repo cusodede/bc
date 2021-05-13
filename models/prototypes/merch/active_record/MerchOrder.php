@@ -7,6 +7,7 @@ use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
 use app\models\prototypes\seller\Stores;
 use app\models\sys\users\Users;
+use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -30,6 +31,7 @@ use yii\db\ActiveRecord;
  * @property Stores $storeStore Магазин поставки заказа
  */
 class MerchOrder extends ActiveRecord {
+	use StatusesTrait;
 	/**
 	 * {@inheritdoc}
 	 */
