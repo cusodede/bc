@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\prototypes\seller\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\prototypes\merch\active_record\relations\RelStoresToSellers;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
@@ -20,6 +21,8 @@ use yii\db\ActiveRecord;
  * @property Stores[] $stores Магазины продавца
  */
 class Sellers extends ActiveRecord {
+	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
