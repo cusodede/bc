@@ -62,6 +62,7 @@ ModalHelperAsset::register($this);
 					},
 				],
 			],
+			'id',
 			'name',
 			'comment',
 			[

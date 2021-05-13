@@ -12,13 +12,14 @@ use yii\data\ActiveDataProvider;
  */
 class PermissionsCollectionsSearch extends PermissionsCollections {
 
-	public $permission;
+	public ?string $permission = null;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
+			['id', 'integer'],
 			[['name', 'permission'], 'string', 'max' => 128]
 		];
 	}
@@ -50,7 +51,8 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 	 * @return void
 	 */
 	private function filterData($query):void {
-		$query->andFilterWhere(['like', self::tableName().'.name', $this->name])
+		$query->andFilterWhere([self::tableName().'.id' => $this->id])
+			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere(['like', Permissions::tableName().'.name', $this->permission]);
 	}
 
@@ -59,8 +61,8 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 	 */
 	private function setSort($dataProvider):void {
 		$dataProvider->setSort([
-			'defaultOrder' => ['name' => SORT_ASC],
-			'attributes' => ['name']
+			'defaultOrder' => ['id' => SORT_ASC],
+			'attributes' => ['id', 'name']
 		]);
 	}
 }
