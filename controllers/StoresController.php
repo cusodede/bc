@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
 use app\models\prototypes\seller\Stores;
+use app\models\prototypes\seller\StoresSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**
@@ -14,5 +15,6 @@ class StoresController extends DefaultController {
 	use ControllerTrait;
 
 	public string $modelClass = Stores::class;
+	public string $modelSearchClass = StoresSearch::class;
 
 }
