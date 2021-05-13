@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\prototypes\seller\active_record;
 
-
+use app\models\prototypes\merch\active_record\relations\RelStoresToSellers;
+use app\models\prototypes\seller\active_record\references\RefStoreTypes;
 use pozitronik\helpers\DateHelper;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -15,6 +17,10 @@ use yii\db\ActiveRecord;
  * @property int $type Тип магазина
  * @property string $create_date Дата регистрации
  * @property int $deleted
+ *
+ * @property RefStoreTypes $refStoreType Тип точки (справочник)
+ * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
+ * @property Sellers[] $sellers Все продавцы точки
  */
 class Stores extends ActiveRecord {
 	/**
@@ -27,7 +33,7 @@ class Stores extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['name', 'type', 'create_date'], 'required'],
 			[['type', 'deleted'], 'integer'],
@@ -40,7 +46,7 @@ class Stores extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'name' => 'Название магазина',
@@ -49,4 +55,26 @@ class Stores extends ActiveRecord {
 			'deleted' => 'Deleted',
 		];
 	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefStoreType():ActiveQuery {
+		return $this->hasOne(RefStoreTypes::class, ['id' => 'type']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedStoresToSellers():ActiveQuery {
+		return $this->hasMany(RelStoresToSellers::class, ['store_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getSellers():ActiveQuery {
+		return $this->hasMany(Sellers::class, ['id' => 'seller_id'])->via('relatedStoresToSellers');
+	}
+
 }
