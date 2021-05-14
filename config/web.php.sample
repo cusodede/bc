@@ -18,6 +18,10 @@ use yii\log\FileTarget;
 use yii\rest\UrlRule;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
+use yii\bootstrap\BootstrapPluginAsset;
+use yii\bootstrap\BootstrapAsset;
+use kartik\dialog\DialogBootstrapAsset;
+use app\assets\SmartAdminThemeAssets;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
