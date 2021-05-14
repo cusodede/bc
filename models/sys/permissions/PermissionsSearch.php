@@ -33,7 +33,7 @@ final class PermissionsSearch extends Permissions {
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = Permissions::find()->active();
+		$query = Permissions::find()->distinct()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
