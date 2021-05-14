@@ -26,7 +26,7 @@ class LoginForm extends Model {
 	public bool $restore = false;
 
 	/** @var null|Users */
-	private ?Users $_user;
+	private ?Users $_user = null;
 
 	/**
 	 * @return array the validation rules.
