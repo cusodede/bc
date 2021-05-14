@@ -16,8 +16,6 @@ use pozitronik\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 
-$this->registerCss(".ms-container {width:100%}");
-
 ?>
 
 <div class="row">
@@ -28,6 +26,19 @@ $this->registerCss(".ms-container {width:100%}");
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'comment')->textarea() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="control-label" for="search-permission">Поиск</label>
+			<?= Html::input(
+				'text',
+				'search-permission',
+				null,
+				['class' => 'form-control', 'id' => 'search-permission']
+			) ?>
+		</div>
 	</div>
 </div>
 <div class="row">

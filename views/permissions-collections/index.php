@@ -22,7 +22,9 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use app\assets\PermissionsCollectionsAsset;
 
+PermissionsCollectionsAsset::register($this);
 ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
@@ -62,6 +64,7 @@ ModalHelperAsset::register($this);
 					},
 				],
 			],
+			'id',
 			'name',
 			'comment',
 			[

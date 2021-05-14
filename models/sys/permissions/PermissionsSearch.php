@@ -14,8 +14,8 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
  */
 final class PermissionsSearch extends Permissions {
 
-	public $user;
-	public $collection;
+	public ?string $user = null;
+	public ?string $collection = null;
 
 	/**
 	 * @inheritDoc
@@ -33,7 +33,7 @@ final class PermissionsSearch extends Permissions {
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = Permissions::find()->active();
+		$query = Permissions::find()->distinct()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
