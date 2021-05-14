@@ -29,7 +29,7 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = PermissionsCollections::find()->active();
+		$query = PermissionsCollections::find()->distinct()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
