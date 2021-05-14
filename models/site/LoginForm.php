@@ -20,8 +20,8 @@ use yii\base\Model;
  * @property bool $restore
  */
 class LoginForm extends Model {
-	public string $login;
-	public string $password;
+	public $login;
+	public $password;
 	public bool $rememberMe = true;
 	public bool $restore = false;
 
