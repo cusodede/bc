@@ -11,7 +11,6 @@ namespace app\assets;
 use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
-use yii\bootstrap\BootstrapAsset;
 
 /**
  * Main application asset bundle.
@@ -30,7 +29,6 @@ class AppAsset extends AssetBundle {
 
 		$this->depends = [
 			YiiAsset::class,
-			BootstrapAsset::class,
 		];
 
 		$this->publishOptions = [
