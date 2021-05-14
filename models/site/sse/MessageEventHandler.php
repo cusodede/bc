@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\core\sse;
+namespace app\models\site\sse;
 
 use odannyc\Yii2SSE\SSEBase;
 

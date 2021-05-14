@@ -2,9 +2,7 @@
 declare(strict_types = 1);
 use app\models\sys\users\Users;
 use pozitronik\widgets\BadgeWidget;
-use yii\bootstrap\BootstrapAsset;
 
-BootstrapAsset::register($this);
 ?>
 
 <?= BadgeWidget::widget([

@@ -21,7 +21,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
-use yii\bootstrap\Html;
+use yii\bootstrap4\Html;
 
 ModalHelperAsset::register($this);
 ?>
@@ -53,12 +53,12 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}{update-password}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fas fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'update-password' => static function(string $url, Users $model) {
-						return Html::a('<i class="glyphicon glyphicon-lock"></i>', $url, [
+						return Html::a('<i class="fas fa-lock"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
