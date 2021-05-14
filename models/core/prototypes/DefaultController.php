@@ -22,6 +22,9 @@ use yii\web\Response;
  * Все контроллеры и все вью плюс-минус одинаковые, поэтому можно сэкономить на прототипировании
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
+ *
+ * @property-read ActiveRecord $searchModel
+ * @property-read ActiveRecord|ActiveRecordTrait $model
  */
 class DefaultController extends Controller {
 	use ControllerTrait;
@@ -68,14 +71,14 @@ class DefaultController extends Controller {
 	/**
 	 * @return ActiveRecord|ActiveRecordTrait
 	 */
-	private function getModel():ActiveRecord {
+	public function getModel():ActiveRecord {
 		return (new $this->modelClass());
 	}
 
 	/**
 	 * @return ActiveRecord
 	 */
-	private function getSearchModel():ActiveRecord {
+	public function getSearchModel():ActiveRecord {
 		return (new $this->modelSearchClass());
 	}
 
