@@ -11,8 +11,8 @@ use yii\base\Model;
  * @property bool $asCommentBlock Выводить генерацию в виде блока комментария
  */
 class SwaggerConverter extends Model {
-	public $parsers = [];
-	public $asCommentBlock = true;
+	public array $parsers = [];
+	public bool $asCommentBlock = true;
 
 	/*Пока я не изучил спецификации, делаю только для примера*/
 	/**

@@ -12,7 +12,7 @@ use yii\data\ActiveDataProvider;
  */
 class PermissionsCollectionsSearch extends PermissionsCollections {
 
-	public ?string $permission = null;
+	public ?string $permission;
 
 	/**
 	 * {@inheritdoc}
