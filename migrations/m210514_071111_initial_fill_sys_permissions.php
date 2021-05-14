@@ -11,9 +11,7 @@ class m210514_071111_initial_fill_sys_permissions extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->execute("
-        INSERT INTO bc.sys_permissions (name, controller, action, verb, comment, priority)
-        VALUES
+		$this->execute("INSERT INTO sys_permissions (name, controller, action, verb, comment, priority) VALUES 
 		('Личный кабинет', '', null, null, 'Доступ к Личному кабинету', 0),
 		('Верификация через Госуслуги', '', null, null, 'Верификация данных через Госуслуги', 0),
 		('Планы на ТТ', '', null, null, 'Инфо о планах на Торговой точке (ТТ)', 0),
