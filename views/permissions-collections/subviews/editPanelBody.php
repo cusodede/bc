@@ -32,6 +32,19 @@ $this->registerCss(".ms-container {width:100%}");
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<div class="form-group">
+			<label class="control-label" for="search-permission">Поиск</label>
+			<?= Html::input(
+				'text',
+				'search-permission',
+				null,
+				['class' => 'form-control', 'id' => 'search-permission']
+			) ?>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?= ([] === $permissions = Permissions::find()->all())
 			?Html::a('Сначала создайте доступы', PermissionsController::to('index'), ['class' => 'btn btn-warning'])
 			:$form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
