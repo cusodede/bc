@@ -14,8 +14,8 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
  */
 final class PermissionsSearch extends Permissions {
 
-	public $user;
-	public $collection;
+	public ?string $user;
+	public ?string $collection;
 
 	/**
 	 * @inheritDoc

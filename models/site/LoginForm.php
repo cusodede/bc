@@ -20,13 +20,13 @@ use yii\base\Model;
  * @property bool $restore
  */
 class LoginForm extends Model {
-	public $login;
-	public $password;
-	public $rememberMe = true;
-	public $restore = false;
+	public string $login;
+	public string $password;
+	public bool $rememberMe = true;
+	public bool $restore = false;
 
 	/** @var null|Users */
-	private $_user;
+	private ?Users $_user;
 
 	/**
 	 * @return array the validation rules.

@@ -17,11 +17,11 @@ use yii\base\Model;
  * @property string $email
  */
 class RegistrationForm extends Model {
-	public $username;
-	public $login;
-	public $password;
-	public $passwordRepeat;
-	public $email;
+	public string $username;
+	public string $login;
+	public string $password;
+	public string $passwordRepeat;
+	public string $email;
 
 	/**
 	 * @return array the validation rules.

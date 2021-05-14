@@ -10,7 +10,7 @@ use odannyc\Yii2SSE\SSEBase;
  */
 class MessageEventHandler extends SSEBase {
 
-	public static $i = 0;
+	public static int $i = 0;
 
 	/**
 	 * @inheritDoc

@@ -92,7 +92,7 @@ class PermissionsCollections extends ActiveRecord {
 	}
 
 	/**
-	 * @param array $relatedPermissions
+	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
 	public function setRelatedPermissions($relatedPermissions):void {
