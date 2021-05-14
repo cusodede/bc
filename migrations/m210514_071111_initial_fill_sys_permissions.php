@@ -65,7 +65,7 @@ class m210514_071111_initial_fill_sys_permissions extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		Permissions::deleteAll();
+		return false;//это миграция данных, она не откатывается
 	}
 
 }
