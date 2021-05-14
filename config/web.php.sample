@@ -59,7 +59,7 @@ $config = [
 			'defaultRoute' => 'references',
 			'params' => [
 				'baseDir' => [
-					'@app/models/ref_products_types/active_record/references'
+					'@app/models/ref_products_types/active_record'
 				],
 			],
 		],

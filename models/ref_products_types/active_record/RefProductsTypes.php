@@ -3,12 +3,12 @@ declare(strict_types = 1);
 
 namespace app\models\ref_products_types\active_record;
 
+use pozitronik\references\models\Reference;
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 use app\models\products\active_record\Products;
 
 /**
- * This is the model class for table "ref_products_types".
+ * Справочник типов продуктов
  *
  * @property int $id
  * @property string $name
@@ -16,38 +16,16 @@ use app\models\products\active_record\Products;
  *
  * @property Products[] $products
  */
-class RefProductsTypes extends ActiveRecord
+class RefProductsTypes extends Reference
 {
+	public $menuCaption  = 'Типы продуктов';
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName(): string
 	{
 		return 'ref_products_types';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function rules(): array
-	{
-		return [
-			[['name'], 'required'],
-			[['deleted'], 'integer'],
-			[['name'], 'string', 'max' => 255],
-		];
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function attributeLabels(): array
-	{
-		return [
-			'id' => 'ID',
-			'name' => 'Name',
-			'deleted' => 'Deleted',
-		];
 	}
 
 	/**
