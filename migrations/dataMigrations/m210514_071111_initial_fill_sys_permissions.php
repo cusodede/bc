@@ -1,7 +1,6 @@
 <?php
 declare(strict_types = 1);
 use yii\db\Migration;
-use app\models\sys\permissions\active_record\Permissions;
 
 /**
  * Class m210514_071111_initial_fill_sys_permissions
