@@ -24,7 +24,7 @@ class UpdatePasswordForm extends Model {
 	 */
 	private $_requireOldPassword = true;
 
-	/** @var Users */
+	/** @var Users|null */
 	private $_user;
 
 	/**
