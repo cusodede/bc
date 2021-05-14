@@ -34,5 +34,6 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 	modalContainerDiv.load(dataUrl, function() {
 		$('#' + modalDivId).modal('show');
 		modalContainerDiv.removeClass('preloading');
+		document.dispatchEvent(new Event('modalIsReady'));
 	}).show();
 }
