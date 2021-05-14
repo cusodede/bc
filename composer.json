@@ -19,7 +19,7 @@
 	"require": {
 		"php": "~7.4|~8.0",
 		"yiisoft/yii2": "dev-master",
-		"yiisoft/yii2-bootstrap": "~2.0.0",
+		"yiisoft/yii2-bootstrap": "dev-master",
 		"pozitronik/yii2-users-options": "dev-master",
 		"pozitronik/yii2-options": "dev-master",
 		"pozitronik/yii2-references": "dev-master",
