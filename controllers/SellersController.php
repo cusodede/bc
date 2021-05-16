@@ -17,4 +17,11 @@ class SellersController extends DefaultController {
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getViewPath():string {
+		return '@app/views/sellers';
+	}
+
 }
