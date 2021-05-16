@@ -87,7 +87,7 @@ class Stores extends ActiveRecord {
 	 * @throws Throwable
 	 */
 	public function setSellers($sellers):void {
-		RelStoresToSellers::linkModels($this, $sellers);/*Порядок объектов такой же, как у ключей в БД*/
+		RelStoresToSellers::linkModels($this, $sellers);
 	}
 
 }
