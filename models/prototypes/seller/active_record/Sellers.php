@@ -35,7 +35,7 @@ class Sellers extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'create_date'], 'required'],
+			[['name'], 'required'],
 			[['create_date'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['deleted'], 'integer'],

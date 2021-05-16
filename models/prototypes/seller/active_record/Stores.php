@@ -38,7 +38,7 @@ class Stores extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'type', 'create_date'], 'required'],
+			[['name', 'type'], 'required'],
 			[['type', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
