@@ -50,7 +50,7 @@ class DefaultController extends Controller {
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Yii::getAlias($alias)), RecursiveIteratorIterator::SELF_FIRST);
 		/** @var RecursiveDirectoryIterator $file */
 		foreach ($files as $file) {
-			/** @var self$model */
+			/** @var self $model */
 			if ($file->isFile() && 'php' === $file->getExtension() && null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) {
 				$items[] = [
 					'label' => $model->id,
@@ -89,7 +89,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionIndex():string {
 		$params = Yii::$app->request->queryParams;
-		$searchModel = $this->getSearchModel();
+		$searchModel = $this->searchModel;
 
 		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->render('index', [
@@ -107,7 +107,7 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionView(int $id):string {
-		if (null === $model = $this->getModel()::findOne($id)) {
+		if (null === $model = $this->model::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
 		if (Yii::$app->request->isAjax) {
@@ -126,7 +126,7 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionEdit(int $id) {
-		if (null === $model = $this->getModel()::findOne($id)) {
+		if (null === $model = $this->model::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
 
@@ -148,7 +148,7 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionCreate() {
-		$model = $this->getModel();
+		$model = $this->model;
 		if ($model->createModelFromPost()) {
 			return $this->redirect('index');
 		}
@@ -168,7 +168,7 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionDelete(int $id):Response {
-		if (null === $model = $this->getModel()::findOne($id)) {
+		if (null === $model = $this->model::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
 		/** @noinspection PhpUndefinedMethodInspection */
