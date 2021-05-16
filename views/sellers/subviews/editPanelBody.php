@@ -26,10 +26,6 @@ use yii\web\View;
 		<?= $form->field($model, 'stores')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
 			'selectModelClass' => Stores::class,
-//			'selectionQuery' => Stores::find()->active(),
-//			'pluginOptions' => [
-//				'matcher' => new JsExpression('function(params, data) {return SellersMatchCustom(params, data)}')
-//			],
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => StoresController::to('ajax-search')
 		]) ?>
