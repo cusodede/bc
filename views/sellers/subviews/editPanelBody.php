@@ -8,8 +8,8 @@ declare(strict_types = 1);
  */
 
 use app\controllers\StoresController;
-use app\models\prototypes\seller\Sellers;
-use app\models\prototypes\seller\Stores;
+use app\models\seller\seller\Sellers;
+use app\models\store\Stores;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
 use yii\web\View;

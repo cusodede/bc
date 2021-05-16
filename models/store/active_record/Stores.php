@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\seller\active_record;
+namespace app\models\store\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\prototypes\seller\active_record\references\RefStoreTypes;
-use app\models\prototypes\seller\active_record\relations\RelStoresToSellers;
+use app\models\seller\seller\Sellers;
+use app\models\store\active_record\references\RefStoreTypes;
+use app\models\store\active_record\relations\RelStoresToSellers;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\db\ActiveQuery;

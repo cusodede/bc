@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch;
+namespace app\models\merch;
 
-use app\models\prototypes\merch\active_record\MerchOrder as ActiveRecordMerchOrder;
-use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
+use app\models\merch\active_record\MerchOrder as ActiveRecordMerchOrder;
+use app\models\merch\active_record\references\RefMerchOrderStatuses;
 
 /**
  * Class MerchOrder

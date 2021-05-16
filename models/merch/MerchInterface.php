@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch;
+namespace app\models\merch;
 
 /**
  * Interface MerchInterface

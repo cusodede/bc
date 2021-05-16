@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch\active_record;
+namespace app\models\merch\active_record;
 
-use app\models\prototypes\merch\active_record\references\RefMerchOrderStatuses;
-use app\models\prototypes\merch\active_record\relations\RelMerchOrderToMerch;
-use app\models\prototypes\seller\Stores;
+use app\models\merch\active_record\references\RefMerchOrderStatuses;
+use app\models\merch\active_record\relations\RelMerchOrderToMerch;
+use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;

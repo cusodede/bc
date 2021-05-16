@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch\active_record\references;
+namespace app\models\merch\active_record\references;
 
 use pozitronik\references\models\CustomisableReference;
 

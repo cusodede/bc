@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var Sellers $model
  */
 
-use app\models\prototypes\seller\Sellers;
+use app\models\seller\seller\Sellers;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap\Modal;
 use yii\web\View;

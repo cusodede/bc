@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\prototypes\merch\Merch;
-use app\models\prototypes\merch\MerchSearch;
+use app\models\merch\Merch;
+use app\models\merch\MerchSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**

@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var Stores $model
  */
 
-use app\models\prototypes\seller\Stores;
+use app\models\store\Stores;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 

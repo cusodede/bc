@@ -1,15 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch;
+namespace app\models\seller\seller;
 
+use app\models\seller\seller\active_record\Sellers as ActiveRecordSellers;
 use yii\data\ActiveDataProvider;
 
 /**
- * Class SimCardSearch
+ * Class StoresSearch
  * todo
  */
-class SimCardSearch extends active_record\SimCard {
+class SellersSearch extends ActiveRecordSellers {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider

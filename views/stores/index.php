@@ -11,8 +11,8 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\controllers\SellersController;
-use app\models\prototypes\seller\Stores;
-use app\models\prototypes\seller\StoresSearch;
+use app\models\store\Stores;
+use app\models\store\StoresSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\prototypes\seller\Stores;
-use app\models\prototypes\seller\StoresSearch;
+use app\models\store\Stores;
+use app\models\store\StoresSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**

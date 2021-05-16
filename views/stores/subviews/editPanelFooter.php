@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm|string $form
  */
 
-use app\models\prototypes\seller\Stores;
+use app\models\store\Stores;
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use yii\web\View;

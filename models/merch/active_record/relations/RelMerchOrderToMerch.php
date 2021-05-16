@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch\active_record\relations;
+namespace app\models\merch\active_record\relations;
 
 use pozitronik\core\traits\Relations;
 use yii\db\ActiveRecord;

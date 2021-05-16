@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\merch;
+namespace app\models\merch;
 
-use app\models\prototypes\merch\active_record\Merch as ActiveRecordMerch;
+use app\models\merch\active_record\Merch as ActiveRecordMerch;
 
 /**
  * Class Merch

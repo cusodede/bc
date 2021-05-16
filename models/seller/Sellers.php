@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\seller;
-use app\models\prototypes\seller\active_record\Sellers as ActiveRecordSellers;
+namespace app\models\seller\seller;
+use app\models\seller\seller\active_record\Sellers as ActiveRecordSellers;
 
 /**
  * Class Sellers

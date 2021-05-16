@@ -1,16 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\seller;
+namespace app\models\merch;
 
-use app\models\prototypes\seller\active_record\Stores as ActiveRecordStores;
 use yii\data\ActiveDataProvider;
+use app\models\merch\active_record\Merch as ActiveRecordMerch;
 
 /**
- * Class StoresSearch
+ * Class MerchSearch
  * todo
  */
-class StoresSearch extends ActiveRecordStores {
+class MerchSearch extends ActiveRecordMerch {
+
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
@@ -34,4 +35,5 @@ class StoresSearch extends ActiveRecordStores {
 
 		return $dataProvider;
 	}
+
 }

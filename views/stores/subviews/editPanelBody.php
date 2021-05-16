@@ -8,9 +8,9 @@ declare(strict_types = 1);
  */
 
 use app\controllers\SellersController;
-use app\models\prototypes\seller\active_record\references\RefStoreTypes;
-use app\models\prototypes\seller\Sellers;
-use app\models\prototypes\seller\Stores;
+use app\models\seller\seller\Sellers;
+use app\models\store\active_record\references\RefStoreTypes;
+use app\models\store\Stores;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
 use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;

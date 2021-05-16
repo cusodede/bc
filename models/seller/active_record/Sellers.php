@@ -1,11 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\seller\active_record;
+namespace app\models\seller\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\prototypes\seller\active_record\relations\RelStoresToSellers;
+use app\models\store\active_record\relations\RelStoresToSellers;
+use app\models\store\Stores;
 use pozitronik\helpers\DateHelper;
+use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -72,7 +74,7 @@ class Sellers extends ActiveRecord {
 
 	/**
 	 * @param mixed $stores
-	 * fixme: issue #4
+	 * @throws Throwable
 	 */
 	public function setStores($stores):void {
 		RelStoresToSellers::linkModels($stores, $this, true);/* Соединение идёт "наоборот", добавляем ключ backLink */

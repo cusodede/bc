@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\prototypes\seller;
+namespace app\models\store;
 
 
-use app\models\prototypes\seller\active_record\Stores as ActiveRecordStores;
+use app\models\store\active_record\Stores as ActiveRecordStores;
 
 /**
  * Class Stores
