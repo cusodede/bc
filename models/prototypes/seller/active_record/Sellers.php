@@ -68,4 +68,11 @@ class Sellers extends ActiveRecord {
 	public function getStores():ActiveQuery {
 		return $this->hasMany(Stores::class, ['id' => 'store_id'])->via('relatedStoresToSellers');
 	}
+
+	/**
+	 * @param mixed $stores
+	 */
+	public function setStores($stores):void {
+		RelStoresToSellers::linkModels($this, $stores);
+	}
 }
