@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\merch\active_record;
 
-use app\models\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\merch\active_record\relations\RelMerchOrderToMerch;
 use app\models\merch\Merch;
 use app\models\store\Stores;
@@ -22,8 +21,6 @@ use yii\db\ActiveRecord;
  * @property int $status Статус
  * @property string $create_date Дата регистрации
  * @property int $deleted
- *
- * @property RefMerchOrderStatuses|null $referenceMerchOrderStatuses Справочник статуса
  *
  * @property RelMerchOrderToMerch[] $relatedMerchOrderToMerch Связь к промежуточной таблице к товарам заказа
  * @property Merch[] $merch Товары в заказе
@@ -93,10 +90,4 @@ class MerchOrderAR extends ActiveRecord {
 		return $this->hasOne(Stores::class, ['id' => 'store']);
 	}
 
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getReferenceMerchOrderStatuses():ActiveQuery {
-		return $this->hasOne(RefMerchOrderStatuses::class, ['id' => 'status']);
-	}
 }
