@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\core\Options;
 use app\models\site\LoginForm;
 use app\models\site\RegistrationForm;
 use app\models\site\RestorePasswordForm;
@@ -11,6 +12,7 @@ use app\models\sys\users\Users;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
+use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -185,6 +187,20 @@ class SiteController extends Controller {
 		}
 		return $this->render('register', [
 			'model' => $registrationForm
+		]);
+	}
+
+	/**
+	 * @return string
+	 * @throws Throwable
+	 */
+	public function actionOptions():string {
+		$this->layout = 'main';
+		return $this->render('options', [
+			'boolOptions' => [
+				'ASSETS_PUBLISHOPTIONS_FORCECOPY' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', Options::ASSETS_PUBLISHOPTIONS_FORCECOPY),
+			],
+			'optionsLabels' => Options::OPTIONS_LABELS
 		]);
 	}
 
