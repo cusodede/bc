@@ -3,23 +3,25 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Stores $model
  * @var ActiveForm $form
  */
 
-use app\models\core\prototypes\ActiveFieldMap;
+use app\models\prototypes\seller\active_record\references\RefStoreTypes;
+use app\models\prototypes\seller\Stores;
 use kartik\form\ActiveForm;
-use yii\base\Model;
+use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;
 use yii\web\View;
 
 ?>
 
-<?php foreach ($model->attributes() as $attribute): ?>
-	<?php if ($model->isAttributeRequired($attribute)): ?>
-		<div class="row">
-			<div class="col-md-12">
-				<?= $form->field($model, $attribute)->widget(ActiveFieldMap::class) ?>
-			</div>
-		</div>
-	<?php endif ?>
-<?php endforeach; ?>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'name')->textInput() ?>
+	</div>
+	<div class="col-md-12">
+		<?= $form->field($model, 'type')->widget(ReferenceSelectWidget::class, [
+			'referenceClass' => RefStoreTypes::class
+		]) ?>
+	</div>
+</div>
