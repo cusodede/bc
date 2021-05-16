@@ -13,6 +13,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
+use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -37,6 +38,21 @@ class DefaultController extends Controller {
 	 * @var string $modelSearchClass
 	 */
 	public string $modelSearchClass;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			[
+				'class' => ContentNegotiator::class,
+				'only' => ['ajax-search'],
+				'formats' => [
+					'application/json' => Response::FORMAT_JSON
+				]
+			]
+		];
+	}
 
 	/**
 	 * Генерирует меню для доступа ко всем контроллерам по указанному пути
@@ -174,5 +190,31 @@ class DefaultController extends Controller {
 		/** @noinspection PhpUndefinedMethodInspection */
 		$model->safeDelete();
 		return $this->redirect('index');
+	}
+
+	/**
+	 * Аяксовый поиск в Select2
+	 * @param string|null $term
+	 * @return string[][]
+	 */
+	public function actionAjaxSearch(?string $term):array {
+		$out = [
+			'results' => [
+				'id' => '',
+				'text' => ''
+			]
+		];
+		if (null !== $term) {
+			$tableName = $this->model::tableName();
+			$data = $this->model::find()
+				->select(["{$tableName}.id", "{$tableName}.name as text"])
+				->where(['like', "{$tableName}.name", "%$term%", false])
+				->active()
+				->distinct()
+				->asArray()
+				->all();
+			$out['results'] = array_values($data);
+		}
+		return $out;
 	}
 }
