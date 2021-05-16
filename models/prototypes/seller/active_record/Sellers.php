@@ -73,6 +73,6 @@ class Sellers extends ActiveRecord {
 	 * @param mixed $stores
 	 */
 	public function setStores($stores):void {
-		RelStoresToSellers::linkModels($this, $stores);
+		RelStoresToSellers::linkModels($stores, $this);/*Порядок объектов такой же, как у ключей в БД*/
 	}
 }
