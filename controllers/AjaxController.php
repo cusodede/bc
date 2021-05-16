@@ -108,8 +108,7 @@ class AjaxController extends Controller {
 	 * Применение настроек
 	 * @return array
 	 */
-	public
-	function actionSetSystemOption():array {
+	public function actionSetSystemOption():array {
 		$valueType = Yii::$app->request->post('type', 'string');
 		switch ($valueType) {//JS types
 			default:
