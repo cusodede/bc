@@ -10,13 +10,14 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\models\core\TemporaryHelper;
+use app\controllers\SellersController;
 use app\models\prototypes\seller\Stores;
 use app\models\prototypes\seller\StoresSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
@@ -45,7 +46,7 @@ ModalHelperAsset::register($this);
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
-		'columns' => array_merge(TemporaryHelper::GuessDataProviderColumns($dataProvider), [
+		'columns' => [
 			[
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
@@ -61,7 +62,26 @@ ModalHelperAsset::register($this);
 						]);
 					},
 				],
+			],
+			'id',
+			'name',
+			[
+				'attribute' => 'sellers',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->sellers,
+						'subItem' => 'name',
+						'urlScheme' => [SellersController::to('view'), 'id' => 'id'],
+						'options' => static function($mapAttributeValue, $model):array {
+							$url = SellersController::to('view', ['id' => $model->id]);
+							return [
+								'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
+							];
+						}
+					]);
+				}
 			]
-		]),
+		]
 	])
 ]) ?>

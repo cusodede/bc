@@ -10,13 +10,16 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\models\core\TemporaryHelper;
+use app\controllers\StoresController;
 use app\models\prototypes\seller\Sellers;
 use app\models\prototypes\seller\SellersSearch;
+use app\models\prototypes\seller\Stores;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\widgets\BadgeWidget;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
@@ -45,23 +48,42 @@ ModalHelperAsset::register($this);
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
-		'columns' => array_merge(TemporaryHelper::GuessDataProviderColumns($dataProvider), [
+		'columns' => [
 			[
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
 				'buttons' => [
-					'edit' => static function(string $url, SellersSearch $model) use ($modelName) {
+					'edit' => static function(string $url, SellersSearch $model) use ($modelName):string {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'view' => static function(string $url, SellersSearch $model) use ($modelName) {
+					'view' => static function(string $url, SellersSearch $model) use ($modelName):string {
 						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
+			],
+			'id',
+			'name',
+			[
+				'attribute' => 'stores',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->stores,
+						'subItem' => 'name',
+						'urlScheme' => [StoresController::to('view'), 'id' => 'id'],
+						'options' => static function($mapAttributeValue, $model):array {
+							$url = StoresController::to('view', ['id' => $model->id]);
+							return [
+								'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
+							];
+						}
+					]);
+				}
 			]
-		]),
+		],
 	])
 ]) ?>
