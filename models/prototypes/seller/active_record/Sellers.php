@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\models\prototypes\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\prototypes\merch\active_record\relations\RelStoresToSellers;
+use app\models\prototypes\seller\active_record\relations\RelStoresToSellers;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
