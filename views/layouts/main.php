@@ -120,6 +120,10 @@ ModalHelperAsset::register($this);
 						[
 							'label' => 'История изменений',
 							'url' => HistoryModule::to('index')
+						],
+						[
+							'label' => 'Настройки системы',
+							'url' => SiteController::to('options')
 						]
 					],
 				],
