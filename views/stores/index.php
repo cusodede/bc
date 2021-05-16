@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $searchModel
+ * @var Stores $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
@@ -11,11 +11,12 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\models\core\TemporaryHelper;
+use app\models\prototypes\seller\Stores;
+use app\models\prototypes\seller\StoresSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
@@ -49,12 +50,12 @@ ModalHelperAsset::register($this);
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
 				'buttons' => [
-					'edit' => static function(string $url, Model $model) use ($modelName) {
+					'edit' => static function(string $url, StoresSearch $model) use ($modelName) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'view' => static function(string $url, Model $model) use ($modelName) {
+					'view' => static function(string $url, StoresSearch $model) use ($modelName) {
 						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);

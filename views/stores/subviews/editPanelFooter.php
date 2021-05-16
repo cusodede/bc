@@ -3,12 +3,12 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Stores $model
  * @var ActiveForm|string $form
  */
 
+use app\models\prototypes\seller\Stores;
 use kartik\form\ActiveForm;
-use yii\base\Model;
 use yii\helpers\Html;
 use yii\web\View;
 

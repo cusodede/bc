@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Stores $model
  */
 
-use yii\base\Model;
+use app\models\prototypes\seller\Stores;
 use yii\web\View;
 use yii\widgets\DetailView;
 

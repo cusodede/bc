@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Stores $model
  */
 
+use app\models\prototypes\seller\Stores;
 use pozitronik\widgets\BadgeWidget;
-use yii\base\Model;
 use yii\bootstrap\Modal;
 use yii\web\View;
 use yii\widgets\ActiveForm;
