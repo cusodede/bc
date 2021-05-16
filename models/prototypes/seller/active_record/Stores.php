@@ -56,6 +56,7 @@ class Stores extends ActiveRecord {
 			'name' => 'Название магазина',
 			'type' => 'Тип магазина',
 			'create_date' => 'Дата регистрации',
+			'sellers' => 'Продавцы',
 			'deleted' => 'Deleted',
 		];
 	}

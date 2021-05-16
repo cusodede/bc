@@ -51,6 +51,7 @@ class Sellers extends ActiveRecord {
 			'id' => 'ID',
 			'name' => 'Имя продавца',
 			'create_date' => 'Дата регистрации',
+			'stores' => 'Магазины',
 			'deleted' => 'Deleted',
 		];
 	}
