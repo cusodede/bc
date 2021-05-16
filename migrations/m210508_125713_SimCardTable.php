@@ -10,20 +10,20 @@ class m210508_125713_SimCardTable extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->createTable('m_simcard', [
+		$this->createTable('simcard', [
 			'id' => $this->primaryKey(),
 			'ICCID' => $this->integer(20)->notNull(),
 			'active' => $this->boolean()->notNull()->defaultValue(0)
 		]);
 
-		$this->createIndex('active', 'm_simcard', 'active');
+		$this->createIndex('active', 'simcard', 'active');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		$this->dropTable('m_simcard');
+		$this->dropTable('simcard');
 	}
 
 }

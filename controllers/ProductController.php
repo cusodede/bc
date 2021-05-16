@@ -4,18 +4,18 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\merch\Merch;
-use app\models\merch\MerchSearch;
+use app\models\product\Product;
+use app\models\product\ProductSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**
  * Class MerchController
  * Управление товарами (админка)
  */
-class MerchController extends DefaultController {
+class ProductController extends DefaultController {
 	use ControllerTrait;
 
-	public string $modelClass = Merch::class;
-	public string $modelSearchClass = MerchSearch::class;
+	public string $modelClass = Product::class;
+	public string $modelSearchClass = ProductSearch::class;
 
 }

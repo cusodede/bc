@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\merch\SimCard;
-use app\models\merch\SimCardSearch;
+use app\models\product\SimCard;
+use app\models\product\SimCardSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**

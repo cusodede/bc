@@ -3,14 +3,14 @@ declare(strict_types = 1);
 use yii\db\Migration;
 
 /**
- * Class m210508_130802_MerchOrderTable
+ * Class m210508_130802_ProductOrderTable
  */
-class m210508_131729_MerchTable extends Migration {
+class m210508_131729_ProductTable extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->createTable('merch', [
+		$this->createTable('product', [
 			'id' => $this->primaryKey(),
 			'name' => $this->string()->notNull()->comment('Название товара'),
 			'item_class' => $this->string()->notNull()->comment('Класс товара'),
@@ -18,7 +18,7 @@ class m210508_131729_MerchTable extends Migration {
 			'deleted' => $this->boolean()->notNull()->defaultValue(0)
 		]);
 
-		$this->createIndex('deleted', 'merch', 'deleted');
+		$this->createIndex('deleted', 'product', 'deleted');
 
 	}
 
@@ -26,7 +26,7 @@ class m210508_131729_MerchTable extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		$this->dropTable('merch');
+		$this->dropTable('product');
 	}
 
 }

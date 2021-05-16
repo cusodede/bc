@@ -3,14 +3,14 @@ declare(strict_types = 1);
 use yii\db\Migration;
 
 /**
- * Class m210508_130802_MerchOrderTable
+ * Class m210508_130802_ProductOrderTable
  */
-class m210508_130802_MerchOrderTable extends Migration {
+class m210508_130802_ProductOrderTable extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->createTable('merch_order', [
+		$this->createTable('product_order', [
 			'id' => $this->primaryKey(),
 			'initiator' => $this->integer()->notNull()->comment('Заказчик'),
 			'store' => $this->integer()->notNull()->comment('Магазин'),
@@ -19,10 +19,10 @@ class m210508_130802_MerchOrderTable extends Migration {
 			'deleted' => $this->boolean()->notNull()->defaultValue(0)
 		]);
 
-		$this->createIndex('initiator', 'merch_order', 'initiator');
-		$this->createIndex('store', 'merch_order', 'store');
-		$this->createIndex('status', 'merch_order', 'status');
-		$this->createIndex('deleted', 'merch_order', 'deleted');
+		$this->createIndex('initiator', 'product_order', 'initiator');
+		$this->createIndex('store', 'product_order', 'store');
+		$this->createIndex('status', 'product_order', 'status');
+		$this->createIndex('deleted', 'product_order', 'deleted');
 
 	}
 
@@ -30,7 +30,7 @@ class m210508_130802_MerchOrderTable extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		$this->dropTable('merch_order');
+		$this->dropTable('product_order');
 	}
 
 }

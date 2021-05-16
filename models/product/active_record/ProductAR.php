@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\merch\active_record;
+namespace app\models\product\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "merch".
+ * This is the model class for table "product".
  *
  * @property int $id
  * @property int $name Название товара
@@ -16,13 +16,13 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $deleted
  */
-class MerchAR extends ActiveRecord {
+class ProductAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'merch';
+		return 'product';
 	}
 
 	/**

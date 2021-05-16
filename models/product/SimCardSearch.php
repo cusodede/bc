@@ -1,17 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\merch;
+namespace app\models\product;
 
-use app\models\merch\active_record\MerchAR;
+use app\models\product\active_record\SimCardAR;
 use yii\data\ActiveDataProvider;
 
 /**
- * Class MerchSearch
+ * Class SimCardSearch
  * todo
  */
-class MerchSearch extends MerchAR {
-
+class SimCardSearch extends SimCardAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
@@ -35,5 +34,4 @@ class MerchSearch extends MerchAR {
 
 		return $dataProvider;
 	}
-
 }

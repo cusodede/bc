@@ -1,27 +1,27 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\merch\active_record\relations;
+namespace app\models\product\active_record\relations;
 
 use pozitronik\core\traits\Relations;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "relation_order_to_merch".
+ * This is the model class for table "relation_order_to_product".
  *
  * Связь заказов с товарами
  * @property int $id
  * @property int $order_id
- * @property int $merch_id
+ * @property int $product_id
  */
-class RelMerchOrderToMerch extends ActiveRecord {
+class RelOrderToProduct extends ActiveRecord {
 	use Relations;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'relation_order_to_merch';
+		return 'relation_order_to_product';
 	}
 
 	/**
@@ -29,9 +29,9 @@ class RelMerchOrderToMerch extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['order_id', 'merch_id'], 'required'],
-			[['order_id', 'merch_id'], 'integer'],
-			[['order_id', 'merch_id'], 'unique', 'targetAttribute' => ['order_id', 'merch_id']],
+			[['order_id', 'product_id'], 'required'],
+			[['order_id', 'product_id'], 'integer'],
+			[['order_id', 'product_id'], 'unique', 'targetAttribute' => ['order_id', 'product_id']],
 		];
 	}
 
@@ -42,7 +42,7 @@ class RelMerchOrderToMerch extends ActiveRecord {
 		return [
 			'id' => 'ID',
 			'order_id' => 'Order ID',
-			'merch_id' => 'Merch ID',
+			'product_id' => 'Product ID',
 		];
 	}
 }

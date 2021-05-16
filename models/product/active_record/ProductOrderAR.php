@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\merch\active_record;
+namespace app\models\product\active_record;
 
-use app\models\merch\active_record\relations\RelMerchOrderToMerch;
-use app\models\merch\Merch;
+use app\models\product\Product;
+use app\models\product\active_record\relations\RelOrderToProduct;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
@@ -13,7 +13,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "merch_order".
+ * This is the model class for table "product_order".
  *
  * @property int $id
  * @property int $initiator Заказчик
@@ -22,19 +22,19 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $deleted
  *
- * @property RelMerchOrderToMerch[] $relatedMerchOrderToMerch Связь к промежуточной таблице к товарам заказа
- * @property Merch[] $merch Товары в заказе
+ * @property RelOrderToProduct[] $relatedOrderToProduct Связь к промежуточной таблице к товарам заказа
+ * @property Product[] $product Товары в заказе
  *
  * @property Users $initiatorUser Пользователь, создавший заказ
  * @property Stores $storeStore Магазин поставки заказа
  */
-class MerchOrderAR extends ActiveRecord {
+class ProductOrderAR extends ActiveRecord {
 	use StatusesTrait;
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'merch_order';
+		return 'product_order';
 	}
 
 	/**
@@ -65,15 +65,15 @@ class MerchOrderAR extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedMerchOrderToMerch():ActiveQuery {
-		return $this->hasMany(RelMerchOrderToMerch::class, ['order_id' => 'id']);
+	public function getRelatedOrderToProduct():ActiveQuery {
+		return $this->hasMany(RelOrderToProduct::class, ['order_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getMerch():ActiveQuery {
-		return $this->hasMany(Merch::class, ['id' => 'merch_id'])->via('relatedMerchOrderToMerch');
+	public function getProduct():ActiveQuery {
+		return $this->hasMany(Product::class, ['id' => 'product_id'])->via('relatedOrderToProduct');
 	}
 
 	/**s
