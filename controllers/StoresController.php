@@ -9,7 +9,7 @@ use app\models\prototypes\seller\StoresSearch;
 use pozitronik\core\traits\ControllerTrait;
 
 /**
- * Class SimCardController
+ * Class StoresController
  */
 class StoresController extends DefaultController {
 	use ControllerTrait;
