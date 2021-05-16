@@ -7,6 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\prototypes\seller\active_record\references\RefStoreTypes;
 use app\models\prototypes\seller\active_record\relations\RelStoresToSellers;
 use pozitronik\helpers\DateHelper;
+use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -78,6 +79,14 @@ class Stores extends ActiveRecord {
 	 */
 	public function getSellers():ActiveQuery {
 		return $this->hasMany(Sellers::class, ['id' => 'seller_id'])->via('relatedStoresToSellers');
+	}
+
+	/**
+	 * @param mixed $sellers
+	 * @throws Throwable
+	 */
+	public function setSellers($sellers):void {
+		RelStoresToSellers::linkModels($this, $sellers);/*Порядок объектов такой же, как у ключей в БД*/
 	}
 
 }
