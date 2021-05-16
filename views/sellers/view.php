@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var Sellers $model
  */
 
-use app\models\seller\seller\Sellers;
+use app\models\seller\Sellers;
 use yii\web\View;
 use yii\widgets\DetailView;
 

@@ -5,6 +5,7 @@ namespace app\models\merch\active_record;
 
 use app\models\merch\active_record\references\RefMerchOrderStatuses;
 use app\models\merch\active_record\relations\RelMerchOrderToMerch;
+use app\models\merch\Merch;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
@@ -30,7 +31,7 @@ use yii\db\ActiveRecord;
  * @property Users $initiatorUser Пользователь, создавший заказ
  * @property Stores $storeStore Магазин поставки заказа
  */
-class MerchOrder extends ActiveRecord {
+class MerchOrderAR extends ActiveRecord {
 	use StatusesTrait;
 	/**
 	 * {@inheritdoc}

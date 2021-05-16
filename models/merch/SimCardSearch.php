@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace app\models\merch;
 
+use app\models\merch\active_record\SimCardAR;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class SimCardSearch
  * todo
  */
-class SimCardSearch extends active_record\SimCard {
+class SimCardSearch extends SimCardAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider

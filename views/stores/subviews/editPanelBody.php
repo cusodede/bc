@@ -8,7 +8,7 @@ declare(strict_types = 1);
  */
 
 use app\controllers\SellersController;
-use app\models\seller\seller\Sellers;
+use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefStoreTypes;
 use app\models\store\Stores;
 use app\widgets\selectmodelwidget\SelectModelWidget;

@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $deleted
  */
-class Merch extends ActiveRecord {
+class MerchAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}

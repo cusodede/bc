@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $ICCID
  * @property bool $active
  */
-class SimCard extends ActiveRecord {
+class SimCardAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}

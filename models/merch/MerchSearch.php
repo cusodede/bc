@@ -3,14 +3,14 @@ declare(strict_types = 1);
 
 namespace app\models\merch;
 
+use app\models\merch\active_record\MerchAR;
 use yii\data\ActiveDataProvider;
-use app\models\merch\active_record\Merch as ActiveRecordMerch;
 
 /**
  * Class MerchSearch
  * todo
  */
-class MerchSearch extends ActiveRecordMerch {
+class MerchSearch extends MerchAR {
 
 	/**
 	 * @param array $params

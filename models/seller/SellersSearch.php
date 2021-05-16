@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\seller\seller;
+namespace app\models\seller;
 
-use app\models\seller\seller\active_record\Sellers as ActiveRecordSellers;
+use app\models\seller\active_record\SellersAR;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class StoresSearch
  * todo
  */
-class SellersSearch extends ActiveRecordSellers {
+class SellersSearch extends SellersAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider

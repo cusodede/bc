@@ -3,14 +3,14 @@ declare(strict_types = 1);
 
 namespace app\models\store;
 
-use app\models\store\active_record\Stores as ActiveRecordStores;
+use app\models\store\active_record\StoresAR;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class StoresSearch
  * todo
  */
-class StoresSearch extends ActiveRecordStores {
+class StoresSearch extends StoresAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider

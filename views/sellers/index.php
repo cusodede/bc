@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Sellers $searchModel
+ * @var SellersSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
@@ -11,8 +11,7 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\controllers\StoresController;
-use app\models\seller\seller\active_record\Sellers;
-use app\models\seller\seller\SellersSearch;
+use app\models\seller\SellersSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;

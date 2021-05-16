@@ -1,38 +1,35 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\store\active_record;
+namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\seller\seller\Sellers;
-use app\models\store\active_record\references\RefStoreTypes;
 use app\models\store\active_record\relations\RelStoresToSellers;
+use app\models\store\Stores;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "stores".
+ * This is the model class for table "sellers".
  *
  * @property int $id
- * @property string $name Название магазина
- * @property int $type Тип магазина
+ * @property string $name Имя продавца
  * @property string $create_date Дата регистрации
  * @property int $deleted
  *
- * @property RefStoreTypes $refStoreType Тип точки (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
- * @property Sellers[] $sellers Все продавцы точки
+ * @property Stores[] $stores Магазины продавца
  */
-class Stores extends ActiveRecord {
+class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'stores';
+		return 'sellers';
 	}
 
 	/**
@@ -40,10 +37,10 @@ class Stores extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'type'], 'required'],
-			[['type', 'deleted'], 'integer'],
+			[['name'], 'required'],
 			[['create_date'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
+			[['deleted'], 'integer'],
 			[['name'], 'string', 'max' => 255],
 		];
 	}
@@ -54,10 +51,9 @@ class Stores extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'name' => 'Название магазина',
-			'type' => 'Тип магазина',
+			'name' => 'Имя продавца',
 			'create_date' => 'Дата регистрации',
-			'sellers' => 'Продавцы',
+			'stores' => 'Магазины',
 			'deleted' => 'Deleted',
 		];
 	}
@@ -65,30 +61,22 @@ class Stores extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefStoreType():ActiveQuery {
-		return $this->hasOne(RefStoreTypes::class, ['id' => 'type']);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
 	public function getRelatedStoresToSellers():ActiveQuery {
-		return $this->hasMany(RelStoresToSellers::class, ['store_id' => 'id']);
+		return $this->hasMany(RelStoresToSellers::class, ['seller_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getSellers():ActiveQuery {
-		return $this->hasMany(Sellers::class, ['id' => 'seller_id'])->via('relatedStoresToSellers');
+	public function getStores():ActiveQuery {
+		return $this->hasMany(Stores::class, ['id' => 'store_id'])->via('relatedStoresToSellers');
 	}
 
 	/**
-	 * @param mixed $sellers
+	 * @param mixed $stores
 	 * @throws Throwable
 	 */
-	public function setSellers($sellers):void {
-		RelStoresToSellers::linkModels($this, $sellers);
+	public function setStores($stores):void {
+		RelStoresToSellers::linkModels($stores, $this, true);/* Соединение идёт "наоборот", добавляем ключ backLink */
 	}
-
 }
