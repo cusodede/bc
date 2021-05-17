@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\rewards\active_record;
+namespace app\models\reward\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "rewards".
+ * This is the model class for table "reward".
  *
  * @property int $id
  * @property int $status Статус
@@ -19,12 +20,13 @@ use yii\db\ActiveRecord;
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
  */
-class RewardsAR extends ActiveRecord {
+class RewardAR extends ActiveRecord {
+	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName() {
-		return 'rewards';
+		return 'reward';
 	}
 
 	/**
