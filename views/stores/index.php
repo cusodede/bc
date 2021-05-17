@@ -66,6 +66,16 @@ ModalHelperAsset::register($this);
 			'id',
 			'name',
 			[
+				'attribute' => 'typeName',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refStoreType,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
 				'attribute' => 'seller',
 				'format' => 'raw',
 				'value' => static function(StoresSearch $model):string {

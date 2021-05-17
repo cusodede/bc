@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 
 /**
  * Class StoresSearch
+ * @property null|string $store
  */
 final class SellersSearch extends SellersAR {
 

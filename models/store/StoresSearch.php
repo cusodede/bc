@@ -4,14 +4,19 @@ declare(strict_types = 1);
 namespace app\models\store;
 
 use app\models\seller\Sellers;
+use app\models\store\active_record\references\RefStoreTypes;
 use app\models\store\active_record\StoresAR;
 use yii\data\ActiveDataProvider;
 
 /**
  * Class StoresSearch
+ * @property null|string $seller
+ * @property null|string $typeName
  */
 class StoresSearch extends StoresAR {
+
 	public ?string $seller = null;
+	public ?string $typeName = null;
 
 	/**
 	 * {@inheritdoc}
@@ -19,7 +24,7 @@ class StoresSearch extends StoresAR {
 	public function rules():array {
 		return [
 			['id', 'integer'],
-			[['name', 'seller'], 'string', 'max' => 255],
+			[['name', 'seller', 'typeName'], 'string', 'max' => 255],
 		];
 	}
 
@@ -39,7 +44,7 @@ class StoresSearch extends StoresAR {
 
 		if (!$this->validate()) return $dataProvider;
 
-		$query->joinWith(['sellers']);
+		$query->joinWith(['sellers', 'refStoreType']);
 		$this->filterData($query);
 
 		return $dataProvider;
@@ -52,6 +57,7 @@ class StoresSearch extends StoresAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere(['like', RefStoreTypes::tableName().'.name', $this->typeName])
 			->andFilterWhere(['like', Sellers::tableName().'.name', $this->seller]);
 	}
 
