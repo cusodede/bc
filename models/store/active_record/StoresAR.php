@@ -7,6 +7,8 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefStoreTypes;
 use app\models\store\active_record\relations\RelStoresToSellers;
+use app\models\store\active_record\relations\RelStoresToUsers;
+use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\db\ActiveQuery;
@@ -23,7 +25,9 @@ use yii\db\ActiveRecord;
  *
  * @property RefStoreTypes $refStoreType Тип точки (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
+ * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Sellers[] $sellers Все продавцы точки
+ * @property Users[] $users Пользователи, входящие под магазином
  */
 class StoresAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -89,6 +93,28 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function setSellers($sellers):void {
 		RelStoresToSellers::linkModels($this, $sellers);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedStoresToUsers():ActiveQuery {
+		return $this->hasMany(RelStoresToUsers::class, ['store_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getUsers():ActiveQuery {
+		return $this->hasMany(Users::class, ['id' => 'user_id'])->via('relatedStoresToUsers');
+	}
+
+	/**
+	 * @param mixed $users
+	 * @throws Throwable
+	 */
+	public function setUsers(array $users):void {
+		RelStoresToUsers::linkModels($this, $users);
 	}
 
 }
