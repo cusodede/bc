@@ -14,7 +14,7 @@ use yii\data\ActiveDataProvider;
  * @property null|string $seller
  * @property null|string $typeName
  */
-class StoresSearch extends StoresAR {
+final class StoresSearch extends StoresAR {
 
 	public ?string $seller = null;
 	public ?string $typeName = null;
