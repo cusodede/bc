@@ -114,6 +114,6 @@ a.desc:after {
 	outline: none;
 }
 
-.ms-container {
+.form-group .ms-container {
 	width: 100%
 }
