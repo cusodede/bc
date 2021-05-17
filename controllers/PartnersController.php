@@ -38,9 +38,13 @@ class PartnersController extends Controller
 	public function actionCreate()
 	{
 		$model = new Partners();
+		// AJAX валидация на сервере с сохранением клиентской, в частности уникальный ИНН
 		if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-			Yii::$app->response->format = Response::FORMAT_JSON;
-			return ActiveForm::validate($model);
+			$errors = ActiveForm::validate($model);
+			if ($errors !== []) {
+				Yii::$app->response->format = Response::FORMAT_JSON;
+				return $errors;
+			}
 		}
 		return $model->createModelFromPost() ? $this->redirect('index') : $this->renderAjax('modal/create', compact('model'));
 	}
@@ -58,9 +62,13 @@ class PartnersController extends Controller
 		if ($model === null) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
+		// AJAX валидация на сервере с сохранением клиентской, в частности уникальный ИНН
 		if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-			Yii::$app->response->format = Response::FORMAT_JSON;
-			return ActiveForm::validate($model);
+			$errors = ActiveForm::validate($model);
+			if ($errors !== []) {
+				Yii::$app->response->format = Response::FORMAT_JSON;
+				return $errors;
+			}
 		}
 		return $model->updateModelFromPost() ? $this->redirect('index') : $this->renderAjax('modal/edit', compact('model'));
 	}
