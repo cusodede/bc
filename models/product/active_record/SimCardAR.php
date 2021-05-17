@@ -7,7 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "m_simcard".
+ * This is the model class for table "simcard".
  *
  * @property int $id
  * @property int $ICCID
@@ -19,7 +19,7 @@ class SimCardAR extends ActiveRecord {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'm_simcard';
+		return 'simcard';
 	}
 
 	/**
