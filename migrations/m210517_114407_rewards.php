@@ -6,7 +6,7 @@ use yii\db\Migration;
  * Class m210517_114407_rewards
  */
 class m210517_114407_rewards extends Migration {
-	private const TABLE_NAME = 'rewards';
+	private const TABLE_NAME = 'reward';
 
 	/**
 	 * {@inheritdoc}
