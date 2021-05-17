@@ -26,7 +26,7 @@ echo SideBarWidget::widget([
 			'iconClass' => 'fa-home'
 		],
 		[
-			'label' => 'Парнтнеры',
+			'label' => 'Партнеры',
 			'url' => [PartnersController::to('index')],
 			'iconClass' => 'fa-briefcase'
 		],
