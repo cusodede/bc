@@ -50,11 +50,6 @@ ModalHelperAsset::register($this);
 			</header>
 			<main id="js-page-content" class="page-content" role="main">
 				<?= $this->render('subviews/breadcrumbs') ?>
-				<div class="subheader">
-					<h1 class="subheader-title">
-						<?= $this->title ?>
-					</h1>
-				</div>
 				<?= $content ?>
 			</main>
 			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>

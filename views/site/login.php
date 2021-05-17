@@ -24,7 +24,7 @@ $this->title = 'Вход';
 
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
-			<?= CheckboxWidget::widget(['field' => $form->field($login, 'rememberMe')]) ?>
+			<?= $form->field($login, 'rememberMe')->widget(CheckboxWidget::class) ?>
 
 			<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 
