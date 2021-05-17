@@ -7,11 +7,29 @@ declare(strict_types = 1);
  */
 
 use app\models\seller\Sellers;
+use pozitronik\widgets\BadgeWidget;
 use yii\web\View;
 use yii\widgets\DetailView;
+use app\models\seller\active_record\SellersAR;
 
 ?>
 
 <?= DetailView::widget([
-	'model' => $model
+	'model' => $model,
+	'attributes' => [
+		'id',
+		'name',
+		'create_date',
+		[
+			'attribute' => 'stores',
+			'format' => 'raw',
+			'value' => static function(SellersAR $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->stores,
+					'subItem' => 'name'
+				]);
+			}
+		],
+		'deleted:boolean'
+	]
 ]) ?>
