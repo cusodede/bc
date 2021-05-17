@@ -64,7 +64,7 @@ final class SellersSearch extends SellersAR {
 	private function setSort($dataProvider):void {
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
-			'attributes' => ['id', 'name']
+			'attributes' => ['id', 'name', 'deleted']
 		]);
 	}
 }

@@ -72,6 +72,7 @@ final class StoresSearch extends StoresAR {
 			'attributes' => [
 				'id',
 				'name',
+				'deleted',
 				'typeName' => [
 					'asc' => [RefStoreTypes::tableName().'.name' => SORT_ASC],
 					'desc' => [RefStoreTypes::tableName().'.name' => SORT_DESC]
