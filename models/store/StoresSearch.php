@@ -6,6 +6,7 @@ namespace app\models\store;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefStoreTypes;
 use app\models\store\active_record\StoresAR;
+use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -33,7 +34,7 @@ class StoresSearch extends StoresAR {
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = self::find()->distinct()->active();
+		$query = $this->setQuery();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
@@ -67,8 +68,25 @@ class StoresSearch extends StoresAR {
 	private function setSort($dataProvider):void {
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
-			'attributes' => ['id', 'name']
+			'attributes' => [
+				'id',
+				'name',
+				'typeName' => [
+					'asc' => [RefStoreTypes::tableName().'.name' => SORT_ASC],
+					'desc' => [RefStoreTypes::tableName().'.name' => SORT_DESC]
+				]
+			],
 		]);
+	}
+
+	/**
+	 * @return LCQuery
+	 */
+	private function setQuery():LCQuery {
+		return self::find()
+			->select([self::tableName().'.*', RefStoreTypes::tableName().'.name  AS typeName'])
+			->distinct()
+			->active();
 	}
 
 }
