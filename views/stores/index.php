@@ -91,7 +91,8 @@ ModalHelperAsset::register($this);
 						}
 					]);
 				}
-			]
+			],
+			'deleted:boolean'
 		]
 	])
 ]) ?>

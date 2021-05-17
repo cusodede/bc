@@ -24,7 +24,7 @@ final class StoresSearch extends StoresAR {
 	 */
 	public function rules():array {
 		return [
-			['id', 'integer'],
+			[['id', 'deleted'], 'integer'],
 			[['name', 'seller', 'typeName'], 'string', 'max' => 255],
 		];
 	}
@@ -58,6 +58,7 @@ final class StoresSearch extends StoresAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', RefStoreTypes::tableName().'.name', $this->typeName])
 			->andFilterWhere(['like', Sellers::tableName().'.name', $this->seller]);
 	}

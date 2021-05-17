@@ -20,7 +20,7 @@ final class SellersSearch extends SellersAR {
 	 */
 	public function rules():array {
 		return [
-			['id', 'integer'],
+			[['id', 'deleted'], 'integer'],
 			[['name', 'store'], 'string', 'max' => 255],
 		];
 	}
@@ -54,6 +54,7 @@ final class SellersSearch extends SellersAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store]);
 	}
 
