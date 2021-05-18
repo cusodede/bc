@@ -25,6 +25,7 @@ $db = require __DIR__.'/db.php';
 $config = [
 	'id' => 'basic',
 	'name' => 'Beeline Cabinet',
+	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
 	'homeUrl' => '/home/home',//<== строка, не массив

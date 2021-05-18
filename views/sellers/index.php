@@ -65,7 +65,7 @@ ModalHelperAsset::register($this);
 			'id',
 			'name',
 			[
-				'attribute' => 'stores',
+				'attribute' => 'store',
 				'format' => 'raw',
 				'value' => static function(SellersSearch $model):string {
 					return BadgeWidget::widget([
@@ -80,7 +80,8 @@ ModalHelperAsset::register($this);
 						}
 					]);
 				}
-			]
+			],
+			'deleted:boolean'
 		],
 	])
 ]) ?>
