@@ -43,10 +43,10 @@ class CropperWidget extends YiiBaseWidget
 	public function run(): string
 	{
 		$options = json_encode([
-			'imageId' => "#$this->imageId",
-			'modalId' => $this->modalId ? "#$this->modalId" : null,
-			'cropperUploadInputId' => "#$this->cropperUploadInputId",
-			'cropperCropElementId' => "#$this->cropperCropElementId",
+			'imageId' => "#{$this->imageId}",
+			'modalId' => $this->modalId ? "#{$this->modalId}" : null,
+			'cropperUploadInputId' => "#{$this->cropperUploadInputId}",
+			'cropperCropElementId' => "#{$this->cropperCropElementId}",
 			'pluginOptions' => $this->pluginOptions
 		]);
 
