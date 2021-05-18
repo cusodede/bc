@@ -484,7 +484,6 @@
     <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingDocCommentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingFieldTypeInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="PhpMissingParamTypeInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpMissingParentCallMagicInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingReturnTypeInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -546,7 +545,6 @@
       <option name="ANALYZE_TYPES" value="false" />
     </inspection_tool>
     <inspection_tool class="PropertiesInspection" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="PropertyAnnotationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PropertyCanBePrivateInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PropertyCanBeStaticInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantSuppression" enabled="false" level="WARNING" enabled_by_default="false" />

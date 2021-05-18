@@ -32,7 +32,7 @@ class AppAsset extends AssetBundle {
 		];
 
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
+			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
 		];
 		parent::init();
 	}

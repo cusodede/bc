@@ -65,8 +65,8 @@ class PermissionsCollections extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'name' => 'Name',
-			'comment' => 'Comment',
+			'name' => 'Название',
+			'comment' => 'Комментарий'
 		];
 	}
 
@@ -92,7 +92,7 @@ class PermissionsCollections extends ActiveRecord {
 	}
 
 	/**
-	 * @param array $relatedPermissions
+	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
 	public function setRelatedPermissions($relatedPermissions):void {

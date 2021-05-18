@@ -17,7 +17,7 @@ use yii\base\Model;
  * @todo: капча
  */
 class RestorePasswordForm extends Model {
-	public $email;
+	public ?string $email;
 
 	/**
 	 * @inheritDoc
