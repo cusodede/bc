@@ -37,7 +37,7 @@ class CropperWidget extends YiiBaseWidget
 	 * @var string|null ID модалки, на случай если кроппер завернут в неё.
 	 * Требуется для корректной инициализации кроппера.
 	 */
-	public ?string $modalId;
+	public ?string $modalId = null;
 
 	public function init(): void
 	{
