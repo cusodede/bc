@@ -18,9 +18,6 @@ $this->title = 'Смена пароля';
 <div class="row">
 	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
 		<div class="card p-4 rounded-plus bg-faded">
-			<div class="panel-tag">
-				Пароль пользователя <b><?= $model->user->login ?></b> просрочен и должен быть изменён.
-			</div>
 			<?php $form = ActiveForm::begin(); ?>
 
 			<?= $form->field($model, 'oldPassword')->passwordInput(['placeholder' => 'Текущий пароль']) ?>
