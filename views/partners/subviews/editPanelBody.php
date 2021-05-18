@@ -3,22 +3,23 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Partners $model
+ * @var Model $model
  * @var ActiveForm $form
  */
 
-use app\models\partners\Partners;
+use app\models\core\prototypes\ActiveFieldMap;
 use kartik\form\ActiveForm;
+use yii\base\Model;
 use yii\web\View;
 
 ?>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'name')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'inn', ['enableAjaxValidation' => true])->textInput() ?>
-	</div>
-</div>
+
+<?php foreach ($model->attributes() as $attribute): ?>
+	<?php if ($model->isAttributeRequired($attribute)): ?>
+		<div class="row">
+			<div class="col-md-12">
+				<?= $form->field($model, $attribute)->widget(ActiveFieldMap::class) ?>
+			</div>
+		</div>
+	<?php endif ?>
+<?php endforeach; ?>

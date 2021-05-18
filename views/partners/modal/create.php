@@ -3,31 +3,33 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Partners $model
- * @var ActiveForm|string $form
+ * @var Model $model
  */
 
-use app\models\partners\Partners;
+use pozitronik\widgets\BadgeWidget;
+use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 
+$modelName = $model->formName();
 ?>
 <?php Modal::begin([
-	'id' => "{$model->formName()}-modal-create-new",
+	'id' => "{$modelName}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'title' => 'Новый партнер',
-	'footer' => Html::submitButton('Сохранить', [
-			'class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right',
-			'form' => "{$model->formName()}-modal-create",
-		]
-	),
+	'title' => BadgeWidget::widget([
+		'items' => $model,
+		'subItem' => 'id'
+	]),
+	'footer' => $this->render('../subviews/editPanelFooter', [
+		'model' => $model,
+		'form' => "{$modelName}-modal-create"
+	]),
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]
-]) ?>
-<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-create"]) ?>
+]); ?>
+<?php $form = ActiveForm::begin(['id' => "{$modelName}-modal-create", 'enableAjaxValidation' => true]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
