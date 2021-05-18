@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<img id="user-logo" src="/img/avatars/1/avatar.png" class="rounded-circle shadow-2 img-thumbnail"
 							 style="width: 160px; height: 160px">
 						<h5 class="mb-0 fw-700 text-center mt-3">
-							<?= Yii::$app->user->identity->username ?>
+							<?= Users::Current()->username ?>
 						</h5>
 					</div>
 				</div>
