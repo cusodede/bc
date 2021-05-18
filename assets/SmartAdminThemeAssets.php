@@ -22,7 +22,7 @@ class SmartAdminThemeAssets extends AssetBundle
 			'css/app.bundle.css',
 			'css/fa-solid.css',
 			'css/skins/skin-master.css',
-			'css/notifications/toastr/toastr.css',
+			'css/notifications/toastr/toastr.css'
 		];
 		$this->js = [
 			'js/vendors.bundle.js',
