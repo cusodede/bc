@@ -107,12 +107,11 @@ class DefaultController extends Controller {
 		$params = Yii::$app->request->queryParams;
 		$searchModel = $this->searchModel;
 
-		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->render('index', [
 				'searchModel' => $searchModel,
 				'dataProvider' => $searchModel->search($params),
 				'controller' => $this,
-				'modelName' => ($this->getModel())->formName()
+				'modelName' => $this->model->formName()
 			]
 		);
 	}
