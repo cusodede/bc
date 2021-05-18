@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\sys\users\Users;
+use app\models\sys\users\UsersLogoUploadForm;
 use app\models\sys\users\UsersSearch;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
@@ -13,6 +14,7 @@ use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * Class UsersController
@@ -133,4 +135,32 @@ class UsersController extends Controller {
 		]);
 	}
 
+	/**
+	 * Загрузка фото профиля
+	 * @return array
+	 */
+	public function actionLogoUpload(): array
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+
+		if (Yii::$app->request->isPost) {
+			$uploadForm = new UsersLogoUploadForm();
+
+			$uploadForm->userId       = Yii::$app->user->id;
+			$uploadForm->uploadedFile = UploadedFile::getInstanceByName('croppedImage');
+
+			$error = '';
+			if ($uploadForm->upload($error)) {
+				return [];
+			}
+
+			Yii::$app->response->statusCode = 500;
+
+			return ['error' => $error];
+		}
+
+		Yii::$app->response->statusCode = 400;
+
+		return [];
+	}
 }
