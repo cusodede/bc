@@ -146,17 +146,21 @@ class DefaultController extends Controller {
 			throw new LoggedException(new NotFoundHttpException());
 		}
 
-		/** @noinspection PhpUndefinedMethodInspection */
-		if ($model->updateModelFromPost()) return $this->redirect('index');
+		/** @var ActiveRecordTrait $model */
+		$posting = $model->updateModelFromPost([], $errors);
 
-		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/edit', [
-				'model' => $model
-			]);
+		if (true === $posting) {/* Модель была успешно прогружена */
+			return $this->redirect('index');
 		}
-		return $this->render('edit', [
-			'model' => $model
-		]);
+		/* Пришёл постинг, но есть ошибки */
+		if ((false === $posting) && Yii::$app->request->isAjax) {
+			Yii::$app->response->format = Response::FORMAT_JSON;
+			return $errors;
+		}
+		/* Постинга не было */
+		return (Yii::$app->request->isAjax)
+			?$this->renderAjax('modal/create', ['model' => $model])
+			:$this->render('create', ['model' => $model]);
 	}
 
 	/**
@@ -165,17 +169,19 @@ class DefaultController extends Controller {
 	 */
 	public function actionCreate() {
 		$model = $this->model;
-		if ($model->createModelFromPost()) {
+		$posting = $model->createModelFromPost([], $errors);/* switch тут нельзя использовать из-за его нестрогости */
+		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
 		}
-		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/create', [
-				'model' => $model
-			]);
+		/* Пришёл постинг, но есть ошибки */
+		if ((false === $posting) && Yii::$app->request->isAjax) {
+			Yii::$app->response->format = Response::FORMAT_JSON;
+			return $errors;
 		}
-		return $this->render('create', [
-			'model' => $model
-		]);
+		/* Постинга не было */
+		return (Yii::$app->request->isAjax)
+			?$this->renderAjax('modal/create', ['model' => $model])
+			:$this->render('create', ['model' => $model]);
 	}
 
 	/**

@@ -25,28 +25,32 @@ trait ActiveRecordTrait {
 
 	/**
 	 * @param array $mappedParams
-	 * @return bool
+	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @return null|bool null
 	 * @throws DbException
 	 * @throws Throwable
+	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function createModelFromPost(array $mappedParams = []):bool {
+	public function createModelFromPost(array $mappedParams = [], ?array &$errors = []):?bool {
 		if ($this->load(Yii::$app->request->post())) {
-			return $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
+			$result = $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
+			$errors = $this->errors;
+			return $result;
 		}
-		return false;
+		return null;
 	}
 
 	/**
 	 * @param array $mappedParams
-	 * @return bool
+	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @return null|bool
 	 * @throws DbException
 	 * @throws Throwable
+	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function updateModelFromPost(array $mappedParams = []):bool {
-		if ($this->load(Yii::$app->request->post())) {
-			return $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
-		}
-		return false;
+	public function updateModelFromPost(array $mappedParams = [], ?array &$errors = []):?bool {
+		/* Методы совпадают, но оставлено на будущее */
+		return $this->createModelFromPost($mappedParams, $errors);
 	}
 
 	/**
@@ -136,8 +140,8 @@ trait ActiveRecordTrait {
 
 	/**
 	 * Разница изменений атрибутов после обновления модели
-	 * @return array
 	 * @param bool $strict Строгое сравнение
+	 * @return array
 	 * @throws Throwable
 	 */
 	public function identifyUpdatedAttributes(bool $strict = true):array {
