@@ -19,7 +19,7 @@ Modal::begin([
 	'size' => Modal::SIZE_LARGE,
 	'header' => BadgeWidget::widget([
 		'items' => $model,
-		'subItem' => 'id'
+		'subItem' => 'name'
 	]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,

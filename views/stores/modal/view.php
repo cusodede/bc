@@ -18,7 +18,7 @@ $modelName = $model->formName();
 	'size' => Modal::SIZE_LARGE,
 	'header' => BadgeWidget::widget([
 		'items' => $model,
-		'subItem' => 'id'
+		'subItem' => 'name'
 	]),
 	'clientOptions' => [
 		'backdrop' => true
