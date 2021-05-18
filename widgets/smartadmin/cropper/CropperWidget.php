@@ -8,6 +8,11 @@ use yii\base\Widget as YiiBaseWidget;
 /**
  * Class CropperWidget
  * @package app\widgets\smartadmin\cropper
+ * @property array $pluginOptions Настройки, используемые для инициализации Cropper
+ * @property string $imageId id <img> для подгрузки фото в кроппер
+ * @property string $cropperUploadInputId id файлового input'а
+ * @property string $cropperCropElementId id элемента, который будет триггерить кроппинг изображения и его отправку на сервак
+ * @property null|string $modalId id модалки, на случай если кроппер завернут в неё.
  */
 class CropperWidget extends YiiBaseWidget
 {
