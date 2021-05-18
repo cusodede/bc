@@ -25,6 +25,7 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\select2\Select2;
 
 ModalHelperAsset::register($this);
 ?>
@@ -65,6 +66,7 @@ ModalHelperAsset::register($this);
 					},
 				],
 			],
+			'id',
 			[
 				'class' => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
@@ -76,19 +78,6 @@ ModalHelperAsset::register($this);
 					];
 				},
 				'attribute' => 'name',
-				'format' => 'text'
-			],
-			[
-				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_TEXTAREA,
-					];
-				},
-				'attribute' => 'comment',
 				'format' => 'text'
 			],
 			[
@@ -164,12 +153,34 @@ ModalHelperAsset::register($this);
 						]
 					];
 				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'verb',
+					'data' => TemporaryHelper::VERBS,
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
 				'attribute' => 'verb',
 				'format' => 'text'
 			],
 			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_TEXTAREA,
+					];
+				},
+				'attribute' => 'comment',
+				'format' => 'text'
+			],
+			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsersToPermissionsCollections',
+				'attribute' => 'collection',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedPermissionsCollections,
@@ -180,7 +191,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsers',
+				'attribute' => 'user',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedUsers,

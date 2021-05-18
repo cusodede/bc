@@ -51,7 +51,8 @@ $config = [
 			'class' => MigrateController::class,
 			'templateFile' => '@app/migrations/template/default_migration_template.php',
 			'migrationNamespaces' => [
-				'app\modules\history\migrations'// <== именно неймспейс, не путь
+				'app\modules\history\migrations',// <== именно неймспейс, не путь
+				'app\modules\status\migrations'
 			],
 		],
 	],
