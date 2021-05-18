@@ -30,7 +30,7 @@ class SmartAdminThemeAssets extends AssetBundle
 			'js/notifications/toastr/toastr.js'
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
+			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
 		];
 
 		parent::init();

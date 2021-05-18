@@ -32,7 +32,7 @@ ModalHelperAsset::register($this);
 			'heading' => $this->title . (($dataProvider->totalCount > 0) ?
 					' (' . Utils::pluralForm($dataProvider->totalCount, ['партнер', 'партнера', 'партнеров']) . ')' : ' (нет партнеров)'),
 		],
-		'summary' => $searchModel !== null ? Html::a('Добавить партнера', PartnersController::to('create'), [
+		'summary' => null !== $searchModel ? Html::a('Добавить партнера', PartnersController::to('create'), [
 			'class' => 'btn btn-success summary-content',
 			'onclick' => new JsExpression(
 				"AjaxModal('" . PartnersController::to('create') . "', 'Partners-modal-create-new');
