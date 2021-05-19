@@ -17,8 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?= $this->render('modal/logo-cropper') ?>
-
 <div class="row">
 	<div class="col-lg-3 col-xl-3 order-lg-1 order-xl-1">
 		<div class="card mb-g rounded-top">
@@ -50,3 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
+
+<?= $this->render('modal/logo-cropper', [
+	'user' => $model
+]) ?>
