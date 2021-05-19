@@ -107,12 +107,11 @@ class DefaultController extends Controller {
 		$params = Yii::$app->request->queryParams;
 		$searchModel = $this->searchModel;
 
-		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->render('index', [
 				'searchModel' => $searchModel,
 				'dataProvider' => $searchModel->search($params),
 				'controller' => $this,
-				'modelName' => ($this->getModel())->formName()
+				'modelName' => $this->model->formName()
 			]
 		);
 	}
@@ -159,8 +158,8 @@ class DefaultController extends Controller {
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
-			?$this->renderAjax('modal/create', ['model' => $model])
-			:$this->render('create', ['model' => $model]);
+			?$this->renderAjax('modal/edit', ['model' => $model])
+			:$this->render('edit', ['model' => $model]);
 	}
 
 	/**
