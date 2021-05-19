@@ -1,6 +1,11 @@
 <?php
 declare(strict_types = 1);
 
+/**
+ * @var View $this
+ */
+
+use yii\web\View;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\UsersController;
@@ -11,6 +16,7 @@ use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
+use app\controllers\PartnersController;
 
 echo SideBarWidget::widget([
 	'items' => [
@@ -18,6 +24,11 @@ echo SideBarWidget::widget([
 			'label' => 'Домой',
 			'url' => [Url::home()],
 			'iconClass' => 'fa-home'
+		],
+		[
+			'label' => 'Партнеры',
+			'url' => [PartnersController::to('index')],
+			'iconClass' => 'fa-briefcase'
 		],
 		[
 			'label' => 'Пользователи',

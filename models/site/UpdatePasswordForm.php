@@ -16,16 +16,16 @@ use yii\base\Model;
  * @property string $newPasswordRepeat Повтор пароля для самопроверки
  */
 class UpdatePasswordForm extends Model {
-	public $oldPassword;
-	public $newPassword;
-	public $newPasswordRepeat;
+	public string $oldPassword;
+	public string $newPassword;
+	public string $newPasswordRepeat;
 	/**
 	 * @var bool Необходимость указания старого пароля при сбросе
 	 */
-	private $_requireOldPassword = true;
+	private bool $_requireOldPassword = true;
 
-	/** @var Users */
-	private $_user;
+	/** @var Users|null */
+	private ?Users $_user;
 
 	/**
 	 * @inheritDoc

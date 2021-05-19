@@ -13,7 +13,9 @@ use app\models\products\active_record\Products;
  * @property int $id
  * @property string $name Название партнера
  * @property string $created_at Дата создания партнера
- * @property int $active Флаг активности
+ * @property string $inn ИНН партнера
+ * @property int $deleted Флаг активности
+ * @property string $updated_at Дата обновления партнера
  *
  * @property Products[] $products
  */
@@ -33,10 +35,13 @@ class Partners extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['name'], 'required'],
-			[['created_at'], 'safe'],
-			[['active'], 'integer'],
-			[['name'], 'string', 'max' => 64],
+			[['name', 'inn'], 'required', 'message' => 'Заполните {attribute} партнера!'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['deleted'], 'integer'],
+			[['name'], 'string', 'max' => 64, 'min' => 3],
+			[['inn'], 'string', 'max' => 12],
+			[['inn'], 'unique', 'message' => 'Партнер с таким {attribute} уже существует'],
+			[['inn'], 'match', 'pattern' => '/^\d{10}(?:\d{2})?$/', 'message' => 'Некорректный {attribute}'],
 		];
 	}
 
@@ -47,9 +52,11 @@ class Partners extends ActiveRecord
 	{
 		return [
 			'id' => 'ID',
-			'name' => 'Name',
-			'created_at' => 'Created At',
-			'active' => 'Active',
+			'name' => 'Наименование',
+			'created_at' => 'Дата создания',
+			'inn' => 'ИНН',
+			'deleted' => 'Флаг удаления',
+			'updated_at' => 'Дата обновления',
 		];
 	}
 
