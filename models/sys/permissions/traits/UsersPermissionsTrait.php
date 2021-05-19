@@ -106,7 +106,7 @@ trait UsersPermissionsTrait {
 	}
 
 	/**
-	 * @param Permissions[] $relatedPermissions
+	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
 	public function setRelatedPermissions($relatedPermissions):void {
@@ -134,7 +134,7 @@ trait UsersPermissionsTrait {
 	}
 
 	/**
-	 * @param PermissionsCollections[] $relatedPermissionsCollections
+	 * @param mixed $relatedPermissionsCollections
 	 * @throws Throwable
 	 */
 	public function setRelatedPermissionsCollections($relatedPermissionsCollections):void {

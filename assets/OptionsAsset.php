@@ -7,23 +7,22 @@ use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
+ * Class OptionsAsset
+ * @package app\modules\targets
  */
-class SSEAsset extends AssetBundle {
+class OptionsAsset extends AssetBundle {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function init():void {
-		$this->sourcePath = __DIR__.'/assets/sse/';
+		$this->sourcePath = __DIR__.'/assets/options';
 		$this->js = [
-			'js/sseListener.js'
+			'js/options.js'
 		];
-
 		$this->publishOptions = [
 			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
 		];
 		parent::init();
 	}
-
 }

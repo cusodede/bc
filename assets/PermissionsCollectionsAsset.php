@@ -7,17 +7,22 @@ use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
+ * Class PermissionsCollectionsAsset
+ * @package app\assets
  */
-class SSEAsset extends AssetBundle {
+class PermissionsCollectionsAsset extends AssetBundle {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function init():void {
-		$this->sourcePath = __DIR__.'/assets/sse/';
+		$this->sourcePath = __DIR__.'/assets/permissionsCollections/';
 		$this->js = [
-			'js/sseListener.js'
+			'js/permissionsCollections.js'
+		];
+
+		$this->depends = [
+			AppAsset::class,
 		];
 
 		$this->publishOptions = [
@@ -25,5 +30,4 @@ class SSEAsset extends AssetBundle {
 		];
 		parent::init();
 	}
-
 }
