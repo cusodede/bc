@@ -1,8 +1,15 @@
 <?php
 declare(strict_types = 1);
 
+/**
+ * @var View $this
+ * @var Users $user
+ */
+
+use app\models\sys\users\Users;
 use app\widgets\smartadmin\cropper\CropperWidget;
 use yii\bootstrap4\Modal;
+use yii\web\View;
 
 ?>
 
@@ -10,6 +17,8 @@ use yii\bootstrap4\Modal;
 
 <?= CropperWidget::widget([
 	'modalId' => $modalId??null,
+	'model' => $user,
+	'attribute' => 'avatar',
 	'pluginOptions' => [
 		'aspectRatio' => 1,
 		'viewMode' => 2,
