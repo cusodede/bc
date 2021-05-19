@@ -11,6 +11,7 @@ use yii\web\UploadedFile;
 /**
  * Class LogoUploadForm
  * @package app\models\sys\users
+ * @deprecated
  */
 class UsersLogoUploadForm extends Model
 {
