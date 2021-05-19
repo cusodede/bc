@@ -8,6 +8,7 @@ use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
+use pozitronik\helpers\PathHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
@@ -24,8 +25,9 @@ use yii\web\IdentityInterface;
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  *
  * Файловые атрибуты
- * @property mixed $avatar Картинка аватара пользователя
+ * @property mixed $avatar Картинка аватара пользователя (атрибут для загрузки)
  * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
+ * @property-read string $currentAvatarUrl Шорткат для получения ссылки на актуальный файл аватарки
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
@@ -180,6 +182,16 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getFileAvatar():?FileStorage {
 		return ([] === $files = $this->files(['avatar']))?null:ArrayHelper::getValue($files, 0);
+	}
+
+	/**
+	 * @return string
+	 * @throws Throwable
+	 */
+	public function getCurrentAvatarUrl():string {
+		return (null === $fileAvatar = $this->fileAvatar)
+			?"/img/theme/avatar-m.png"//ну, допустим
+			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
 }

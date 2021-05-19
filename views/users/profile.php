@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="row no-gutters row-grid">
 				<div class="col-12">
 					<div class="d-flex flex-column align-items-center justify-content-center p-4">
-						<?= Html::img(Users::Current()->currentAvatarFile, [
+						<?= Html::img(Users::Current()->currentAvatarUrl, [
 							'class' => "rounded-circle shadow-2 img-thumbnail",
 							'style' => "width: 160px; height: 160px"
 						]) ?>
