@@ -32,7 +32,7 @@ Modal::begin([
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => "{$modelName}-modal-edit"]) ?>
+<?php $form = ActiveForm::begin(['id' => "{$modelName}-modal-edit", 'enableAjaxValidation' => true]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
