@@ -24,7 +24,7 @@ use yii\web\IdentityInterface;
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  *
  * Файловые атрибуты
- * @public mixed $avatar Картинка аватара пользователя
+ * @property mixed $avatar Картинка аватара пользователя
  * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
