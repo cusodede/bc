@@ -17,4 +17,18 @@ class SimCardController extends DefaultController {
 	public string $modelClass = SimCard::class;
 	public string $modelSearchClass = SimCardSearch::class;
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getViewPath():string {
+		return '@app/views/simcard';
+	}
+
+	/**
+	 * Продажа карты
+	 * @param int $id
+	 */
+	public function actionSell(int $id) {
+		//todo
+	}
 }
