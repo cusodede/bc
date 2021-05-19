@@ -10,6 +10,7 @@ use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\db\Exception;
+use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -19,6 +20,19 @@ use yii\web\Response;
  */
 class UsersController extends Controller {
 	use ControllerTrait;
+
+	public function behaviors(): array
+	{
+		return [
+			'contentNegotiator' => [
+				'class' => ContentNegotiator::class,
+				'only' => ['logo-upload'],
+				'formats' => [
+					'application/json' => Response::FORMAT_JSON,
+				],
+			],
+		];
+	}
 
 	/**
 	 * Основной список пользователей
@@ -136,14 +150,34 @@ class UsersController extends Controller {
 	/**
 	 * Загрузка фото профиля
 	 * @return array
+	 * @throws LoggedException
+	 * @throws Throwable
 	 */
 	public function actionLogoUpload(): array
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;//todo: content negotiator
-
-		Users::Current()->uploadAttribute('avatar');//todo: добавить обвязку обработки ошибок. ResponseCodes можно не задавать - фреймворк добавит их автоматически
-
+		try {
+			Users::Current()->uploadAttribute('avatar');
+		} catch (Throwable $t) {
+			throw new LoggedException($t);
+		}
 
 		return [];
+	}
+
+	/**
+	 * @param int|null $id
+	 * @throws LoggedException
+	 */
+	public function actionLogoGet(int $id = null): void
+	{
+		$user = $id ? Users::findIdentity($id) : Users::Current();
+		if (null === $user) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+		if (null === $user->fileAvatar) {
+			Yii::$app->response->sendFile(Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH));
+		} else {
+			$user->fileAvatar->download();
+		}
 	}
 }

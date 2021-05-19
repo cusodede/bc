@@ -34,6 +34,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	use ActiveRecordTrait;
 	use FileStorageTrait;
 
+	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
+
 	private const DEFAULT_PASSWORD = 'Qq123456';
 
 	/*файловые атрибуты*/
@@ -190,7 +192,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getCurrentAvatarUrl():string {
 		return (null === $fileAvatar = $this->fileAvatar)
-			?"/img/theme/avatar-m.png"//ну, допустим
+			?PathHelper::PathToUrl(PathHelper::RelativePath(Yii::getAlias(self::DEFAULT_AVATAR_ALIAS_PATH), "@webroot"))
 			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
