@@ -6,8 +6,9 @@ declare(strict_types = 1);
  * @var View $this
  */
 
+use app\controllers\SiteController;
 use app\models\sys\users\Users;
-use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\web\View;
 
 $this->title = 'Профиль';
@@ -24,8 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="row no-gutters row-grid">
 				<div class="col-12">
 					<div class="d-flex flex-column align-items-center justify-content-center p-4">
-						<img id="user-logo" src="/img/avatars/1/avatar.png" class="rounded-circle shadow-2 img-thumbnail"
-							 style="width: 160px; height: 160px">
+						<?= Html::img("/img/avatars/1/avatar.png", [
+							'class' => "rounded-circle shadow-2 img-thumbnail",
+							'style' => "width: 160px; height: 160px"
+						]) ?>
 						<h5 class="mb-0 fw-700 text-center mt-3">
 							<?= Users::Current()->username ?>
 						</h5>
@@ -33,15 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>
 				<div class="col-12">
 					<div class="p-3 text-center">
-						<a href="javascript:void(0);" class="btn-link font-weight-bold"
-						   data-toggle="modal"
-						   data-target="#cropperModal">
-							<i class="fal fa-fw fa-image-polaroid"></i> Загрузить фото
-						</a>
+						<?= Html::a("<i class='fal fa-fw fa-image-polaroid'></i> Загрузить фото", "#", [
+							"data-toggle" => "modal",
+							"data-target" => "#cropperModal"
+						]) ?>
 						<span class="text-primary d-inline-block mx-3">●</span>
-						<a href="<?= Url::to(['/site/update-password'])?>" class="btn-link font-weight-bold">
-							<i class="fal fa-fw fa-lock"></i> Обновить пароль
-						</a>
+						<?= Html::a("<i class='fal fa-fw fa-lock'></i> Обновить пароль", SiteController::to('update-password'), [
+							"class" => "btn-link font-weight-bold"
+						]) ?>
 					</div>
 				</div>
 			</div>
