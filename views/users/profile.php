@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\controllers\SiteController;
+use app\controllers\UsersController;
 use app\models\sys\users\Users;
 use yii\helpers\Html;
 use yii\web\View;
@@ -23,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="row no-gutters row-grid">
 				<div class="col-12">
 					<div class="d-flex flex-column align-items-center justify-content-center p-4">
-						<?= Html::img(Users::Current()->currentAvatarUrl, [
-							'class' => "rounded-circle shadow-2 img-thumbnail",
-							'style' => "width: 160px; height: 160px"
+						<?= Html::img(UsersController::to('logo-get'), [
+							'class' => "rounded-circle shadow-2 img-thumbnail user-logo",
+							'style' => "width: 160px; height: 160px",
 						]) ?>
 						<h5 class="mb-0 fw-700 text-center mt-3">
 							<?= Users::Current()->username ?>
@@ -36,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div class="p-3 text-center">
 						<?= Html::a("<i class='fal fa-fw fa-image-polaroid'></i> Загрузить фото", "#", [
 							"data-toggle" => "modal",
-							"data-target" => "#cropperModal"
+							"data-target" => "#cropperModal",
+							"class" => "btn-link font-weight-bold"
 						]) ?>
 						<span class="text-primary d-inline-block mx-3">●</span>
 						<?= Html::a("<i class='fal fa-fw fa-lock'></i> Обновить пароль", SiteController::to('update-password'), [

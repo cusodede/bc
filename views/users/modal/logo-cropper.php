@@ -16,7 +16,7 @@ use yii\web\View;
 <?php Modal::begin(['id' => 'cropperModal', 'title' => 'Фото профиля']) ?>
 
 <?= CropperWidget::widget([
-	'modalId' => $modalId??null,
+	'modalId' => 'cropperModal',
 	'model' => $user,
 	'attribute' => 'avatar',
 	'pluginOptions' => [
