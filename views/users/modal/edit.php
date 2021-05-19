@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-edit"]) ?>
+<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-edit", 'enableAjaxValidation' => true]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
