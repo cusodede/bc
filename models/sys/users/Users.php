@@ -6,9 +6,14 @@ namespace app\models\sys\users;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
+use pozitronik\filestorage\models\FileStorage;
+use pozitronik\filestorage\traits\FileStorageTrait;
+use pozitronik\helpers\PathHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
+use Throwable;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
 
@@ -18,12 +23,29 @@ use yii\web\IdentityInterface;
  *
  * @property-read bool $isSaltedPassword Для удобства разрешено не использовать соль при установлении пароля
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
+ *
+ * Файловые атрибуты
+ * @property mixed $avatar Картинка аватара пользователя (атрибут для загрузки)
+ * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
+ * @property-read string $currentAvatarUrl Шорткат для получения ссылки на актуальный файл аватарки
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
 	use ActiveRecordTrait;
+	use FileStorageTrait;
+
+	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
 
 	private const DEFAULT_PASSWORD = 'Qq123456';
+
+	/*файловые атрибуты*/
+	public $avatar;
+
+	public function rules():array {
+		return array_merge(parent::rules(), [
+			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
+		]);
+	}
 
 	/**
 	 * @return static
@@ -154,6 +176,24 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function validatePassword(string $password):bool {
 		return $this->isSaltedPassword?$this->doSalt($password) === $this->password:$this->password === $password;
+	}
+
+	/**
+	 * @return FileStorage|null
+	 * @throws Throwable
+	 */
+	public function getFileAvatar():?FileStorage {
+		return ([] === $files = $this->files(['avatar']))?null:ArrayHelper::getValue($files, 0);
+	}
+
+	/**
+	 * @return string
+	 * @throws Throwable
+	 */
+	public function getCurrentAvatarUrl():string {
+		return (null === $fileAvatar = $this->fileAvatar)
+			?PathHelper::PathToUrl(PathHelper::RelativePath(Yii::getAlias(self::DEFAULT_AVATAR_ALIAS_PATH), "@webroot"))
+			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
 }

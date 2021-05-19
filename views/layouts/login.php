@@ -6,11 +6,11 @@ declare(strict_types = 1);
  * @var string $content
  */
 
-use app\assets\LoginAsset;
+use app\assets\SmartAdminThemeAssets;
 use yii\helpers\Html;
 use yii\web\View;
 
-LoginAsset::register($this);
+SmartAdminThemeAssets::register($this);
 ?>
 <!DOCTYPE html>
 <?php $this->beginPage(); ?>
