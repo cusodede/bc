@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\widgets\smartadmin\cropper;
 
-use yii\base\Widget as YiiBaseWidget;
+use yii\helpers\Html;
+use yii\widgets\InputWidget;
 
 /**
  * Class CropperWidget
@@ -14,7 +15,7 @@ use yii\base\Widget as YiiBaseWidget;
  * @property string $cropperCropElementId id элемента, который будет триггерить кроппинг изображения и его отправку на сервак
  * @property null|string $modalId id модалки, на случай если кроппер завернут в неё.
  */
-class CropperWidget extends YiiBaseWidget
+class CropperWidget extends InputWidget
 {
 	/**
 	 * @var array настройки, используемые для инициализации Cropper
@@ -48,6 +49,7 @@ class CropperWidget extends YiiBaseWidget
 	public function run(): string
 	{
 		$options = json_encode([
+			'fileInputName' => Html::getInputName($this->model, $this->attribute),
 			'imageId' => "#{$this->imageId}",
 			'modalId' => $this->modalId ? "#{$this->modalId}" : null,
 			'cropperUploadInputId' => "#{$this->cropperUploadInputId}",
