@@ -28,7 +28,7 @@ class CropperWidgetAsset extends YiiAssetBundle
 			'js/cropper-actions.js',
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('assets.publishOptions.forceCopy', false)
+			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
 		];
 
 		parent::init();

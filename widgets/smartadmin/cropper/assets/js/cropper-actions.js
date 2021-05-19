@@ -6,7 +6,8 @@ let cropperInitConfig = {
 	cropperUploadInput: null,
 	cropperCropElement: null,
 	uploadUrl: '/users/logo-upload',
-	userLogo: $('#user-logo'),
+	fileInputName: 'croppedImage',
+	userLogos: $('.user-logo'),
 	init: function(options) {
 		this.image = $(options.imageId);
 		if (options.modalId) {
@@ -15,6 +16,7 @@ let cropperInitConfig = {
 		this.cropperOptions = options.pluginOptions;
 		this.cropperUploadInput = $(options.cropperUploadInputId);
 		this.cropperCropElement = $(options.cropperCropElementId);
+		this.fileInputName = options.fileInputName;
 		if (this.modal) {
 			this.initModalEvents();
 		} else {
@@ -52,7 +54,7 @@ let cropperInitConfig = {
 			_this.getImgCropper().getCroppedCanvas({width: 300, height: 300}).toBlob((blob) => {
 				const formData = new FormData();
 
-				formData.append('croppedImage', blob);
+				formData.append(_this.fileInputName, blob);
 
 				$.ajax(_this.uploadUrl, {
 					method: 'POST',
@@ -66,10 +68,13 @@ let cropperInitConfig = {
 						_this.modal.modal('hide');
 					}
 
-					let url = new URL(window.location.origin + _this.userLogo.attr('src'));
-					url.searchParams.set('t', new Date().getTime());
+					let timestamp = new Date().getTime();
+					_this.userLogos.each(function () {
+						let url = new URL(window.location.origin + $(this).attr('src'));
+						url.searchParams.set('t', timestamp);
 
-					_this.userLogo.attr('src', url.pathname + url.search);
+						$(this).attr('src', url.pathname + url.search);
+					});
 
 					_this.getImgCropper().reset();
 				}).fail(function(data) {
@@ -80,7 +85,7 @@ let cropperInitConfig = {
 	},
 	initModalEvents: function() {
 		let _this = this;
-		this.modal.on('shown.bs.modal', function () {
+		this.modal.on('shown.bs.modal', function() {
 			if (_this.getImgCropper() === undefined) {
 				_this.initCropper();
 			}
