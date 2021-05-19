@@ -7,7 +7,7 @@ let cropperInitConfig = {
 	cropperCropElement: null,
 	uploadUrl: '/users/logo-upload',
 	fileInputName: 'croppedImage',
-	userLogo: $('#user-logo'),
+	userLogos: $('.user-logo'),
 	init: function(options) {
 		this.image = $(options.imageId);
 		if (options.modalId) {
@@ -68,10 +68,13 @@ let cropperInitConfig = {
 						_this.modal.modal('hide');
 					}
 
-					let url = new URL(window.location.origin + _this.userLogo.attr('src'));
-					url.searchParams.set('t', new Date().getTime());
+					let timestamp = new Date().getTime();
+					_this.userLogos.each(function () {
+						let url = new URL(window.location.origin + $(this).attr('src'));
+						url.searchParams.set('t', timestamp);
 
-					_this.userLogo.attr('src', url.pathname + url.search);
+						$(this).attr('src', url.pathname + url.search);
+					});
 
 					_this.getImgCropper().reset();
 				}).fail(function(data) {
