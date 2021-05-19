@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\product;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\products\active_record\Products;
 use yii\data\ActiveDataProvider;
 
 /**
