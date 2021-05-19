@@ -6,9 +6,13 @@ namespace app\models\sys\users;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
+use pozitronik\filestorage\models\FileStorage;
+use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
+use Throwable;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
 
@@ -18,12 +22,26 @@ use yii\web\IdentityInterface;
  *
  * @property-read bool $isSaltedPassword Для удобства разрешено не использовать соль при установлении пароля
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
+ *
+ * Файловые атрибуты
+ * @public mixed $avatar Картинка аватара пользователя
+ * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
 	use ActiveRecordTrait;
+	use FileStorageTrait;
 
 	private const DEFAULT_PASSWORD = 'Qq123456';
+
+	/*файловые атрибуты*/
+	public $avatar;
+
+	public function rules():array {
+		return array_merge(parent::rules(), [
+			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
+		]);
+	}
 
 	/**
 	 * @return static
@@ -154,6 +172,14 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function validatePassword(string $password):bool {
 		return $this->isSaltedPassword?$this->doSalt($password) === $this->password:$this->password === $password;
+	}
+
+	/**
+	 * @return FileStorage|null
+	 * @throws Throwable
+	 */
+	public function getFileAvatar():?FileStorage {
+		return ([] === $files = $this->files(['avatar']))?null:ArrayHelper::getValue($files, 0);
 	}
 
 }
