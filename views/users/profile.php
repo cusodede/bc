@@ -35,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
 					</div>
 					<div class="col-8">
 						<div class="d-flex flex-column align-items-start p-4">
-							<h2>Параметры</h2>
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
 									'model'     => $model,
