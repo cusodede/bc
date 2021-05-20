@@ -13,6 +13,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
+use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -50,6 +51,10 @@ class DefaultController extends Controller {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
+			],
+			[
+				'class' => AjaxFilter::class,
+				'only' => ['ajax-search']
 			]
 		];
 	}
@@ -146,6 +151,10 @@ class DefaultController extends Controller {
 		}
 
 		/** @var ActiveRecordTrait $model */
+		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+			return $this->asJson($model->validateModelFromPost());
+		}
+
 		$posting = $model->updateModelFromPost([], $errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
@@ -153,8 +162,7 @@ class DefaultController extends Controller {
 		}
 		/* Пришёл постинг, но есть ошибки */
 		if ((false === $posting) && Yii::$app->request->isAjax) {
-			Yii::$app->response->format = Response::FORMAT_JSON;
-			return $errors;
+			return $this->asJson($errors);
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
@@ -168,14 +176,16 @@ class DefaultController extends Controller {
 	 */
 	public function actionCreate() {
 		$model = $this->model;
+		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+			return $this->asJson($model->validateModelFromPost());
+		}
 		$posting = $model->createModelFromPost([], $errors);/* switch тут нельзя использовать из-за его нестрогости */
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
 		}
 		/* Пришёл постинг, но есть ошибки */
 		if ((false === $posting) && Yii::$app->request->isAjax) {
-			Yii::$app->response->format = Response::FORMAT_JSON;
-			return $errors;
+			return $this->asJson($errors);
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
@@ -222,4 +232,5 @@ class DefaultController extends Controller {
 		}
 		return $out;
 	}
+
 }
