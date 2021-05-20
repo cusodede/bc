@@ -52,6 +52,19 @@ trait ActiveRecordTrait {
 	}
 
 	/**
+	 * Валидация для ajax-validation
+	 * @return null|array
+	 * @throws Throwable
+	 */
+	public function validateModelFromPost():?array {
+		if ($this->load(Yii::$app->request->post())) {
+			/** @var ActiveRecord $this */
+			return ActiveForm::validate($this);
+		}
+		return null;
+	}
+
+	/**
 	 * @param array $mappedParams
 	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
