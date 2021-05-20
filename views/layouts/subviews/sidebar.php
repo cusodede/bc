@@ -21,7 +21,7 @@ use app\controllers\PartnersController;
 echo SideBarWidget::widget([
 	'items' => [
 		[
-			'label' => 'Домой',
+			'label' => 'Профиль',
 			'url' => [Url::home()],
 			'iconClass' => 'fa-home'
 		],
