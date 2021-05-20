@@ -32,7 +32,7 @@ $config = [
 	'name' => 'Beeline Cabinet',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
-	'homeUrl' => '/home/home',//<== строка, не массив
+	'homeUrl' => '/users/profile',//<== строка, не массив
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
