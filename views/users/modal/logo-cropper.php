@@ -31,6 +31,7 @@ use yii\web\View;
 		'rotatable' => false,
 		'scalable' => false,
 		'toggleDragModeOnDblclick' => false,
+		'guides' => false
 	]
 ]) ?>
 
