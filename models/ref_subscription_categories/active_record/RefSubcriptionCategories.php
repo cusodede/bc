@@ -12,7 +12,7 @@ use pozitronik\references\models\Reference;
  */
 class RefSubcriptionCategories extends Reference
 {
-	public string $menuCaption  = 'Категории подписок';
+	public $menuCaption  = 'Категории подписок';
 
 	/**
 	 * {@inheritdoc}
