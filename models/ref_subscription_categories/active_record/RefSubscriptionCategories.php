@@ -7,10 +7,10 @@ use pozitronik\references\models\Reference;
 
 /**
  * Справочник категорий подписок
- * Class RefSubcriptionCategories
+ * Class RefSubscriptionCategories
  * @package app\models\ref_products_types\active_record
  */
-class RefSubcriptionCategories extends Reference
+class RefSubscriptionCategories extends Reference
 {
 	public $menuCaption  = 'Категории подписок';
 
