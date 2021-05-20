@@ -36,7 +36,7 @@ ModalHelperAsset::register($this);
 		'panel' => [
 			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['продукт', 'продукты', 'продуктов']). ')' : ' (нет продуктов)'),
 		],
-		'summary' => $searchModel !== null ? Html::a('Добавить продукт', $controller::to('create'), [
+		'summary' => null !== $searchModel ? Html::a('Добавить продукт', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
 		]):null,
