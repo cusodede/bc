@@ -21,6 +21,10 @@ use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\select2\Select2;
+use app\models\ref_products_types\active_record\RefProductsTypes;
+use app\models\partners\Partners;
+use pozitronik\helpers\ArrayHelper;
 
 ModalHelperAsset::register($this);
 ?>
@@ -30,14 +34,14 @@ ModalHelperAsset::register($this);
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['партнер', 'партнера', 'партнеров']). ')' : ' (нет партнеров)'),
+			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['продукт', 'продукты', 'продуктов']). ')' : ' (нет продуктов)'),
 		],
-		'summary' => $searchModel !== null ? Html::a('Добавить партнера', $controller::to('create'), [
+		'summary' => $searchModel !== null ? Html::a('Добавить продукт', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
 		]):null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Добавить партнера', $controller::to('create'), [
+		'emptyText' => Html::a('Добавить продукт', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
 		]),
@@ -66,7 +70,34 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			'name',
-			'inn',
+			[
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'type_id',
+					'data' => RefProductsTypes::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
+				'attribute' => 'type_id',
+				'format' => 'text',
+				'value' => 'type.name',
+			],
+			[
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'partner_id',
+					'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
+				'attribute' => 'partner_id',
+				'format' => 'text',
+				'value' => 'partner.name',
+			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',

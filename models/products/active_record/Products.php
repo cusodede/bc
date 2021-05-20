@@ -8,6 +8,7 @@ use app\models\ref_products_types\active_record\RefProductsTypes;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use Yii;
 
 /**
  * This is the model class for table "products".
@@ -18,8 +19,9 @@ use yii\db\ActiveRecord;
  * @property int|null $type_id id типа (подписка, бандл и т.д)
  * @property int $user_id id пользователя, создателя
  * @property int $partner_id id партнера, к кому привязан
- * @property int $active Флаг активности
- * @property string $created_at Дата создания партнера
+ * @property int $deleted Флаг удаления
+ * @property string $created_at Дата создания продукта
+ * @property string $updated_at Дата обновления партнера
  *
  * @property Partners $partner
  * @property RefProductsTypes $type
@@ -41,10 +43,11 @@ class Products extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['name', 'user_id', 'partner_id'], 'required'],
-			[['type_id', 'user_id', 'partner_id', 'active'], 'integer'],
-			[['created_at'], 'safe'],
-			[['name'], 'string', 'max' => 64],
+			[['user_id'], 'default', 'value' => Yii::$app->user->id],
+			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute} продукта.'],
+			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefProductsTypes::class, 'targetAttribute' => ['type_id' => 'id']],
@@ -59,13 +62,14 @@ class Products extends ActiveRecord
 	{
 		return [
 			'id' => 'ID',
-			'name' => 'Name',
-			'description' => 'Description',
-			'type_id' => 'Type ID',
-			'user_id' => 'User ID',
-			'partner_id' => 'Partner ID',
-			'active' => 'Active',
-			'created_at' => 'Created At',
+			'name' => 'Наименование',
+			'description' => 'Описание',
+			'type_id' => 'Тип продукта',
+			'user_id' => 'Пользователь',
+			'partner_id' => 'Партнер',
+			'deleted' => 'Флаг удаления',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата обновления',
 		];
 	}
 

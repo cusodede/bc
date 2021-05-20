@@ -17,6 +17,7 @@ use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
 use app\controllers\PartnersController;
+use app\controllers\ProductsController;
 
 echo SideBarWidget::widget([
 	'items' => [
@@ -29,6 +30,17 @@ echo SideBarWidget::widget([
 			'label' => 'Партнеры',
 			'url' => [PartnersController::to('index')],
 			'iconClass' => 'fa-briefcase'
+		],
+		[
+			'label' => 'Продукты',
+			'url' => '#',
+			'iconClass' => 'fa-shopping-cart',
+			'items' => [
+				[
+					'label' => 'Все продукты',
+					'url' => [ProductsController::to('index')]
+				]
+			],
 		],
 		[
 			'label' => 'Пользователи',

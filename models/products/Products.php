@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product;
+namespace app\models\products;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\products\active_record\Products as ActiveRecordProduct;
+use app\models\products\active_record\Products as ActiveRecordProducts;
 
 /**
- * Функции продуктов, не относящиеся к ActiveRecord
+ * Логика продуктов, не относящиеся к ActiveRecord
  * Class Products
  * @package app\models\product
  */
-class Products extends ActiveRecordProduct
+class Products extends ActiveRecordProducts
 {
 	use ActiveRecordTrait;
 }
