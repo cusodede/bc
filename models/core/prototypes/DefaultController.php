@@ -13,6 +13,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -46,7 +47,7 @@ class DefaultController extends Controller {
 		return [
 			[
 				'class' => ContentNegotiator::class,
-				'only' => ['ajax-search'],
+				'only' => ['ajax-search', 'live-edit'],
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
@@ -221,5 +222,26 @@ class DefaultController extends Controller {
 			$out['results'] = array_values($data);
 		}
 		return $out;
+	}
+
+	/**
+	 * @param int $id
+	 * @return array
+	 * @throws LoggedException
+	 * @throws Throwable
+	 * @throws Exception
+	 */
+	public function actionLiveEdit(int $id)
+	{
+		if (null === $model = $this->model::findOne($id)) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+
+		/** @var ActiveRecordTrait $model */
+		if ($model->updateModelFromPost()) {
+			return ['output' => '', 'message' => ''];
+		}
+
+		return ['output' => '', 'message' => 'Ошибка сохранения'];
 	}
 }
