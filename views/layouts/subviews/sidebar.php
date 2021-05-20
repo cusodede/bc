@@ -22,7 +22,7 @@ use app\controllers\ProductsController;
 echo SideBarWidget::widget([
 	'items' => [
 		[
-			'label' => 'Домой',
+			'label' => 'Профиль',
 			'url' => [Url::home()],
 			'iconClass' => 'fa-home'
 		],
