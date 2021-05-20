@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product;
+namespace app\models\products;
 
-use app\models\core\prototypes\ActiveRecordTrait;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -13,7 +12,16 @@ use yii\data\ActiveDataProvider;
  */
 class ProductsSearch extends Products
 {
-	use ActiveRecordTrait;
+	/**
+	 * @return array[]
+	 */
+	public function rules(): array
+	{
+		return [
+			[['id', 'type_id', 'partner_id'], 'integer'],
+			[['name'], 'safe'],
+		];
+	}
 
 	/**
 	 * @param array $params
@@ -21,15 +29,15 @@ class ProductsSearch extends Products
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
-		$query = static::find()->active();
+		$query = Products::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
 		]);
 
 		$dataProvider->setSort([
-			'defaultOrder' => ['id' => SORT_ASC],
-			'attributes' => []
+			'defaultOrder' => ['products.id' => SORT_ASC],
+			'attributes' => ['products.id', 'products.name'],
 		]);
 
 		$this->load($params);
@@ -38,7 +46,12 @@ class ProductsSearch extends Products
 			return $dataProvider;
 		}
 
-		// $query->andFilterWhere(['sys_users.id' => $this->id])
+		$query->joinWith(['type', 'partner']);
+
+		$query->andFilterWhere(['products.id' => $this->id])
+			->andFilterWhere(['products.type_id' => $this->type_id])
+			->andFilterWhere(['products.partner_id' => $this->partner_id])
+			->andFilterWhere(['like', 'products.name', $this->name]);
 
 		return $dataProvider;
 	}
