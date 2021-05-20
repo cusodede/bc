@@ -18,7 +18,7 @@ use app\models\products\active_record\Products;
  */
 class RefProductsTypes extends Reference
 {
-	public $menuCaption  = 'Типы продуктов';
+	public string $menuCaption  = 'Типы продуктов';
 
 	/**
 	 * {@inheritdoc}
