@@ -13,3 +13,7 @@
 .img-container > img {
 	max-width: 100%;
 }
+
+.cropper-view-box {
+	border-radius: 50%;
+}
