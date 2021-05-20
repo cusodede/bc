@@ -4,6 +4,7 @@ declare(strict_types = 1);
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
@@ -153,6 +154,11 @@ $config = [
 					'css' => [],
 				],
 				DialogBootstrapAsset::class => [
+					'depends' => [
+						SmartAdminThemeAssets::class
+					]
+				],
+				EditableAsset::class => [
 					'depends' => [
 						SmartAdminThemeAssets::class
 					]
