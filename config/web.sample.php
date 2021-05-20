@@ -30,6 +30,7 @@ $db = require __DIR__.'/db.php';
 $config = [
 	'id' => 'basic',
 	'name' => 'Beeline Cabinet',
+	'language' => 'ru',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
 	'homeUrl' => '/users/profile',//<== строка, не массив
