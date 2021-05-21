@@ -22,17 +22,18 @@ use yii\db\ActiveRecord;
  */
 class RewardAR extends ActiveRecord {
 	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():string {
 		return 'reward';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules(): array {
 		return [
 			[['status', 'user', 'operation', 'rule', 'create_date'], 'required'],
 			[['status', 'user', 'operation', 'rule', 'value', 'override', 'deleted'], 'integer'],
@@ -45,7 +46,7 @@ class RewardAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'status' => 'Статус',
