@@ -26,9 +26,7 @@ use yii\widgets\DetailView;
 		[
 			'attribute' => 'trial',
 			'label' => 'Триальный период',
-			'value' => static function($model) {
-				return $model->trial ? 'Да' : 'Нет';
-			}
+			'format' => 'boolean',
 		],
 		[
 			'attribute' => 'category.name',

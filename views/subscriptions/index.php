@@ -88,9 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'trial',
 				'label' => 'Триальный период',
-				'value' => static function($model) {
-					return $model->trial ? 'Да' : 'Нет';
-				}
+				'format' => 'boolean',
 			],
 			[
 				'filter' => Select2::widget([
