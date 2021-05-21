@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace app\models\reward;
 
-use app\models\product\active_record\ProductAR;
+use app\models\reward\active_record\RewardsAR;
 use yii\data\ActiveDataProvider;
 
 /**
  * todo
  */
-class RewardSearch extends ProductAR {
+class RewardsSearch extends RewardsAR {
 
 	/**
 	 * @param array $params

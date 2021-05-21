@@ -4,6 +4,11 @@ declare(strict_types = 1);
 namespace app\models\reward\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\reward\active_record\references\RefRewardOperations;
+use app\models\reward\active_record\references\RefRewardRules;
+use app\models\reward\active_record\references\RefRewardStatuses;
+use app\models\sys\users\Users;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -19,8 +24,13 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата создания
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
+ *
+ * @property RefRewardStatuses $refRewardStatus Справочник статусов
+ * @property RefRewardOperations $refRewardOperation Справочник операций
+ * @property RefRewardRules $refRewardRule Справочник правил расчета вознаграждения
+ * @property Users $relatedUser Пользователь к которому относится вознаграждение
  */
-class RewardAR extends ActiveRecord {
+class RewardsAR extends ActiveRecord {
 	use ActiveRecordTrait;
 
 	/**
@@ -33,7 +43,7 @@ class RewardAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules(): array {
+	public function rules():array {
 		return [
 			[['status', 'user', 'operation', 'rule', 'create_date'], 'required'],
 			[['status', 'user', 'operation', 'rule', 'value', 'override', 'deleted'], 'integer'],
@@ -59,5 +69,33 @@ class RewardAR extends ActiveRecord {
 			'override' => 'Переопределено',
 			'deleted' => 'Флаг удаления',
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRewardStatus():ActiveQuery {
+		return $this->hasOne(RefRewardStatuses::class, ['id' => 'status']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRewardOperation():ActiveQuery {
+		return $this->hasOne(RefRewardOperations::class, ['id' => 'operation']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRewardRule():ActiveQuery {
+		return $this->hasOne(RefRewardRules::class, ['id' => 'rule']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUser():ActiveQuery {
+		return $this->hasOne(Users::class, ['id' => 'user']);
 	}
 }
