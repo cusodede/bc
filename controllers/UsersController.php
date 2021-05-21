@@ -59,11 +59,11 @@ class UsersController extends DefaultController
 
 	/**
 	 * Профиль пользователя
-	 * @param int $id
+	 * @param null|int $id
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public function actionProfile(int $id = null): ?string
+	public function actionProfile(?int $id = null): ?string
 	{
 		$user = $id ? Users::findIdentity($id) : Users::Current();
 		if (null === $user) {
