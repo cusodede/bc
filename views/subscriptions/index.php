@@ -22,9 +22,7 @@ use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\select2\Select2;
-use app\models\ref_products_types\active_record\RefProductsTypes;
-use app\models\partners\Partners;
-use pozitronik\helpers\ArrayHelper;
+use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 
 ModalHelperAsset::register($this);
 ?>
@@ -34,14 +32,14 @@ ModalHelperAsset::register($this);
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['продукт', 'продукты', 'продуктов']). ')' : ' (нет продуктов)'),
+			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['подписка', 'подписки', 'подписок']). ')' : ' (нет подписок)'),
 		],
-		'summary' => null !== $searchModel ? Html::a('Добавить продукт', $controller::to('create'), [
+		'summary' => null !== $searchModel ? Html::a('Создать подписку', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
+		]) : null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Добавить продукт', $controller::to('create'), [
+		'emptyText' => Html::a('Создать подписку', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
 		]),
@@ -69,35 +67,34 @@ ModalHelperAsset::register($this);
 				],
 			],
 			'id',
-			'name',
-			'price',
 			[
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'type_id',
-					'data' => RefProductsTypes::mapData(),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				]),
-				'attribute' => 'type_id',
-				'format' => 'text',
-				'value' => 'type.name',
+				'attribute' => 'partner_id',
+				'value' => 'product.name',
+				'label' => 'Наименование продукта'
+			],
+			[
+				'attribute' => 'partner_id',
+				'value' => 'product.partner.name',
+				'label' => 'Партнер'
+			],
+			[
+				'attribute' => 'price',
+				'value' => 'product.price',
+				'label' => 'Стоимость'
 			],
 			[
 				'filter' => Select2::widget([
 					'model' => $searchModel,
-					'attribute' => 'partner_id',
-					'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+					'attribute' => 'category_id',
+					'data' => RefSubscriptionCategories::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
 					]
 				]),
-				'attribute' => 'partner_id',
+				'attribute' => 'category_id',
 				'format' => 'text',
-				'value' => 'partner.name',
+				'value' => 'category.name',
 			],
 			[
 				'class' => DataColumn::class,

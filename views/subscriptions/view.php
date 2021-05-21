@@ -15,15 +15,20 @@ use yii\widgets\DetailView;
 <?= DetailView::widget([
 	'model' => $model,
 	'attributes' => [
-		'name',
-		'price',
-		'description',
 		[
-			'attribute' => 'type.name',
-			'label' => 'Тип продукта',
+			'attribute' => 'product.name',
+			'label' => 'Наименование',
 		],
 		[
-			'attribute' => 'partner.name',
+			'attribute' => 'product.price',
+			'label' => 'Стоимость',
+		],
+		[
+			'attribute' => 'category.name',
+			'label' => 'Категория',
+		],
+		[
+			'attribute' => 'product.partner.name',
 			'label' => 'Партнер',
 		],
 		[
