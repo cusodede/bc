@@ -25,6 +25,9 @@ use kartik\select2\Select2;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 
 ModalHelperAsset::register($this);
+$this->title = 'Подписки';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <?= GridConfig::widget([
 	'id' => "{$modelName}-index-grid",

@@ -23,6 +23,9 @@ use yii\web\JsExpression;
 use yii\web\View;
 
 ModalHelperAsset::register($this);
+$this->title = 'Партнеры';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <?= GridConfig::widget([
 	'id' => "{$modelName}-index-grid",
