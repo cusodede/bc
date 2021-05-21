@@ -24,6 +24,13 @@ use yii\widgets\DetailView;
 			'label' => 'Стоимость',
 		],
 		[
+			'attribute' => 'trial',
+			'label' => 'Триальный период',
+			'value' => static function($model) {
+				return $model->trial ? 'Да' : 'Нет';
+			}
+		],
+		[
 			'attribute' => 'category.name',
 			'label' => 'Категория',
 		],

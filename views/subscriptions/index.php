@@ -83,6 +83,13 @@ ModalHelperAsset::register($this);
 				'label' => 'Стоимость'
 			],
 			[
+				'attribute' => 'trial',
+				'label' => 'Триальный период',
+				'value' => static function($model) {
+					return $model->trial ? 'Да' : 'Нет';
+				}
+			],
+			[
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'category_id',
