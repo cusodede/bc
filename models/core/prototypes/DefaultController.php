@@ -212,7 +212,7 @@ class DefaultController extends Controller {
 	 * @param string|null $term
 	 * @return string[][]
 	 */
-	public function actionAjaxSearch(?string $term):array {
+	public function actionAjaxSearch(?string $term, string $column = 'name'):array {
 		$out = [
 			'results' => [
 				'id' => '',
@@ -222,8 +222,8 @@ class DefaultController extends Controller {
 		if (null !== $term) {
 			$tableName = $this->model::tableName();
 			$data = $this->model::find()
-				->select(["{$tableName}.id", "{$tableName}.name as text"])
-				->where(['like', "{$tableName}.name", "%$term%", false])
+				->select(["{$tableName}.id", "{$tableName}.{$column} as text"])
+				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()
 				->distinct()
 				->asArray()
