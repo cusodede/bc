@@ -69,8 +69,10 @@ ModalHelperAsset::register($this);
 				],
 			],
 			'id',
+			'value',
+			'create_date',
 			[
-				'attribute' => 'user',
+				'attribute' => 'userName',
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
@@ -80,7 +82,7 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'status',
+				'attribute' => 'statusName',
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
@@ -90,7 +92,7 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'operation',
+				'attribute' => 'operationName',
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
@@ -100,7 +102,7 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'rule',
+				'attribute' => 'ruleName',
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
