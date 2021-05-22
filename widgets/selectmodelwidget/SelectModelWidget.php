@@ -25,7 +25,7 @@ use yii\web\JsExpression;
  * @property ActiveQuery $selectionQuery Переопределение запроса, если нужны какие-то модификации, но не нужно передавать данные в $data
  * @property string $mapAttribute Названия атрибута, который будет отображаться на выбиралку
  * @property string|null $pkName Имя ключевого атрибута модели, если не указано -- подберётся автоматически
- * @property int $ajaxMinimumInputLength Количество симоволов для старта поиска при аксовом режиме
+ * @property int $ajaxMinimumInputLength Количество символов для старта поиска при аксовом режиме
  * @property string $ajaxSearchUrl Путь к экшену ajax-поиска.
  * @property int $loadingMode self::DATA_MODE_AJAX -- фоновая загрузка, DATA_MODE_LOAD -- вычисляемые данные
  * @property bool $multiple true by default
@@ -87,9 +87,9 @@ class SelectModelWidget extends Select2 {
 
 	/**
 	 * Генерирует набор данных для подстановки в выбиралку без загрузки. При self::DATA_MODE_AJAX используется для подстановки данных в уже имеющиеся значения (см. self::initAjaxValueText())
-	 * @param array|null $filterValue - если указано, то выборка скукожится только до переданного значения
+	 * @param $filterValue - если указано, то выборка скукожится только до переданного значения
 	 */
-	private function initData(?array $filterValue = null):void {
+	private function initData($filterValue = null):void {
 		if ([] === $this->data) {
 			if (null === $this->selectionQuery) $this->selectionQuery = $this->_selectModel::find();
 			if (is_array($this->exclude) && [] !== $this->exclude) {
@@ -100,7 +100,11 @@ class SelectModelWidget extends Select2 {
 			}
 
 			if (null !== $filterValue) {
-				$this->selectionQuery->andWhere(['in', $this->pkName, $filterValue]);
+				if (is_array($filterValue)) {
+					$this->selectionQuery->andWhere(['in', $this->pkName, $filterValue]);
+				} else {
+					$this->selectionQuery->andWhere(['id' => $filterValue]);
+				}
 			}
 			$this->data = ArrayHelper::map($this->selectionQuery->all(), $this->pkName, $this->mapAttribute);
 		}
@@ -126,7 +130,7 @@ class SelectModelWidget extends Select2 {
 		parent::init();
 		SelectModelWidgetAssets::register($this->getView());
 
-		$this->pkName = $this->pkName??$this->selectModel::primaryKey();
+		$this->pkName = $this->pkName??$this->selectModel::primaryKey()[0];
 		if (null === $this->pkName) {
 			throw new InvalidConfigException("{$this->selectModel} must have primary key and it should not be composite");
 		}
