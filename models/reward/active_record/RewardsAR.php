@@ -8,6 +8,7 @@ use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
 use app\models\reward\active_record\references\RefRewardStatuses;
 use app\models\sys\users\Users;
+use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -45,7 +46,8 @@ class RewardsAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['status', 'user', 'operation', 'rule', 'create_date'], 'required'],
+			[['status', 'user', 'operation', 'rule'], 'required'],
+			['create_date', 'default', 'value' => DateHelper::lcDate()],
 			[['status', 'user', 'operation', 'rule', 'value', 'override', 'deleted'], 'integer'],
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
