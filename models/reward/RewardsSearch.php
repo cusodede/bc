@@ -14,15 +14,11 @@ use app\models\sys\users\Users;
 /**
  * Class RewardsSearch
  * @property null|string $userName
- * @property null|string $statusName
- * @property null|string $operationName
  * @property null|string $ruleName
  */
 final class RewardsSearch extends RewardsAR {
 
 	public ?string $userName = null;
-	public ?string $statusName = null;
-	public ?string $operationName = null;
 	public ?string $ruleName = null;
 
 	/**
