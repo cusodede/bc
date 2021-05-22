@@ -31,6 +31,7 @@ final class RewardsSearch extends RewardsAR {
 	public function rules():array {
 		return [
 			[['id', 'value', 'deleted'], 'integer'],
+			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
 			[['userName', 'statusName', 'operationName', 'ruleName'], 'string', 'max' => 255]
 		];
 	}
@@ -48,10 +49,10 @@ final class RewardsSearch extends RewardsAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
+		$query->joinWith(['relatedUser', 'refRewardStatus', 'refRewardOperation', 'refRewardRule']);
 
 		if (!$this->validate()) return $dataProvider;
 
-		$query->joinWith(['relatedUser', 'refRewardStatus', 'refRewardOperation', 'refRewardRule']);
 		$this->filterData($query);
 
 		return $dataProvider;
@@ -64,6 +65,7 @@ final class RewardsSearch extends RewardsAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere([self::tableName().'.value' => $this->value])
+			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
 			->andFilterWhere([RefRewardStatuses::tableName().'.name' => $this->statusName])
 			->andFilterWhere([RefRewardOperations::tableName().'.name' => $this->operationName])
 			->andFilterWhere([RefRewardStatuses::tableName().'.name' => $this->ruleName])

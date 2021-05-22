@@ -13,6 +13,7 @@ use app\assets\ModalHelperAsset;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 use kartik\grid\GridView;
+use kartik\datetime\DateTimePicker;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
@@ -70,7 +71,16 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			'value',
-			'create_date',
+			[
+				'attribute' => 'create_date',
+				'filterType' => DateTimePicker::class,
+				'filterWidgetOptions' => [
+					'type' => DateTimePicker::TYPE_INPUT,
+					'pluginOptions' => [
+						'alwaysShowCalendars' => true
+					]
+				]
+			],
 			[
 				'attribute' => 'userName',
 				'format' => 'raw',
