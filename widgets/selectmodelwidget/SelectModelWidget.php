@@ -73,13 +73,15 @@ class SelectModelWidget extends Select2 {
 	 * AJAX parameters generator
 	 */
 	private function initAjax():void {
+		$column = 'name' === $this->mapAttribute?null:"column: '{$this->mapAttribute}', ";
 		$this->ajaxPluginOptions = [
 			'minimumInputLength' => $this->ajaxMinimumInputLength,
 			'initValueText' => $this->initAjaxValueText(),
 			'ajax' => [
 				'url' => $this->ajaxSearchUrl,
 				'dataType' => 'json',
-				'data' => new JsExpression("function(params) { return {term:params.term, page: params.page}; }"),
+				'data' => new JsExpression("function(params) { return {term:params.term, ".
+					$column."page: params.page}; }"),
 				'cache' => true
 			]
 		];
