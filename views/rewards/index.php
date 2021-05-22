@@ -10,10 +10,13 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\models\reward\active_record\references\RefRewardOperations;
+use app\models\reward\active_record\references\RefRewardStatuses;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 use kartik\grid\GridView;
 use kartik\datetime\DateTimePicker;
+use kartik\select2\Select2;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
@@ -99,7 +102,16 @@ ModalHelperAsset::register($this);
 						'items' => $model->refRewardStatus,
 						'subItem' => 'name'
 					]);
-				}
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'status',
+					'data' => RefRewardStatuses::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
 				'attribute' => 'operationName',
@@ -109,7 +121,16 @@ ModalHelperAsset::register($this);
 						'items' => $model->refRewardOperation,
 						'subItem' => 'name'
 					]);
-				}
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'operation',
+					'data' => RefRewardOperations::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
 				'attribute' => 'ruleName',

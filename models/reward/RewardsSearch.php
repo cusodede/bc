@@ -30,9 +30,9 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	public function rules():array {
 		return [
-			[['id', 'value', 'deleted'], 'integer'],
+			[['id', 'value', 'deleted', 'status', 'operation'], 'integer'],
 			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
-			[['userName', 'statusName', 'operationName', 'ruleName'], 'string', 'max' => 255]
+			[['userName', 'ruleName'], 'string', 'max' => 255]
 		];
 	}
 
@@ -66,9 +66,9 @@ final class RewardsSearch extends RewardsAR {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere([self::tableName().'.value' => $this->value])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
-			->andFilterWhere([RefRewardStatuses::tableName().'.name' => $this->statusName])
-			->andFilterWhere([RefRewardOperations::tableName().'.name' => $this->operationName])
-			->andFilterWhere([RefRewardStatuses::tableName().'.name' => $this->ruleName])
+			->andFilterWhere([self::tableName().'.status' => $this->status])
+			->andFilterWhere([self::tableName().'.operation' => $this->operation])
+			->andFilterWhere(['like', RefRewardRules::tableName().'.name', $this->ruleName])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted]);
 	}
