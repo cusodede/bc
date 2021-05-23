@@ -7,10 +7,14 @@ use app\models\core\TemporaryHelper;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\users\Users;
+use app\widgets\search\SearchHelper;
+use app\widgets\search\SearchWidget;
 use pozitronik\core\traits\ControllerTrait;
+use pozitronik\sys_exceptions\models\LoggedException;
 use pozitronik\sys_options\models\SysOptions;
 use Yii;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -40,6 +44,23 @@ class AjaxController extends Controller {
 				]
 			]
 		];
+	}
+
+	/**
+	 * @param string $alias
+	 * @param string|null $term
+	 * @return string[][]
+	 * @throws LoggedException
+	 */
+	public function actionSearch(string $alias, ?string $term):array {
+		if (null !== $ARClass = ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.class")) {
+			return SearchHelper::Search(
+				$ARClass,
+				$term,
+				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.limit", SearchWidget::DEFAULT_LIMIT),
+				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.attributes"));
+		}
+		return [];
 	}
 
 	/**
