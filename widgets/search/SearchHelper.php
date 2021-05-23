@@ -62,7 +62,8 @@ class SearchHelper {
 			throw new LoggedException(new UnknownPropertyException('Primary key not configured'));
 		}
 		$tableName = $modelClass::tableName();
-		$swTerm = TemporaryHelper::SwitchKeyboard($term);
+		$swTermCyr = TemporaryHelper::SwitchKeyboard($term);
+		$swTermLat = TemporaryHelper::SwitchKeyboard($term, true);
 		$searchQuery = $modelClass::find()->select("{$tableName}.{$pk}");
 		foreach ($searchAttributes as $searchRule) {
 			if (is_array($searchRule) && isset($searchRule[0], $searchRule[1])) {//attribute, search type
@@ -75,20 +76,24 @@ class SearchHelper {
 			switch ($searchType) {
 				case self::SEARCH_TYPE_EQUAL:
 					$searchQuery->orWhere(["=", "{$tableName}.{$searchAttribute}", $term]);
-					$searchQuery->orWhere(["=", "{$tableName}.{$searchAttribute}", $swTerm]);
+					$searchQuery->orWhere(["=", "{$tableName}.{$searchAttribute}", $swTermCyr]);
+					$searchQuery->orWhere(["=", "{$tableName}.{$searchAttribute}", $swTermLat]);
 				break;
 				case self::SEARCH_TYPE_LIKE:
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$term%", false]);
-					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTerm%", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTermCyr%", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTermLat%", false]);
 				break;
 				case self::SEARCH_TYPE_LIKE_BEGINNING:
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$term", false]);
-					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTerm", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTermCyr", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTermLat", false]);
 
 				break;
 				case self::SEARCH_TYPE_LIKE_ENDING:
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$term%", false]);
-					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$swTerm%", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$swTermCyr%", false]);
+					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$swTermLat%", false]);
 				break;
 			}
 		}
