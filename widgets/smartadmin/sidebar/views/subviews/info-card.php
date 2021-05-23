@@ -1,6 +1,12 @@
+<?php
+declare(strict_types = 1);
+
+use app\controllers\UsersController;
+use yii\helpers\Html;
+
+?>
 <div class="info-card">
-	<img src="/img/theme/avatar-m.png" class="profile-image rounded-circle"
-		 alt="Dr. Cox">
+	<?= Html::img(UsersController::to('logo-get'), ['class' => 'profile-image rounded-circle user-logo']) ?>
 	<div class="info-card-text">
 		<a href="#" class="d-flex align-items-center text-white">
 			<span class="text-truncate text-truncate-sm d-inline-block">Dr. Cox</span>
