@@ -51,16 +51,18 @@ class SearchHelper {
 	 * @return array
 	 * @throws LoggedException
 	 */
-	public static function Search(string $modelClass, ?string $term, int $limit = 5, ?array $searchAttributes = null):array {
+	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null):array {
+		/*В модели можно полностью переопределить поиск*/
+		if (method_exists($modelClass, 'search')) return $modelClass::search($term, $limit, $searchAttributes);
+
 		if (null === $searchAttributes) $searchAttributes = self::AssumeSearchAttributes($modelClass);
+
 		/** @var ActiveRecord $modelClass */
-		$tableName = $modelClass::tableName();
 		if ((null === $pk = ArrayHelper::getValue($modelClass::primaryKey(), 0))) {
 			throw new LoggedException(new UnknownPropertyException('Primary key not configured'));
 		}
-
+		$tableName = $modelClass::tableName();
 		$swTerm = TemporaryHelper::SwitchKeyboard($term);
-
 		$searchQuery = $modelClass::find()->select("{$tableName}.{$pk}");
 		foreach ($searchAttributes as $searchRule) {
 			if (is_array($searchRule) && isset($searchRule[0], $searchRule[1])) {//attribute, search type
