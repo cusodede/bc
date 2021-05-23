@@ -3,13 +3,21 @@ declare(strict_types = 1);
 
 namespace app\widgets\search;
 
+use app\controllers\AjaxController;
+use Exception;
+use Yii;
 use yii\base\Widget;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\JsExpression;
 
 /**
  * Class SearchWidget
  * @package app\widgets\search
  */
 class SearchWidget extends Widget {
+	public const DEFAULT_LIMIT = 5;
+	public const DEFAULT_TEMPLATE_VIEW = 'template';
 
 	/**
 	 * Функция инициализации и нормализации свойств виджета
@@ -22,8 +30,40 @@ class SearchWidget extends Widget {
 	/**
 	 * Функция возврата результата рендеринга виджета
 	 * @return string
+	 * @throws Exception
 	 */
 	public function run():string {
-		return $this->render('search');
+		return $this->render('search', [
+			'dataset' => $this->prepareDataset()
+		]);
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	private function prepareDataset():array {
+		$dataset = [];
+		$searchConfig = ArrayHelper::getValue(Yii::$app, 'params.searchConfig', []);
+		foreach ($searchConfig as $alias => $config) {
+			if (null === $templateString = str_replace(["\r", "\n", "\t"], '', ArrayHelper::getValue($config, 'template'))) {
+				$templateString = str_replace(["\r", "\n", "\t"], '', $this->render(ArrayHelper::getValue($config, 'templateView', self::DEFAULT_TEMPLATE_VIEW)));
+			}
+
+			$dataset[] = [
+				'limit' => ArrayHelper::getValue($config, 'limit', self::DEFAULT_LIMIT),
+				'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('html')",
+				'display' => 'name',
+				'templates' => [
+					'suggestion' => new JsExpression("Handlebars.compile('{$templateString}')"),
+					'header' => Html::tag('h3', ArrayHelper::getValue($config, 'header', $alias), ['class' => 'suggestion-header'])
+				],
+				'remote' => [
+					'url' => AjaxController::to('search')."?term=QUERY&alias={$alias}",
+					'wildcard' => 'QUERY'
+				]
+			];
+		}
+		return $dataset;
 	}
 }
