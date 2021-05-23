@@ -134,6 +134,21 @@ $config = [
 				'@app/controllers/api' => 'api'
 			],
 			'grantAll' => [1]/*User ids, that receive all permissions by default*/
+		],
+		'assetManager' => [
+			'bundles' => [
+				BootstrapPluginAsset::class => [
+					'js'=>[]
+				],
+				BootstrapAsset::class => [
+					'css' => [],
+				],
+				DialogBootstrapAsset::class => [
+					'depends' => [
+						SmartAdminThemeAssets::class
+					]
+				]
+			]
 		]
 	],
 	'params' => $params,

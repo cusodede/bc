@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
@@ -15,14 +15,11 @@ use yii\widgets\ActiveForm;
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'header' => 'Новый пользователь',
+	'title' => 'Новый пользователь',
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => "{$model->formName()}-modal-create"
 	]),//post button outside the form
-	'clientOptions' => [
-		'backdrop' => true
-	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]
