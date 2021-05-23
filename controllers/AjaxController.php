@@ -3,10 +3,6 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\TemporaryHelper;
-use app\models\sys\permissions\Permissions;
-use app\models\sys\permissions\PermissionsCollections;
-use app\models\sys\users\Users;
 use app\widgets\search\SearchHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\core\traits\ControllerTrait;
@@ -61,68 +57,6 @@ class AjaxController extends Controller {
 				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.attributes"));
 		}
 		return [];
-	}
-
-	/**
-	 * Аяксовый поиск пользователя в глобальной искалке
-	 * @param string|null $term
-	 * @param int $limit
-	 * @return string[][]
-	 */
-	public function actionSearchUsers(?string $term, int $limit = 5):array {
-		$tableName = Users::tableName();
-		$t_term = TemporaryHelper::SwitchKeyboard($term);
-		return Users::find()
-			->select(["{$tableName}.id", "{$tableName}.username as name"])
-			->orWhere(['like', "{$tableName}.username", "%$term%", false])
-			->orWhere(['like', "{$tableName}.username", "%$t_term%", false])
-			->active()
-			->distinct()
-			->limit($limit)
-			->asArray()
-			->all();
-	}
-
-	/**
-	 * Аяксовый поиск доступа по имени в глобальной искалке
-	 * @param string|null $term
-	 * @param int $limit
-	 * @return string[][]
-	 */
-	public function actionSearchPermissions(?string $term, int $limit = 5):array {
-		$tableName = Permissions::tableName();
-		$t_term = TemporaryHelper::SwitchKeyboard($term);
-		return Permissions::find()
-			->select(["{$tableName}.id", "{$tableName}.name as name", "{$tableName}.controller as controller"])
-			->orWhere(['like', "{$tableName}.name", "%$term%", false])
-			->orWhere(['like', "{$tableName}.controller", "%$term%", false])
-			->orWhere(['like', "{$tableName}.name", "%$t_term%", false])
-			->orWhere(['like', "{$tableName}.controller", "%$t_term%", false])
-			->active()
-			->distinct()
-			->limit($limit)
-			->asArray()
-			->all();
-	}
-
-	/**
-	 * Аяксовый поиск группы доступов по имени в глобальной искалке
-	 * @param string|null $term
-	 * @param int $limit
-	 * @return string[][]
-	 */
-	public function actionSearchPermissionsCollections(?string $term, int $limit = 5):array {
-		$tableName = PermissionsCollections::tableName();
-		$t_term = TemporaryHelper::SwitchKeyboard($term);
-		return PermissionsCollections::find()
-			->select(["{$tableName}.id", "{$tableName}.name as name"])
-			->orWhere(['like', "{$tableName}.name", "%$term%", false])
-			->orWhere(['like', "{$tableName}.name", "%$t_term%", false])
-			->active()
-			->distinct()
-			->limit($limit)
-			->asArray()
-			->all();
 	}
 
 	/**
