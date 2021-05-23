@@ -61,20 +61,12 @@ class CheckboxWidget extends YiiInputWidget
 		$render = Html::beginTag('div', $this->wrapperOptions);
 
 		if ($this->hasModel()) {
-			$label = Html::activeLabel(
-				$this->model,
-				$this->attribute,
-				$this->labelOptions
-			);
+			$label = Html::activeLabel($this->model, $this->attribute, $this->labelOptions);
 		} else {
 			//null, т.к. логика отрисовки лейбла для обычного чекбокса отличается
 			$this->checkboxOptions['label'] = null;
 
-			$label = Html::label(
-				$this->options['label'],
-				$this->options['id'],
-				$this->labelOptions
-			);
+			$label = Html::label($this->options['label'], $this->options['id'], $this->labelOptions);
 		}
 
 		$this->options = ArrayHelper::merge($this->options, $this->checkboxOptions);
