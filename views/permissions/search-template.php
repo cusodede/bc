@@ -14,7 +14,7 @@ use yii\base\View;
 	<div class="clearfix"></div>
 	<div class="suggestion-secondary">{{controller}}</div>
 	<div class="suggestion-links">
-		<a href="<?= PermissionsController::to('edit') ?>'?id={{id}}"
+		<a href="<?= PermissionsController::to('edit') ?>?id={{id}}"
 		   class="dashboard-button btn btn-xs btn-info pull-left">Редактировать<a/>
 	</div>
 	<div class="clearfix"></div>
