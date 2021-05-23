@@ -17,8 +17,8 @@ class SearchHelper {
 
 	public const SEARCH_TYPE_EQUAL = '=';
 	public const SEARCH_TYPE_LIKE = 'like';
-	public const SEARCH_TYPE_LIKE_START = '%like';
-	public const SEARCH_TYPE_LIKE_FINISH = 'like%';
+	public const SEARCH_TYPE_LIKE_BEGINNING = '%like';
+	public const SEARCH_TYPE_LIKE_ENDING = 'like%';
 
 	/**
 	 * @param string $modelClass
@@ -79,12 +79,12 @@ class SearchHelper {
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$term%", false]);
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTerm%", false]);
 				break;
-				case self::SEARCH_TYPE_LIKE_START:
+				case self::SEARCH_TYPE_LIKE_BEGINNING:
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$term", false]);
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "%$swTerm", false]);
 
 				break;
-				case self::SEARCH_TYPE_LIKE_FINISH:
+				case self::SEARCH_TYPE_LIKE_ENDING:
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$term%", false]);
 					$searchQuery->orWhere(["like", "{$tableName}.{$searchAttribute}", "$swTerm%", false]);
 				break;
