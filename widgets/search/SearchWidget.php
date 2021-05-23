@@ -46,9 +46,11 @@ class SearchWidget extends Widget {
 		$dataset = [];
 		$searchConfig = ArrayHelper::getValue(Yii::$app, 'params.searchConfig', []);
 		foreach ($searchConfig as $alias => $config) {
-			if (null === $templateString = str_replace(["\r", "\n", "\t"], '', ArrayHelper::getValue($config, 'template'))) {
-				$templateString = str_replace(["\r", "\n", "\t"], '', $this->render(ArrayHelper::getValue($config, 'templateView', self::DEFAULT_TEMPLATE_VIEW)));
+			if (null === $templateString = ArrayHelper::getValue($config, 'template')) {
+				$templateString = $this->render(ArrayHelper::getValue($config, 'templateView', self::DEFAULT_TEMPLATE_VIEW));
 			}
+
+			$templateString = str_replace(["\r", "\n", "\t"], '', $templateString);
 
 			$dataset[] = [
 				'limit' => ArrayHelper::getValue($config, 'limit', self::DEFAULT_LIMIT),
