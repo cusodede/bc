@@ -33,8 +33,11 @@ class SearchWidget extends Widget {
 	 * @throws Exception
 	 */
 	public function run():string {
+		if ([] === $dataset = $this->prepareDataset()) {
+			return '';
+		}
 		return $this->render('search', [
-			'dataset' => $this->prepareDataset()
+			'dataset' => $dataset
 		]);
 	}
 
