@@ -15,9 +15,6 @@ use yii\web\View;
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-profile-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'clientOptions' => [
-		'backdrop' => true
-	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]

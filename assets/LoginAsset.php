@@ -25,6 +25,7 @@ class LoginAsset extends AssetBundle {
 		$this->depends = [
 			AppAsset::class,
 			YiiAsset::class,
+			SmartAdminThemeAssets::class
 		];
 
 		$this->publishOptions = [

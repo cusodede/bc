@@ -13,9 +13,13 @@ use yii\bootstrap4\Html;
 
 $this->title = 'Восстановление пароля';
 ?>
-<div class="panel">
-	<div class="panel-body">
-		На указанный адрес выслано письмо с инструкциями по восстановлению пароля.
-		<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link mar-lft']) ?>
+<div class="row">
+	<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 m-auto">
+		<div class="card p-4 rounded-plus bg-faded">
+			На указанный адрес выслано письмо с инструкциями по восстановлению пароля.
+			<div class="text-right mt-1">
+				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
+			</div>
+		</div>
 	</div>
 </div>

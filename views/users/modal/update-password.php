@@ -16,9 +16,6 @@ use yii\bootstrap4\ActiveForm;
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-update-password-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'clientOptions' => [
-		'backdrop' => true
-	],
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => "{$model->formName()}-modal-update-password"

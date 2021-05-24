@@ -16,7 +16,7 @@ use yii\bootstrap4\ActiveForm;
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'header' => BadgeWidget::widget([
+	'title' => BadgeWidget::widget([
 		'items' => $model,
 		'subItem' => 'name'
 	]),
@@ -24,9 +24,6 @@ use yii\bootstrap4\ActiveForm;
 		'model' => $model,
 		'form' => "{$model->formName()}-modal-create"
 	]),//post button outside the form
-	'clientOptions' => [
-		'backdrop' => true
-	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]

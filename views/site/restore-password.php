@@ -15,14 +15,21 @@ use yii\bootstrap4\Html;
 
 $this->title = 'Восстановление пароля';
 ?>
-<div class="panel">
-	<div class="panel-body">
-		<?php $form = ActiveForm::begin(); ?>
-		<div class="form-group">
-			<?= $form->field($model, 'email')->passwordInput(['placeholder' => 'Почтовый адрес, указанный при регистрации']) ?>
+
+<div class="row">
+	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
+		<div class="card p-4 rounded-plus bg-faded">
+			<?php $form = ActiveForm::begin(); ?>
+
+			<?= $form->field($model, 'email')->passwordInput() ?>
+
+			<?= Html::submitButton('Восстановить пароль', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
+
+			<?php ActiveForm::end(); ?>
+
+			<div class="text-right mt-1">
+				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
+			</div>
 		</div>
-		<?= Html::submitButton('Восстановить пароль', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
-		<?php ActiveForm::end(); ?>
-		<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link mar-lft']) ?>
 	</div>
 </div>

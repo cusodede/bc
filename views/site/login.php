@@ -16,21 +16,23 @@ use yii\bootstrap4\Html;
 
 $this->title = 'Вход';
 ?>
-<div class="panel">
-	<div class="panel-body">
-		<?php $form = ActiveForm::begin(); ?>
-		<div class="form-group">
+<div class="row">
+	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
+		<div class="card p-4 rounded-plus bg-faded">
+			<?php $form = ActiveForm::begin(); ?>
+
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
-		</div>
-		<div class="form-group">
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
-		</div>
-		<div class="form-group">
 			<?= $form->field($login, 'rememberMe')->checkbox() ?>
+
+			<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
+
+			<?php ActiveForm::end(); ?>
+
+			<div class="mt-1 ">
+				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link fa-pull-left text-left']) ?>
+				<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link fa-pull-right text-right']) ?>
+			</div>
 		</div>
-		<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
-		<?php ActiveForm::end(); ?>
-		<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link mar-rgt']) ?>
-		<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link mar-lft']) ?>
 	</div>
 </div>

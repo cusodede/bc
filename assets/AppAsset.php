@@ -30,7 +30,6 @@ class AppAsset extends AssetBundle {
 
 		$this->depends = [
 			YiiAsset::class,
-			BootstrapAsset::class,
 		];
 
 		$this->publishOptions = [
