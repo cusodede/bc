@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
@@ -12,7 +13,9 @@ use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
 
-echo SideBarWidget::widget([
+?>
+
+<?= SideBarWidget::widget([
 	'items' => [
 		[
 			'label' => 'Домой',
@@ -52,23 +55,27 @@ echo SideBarWidget::widget([
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => [ReferencesModule::to('references')]
+					'url' => ReferencesModule::to('references')
 				],
 				[
 					'label' => 'Протокол сбоев',
-					'url' => [SysExceptionsModule::to('index')]
+					'url' => SysExceptionsModule::to('index')
 				],
 				[
 					'label' => 'Процессы на БД',
-					'url' => [DbController::to('process-list')]
+					'url' => DbController::to('process-list')
 				],
 				[
 					'label' => 'Файловый менеджер',
-					'url' => [FSModule::to('index')]
+					'url' => FSModule::to('index')
 				],
 				[
 					'label' => 'История изменений',
-					'url' => [HistoryModule::to('index')]
+					'url' => HistoryModule::to('index')
+				],
+				[
+					'label' => 'Настройки системы',
+					'url' => SiteController::to('options')
 				]
 			],
 		],
@@ -85,3 +92,4 @@ echo SideBarWidget::widget([
 		],
 	]
 ]);
+?>
