@@ -210,6 +210,7 @@ class DefaultController extends Controller {
 	/**
 	 * Аяксовый поиск в Select2
 	 * @param string|null $term
+	 * @param string $column
 	 * @return string[][]
 	 */
 	public function actionAjaxSearch(?string $term, string $column = 'name'):array {
