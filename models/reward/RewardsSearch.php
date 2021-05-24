@@ -6,9 +6,11 @@ namespace app\models\reward;
 use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
 use app\models\reward\active_record\RewardsAR;
+use app\modules\status\models\Status;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use app\models\sys\users\Users;
+use yii\db\ActiveQuery;
 
 /**
  * Class RewardsSearch
@@ -20,15 +22,29 @@ final class RewardsSearch extends RewardsAR {
 	public ?string $userName = null;
 	public ?string $ruleName = null;
 
+	public $currentStatus;
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
-			[['id', 'value', 'deleted', 'operation'], 'integer'],
+			[['id', 'value', 'deleted', 'operation', 'currentStatus'], 'integer'],
 			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
-			[['userName', 'ruleName'], 'string', 'max' => 255]
+			[['userName', 'ruleName'], 'string', 'max' => 255],
+			[['currentStatus'], 'filter', 'filter' => static function($value) {
+				return ('' === $value || null === $value)?null:(int)$value;
+			}],
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelStatus():ActiveQuery {
+		return $this->hasOne(Status::class, [
+			'model_key' => 'id'
+		])->andOnCondition(['model_name' => Rewards::class]);
 	}
 
 	/**
@@ -44,7 +60,7 @@ final class RewardsSearch extends RewardsAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['relStatus','relatedUser', 'refRewardOperation', 'refRewardRule']);
+		$query->joinWith(['relStatus', 'relatedUser', 'refRewardOperation', 'refRewardRule']);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -64,6 +80,8 @@ final class RewardsSearch extends RewardsAR {
 			->andFilterWhere([self::tableName().'.operation' => $this->operation])
 			->andFilterWhere(['like', RefRewardRules::tableName().'.name', $this->ruleName])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
+			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
+			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted]);
 	}
 
