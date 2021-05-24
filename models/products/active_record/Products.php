@@ -15,6 +15,7 @@ use Yii;
  *
  * @property int $id
  * @property string $name Название продукта
+ * @property float $price
  * @property string|null $description Описание продукта
  * @property int|null $type_id id типа (подписка, бандл и т.д)
  * @property int $user_id id пользователя, создателя
@@ -47,6 +48,7 @@ class Products extends ActiveRecord
 			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute} продукта.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
+			[['price'], 'number'],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
@@ -70,6 +72,7 @@ class Products extends ActiveRecord
 			'deleted' => 'Флаг удаления',
 			'created_at' => 'Дата создания',
 			'updated_at' => 'Дата обновления',
+			'price' => 'Цена',
 		];
 	}
 

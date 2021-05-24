@@ -18,6 +18,7 @@ use yii\helpers\Url;
 use app\controllers\DbController;
 use app\controllers\PartnersController;
 use app\controllers\ProductsController;
+use app\controllers\SubscriptionsController;
 
 echo SideBarWidget::widget([
 	'items' => [
@@ -39,6 +40,10 @@ echo SideBarWidget::widget([
 				[
 					'label' => 'Все продукты',
 					'url' => [ProductsController::to('index')]
+				],
+				[
+					'label' => 'Подписки',
+					'url' => [SubscriptionsController::to('index')]
 				]
 			],
 		],

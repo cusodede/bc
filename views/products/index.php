@@ -27,6 +27,9 @@ use app\models\partners\Partners;
 use pozitronik\helpers\ArrayHelper;
 
 ModalHelperAsset::register($this);
+$this->title = 'Продукты';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <?= GridConfig::widget([
 	'id' => "{$modelName}-index-grid",
@@ -70,6 +73,7 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			'name',
+			'price',
 			[
 				'filter' => Select2::widget([
 					'model' => $searchModel,

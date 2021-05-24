@@ -21,9 +21,11 @@ use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\select2\Select2;
+use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 
 ModalHelperAsset::register($this);
-$this->title = 'Партнеры';
+$this->title = 'Подписки';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -33,14 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['партнер', 'партнера', 'партнеров']). ')' : ' (нет партнеров)'),
+			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['подписка', 'подписки', 'подписок']). ')' : ' (нет подписок)'),
 		],
-		'summary' => null !== $searchModel ? Html::a('Добавить партнера', $controller::to('create'), [
+		'summary' => null !== $searchModel ? Html::a('Создать подписку', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
+		]) : null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Добавить партнера', $controller::to('create'), [
+		'emptyText' => Html::a('Создать подписку', $controller::to('create'), [
 			'class' => 'btn btn-success',
 			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
 		]),
@@ -68,8 +70,40 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			'id',
-			'name',
-			'inn',
+			[
+				'attribute' => 'partner_id',
+				'value' => 'product.name',
+				'label' => 'Наименование продукта'
+			],
+			[
+				'attribute' => 'partner_id',
+				'value' => 'product.partner.name',
+				'label' => 'Партнер'
+			],
+			[
+				'attribute' => 'price',
+				'value' => 'product.price',
+				'label' => 'Стоимость'
+			],
+			[
+				'attribute' => 'trial',
+				'label' => 'Триальный период',
+				'format' => 'boolean',
+			],
+			[
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'category_id',
+					'data' => RefSubscriptionCategories::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
+				'attribute' => 'category_id',
+				'format' => 'text',
+				'value' => 'category.name',
+			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',

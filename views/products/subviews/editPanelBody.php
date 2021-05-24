@@ -24,6 +24,11 @@ use app\models\partners\Partners;
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?= $form->field($model, 'description')->textarea() ?>
 	</div>
 </div>
