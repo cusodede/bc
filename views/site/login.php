@@ -10,9 +10,8 @@ declare(strict_types = 1);
  */
 
 use app\models\site\LoginForm;
-use app\widgets\smartadmin\checkbox\CheckboxWidget;
+use yii\bootstrap4\ActiveForm;
 use yii\web\View;
-use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = 'Вход';
@@ -24,14 +23,15 @@ $this->title = 'Вход';
 
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
-			<?= $form->field($login, 'rememberMe')->widget(CheckboxWidget::class) ?>
+			<?= $form->field($login, 'rememberMe')->checkbox() ?>
 
 			<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 
 			<?php ActiveForm::end(); ?>
 
-			<div class="text-right mt-1">
-				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link']) ?>
+			<div class="mt-1 ">
+				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link fa-pull-left text-left']) ?>
+				<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link fa-pull-right text-right']) ?>
 			</div>
 		</div>
 	</div>
