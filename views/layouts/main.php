@@ -8,9 +8,10 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\assets\SmartAdminThemeAssets;
+use app\controllers\SiteController;
+use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 SmartAdminThemeAssets::register($this);
@@ -39,22 +40,40 @@ ModalHelperAsset::register($this);
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
+				<div class="subheader fa-pull-left" style="margin-bottom: unset">
+					<h1 class="subheader-title">
+						<?= $this->title ?>
+					</h1>
+				</div>
+				<div class="subheader fa-pull-left" style="margin-bottom: unset">
+					<?= $this->render('subviews/breadcrumbs') ?>
+				</div>
+
 				<div class="ml-auto d-flex">
+					<div class="subheader fa-pull-right" style="margin-bottom: unset">
+						<?= SearchWidget::widget() ?>
+					</div>
 					<div>
-						<a href="<?= Url::to(['/site/logout']) ?>" class="header-icon" data-toggle="tooltip"
-						   data-placement="left" title="" data-original-title="Выйти из системы">
-							<i class="fal fa-sign-out"></i>
-						</a>
+						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
+							'class' => "header-icon",
+							'data-toggle' => "tooltip",
+							'data-placement' => "bottom",
+							'title' => "",
+							'data-original-title' => "Выйти из системы"
+						]) ?>
 					</div>
 				</div>
 			</header>
 			<main id="js-page-content" class="page-content" role="main">
-				<?= $this->render('subviews/breadcrumbs') ?>
 				<div class="subheader">
 					<h1 class="subheader-title">
 						<?= $this->title ?>
 					</h1>
 				</div>
+				<div>
+					<?= $this->render('subviews/breadcrumbs') ?>
+				</div>
+
 				<?= $content ?>
 			</main>
 			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
