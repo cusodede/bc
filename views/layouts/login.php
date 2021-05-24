@@ -37,7 +37,7 @@ LoginAsset::register($this);
 					<div
 						class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0">
 						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-							<img src="/img/theme/logo-bee.png" alt="SmartAdmin WebApp" aria-roledescription="logo">
+							<img src="/img/theme/logo-bee.png" alt="<?= Yii::$app->name ?>" aria-roledescription="logo">
 							<span class="page-logo-text mr-1"><?= Yii::$app->name ?></span>
 						</a>
 					</div>
@@ -48,7 +48,7 @@ LoginAsset::register($this);
 				<div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
 					<?= $content ?>
 					<div class="position-absolute pos-bottom pos-left pos-right p-3 text-center">
-						<?= date('Y') . ' © ' . Yii::$app->name ?>
+						<?= date('Y').' © '.Yii::$app->name ?>
 					</div>
 				</div>
 			</div>
