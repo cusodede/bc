@@ -14,6 +14,7 @@ use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 use app\modules\status\models\StatusRulesModel;
+use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
@@ -96,13 +97,17 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
+				'class' => DataColumn::class,
 				'attribute' => 'currentStatus',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->currentStatus,
-						'subItem' => 'name'
+						'items' => Rewards::findOne($model->id),
+						'subItem' => 'currentStatus.name'
 					]);
 				},
+				'format' => 'raw',
+				'filterType' => GridView::FILTER_SELECT2,
+				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name')
 			],
 			[
 				'attribute' => 'operationName',
