@@ -12,4 +12,4 @@ use yii\widgets\Breadcrumbs;
 	'links' => $this->params['breadcrumbs']??[],
 	'itemTemplate' => "<li class='breadcrumb-item'>{link}</li>\n",
 	'activeItemTemplate' => "<li class='breadcrumb-item active'>{link}</li>\n"
-]);
+]) ?>

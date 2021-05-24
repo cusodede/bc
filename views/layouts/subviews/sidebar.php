@@ -91,5 +91,4 @@ use app\controllers\DbController;
 			]
 		],
 	]
-]);
-?>
+]) ?>
