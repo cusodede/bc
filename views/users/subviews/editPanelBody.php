@@ -10,7 +10,7 @@ declare(strict_types = 1);
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\users\Users;
-use dosamigos\multiselect\MultiSelectListBox;
+use cusodede\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
 use yii\web\View;
