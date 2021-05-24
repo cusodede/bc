@@ -29,3 +29,7 @@
 .suggestion-links {
 	float: right;
 }
+
+.tt-menu {
+	z-index: 10000!important;
+}
