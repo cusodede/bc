@@ -22,7 +22,7 @@ use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;

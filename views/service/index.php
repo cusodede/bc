@@ -6,7 +6,7 @@ declare(strict_types = 1);
  */
 
 use yii\bootstrap4\Button;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>

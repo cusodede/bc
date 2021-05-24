@@ -13,7 +13,7 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
 use cusodede\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 $this->registerCss(".ms-container {width:100%}");

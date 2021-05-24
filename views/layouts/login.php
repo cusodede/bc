@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\LoginAsset;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 LoginAsset::register($this);

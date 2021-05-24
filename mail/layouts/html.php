@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\mail\MessageInterface;
 use yii\web\View;
 

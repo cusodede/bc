@@ -19,7 +19,7 @@ use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 use app\assets\PermissionsCollectionsAsset;
