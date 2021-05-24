@@ -8,14 +8,16 @@ declare(strict_types = 1);
  */
 
 use app\controllers\UsersController;
-use app\models\reward\active_record\references\RefRewardStatuses;
 use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
 use app\models\reward\Rewards;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
+use app\modules\status\models\StatusRulesModel;
 use  app\models\sys\users\Users;
+use kartik\select2\Select2;
 use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;
+use yii\helpers\ArrayHelper;
 use yii\web\View;
 
 ?>
@@ -38,8 +40,12 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'status')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRewardStatuses::class
+		<?= $form->field($model, 'currentStatusId')->widget(Select2::class, [
+			'data' => ArrayHelper::map(
+				$model->getAvailableStatuses(),
+				'id',
+				'name'
+			)
 		]) ?>
 	</div>
 </div>

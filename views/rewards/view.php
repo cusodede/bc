@@ -21,16 +21,6 @@ use yii\widgets\DetailView;
 		'create_date',
 		'value',
 		[
-			'attribute' => 'status',
-			'format' => 'raw',
-			'value' => static function(RewardsAR $model):string {
-				return BadgeWidget::widget([
-					'items' => $model->refRewardStatus,
-					'subItem' => 'name'
-				]);
-			}
-		],
-		[
 			'attribute' => 'operation',
 			'format' => 'raw',
 			'value' => static function(RewardsAR $model):string {

@@ -5,7 +5,6 @@ namespace app\models\reward;
 
 use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
-use app\models\reward\active_record\references\RefRewardStatuses;
 use app\models\reward\active_record\RewardsAR;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
@@ -26,7 +25,7 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	public function rules():array {
 		return [
-			[['id', 'value', 'deleted', 'status', 'operation'], 'integer'],
+			[['id', 'value', 'deleted', 'operation'], 'integer'],
 			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
 			[['userName', 'ruleName'], 'string', 'max' => 255]
 		];
@@ -45,7 +44,7 @@ final class RewardsSearch extends RewardsAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['relatedUser', 'refRewardStatus', 'refRewardOperation', 'refRewardRule']);
+		$query->joinWith(['relStatus','relatedUser', 'refRewardOperation', 'refRewardRule']);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -62,7 +61,6 @@ final class RewardsSearch extends RewardsAR {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere([self::tableName().'.value' => $this->value])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
-			->andFilterWhere([self::tableName().'.status' => $this->status])
 			->andFilterWhere([self::tableName().'.operation' => $this->operation])
 			->andFilterWhere(['like', RefRewardRules::tableName().'.name', $this->ruleName])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
@@ -80,10 +78,6 @@ final class RewardsSearch extends RewardsAR {
 				'value',
 				'create_date',
 				'deleted',
-				'statusName' => [
-					'asc' => [RefRewardStatuses::tableName().'.name' => SORT_ASC],
-					'desc' => [RefRewardStatuses::tableName().'.name' => SORT_DESC]
-				],
 				'operationName' => [
 					'asc' => [RefRewardOperations::tableName().'.name' => SORT_ASC],
 					'desc' => [RefRewardOperations::tableName().'.name' => SORT_DESC]
@@ -107,7 +101,6 @@ final class RewardsSearch extends RewardsAR {
 		return self::find()
 			->select([
 				self::tableName().'.*',
-				RefRewardStatuses::tableName().'.name  AS statusName',
 				RefRewardOperations::tableName().'.name  AS operationName',
 				RefRewardRules::tableName().'.name  AS ruleName',
 				Users::tableName().'.username  AS userName',

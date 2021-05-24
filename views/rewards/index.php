@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Rewards $searchModel
+ * @var RewardsSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
@@ -11,14 +11,15 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\models\reward\active_record\references\RefRewardOperations;
-use app\models\reward\active_record\references\RefRewardStatuses;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
+use app\modules\status\models\StatusRulesModel;
 use kartik\grid\GridView;
 use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
+use pozitronik\helpers\ArrayHelper;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
@@ -95,23 +96,13 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'statusName',
-				'format' => 'raw',
+				'attribute' => 'currentStatus',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refRewardStatus,
+						'items' => $model->currentStatus,
 						'subItem' => 'name'
 					]);
 				},
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'status',
-					'data' => RefRewardStatuses::mapData(),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				])
 			],
 			[
 				'attribute' => 'operationName',
