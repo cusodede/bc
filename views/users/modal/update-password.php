@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
