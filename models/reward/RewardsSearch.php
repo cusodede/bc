@@ -51,20 +51,41 @@ final class RewardsSearch extends RewardsAR {
 	}
 
 	/**
+	 * @param LCQuery $query
+	 * @throws Throwable
+	 */
+	private function initQuery(LCQuery $query):void {
+		$query->select([
+			self::tableName().'.*',
+			RefRewardOperations::tableName().'.name AS operationName',
+			RefRewardRules::tableName().'.name AS ruleName',
+			Users::tableName().'.username AS userName',
+			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
+				StatusRulesModel::getAllStatuses(Rewards::class),
+				'id',
+				'name'
+			))."') AS currentStatus"
+		])
+			->distinct()
+			->active();
+	}
+
+	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 * @throws Throwable
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = $this->setQuery();
+		$query = self::find();
+		$query->joinWith(['relStatus', 'relatedUser', 'refRewardOperation', 'refRewardRule']);
+		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
 		]);
 
 		$this->setSort($dataProvider);
-		$this->load($params);
-		$query->joinWith(['relStatus', 'relatedUser', 'refRewardOperation', 'refRewardRule']);
+		$this->load($params);;
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -118,27 +139,6 @@ final class RewardsSearch extends RewardsAR {
 				]
 			],
 		]);
-	}
-
-	/**
-	 * @return LCQuery
-	 * @throws Throwable
-	 */
-	private function setQuery():LCQuery {
-		return self::find()
-			->select([
-				self::tableName().'.*',
-				RefRewardOperations::tableName().'.name  AS operationName',
-				RefRewardRules::tableName().'.name  AS ruleName',
-				Users::tableName().'.username  AS userName',
-				"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
-					StatusRulesModel::getAllStatuses(Rewards::class),
-					'id',
-					'name'
-				))."') AS currentStatus"
-			])
-			->distinct()
-			->active();
 	}
 
 }
