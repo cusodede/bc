@@ -92,7 +92,8 @@ ModalHelperAsset::register($this);
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->relatedUser,
-						'subItem' => 'username'
+						'subItem' => 'username',
+						'useBadges' => false
 					]);
 				}
 			],
@@ -100,12 +101,6 @@ ModalHelperAsset::register($this);
 				'class' => DataColumn::class,
 				'attribute' => 'currentStatus',
 				'format' => 'raw',
-				'value' => static function(RewardsSearch $model):string {
-					return BadgeWidget::widget([
-						'items' => Rewards::findOne($model->id),
-						'subItem' => 'currentStatus.name'
-					]);
-				},
 				'filterType' => GridView::FILTER_SELECT2,
 				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name'),
 				'filterWidgetOptions' => [
@@ -118,7 +113,8 @@ ModalHelperAsset::register($this);
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refRewardOperation,
-						'subItem' => 'name'
+						'subItem' => 'name',
+						'useBadges' => false
 					]);
 				},
 				'filter' => Select2::widget([
@@ -137,7 +133,8 @@ ModalHelperAsset::register($this);
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refRewardRule,
-						'subItem' => 'name'
+						'subItem' => 'name',
+						'useBadges' => false
 					]);
 				}
 			],
