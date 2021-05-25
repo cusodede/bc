@@ -60,6 +60,7 @@ final class RewardsSearch extends RewardsAR {
 			RefRewardOperations::tableName().'.name AS operationName',
 			RefRewardRules::tableName().'.name AS ruleName',
 			Users::tableName().'.username AS userName',
+			/*Так обеспечивается наполнение атрибута + алфавитная сортировка*/
 			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
 				StatusRulesModel::getAllStatuses(Rewards::class),
 				'id',
