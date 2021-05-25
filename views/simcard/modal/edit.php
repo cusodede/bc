@@ -7,9 +7,9 @@ declare(strict_types = 1);
  */
 use pozitronik\widgets\BadgeWidget;
 use app\models\product\SimCard;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 $modelName = $model->formName();
 ?>
@@ -17,7 +17,7 @@ $modelName = $model->formName();
 Modal::begin([
 	'id' => "{$modelName}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'header' => BadgeWidget::widget([
+	'title' => BadgeWidget::widget([
 		'items' => $model,
 		'subItem' => 'id'
 	]),

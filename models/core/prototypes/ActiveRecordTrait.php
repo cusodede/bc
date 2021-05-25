@@ -10,7 +10,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Exception as DbException;
 use yii\db\Transaction;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /**
  * Trait ActiveRecordTrait

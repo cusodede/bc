@@ -18,7 +18,7 @@ use kartik\select2\Select2;
 use yii\db\ActiveRecord;
 use yii\bootstrap4\Html;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 ?>
 
