@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace app\assets;
 
@@ -9,14 +9,15 @@ use yii\web\YiiAsset;
 
 /**
  * Class SmartAdminThemeWidgetAssets
- * @package app\widgets
  */
-class SmartAdminThemeAssets extends AssetBundle
-{
-	public function init(): void
-	{
+class SmartAdminThemeAssets extends AssetBundle {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function init():void {
 		$this->depends = [YiiAsset::class];
-		$this->sourcePath = __DIR__ . '/assets/theme';
+		$this->sourcePath = __DIR__.'/assets/theme';
 		$this->css = [
 			'css/vendors.bundle.css',
 			'css/app.bundle.css',
