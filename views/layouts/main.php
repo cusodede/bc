@@ -40,6 +40,23 @@ ModalHelperAsset::register($this);
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
+				<div class="hidden-md-down dropdown-icon-menu position-relative">
+					<a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Скрыть меню">
+						<i class="ni ni-menu"></i>
+					</a>
+					<ul>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Свернуть меню">
+								<i class="ni ni-minify-nav"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Закрепить меню">
+								<i class="ni ni-lock-nav"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
 				<div class="subheader fa-pull-left mb-0 mr-2">
 					<h1 class="subheader-title">
 						<?= $this->title ?>
