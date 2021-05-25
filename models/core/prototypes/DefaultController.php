@@ -75,7 +75,7 @@ class DefaultController extends Controller {
 			if ($file->isFile() && 'php' === $file->getExtension() && null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) {
 				$items[] = [
 					'label' => $model->id,
-					'url' => $model::to($model->defaultAction)
+					'url' => [$model::to($model->defaultAction)]
 				];
 			}
 		}
