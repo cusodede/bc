@@ -58,7 +58,7 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}',
 				'buttons' => [
 					'edit' => static function(string $url, PermissionsCollections $model) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},

@@ -50,12 +50,12 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}{view}',
 				'buttons' => [
 					'edit' => static function(string $url, Model $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'view' => static function(string $url, Model $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+						return Html::a('<i class="fa fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
