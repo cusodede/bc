@@ -9,3 +9,7 @@ nav ul li {
 .nav > li > a {
 	padding: 5px 10px;
 }
+
+.subheader .breadcrumb {
+	margin-bottom: 0;
+}
