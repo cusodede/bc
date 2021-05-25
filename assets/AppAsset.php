@@ -30,6 +30,8 @@ class AppAsset extends AssetBundle {
 
 		$this->depends = [
 			YiiAsset::class,
+			BootstrapAsset::class,
+			SmartAdminThemeAssets::class
 		];
 
 		$this->publishOptions = [
