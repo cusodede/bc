@@ -45,12 +45,12 @@ ModalHelperAsset::register($this);
 						<?= $this->title ?>
 					</h1>
 				</div>
-				<div class="subheader fa-pull-left" style="margin-bottom: 0">
+				<div class="subheader fa-pull-left mb-0">
 					<?= $this->render('subviews/breadcrumbs') ?>
 				</div>
 
 				<div class="ml-auto d-flex">
-					<div class="subheader fa-pull-right" style="margin-bottom: unset">
+					<div class="subheader fa-pull-right mb-0">
 						<?= SearchWidget::widget() ?>
 					</div>
 					<div>
