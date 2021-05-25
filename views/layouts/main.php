@@ -8,25 +8,11 @@ declare(strict_types = 1);
 
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
-use app\controllers\PermissionsCollectionsController;
-use app\controllers\PermissionsController;
 use app\controllers\SiteController;
-use app\controllers\UsersController;
-use app\models\sys\users\Users;
-use app\modules\history\HistoryModule;
 use app\widgets\search\SearchWidget;
-use pozitronik\filestorage\FSModule;
 use pozitronik\helpers\Utils;
-use pozitronik\references\ReferencesModule;
-use pozitronik\sys_exceptions\SysExceptionsModule;
-use yii\bootstrap4\Nav;
-use yii\bootstrap4\NavBar;
-use yii\helpers\ArrayHelper;
 use yii\bootstrap4\Html;
-use yii\helpers\Url;
-use yii\web\JsExpression;
 use yii\web\View;
-use app\controllers\DbController;
 
 AppAsset::register($this);
 ModalHelperAsset::register($this);
@@ -54,12 +40,12 @@ ModalHelperAsset::register($this);
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
-				<div class="subheader fa-pull-left" style="margin-bottom: unset">
+				<div class="subheader fa-pull-left mb-0 mr-2">
 					<h1 class="subheader-title">
 						<?= $this->title ?>
 					</h1>
 				</div>
-				<div class="subheader fa-pull-left" style="margin-bottom: unset">
+				<div class="subheader fa-pull-left" style="margin-bottom: 0">
 					<?= $this->render('subviews/breadcrumbs') ?>
 				</div>
 
@@ -79,15 +65,6 @@ ModalHelperAsset::register($this);
 				</div>
 			</header>
 			<main id="js-page-content" class="page-content" role="main">
-				<div class="subheader">
-					<h1 class="subheader-title">
-						<?= $this->title ?>
-					</h1>
-				</div>
-				<div>
-					<?= $this->render('subviews/breadcrumbs') ?>
-				</div>
-
 				<?= $content ?>
 			</main>
 			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
