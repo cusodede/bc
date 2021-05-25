@@ -11,18 +11,19 @@ use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class RewardsSearch
  * @property null|string $userName
  * @property null|string $ruleName
+ * @property null|string $currentStatus
  */
 final class RewardsSearch extends RewardsAR {
 
 	public ?string $userName = null;
 	public ?string $ruleName = null;
-
-	public $currentStatus;
+	public ?string $currentStatus = null;
 
 	/**
 	 * {@inheritdoc}
@@ -96,6 +97,10 @@ final class RewardsSearch extends RewardsAR {
 				'value',
 				'create_date',
 				'deleted',
+				'currentStatus' => [
+					'asc' => ['currentStatus' => SORT_ASC],
+					'desc' => ['currentStatus' => SORT_DESC]
+				],
 				'operationName' => [
 					'asc' => [RefRewardOperations::tableName().'.name' => SORT_ASC],
 					'desc' => [RefRewardOperations::tableName().'.name' => SORT_DESC]
@@ -122,6 +127,11 @@ final class RewardsSearch extends RewardsAR {
 				RefRewardOperations::tableName().'.name  AS operationName',
 				RefRewardRules::tableName().'.name  AS ruleName',
 				Users::tableName().'.username  AS userName',
+				"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
+					(new Rewards())->getAvailableStatuses(),
+					'id',
+					'name'
+				))."') AS currentStatus"
 			])
 			->distinct()
 			->active();

@@ -99,15 +99,26 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'currentStatus',
+				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => Rewards::findOne($model->id),
 						'subItem' => 'currentStatus.name'
 					]);
 				},
-				'format' => 'raw',
-				'filterType' => GridView::FILTER_SELECT2,
-				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name')
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'currentStatus',
+					'data' => ArrayHelper::map(
+						StatusRulesModel::getAllStatuses(Rewards::class),
+						'id',
+						'name'
+					),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
 				'attribute' => 'operationName',
