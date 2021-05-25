@@ -466,9 +466,7 @@
     <inspection_tool class="PhpDisabledQualityToolComposerInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpDivisionByZeroInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpFieldCanBePromotedInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
-    <inspection_tool class="PhpFullyQualifiedNameUsageInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="IGNORE_GLOBAL_NAMESPACE" value="true" />
-    </inspection_tool>
+    <inspection_tool class="PhpFullyQualifiedNameUsageInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpFunctionNamingConventionInspection" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_maxLength" value="20" />
     </inspection_tool>
