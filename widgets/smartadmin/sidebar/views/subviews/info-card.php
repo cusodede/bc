@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
+use yii\web\JsExpression;
 
 ?>
 <div class="info-card">
@@ -14,11 +15,12 @@ use yii\helpers\Html;
 		</a>
 	</div>
 	<img src="/img/theme/card-backgrounds/cover-6-lg.png" class="cover" alt="cover">
-	<a href="#" onclick="return false;" class="pull-trigger-btn"
-	   data-action="toggle"
-	   data-target=".page-sidebar"
-	   data-class="list-filter-active"
-	   data-focus="nav_filter_input">
-		<i class="fal fa-angle-down"></i>
-	</a>
+	<?= Html::a('<i class="fal fa-angle-down"></i>', '#', [
+		'class' => "pull-trigger-btn",
+		'data-action' => "toggle",
+		'data-target' => ".page-sidebar",
+		'data-class' => "list-filter-active",
+		'data-focus' => "nav_filter_input",
+		'onclick' => new JsExpression("return false;")
+	]) ?>
 </div>
