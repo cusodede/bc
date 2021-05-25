@@ -7,11 +7,13 @@ use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
 use app\models\reward\active_record\RewardsAR;
 use app\modules\status\models\Status;
+use app\modules\status\models\StatusRulesModel;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
+use Throwable;
 
 /**
  * Class RewardsSearch
@@ -51,6 +53,7 @@ final class RewardsSearch extends RewardsAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws Throwable
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = $this->setQuery();
@@ -119,6 +122,7 @@ final class RewardsSearch extends RewardsAR {
 
 	/**
 	 * @return LCQuery
+	 * @throws Throwable
 	 */
 	private function setQuery():LCQuery {
 		return self::find()
@@ -128,7 +132,7 @@ final class RewardsSearch extends RewardsAR {
 				RefRewardRules::tableName().'.name  AS ruleName',
 				Users::tableName().'.username  AS userName',
 				"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
-					(new Rewards())->getAvailableStatuses(),
+					StatusRulesModel::getAllStatuses(Rewards::class),
 					'id',
 					'name'
 				))."') AS currentStatus"
