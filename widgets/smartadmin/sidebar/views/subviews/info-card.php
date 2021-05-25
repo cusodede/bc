@@ -10,7 +10,7 @@ use yii\web\JsExpression;
 <div class="info-card">
 	<?= Html::img(UsersController::to('logo-get'), ['class' => 'profile-image rounded-circle user-logo']) ?>
 	<div class="info-card-text">
-		<a href="#" class="d-flex align-items-center text-white">
+		<a href="<?= UsersController::to('profile') ?>" class="d-flex align-items-center text-white">
 			<span class="d-inline-block"><?= Users::Current()->username ?></span>
 		</a>
 	</div>

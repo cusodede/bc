@@ -33,23 +33,23 @@ use yii\bootstrap4\Html;
 						<div class="d-flex flex-column align-items-start p-4">
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
-									'model'     => $model,
+									'model' => $model,
 									'attribute' => 'username',
-									'url'       => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('live-edit', ['id' => $model->id])
 								]) ?>
 							</div>
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
-									'model'     => $model,
+									'model' => $model,
 									'attribute' => 'login',
-									'url'       => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('live-edit', ['id' => $model->id])
 								]) ?>
 							</div>
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
-									'model'     => $model,
+									'model' => $model,
 									'attribute' => 'email',
-									'url'       => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('live-edit', ['id' => $model->id])
 								]) ?>
 							</div>
 						</div>
@@ -59,7 +59,7 @@ use yii\bootstrap4\Html;
 							<?= Html::a("<i class='fal fa-fw fa-image-polaroid'></i> Загрузить фото", "#", [
 								"data-toggle" => "modal",
 								"data-target" => "#cropperModal",
-								"class"       => "btn-link font-weight-bold"
+								"class" => "btn-link font-weight-bold"
 							]) ?>
 							<span class="text-primary d-inline-block mx-3">●</span>
 							<?= Html::a("<i class='fal fa-fw fa-lock'></i> Обновить пароль", SiteController::to('update-password'), [

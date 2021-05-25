@@ -19,8 +19,7 @@ use yii\web\Response;
 /**
  * Class UsersController
  */
-class UsersController extends DefaultController
-{
+class UsersController extends DefaultController {
 	use ControllerTrait;
 
 	/**
@@ -39,17 +38,15 @@ class UsersController extends DefaultController
 	 * Переопределим базовую директорию views
 	 * @return string
 	 */
-	public function getViewPath(): string
-	{
+	public function getViewPath():string {
 		return '@app/views/users';
 	}
 
-	public function behaviors(): array
-	{
+	public function behaviors():array {
 		return ArrayHelper::merge(parent::behaviors(), [
 			[
-				'class'   => ContentNegotiator::class,
-				'only'    => ['logo-upload'],
+				'class' => ContentNegotiator::class,
+				'only' => ['logo-upload'],
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
@@ -63,9 +60,8 @@ class UsersController extends DefaultController
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public function actionProfile(?int $id = null): ?string
-	{
-		$user = (null === $id) ? Users::findIdentity($id) : Users::Current();
+	public function actionProfile(?int $id = null):?string {
+		$user = (null === $id)?Users::findIdentity($id):Users::Current();
 		if (null === $user) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
@@ -86,8 +82,7 @@ class UsersController extends DefaultController
 	 * @throws Throwable
 	 * @throws Exception
 	 */
-	public function actionUpdatePassword(int $id)
-	{
+	public function actionUpdatePassword(int $id) {
 		if (null === $user = Users::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
@@ -110,8 +105,7 @@ class UsersController extends DefaultController
 	 * @throws LoggedException
 	 * @throws Throwable
 	 */
-	public function actionLogoUpload(): array
-	{
+	public function actionLogoUpload():array {
 		try {
 			Users::Current()->uploadAttribute('avatar');
 		} catch (Throwable $t) {
@@ -125,9 +119,8 @@ class UsersController extends DefaultController
 	 * @param int|null $id
 	 * @throws LoggedException
 	 */
-	public function actionLogoGet(int $id = null): void
-	{
-		$user = $id ? Users::findIdentity($id) : Users::Current();
+	public function actionLogoGet(int $id = null):void {
+		$user = $id?Users::findIdentity($id):Users::Current();
 		if (null === $user) {
 			throw new LoggedException(new NotFoundHttpException());
 		}

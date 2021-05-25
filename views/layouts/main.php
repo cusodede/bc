@@ -41,17 +41,20 @@ ModalHelperAsset::register($this);
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
 				<div class="hidden-md-down dropdown-icon-menu position-relative">
-					<a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Скрыть меню">
+					<a href="#" class="header-btn btn js-waves-off" data-action="toggle"
+					   data-class="nav-function-hidden" title="Скрыть меню">
 						<i class="ni ni-menu"></i>
 					</a>
 					<ul>
 						<li>
-							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Свернуть меню">
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify"
+							   title="Свернуть меню">
 								<i class="ni ni-minify-nav"></i>
 							</a>
 						</li>
 						<li>
-							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Закрепить меню">
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed"
+							   title="Закрепить меню">
 								<i class="ni ni-lock-nav"></i>
 							</a>
 						</li>

@@ -25,8 +25,8 @@ use yii\web\View;
 	<div class="col-6">
 		<label class="btn btn-primary btn-upload btn-block" for="<?= $widget->cropperUploadInputId ?>">
 			<?= Html::fileInput('cropper__upload-input', null, [
-				'id'     => $widget->cropperUploadInputId,
-				'class'  => 'sr-only',
+				'id' => $widget->cropperUploadInputId,
+				'class' => 'sr-only',
 				'accept' => 'image/*'
 			]) ?>
 			<span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="Загрузка изображения">

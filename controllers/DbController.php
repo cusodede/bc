@@ -15,6 +15,7 @@ use yii\web\Response;
  */
 class DbController extends Controller {
 	use ControllerTrait;
+
 	/**
 	 * Список процессов на базе данных
 	 * @return string
