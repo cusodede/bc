@@ -13,7 +13,6 @@ use app\models\reward\active_record\references\RefRewardRules;
 use app\models\reward\Rewards;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
-use app\modules\status\models\StatusRulesModel;
 use  app\models\sys\users\Users;
 use kartik\select2\Select2;
 use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;

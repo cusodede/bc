@@ -7,7 +7,6 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\reward\active_record\references\RefRewardOperations;
 use app\models\reward\active_record\references\RefRewardRules;
 use app\models\sys\users\Users;
-use app\modules\status\models\StatusModel;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
