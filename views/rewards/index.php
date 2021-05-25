@@ -106,19 +106,11 @@ ModalHelperAsset::register($this);
 						'subItem' => 'currentStatus.name'
 					]);
 				},
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'currentStatus',
-					'data' => ArrayHelper::map(
-						StatusRulesModel::getAllStatuses(Rewards::class),
-						'id',
-						'name'
-					),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				])
+				'filterType' => GridView::FILTER_SELECT2,
+				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name'),
+				'filterWidgetOptions' => [
+					'pluginOptions' => ['allowClear' => true, 'placeholder' => '']
+				]
 			],
 			[
 				'attribute' => 'operationName',
