@@ -39,37 +39,35 @@ body {
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
 	position: relative;
-	top: 1px;
 	display: inline-block;
-	font-family: 'Glyphicons Halflings';
-	font-style: normal;
-	font-weight: normal;
+	font-family: 'Font Awesome 5 Pro' !important;
+	font-weight: 900;
 	line-height: 1;
 	padding-left: 5px;
 }
 
 a.asc:after {
-	content: /*"\e113"*/ "\e151";
+	content: "\f15e" !important;
 }
 
 a.desc:after {
-	content: /*"\e114"*/ "\e152";
+	content: "\f881" !important;
 }
 
 .sort-numerical a.asc:after {
-	content: "\e153";
+	content: "\f163" !important;
 }
 
 .sort-numerical a.desc:after {
-	content: "\e154";
+	content: "\f886" !important;
 }
 
 .sort-ordinal a.asc:after {
-	content: "\e155";
+	content: "\f0de" !important;
 }
 
 .sort-ordinal a.desc:after {
-	content: "\e156";
+	content: "\f0dd" !important;
 }
 
 .grid-view th {
