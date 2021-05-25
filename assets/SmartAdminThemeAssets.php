@@ -28,7 +28,8 @@ class SmartAdminThemeAssets extends AssetBundle {
 		$this->js = [
 			'js/vendors.bundle.js',
 			'js/app.bundle.js',
-			'js/notifications/toastr/toastr.js'
+			'js/notifications/toastr/toastr.js',
+			'js/init.js'
 		];
 		$this->publishOptions = [
 			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
