@@ -14,7 +14,6 @@ class m210517_114407_rewards extends Migration {
 	public function safeUp() {
 		$this->createTable(self::TABLE_NAME, [
 			'id' => $this->primaryKey(),
-			'status' => $this->integer()->notNull()->comment('Статус'),
 			'user' => $this->integer()->notNull()->comment('Аккаунт'),
 			'operation' => $this->integer()->notNull()->comment('Операция'),
 			'rule' => $this->integer()->notNull()->comment('Правило расчёта'),
@@ -25,7 +24,6 @@ class m210517_114407_rewards extends Migration {
 			'deleted' => $this->boolean()->defaultValue(0)->comment('Флаг удаления')
 		]);
 
-		$this->createIndex('status', self::TABLE_NAME, 'status');
 		$this->createIndex('user', self::TABLE_NAME, 'user');
 		$this->createIndex('operation', self::TABLE_NAME, 'operation');
 		$this->createIndex('rule', self::TABLE_NAME, 'rule');
