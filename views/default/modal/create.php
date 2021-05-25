@@ -8,16 +8,16 @@ declare(strict_types = 1);
 
 use pozitronik\widgets\BadgeWidget;
 use yii\base\Model;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
 	'id' => "{$modelName}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'header' => BadgeWidget::widget([
+	'title' => BadgeWidget::widget([
 		'items' => $model,
 		'subItem' => 'id'
 	]),
@@ -25,9 +25,6 @@ $modelName = $model->formName();
 		'model' => $model,
 		'form' => "{$modelName}-modal-create"
 	]),//post button outside the form
-	'clientOptions' => [
-		'backdrop' => true
-	],
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]

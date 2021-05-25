@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 use kartik\form\ActiveForm;
 use yii\base\Model;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>

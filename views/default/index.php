@@ -18,7 +18,7 @@ use pozitronik\helpers\Utils;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 

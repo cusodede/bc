@@ -7,7 +7,9 @@ declare(strict_types = 1);
 
 use yii\web\View;
 
-$this->title = 'Hello, world!';
+$this->title = 'Главная страница';
+
+$this->params['breadcrumbs'][] = 'Главная страница';
 ?>
 <div class="site-index">
 	Оно живое!

@@ -6,24 +6,21 @@ declare(strict_types = 1);
  * @var HttpException $exception
  */
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 use yii\web\HttpException;
 
-$message = $exception->getMessage();
-$this->title = $message;
+$this->title = 'Ошибка';
 ?>
 
 <div class="row">
-	<div class="col-lg-6 col-lg-offset-3">
-		<div class="panel panel-trans text-center">
-			<div class="panel-heading">
-				<h1 class="error-code text-primary"><?= Html::encode($exception->statusCode) ?></h1>
-			</div>
-			<div class="panel-body">
-				<p><?= nl2br(Html::encode($message)) ?></p>
-				<i class="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></i>
-				<div class="pad-top"><a class="btn-link text-semibold" href="/">На главную</a></div>
+	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
+		<div class="card p-4 rounded-plus bg-faded text-center">
+			<h1 class="error-code text-primary"><?= Html::encode($exception->statusCode) ?></h1>
+			<p><?= nl2br(Html::encode($exception->getMessage())) ?></p>
+			<div><i class="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></i></div>
+			<div class="mt-5">
+				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
 			</div>
 		</div>
 	</div>

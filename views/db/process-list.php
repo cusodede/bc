@@ -10,7 +10,7 @@ use pozitronik\core\models\ProcessListItem;
 use yii\data\ArrayDataProvider;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 $this->title = 'Мониторинг процессов БД';

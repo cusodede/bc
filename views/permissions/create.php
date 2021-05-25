@@ -7,8 +7,8 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\permissions\Permissions;
+use yii\bootstrap4\ActiveForm;
 use yii\web\View;
-use yii\widgets\ActiveForm;
 
 ?>
 

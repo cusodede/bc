@@ -12,7 +12,8 @@ use yii\base\View;
 <div class="suggestion-item">
 	<div class="suggestion-name">{{username}}</div>
 	<div class="suggestion-links">
-		<a href="<?= UsersController::to('profile') ?>?id={{id}}" class="dashboard-button btn btn-xs btn-info pull-left">Профиль<a/>
+		<a href="<?= UsersController::to('profile') ?>?id={{id}}"
+		   class="dashboard-button btn btn-xs btn-info pull-left">Профиль<a/>
 	</div>
 	<div class="clearfix"></div>
 </div>
