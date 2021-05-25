@@ -28,7 +28,7 @@ class SimCardController extends DefaultController {
 	 * Продажа карты
 	 * @param int $id
 	 */
-	public function actionSell(int $id) {
+	public function actionSell(int $id):void {
 		//todo
 	}
 }
