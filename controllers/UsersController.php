@@ -61,7 +61,7 @@ class UsersController extends DefaultController {
 	 * @throws Throwable
 	 */
 	public function actionProfile(?int $id = null):?string {
-		$user = (null === $id)?Users::findIdentity($id):Users::Current();
+		$user = (null !== $id)?Users::findOne($id):Users::Current();
 		if (null === $user) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
