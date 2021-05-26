@@ -155,17 +155,29 @@ trait UsersPermissionsTrait {
 	 */
 	public function hasActionPermission(Action $action):bool {
 		if ($this->isAllPermissionsGranted()) return true;
-		$verb = Yii::$app->request->method;
+		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method);
+	}
+
+	/**
+	 * Проверка наличия разрешения на доступ к контроллеру, и, опционально, экшену с указанным методом
+	 * @param string $controllerId
+	 * @param string|null $actionId
+	 * @param string|null $verb
+	 * @return bool
+	 * @throws Throwable
+	 */
+	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null):bool {
+		if ($this->isAllPermissionsGranted()) return true;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,
-			'controller' => $action->controller->id,
-			'action' => $action->id,
+			'controller' => $controllerId,
+			'action' => $actionId,
 			'verb' => $verb
 		]);
-		return Yii::$app->cache->getOrSet($cacheKey, function() use ($action, $verb) {
+		return Yii::$app->cache->getOrSet($cacheKey, function() use ($controllerId, $actionId, $verb) {
 			return [] !== Permissions::allUserPermissions($this->id, [
-					'controller' => $action->controller->id,
-					'action' => $action->id,
+					'controller' => $controllerId,
+					'action' => $actionId,
 					'verb' => $verb
 				]);
 		}, null, new TagDependency([
