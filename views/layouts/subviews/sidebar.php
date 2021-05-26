@@ -62,27 +62,27 @@ use app\controllers\DbController;
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => ReferencesModule::to('references')
+					'url' => [ReferencesModule::to('references')]/*fixme: не срабатывает триггер активности пункта меню на урл в модуле*/
 				],
 				[
 					'label' => 'Протокол сбоев',
-					'url' => SysExceptionsModule::to('index')
+					'url' => [SysExceptionsModule::to('index')]
 				],
 				[
 					'label' => 'Процессы на БД',
-					'url' => DbController::to('process-list')
+					'url' => [DbController::to('process-list')]
 				],
 				[
 					'label' => 'Файловый менеджер',
-					'url' => FSModule::to('index')
+					'url' => [FSModule::to('index')]
 				],
 				[
 					'label' => 'История изменений',
-					'url' => HistoryModule::to('index')
+					'url' => [HistoryModule::to('index')]
 				],
 				[
 					'label' => 'Настройки системы',
-					'url' => SiteController::to('options')
+					'url' => [SiteController::to('options')]
 				]
 			],
 		],
