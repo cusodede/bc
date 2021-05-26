@@ -120,7 +120,7 @@ class UsersController extends DefaultController {
 	 * @throws LoggedException
 	 */
 	public function actionLogoGet(?int $id = null):void {
-		$user = null===$id?Users::Current():Users::findOne($id);
+		$user = null === $id?Users::Current():Users::findOne($id);
 		if (null === $user) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
