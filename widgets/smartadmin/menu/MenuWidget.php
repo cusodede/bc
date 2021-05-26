@@ -35,7 +35,7 @@ class MenuWidget extends YiiMenuWidget {
 			return false;
 		}
 
-		if (Yii::$app->controller && null !== ($route = ArrayHelper::getValue($item, 'url.0'))) {
+		if (Yii::$app->controller && (null !== $route = ArrayHelper::getValue($item, 'url.0'))) {
 			//дополнительная проверка в связи с возможностью передачи Url без указания экшона (по-умолчанию)
 			$syntheticRoute = trim(Yii::getAlias($route), '/').'/'.Yii::$app->controller->defaultAction;
 			if ($syntheticRoute === Yii::$app->controller->route) {
