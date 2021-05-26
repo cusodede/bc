@@ -6,7 +6,7 @@ use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 
 return [
-	'bsVersion' => '3',
+	'bsVersion' => 4,
 	'searchConfig' => [
 		'Users' => [//<== алиас модели
 			'class' => Users::class,//<== FQN-название ActiveRecord-класса
