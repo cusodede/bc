@@ -14,7 +14,6 @@ use pozitronik\helpers\ArrayHelper;
  * Class PermissionsController
  */
 class PermissionsController extends DefaultController {
-	use ControllerTrait;
 
 	public string $modelClass = Permissions::class;
 	public string $modelSearchClass = PermissionsSearch::class;

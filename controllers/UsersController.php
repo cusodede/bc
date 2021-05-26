@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
+use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use pozitronik\core\traits\ControllerTrait;
@@ -20,7 +21,6 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends DefaultController {
-	use ControllerTrait;
 
 	/**
 	 * Поисковая модель пользователя
