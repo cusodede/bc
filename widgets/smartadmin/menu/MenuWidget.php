@@ -13,13 +13,11 @@ use yii\widgets\Menu as YiiMenuWidget;
  *
  * Виджет для отрисовки меню
  */
-class MenuWidget extends YiiMenuWidget
-{
+class MenuWidget extends YiiMenuWidget {
 	/**
 	 * @inheritdoc
 	 */
-	public function init(): void
-	{
+	public function init():void {
 		parent::init();
 
 		$this->linkTemplate = '<a href="{url}" data-filter-tags="{tags}">{icon}<span class="nav-link-text">{label}</span></a>';
@@ -28,11 +26,10 @@ class MenuWidget extends YiiMenuWidget
 	/**
 	 * @inheritdoc
 	 */
-	protected function renderItem($item): string
-	{
+	protected function renderItem($item):string {
 		$render = parent::renderItem($item);
 
-		$icon = (null === $itemClass = ArrayHelper::getValue($item, 'iconClass')) ? '' : Html::tag('i', '', ['class' => "fal {$itemClass}"]);
+		$icon = (null === $itemClass = ArrayHelper::getValue($item, 'iconClass'))?'':Html::tag('i', '', ['class' => "fal {$itemClass}"]);
 
 		$tags = mb_strtolower($item['label']);
 

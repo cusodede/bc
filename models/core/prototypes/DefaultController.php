@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\users\Users;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
@@ -15,6 +16,7 @@ use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
 use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -60,6 +62,18 @@ class DefaultController extends Controller {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function actions():array {
+		return ArrayHelper::merge(parent::actions(), [
+			'editAction' => [
+				'class' => EditableFieldAction::class,
+				'modelClass' => $this->modelClass,
+			]
+		]);
+	}
+
+	/**
 	 * Генерирует меню для доступа ко всем контроллерам по указанному пути
 	 * @param string $alias
 	 * @return array
@@ -75,7 +89,7 @@ class DefaultController extends Controller {
 			if ($file->isFile() && 'php' === $file->getExtension() && null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) {
 				$items[] = [
 					'label' => $model->id,
-					'url' => $model::to($model->defaultAction)
+					'url' => [$model::to($model->defaultAction)]
 				];
 			}
 		}

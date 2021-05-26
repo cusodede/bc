@@ -1,4 +1,4 @@
-const evtSource = new EventSource("//bc/test/sse", { withCredentials: false } );
+const evtSource = new EventSource("//bc/test/sse", {withCredentials: false});
 evtSource.onmessage = function(event) {
 	const newElement = document.createElement("li");
 	const eventList = document.getElementById("list");

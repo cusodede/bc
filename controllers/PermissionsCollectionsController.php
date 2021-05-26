@@ -37,7 +37,7 @@ class PermissionsCollectionsController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionEdit(int $id) {
-		if (null === $permissionsCollections = PermissionsCollections::findOne($id)){
+		if (null === $permissionsCollections = PermissionsCollections::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
 		if ($permissionsCollections->updateModelFromPost()) {

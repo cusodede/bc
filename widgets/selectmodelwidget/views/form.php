@@ -14,10 +14,9 @@ declare(strict_types = 1);
  * @var array $options
  */
 
-
 use kartik\select2\Select2;
 use yii\db\ActiveRecord;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
