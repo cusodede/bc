@@ -102,8 +102,9 @@ use app\controllers\DbController;
 					'label' => 'Пользователи',
 					'url' => ['/api/users'],
 				]
-			]
+			],
+			'visible' => Users::Current()->hasPermission(['system'])
 		],
-		'visible' => Users::Current()->hasPermission(['system'])
+
 	]
 ]) ?>

@@ -33,6 +33,7 @@ class SideBarWidget extends YiiBaseWidget {
 	/**
 	 * Удаляет все узлы, помеченные 'visible' => false
 	 * @param array $items
+	 * @return array
 	 * @throws Exception
 	 */
 	private static function prepareItems(array $items):array {
@@ -49,6 +50,7 @@ class SideBarWidget extends YiiBaseWidget {
 	/**
 	 * Удаляет все пустые узлы
 	 * @param array $items
+	 * @return array
 	 * @throws Exception
 	 */
 	private static function clearItems(array $items):array {

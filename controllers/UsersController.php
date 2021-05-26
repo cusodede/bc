@@ -4,10 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;

@@ -7,7 +7,6 @@ use app\models\core\prototypes\DefaultController;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
 
 /**
