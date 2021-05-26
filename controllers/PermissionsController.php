@@ -18,6 +18,7 @@ class PermissionsController extends DefaultController {
 
 	public string $modelClass = Permissions::class;
 	public string $modelSearchClass = PermissionsSearch::class;
+	public bool $enablePrototypeMenu = false;
 
 	/**
 	 * @inheritDoc
