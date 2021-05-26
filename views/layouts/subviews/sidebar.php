@@ -10,7 +10,6 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
-use app\models\core\prototypes\DefaultController;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
