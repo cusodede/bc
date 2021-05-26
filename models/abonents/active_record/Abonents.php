@@ -19,43 +19,43 @@ use yii\db\ActiveRecord;
  */
 class Abonents extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'abonents';
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'abonents';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['phone'], 'required'],
-            [['deleted'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['surname', 'name', 'patronymic'], 'string', 'max' => 64],
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['phone'], 'required'],
+			[['deleted'], 'integer'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['surname', 'name', 'patronymic'], 'string', 'max' => 64],
 			['phone', 'match', 'pattern' => '/^\d{11}$/', 'message' => 'Значение не верно, пример: 79050968533'],
-            [['phone'], 'unique'],
-        ];
-    }
+			[['phone'], 'unique'],
+		];
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels(): array
-    {
-        return [
-            'id' => 'ID',
-            'surname' => 'Фамилия',
-            'name' => 'Имя',
-            'patronymic' => 'Отчество',
-            'phone' => 'Телефон',
-            'deleted' => 'Флаг удаления',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата обновления',
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return [
+			'id' => 'ID',
+			'surname' => 'Фамилия',
+			'name' => 'Имя',
+			'patronymic' => 'Отчество',
+			'phone' => 'Телефон',
+			'deleted' => 'Флаг удаления',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата обновления',
+		];
+	}
 }
