@@ -34,6 +34,8 @@ class UsersController extends DefaultController {
 	 */
 	public string $modelClass = Users::class;
 
+	public bool $enablePrototypeMenu = false;
+
 	/**
 	 * Переопределим базовую директорию views
 	 * @return string
