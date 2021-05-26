@@ -6,6 +6,7 @@ use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\models\core\prototypes\DefaultController;
+use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
@@ -30,9 +31,11 @@ use app\controllers\DbController;
 			'items' => [
 				[
 					'label' => 'Все',
-					'url' => [UsersController::to('index')]
+					'url' => [UsersController::to('index')],
+					'visible' => UsersController::hasPermission('index')
 				]
 			],
+			//'visible' => UsersController::hasPermission() для проверки доступа ко всему контроллеру и отключения всего списка
 		],
 		[
 			'label' => 'Прототипирование',
@@ -47,13 +50,16 @@ use app\controllers\DbController;
 			'items' => [
 				[
 					'label' => 'Редактор разрешений',
-					'url' => [PermissionsController::to('index')]
+					'url' => [PermissionsController::to('index')],
+					'visible' => PermissionsController::hasPermission('index')
 				],
 				[
 					'label' => 'Группы разрешений',
-					'url' => [PermissionsCollectionsController::to('index')]
+					'url' => [PermissionsCollectionsController::to('index')],
+					'visible' => PermissionsCollectionsController::hasPermission('index')
 				],
 			],
+
 		],
 		[
 			'label' => 'Система',
@@ -62,7 +68,7 @@ use app\controllers\DbController;
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => [ReferencesModule::to('references')]/*fixme: не срабатывает триггер активности пункта меню на урл в модуле*/
+					'url' => [ReferencesModule::to('references')],/*fixme: не срабатывает триггер активности пункта меню на урл в модуле*/
 				],
 				[
 					'label' => 'Протокол сбоев',
@@ -85,6 +91,7 @@ use app\controllers\DbController;
 					'url' => [SiteController::to('options')]
 				]
 			],
+			'visible' => Users::Current()->hasPermission(['system'])
 		],
 		[
 			'label' => 'REST API',
@@ -97,5 +104,6 @@ use app\controllers\DbController;
 				]
 			]
 		],
+		'visible' => Users::Current()->hasPermission(['system'])
 	]
 ]) ?>
