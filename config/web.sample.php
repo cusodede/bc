@@ -1,9 +1,11 @@
 <?php
 declare(strict_types = 1);
 
+use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
 use simialbi\yii2\rest\Connection;
@@ -12,6 +14,8 @@ use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
 use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
+use yii\bootstrap4\BootstrapAsset;
+use yii\bootstrap4\BootstrapPluginAsset;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
@@ -19,10 +23,6 @@ use yii\log\FileTarget;
 use yii\rest\UrlRule;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
-use yii\bootstrap4\BootstrapPluginAsset;
-use yii\bootstrap4\BootstrapAsset;
-use kartik\dialog\DialogBootstrapAsset;
-use app\assets\SmartAdminThemeAssets;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';

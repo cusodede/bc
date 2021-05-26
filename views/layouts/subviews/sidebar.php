@@ -8,7 +8,9 @@ declare(strict_types = 1);
 use yii\web\View;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\controllers\SiteController;
 use app\controllers\UsersController;
+use app\models\core\prototypes\DefaultController;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
@@ -20,7 +22,9 @@ use app\controllers\PartnersController;
 use app\controllers\ProductsController;
 use app\controllers\SubscriptionsController;
 
-echo SideBarWidget::widget([
+?>
+
+<?= SideBarWidget::widget([
 	'items' => [
 		[
 			'label' => 'Профиль',
@@ -59,6 +63,12 @@ echo SideBarWidget::widget([
 			],
 		],
 		[
+			'label' => 'Прототипирование',
+			'url' => '#',
+			'iconClass' => 'fa-digging',
+			'items' => DefaultController::MenuItems()
+		],
+		[
 			'label' => 'Доступы',
 			'url' => '#',
 			'iconClass' => 'fa-lock',
@@ -80,23 +90,27 @@ echo SideBarWidget::widget([
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => [ReferencesModule::to('references')]
+					'url' => ReferencesModule::to('references')
 				],
 				[
 					'label' => 'Протокол сбоев',
-					'url' => [SysExceptionsModule::to('index')]
+					'url' => SysExceptionsModule::to('index')
 				],
 				[
 					'label' => 'Процессы на БД',
-					'url' => [DbController::to('process-list')]
+					'url' => DbController::to('process-list')
 				],
 				[
 					'label' => 'Файловый менеджер',
-					'url' => [FSModule::to('index')]
+					'url' => FSModule::to('index')
 				],
 				[
 					'label' => 'История изменений',
-					'url' => [HistoryModule::to('index')]
+					'url' => HistoryModule::to('index')
+				],
+				[
+					'label' => 'Настройки системы',
+					'url' => SiteController::to('options')
 				]
 			],
 		],
@@ -112,4 +126,4 @@ echo SideBarWidget::widget([
 			]
 		],
 	]
-]);
+]) ?>

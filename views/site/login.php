@@ -10,9 +10,9 @@ declare(strict_types = 1);
  */
 
 use app\models\site\LoginForm;
-use yii\bootstrap4\ActiveForm;
 use yii\web\View;
-use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 
 $this->title = 'Вход';
 ?>
@@ -29,8 +29,9 @@ $this->title = 'Вход';
 
 			<?php ActiveForm::end(); ?>
 
-			<div class="text-right mt-1">
-				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link']) ?>
+			<div class="mt-1 ">
+				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link fa-pull-left text-left']) ?>
+				<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link fa-pull-right text-right']) ?>
 			</div>
 		</div>
 	</div>

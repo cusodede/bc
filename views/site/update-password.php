@@ -10,8 +10,8 @@ declare(strict_types = 1);
 
 use app\models\site\UpdatePasswordForm;
 use yii\web\View;
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 
 $this->title = 'Смена пароля';
 ?>

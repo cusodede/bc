@@ -9,10 +9,9 @@ declare(strict_types = 1);
  */
 
 use app\models\site\RestorePasswordForm;
-use pozitronik\helpers\ArrayHelper;
 use yii\web\View;
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 
 $this->title = 'Восстановление пароля';
 ?>
@@ -29,7 +28,7 @@ $this->title = 'Восстановление пароля';
 			<?php ActiveForm::end(); ?>
 
 			<div class="text-right mt-1">
-				<?= Html::a('Назад', ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login']), ['class' => 'btn-link']) ?>
+				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
 			</div>
 		</div>
 	</div>

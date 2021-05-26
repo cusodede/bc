@@ -3,24 +3,29 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\core\prototypes\DefaultController;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_exceptions\models\LoggedException;
-use Throwable;
-use Yii;
-use yii\db\Exception;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\web\Response;
 
 /**
  * Class PermissionsController
  */
-class PermissionsController extends Controller {
+class PermissionsController extends DefaultController {
 	use ControllerTrait;
+
+	public string $modelClass = Permissions::class;
+	public string $modelSearchClass = PermissionsSearch::class;
+	public bool $enablePrototypeMenu = false;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getViewPath():string {
+		return '@app/views/permissions';
+	}
 
 	/**
 	 * @inheritDoc
@@ -53,57 +58,4 @@ class PermissionsController extends Controller {
 		]);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function actionIndex():string {
-		$params = Yii::$app->request->queryParams;
-		$searchModel = new PermissionsSearch();
-
-		$dataProvider = $searchModel->search($params);
-
-		return $this->render('index', compact('searchModel', 'dataProvider'));
-	}
-
-	/**
-	 * @param int $id
-	 * @return string|Response
-	 * @throws Throwable
-	 */
-	public function actionEdit(int $id) {
-		if (null === $permission = Permissions::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
-		}
-		if ($permission->updateModelFromPost()) {
-			return $this->redirect('index');
-		}
-		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/edit', [
-				'model' => $permission
-			]);
-		}
-		return $this->render('edit', [
-			'model' => $permission
-		]);
-	}
-
-	/**
-	 * @return string|Response
-	 * @throws Throwable
-	 * @throws Exception
-	 */
-	public function actionCreate() {
-		$permission = new Permissions();
-		if ($permission->createModelFromPost()) {
-			return $this->redirect('index');
-		}
-		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/create', [
-				'model' => $permission
-			]);
-		}
-		return $this->render('create', [
-			'model' => $permission
-		]);
-	}
 }

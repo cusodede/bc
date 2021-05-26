@@ -15,6 +15,7 @@ use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
 use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -24,6 +25,7 @@ use yii\web\Response;
  * Все контроллеры и все вью плюс-минус одинаковые, поэтому можно сэкономить на прототипировании
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
+ * @property bool $enablePrototypeMenu Включать ли контроллер в меню списка прототипов
  *
  * @property-read ActiveRecord $searchModel
  * @property-read ActiveRecord|ActiveRecordTrait $model
@@ -39,6 +41,11 @@ class DefaultController extends Controller {
 	 * @var string $modelSearchClass
 	 */
 	public string $modelSearchClass;
+
+	/**
+	 * @var bool enablePrototypeMenu
+	 */
+	public bool $enablePrototypeMenu = true;
 
 	/**
 	 * @inheritDoc
@@ -60,6 +67,18 @@ class DefaultController extends Controller {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function actions():array {
+		return ArrayHelper::merge(parent::actions(), [
+			'editAction' => [
+				'class' => EditableFieldAction::class,
+				'modelClass' => $this->modelClass,
+			]
+		]);
+	}
+
+	/**
 	 * Генерирует меню для доступа ко всем контроллерам по указанному пути
 	 * @param string $alias
 	 * @return array
@@ -72,10 +91,10 @@ class DefaultController extends Controller {
 		/** @var RecursiveDirectoryIterator $file */
 		foreach ($files as $file) {
 			/** @var self $model */
-			if ($file->isFile() && 'php' === $file->getExtension() && null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) {
+			if ($file->isFile() && ('php' === $file->getExtension()) && (null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) && $model->enablePrototypeMenu) {
 				$items[] = [
 					'label' => $model->id,
-					'url' => $model::to($model->defaultAction)
+					'url' => [$model::to($model->defaultAction)]
 				];
 			}
 		}

@@ -8,7 +8,7 @@ declare(strict_types = 1);
  */
 use app\models\sys\permissions\Permissions;
 use kartik\form\ActiveForm;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>

@@ -6,14 +6,15 @@ declare(strict_types = 1);
  * @var string $content
  */
 
+use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
-use app\assets\SmartAdminThemeAssets;
+use app\controllers\SiteController;
+use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
-SmartAdminThemeAssets::register($this);
+AppAsset::register($this);
 ModalHelperAsset::register($this);
 ?>
 <!DOCTYPE html>
@@ -39,24 +40,58 @@ ModalHelperAsset::register($this);
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
+				<div class="hidden-md-down dropdown-icon-menu position-relative">
+					<a href="#" class="header-btn btn js-waves-off" data-action="toggle"
+					   data-class="nav-function-hidden" title="Скрыть меню">
+						<i class="ni ni-menu"></i>
+					</a>
+					<ul>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify"
+							   title="Свернуть меню">
+								<i class="ni ni-minify-nav"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed"
+							   title="Закрепить меню">
+								<i class="ni ni-lock-nav"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="subheader fa-pull-left mb-0 mr-2">
+					<h1 class="subheader-title">
+						<?= $this->title ?>
+					</h1>
+				</div>
+				<div class="subheader fa-pull-left mb-0">
+					<?= $this->render('subviews/breadcrumbs') ?>
+				</div>
+
 				<div class="ml-auto d-flex">
+					<div class="subheader fa-pull-right mb-0">
+						<?= SearchWidget::widget() ?>
+					</div>
 					<div>
-						<a href="<?= Url::to(['/site/logout']) ?>" class="header-icon" data-toggle="tooltip"
-						   data-placement="left" title="" data-original-title="Выйти из системы">
-							<i class="fal fa-sign-out"></i>
-						</a>
+						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
+							'class' => "header-icon",
+							'data-toggle' => "tooltip",
+							'data-placement' => "bottom",
+							'title' => "",
+							'data-original-title' => "Выйти из системы"
+						]) ?>
 					</div>
 				</div>
 			</header>
 			<main id="js-page-content" class="page-content" role="main">
-				<?= $this->render('subviews/breadcrumbs') ?>
 				<?= $content ?>
 			</main>
 			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
 			<footer class="page-footer" role="contentinfo">
 				<div class="d-flex align-items-center flex-1 text-muted">
 						<span class="hidden-md-down fw-700">
-							<?= date('Y') . ' © ' . Yii::$app->name ?>
+							<?= date('Y').' © '.Yii::$app->name ?>
 						</span>
 				</div>
 			</footer>

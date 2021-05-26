@@ -12,16 +12,14 @@ use yii\widgets\Menu;
  *
  * Виджет для отрисовки панели навигации
  */
-class SideBarWidget extends YiiBaseWidget
-{
+class SideBarWidget extends YiiBaseWidget {
 	/**
 	 * @var array список элементов Меню
 	 * @see Menu::$items
 	 */
 	public array $items = [];
 
-	public function run(): string
-	{
+	public function run():string {
 		return $this->render('main', ['items' => $this->items]);
 	}
 }

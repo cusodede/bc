@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var HttpException $exception
  */
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 use yii\web\HttpException;
 
