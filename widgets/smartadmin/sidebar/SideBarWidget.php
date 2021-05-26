@@ -21,20 +21,46 @@ class SideBarWidget extends YiiBaseWidget {
 	 */
 	public array $items = [];
 
+	/**
+	 * @inheritDoc
+	 */
 	public function run():string {
-		self::prepareItems($this->items);
+		$this->items = self::prepareItems($this->items);
+		$this->items = self::clearItems($this->items);
 		return $this->render('main', ['items' => $this->items]);
 	}
 
 	/**
+	 * Удаляет все узлы, помеченные 'visible' => false
+	 * @param array $items
 	 * @throws Exception
 	 */
-	private static function prepareItems(array &$items):void {
-		$items = array_filter($items, static function(array $item) {
+	private static function prepareItems(array $items):array {
+		foreach ($items as &$item) {
 			if ((null !== $subItems = ArrayHelper::getValue($item, 'items')) && is_array($subItems)) {
-				self::prepareItems($item['items']);
+				$item['items'] = self::prepareItems($item['items']);
 			}
-			return (ArrayHelper::getValue($item, 'visible', true));
-		}, ARRAY_FILTER_USE_BOTH);
+			$item = ArrayHelper::getValue($item, 'visible', true)?$item:[];
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Удаляет все пустые узлы
+	 * @param array $items
+	 * @throws Exception
+	 */
+	private static function clearItems(array $items):array {
+		$items = array_filter($items);
+		foreach ($items as $key => $item) {
+			if ((null !== $subItems = ArrayHelper::getValue($item, 'items')) && is_array($subItems) && [] !== $subItems) {
+				$item['items'] = self::clearItems($item['items']);
+			}
+			if ([] === ArrayHelper::getValue($item, 'items')) {
+				unset($items[$key]);
+			}
+		}
+		return $items;
 	}
 }
