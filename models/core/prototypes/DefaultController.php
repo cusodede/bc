@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
@@ -31,7 +32,7 @@ use yii\web\Response;
  * @property-read ActiveRecord|ActiveRecordTrait $model
  */
 class DefaultController extends Controller {
-	use ControllerTrait;
+	use ControllerPermissionsTrait;
 
 	/**
 	 * @var string $modelClass
