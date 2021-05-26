@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use pozitronik\core\helpers\ControllerHelper;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -31,7 +31,7 @@ use yii\web\Response;
  * @property-read ActiveRecord|ActiveRecordTrait $model
  */
 class DefaultController extends Controller {
-	use ControllerTrait;
+	use ControllerPermissionsTrait;
 
 	/**
 	 * @var string $modelClass
@@ -94,7 +94,8 @@ class DefaultController extends Controller {
 			if ($file->isFile() && ('php' === $file->getExtension()) && (null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) && $model->enablePrototypeMenu) {
 				$items[] = [
 					'label' => $model->id,
-					'url' => [$model::to($model->defaultAction)]
+					'url' => [$model::to($model->defaultAction)],
+					'visible' => $model::hasPermission($model->defaultAction)
 				];
 			}
 		}
