@@ -21,6 +21,7 @@ use app\controllers\DbController;
 use app\controllers\PartnersController;
 use app\controllers\ProductsController;
 use app\controllers\SubscriptionsController;
+use app\controllers\AbonentsController;
 
 ?>
 
@@ -52,6 +53,11 @@ use app\controllers\SubscriptionsController;
 			],
 		],
 		[
+			'label' => 'Абоненты',
+			'url' => [AbonentsController::to('index')],
+			'iconClass' => 'fa-phone'
+		],
+		[
 			'label' => 'Пользователи',
 			'url' => '#',
 			'iconClass' => 'fa-users-cog',
@@ -61,12 +67,6 @@ use app\controllers\SubscriptionsController;
 					'url' => [UsersController::to('index')]
 				]
 			],
-		],
-		[
-			'label' => 'Прототипирование',
-			'url' => '#',
-			'iconClass' => 'fa-digging',
-			'items' => DefaultController::MenuItems()
 		],
 		[
 			'label' => 'Доступы',
