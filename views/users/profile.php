@@ -35,21 +35,21 @@ use yii\bootstrap4\Html;
 								<?= $this->render('subviews/editable-input', [
 									'model' => $model,
 									'attribute' => 'username',
-									'url' => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('editAction', ['id' => $model->id])
 								]) ?>
 							</div>
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
 									'model' => $model,
 									'attribute' => 'login',
-									'url' => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('editAction', ['id' => $model->id])
 								]) ?>
 							</div>
 							<div class="d-flex flex-column mb-2">
 								<?= $this->render('subviews/editable-input', [
 									'model' => $model,
 									'attribute' => 'email',
-									'url' => UsersController::to('live-edit', ['id' => $model->id])
+									'url' => UsersController::to('editAction', ['id' => $model->id])
 								]) ?>
 							</div>
 						</div>

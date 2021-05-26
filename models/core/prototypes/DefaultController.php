@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\users\Users;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
@@ -15,6 +16,7 @@ use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
 use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -57,6 +59,18 @@ class DefaultController extends Controller {
 				'only' => ['ajax-search']
 			]
 		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function actions():array {
+		return ArrayHelper::merge(parent::actions(), [
+			'editAction' => [
+				'class' => EditableFieldAction::class,
+				'modelClass' => $this->modelClass,
+			]
+		]);
 	}
 
 	/**
