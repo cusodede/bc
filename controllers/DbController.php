@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use pozitronik\core\models\DbMonitor;
 use pozitronik\core\traits\ControllerTrait;
+use Throwable;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
@@ -19,7 +20,7 @@ class DbController extends Controller {
 	/**
 	 * Список процессов на базе данных
 	 * @return string
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function actionProcessList():string {
 		$provider = new ArrayDataProvider([
