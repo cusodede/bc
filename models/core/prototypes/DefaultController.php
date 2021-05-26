@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
-use app\models\sys\users\Users;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
