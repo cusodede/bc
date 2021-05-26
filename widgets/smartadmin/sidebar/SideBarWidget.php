@@ -30,7 +30,7 @@ class SideBarWidget extends YiiBaseWidget {
 	 * @throws Exception
 	 */
 	private static function prepareItems(array &$items):void {
-		$items = array_filter($items, function(array $item) {
+		$items = array_filter($items, static function(array $item) {
 			if ((null !== $subItems = ArrayHelper::getValue($item, 'items')) && is_array($subItems)) {
 				self::prepareItems($item['items']);
 			}
