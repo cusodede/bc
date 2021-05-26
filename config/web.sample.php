@@ -26,6 +26,7 @@ use yii\web\JsonParser;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
+$statusRules = require __DIR__.'/status_rules.php';
 
 $config = [
 	'id' => 'basic',
@@ -64,12 +65,20 @@ $config = [
 			'class' => ReferencesModule::class,
 			'defaultRoute' => 'references',
 			'params' => [
-				'baseDir' => '@app/models'
+				'baseDir' => [
+					'@app/models/',
+				]
 			]
 		],
 		'history' => [
 			'class' => HistoryModule::class,
 			'defaultRoute' => 'index'
+		],
+		'statuses' => [
+			'class' => StatusModule::class,
+			'params' => [
+				'rules' => $statusRules
+			]
 		],
 	],
 	'components' => [
@@ -117,6 +126,26 @@ $config = [
 			// 'useFilterKeyword' => false,
 			// 'enableExceptions' => true,
 			'itemsProperty' => 'items'
+		],
+		'assetManager' => [
+			'bundles' => [
+				BootstrapPluginAsset::class => [
+					'js' => []
+				],
+				BootstrapAsset::class => [
+					'css' => [],
+				],
+				DialogBootstrapAsset::class => [
+					'depends' => [
+						SmartAdminThemeAssets::class
+					]
+				],
+				EditableAsset::class => [
+					'depends' => [
+						SmartAdminThemeAssets::class
+					]
+				]
+			]
 		],
 		'db' => $db,
 		'urlManager' => [
