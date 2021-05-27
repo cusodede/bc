@@ -1,0 +1,35 @@
+<?php
+declare(strict_types = 1);
+
+/**
+ * @var View $this
+ * @var ImportModel $model
+ * @var ControllerTrait $controller
+ */
+
+use app\modules\import\models\ImportModel;
+use pozitronik\core\traits\ControllerTrait;
+use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
+use yii\web\View;
+
+?>
+
+<?php $form = ActiveForm::begin(); ?>
+	<div class="panel">
+		<div class="panel-container">
+			<div class="panel-content bg-success">
+				Готово!
+			</div>
+			<div class="panel-content">
+				<?= Html::a('Загрузить ещё что-нибудь', $controller::to('import'), [
+					'class' => 'btn btn-success pull-right',
+				]) ?>
+				<?= Html::a('На главную', $controller::to('index'), [
+					'class' => 'btn btn-success pull-right',
+				]) ?>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+<?php ActiveForm::end(); ?>
