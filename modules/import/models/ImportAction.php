@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\import\models;
 
+use Throwable;
 use yii\base\Action;
+use yii\web\Response;
 
 /**
  * Class ImportAction
@@ -17,7 +19,8 @@ class ImportAction extends Action {
 	public bool $skipEmptyRows = true;
 
 	/**
-	 * @inheritDoc
+	 * @return string|Response
+	 * @throws Throwable
 	 */
 	public function run() {
 
