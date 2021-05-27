@@ -48,10 +48,10 @@ class DealersAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'code', 'client_code', 'group', 'branch', 'create_date'], 'required'],
+			[['name', 'code', 'client_code', 'group', 'branch'], 'required'],
 			[['group', 'branch', 'type', 'daddy', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
-			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
+			[['create_date'], 'default', 'value' => DateHelper::lcDate()],/*если делаем так, то не ставим required*/
 			[['name'], 'string', 'max' => 255],
 			[['code'], 'string', 'max' => 4],
 			[['client_code'], 'string', 'max' => 9],
