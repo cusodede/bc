@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\core\prototypes;
 
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
+use app\modules\import\models\ImportAction;
+use app\modules\import\models\ProcessImportAction;
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
 use RecursiveDirectoryIterator;
@@ -26,6 +28,7 @@ use yii\web\Response;
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
  * @property bool $enablePrototypeMenu Включать ли контроллер в меню списка прототипов
+ * @property array $mappingRules Настройки параметров импорта
  *
  * @property-read ActiveRecord $searchModel
  * @property-read ActiveRecord|ActiveRecordTrait $model
@@ -46,6 +49,11 @@ class DefaultController extends Controller {
 	 * @var bool enablePrototypeMenu
 	 */
 	public bool $enablePrototypeMenu = true;
+
+	/**
+	 * @var array $mappingRules
+	 */
+	public array $mappingRules = [];
 
 	/**
 	 * @inheritDoc
@@ -74,6 +82,14 @@ class DefaultController extends Controller {
 			'editAction' => [
 				'class' => EditableFieldAction::class,
 				'modelClass' => $this->modelClass,
+			],
+			'import' => [
+				'class' => ImportAction::class,
+				'modelClass' => $this->modelClass
+			],
+			'process-import' => [
+				'class' => ProcessImportAction::class,
+				'mappingRules' => $this->mappingRules
 			]
 		]);
 	}

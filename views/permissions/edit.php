@@ -20,10 +20,10 @@ use yii\bootstrap4\ActiveForm;
 		<div class="panel-content">
 			<?= $this->render('subviews/editPanelBody', compact('model', 'form')) ?>
 		</div>
-	</div>
-	<div class="panel-footer">
-		<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
-		<div class="clearfix"></div>
+		<div class="panel-content">
+			<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
+			<div class="clearfix"></div>
+		</div>
 	</div>
 </div>
 <?php ActiveForm::end(); ?>
