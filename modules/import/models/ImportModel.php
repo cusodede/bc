@@ -153,18 +153,24 @@ class ImportModel extends Model {
 						} else {
 							$value = $foreignModel->$return;
 						}
-					} else {//ошибка вставки во внешнюю таблицу
-						$messages[$data->id] = $foreignModel->errors;
 					}
+					/**
+					 * else {
+					 * ошибка вставки во внешнюю таблицу.
+					 * На данном этапе мы ничего не можем сделать. Нужно предусмотреть какое-то логирование таких ошибок,
+					 * а лучше - механику уведомлений и abort/retry/continue
+					 * }
+					 **/
 				}
 				$mappedColumnData[$currentRule['attribute']] = $value;
 
 			}
-			if (null !== $result = self::addInstance($this->model, $mappedColumnData)) {
+			$errors = [];
+			if (null !== self::addInstance($this->model, $mappedColumnData, null, false, $errors)) {
 				$importRecord->processed = true;
 				$importRecord->save();
 			} else {
-				$messages[$data->id] = $result->errors;
+				$messages[] = $errors;
 			}
 
 		}
@@ -178,13 +184,15 @@ class ImportModel extends Model {
 	 * @param bool $forceUpdate
 	 * @return ActiveRecord|null
 	 */
-	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false):?ActiveRecord {
+	private
+	static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
 		/** @var ActiveRecord $class */
 		$instance = $class::find()->where($searchCondition)->one();
 		$instance = $instance??new $class();
 		if ($instance->isNewRecord || $forceUpdate) {
 			$instance->load($fields??$searchCondition, '');
 			if (!$instance->save()) {
+				$errors = $instance->errors;
 				return null;
 			}
 		}
@@ -194,7 +202,8 @@ class ImportModel extends Model {
 	/**
 	 * Подчищаем обработанные данные
 	 */
-	public function clear():void {
+	public
+	function clear():void {
 		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => true]);
 	}
 
@@ -202,7 +211,8 @@ class ImportModel extends Model {
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public function getFilename():?string {
+	public
+	function getFilename():?string {
 		if (null !== $lastFileName = ArrayHelper::getValue($this->files(['importFile']), 0)) {
 			/** @var FileStorage $lastFileName */
 			return $lastFileName->path;
