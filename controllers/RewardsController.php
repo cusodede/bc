@@ -12,7 +12,6 @@ use pozitronik\core\traits\ControllerTrait;
  * Class RewardsController
  */
 class RewardsController extends DefaultController {
-	use ControllerTrait;
 
 	public string $modelClass = Rewards::class;
 	public string $modelSearchClass = RewardsSearch::class;
