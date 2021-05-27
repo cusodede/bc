@@ -31,7 +31,11 @@ class ImportAction extends Action {
 		]);
 
 		if (([] !== $importModel->uploadAttribute('importFile')) && $importModel->preload()) {
-			return $this->controller->redirect(['process-import', 'domain' => $importModel->domain]);
+			return $this->controller->redirect([
+				'process-import',
+				'domain' => $importModel->domain,
+				'modelClass' => $this->modelClass
+			]);
 		}
 
 		return $this->controller->render('@app/modules/import/views/import', [
