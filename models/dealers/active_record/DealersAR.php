@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\dealers\active_record;
 
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 
@@ -21,6 +22,18 @@ use yii\db\ActiveRecord;
  * @property int $deleted
  */
 class DealersAR extends ActiveRecord {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
