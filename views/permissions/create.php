@@ -20,7 +20,7 @@ use yii\web\View;
 		<div class="panel-content">
 			<?= $this->render('subviews/editPanelBody', compact('model', 'form')) ?>
 		</div>
-		<div class="panel-footer">
+		<div class="panel-container">
 			<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
 			<div class="clearfix"></div>
 		</div>
