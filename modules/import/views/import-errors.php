@@ -17,7 +17,9 @@ use yii\web\View;
 
 <div class="panel">
 	<div class="panel-hdr">
-		Импорт
+		<div class="panel-content bg-warning">
+			Ошибки на этапе импорта
+		</div>
 	</div>
 	<div class="panel-container">
 		<div class="panel-content">
