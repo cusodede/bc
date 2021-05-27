@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use yii\base\Model;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 ?>
 
