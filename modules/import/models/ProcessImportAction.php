@@ -29,14 +29,14 @@ class ProcessImportAction extends Action {
 		if ([] !== $messages) { //на итерации найдены ошибки
 			return $this->controller->render('@app/modules/import/views/import-errors', [
 				'messages' => $messages,
-				'domain' => $this->domain
+				'domain' => $domain
 			]);
 		}
 
 		if ($isImportDone) {
 			$importModel->clear();
 			return $this->controller->render('@app/modules/import/views/import-done', [
-				'controller' => $this
+				'controller' => get_class($this->controller)
 			]);
 		}
 		return $this->controller->redirect([
