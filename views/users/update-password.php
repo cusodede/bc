@@ -20,7 +20,7 @@ use yii\bootstrap4\ActiveForm;
 		<div class="panel-content">
 			<?= $this->render('subviews/update-passwordPanelBody', compact('model', 'form')) ?>
 		</div>
-		<div class="panel-container">
+		<div class="panel-content">
 			<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
 			<div class="clearfix"></div>
 		</div>
