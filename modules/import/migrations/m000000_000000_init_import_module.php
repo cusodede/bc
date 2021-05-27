@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace app\modules\history\migrations;
+namespace app\modules\import\migrations;
 
 use yii\db\Migration;
 
