@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Dealers $searchModel
+ * @var DealersSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
@@ -11,7 +11,7 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\models\core\TemporaryHelper;
-use app\models\dealers\Dealers;
+use app\models\dealers\DealersSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
@@ -49,12 +49,12 @@ ModalHelperAsset::register($this);
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
 				'buttons' => [
-					'edit' => static function(string $url, Dealers $model) use ($modelName) {
+					'edit' => static function(string $url, DealersSearch $model) use ($modelName) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'view' => static function(string $url, Dealers $model) use ($modelName) {
+					'view' => static function(string $url, DealersSearch $model) use ($modelName) {
 						return Html::a('<i class="fa fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
