@@ -6,7 +6,6 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
-use pozitronik\core\traits\ControllerTrait;
 
 /**
  * Class RewardsController
