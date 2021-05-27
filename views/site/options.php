@@ -18,32 +18,34 @@ OptionsAsset::register($this);
 ?>
 
 <div class="hpanel">
-	<div class="panel-heading">
+	<div class="panel-hdr">
 	</div>
-	<div class="panel-body">
-		<?php foreach ($boolOptions as $name => $value): ?>
-			<?php $id = md5($name) ?>
-			<div class="row">
-				<div class="col-md-1">
-					<?= SwitchInput::widget([
-						'name' => $name,
-						'tristate' => false,
-						'value' => $value,
-						'disabled' => false,
-						'pluginOptions' => [
-							'onText' => 'On',
-							'offText' => 'Off'
-						],
-						'pluginEvents' => [
-							"switchChange.bootstrapSwitch" => new JsExpression('function (event, state) {SetSystemOptionBool("'.$name.'", state, "'.$id.'", "'.AjaxController::to('set-system-option').'")}')
-						],
-					]) ?>
+	<div class="panel-container show">
+		<div class="panel-content">
+			<?php foreach ($boolOptions as $name => $value): ?>
+				<?php $id = md5($name) ?>
+				<div class="row">
+					<div class="col-md-1">
+						<?= SwitchInput::widget([
+							'name' => $name,
+							'tristate' => false,
+							'value' => $value,
+							'disabled' => false,
+							'pluginOptions' => [
+								'onText' => 'On',
+								'offText' => 'Off'
+							],
+							'pluginEvents' => [
+								"switchChange.bootstrapSwitch" => new JsExpression('function (event, state) {SetSystemOptionBool("'.$name.'", state, "'.$id.'", "'.AjaxController::to('set-system-option').'")}')
+							],
+						]) ?>
+					</div>
+					<div class="col-md-6" id="<?= $id ?>">
+						<?= ArrayHelper::getValue($optionsLabels, $name, $name) ?>
+					</div>
 				</div>
-				<div class="col-md-6" id="<?= $id ?>">
-					<?= ArrayHelper::getValue($optionsLabels, $name, $name) ?>
-				</div>
-			</div>
-		<?php endforeach; ?>
+			<?php endforeach; ?>
+		</div>
 	</div>
 </div>
 

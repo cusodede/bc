@@ -18,7 +18,7 @@ use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 
@@ -50,17 +50,17 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}{view}{sell}',
 				'buttons' => [
 					'edit' => static function(string $url, SimCardSearch $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'view' => static function(string $url, SimCardSearch $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+						return Html::a('<i class="fa fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'sell' => static function(string $url, SimCardSearch $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-usd"></i>', $url, [
+						return Html::a('<i class="fa fa-usd-circle"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},

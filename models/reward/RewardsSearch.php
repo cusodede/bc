@@ -86,7 +86,7 @@ final class RewardsSearch extends RewardsAR {
 		]);
 
 		$this->setSort($dataProvider);
-		$this->load($params);;
+		$this->load($params);
 
 		if (!$this->validate()) return $dataProvider;
 

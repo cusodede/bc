@@ -25,7 +25,7 @@ use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 
@@ -61,13 +61,13 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}{view}',
 				'buttons' => [
 					'edit' => static function(string $url, RewardsSearch $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', ".
 								"'{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'view' => static function(string $url, RewardsSearch $model) use ($modelName) {
-						return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
+						return Html::a('<i class="fa fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', ".
 								"'{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
