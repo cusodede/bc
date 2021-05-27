@@ -68,7 +68,7 @@ use app\controllers\DbController;
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => [ReferencesModule::to('references')],/*fixme: не срабатывает триггер активности пункта меню на урл в модуле*/
+					'url' => [ReferencesModule::to('references')],
 				],
 				[
 					'label' => 'Протокол сбоев',
