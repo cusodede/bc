@@ -15,11 +15,10 @@ class DealersController extends DefaultController {
 	public string $modelClass = Dealers::class;
 	public string $modelSearchClass = DealersSearch::class;
 
-
 	/**
 	 * @inheritDoc
 	 */
-//	public function getViewPath():string {
-//		return '@app/views/dealers';
-//	}
+	public function getViewPath():string {
+		return '@app/views/dealers';
+	}
 }
