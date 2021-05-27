@@ -26,7 +26,7 @@ class DealersController extends DefaultController {
 			'foreign' => [//какая-то связь
 				'class' => RefDealersGroups::class,//с чем
 				'attribute' => 'name',//в какое поле вставить значение
-				'key' => 'id'//что получить
+				'key' => 'id'//что получить. Можно не указывать, тогда используется primaryKey
 			],
 		],
 		2 => [
@@ -42,7 +42,8 @@ class DealersController extends DefaultController {
 			'foreign' => [
 				'class' => RefDealersTypes::class,
 				'attribute' => 'name',
-				'key' => 'id']
+				'key' => 'id'
+			]
 		],
 		4 => ['attribute' => 'name'],
 		5 => ['attribute' => 'code'],
