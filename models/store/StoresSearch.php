@@ -42,7 +42,7 @@ final class StoresSearch extends StoresAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['sellers', 'refStoresType']);
+		$query->joinWith(['sellers', 'refStoresTypes']);
 
 		if (!$this->validate()) return $dataProvider;
 
