@@ -70,7 +70,7 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(StoresSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refStoreType,
+						'items' => $model->refStoresTypes,
 						'subItem' => 'name'
 					]);
 				}

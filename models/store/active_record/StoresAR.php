@@ -5,7 +5,7 @@ namespace app\models\store\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\seller\Sellers;
-use app\models\store\active_record\references\RefStoreTypes;
+use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\active_record\relations\RelStoresToUsers;
 use app\models\sys\users\Users;
@@ -23,7 +23,7 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $deleted
  *
- * @property RefStoreTypes $refStoreType Тип точки (справочник)
+ * @property RefStoresTypes $refStoresTypes Тип точки (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Sellers[] $sellers Все продавцы точки
@@ -69,8 +69,8 @@ class StoresAR extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefStoreType():ActiveQuery {
-		return $this->hasOne(RefStoreTypes::class, ['id' => 'type']);
+	public function getRefStoresTypes():ActiveQuery {
+		return $this->hasOne(RefStoresTypes::class, ['id' => 'type']);
 	}
 
 	/**
