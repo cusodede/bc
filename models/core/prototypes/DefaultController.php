@@ -58,7 +58,7 @@ class DefaultController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	public function beforeAction($action) {
+	public function beforeAction($action):bool {
 		$this->view->title = $this->view->title??$this->id;
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {
