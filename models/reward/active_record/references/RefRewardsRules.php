@@ -6,10 +6,10 @@ namespace app\models\reward\active_record\references;
 use pozitronik\references\models\CustomisableReference;
 
 /**
- * Class RefRewardRules
+ * Class RefRewardsRules
  * Справочник правил расчета вознаграждения
  */
-class RefRewardRules extends CustomisableReference {
+class RefRewardsRules extends CustomisableReference {
 
 	public $menuCaption = "Справочник правил расчета вознаграждения";
 
@@ -17,6 +17,6 @@ class RefRewardRules extends CustomisableReference {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'ref_reward_rule';
+		return 'ref_rewards_rules';
 	}
 }

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\models\reward\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\reward\active_record\references\RefRewardOperations;
-use app\models\reward\active_record\references\RefRewardRules;
+use app\models\reward\active_record\references\RefRewardsOperations;
+use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
@@ -26,8 +26,8 @@ use yii\db\ActiveRecord;
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
  *
- * @property RefRewardOperations $refRewardOperation Справочник операций
- * @property RefRewardRules $refRewardRule Справочник правил расчета вознаграждения
+ * @property RefRewardsOperations $refRewardsOperations Справочник операций
+ * @property RefRewardsRules $refRewardsRules Справочник правил расчета вознаграждения
  * @property Users $relatedUser Пользователь к которому относится вознаграждение
  */
 class RewardsAR extends ActiveRecord {
@@ -76,15 +76,15 @@ class RewardsAR extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefRewardOperation():ActiveQuery {
-		return $this->hasOne(RefRewardOperations::class, ['id' => 'operation']);
+	public function getRefRewardsOperations():ActiveQuery {
+		return $this->hasOne(RefRewardsOperations::class, ['id' => 'operation']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefRewardRule():ActiveQuery {
-		return $this->hasOne(RefRewardRules::class, ['id' => 'rule']);
+	public function getRefRewardsRules():ActiveQuery {
+		return $this->hasOne(RefRewardsRules::class, ['id' => 'rule']);
 	}
 
 	/**
