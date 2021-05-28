@@ -13,7 +13,7 @@ use yii\base\View;
 	<div class="suggestion-name">{{name}}</div>
 	<div class="suggestion-links">
 		<a href="<?= SellersController::to('edit') ?>?id={{id}}"
-		   class="dashboard-button btn btn-xs btn-info pull-left">Редактировать<a/>
+		   class="dashboard-button btn btn-xs btn-info float-left">Редактировать<a/>
 	</div>
 	<div class="clearfix"></div>
 </div>
