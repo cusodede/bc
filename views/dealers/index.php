@@ -10,12 +10,12 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\models\core\TemporaryHelper;
 use app\models\dealers\DealersSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\bootstrap4\Html;
@@ -44,7 +44,7 @@ ModalHelperAsset::register($this);
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
-		'columns' => array_merge(TemporaryHelper::GuessDataProviderColumns($dataProvider), [
+		'columns' => [
 			[
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
@@ -60,7 +60,41 @@ ModalHelperAsset::register($this);
 						]);
 					},
 				],
+			],
+			'id',
+			'name',
+			'code',
+			'client_code',
+			[
+				'attribute' => 'group',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model, int $key, int $index) {
+					return BadgeWidget::widget([
+						'items' => $model->refDealersGroups,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
+				'attribute' => 'type',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model, int $key, int $index) {
+					return BadgeWidget::widget([
+						'items' => $model->refDealersTypes,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
+				'attribute' => 'branch',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model, int $key, int $index) {
+					return BadgeWidget::widget([
+						'items' => $model->refBranches,
+						'subItem' => 'name'
+					]);
+				}
 			]
-		]),
-	])
+		]
+	]),
 ]) ?>
