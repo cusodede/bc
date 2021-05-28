@@ -11,6 +11,8 @@ use pozitronik\references\models\CustomisableReference;
 class RefSellingChannels extends CustomisableReference {
 
 	public $menuCaption = "Каналы продаж";
+	public $moduleId = "Магазины";
+
 	/**
 	 * {@inheritdoc}
 	 */

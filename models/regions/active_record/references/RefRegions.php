@@ -12,6 +12,7 @@ class RefRegions extends CustomisableReference {
 
 	public $menuCaption = "Справочник регионов";
 
+	public $moduleId = "Регионы";
 	/**
 	 * {@inheritdoc}
 	 */

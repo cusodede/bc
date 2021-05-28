@@ -11,6 +11,7 @@ use pozitronik\references\models\CustomisableReference;
 class RefBranches extends CustomisableReference {
 
 	public $menuCaption = "Справочник филиалов";
+	public $moduleId = "Филиалы";
 
 	/**
 	 * {@inheritdoc}
