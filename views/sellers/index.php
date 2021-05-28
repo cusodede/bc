@@ -11,7 +11,10 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\controllers\StoresController;
+use app\models\core\prototypes\ProjectConstants;
 use app\models\seller\SellersSearch;
+use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
@@ -20,6 +23,7 @@ use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\bootstrap4\Html;
+use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use yii\web\View;
 
@@ -63,7 +67,79 @@ ModalHelperAsset::register($this);
 				],
 			],
 			'id',
+			'surname',
 			'name',
+			'patronymic',
+			[
+				'attribute' => 'gender',
+				'value' => static function(SellersSearch $model) {
+					return ArrayHelper::getValue(ProjectConstants::GENDER, $model->gender);
+				},
+				'format' => 'raw',
+				'filter' => ProjectConstants::GENDER,
+				'filterWidgetOptions' => [
+					'pluginOptions' => ['allowClear' => true, 'placeholder' => '']
+				]
+			],
+			[
+				'attribute' => 'birthday',
+				'filterType' => DatePicker::class,
+				'filterWidgetOptions' => [
+					'type' => DatePicker::TYPE_INPUT,
+					'pluginOptions' => [
+						'alwaysShowCalendars' => true,
+						'format' => 'yyyy-mm-dd'
+					]
+				]
+			],
+			'login',
+			'email',
+			[
+				'attribute' => 'create_date',
+				'filterType' => DateTimePicker::class,
+				'filterWidgetOptions' => [
+					'type' => DateTimePicker::TYPE_INPUT,
+					'pluginOptions' => [
+						'alwaysShowCalendars' => true
+					]
+				]
+			],
+			[
+				'attribute' => 'update_date',
+				'filterType' => DateTimePicker::class,
+				'filterWidgetOptions' => [
+					'type' => DateTimePicker::TYPE_INPUT,
+					'pluginOptions' => [
+						'alwaysShowCalendars' => true
+					]
+				]
+			],
+			'is_resident:boolean',
+			[
+				'attribute' => 'passport',
+				'value' => static function(SellersSearch $model) {
+					return "{$model->passport_series} {$model->passport_number}";
+				}
+			],
+			'passport_whom',
+			'passport_when',
+			'reg_address',
+			[
+				'attribute' => 'entry_date',
+				'filterType' => DatePicker::class,
+				'filterWidgetOptions' => [
+					'type' => DatePicker::TYPE_INPUT,
+					'pluginOptions' => [
+						'alwaysShowCalendars' => true,
+						'format' => 'yyyy-mm-dd'
+					]
+				]
+			],
+			'inn',
+			'snils',
+			'keyword',
+			'is_wireman_shpd:boolean',
+			'tt_code',
 			[
 				'attribute' => 'store',
 				'format' => 'raw',
