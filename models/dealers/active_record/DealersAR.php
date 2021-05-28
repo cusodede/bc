@@ -4,8 +4,12 @@ declare(strict_types = 1);
 namespace app\models\dealers\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\dealers\active_record\references\RefBranches;
+use app\models\dealers\active_record\references\RefDealersGroups;
+use app\models\dealers\active_record\references\RefDealersTypes;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,6 +25,10 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property int $deleted
+ *
+ * @property RefDealersTypes $refDealersTypes Справочник типов
+ * @property RefDealersGroups $refDealersGroups Справочник групп дилеров
+ * @property RefBranches $refBranches Справочник филиалов
  */
 class DealersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -74,7 +82,28 @@ class DealersAR extends ActiveRecord {
 			'type' => 'Тип',
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
-			'deleted' => 'Deleted',
+			'deleted' => 'Deleted'
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefDealersTypes():ActiveQuery {
+		return $this->hasOne(RefDealersTypes::class, ['id' => 'type']);
+	}
+
+	/**
+	 * @returnActiveQuery
+	 */
+	public function getRefDealersGroups():ActiveQuery {
+		return $this->hasOne(RefDealersGroups::class, ['id' => 'group']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefBranches():ActiveQuery {
+		return $this->hasOne(RefDealersTypes::class, ['id' => 'branch']);
 	}
 }
