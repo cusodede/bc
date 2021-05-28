@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\reward;
 
-use app\models\reward\active_record\references\RefRewardOperations;
-use app\models\reward\active_record\references\RefRewardRules;
+use app\models\reward\active_record\references\RefRewardsOperations;
+use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\active_record\RewardsAR;
 use app\modules\status\models\Status;
 use app\modules\status\models\StatusRulesModel;
@@ -57,8 +57,8 @@ final class RewardsSearch extends RewardsAR {
 	private function initQuery(LCQuery $query):void {
 		$query->select([
 			self::tableName().'.*',
-			RefRewardOperations::tableName().'.name AS operationName',
-			RefRewardRules::tableName().'.name AS ruleName',
+			RefRewardsOperations::tableName().'.name AS operationName',
+			RefRewardsRules::tableName().'.name AS ruleName',
 			Users::tableName().'.username AS userName',
 			/*Так обеспечивается наполнение атрибута + алфавитная сортировка*/
 			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
@@ -78,7 +78,7 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find();
-		$query->joinWith(['relStatus', 'relatedUser', 'refRewardOperation', 'refRewardRule']);
+		$query->joinWith(['relStatus', 'relatedUser', 'refRewardsOperations', 'refRewardsRules']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -104,7 +104,7 @@ final class RewardsSearch extends RewardsAR {
 			->andFilterWhere([self::tableName().'.value' => $this->value])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
 			->andFilterWhere([self::tableName().'.operation' => $this->operation])
-			->andFilterWhere(['like', RefRewardRules::tableName().'.name', $this->ruleName])
+			->andFilterWhere(['like', RefRewardsRules::tableName().'.name', $this->ruleName])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
 			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus])
@@ -127,12 +127,12 @@ final class RewardsSearch extends RewardsAR {
 					'desc' => ['currentStatus' => SORT_DESC]
 				],
 				'operationName' => [
-					'asc' => [RefRewardOperations::tableName().'.name' => SORT_ASC],
-					'desc' => [RefRewardOperations::tableName().'.name' => SORT_DESC]
+					'asc' => [RefRewardsOperations::tableName().'.name' => SORT_ASC],
+					'desc' => [RefRewardsOperations::tableName().'.name' => SORT_DESC]
 				],
 				'ruleName' => [
-					'asc' => [RefRewardRules::tableName().'.name' => SORT_ASC],
-					'desc' => [RefRewardRules::tableName().'.name' => SORT_DESC]
+					'asc' => [RefRewardsRules::tableName().'.name' => SORT_ASC],
+					'desc' => [RefRewardsRules::tableName().'.name' => SORT_DESC]
 				],
 				'userName' => [
 					'asc' => [Users::tableName().'.username' => SORT_ASC],

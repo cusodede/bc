@@ -10,7 +10,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\models\reward\active_record\references\RefRewardOperations;
+use app\models\reward\active_record\references\RefRewardsOperations;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 use app\modules\status\models\StatusRulesModel;
@@ -112,7 +112,7 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refRewardOperation,
+						'items' => $model->refRewardsOperations,
 						'subItem' => 'name',
 						'useBadges' => false
 					]);
@@ -120,7 +120,7 @@ ModalHelperAsset::register($this);
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'operation',
-					'data' => RefRewardOperations::mapData(),
+					'data' => RefRewardsOperations::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
@@ -132,7 +132,7 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(RewardsSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refRewardRule,
+						'items' => $model->refRewardsRules,
 						'subItem' => 'name',
 						'useBadges' => false
 					]);
