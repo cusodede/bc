@@ -18,7 +18,7 @@ $modelName = $model->formName();
 	'size' => Modal::SIZE_LARGE,
 	'title' => BadgeWidget::widget([
 		'items' => $model,
-		'subItem' => 'id'
+		'subItem' => 'name'
 	]),
 	'options' => [
 		'class' => 'modal-dialog-large',
