@@ -104,6 +104,6 @@ class DealersAR extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRefBranches():ActiveQuery {
-		return $this->hasOne(RefDealersTypes::class, ['id' => 'branch']);
+		return $this->hasOne(RefBranches::class, ['id' => 'branch']);
 	}
 }
