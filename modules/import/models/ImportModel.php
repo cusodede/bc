@@ -178,7 +178,7 @@ class ImportModel extends Model {
 			}
 
 		}
-		return true;
+		return false;
 	}
 
 	/**
