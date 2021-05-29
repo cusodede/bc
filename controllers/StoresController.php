@@ -3,9 +3,11 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\branches\active_record\references\RefBranches;
 use app\models\core\prototypes\DefaultController;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\store\active_record\references\RefSellingChannels;
+use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\Stores;
 use app\models\store\StoresSearch;
 
@@ -32,26 +34,26 @@ class StoresController extends DefaultController {
 				'attribute' => 'branch',
 				'foreign' => [
 					'match' => static function(string $attributeValue) {
-						if (null === $id = RefRegions::find()->select('id')->where(['like', 'name' => $attributeValue])->one()) {
+						if (null === $record = RefBranches::find()->where(['like', 'name', "%$attributeValue%", false])->one()) {
 							return null;
 						}
-						return (int)$id;
+						return $record->id;
 					},
-					'class' => RefRegions::class,
+					'class' => RefBranches::class,
 					'attribute' => 'name',//в какое поле вставить значение
 					'key' => 'id'//что получить. Можно не указывать, тогда используется primaryKey
 				]
 			],
-			6 => ['attribute' => 'name'],
-			7 => [
+			5 => ['attribute' => 'name'],
+			6 => [
 				'attribute' => 'type',
 				'foreign' => [
-					'class' => RefRegions::class,
+					'class' => RefStoresTypes::class,
 					'attribute' => 'name',//в какое поле вставить значение
 					'key' => 'id'//что получить. Можно не указывать, тогда используется primaryKey
 				]
 			],
-			8 => [
+			7 => [
 				'attribute' => 'selling_channel',
 				'foreign' => [
 					'class' => RefSellingChannels::class,
