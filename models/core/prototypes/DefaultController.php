@@ -51,14 +51,16 @@ class DefaultController extends Controller {
 	public bool $enablePrototypeMenu = true;
 
 	/**
-	 * @var array $mappingRules
+	 * @return array
 	 */
-	public array $mappingRules = [];
+	public function getMappingRules():array {
+		return [];
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function beforeAction($action) {
+	public function beforeAction($action):bool {
 		$this->view->title = $this->view->title??$this->id;
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {

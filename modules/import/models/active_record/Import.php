@@ -13,6 +13,10 @@ use yii\db\ActiveRecord;
  * @property int $processed
  */
 class Import extends ActiveRecord {
+	public const NOT_PROCESSED = 0;
+	public const PROCESSED = 1;
+	public const PROCESSED_ERROR = 2;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -26,7 +30,8 @@ class Import extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['model', 'domain'], 'required'],
-			[['domain', 'processed'], 'integer'],
+			[['domain'], 'integer'],
+			[['processed'], 'integer'],
 			[['data'], 'string'],
 			[['model'], 'string', 'max' => 255],
 		];
