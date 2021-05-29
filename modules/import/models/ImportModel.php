@@ -24,6 +24,8 @@ use yii\db\ActiveRecord;
  * @property array $mappingRules правила соответствия полей в формате
  * @property-read ?string $filename путь загруженного/обрабатываемого импорта
  * @property-read int $count количество прогруженных строк
+ * @property-read int $done количество импортированных строк
+ * @property-read int $percent процент импортированных строк
  */
 class ImportModel extends Model {
 	use FileStorageTrait;
@@ -230,6 +232,20 @@ class ImportModel extends Model {
 			$this->_count = (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain])->count();
 		}
 		return $this->_count;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPercent():float {
+		return (int)(($this->done / $this->count) * 100);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDone():int {
+		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => true])->count();
 	}
 
 }
