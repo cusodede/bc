@@ -5,6 +5,7 @@ namespace app\models\store\active_record;
 
 use app\models\branches\active_record\references\RefBranches;
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
@@ -23,6 +24,7 @@ use yii\db\ActiveRecord;
  * @property string $name Название магазина
  * @property int $type Тип магазина
  * @property int $branch Филиал
+ * @property int $region Филиал
  * @property int $selling_channel Тип магазина
  * @property string $create_date Дата регистрации
  * @property int $deleted
@@ -30,6 +32,7 @@ use yii\db\ActiveRecord;
  * @property RefStoresTypes $refStoresTypes Тип точки (справочник)
  * @property RefSellingChannels $refSellingChannels Канал продаж (справочник)
  * @property RefBranches $refBranches Филиал (справочник)
+ * @property RefRegions $refRegions Регионы (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Sellers[] $sellers Все продавцы точки
@@ -50,7 +53,7 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'type', 'selling_channel', 'branch'], 'required'],
+			[['name', 'type', 'selling_channel', 'branch', 'region'], 'required'],
 			[['type', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
@@ -135,6 +138,13 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function getRefBranches():ActiveQuery {
 		return $this->hasOne(RefBranches::class, ['id' => 'branch']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRegions(): ActiveQuery {
+		return $this->hasOne(RefRegions::class, ['id' => 'region']);
 	}
 
 }
