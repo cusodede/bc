@@ -86,6 +86,16 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
+				'attribute' => 'region',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refRegions,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
 				'attribute' => 'selling_channel',
 				'format' => 'raw',
 				'value' => static function(StoresSearch $model):string {
