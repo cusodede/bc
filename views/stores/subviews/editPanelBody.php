@@ -8,6 +8,7 @@ declare(strict_types = 1);
  */
 
 use app\controllers\SellersController;
+use app\models\branches\active_record\references\RefBranches;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
@@ -28,6 +29,13 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'type')->widget(ReferenceSelectWidget::class, [
 			'referenceClass' => RefStoresTypes::class
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'branch')->widget(ReferenceSelectWidget::class, [
+			'referenceClass' => RefBranches::class
 		]) ?>
 	</div>
 </div>

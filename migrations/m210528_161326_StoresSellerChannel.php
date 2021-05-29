@@ -10,7 +10,7 @@ class m210528_161326_StoresSellerChannel extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->addColumn('stores', 'selling_channel', $this->integer()->notNull()->comment('Канал продаж'));
+		$this->addColumn('stores', 'selling_channel', $this->integer()->notNull()->comment('Канал продаж')->after('type'));
 
 		$this->createIndex('selling_channel', 'stores', 'selling_channel');
 	}

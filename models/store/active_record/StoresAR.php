@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\store\active_record;
 
+use app\models\branches\active_record\references\RefBranches;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
@@ -21,12 +22,14 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $name Название магазина
  * @property int $type Тип магазина
+ * @property int $branch Филиал
  * @property int $selling_channel Тип магазина
  * @property string $create_date Дата регистрации
  * @property int $deleted
  *
  * @property RefStoresTypes $refStoresTypes Тип точки (справочник)
  * @property RefSellingChannels $refSellingChannels Канал продаж (справочник)
+ * @property RefBranches $refBranches Филиал (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Sellers[] $sellers Все продавцы точки
@@ -47,7 +50,7 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['name', 'type', 'selling_channel'], 'required'],
+			[['name', 'type', 'selling_channel', 'branch'], 'required'],
 			[['type', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
@@ -125,6 +128,13 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function getRefSellingChannels():ActiveQuery {
 		return $this->hasOne(RefSellingChannels::class, ['id' => 'selling_channel']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefBranches():ActiveQuery {
+		return $this->hasOne(RefBranches::class, ['id' => 'branch']);
 	}
 
 }
