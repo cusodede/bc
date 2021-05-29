@@ -51,14 +51,16 @@ class DefaultController extends Controller {
 	public bool $enablePrototypeMenu = true;
 
 	/**
-	 * @var array $mappingRules
+	 * @return array
 	 */
-	public array $mappingRules = [];
+	public function getMappingRules():array {
+		return [];
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function beforeAction($action) {
+	public function beforeAction($action):bool {
 		$this->view->title = $this->view->title??$this->id;
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {
@@ -263,9 +265,10 @@ class DefaultController extends Controller {
 	/**
 	 * Аяксовый поиск в Select2
 	 * @param string|null $term
+	 * @param string $column
 	 * @return string[][]
 	 */
-	public function actionAjaxSearch(?string $term):array {
+	public function actionAjaxSearch(?string $term, string $column = 'name'):array {
 		$out = [
 			'results' => [
 				'id' => '',
@@ -275,8 +278,8 @@ class DefaultController extends Controller {
 		if (null !== $term) {
 			$tableName = $this->model::tableName();
 			$data = $this->model::find()
-				->select(["{$tableName}.id", "{$tableName}.name as text"])
-				->where(['like', "{$tableName}.name", "%$term%", false])
+				->select(["{$tableName}.id", "{$tableName}.{$column} as text"])
+				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()
 				->distinct()
 				->asArray()

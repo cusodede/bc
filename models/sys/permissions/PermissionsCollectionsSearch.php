@@ -24,6 +24,13 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 		];
 	}
 
+	public function attributeLabels():array {
+		return parent::attributeLabels() + [
+				'name' => 'Название',
+				'permission' => 'Разрешения'
+			];
+	}
+
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider

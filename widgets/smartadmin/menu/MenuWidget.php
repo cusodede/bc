@@ -5,7 +5,7 @@ namespace app\widgets\smartadmin\menu;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\Menu as YiiMenuWidget;
 
 /**
