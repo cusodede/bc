@@ -5,7 +5,6 @@ namespace app\modules\import\models;
 
 use Throwable;
 use yii\base\Action;
-use yii\web\Response;
 
 /**
  * Class ImportAction
@@ -19,7 +18,7 @@ class ImportAction extends Action {
 	public bool $skipEmptyRows = true;
 
 	/**
-	 * @return string|Response
+	 * @return string
 	 * @throws Throwable
 	 */
 	public function run() {
@@ -31,10 +30,9 @@ class ImportAction extends Action {
 		]);
 
 		if (([] !== $importModel->uploadAttribute('importFile')) && $importModel->preload()) {
-			return $this->controller->redirect([
-				'process-import',
-				'domain' => $importModel->domain,
-				'modelClass' => $this->modelClass
+			return $this->controller->render('@app/modules/import/views/preload-done', [
+				'controller' => get_class($this->controller),
+				'model' => $importModel
 			]);
 		}
 

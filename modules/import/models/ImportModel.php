@@ -23,6 +23,10 @@ use yii\db\ActiveRecord;
  * @property int $importChunkSize количество импортируемых записей, обрабатываемых за раз
  * @property array $mappingRules правила соответствия полей в формате
  * @property-read ?string $filename путь загруженного/обрабатываемого импорта
+ * @property-read int $count количество прогруженных строк
+ * @property-read int $done количество импортированных строк
+ * @property-read int $percent процент импортированных строк
+ * @property-read int $errorCount количество строк с ошибкой импорта
  */
 class ImportModel extends Model {
 	use FileStorageTrait;
@@ -65,6 +69,11 @@ class ImportModel extends Model {
 	 * @var string|null $_filename Имя загруженного файла в локальной ФС
 	 */
 	private ?string $_filename;
+
+	/**
+	 * @var int $_count количество прогруженных строк
+	 */
+	private ?int $_count = null;
 
 	/**
 	 * @inheritDoc
@@ -110,11 +119,12 @@ class ImportModel extends Model {
 	 */
 	public function preload():bool {
 		$dataArray = $this->loadXls();
-		$rowIndex = 0;
+		$dataArray = array_slice($dataArray, $this->skipRows);
+		if ($this->skipEmptyRows) {
+			$dataArray = array_filter($dataArray);//ignore empty rows
+		}
+		$this->_count = 0;
 		foreach ($dataArray as $importRow) {
-			$rowIndex++;
-			if ($this->skipRows >= $rowIndex) continue;
-			if ($this->skipEmptyRows && [] === array_filter($importRow)) continue;//ignore empty rows
 			$importRow = array_map("trim", $importRow);
 			$rawDataImport = new Import([
 				'data' => serialize($importRow),
@@ -124,6 +134,7 @@ class ImportModel extends Model {
 			if (!$rawDataImport->save()) {
 				throw new Exception(TemporaryHelper::Errors2String($rawDataImport->errors));
 			}
+			$this->_count++;
 		}
 		return true;
 	}
@@ -133,10 +144,11 @@ class ImportModel extends Model {
 	 * @param array $messages
 	 * @return bool
 	 * @throws Throwable
+	 * todo: добавить правило, разрешающее скипать существующие данные
 	 */
 	public function import(array &$messages = []):bool {
 		/** @var Import $data */
-		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => false])->limit($this->importChunkSize)->all()) {
+		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => Import::NOT_PROCESSED])->limit($this->importChunkSize)->all()) {
 			return true;
 		}
 		foreach ($data as $importRecord) {
@@ -146,13 +158,17 @@ class ImportModel extends Model {
 				/** @var array $currentRule */
 				if ((null === $currentRule = ArrayHelper::getValue($this->mappingRules, $columnIndex)) || !is_array($currentRule)) continue;
 
-				if (null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class')) {//вставить данные во внешнюю таблицу и связать их напрямую
-					if (null !== $foreignModel = self::addInstance($foreignClass, [ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value])) {
-						if (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key')) {
-							$value = $foreignModel->primaryKey;
-						} else {
-							$value = $foreignModel->$return;
-						}
+				//есть функция переопределения вставки
+				if ((null !== $foreignMatch = ArrayHelper::getValue($currentRule, 'foreign.match')) && is_callable($foreignMatch) && null !== $matchedValue = $foreignMatch($value)) {//функция нашла совпадение, вернула значение
+					$value = $matchedValue;
+				} else {
+					//вставить данные во внешнюю таблицу и связать их напрямую
+					if ((null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class'))
+						&& null !== $foreignModel = self::addInstance($foreignClass, [
+							ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value
+						])
+					) {
+						$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key'))?$foreignModel->primaryKey:$foreignModel->$return;
 					}
 					/**
 					 * else {
@@ -167,14 +183,16 @@ class ImportModel extends Model {
 			}
 			$errors = [];
 			if (null !== self::addInstance($this->model, $mappedColumnData, null, false, $errors)) {
-				$importRecord->processed = true;
+				$importRecord->processed = Import::PROCESSED;
 				$importRecord->save();
 			} else {
+				$importRecord->processed = Import::PROCESSED_ERROR;
+				$importRecord->save();
 				$messages[] = $errors;
 			}
 
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -184,8 +202,7 @@ class ImportModel extends Model {
 	 * @param bool $forceUpdate
 	 * @return ActiveRecord|null
 	 */
-	private
-	static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
+	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
 		/** @var ActiveRecord $class */
 		$instance = $class::find()->where($searchCondition)->one();
 		$instance = $instance??new $class();
@@ -202,22 +219,51 @@ class ImportModel extends Model {
 	/**
 	 * Подчищаем обработанные данные
 	 */
-	public
-	function clear():void {
-		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => true]);
+	public function clear():void {
+		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED]);
 	}
 
 	/**
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public
-	function getFilename():?string {
+	public function getFilename():?string {
 		if (null !== $lastFileName = ArrayHelper::getValue($this->files(['importFile']), 0)) {
 			/** @var FileStorage $lastFileName */
 			return $lastFileName->path;
 		}
 		return null;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCount():int {
+		if (null === $this->_count) {
+			$this->_count = (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain])->count();
+		}
+		return $this->_count;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPercent():float {
+		return (int)(($this->done / $this->count) * 100);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDone():int {
+		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => [Import::PROCESSED, Import::PROCESSED_ERROR]])->count();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getErrorCount():int {
+		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED_ERROR])->count();
 	}
 
 }
