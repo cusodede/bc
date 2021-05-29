@@ -21,7 +21,6 @@ use yii\web\View;
 		</div>
 		<div class="panel-content bg-info">
 			Нажмите "Далее" для экспорта в основные таблицы.<br/>
-			Если браузер остановит работу, просто обновите страницу, импорт продолжится с места остановки.
 		</div>
 		<div class="panel-content">
 			<?= Html::a('Далее', $controller::to('process-import', ['domain' => $model->domain, 'modelClass' => $model->model]), [
