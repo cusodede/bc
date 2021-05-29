@@ -147,7 +147,7 @@ class ImportModel extends Model {
 	 */
 	public function import(array &$messages = []):bool {
 		/** @var Import $data */
-		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => false])->limit($this->importChunkSize)->all()) {
+		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => Import::NOT_PROCESSED])->limit($this->importChunkSize)->all()) {
 			return true;
 		}
 		foreach ($data as $importRecord) {
@@ -175,9 +175,11 @@ class ImportModel extends Model {
 			}
 			$errors = [];
 			if (null !== self::addInstance($this->model, $mappedColumnData, null, false, $errors)) {
-				$importRecord->processed = true;
+				$importRecord->processed = Import::PROCESSED;
 				$importRecord->save();
 			} else {
+				$importRecord->processed = Import::PROCESSED_ERROR;
+				$importRecord->save();
 				$messages[] = $errors;
 			}
 
@@ -210,7 +212,7 @@ class ImportModel extends Model {
 	 * Подчищаем обработанные данные
 	 */
 	public function clear():void {
-		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => true]);
+		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED]);
 	}
 
 	/**
@@ -246,7 +248,7 @@ class ImportModel extends Model {
 	 * @return int
 	 */
 	public function getDone():int {
-		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => true])->count();
+		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => [Import::PROCESSED, Import::PROCESSED_ERROR]])->count();
 	}
 
 }
