@@ -70,7 +70,7 @@ class ImportModel extends Model {
 	/**
 	 * @var int $_count количество прогруженных строк
 	 */
-	private int $_count = 0;
+	private ?int $_count = null;
 
 	/**
 	 * @inheritDoc
@@ -116,10 +116,11 @@ class ImportModel extends Model {
 	 */
 	public function preload():bool {
 		$dataArray = $this->loadXls();
-		$dataArray = array_slice($dataArray,$this->skipRows);
+		$dataArray = array_slice($dataArray, $this->skipRows);
 		if ($this->skipEmptyRows) {
 			$dataArray = array_filter($dataArray);//ignore empty rows
 		}
+		$this->_count = 0;
 		foreach ($dataArray as $importRow) {
 			$importRow = array_map("trim", $importRow);
 			$rawDataImport = new Import([
@@ -225,6 +226,9 @@ class ImportModel extends Model {
 	 * @return int
 	 */
 	public function getCount():int {
+		if (null === $this->_count) {
+			$this->_count = (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain])->count();
+		}
 		return $this->_count;
 	}
 
