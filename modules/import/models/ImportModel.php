@@ -188,8 +188,7 @@ class ImportModel extends Model {
 	 * @param bool $forceUpdate
 	 * @return ActiveRecord|null
 	 */
-	private
-	static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
+	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
 		/** @var ActiveRecord $class */
 		$instance = $class::find()->where($searchCondition)->one();
 		$instance = $instance??new $class();
@@ -206,8 +205,7 @@ class ImportModel extends Model {
 	/**
 	 * Подчищаем обработанные данные
 	 */
-	public
-	function clear():void {
+	public function clear():void {
 		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => true]);
 	}
 
@@ -215,8 +213,7 @@ class ImportModel extends Model {
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public
-	function getFilename():?string {
+	public function getFilename():?string {
 		if (null !== $lastFileName = ArrayHelper::getValue($this->files(['importFile']), 0)) {
 			/** @var FileStorage $lastFileName */
 			return $lastFileName->path;
