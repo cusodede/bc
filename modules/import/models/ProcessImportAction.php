@@ -43,9 +43,11 @@ class ProcessImportAction extends Action {
 			]);
 		}
 		if ($isImportDone) {
-			$importModel->clear();
+			$count = $importModel->count;
+			$importModel->clear();/*очищаем, чтоб не мусорить, поэтому count вызываем, он сохранится*/
 			return $this->controller->render('@app/modules/import/views/import-done', [
-				'controller' => get_class($this->controller)
+				'controller' => get_class($this->controller),
+				'model' => $importModel,
 			]);
 		}
 		return $this->controller->render('@app/modules/import/views/import-progress', [
