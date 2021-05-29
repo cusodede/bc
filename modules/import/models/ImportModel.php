@@ -146,21 +146,18 @@ class ImportModel extends Model {
 				/** @var array $currentRule */
 				if ((null === $currentRule = ArrayHelper::getValue($this->mappingRules, $columnIndex)) || !is_array($currentRule)) continue;
 
-				if (null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class')) {//вставить данные во внешнюю таблицу и связать их напрямую
-					if (null !== $foreignModel = self::addInstance($foreignClass, [ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value])) {
-						if (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key')) {
-							$value = $foreignModel->primaryKey;
-						} else {
-							$value = $foreignModel->$return;
-						}
+				//есть функция переопределения вставки
+				if ((null !== $foreignMatch = ArrayHelper::getValue($currentRule, 'foreign.match')) && is_callable($foreignMatch) && null !== $matchedValue = $foreignMatch($value)) {//функция нашла совпадение, вернула значение
+					$value = $matchedValue;
+				} else {
+					//вставить данные во внешнюю таблицу и связать их напрямую
+					if ((null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class'))
+						&& null !== $foreignModel = self::addInstance($foreignClass, [
+							ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value
+						])
+					) {
+						$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key'))?$foreignModel->primaryKey:$foreignModel->$return;
 					}
-					/**
-					 * else {
-					 * ошибка вставки во внешнюю таблицу.
-					 * На данном этапе мы ничего не можем сделать. Нужно предусмотреть какое-то логирование таких ошибок,
-					 * а лучше - механику уведомлений и abort/retry/continue
-					 * }
-					 **/
 				}
 				$mappedColumnData[$currentRule['attribute']] = $value;
 
