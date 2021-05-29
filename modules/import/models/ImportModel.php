@@ -143,6 +143,7 @@ class ImportModel extends Model {
 	 * @param array $messages
 	 * @return bool
 	 * @throws Throwable
+	 * todo: добавить правило, разрешающее скипать существующие данные
 	 */
 	public function import(array &$messages = []):bool {
 		/** @var Import $data */
