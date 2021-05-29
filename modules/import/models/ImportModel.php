@@ -26,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property-read int $count количество прогруженных строк
  * @property-read int $done количество импортированных строк
  * @property-read int $percent процент импортированных строк
+ * @property-read int $errorCount количество строк с ошибкой импорта
  */
 class ImportModel extends Model {
 	use FileStorageTrait;
@@ -249,6 +250,13 @@ class ImportModel extends Model {
 	 */
 	public function getDone():int {
 		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => [Import::PROCESSED, Import::PROCESSED_ERROR]])->count();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getErrorCount():int {
+		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED_ERROR])->count();
 	}
 
 }
