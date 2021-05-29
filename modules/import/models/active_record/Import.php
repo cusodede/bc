@@ -10,9 +10,13 @@ use yii\db\ActiveRecord;
  * @property string $model
  * @property int $domain
  * @property resource $data
- * @property bool $processed
+ * @property int $processed
  */
 class Import extends ActiveRecord {
+	public const NOT_PROCESSED = 0;
+	public const PROCESSED = 1;
+	public const PROCESSED_ERROR = 2;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -27,7 +31,7 @@ class Import extends ActiveRecord {
 		return [
 			[['model', 'domain'], 'required'],
 			[['domain'], 'integer'],
-			[['processed'], 'boolean'],
+			[['processed'], 'integer'],
 			[['data'], 'string'],
 			[['model'], 'string', 'max' => 255],
 		];
