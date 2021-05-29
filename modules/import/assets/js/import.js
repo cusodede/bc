@@ -5,9 +5,12 @@ function RefreshProgress(processImportUrl, progressWidgetId) {
 		async: true,
 		method: 'GET'
 	}).done(function(data) {
-		progressBar.css("width", data.percent+'%')
+		progressBar.css("width", data.percent+'%');
+		if (data.messages) {
+			console.log(data.messages);
+		}
 		if (true === data.done) {
-
+			window.location.reload();
 		} else {
 			RefreshProgress(processImportUrl, progressWidgetId);
 		}
