@@ -116,11 +116,11 @@ class ImportModel extends Model {
 	 */
 	public function preload():bool {
 		$dataArray = $this->loadXls();
-		$rowIndex = 0;
+		$dataArray = array_slice($dataArray,$this->skipRows);
+		if ($this->skipEmptyRows) {
+			$dataArray = array_filter($dataArray);//ignore empty rows
+		}
 		foreach ($dataArray as $importRow) {
-			$rowIndex++;
-			if ($this->skipRows >= $rowIndex) continue;
-			if ($this->skipEmptyRows && [] === array_filter($importRow)) continue;//ignore empty rows
 			$importRow = array_map("trim", $importRow);
 			$rawDataImport = new Import([
 				'data' => serialize($importRow),
