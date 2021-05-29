@@ -30,7 +30,7 @@ class ImportAction extends Action {
 		]);
 
 		if (([] !== $importModel->uploadAttribute('importFile')) && $importModel->preload()) {
-			return $this->controller->render('preload-done', [
+			return $this->controller->render('@app/modules/import/views/preload-done', [
 				'controller' => get_class($this->controller),
 				'model' => $importModel
 			]);
