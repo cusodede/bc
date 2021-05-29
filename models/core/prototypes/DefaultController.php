@@ -51,9 +51,11 @@ class DefaultController extends Controller {
 	public bool $enablePrototypeMenu = true;
 
 	/**
-	 * @var array $mappingRules
+	 * @return array
 	 */
-	public array $mappingRules = [];
+	public function getMappingRules():array {
+		return [];
+	}
 
 	/**
 	 * @inheritDoc
