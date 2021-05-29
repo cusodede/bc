@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\import\models;
 
-use pozitronik\helpers\Utils;
 use Throwable;
+use Yii;
 use yii\base\Action;
 use yii\web\Response;
 
@@ -33,16 +33,22 @@ class ProcessImportAction extends Action {
 			]);
 		}
 
+		if (Yii::$app->request->isAjax) {
+			return $this->controller->asJson([
+				'done' => $isImportDone,
+				'percent' => $isImportDone?100:$importModel->percent
+			]);
+		}
 		if ($isImportDone) {
 			$importModel->clear();
 			return $this->controller->render('@app/modules/import/views/import-done', [
 				'controller' => get_class($this->controller)
 			]);
 		}
-		return $this->controller->redirect([
-			$this->id,
-			'modelClass' => $modelClass,
-			'domain' => $importModel->domain,
-			'uuid' => Utils::gen_uuid()]);
+		return $this->controller->render('@app/modules/import/views/import-progress', [
+			'model' => $importModel,
+			'controller' => get_class($this->controller)
+		]);
+
 	}
 }
