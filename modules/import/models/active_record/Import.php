@@ -10,7 +10,7 @@ use yii\db\ActiveRecord;
  * @property string $model
  * @property int $domain
  * @property resource $data
- * @property int $processed
+ * @property bool $processed
  */
 class Import extends ActiveRecord {
 	/**
@@ -26,7 +26,8 @@ class Import extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['model', 'domain'], 'required'],
-			[['domain', 'processed'], 'integer'],
+			[['domain'], 'integer'],
+			[['processed'], 'boolean'],
 			[['data'], 'string'],
 			[['model'], 'string', 'max' => 255],
 		];
