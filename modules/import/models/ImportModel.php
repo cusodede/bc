@@ -23,6 +23,7 @@ use yii\db\ActiveRecord;
  * @property int $importChunkSize количество импортируемых записей, обрабатываемых за раз
  * @property array $mappingRules правила соответствия полей в формате
  * @property-read ?string $filename путь загруженного/обрабатываемого импорта
+ * @property-read int $count количество прогруженных строк
  */
 class ImportModel extends Model {
 	use FileStorageTrait;
@@ -65,6 +66,11 @@ class ImportModel extends Model {
 	 * @var string|null $_filename Имя загруженного файла в локальной ФС
 	 */
 	private ?string $_filename;
+
+	/**
+	 * @var int $_count количество прогруженных строк
+	 */
+	private int $_count = 0;
 
 	/**
 	 * @inheritDoc
@@ -124,6 +130,7 @@ class ImportModel extends Model {
 			if (!$rawDataImport->save()) {
 				throw new Exception(TemporaryHelper::Errors2String($rawDataImport->errors));
 			}
+			$this->_count++;
 		}
 		return true;
 	}
@@ -215,6 +222,13 @@ class ImportModel extends Model {
 			return $lastFileName->path;
 		}
 		return null;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCount():int {
+		return $this->_count;
 	}
 
 }
