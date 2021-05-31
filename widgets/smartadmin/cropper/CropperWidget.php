@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\widgets\smartadmin\cropper;
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\InputWidget;
 
 /**

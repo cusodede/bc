@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 use kartik\editable\Editable;
 use yii\base\Model;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 
 /**
  * @var Model $model
