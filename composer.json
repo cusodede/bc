@@ -39,6 +39,7 @@
 		"webonyx/graphql-php": "dev-master",
 		"kartik-v/yii2-widget-datetimepicker": "dev-master",
 		"kartik-v/yii2-widget-datepicker": "dev-master"
+		"moonlandsoft/yii2-phpexcel": "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
