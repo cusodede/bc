@@ -37,7 +37,8 @@ use yii\db\ActiveRecord;
  * @property string $snils СНИЛС
  * @property string $keyword Ключевое слово для  «Горячей линии»
  * @property int $is_wireman_shpd Монтажник ШПД
- * @property int $tt_code Код торговой точки в СКАД
+ * @property int $dealer Дилер
+ * @property int $sale_point Торговая точка
  * @property int $contract_signing_address Адрес подписания договора
  * @property int $deleted
  *
@@ -77,8 +78,7 @@ class SellersAR extends ActiveRecord {
 			[
 				[
 					'name', 'surname', 'login', 'passport_series', 'passport_number', 'passport_whom',
-					'passport_when', 'birthday', 'reg_address', 'inn', 'keyword', 'email', 'is_wireman_shpd', 'tt_code',
-					'contract_signing_address', 'is_resident'
+					'passport_when', 'birthday', 'reg_address', 'keyword', 'email', 'is_wireman_shpd', 'is_resident'
 				],
 				'required'
 			],
@@ -86,7 +86,7 @@ class SellersAR extends ActiveRecord {
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
 			['email', 'email'],
-			[['gender', 'is_resident', 'is_wireman_shpd', 'tt_code', 'deleted'], 'integer'],
+			[['gender', 'is_resident', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted'], 'integer'],
 			[['name', 'surname', 'patronymic', 'email'], 'string', 'max' => 128],
 			[['login', 'passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
 			[['passport_whom', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
@@ -127,7 +127,8 @@ class SellersAR extends ActiveRecord {
 			'snils' => 'СНИЛС',
 			'keyword' => 'Ключевое слово для  «Горячей линии»',
 			'is_wireman_shpd' => 'Монтажник ШПД',
-			'tt_code' => 'Код торговой точки в СКАД',
+			'dealer' => 'Дилер',
+			'sale_point' => 'Торговая точка',
 			'contract_signing_address' => 'Адрес подписания договора',
 			'deleted' => 'Deleted'
 		];
