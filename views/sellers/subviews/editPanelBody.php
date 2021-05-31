@@ -124,27 +124,7 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'inn')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'snils')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
 		<?= $form->field($model, 'keyword')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'contract_signing_address')->textarea(['row' => 6]) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'tt_code')->textInput() ?>
 	</div>
 </div>
 <div class="row">

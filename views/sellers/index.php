@@ -135,11 +135,8 @@ ModalHelperAsset::register($this);
 					]
 				]
 			],
-			'inn',
-			'snils',
 			'keyword',
 			'is_wireman_shpd:boolean',
-			'tt_code',
 			[
 				'attribute' => 'store',
 				'format' => 'raw',
