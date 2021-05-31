@@ -6,6 +6,7 @@ namespace app\models\seller\active_record;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
+use app\modules\history\behaviors\HistoryBehavior;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
 use Throwable;
@@ -61,6 +62,9 @@ class SellersAR extends ActiveRecord {
 	 */
 	public function behaviors():array {
 		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			],
 			[
 				'class' => TimestampBehavior::class,
 				'createdAtAttribute' => 'create_date',
