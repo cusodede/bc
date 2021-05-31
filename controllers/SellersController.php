@@ -6,13 +6,11 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
-use pozitronik\core\traits\ControllerTrait;
 
 /**
  * Class SellersController
  */
 class SellersController extends DefaultController {
-	use ControllerTrait;
 
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;

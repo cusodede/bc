@@ -25,7 +25,7 @@ use yii\widgets\DetailView;
 			'format' => 'raw',
 			'value' => static function(RewardsAR $model):string {
 				return BadgeWidget::widget([
-					'items' => $model->refRewardOperation,
+					'items' => $model->refRewardsOperations,
 					'subItem' => 'name'
 				]);
 			}
@@ -35,7 +35,7 @@ use yii\widgets\DetailView;
 			'format' => 'raw',
 			'value' => static function(RewardsAR $model):string {
 				return BadgeWidget::widget([
-					'items' => $model->refRewardRule,
+					'items' => $model->refRewardsRules,
 					'subItem' => 'name'
 				]);
 			}

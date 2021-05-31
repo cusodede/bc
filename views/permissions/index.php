@@ -48,7 +48,7 @@ ModalHelperAsset::register($this);
 		]),
 		'toolbar' => [
 			[
-				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn pull-left btn-info'])
+				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn float-left btn-info'])
 			]
 		],
 		'export' => false,
