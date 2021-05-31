@@ -19,7 +19,8 @@ class m210527_100644_modify_sellers_table extends Migration {
 		'email',
 		'create_date',
 		'update_date',
-		'tt_code'
+		'sale_point',
+		'dealer'
 	];
 
 	private const UNIQUE_INDEXES = [
@@ -58,12 +59,13 @@ class m210527_100644_modify_sellers_table extends Migration {
 			'passport_when' => $this->date()->notNull()->comment('Когда выдан паспорт'),
 			'reg_address' => $this->string()->notNull()->comment('Адрес регистрации'),
 			'entry_date' => $this->date()->comment('Дата въезда в страну'),
-			'inn' => $this->string(12)->notNull()->comment('ИНН'),
+			'inn' => $this->string(12)->comment('ИНН'),
 			'snils' => $this->string(14)->comment('СНИЛС'),
 			'keyword' => $this->string(64)->notNull()->comment('Ключевое слово для  «Горячей линии»'),
 			'is_wireman_shpd' => $this->boolean()->notNull()->comment('Монтажник ШПД'),
-			'tt_code' => $this->integer()->notNull()->comment('Код торговой точки в СКАД'),
-			'contract_signing_address' => $this->string()->notNull()->comment('Адрес подписания договора'),
+			'dealer' => $this->integer()->comment('Дилер'),
+			'sale_point' => $this->integer()->comment('Торговая точка'),
+			'contract_signing_address' => $this->string()->comment('Адрес подписания договора'),
 			'deleted' => $this->boolean()->notNull()->defaultValue(0)
 		]);
 
