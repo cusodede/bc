@@ -82,6 +82,17 @@ class SellersAR extends ActiveRecord {
 				],
 				'required'
 			],
+			[
+				'entry_date',
+				'required',
+				'when' => static function($model) {
+					/** @var self $model */
+					return !$model->is_resident;
+				},
+				'whenClient' => "function() {
+					return !document.getElementById('sellers-is_resident').checked;
+				}"
+			],
 			[['create_date', 'update_date'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],

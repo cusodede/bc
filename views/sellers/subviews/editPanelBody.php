@@ -70,18 +70,6 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'is_resident')->widget(SwitchInput::class, [
-			'tristate' => false,
-			'pluginOptions' => [
-				'size' => 'mini',
-				'onText' => '<i class="glyphicon glyphicon-check"></i>',
-				'offText' => null
-			],
-		]) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
 		<?= $form->field($model, 'passport_series')->textInput() ?>
 	</div>
 </div>
@@ -109,6 +97,18 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'reg_address')->textarea(['row' => 6]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'is_resident')->widget(SwitchInput::class, [
+			'tristate' => false,
+			'pluginOptions' => [
+				'size' => 'mini',
+				'onText' => '<i class="glyphicon glyphicon-check"></i>',
+				'offText' => null
+			],
+		]) ?>
 	</div>
 </div>
 <div class="row">
