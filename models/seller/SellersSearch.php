@@ -26,8 +26,8 @@ final class SellersSearch extends SellersAR {
 		return [
 			[
 				[
-					'id', 'deleted', 'is_wireman_shpd', 'is_resident', 'gender', 'name', 'surname', 'patronymic', 'email',
-					'passport', 'inn', 'snils', 'login', 'keyword', 'birthday', 'entry_date', 'store'
+					'id', 'gender', 'name', 'surname', 'patronymic', 'email', 'passport', 'login', 'keyword',
+					'birthday', 'entry_date', 'create_date', 'update_date', 'store'
 				],
 				'filter',
 				'filter' => 'trim'
@@ -36,10 +36,9 @@ final class SellersSearch extends SellersAR {
 			[['deleted', 'is_wireman_shpd', 'is_resident'], 'boolean'],
 			['store', 'string', 'max' => 255],
 			[['birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
+			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i'],
 			[['login', 'keyword'], 'string', 'max' => 64],
-			[['name', 'surname', 'patronymic', 'email', 'passport'], 'string', 'max' => 128],
-			['inn', 'string', 'max' => 12],
-			['snils', 'string', 'max' => 14]
+			[['name', 'surname', 'patronymic', 'email', 'passport'], 'string', 'max' => 128]
 		];
 	}
 
@@ -83,8 +82,6 @@ final class SellersSearch extends SellersAR {
 			->andFilterWhere([self::tableName().'.passport_series' => $this->passportExplodedSeries])
 			->andFilterWhere([self::tableName().'.passport_number' => $this->passportExplodedNumber])
 			->andFilterWhere([self::tableName().'.entry_date' => $this->entry_date])
-			->andFilterWhere([self::tableName().'.inn' => $this->inn])
-			->andFilterWhere([self::tableName().'.snils' => $this->snils])
 			->andFilterWhere([self::tableName().'.keyword' => $this->keyword])
 			->andFilterWhere([self::tableName().'.is_resident' => $this->is_resident])
 			->andFilterWhere([self::tableName().'.is_wireman_shpd' => $this->is_wireman_shpd])
@@ -98,7 +95,10 @@ final class SellersSearch extends SellersAR {
 	private function setSort($dataProvider):void {
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
-			'attributes' => ['id', 'name', 'deleted']
+			'attributes' => [
+				'id', 'name', 'surname', 'patronymic', 'gender', 'birthday', 'login', 'deleted', 'email', 'create_date',
+				'update_date', 'entry_date', 'create_date', 'update_date', 'keyword', 'is_resident', 'is_wireman_shpd'
+			]
 		]);
 	}
 
