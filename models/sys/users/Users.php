@@ -7,6 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use pozitronik\sys_exceptions\models\LoggedException;
+use Webmozart\Assert\Assert;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\ForbiddenHttpException;
@@ -154,6 +155,16 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function validatePassword(string $password):bool {
 		return $this->isSaltedPassword?$this->doSalt($password) === $this->password:$this->password === $password;
+	}
+
+	/**
+	 * @param string $username
+	 * @return $this
+	 */
+	public function setUserName(string $username):self {
+		Assert::notEmpty($username, 'username не может быть пустым');
+		$this->username = $username;
+		return $this;
 	}
 
 }

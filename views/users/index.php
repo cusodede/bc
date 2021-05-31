@@ -18,6 +18,7 @@ use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
@@ -50,7 +51,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{update-password}',
+				'template' => '{edit}{update-password}{login-as-another-user}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
 						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
@@ -62,6 +63,15 @@ ModalHelperAsset::register($this);
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
+					'login-as-another-user' => static function (string $url, Users $model) {
+						$action = Url::toRoute(['users/login-as-another-user']);
+
+						$form = Html::beginForm($action, 'post', ['id' => 'login-as-another-user']);
+						$form .= Html::hiddenInput('userId', $model->id);
+						$form .= Html::submitButton("Ok");
+						$form .= Html::endForm();
+						return $form;
+					}
 				],
 			],
 			'id',

@@ -18,7 +18,7 @@ $this->title = 'Вход';
 ?>
 <div class="panel">
 	<div class="panel-body">
-		<?php $form = ActiveForm::begin(); ?>
+		<?php $form = ActiveForm::begin(['id' => 'login_form']); ?>
 		<div class="form-group">
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
 		</div>

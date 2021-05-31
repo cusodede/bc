@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use DomainException;
 use pozitronik\core\models\LCQuery;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
@@ -189,6 +190,17 @@ trait ActiveRecordTrait {
 	public function isAttributeUpdated(string $attribute, bool $strict = true):bool {
 		/** @noinspection TypeUnsafeComparisonInspection */
 		return $strict?(ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute):(ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function saveAndReturn() : self
+	{
+		if (!$this->save()) {
+			throw new DomainException(implode(".", $this->getFirstErrors()));
+		}
+		return $this;
 	}
 
 }

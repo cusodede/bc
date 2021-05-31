@@ -47,6 +47,19 @@ ModalHelperAsset::register($this);
 
 <body>
 <?php $this->beginBody(); ?>
+<?php if (Yii::$app->session->hasFlash('success')) { ?>
+	<div class="alert alert-success flash-success text-center">
+		<?= Yii::$app->session->getFlash('success') ?>
+	</div>
+<?php } ?>
+
+
+<?php if (Yii::$app->session->hasFlash('error')) { ?>
+	<div class="alert alert-danger flash-error text-center">
+		<?= Yii::$app->session->getFlash('error') ?>
+	</div>
+<?php } ?>
+
 <?php if (Yii::$app->user->isGuest || ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false)): ?>
 	<div class="panel panel-trans text-center">
 		<div class="panel-heading">
@@ -153,6 +166,14 @@ ModalHelperAsset::register($this);
 							'encode' => true
 						],
 						'<li class="divider"></li>',
+						[
+							'label' => 'Вернуться в свой аккаунт',
+							'url' => UsersController::to('login-back'),
+							'visible' => Yii::$app->user->isLoginAsAnotherUser(),
+							'options' => [
+								'class' => 'js-login-back-url pull-right'
+							]
+						],
 						[
 							'label' => 'Выход',
 							'url' => SiteController::to('logout'),
