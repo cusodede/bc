@@ -49,7 +49,7 @@ return [
 			'initial' => false,
 			'finishing' => true,
 			'next' => [SELLER_NOT_ACTIVE, SELLER_ACTIVE, SELLER_BLOCKED, SELLER_SUSPENDED],
-			'allowed' => static function(Sellers $model, Users $user):bool {/*Одобрить задание может только текущий кластерлид*/
+			'allowed' => static function(Sellers $model, Users $user):bool {
 				return true;
 			},
 			'color' => '#00ff00'
@@ -60,7 +60,7 @@ return [
 			'initial' => false,
 			'finishing' => true,
 			'next' => [SELLER_NOT_ACTIVE, SELLER_ACTIVE, SELLER_LIMITED, SELLER_SUSPENDED],
-			'allowed' => static function(Sellers $model, Users $user):bool {/*Одобрить задание может только текущий кластерлид*/
+			'allowed' => static function(Sellers $model, Users $user):bool {
 				return true;
 			},
 			'color' => '#00ff00'
@@ -71,7 +71,7 @@ return [
 			'initial' => false,
 			'finishing' => true,
 			'next' => [SELLER_NOT_ACTIVE, SELLER_ACTIVE, SELLER_LIMITED, SELLER_BLOCKED],
-			'allowed' => static function(Sellers $model, Users $user):bool {/*Одобрить задание может только текущий кластерлид*/
+			'allowed' => static function(Sellers $model, Users $user):bool {
 				return true;
 			},
 			'color' => '#00ff00'
@@ -131,7 +131,7 @@ return [
 			'initial' => false,
 			'finishing' => true,
 			'next' => [ARCHIVE],
-			'allowed' => static function(MerchOrder $model, Users $user):bool {/*Одобрить задание может только текущий кластерлид*/
+			'allowed' => static function(MerchOrder $model, Users $user):bool {
 				return true;
 			},
 			'color' => '#00ff00'
