@@ -149,3 +149,8 @@ use yii\web\View;
 		]) ?>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'uploadFileInstance')->fileInput() ?>
+	</div>
+</div>

@@ -26,6 +26,7 @@ use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use yii\web\View;
+use app\controllers\UploadsController;
 
 ModalHelperAsset::register($this);
 ?>
@@ -154,7 +155,21 @@ ModalHelperAsset::register($this);
 					]);
 				}
 			],
-			'deleted:boolean'
-		],
+			'deleted:boolean',
+			[
+				'attribute' => 'uploadedFiles',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					$uploads = [];
+					foreach ($model->uploads as $upload) {
+						$uploads[] = Html::a(
+							'Скачать',
+							UploadsController::to('download', ['id' => $upload->id])
+						);
+					}
+					return implode('<br>', $uploads);
+				}
+			]
+		]
 	])
 ]) ?>
