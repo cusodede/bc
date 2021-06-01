@@ -13,7 +13,7 @@ class PhoneNumberValidator extends Validator {
 	/**
 	 * @inheritDoc
 	 */
-	public function validateAttribute($model, $attribute) {
+	public function validateAttribute($model, $attribute):void {
 		$validatedValue = $model->$attribute;
 		if (is_array($validatedValue)) {
 			$errors = [];
@@ -27,9 +27,6 @@ class PhoneNumberValidator extends Validator {
 					?implode(', ', $errors)." не является корректным телефонным номером"
 					:implode(', ', $errors)." не являются корректными телефонными номерами");
 			}
-		} else {
-			if (!Phones::isValidNumber($validatedValue)) $this->addError($model, $attribute, "$validatedValue не является корректным телефонным номером");
-		}
-
+		} elseif (!Phones::isValidNumber($validatedValue)) $this->addError($model, $attribute, "$validatedValue не является корректным телефонным номером");
 	}
 }
