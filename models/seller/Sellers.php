@@ -12,13 +12,4 @@ use pozitronik\filestorage\traits\FileStorageTrait;
  */
 class Sellers extends SellersAR {
 	use FileStorageTrait;
-
-	/**
-	 * В этом методе будем проверять данные в других сервисах (Госуслуги, налоговая и т.д.)
-	 * Сюда передаем POST
-	 * @return bool
-	 */
-	public function checkData():bool {
-		return true;
-	}
 }
