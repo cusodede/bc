@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record;
 
+use app\models\phones\active_record\PhonesAR;
+use app\models\sys\users\active_record\relations\RelUsersToPhones;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use Yii;
@@ -26,6 +28,8 @@ use yii\db\ActiveRecord;
  * @property bool $deleted Флаг удаления
  *
  * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
+ * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
+ * @property PhonesAR[] $relatedPhones Телефонные номера пользователя
  */
 class Users extends ActiveRecord {
 
@@ -94,6 +98,20 @@ class Users extends ActiveRecord {
 	 */
 	public function getRelatedUsersTokens():ActiveQuery {
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersToPhones():ActiveQuery {
+		return $this->hasMany(RelUsersToPhones::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return PhonesAR[]
+	 */
+	public function getRelatedPhones():array {
+		return $this->hasMany(PhonesAR::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
 	}
 
 }
