@@ -31,6 +31,7 @@ class RelUsersToPhones extends ActiveRecord {
 			[['user_id', 'phone_id'], 'required'],
 			[['user_id', 'phone_id'], 'integer'],
 			[['user_id', 'phone_id'], 'unique', 'targetAttribute' => ['user_id', 'phone_id']],
+			[['phone_id'], 'unique'] /*у разных юзеров не может быть одного телефона*/
 		];
 	}
 
