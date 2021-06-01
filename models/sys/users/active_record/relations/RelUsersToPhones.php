@@ -20,7 +20,7 @@ class RelUsersToPhones extends ActiveRecord {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'relation_stores_to_users';
+		return 'relation_users_to_phones';
 	}
 
 	/**
