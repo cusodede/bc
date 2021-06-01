@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property int $deleted
  */
 class PhonesAR extends ActiveRecord {
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -29,7 +30,7 @@ class PhonesAR extends ActiveRecord {
 	 */
 	public function rules() {
 		return [
-			[['phone', 'create_date'], 'required'],
+			[['phone'], 'required'],
 			[['create_date'], 'safe'],
 			[['status', 'deleted'], 'integer'],
 			[['phone'], 'string', 'max' => 255],
