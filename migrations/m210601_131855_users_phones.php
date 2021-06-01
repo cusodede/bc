@@ -1,6 +1,8 @@
 <?php
 declare(strict_types = 1);
+use yii\db\Expression;
 use yii\db\Migration;
+use yii\db\SqlToken;
 
 /**
  * Class m210601_131855_users_phones
@@ -13,7 +15,7 @@ class m210601_131855_users_phones extends Migration {
 		$this->createTable('phones', [
 			'id' => $this->primaryKey(),
 			'phone' => $this->string()->notNull()->comment('Телефон'),
-			'create_date' => $this->dateTime()->notNull()->comment('Дата регистрации'),
+			'create_date' => $this->dateTime()->defaultValue(new Expression('NOW()'))->comment('Дата регистрации'),
 			'status' => $this->integer()->null()->comment('Статус'),
 			'deleted' => $this->boolean()->notNull()->defaultValue(0)
 		]);
