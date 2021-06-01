@@ -108,10 +108,17 @@ class Users extends ActiveRecord {
 	}
 
 	/**
-	 * @return PhonesAR[]
+	 * @return ActiveQuery
 	 */
-	public function getRelatedPhones():array {
+	public function getRelatedPhones():ActiveQuery {
 		return $this->hasMany(PhonesAR::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
+	}
+
+	/**
+	 * @param mixed $relatedPhones
+	 */
+	public function setRelatedPhones($relatedPhones):void {
+		RelUsersToPhones::linkModels($this, $relatedPhones);
 	}
 
 }
