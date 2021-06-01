@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\modules\import\models;
 
-use app\models\core\TemporaryHelper;
 use app\modules\import\models\active_record\Import;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -11,6 +10,7 @@ use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
+use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 
@@ -71,7 +71,7 @@ class ImportModel extends Model {
 	private ?string $_filename;
 
 	/**
-	 * @var int $_count количество прогруженных строк
+	 * @var int|null $_count количество прогруженных строк
 	 */
 	private ?int $_count = null;
 
@@ -123,19 +123,14 @@ class ImportModel extends Model {
 		if ($this->skipEmptyRows) {
 			$dataArray = array_filter($dataArray);//ignore empty rows
 		}
-		$this->_count = 0;
-		foreach ($dataArray as $importRow) {
-			$importRow = array_map("trim", $importRow);
-			$rawDataImport = new Import([
-				'data' => serialize($importRow),
+		$dataArray = array_map(function($row) {
+			return [
+				'data' => serialize(array_map("trim", $row)),
 				'domain' => $this->domain,
 				'model' => $this->model
-			]);
-			if (!$rawDataImport->save()) {
-				throw new Exception(TemporaryHelper::Errors2String($rawDataImport->errors));
-			}
-			$this->_count++;
-		}
+			];
+		}, $dataArray);
+		$this->_count = Yii::$app->db->createCommand()->batchInsert(Import::tableName(), ['data', 'domain', 'model'], $dataArray)->execute();
 		return true;
 	}
 
@@ -161,15 +156,12 @@ class ImportModel extends Model {
 				//есть функция переопределения вставки
 				if ((null !== $foreignMatch = ArrayHelper::getValue($currentRule, 'foreign.match')) && is_callable($foreignMatch) && null !== $matchedValue = $foreignMatch($value)) {//функция нашла совпадение, вернула значение
 					$value = $matchedValue;
-				} else {
-					//вставить данные во внешнюю таблицу и связать их напрямую
-					if ((null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class'))
-						&& null !== $foreignModel = self::addInstance($foreignClass, [
-							ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value
-						])
-					) {
-						$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key'))?$foreignModel->primaryKey:$foreignModel->$return;
-					}
+				} elseif ((null !== $foreignClass = ArrayHelper::getValue($currentRule, 'foreign.class'))
+					&& null !== $foreignModel = self::addInstance($foreignClass, [
+						ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value
+					])
+				) {
+					$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key'))?$foreignModel->primaryKey:$foreignModel->$return;
 				}
 				$mappedColumnData[$currentRule['attribute']] = $value;
 
@@ -193,6 +185,7 @@ class ImportModel extends Model {
 	 * @param array $searchCondition
 	 * @param array|null $fields
 	 * @param bool $forceUpdate
+	 * @param array $errors
 	 * @return ActiveRecord|null
 	 */
 	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
@@ -239,7 +232,7 @@ class ImportModel extends Model {
 	}
 
 	/**
-	 * @return int
+	 * @return float
 	 */
 	public function getPercent():float {
 		return (int)(($this->done / $this->count) * 100);

@@ -191,4 +191,18 @@ trait ActiveRecordTrait {
 		return $strict?(ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute):(ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
 	}
 
+	/**
+	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
+	 * @param array $attributes
+	 * @return static
+	 */
+	public static function Upsert(array $attributes):self {
+		if (null === $model = self::find()->where($attributes)->one()) {
+			$model = new self();
+			$model->load($attributes, '');
+			$model->save();
+		}
+		return $model;
+	}
+
 }
