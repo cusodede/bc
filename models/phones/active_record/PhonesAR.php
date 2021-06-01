@@ -21,14 +21,14 @@ class PhonesAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName() {
+	public static function tableName():array {
 		return 'phones';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules() {
+	public function rules():array {
 		return [
 			[['phone'], 'required'],
 			[['create_date'], 'safe'],
@@ -41,7 +41,7 @@ class PhonesAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels() {
+	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
 			'phone' => 'Телефон',
