@@ -21,7 +21,7 @@ class PhonesAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():array {
+	public static function tableName():string {
 		return 'phones';
 	}
 
