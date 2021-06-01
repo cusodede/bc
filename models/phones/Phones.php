@@ -19,12 +19,22 @@ class Phones extends PhonesAR {
 	/**
 	 * @param string $phoneNum
 	 * @return bool
-	 * @throws NumberParseException
 	 */
 	public static function isValidNumber(string $phoneNum):bool {
-		$phoneNumberUtil = PhoneNumberUtil::getInstance();
-		$phoneNumber = $phoneNumberUtil->parse($phoneNum, 'RU', null, true);
-		return null === $phoneNumber?false:$phoneNumberUtil->isValidNumber($phoneNumber);
+		try {
+			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
+			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
+			return false;
+		}
+
+	}
+
+	public static function defaultFormat(string $phone):?string {
+		if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
+			return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+		}
+		return null;
 	}
 
 	/**
@@ -32,17 +42,13 @@ class Phones extends PhonesAR {
 	 * Номера приводятся к единому виду.
 	 * @param array $phones
 	 * @return array
-	 * @throws NumberParseException
 	 */
 	public static function add(array $phones):array {
 		$results = [];
-		$phoneNumberUtil = PhoneNumberUtil::getInstance();
 		foreach ($phones as $phone) {
-			if (null !== $phoneNumber = $phoneNumberUtil->parse($phone, 'RU', null, true)) {
-				$formattedNumber = $phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::E164);
+			if (null !== $formattedNumber = self::defaultFormat($phone)) {
 				$results[] = self::Upsert(['phone' => $formattedNumber])->id;
 			}
-
 		}
 		return $results;
 
