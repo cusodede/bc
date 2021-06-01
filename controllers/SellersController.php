@@ -35,7 +35,7 @@ class SellersController extends DefaultController {
 			return $this->asJson($model->validateModelFromPost());
 		}
 
-		if ($model->checkData(Yii::$app->request->post())) {
+		if ($model->checkData()) {
 			$posting = $model->createModelFromPost([], $errors);/* switch тут нельзя использовать из-за его нестрогости */
 			if (true === $posting) {/* Модель была успешно прогружена */
 				$model->uploadAttribute('uploadFileInstance');
@@ -66,7 +66,7 @@ class SellersController extends DefaultController {
 		}
 
 		/** @var Sellers $model */
-		if ($model->checkData(Yii::$app->request->post())) {
+		if ($model->checkData()) {
 			$posting = $model->updateModelFromPost([], $errors);
 
 			if (true === $posting) {/* Модель была успешно прогружена */

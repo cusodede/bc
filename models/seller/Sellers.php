@@ -15,10 +15,10 @@ class Sellers extends SellersAR {
 
 	/**
 	 * В этом методе будем проверять данные в других сервисах (Госуслуги, налоговая и т.д.)
-	 * @param array $post POST with seller data
+	 * Сюда передаем POST
 	 * @return bool
 	 */
-	public function checkData(array $post):bool {
+	public function checkData():bool {
 		return true;
 	}
 }
