@@ -4,10 +4,12 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\seller\Sellers;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\modules\history\behaviors\HistoryBehavior;
 use app\modules\status\models\traits\StatusesTrait;
+use pozitronik\filestorage\models\FileStorage;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\behaviors\TimestampBehavior;
@@ -45,6 +47,7 @@ use yii\db\ActiveRecord;
  *
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property Stores[] $stores Магазины продавца
+ * @property FileStorage[] $uploads Загруженные документы
  */
 class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -169,5 +172,14 @@ class SellersAR extends ActiveRecord {
 	 */
 	public function setStores($stores):void {
 		RelStoresToSellers::linkModels($stores, $this, true);/* Соединение идёт "наоборот", добавляем ключ backLink */
+	}
+
+	/**
+	 * @return ActiveQuery
+	 * TODO 'model_name' => Sellers::class это не нравится
+	 */
+	public function getUploads():ActiveQuery {
+		return $this->hasMany(FileStorage::class, ['model_key' => 'id'])
+			->andOnCondition(['model_name' => Sellers::class]);
 	}
 }
