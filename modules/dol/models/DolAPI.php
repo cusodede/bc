@@ -36,10 +36,16 @@ class DolAPI extends ActiveRecord {
 	public string $errorMessage = '';
 
 	/**
+	 * @var array
+	 */
+	private array $_debugPhones = [];
+
+	/**
 	 * @inheritDoc
 	 */
 	public function init() {
 		$this->baseUrl = ArrayHelper::getValue(Yii::$app->components, "dolApi.baseUrl", $this->baseUrl);
+		$this->_debugPhones = ArrayHelper::getValue(Yii::$app->components, "dolApi.debugPhones", $this->_debugPhones);
 	}
 
 	/**
@@ -87,6 +93,12 @@ class DolAPI extends ActiveRecord {
 	 * @throws InvalidConfigException
 	 */
 	public function smsLogon(string $phoneAsLogin):array {
+		if (ArrayHelper::keyExists($phoneAsLogin, $this->_debugPhones)) {
+			$this->success = true;
+			return [
+				"success" => true
+			];
+		}
 		$response = self::doRequest($this->baseUrl.self::METHOD_SMS_LOGON, [
 			'phoneAsLogin' => $phoneAsLogin
 		]);
@@ -101,6 +113,12 @@ class DolAPI extends ActiveRecord {
 	 * @throws InvalidConfigException
 	 */
 	public function confirmSmsLogon(string $phoneAsLogin, string $code):array {
+		if ($code === ArrayHelper::getValue($this->_debugPhones, $phoneAsLogin)) {
+			$this->success = true;
+			return [
+				"success" => true
+			];
+		}
 		$response = self::doRequest($this->baseUrl.self::METHOD_CONFIRM_SMS_LOGON, compact('phoneAsLogin', 'code'));
 		return $this->parseAnswer($response->content);
 	}
