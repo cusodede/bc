@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\core\Options;
 use app\models\site\LoginForm;
+use app\models\site\LoginSMSForm;
 use app\models\site\RegistrationForm;
 use app\models\site\RestorePasswordForm;
 use app\models\site\UpdatePasswordForm;
@@ -15,6 +16,7 @@ use pozitronik\sys_exceptions\models\LoggedException;
 use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\ErrorAction;
 use yii\web\ForbiddenHttpException;
@@ -76,6 +78,33 @@ class SiteController extends Controller {
 		return $this->render('login', [
 			'login' => $model,
 			'from' => $from /*unused, на будущее*/
+		]);
+	}
+
+	/**
+	 * @return string|Response
+	 * @throws InvalidConfigException
+	 */
+	public function actionLoginSms() {
+		$model = new LoginSMSForm();
+		if ($model->load(Yii::$app->request->post())) {
+			if (null === $model->smsCode && $model->doSmsLogon()) {/*Проверяем пользователя, отправляем код*/
+				return $this->render('login-sms', [
+					'login' => $model,
+					'firstStep' => false
+				]);
+			}
+			if (null !== $model->smsCode && $model->doConfirmSmsLogon()) {/*Пытаемся авторизовать*/
+				return $this->redirect(Yii::$app->homeUrl);
+			}
+			return $this->render('login-sms', [
+				'login' => $model,
+				'firstStep' => false
+			]);
+		}
+		return $this->render('login-sms', [
+			'login' => $model,
+			'firstStep' => true
 		]);
 	}
 
