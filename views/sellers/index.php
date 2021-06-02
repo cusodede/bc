@@ -12,9 +12,12 @@ declare(strict_types = 1);
 use app\assets\ModalHelperAsset;
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
+use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
+use app\modules\status\models\StatusRulesModel;
 use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
+use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
@@ -68,6 +71,49 @@ ModalHelperAsset::register($this);
 				],
 			],
 			'id',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'currentStatus',
+				'format' => 'raw',
+				'filterType' => GridView::FILTER_SELECT2,
+				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Sellers::class), 'id', 'name'),
+				'filterWidgetOptions' => [
+					'pluginOptions' => ['allowClear' => true, 'placeholder' => '']
+				]
+			],
+			[
+				'attribute' => 'userId',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relatedUser,
+						'subItem' => 'id',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'userLogin',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relatedUser,
+						'subItem' => 'login',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'userEmail',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relatedUser,
+						'subItem' => 'email',
+						'useBadges' => false
+					]);
+				}
+			],
 			'surname',
 			'name',
 			'patronymic',
@@ -93,8 +139,6 @@ ModalHelperAsset::register($this);
 					]
 				]
 			],
-			'login',
-			'email',
 			[
 				'attribute' => 'create_date',
 				'filterType' => DateTimePicker::class,
@@ -157,15 +201,18 @@ ModalHelperAsset::register($this);
 			],
 			'deleted:boolean',
 			[
-				'attribute' => 'uploadedFiles',
+				'attribute' => 'sellerDocs',
 				'format' => 'raw',
 				'value' => static function(SellersSearch $model):string {
 					$uploads = [];
-					foreach ($model->uploads as $upload) {
-						$uploads[] = Html::a(
-							'Скачать',
-							UploadsController::to('download', ['id' => $upload->id])
-						);
+					$seller = Sellers::findOne($model->id);
+					if ($seller) {
+						foreach ($seller->files(['sellerDocs']) as $upload) {
+							$uploads[] = Html::a(
+								'Скачать',
+								UploadsController::to('download', ['id' => $upload->id])
+							);
+						}
 					}
 					return implode('<br>', $uploads);
 				}

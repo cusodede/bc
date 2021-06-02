@@ -60,12 +60,12 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'login')->textInput() ?>
+		<?= $form->field($model->relatedUser??$model, 'login')->textInput(['readonly' => !$model->isNewRecord]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'email')->textInput() ?>
+		<?= $form->field($model->relatedUser??$model, 'email')->textInput(['readonly' => !$model->isNewRecord]) ?>
 	</div>
 </div>
 <div class="row">
@@ -151,6 +151,6 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'uploadFileInstance')->fileInput() ?>
+		<?= $form->field($model, 'sellerDocs')->fileInput() ?>
 	</div>
 </div>

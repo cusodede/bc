@@ -197,4 +197,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
+	/**
+	 * @return string
+	 */
+	public static function getDefaultPassword():string {
+		return self::DEFAULT_PASSWORD;
+	}
+
 }

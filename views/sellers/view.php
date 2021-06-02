@@ -23,6 +23,12 @@ use app\models\seller\active_record\SellersAR;
 	'attributes' => [
 		'create_date',
 		'update_date',
+		[
+			'attribute' => 'currentStatus',
+			'value' => static function(Sellers $model) {
+				return $model->currentStatus->name;
+			},
+		],
 		'surname',
 		'name',
 		'patronymic',
@@ -31,6 +37,24 @@ use app\models\seller\active_record\SellersAR;
 			'value' => static function(Sellers $model) {
 				return ArrayHelper::getValue(ProjectConstants::GENDER, $model->gender);
 			},
+		],
+		[
+			'attribute' => 'userId',
+			'value' => static function(Sellers $model) {
+				return $model->relatedUser->id;
+			}
+		],
+		[
+			'attribute' => 'userLogin',
+			'value' => static function(Sellers $model) {
+				return $model->relatedUser->login;
+			}
+		],
+		[
+			'attribute' => 'userEmail',
+			'value' => static function(Sellers $model) {
+				return $model->relatedUser->email;
+			}
 		],
 		[
 			'attribute' => 'stores',
@@ -43,8 +67,6 @@ use app\models\seller\active_record\SellersAR;
 			}
 		],
 		'birthday',
-		'login',
-		'email',
 		'is_resident:boolean',
 		[
 			'attribute' => 'passport',
@@ -60,11 +82,12 @@ use app\models\seller\active_record\SellersAR;
 		'is_wireman_shpd:boolean',
 		'deleted:boolean',
 		[
-			'attribute' => 'uploadedFiles',
+			'attribute' => 'sellerDocs',
 			'format' => 'raw',
 			'value' => static function(Sellers $model):string {
 				$uploads = [];
-				foreach ($model->uploads as $upload) {
+				$docs = $model->files(['sellerDocs']);
+				foreach ($docs as $upload) {
 					$uploads[] = Html::a(
 						'Скачать',
 						UploadsController::to('download', ['id' => $upload->id])

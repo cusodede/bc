@@ -12,7 +12,7 @@ use yii\bootstrap4\ActiveForm;
 
 ?>
 
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['enableAjaxValidation' => true]); ?>
 <div class="panel">
 	<div class="panel-hdr">
 	</div>

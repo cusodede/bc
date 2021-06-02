@@ -4,12 +4,11 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\seller\Sellers;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
+use app\models\sys\users\Users;
 use app\modules\history\behaviors\HistoryBehavior;
 use app\modules\status\models\traits\StatusesTrait;
-use pozitronik\filestorage\models\FileStorage;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\behaviors\TimestampBehavior;
@@ -24,8 +23,6 @@ use yii\db\ActiveRecord;
  * @property string $surname Фамилия
  * @property string $patronymic Отчество
  * @property string $birthday Дата рождения
- * @property string $login Логин
- * @property string $email Email
  * @property string $create_date Дата регистрации
  * @property string $update_date Дата обновления
  * @property int $is_resident Резидент
@@ -41,17 +38,24 @@ use yii\db\ActiveRecord;
  * @property string $keyword Ключевое слово для  «Горячей линии»
  * @property int $is_wireman_shpd Монтажник ШПД
  * @property int $dealer Дилер
+ * @property int $user Пользователь
  * @property int $sale_point Торговая точка
  * @property int $contract_signing_address Адрес подписания договора
  * @property int $deleted
  *
+ * @property string $email
+ * @property string $login
+ *
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property Stores[] $stores Магазины продавца
- * @property FileStorage[] $uploads Загруженные документы
+ * @property Users $relatedUser Пользователь связанный с продавцом
  */
 class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	use StatusesTrait;
+
+	public $email;
+	public $login;
 
 	/**
 	 * {@inheritdoc}
@@ -84,10 +88,38 @@ class SellersAR extends ActiveRecord {
 		return [
 			[
 				[
-					'name', 'surname', 'login', 'passport_series', 'passport_number', 'passport_whom',
-					'passport_when', 'birthday', 'reg_address', 'keyword', 'email', 'is_wireman_shpd', 'is_resident'
+					'name', 'surname', 'patronymic', 'keyword', 'birthday', 'entry_date', 'email', 'login',
+					'passport_series', 'passport_number', 'passport_whom', 'passport_when'
+				],
+				'filter',
+				'filter' => 'trim'
+			],
+			[
+				[
+					'name', 'surname', 'passport_series', 'passport_number', 'passport_whom',
+					'passport_when', 'birthday', 'reg_address', 'keyword', 'is_wireman_shpd', 'is_resident'
 				],
 				'required'
+			],
+			[['email', 'login',], 'required', 'on' => 'create'],
+			['email', 'email', 'on' => 'create'],
+			[
+				'email',
+				function(string $attribute):void {
+					if (null !== Users::findByEmail($this->email)) {
+						$this->addError('email', 'Пользователь с таким почтовым адресом уже зарегистрирован');
+					}
+				},
+				'on' => 'create'
+			],
+			[
+				'login',
+				function(string $attribute):void {
+					if (null !== Users::findByLogin($this->login)) {
+						$this->addError('login', 'Такой логин уже занят');
+					}
+				},
+				'on' => 'create'
 			],
 			[
 				'entry_date',
@@ -103,14 +135,13 @@ class SellersAR extends ActiveRecord {
 			[['create_date', 'update_date'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
-			['email', 'email'],
-			[['gender', 'is_resident', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted'], 'integer'],
-			[['name', 'surname', 'patronymic', 'email'], 'string', 'max' => 128],
-			[['login', 'passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
-			[['passport_whom', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
+			[['gender', 'is_resident', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted', 'user'], 'integer'],
+			[['name', 'surname', 'patronymic', 'login'], 'string', 'max' => 128],
+			[['passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
+			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
 			['inn', 'string', 'max' => 12],
 			['snils', 'string', 'max' => 14],
-			[['inn', 'snils', 'email'], 'unique'],
+			[['inn', 'snils'], 'unique'],
 			[
 				['passport_series', 'passport_number'],
 				'unique',
@@ -125,12 +156,11 @@ class SellersAR extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
+			'user' => 'Пользователь',
 			'name' => 'Имя',
 			'surname' => 'Фамилия',
 			'patronymic' => 'Отчество',
 			'birthday' => 'Дата рождения',
-			'login' => 'Логин',
-			'email' => 'Email',
 			'create_date' => 'Дата регистрации',
 			'update_date' => 'Дата обновления',
 			'is_resident' => 'Резидент',
@@ -176,10 +206,8 @@ class SellersAR extends ActiveRecord {
 
 	/**
 	 * @return ActiveQuery
-	 * TODO 'model_name' => Sellers::class это не нравится
 	 */
-	public function getUploads():ActiveQuery {
-		return $this->hasMany(FileStorage::class, ['model_key' => 'id'])
-			->andOnCondition(['model_name' => Sellers::class]);
+	public function getRelatedUser():ActiveQuery {
+		return $this->hasOne(Users::class, ['id' => 'user']);
 	}
 }
