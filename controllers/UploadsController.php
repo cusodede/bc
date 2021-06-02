@@ -7,9 +7,7 @@ use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use pozitronik\filestorage\models\FileStorage;
-use Yii;
 use yii\web\Controller;
-use yii\web\Response;
 use Throwable;
 
 /**
@@ -38,30 +36,24 @@ class UploadsController extends Controller {
 	}
 
 	/**
-	 * Отдаёт загруженные файлы по ID
+	 * Отдаёт загруженный файлы по ID
 	 * @param null|int $id
-	 * @return Response
 	 * @throws NotFoundHttpException
 	 * @throws Throwable
 	 */
-	public function actionDownload(?int $id = null):Response {
-		if (!$id) {
-			return $this->redirect(Yii::$app->request->referrer?:Yii::$app->homeUrl);
-		}
+	public function actionDownload(?int $id = null):void {
+		$fileStorage = FileStorage::findModel($id, new NotFoundHttpException('Не найдена запись о файле'));
 
-		$uploadedFile = FileStorage::findOne($id);
-		if (null === $uploadedFile) {
-			throw new NotFoundHttpException('Не найдена запись о файле');
-		}
+		if (null !== $fileStorage) {
+			if ($fileStorage->deleted) {
+				throw new NotFoundHttpException('Данный файл был удалён');
+			}
 
-		if ($uploadedFile->deleted) {
-			throw new NotFoundHttpException('Данный файл был удалён');
-		}
+			if (!file_exists($fileStorage->path)) {
+				throw new NotFoundHttpException('Файл не найден');
+			}
 
-		if (!file_exists($uploadedFile->path)) {
-			throw new NotFoundHttpException('Файл не найден');
+			$fileStorage->download();
 		}
-
-		return Yii::$app->response->sendFile($uploadedFile->path);
 	}
 }
