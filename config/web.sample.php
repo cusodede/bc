@@ -154,6 +154,9 @@ $config = [
 			],
 			'grantAll' => [1]/*User ids, that receive all permissions by default*/
 		],
+		'dolApi' => [
+			'baseUrl' => 'https://dolfront.beelinetst.ru/api/'
+		],
 		'assetManager' => [
 			'bundles' => [
 				BootstrapPluginAsset::class => [
