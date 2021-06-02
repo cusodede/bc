@@ -16,7 +16,7 @@ class m210527_100644_modify_sellers_table extends Migration {
 		'inn',
 		'snils',
 		'keyword',
-		'email',
+		'user',
 		'create_date',
 		'update_date',
 		'sale_point',
@@ -43,13 +43,12 @@ class m210527_100644_modify_sellers_table extends Migration {
 
 		$this->createTable(self::TABLE, [
 			'id' => $this->primaryKey(),
+			'user' => $this->integer()->comment('Пользователь'),
 			'name' => $this->string(128)->notNull()->comment('Имя'),
 			'surname' => $this->string(128)->notNull()->comment('Фамилия'),
 			'patronymic' => $this->string(128)->comment('Отчество'),
 			'gender' => $this->integer()->comment('Пол'),
 			'birthday' => $this->date()->notNull()->comment('Дата рождения'),
-			'login' => $this->string(64)->notNull()->comment('Логин'),
-			'email' => $this->string(128)->notNull()->comment('Email'),
 			'create_date' => $this->dateTime()->notNull()->comment('Дата регистрации'),
 			'update_date' => $this->dateTime()->comment('Дата обновления'),
 			'is_resident' => $this->boolean()->notNull()->comment('Резидент'),
