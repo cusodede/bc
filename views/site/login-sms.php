@@ -9,6 +9,7 @@ declare(strict_types = 1);
  * @var bool $firstStep
  */
 
+use app\controllers\SiteController;
 use app\models\site\LoginForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
@@ -27,7 +28,17 @@ $this->title = 'Вход';
 				<?= $form->field($login, 'login')->textInput(['placeholder' => 'Введите логин или телефон', 'disabled' => true]) ?>
 				<?= $form->field($login, 'smsCode')->textInput(['placeholder' => 'Код подтверждения']) ?>
 			<?php endif; ?>
-			<?= $form->field($login, 'rememberMe')->checkbox() ?>
+			<div class="row mb-lg-4">
+				<div class="col-md-6">
+					<?= $form->field($login, 'rememberMe')->checkbox() ?>
+				</div>
+				<div class="col-md-6">
+					<?= Html::a('<i class="fa fa-key fa-lg opacity-100 color-primary-500 mr-1"></i>Войти по паролю', SiteController::to('login'), [
+						'class' => 'color-black fw-500 float-right'
+					]) ?>
+				</div>
+			</div>
+
 			<?= Html::submitButton('Отправить', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 
 			<?php ActiveForm::end(); ?>

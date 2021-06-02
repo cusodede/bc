@@ -9,6 +9,7 @@ declare(strict_types = 1);
  * @var null|string $from Опциональный ключ перехода
  */
 
+use app\controllers\SiteController;
 use app\models\site\LoginForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
@@ -19,11 +20,21 @@ $this->title = 'Вход';
 <div class="row">
 	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
 		<div class="card p-4 rounded-plus bg-faded">
-			<?php $form = ActiveForm::begin(); ?>
 
+			<?php $form = ActiveForm::begin(); ?>
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
-			<?= $form->field($login, 'rememberMe')->checkbox() ?>
+			<div class="row mb-lg-4">
+				<div class="col-md-6">
+					<?= $form->field($login, 'rememberMe')->checkbox() ?>
+				</div>
+				<div class="col-md-6">
+					<?= Html::a('<i class="fa fa-sms fa-lg opacity-100 color-primary-500 mr-1"></i>Войти по SMS', SiteController::to('login-sms'), [
+						'class' => 'color-black fw-500 float-right'
+					]) ?>
+				</div>
+			</div>
+
 
 			<?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 
