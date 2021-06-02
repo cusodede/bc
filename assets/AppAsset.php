@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace app\assets;
 
 use pozitronik\sys_options\models\SysOptions;
+use yii\bootstrap4\BootstrapAsset;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
-use yii\bootstrap\BootstrapAsset;
 
 /**
  * Main application asset bundle.
@@ -31,6 +31,7 @@ class AppAsset extends AssetBundle {
 		$this->depends = [
 			YiiAsset::class,
 			BootstrapAsset::class,
+			SmartAdminThemeAssets::class
 		];
 
 		$this->publishOptions = [

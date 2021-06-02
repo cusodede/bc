@@ -6,7 +6,6 @@ namespace app\assets;
 use pozitronik\sys_options\models\SysOptions;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
-use yii\bootstrap\BootstrapAsset;
 
 /**
  * Class LoginAssetAsset
@@ -26,7 +25,7 @@ class LoginAsset extends AssetBundle {
 		$this->depends = [
 			AppAsset::class,
 			YiiAsset::class,
-			BootstrapAsset::class,
+			SmartAdminThemeAssets::class
 		];
 
 		$this->publishOptions = [

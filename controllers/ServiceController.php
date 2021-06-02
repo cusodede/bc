@@ -11,7 +11,7 @@ use yii\web\Controller;
  */
 class ServiceController extends Controller {
 	use ControllerTrait;
-	
+
 	/**
 	 * @return string
 	 */

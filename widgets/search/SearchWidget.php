@@ -8,7 +8,7 @@ use Exception;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 
 /**
@@ -33,8 +33,11 @@ class SearchWidget extends Widget {
 	 * @throws Exception
 	 */
 	public function run():string {
+		if ([] === $dataset = $this->prepareDataset()) {
+			return '';
+		}
 		return $this->render('search', [
-			'dataset' => $this->prepareDataset()
+			'dataset' => $dataset
 		]);
 	}
 

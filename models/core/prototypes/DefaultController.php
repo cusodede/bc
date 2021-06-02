@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\permissions\traits\ControllerPermissionsTrait;
+use app\modules\import\models\ImportAction;
+use app\modules\import\models\ProcessImportAction;
 use pozitronik\core\helpers\ControllerHelper;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -15,6 +17,7 @@ use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
 use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -24,12 +27,14 @@ use yii\web\Response;
  * Все контроллеры и все вью плюс-минус одинаковые, поэтому можно сэкономить на прототипировании
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
+ * @property bool $enablePrototypeMenu Включать ли контроллер в меню списка прототипов
+ * @property array $mappingRules Настройки параметров импорта
  *
  * @property-read ActiveRecord $searchModel
  * @property-read ActiveRecord|ActiveRecordTrait $model
  */
 class DefaultController extends Controller {
-	use ControllerTrait;
+	use ControllerPermissionsTrait;
 
 	/**
 	 * @var string $modelClass
@@ -39,6 +44,35 @@ class DefaultController extends Controller {
 	 * @var string $modelSearchClass
 	 */
 	public string $modelSearchClass;
+
+	/**
+	 * @var bool enablePrototypeMenu
+	 */
+	public bool $enablePrototypeMenu = true;
+
+	/**
+	 * @return array
+	 */
+	public function getMappingRules():array {
+		return [];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function beforeAction($action):bool {
+		$this->view->title = $this->view->title??$this->id;
+		if (!isset($this->view->params['breadcrumbs'])) {
+			if ($this->defaultAction === $action->id) {
+				$this->view->params['breadcrumbs'][] = $this->id;
+			} else {
+				$this->view->params['breadcrumbs'][] = ['label' => $this->defaultAction, 'url' => $this::to($this->defaultAction)];
+				$this->view->params['breadcrumbs'][] = $action->id;
+			}
+
+		}
+		return parent::beforeAction($action);
+	}
 
 	/**
 	 * @inheritDoc
@@ -60,6 +94,26 @@ class DefaultController extends Controller {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function actions():array {
+		return ArrayHelper::merge(parent::actions(), [
+			'editAction' => [
+				'class' => EditableFieldAction::class,
+				'modelClass' => $this->modelClass,
+			],
+			'import' => [
+				'class' => ImportAction::class,
+				'modelClass' => $this->modelClass
+			],
+			'process-import' => [
+				'class' => ProcessImportAction::class,
+				'mappingRules' => $this->mappingRules
+			]
+		]);
+	}
+
+	/**
 	 * Генерирует меню для доступа ко всем контроллерам по указанному пути
 	 * @param string $alias
 	 * @return array
@@ -72,10 +126,11 @@ class DefaultController extends Controller {
 		/** @var RecursiveDirectoryIterator $file */
 		foreach ($files as $file) {
 			/** @var self $model */
-			if ($file->isFile() && 'php' === $file->getExtension() && null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) {
+			if ($file->isFile() && ('php' === $file->getExtension()) && (null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) && $model->enablePrototypeMenu) {
 				$items[] = [
 					'label' => $model->id,
-					'url' => $model::to($model->defaultAction)
+					'url' => [$model::to($model->defaultAction)],
+					'visible' => $model::hasPermission($model->defaultAction)
 				];
 			}
 		}
@@ -210,9 +265,10 @@ class DefaultController extends Controller {
 	/**
 	 * Аяксовый поиск в Select2
 	 * @param string|null $term
+	 * @param string $column
 	 * @return string[][]
 	 */
-	public function actionAjaxSearch(?string $term):array {
+	public function actionAjaxSearch(?string $term, string $column = 'name'):array {
 		$out = [
 			'results' => [
 				'id' => '',
@@ -222,8 +278,8 @@ class DefaultController extends Controller {
 		if (null !== $term) {
 			$tableName = $this->model::tableName();
 			$data = $this->model::find()
-				->select(["{$tableName}.id", "{$tableName}.name as text"])
-				->where(['like', "{$tableName}.name", "%$term%", false])
+				->select(["{$tableName}.id", "{$tableName}.{$column} as text"])
+				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()
 				->distinct()
 				->asArray()

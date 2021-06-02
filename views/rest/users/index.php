@@ -19,7 +19,7 @@ use simialbi\yii2\rest\RestDataProvider;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
-use yii\bootstrap\Html;
+use yii\bootstrap4\Html;
 
 ModalHelperAsset::register($this);
 ?>
@@ -44,7 +44,7 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},

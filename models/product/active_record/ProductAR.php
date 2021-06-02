@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\product\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 
@@ -18,6 +19,18 @@ use yii\db\ActiveRecord;
  */
 class ProductAR extends ActiveRecord {
 	use ActiveRecordTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */

@@ -52,7 +52,8 @@ $config = [
 			'templateFile' => '@app/migrations/template/default_migration_template.php',
 			'migrationNamespaces' => [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
-				'app\modules\status\migrations'
+				'app\modules\status\migrations',
+				'app\modules\import\migrations'
 			],
 		],
 	],

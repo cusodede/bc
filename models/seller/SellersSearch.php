@@ -38,10 +38,10 @@ final class SellersSearch extends SellersAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
+		$query->joinWith(['stores']);
 
 		if (!$this->validate()) return $dataProvider;
 
-		$query->joinWith(['stores']);
 		$this->filterData($query);
 
 		return $dataProvider;

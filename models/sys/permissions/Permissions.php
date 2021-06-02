@@ -32,7 +32,7 @@ class Permissions extends ActiveRecordPermissions {
 	public const ALLOWED_EMPTY_PARAMS = ['action', 'verb'];
 
 	public const COMPONENT_NAME = 'permissions';
-	public const GRANT_ALL= 'grantAll';
+	public const GRANT_ALL = 'grantAll';
 	public const CONTROLLER_DIRS = 'controllerDirs';
 
 	/**

@@ -19,6 +19,7 @@
 	"require": {
 		"php": "~7.4|~8.0",
 		"yiisoft/yii2": "dev-master",
+		"yiisoft/yii2-bootstrap4": "~2.0.10",
 		"pozitronik/yii2-users-options": "dev-master",
 		"pozitronik/yii2-options": "dev-master",
 		"pozitronik/yii2-references": "dev-master",
@@ -32,10 +33,13 @@
 		"kartik-v/yii2-editable": "dev-master",
 		"kartik-v/yii2-widget-touchspin": "dev-master",
 		"odannyc/yii2-sse": "dev-master",
-		"2amigos/yii2-multi-select-widget" : "dev-master",
+		"cusodede/yii2-multi-select-widget" : "dev-master",
 		"simialbi/yii2-rest-client": "dev-master",
 		"yii2mod/yii2-swagger": "dev-master",
-		"webonyx/graphql-php": "dev-master"
+		"webonyx/graphql-php": "dev-master",
+		"kartik-v/yii2-widget-datetimepicker": "dev-master",
+		"moonlandsoft/yii2-phpexcel": "dev-master",
+		"giggsey/libphonenumber-for-php": "^8.12"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
@@ -79,6 +83,10 @@
 		{
 			"type": "composer",
 			"url": "https://asset-packagist.org"
+		},
+		{
+			"type": "github",
+			"url": "https://github.com/cusodede/yii2-multi-select-widget.git"
 		}
 	]
 }
