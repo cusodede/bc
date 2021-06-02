@@ -96,4 +96,16 @@ class WebUser extends User {
 			])
 		);
 	}
+
+	/**
+	 * @param bool $destroySession
+	 * @return bool
+	 */
+	public function logout($destroySession = true) {
+		$isLogout =  parent::logout($destroySession);
+		if ($isLogout) {
+			Yii::$app->response->cookies->remove('fear');
+		}
+		return $isLogout;
+	}
 }
