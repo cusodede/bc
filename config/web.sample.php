@@ -4,6 +4,7 @@ declare(strict_types = 1);
 use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use app\models\vendor\yii2\WebUser;
 use app\modules\history\HistoryModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
@@ -93,6 +94,7 @@ $config = [
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
+			'class' => WebUser::class,
 			'identityClass' => Users::class,
 			'enableAutoLogin' => true
 		],

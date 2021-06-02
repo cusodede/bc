@@ -66,9 +66,12 @@ ModalHelperAsset::register($this);
 					'login-as-another-user' => static function (string $url, Users $model) {
 						$action = Url::toRoute(['users/login-as-another-user']);
 
-						$form = Html::beginForm($action, 'post', ['id' => 'login-as-another-user']);
+						$form = Html::beginForm($action, 'post', ['id' => 'login-as-another-user', 'class' => 'd-inline-block']);
 						$form .= Html::hiddenInput('userId', $model->id);
-						$form .= Html::submitButton("Ok");
+						$form .= Html::a('<i class="fas fa-eye"></i>', '#', [
+							'class' => 'as-link',
+							'onclick' => new JsExpression("$('#login-as-another-user').submit();")
+						]);
 						$form .= Html::endForm();
 						return $form;
 					}
