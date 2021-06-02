@@ -157,7 +157,11 @@ $config = [
 		],
 		'dolApi' => [
 			'class' => DolAPI::class,
-			'baseUrl' => 'https://dolfront.beelinetst.ru/api/'
+			'baseUrl' => 'https://dolfront.beelinetst.ru/api/',
+			'debugPhones' => [
+				/* fake phone  =>  sms code */
+				'+79250000000' => '0000'
+			]
 		],
 		'assetManager' => [
 			'bundles' => [
