@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\core\sse;
+namespace app\models\site\sse;
 
 use odannyc\Yii2SSE\SSEBase;
 
@@ -10,7 +10,7 @@ use odannyc\Yii2SSE\SSEBase;
  */
 class MessageEventHandler extends SSEBase {
 
-	public static $i = 0;
+	public static int $i = 0;
 
 	/**
 	 * @inheritDoc

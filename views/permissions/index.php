@@ -22,9 +22,10 @@ use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\select2\Select2;
 
 ModalHelperAsset::register($this);
 ?>
@@ -47,7 +48,7 @@ ModalHelperAsset::register($this);
 		]),
 		'toolbar' => [
 			[
-				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn pull-left btn-info'])
+				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn float-left btn-info'])
 			]
 		],
 		'export' => false,
@@ -59,12 +60,13 @@ ModalHelperAsset::register($this);
 				'template' => '{edit}',
 				'buttons' => [
 					'edit' => static function(string $url, Permissions $model) {
-						return Html::a('<i class="glyphicon glyphicon-edit"></i>', $url, [
+						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
 				],
 			],
+			'id',
 			[
 				'class' => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
@@ -76,19 +78,6 @@ ModalHelperAsset::register($this);
 					];
 				},
 				'attribute' => 'name',
-				'format' => 'text'
-			],
-			[
-				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_TEXTAREA,
-					];
-				},
-				'attribute' => 'comment',
 				'format' => 'text'
 			],
 			[
@@ -164,12 +153,34 @@ ModalHelperAsset::register($this);
 						]
 					];
 				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'verb',
+					'data' => TemporaryHelper::VERBS,
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
 				'attribute' => 'verb',
 				'format' => 'text'
 			],
 			[
+				'class' => EditableColumn::class,
+				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
+					return [
+						'formOptions' => [
+							'action' => PermissionsController::to('editDefault')
+						],
+						'inputType' => Editable::INPUT_TEXTAREA,
+					];
+				},
+				'attribute' => 'comment',
+				'format' => 'text'
+			],
+			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsersToPermissionsCollections',
+				'attribute' => 'collection',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedPermissionsCollections,
@@ -180,7 +191,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'relatedUsers',
+				'attribute' => 'user',
 				'value' => static function(Permissions $permission) {
 					return BadgeWidget::widget([
 						'items' => $permission->relatedUsers,

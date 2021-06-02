@@ -9,4 +9,4 @@ use app\models\sys\users\Users;
 use yii\web\View;
 
 ?>
-	Access granted for <?= Users::Current()->username ?>!
+Access granted for <?= Users::Current()->username ?>!

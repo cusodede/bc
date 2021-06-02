@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\sse\MessageEventHandler;
+use app\models\site\sse\MessageEventHandler;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use pozitronik\core\models\SqlDebugInfo;
@@ -113,7 +113,7 @@ class TestController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionBadges() {
+	public function actionBadges():string {
 		return $this->render('badges');
 	}
 }

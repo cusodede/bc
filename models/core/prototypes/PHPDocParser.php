@@ -10,18 +10,18 @@ use yii\helpers\ArrayHelper;
 /**
  * Class PHPDocParser
  *
- * @attribute string $name
- * @attribute null|string $type
- * @attribute null|string $comment
- * @attribute bool $required
+ * @property string $name
+ * @property null|string $type
+ * @property null|string $comment
+ * @property bool $required
  */
 class PHPDocParser extends Model {
 	private const PROPERTY_REGEXP = '/(?m)@property\h*\K(?:(\S+)\h+)\$?(\S+)?(.*)$/';
 
 	public $name;
-	public $type;
-	public $comment;
-	public $required = false;
+	public ?string $type = null;
+	public ?string $comment = null;
+	public bool $required = false;
 
 	/**
 	 * Соответствие типов PHPDoc типам SWG. Если не указано, то совпадает
@@ -84,7 +84,7 @@ class PHPDocParser extends Model {
 	 * @throws Exception
 	 */
 	public function loadString(string $attributeString):bool {
-		/** @noinspection OnlyWritesOnParameterInspection {todo}*/
+		/** @noinspection OnlyWritesOnParameterInspection {todo} */
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		if (false === $matchResult = preg_match(self::PROPERTY_REGEXP, $attributeString, $matches)) return false;
 

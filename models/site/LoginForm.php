@@ -22,11 +22,11 @@ use yii\base\Model;
 class LoginForm extends Model {
 	public $login;
 	public $password;
-	public $rememberMe = true;
-	public $restore = false;
+	public bool $rememberMe = true;
+	public bool $restore = false;
 
 	/** @var null|Users */
-	private $_user;
+	private ?Users $_user = null;
 
 	/**
 	 * @return array the validation rules.

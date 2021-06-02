@@ -5,8 +5,8 @@ declare(strict_types = 1);
  * @var View $this
  */
 
-use yii\bootstrap\Button;
-use yii\helpers\Html;
+use yii\bootstrap4\Button;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>

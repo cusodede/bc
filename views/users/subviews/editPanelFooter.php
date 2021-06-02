@@ -8,13 +8,13 @@ declare(strict_types = 1);
  */
 use app\models\sys\users\Users;
 use kartik\form\ActiveForm;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>
 
 <?= Html::submitButton('Сохранить', [
-		'class' => $model->isNewRecord?'btn btn-success pull-right':'btn btn-primary pull-right',
+		'class' => $model->isNewRecord?'btn btn-success float-right':'btn btn-primary float-right',
 		'form' => is_object($form)?$form->id:$form
 	]
 ) ?>

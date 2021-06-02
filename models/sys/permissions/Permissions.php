@@ -32,7 +32,7 @@ class Permissions extends ActiveRecordPermissions {
 	public const ALLOWED_EMPTY_PARAMS = ['action', 'verb'];
 
 	public const COMPONENT_NAME = 'permissions';
-	public const GRANT_ALL= 'grantAll';
+	public const GRANT_ALL = 'grantAll';
 	public const CONTROLLER_DIRS = 'controllerDirs';
 
 	/**
@@ -50,9 +50,10 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * @param int $user_id
 	 * @param string[] $permissionFilters
+	 * @param bool $asArray
 	 * @return self[]
 	 */
-	public static function allUserPermissions(int $user_id, array $permissionFilters = []):array {
+	public static function allUserPermissions(int $user_id, array $permissionFilters = [], bool $asArray = true):array {
 		$query = self::find()
 			->distinct()
 			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
@@ -60,7 +61,8 @@ class Permissions extends ActiveRecordPermissions {
 			->orWhere(['collectionPermissions.user_id' => $user_id])
 			->orderBy([
 				'priority' => SORT_DESC,
-				'id' => SORT_ASC]);
+				'id' => SORT_ASC
+			]);
 		foreach ($permissionFilters as $paramName => $paramValue) {
 			$paramValues = [$paramValue];
 			/*для перечисленных параметров пустое значение приравнивается к любому*/
@@ -70,7 +72,7 @@ class Permissions extends ActiveRecordPermissions {
 			$query->andWhere([self::tableName().".".$paramName => $paramValues]);
 
 		}
-		return $query->all();
+		return $query->asArray($asArray)->all();
 	}
 
 	/**

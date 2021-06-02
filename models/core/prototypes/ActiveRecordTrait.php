@@ -7,8 +7,10 @@ use pozitronik\core\models\LCQuery;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
+use yii\db\ActiveRecord;
 use yii\db\Exception as DbException;
 use yii\db\Transaction;
+use yii\bootstrap4\ActiveForm;
 
 /**
  * Trait ActiveRecordTrait
@@ -25,28 +27,55 @@ trait ActiveRecordTrait {
 
 	/**
 	 * @param array $mappedParams
-	 * @return bool
+	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
+	 * @return null|bool null
 	 * @throws DbException
 	 * @throws Throwable
+	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function createModelFromPost(array $mappedParams = []):bool {
+	public function createModelFromPost(array $mappedParams = [], ?array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+		$errors = [];
 		if ($this->load(Yii::$app->request->post())) {
-			return $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
+			$result = $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
+			if (!$result) {
+				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
+				/** @var ActiveRecord $this */
+				$errors = $AJAXErrorsFormat
+					?ActiveForm::validate($this)
+					:$this->errors;
+			}
+
+			return $result;
 		}
-		return false;
+		return null;
+	}
+
+	/**
+	 * Валидация для ajax-validation
+	 * @return null|array
+	 * @throws Throwable
+	 */
+	public function validateModelFromPost():?array {
+		if ($this->load(Yii::$app->request->post())) {
+			/** @var ActiveRecord $this */
+			return ActiveForm::validate($this);
+		}
+		return null;
 	}
 
 	/**
 	 * @param array $mappedParams
-	 * @return bool
+	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
+	 * @return null|bool
 	 * @throws DbException
 	 * @throws Throwable
+	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function updateModelFromPost(array $mappedParams = []):bool {
-		if ($this->load(Yii::$app->request->post())) {
-			return $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
-		}
-		return false;
+	public function updateModelFromPost(array $mappedParams = [], ?array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+		/* Методы совпадают, но оставлено на будущее */
+		return $this->createModelFromPost($mappedParams, $errors, $AJAXErrorsFormat);
 	}
 
 	/**
@@ -136,8 +165,8 @@ trait ActiveRecordTrait {
 
 	/**
 	 * Разница изменений атрибутов после обновления модели
-	 * @return array
 	 * @param bool $strict Строгое сравнение
+	 * @return array
 	 * @throws Throwable
 	 */
 	public function identifyUpdatedAttributes(bool $strict = true):array {
@@ -160,6 +189,20 @@ trait ActiveRecordTrait {
 	public function isAttributeUpdated(string $attribute, bool $strict = true):bool {
 		/** @noinspection TypeUnsafeComparisonInspection */
 		return $strict?(ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute):(ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
+	}
+
+	/**
+	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
+	 * @param array $attributes
+	 * @return static
+	 */
+	public static function Upsert(array $attributes):self {
+		if (null === $model = self::find()->where($attributes)->one()) {
+			$model = new self();
+			$model->load($attributes, '');
+			$model->save();
+		}
+		return $model;
 	}
 
 }
