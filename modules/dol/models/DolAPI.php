@@ -5,6 +5,7 @@ namespace app\modules\dol\models;
 
 use Exception;
 use simialbi\yii2\rest\ActiveRecord;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Client;
@@ -20,8 +21,8 @@ use yii\httpclient\Response;
 class DolAPI extends ActiveRecord {
 	public string $baseUrl = "https://dolfront.beelinetst.ru/api/";
 
-	public const METHOD_SMS_LOGON = 'auth/sms-logon';
-	public const METHOD_CONFIRM_SMS_LOGON = 'auth/confirm-sms-logon';
+	public const METHOD_SMS_LOGON = 'v2/auth/sms-logon';
+	public const METHOD_CONFIRM_SMS_LOGON = 'v2/auth/confirm-sms-logon';
 	public const METHOD_REFRESH = 'v2/auth/refresh';
 
 	/**
@@ -33,6 +34,13 @@ class DolAPI extends ActiveRecord {
 	 * @var string
 	 */
 	public string $errorMessage = '';
+
+	/**
+	 * @inheritDoc
+	 */
+	public function init() {
+		$this->baseUrl = ArrayHelper::getValue(Yii::$app->components, "dolApi.baseUrl", $this->baseUrl);
+	}
 
 	/**
 	 * @param string $url
@@ -68,7 +76,7 @@ class DolAPI extends ActiveRecord {
 			return [];
 		}
 		$this->success = ArrayHelper::getValue($result, 'success', $this->success);
-		$this->errorMessage = ArrayHelper::getValue($result, 'success', $this->success);
+		$this->errorMessage = ArrayHelper::getValue($result, 'errorMessage', $this->success);
 		return $result;
 	}
 
