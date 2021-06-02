@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -126,26 +127,6 @@ $config = [
 			// 'useFilterKeyword' => false,
 			// 'enableExceptions' => true,
 			'itemsProperty' => 'items'
-		],
-		'assetManager' => [
-			'bundles' => [
-				BootstrapPluginAsset::class => [
-					'js' => []
-				],
-				BootstrapAsset::class => [
-					'css' => [],
-				],
-				DialogBootstrapAsset::class => [
-					'depends' => [
-						SmartAdminThemeAssets::class
-					]
-				],
-				EditableAsset::class => [
-					'depends' => [
-						SmartAdminThemeAssets::class
-					]
-				]
-			]
 		],
 		'db' => $db,
 		'urlManager' => [
