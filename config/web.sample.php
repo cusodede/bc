@@ -4,6 +4,7 @@ declare(strict_types = 1);
 use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use app\modules\dol\models\DolAPI;
 use app\modules\history\HistoryModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
@@ -155,6 +156,7 @@ $config = [
 			'grantAll' => [1]/*User ids, that receive all permissions by default*/
 		],
 		'dolApi' => [
+			'class' => DolAPI::class,
 			'baseUrl' => 'https://dolfront.beelinetst.ru/api/'
 		],
 		'assetManager' => [
