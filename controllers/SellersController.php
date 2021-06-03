@@ -18,6 +18,8 @@ class SellersController extends DefaultController {
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;
 
+	public const CREATE_SCENARIO = 'create';
+
 	/**
 	 * @inheritDoc
 	 */
@@ -31,23 +33,16 @@ class SellersController extends DefaultController {
 	public function actionCreate() {
 		/** @var Sellers $model */
 		$model = $this->model;
-		$model->scenario = 'create';
+		$model->scenario = self::CREATE_SCENARIO;
 		if (Yii::$app->request->post('ajax')) {
 			return $this->asJson($model->validateModelFromPost());
 		}
 
 		$posting = $model->createModelFromPost([], $errors);
 		if (true === $posting) {
-			if (!empty($_FILES)) {
-				$model->uploadAttribute('sellerDocs');
-			}
-
-			$userId = $model->createUser($errors);
-			if ($userId) {
-				$model->linkToUsers($userId);
-				return $this->redirect('index');
-			}
-			$posting = false;
+			$model->uploadDocs($_FILES);
+			$model->createAccess();
+			return $this->redirect('index');
 		}
 		/* Пришёл постинг, но есть ошибки */
 		if ((false === $posting) && Yii::$app->request->isAjax) {
@@ -76,9 +71,7 @@ class SellersController extends DefaultController {
 		$posting = $model->updateModelFromPost([], $errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
-			if (!empty($_FILES)) {
-				$model->uploadAttribute('sellerDocs');
-			}
+			$model->uploadDocs($_FILES);
 			return $this->redirect('index');
 		}
 		/* Пришёл постинг, но есть ошибки */

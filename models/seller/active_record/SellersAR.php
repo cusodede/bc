@@ -141,7 +141,7 @@ class SellersAR extends ActiveRecord {
 			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
 			['inn', 'string', 'max' => 12],
 			['snils', 'string', 'max' => 14],
-			[['inn', 'snils'], 'unique'],
+			[['inn', 'snils', 'user'], 'unique'],
 			[
 				['passport_series', 'passport_number'],
 				'unique',
