@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\models\dealers\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\dealers\active_record\references\RefBranches;
+use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\modules\history\behaviors\HistoryBehavior;

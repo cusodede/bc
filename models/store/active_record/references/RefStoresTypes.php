@@ -6,16 +6,17 @@ namespace app\models\store\active_record\references;
 use pozitronik\references\models\CustomisableReference;
 
 /**
- * Class RefStoreTypes
+ * Class RefStoresTypes
  * Справочник типов магазинов
  */
-class RefStoreTypes extends CustomisableReference {
+class RefStoresTypes extends CustomisableReference {
 
 	public $menuCaption = "Типы магазинов";
+	public $moduleId = "Магазины";
 	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'ref_store_types';
+		return 'ref_stores_types';
 	}
 }
