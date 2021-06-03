@@ -18,6 +18,6 @@ class RefRewardsOperations extends CustomisableReference {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'ref_rewards_operation';
+		return 'ref_rewards_operations';
 	}
 }
