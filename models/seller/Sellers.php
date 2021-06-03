@@ -131,8 +131,8 @@ class Sellers extends SellersAR {
 		Yii::$app->mailer->compose('sellers/registration-errors', [
 			'seller' => $this,
 			'sellerUrl' => SellersController::to(
-				'view',
-				['id' => $this->id],
+				'index',
+				['SellersSearch[id]' => $this->id],
 				true
 			),
 			'errors' => $this->registrationErrors
