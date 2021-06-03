@@ -30,6 +30,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use yii\web\View;
 use app\controllers\UploadsController;
+use app\controllers\UsersController;
 
 ModalHelperAsset::register($this);
 ?>
@@ -88,7 +89,13 @@ ModalHelperAsset::register($this);
 					return BadgeWidget::widget([
 						'items' => $model->relatedUser,
 						'subItem' => 'id',
-						'useBadges' => false
+						'useBadges' => false,
+						'urlScheme' => [
+							UsersController::to(
+								'index',
+								['UsersSearch[id]' => $model->relatedUser->id??null]
+							)
+						]
 					]);
 				}
 			],
