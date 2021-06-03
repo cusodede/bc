@@ -12,6 +12,7 @@ use pozitronik\references\models\CustomisableReference;
 class RefRewardsRules extends CustomisableReference {
 
 	public $menuCaption = "Справочник правил расчета вознаграждения";
+	public $moduleId = "Вознаграждения";
 
 	/**
 	 * {@inheritdoc}

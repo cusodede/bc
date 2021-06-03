@@ -70,7 +70,37 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(StoresSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refStoreType,
+						'items' => $model->refStoresTypes,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
+				'attribute' => 'branch',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refBranches,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
+				'attribute' => 'region',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refRegions,
+						'subItem' => 'name'
+					]);
+				}
+			],
+			[
+				'attribute' => 'selling_channel',
+				'format' => 'raw',
+				'value' => static function(StoresSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refSellingChannels,
 						'subItem' => 'name'
 					]);
 				}

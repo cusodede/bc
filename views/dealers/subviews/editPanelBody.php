@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\dealers\active_record\references\RefBranches;
+use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\widgets\selectmodelwidget\SelectModelWidget;

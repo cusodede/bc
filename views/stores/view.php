@@ -25,7 +25,7 @@ use yii\widgets\DetailView;
 			'format' => 'raw',
 			'value' => static function(StoresAR $model):string {
 				return BadgeWidget::widget([
-					'items' => $model->refStoreType,
+					'items' => $model->refStoresTypes,
 					'subItem' => 'name'
 				]);
 			}

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\models\store;
 
 use app\models\seller\Sellers;
-use app\models\store\active_record\references\RefStoreTypes;
+use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\StoresAR;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
@@ -42,7 +42,7 @@ final class StoresSearch extends StoresAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['sellers', 'refStoreType']);
+		$query->joinWith(['sellers', 'refStoresTypes']);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -59,7 +59,7 @@ final class StoresSearch extends StoresAR {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
-			->andFilterWhere(['like', RefStoreTypes::tableName().'.name', $this->typeName])
+			->andFilterWhere(['like', RefStoresTypes::tableName().'.name', $this->typeName])
 			->andFilterWhere(['like', Sellers::tableName().'.name', $this->seller]);
 	}
 
@@ -74,8 +74,8 @@ final class StoresSearch extends StoresAR {
 				'name',
 				'deleted',
 				'typeName' => [
-					'asc' => [RefStoreTypes::tableName().'.name' => SORT_ASC],
-					'desc' => [RefStoreTypes::tableName().'.name' => SORT_DESC]
+					'asc' => [RefStoresTypes::tableName().'.name' => SORT_ASC],
+					'desc' => [RefStoresTypes::tableName().'.name' => SORT_DESC]
 				]
 			],
 		]);
@@ -86,7 +86,7 @@ final class StoresSearch extends StoresAR {
 	 */
 	private function setQuery():LCQuery {
 		return self::find()
-			->select([self::tableName().'.*', RefStoreTypes::tableName().'.name  AS typeName'])
+			->select([self::tableName().'.*', RefStoresTypes::tableName().'.name  AS typeName'])
 			->distinct()
 			->active();
 	}
