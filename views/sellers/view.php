@@ -41,19 +41,19 @@ use app\models\seller\active_record\SellersAR;
 		[
 			'attribute' => 'userId',
 			'value' => static function(Sellers $model) {
-				return $model->relatedUser->id;
+				return $model->relatedUser->id??null;
 			}
 		],
 		[
 			'attribute' => 'userLogin',
 			'value' => static function(Sellers $model) {
-				return $model->relatedUser->login;
+				return $model->relatedUser->login??null;
 			}
 		],
 		[
 			'attribute' => 'userEmail',
 			'value' => static function(Sellers $model) {
-				return $model->relatedUser->email;
+				return $model->relatedUser->email??null;
 			}
 		],
 		[
