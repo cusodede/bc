@@ -212,7 +212,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $username
 	 * @return $this
 	 */
-	public function setUserName(string $username):self {
+	public function changeUserName(string $username):self {
 		Assert::notEmpty($username, 'username не может быть пустым');
 		$this->username = $username;
 		return $this;

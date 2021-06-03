@@ -7,7 +7,6 @@ use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use DomainException;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
@@ -15,6 +14,7 @@ use yii\db\Exception;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -139,10 +139,12 @@ class UsersController extends DefaultController {
 			$user->fileAvatar->download();
 		}
 	}
+
 	/**
 	 * Авторизоваться под другим пользователем
 	 *
 	 * @return Response
+	 * @throws Throwable
 	 */
 	public function actionLoginAsAnotherUser() {
 		try {

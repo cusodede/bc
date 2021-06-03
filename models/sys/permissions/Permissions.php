@@ -75,7 +75,10 @@ class Permissions extends ActiveRecordPermissions {
 		return $query->asArray($asArray)->all();
 	}
 
-    public static function loginAsAnotherUser()
+	/**
+	 * @return Permissions
+	 */
+	public static function loginAsAnotherUser()
     {
 		$self = new self();
 		$self->name = 'login_as_another_user';
