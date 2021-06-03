@@ -100,7 +100,10 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * or the identity is not in an active state (disabled, deleted, etc.)
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::find()->joinWith('relatedUsersTokens')->where(['auth_token' => $token])->one();
+		return static::find()->joinWith('relatedUsersTokens rut')
+			->where(['rut.auth_token' => $token])
+			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
+			->one();
 	}
 
 	/**
