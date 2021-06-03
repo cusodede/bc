@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\dealers;
 
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\dealers\active_record\DealersAR;
 use app\models\store\Stores;
 use yii\data\ActiveDataProvider;
@@ -13,7 +12,6 @@ use yii\data\ActiveDataProvider;
  * @property null|string $store
  */
 final class DealersSearch extends DealersAR {
-	use ActiveRecordTrait;
 
 	public ?string $store = null;
 

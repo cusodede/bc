@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection BadExceptionsProcessingInspection */
 declare(strict_types = 1);
 
 namespace app\models\phones;
@@ -24,15 +24,39 @@ class Phones extends PhonesAR {
 		try {
 			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
 			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
+		} catch (NumberParseException $exception) {
 			return false;
 		}
 
 	}
 
+	/**
+	 * @param string $phone
+	 * @return string|null
+	 */
 	public static function defaultFormat(string $phone):?string {
-		if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
-			return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+		try {
+			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
+				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+			}
+		} catch (NumberParseException $exception) {
+			return null;
+		}
+		return null;
+	}
+
+	/**
+	 * @param string $phone
+	 * @return string|null
+	 * @noinspection BadExceptionsProcessingInspection
+	 */
+	public static function nationalFormat(string $phone):?string {
+		try {
+			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
+				return PhoneNumberUtil::getInstance()->getNationalSignificantNumber($phoneNumber);
+			}
+		} catch (NumberParseException $exception) {
+			return null;
 		}
 		return null;
 	}

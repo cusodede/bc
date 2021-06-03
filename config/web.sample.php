@@ -4,8 +4,10 @@ declare(strict_types = 1);
 use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use app\modules\dol\models\DolAPI;
 use app\models\vendor\yii2\WebUser;
 use app\modules\history\HistoryModule;
+use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -129,26 +131,6 @@ $config = [
 			// 'enableExceptions' => true,
 			'itemsProperty' => 'items'
 		],
-		'assetManager' => [
-			'bundles' => [
-				BootstrapPluginAsset::class => [
-					'js' => []
-				],
-				BootstrapAsset::class => [
-					'css' => [],
-				],
-				DialogBootstrapAsset::class => [
-					'depends' => [
-						SmartAdminThemeAssets::class
-					]
-				],
-				EditableAsset::class => [
-					'depends' => [
-						SmartAdminThemeAssets::class
-					]
-				]
-			]
-		],
 		'db' => $db,
 		'urlManager' => [
 			'enablePrettyUrl' => true,
@@ -174,6 +156,14 @@ $config = [
 				'@app/controllers/api' => 'api'
 			],
 			'grantAll' => [1]/*User ids, that receive all permissions by default*/
+		],
+		'dolApi' => [
+			'class' => DolAPI::class,
+			'baseUrl' => 'https://dolfront.beelinetst.ru/api/',
+			'debugPhones' => [
+				/* fake phone  =>  sms code */
+				'9250000000' => '0000'
+			]
 		],
 		'assetManager' => [
 			'bundles' => [

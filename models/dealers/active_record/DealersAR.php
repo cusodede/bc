@@ -94,7 +94,7 @@ class DealersAR extends ActiveRecord {
 	}
 
 	/**
-	 * @returnActiveQuery
+	 * @return ActiveQuery
 	 */
 	public function getRefDealersGroups():ActiveQuery {
 		return $this->hasOne(RefDealersGroups::class, ['id' => 'group']);
