@@ -26,7 +26,7 @@ class m210527_100644_modify_sellers_table extends Migration {
 	private const UNIQUE_INDEXES = [
 		'inn',
 		'snils',
-		'email'
+		'user'
 	];
 
 	private const COMPLEX_INDEX = [
