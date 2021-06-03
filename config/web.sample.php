@@ -5,7 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\dol\models\DolAPI;
-use app\models\vendor\yii2\WebUser;
+use app\models\sys\users\WebUser;
 use app\modules\history\HistoryModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;

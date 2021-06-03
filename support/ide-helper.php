@@ -1,7 +1,9 @@
 <?php
+/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+declare(strict_types=1);
 
+use app\models\sys\users\WebUser;
 use yii\BaseYii;
-use app\models\vendor\yii2\WebUser;
 
 /**
  * Yii bootstrap file.
@@ -20,7 +22,7 @@ class Yii extends BaseYii {
  * Class BaseApplication
  * Used for properties that are identical for both WebApplication and ConsoleApplication
  *
- * @property \app\models\vendor\yii2\WebUser $user
+ * @property WebUser $user
  */
 abstract class BaseApplication extends yii\base\Application {
 

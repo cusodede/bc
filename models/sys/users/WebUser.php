@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\vendor\yii2;
+namespace app\models\sys\users;
 
-use app\models\sys\users\Users;
 use DomainException;
+use Throwable;
 use Webmozart\Assert\Assert;
 use Yii;
 use yii\web\Cookie;
@@ -20,11 +20,11 @@ class WebUser extends User {
 
 	/**
 	 * Вернуть id оригинального пользователя,
-	 * из под которого авторизовывались под другим пользователем
+	 * из под которого авторизовались под другим пользователем
 	 *
 	 * @return int
 	 */
-	public function getOriginalUserId() : int {
+	public function getOriginalUserId():int {
 		if (!$this->isLoginAsAnotherUser()) {
 			throw new DomainException("Неправильный сценарий использования");
 		}
@@ -48,7 +48,7 @@ class WebUser extends User {
 	 *
 	 * @return void
 	 */
-	public function loginBackToOriginUser() : void {
+	public function loginBackToOriginUser():void {
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
 			throw new DomainException("Вы не авторизованы");
@@ -56,7 +56,7 @@ class WebUser extends User {
 
 		$existentUser = Users::findIdentity($id = $this->getOriginalUserId());
 		if (is_null($existentUser)) {
-			throw new DomainException("Пользователь с id {$id} не найден");
+			throw new DomainException("Пользователь с id $id не найден");
 		}
 
 		$webUser->login($existentUser);
@@ -67,9 +67,9 @@ class WebUser extends User {
 	 * Авторизоваться под другим пользователем
 	 *
 	 * @param int $userId
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
-	public function loginAsAnotherUser(int $userId) : void {
+	public function loginAsAnotherUser(int $userId):void {
 		Assert::greaterThan($userId, 0, 'ID пользователя должен быть больше 0');
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
@@ -82,7 +82,7 @@ class WebUser extends User {
 
 		$existentUser = Users::findIdentity($userId);
 		if (is_null($existentUser)) {
-			throw new DomainException("Пользователь с id {$userId} не найден");
+			throw new DomainException("Пользователь с id $userId не найден");
 		}
 
 		$originalUserId = $webUser->identity->id;
@@ -102,7 +102,7 @@ class WebUser extends User {
 	 * @return bool
 	 */
 	public function logout($destroySession = true) {
-		$isLogout =  parent::logout($destroySession);
+		$isLogout = parent::logout($destroySession);
 		if ($isLogout) {
 			Yii::$app->response->cookies->remove('fear');
 		}
