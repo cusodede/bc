@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\seller;
 
 use app\controllers\SellersController;
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\seller\active_record\SellersAR;
 use app\models\site\RestorePasswordForm;
 use app\models\sys\users\Users;
@@ -23,7 +22,6 @@ use Yii;
  */
 class Sellers extends SellersAR {
 	use FileStorageTrait;
-	use ActiveRecordTrait;
 
 	public $sellerDocs;
 	public ?Users $sysUser = null;
