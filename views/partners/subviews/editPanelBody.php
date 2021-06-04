@@ -12,6 +12,8 @@ use kartik\form\ActiveForm;
 use yii\base\Model;
 use yii\web\View;
 
+$this->registerCss('.ms-container {width:100%}');
+
 ?>
 
 <?php foreach ($model->attributes() as $attribute): ?>
