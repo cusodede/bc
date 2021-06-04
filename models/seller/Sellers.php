@@ -63,7 +63,7 @@ class Sellers extends SellersAR {
 		$this->sysUser = new Users([
 			'login' => $this->login,
 			'username' => $this->fio,
-			'password' => Users::getDefaultPassword(),
+			'password' => Users::DEFAULT_PASSWORD,
 			'comment' => "User automatically created from seller's registration",
 			'email' => $this->email
 		]);
