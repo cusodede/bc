@@ -8,7 +8,6 @@ use app\models\seller\active_record\SellersAR;
 use app\models\site\RestorePasswordForm;
 use app\models\sys\users\Users;
 use pozitronik\filestorage\traits\FileStorageTrait;
-use Throwable;
 use Yii;
 
 /**
@@ -102,25 +101,6 @@ class Sellers extends SellersAR {
 		$restoreCode = Users::generateSalt();
 		$this->sysUser->restore_code = $restoreCode;
 		return $this->sysUser->save();
-	}
-
-	/**
-	 * Загрузка сканов продавца.
-	 * Если при создании продавца загружаем сканы, а они не загрузились, идем дальше по коду, чтобы создавать
-	 * пользователя и только тогда отправляем письмо админу со всеми ошибками. Если же мы при обновлении загружаем
-	 * сканы, и они не загрузились, то сразу отправляем письмо админу, так как создание пользователя не возможно при
-	 * обновлении.
-	 * @param array $files
-	 * @return void
-	 * @throws Throwable
-	 */
-	public function uploadDocs(array $files):void {
-		if (!empty($files['Sellers']['name']['sellerDocs']) && empty($this->uploadAttribute('sellerDocs'))) {
-			$this->registrationErrors[] = 'Сканы продавца  не загрузились';
-			if (!SellersController::CREATE_SCENARIO) {
-				$this->sendErrors();
-			}
-		}
 	}
 
 	/**

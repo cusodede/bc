@@ -15,6 +15,7 @@ use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\switchinput\SwitchInput;
+use pozitronik\filestorage\widgets\file_input\FileInputWidget;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
@@ -153,6 +154,8 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'sellerDocs')->fileInput() ?>
+		<?= $form->field($model, 'sellerDocs')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
 	</div>
 </div>

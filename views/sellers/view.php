@@ -6,12 +6,11 @@ declare(strict_types = 1);
  * @var Sellers $model
  */
 
-use app\controllers\UploadsController;
 use app\models\core\prototypes\ProjectConstants;
 use app\models\seller\Sellers;
+use pozitronik\filestorage\widgets\file_list\FileListWidget;
 use pozitronik\widgets\BadgeWidget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\DetailView;
 use app\models\seller\active_record\SellersAR;
@@ -85,15 +84,11 @@ use app\models\seller\active_record\SellersAR;
 			'attribute' => 'sellerDocs',
 			'format' => 'raw',
 			'value' => static function(Sellers $model):string {
-				$uploads = [];
-				$docs = $model->files(['sellerDocs']);
-				foreach ($docs as $upload) {
-					$uploads[] = Html::a(
-						'Скачать',
-						UploadsController::to('download', ['id' => $upload->id])
-					);
-				}
-				return implode('<br>', $uploads);
+				return FileListWidget::widget([
+					'model' => $model,
+					'tags' => ['sellerDocs'],
+					'allowVersions' => false
+				]);
 			}
 		]
 	]
