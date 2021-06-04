@@ -17,8 +17,7 @@ use app\models\ref_subscription_categories\active_record\RefSubscriptionCategori
 use app\models\products\Products;
 use app\models\partners\Partners;
 use kartik\switchinput\SwitchInput;
-
-$this->registerCss('.ms-container {width:100%}');
+use kartik\touchspin\TouchSpin;
 
 ?>
 <div class="row">
@@ -57,7 +56,7 @@ $this->registerCss('.ms-container {width:100%}');
 		]) ?>
 	</div>
 	<div class="col-md-3">
-		<?= $form->field($subscription, 'trial_days_count')->textInput(['type' => 'number']) ?>
+		<?= $form->field($subscription, 'trial_days_count')->widget(TouchSpin::class) ?>
 	</div>
 	<div class="col-md-6">
 		<?= $form->field($subscription, 'category_id')->widget(Select2::class, [

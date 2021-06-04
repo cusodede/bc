@@ -10,8 +10,6 @@ use yii\base\Model;
 use yii\web\View;
 use yii\widgets\DetailView;
 
-$this->registerCss('.ms-container {width:100%}');
-
 ?>
 
 <?= DetailView::widget([
