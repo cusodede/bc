@@ -6,7 +6,6 @@ namespace app\models\sys\users\active_record;
 use app\models\phones\active_record\PhonesAR;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
-use app\models\seller\Sellers;
 use app\models\sys\users\active_record\relations\RelUsersToPhones;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
@@ -34,7 +33,6 @@ use yii\helpers\ArrayHelper;
  *
  * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
- * @property Sellers $relatedSeller Связь с продавцом
  * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
  * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
  */
@@ -147,13 +145,6 @@ class Users extends ActiveRecord {
 	 */
 	public function setPhones($phones):void {
 		$this->_phones = (array)$phones;
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedSeller():ActiveQuery {
-		return $this->hasOne(Sellers::class, ['user' => 'id']);
 	}
 
 	/**

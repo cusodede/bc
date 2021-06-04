@@ -9,7 +9,6 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\controllers\SellersController;
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
@@ -81,24 +80,6 @@ ModalHelperAsset::register($this);
 					return BadgeWidget::widget([
 						'items' => $user->relatedPhones,
 						'subItem' => 'phone'
-					]);
-				}
-			],
-			[
-				'class' => DataColumn::class,
-				'attribute' => 'relatedSeller',
-				'format' => 'raw',
-				'value' => static function(Users $user) {
-					return BadgeWidget::widget([
-						'items' => $user->relatedSeller,
-						'subItem' => 'id',
-						'useBadges' => false,
-						'urlScheme' => [
-							SellersController::to(
-								'index',
-								['SellersSearch[id]' => $user->relatedSeller->id??null]
-							)
-						]
 					]);
 				}
 			],
