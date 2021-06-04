@@ -7,13 +7,13 @@ namespace app\models\core\prototypes;
  */
 final class ProjectConstants {
 	public const GENDER = [
-		0 => 'Мужской',
-		1 => 'Женский'
+		1 => 'Мужской',
+		2 => 'Женский'
 	];
 
 	public const NON_RESIDENT_TYPE = [
-		0 => 'Вид на жительство',
-		1 => ' Виза',
-		2 => 'Временное пребывание'
+		1 => 'Вид на жительство',
+		2 => ' Виза',
+		3 => 'Временное пребывание'
 	];
 }
