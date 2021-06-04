@@ -53,11 +53,11 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	}
 
 	/**
-	 * @param mixed $type
+	 * @param string $type
 	 * @return int|null
 	 * @throws Exception
 	 */
-	public static function getIdByType($type):?int {
+	public static function getIdByType(string $type):?int {
 		return ArrayHelper::getValue(self::TOKEN_TYPES, $type);
 	}
 }
