@@ -86,7 +86,10 @@ use app\models\seller\active_record\SellersAR;
 			'value' => static function(Sellers $model):string {
 				return FileListWidget::widget([
 					'model' => $model,
-					'tags' => ['sellerDocs'],
+					'tags' => [
+						'passportTranslation', 'migrationCard', 'placeOfStay', 'patent', 'residence',
+						'temporaryResidence', 'visa'
+					],
 					'allowVersions' => false
 				]);
 			}

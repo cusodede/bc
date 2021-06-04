@@ -40,7 +40,7 @@ class SellersController extends DefaultController {
 
 		$posting = $model->createModelFromPost([], $errors);
 		if (true === $posting) {
-			$model->uploadAttribute('sellerDocs');
+			$model->uploadAttributes();
 			$model->createAccess();
 			return $this->redirect('index');
 		}
@@ -71,7 +71,7 @@ class SellersController extends DefaultController {
 		$posting = $model->updateModelFromPost([], $errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
-			$model->uploadAttribute('sellerDocs');
+			$model->uploadAttributes();
 			return $this->redirect('index');
 		}
 		/* Пришёл постинг, но есть ошибки */

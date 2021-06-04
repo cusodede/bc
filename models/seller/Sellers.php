@@ -13,7 +13,13 @@ use Yii;
 /**
  * Class Sellers
  * Конкретный продавец
- * @property mixed $sellerDocs атрибут загрузки файла
+ * @property mixed $passportTranslation Скан нотариально заверенного перевода (в случае если нет транскрипции на кирилицу)
+ * @property mixed $migrationCard Миграционная карта (всем, кроме граждан Беларуси)
+ * @property mixed $placeOfStay Отрывная часть бланка к уведомлению о прибытии в место пребывания
+ * @property mixed $patent Патент + квитанция об оплате
+ * @property mixed $residence Вид на жительство
+ * @property mixed $temporaryResidence Разрешение на временное проживание
+ * @property mixed $visa Виза
  * @property Users|null $sysUser системный пользователь
  * @property array $registrationErrors массив с ошибками во время регистрации
  *
@@ -22,7 +28,13 @@ use Yii;
 class Sellers extends SellersAR {
 	use FileStorageTrait;
 
-	public $sellerDocs;
+	public $passportTranslation;
+	public $migrationCard;
+	public $placeOfStay;
+	public $patent;
+	public $residence;
+	public $temporaryResidence;
+	public $visa;
 	public ?Users $sysUser = null;
 	public array $registrationErrors = [];
 

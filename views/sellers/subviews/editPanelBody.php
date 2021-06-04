@@ -154,8 +154,50 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'sellerDocs')->widget(FileInputWidget::class, [
+		<?= $form->field($model, 'passportTranslation')->widget(FileInputWidget::class, [
 			'allowVersions' => false
 		]) ?>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'migrationCard')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'placeOfStay')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'patent')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'residence')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'temporaryResidence')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'visa')->widget(FileInputWidget::class, [
+			'allowVersions' => false
+		]) ?>
+	</div>
+</div
