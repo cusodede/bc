@@ -103,7 +103,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
 		return static::find()->joinWith('relatedUsersTokens rut')
 			->where(['rut.auth_token' => $token])
-			->andFilterWhere(['rut.type_id' => (null !== $type)?UsersTokens::getIdByType($type):null])
+			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
 			->one();
 	}
 
