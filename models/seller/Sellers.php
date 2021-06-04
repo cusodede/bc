@@ -13,7 +13,8 @@ use Yii;
 /**
  * Class Sellers
  * Конкретный продавец
- * @property mixed $passportTranslation Скан нотариально заверенного перевода (в случае если нет транскрипции на кирилицу)
+ * @property mixed $passportTranslation Скан нотариально заверенного перевода (в случае если нет транскрипции на
+ * кириллицу)
  * @property mixed $migrationCard Миграционная карта (всем, кроме граждан Беларуси)
  * @property mixed $placeOfStay Отрывная часть бланка к уведомлению о прибытии в место пребывания
  * @property mixed $patent Патент + квитанция об оплате
