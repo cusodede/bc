@@ -10,6 +10,8 @@ use yii\base\Model;
 use yii\web\View;
 use yii\widgets\DetailView;
 
+$this->registerCss('.ms-container {width:100%}');
+
 ?>
 
 <?= DetailView::widget([
@@ -28,6 +30,7 @@ use yii\widgets\DetailView;
 			'label' => 'Триальный период',
 			'format' => 'boolean',
 		],
+		'trial_days_count',
 		[
 			'attribute' => 'category.name',
 			'label' => 'Категория',
@@ -37,11 +40,11 @@ use yii\widgets\DetailView;
 			'label' => 'Партнер',
 		],
 		[
-			'attribute' => 'created_at',
+			'attribute' => 'product.created_at',
 			'format' => ['date', 'php:d.m.Y H:i'],
 		],
 		[
-			'attribute' => 'updated_at',
+			'attribute' => 'product.updated_at',
 			'format' => ['date', 'php:d.m.Y H:i'],
 		],
 	],

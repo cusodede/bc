@@ -45,7 +45,7 @@ class Products extends ActiveRecord
 	{
 		return [
 			[['user_id'], 'default', 'value' => Yii::$app->user->id],
-			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute} продукта.'],
+			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['price'], 'number'],

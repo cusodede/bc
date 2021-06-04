@@ -9,8 +9,10 @@ use app\models\ref_products_types\RefProductsTypes;
 use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\SubscriptionsSearch;
 use pozitronik\core\traits\ControllerTrait;
+use pozitronik\sys_exceptions\models\LoggedException;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -74,5 +76,39 @@ class SubscriptionsController extends DefaultController
 		}
 
 		return $this->renderAjax('modal/create', compact('subscription', 'product'));
+	}
+
+	/**
+	 * @param int $id
+	 * @return string|Response
+	 * @throws LoggedException
+	 */
+	public function actionEdit(int $id)
+	{
+		$subscription = Subscriptions::findOne($id);
+		if (null === $subscription) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+
+		$product = Products::findOne($subscription->product_id);
+		if (null === $product) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+
+		$result = Yii::$app->request->post('ajax')
+			&& $subscription->load(Yii::$app->request->post())
+			&& $product->load(Yii::$app->request->post());
+
+		if ($result) {
+			$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
+			if ($errors !== []) {
+				return $this->asJson($errors);
+			}
+			$product->save();
+			$subscription->link('product', $product); // Цепляем к партнеру и сохраняем
+			return $this->redirect('index');
+		}
+
+		return $this->renderAjax('modal/edit', compact('subscription', 'product'));
 	}
 }

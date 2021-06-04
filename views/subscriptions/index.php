@@ -107,12 +107,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'created_at',
+				'attribute' => 'product.created_at',
 				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'updated_at',
+				'attribute' => 'product.updated_at',
 				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],

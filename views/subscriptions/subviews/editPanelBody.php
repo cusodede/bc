@@ -16,7 +16,9 @@ use kartik\select2\Select2;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
 use app\models\partners\Partners;
-use \kartik\switchinput\SwitchInput;
+use kartik\switchinput\SwitchInput;
+
+$this->registerCss('.ms-container {width:100%}');
 
 ?>
 <div class="row">
