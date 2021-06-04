@@ -20,7 +20,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 
 ?>
-<?php if(!$model->isNewRecord): ?>
+<?php if (!$model->isNewRecord): ?>
 	<div class="row">
 		<div class="col-md-12">
 			<?= $form->field($model, 'currentStatusId')->dropDownList(
@@ -112,6 +112,11 @@ use yii\web\View;
 				'offText' => null
 			],
 		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'non_resident_type')->dropDownList(ProjectConstants::NON_RESIDENT_TYPE, ['prompt' => '']) ?>
 	</div>
 </div>
 <div class="row">

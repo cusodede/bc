@@ -46,7 +46,7 @@ final class SellersSearch extends Sellers {
 				'filter',
 				'filter' => 'trim'
 			],
-			[['id', 'userId', 'gender', 'currentStatus'], 'integer'],
+			[['id', 'userId', 'gender', 'non_resident_type', 'currentStatus'], 'integer'],
 			[['deleted', 'is_wireman_shpd', 'is_resident'], 'boolean'],
 			[['store', 'userEmail'], 'string', 'max' => 255],
 			['userLogin', 'string', 'max' => 64],
@@ -109,6 +109,7 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([self::tableName().'.entry_date' => $this->entry_date])
 			->andFilterWhere([self::tableName().'.keyword' => $this->keyword])
 			->andFilterWhere([self::tableName().'.is_resident' => $this->is_resident])
+			->andFilterWhere([self::tableName().'.non_resident_type' => $this->non_resident_type])
 			->andFilterWhere([self::tableName().'.is_wireman_shpd' => $this->is_wireman_shpd])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
@@ -139,6 +140,7 @@ final class SellersSearch extends Sellers {
 				'update_date',
 				'keyword',
 				'is_resident',
+				'non_resident_type',
 				'is_wireman_shpd',
 				'userId' => [
 					'asc' => [Users::tableName().'.id' => SORT_ASC],

@@ -26,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property string $update_date Дата обновления
  * @property int $is_resident Резидент
+ * @property int $non_resident_type Категория нерезидента
  * @property string $passport_series Серия паспорта
  * @property string $passport_number Номер паспорта
  * @property string $passport_whom Кем выдан паспорт
@@ -122,7 +123,7 @@ class SellersAR extends ActiveRecord {
 				'on' => 'create'
 			],
 			[
-				'entry_date',
+				['entry_date', 'non_resident_type'],
 				'required',
 				'when' => static function($model) {
 					/** @var self $model */
@@ -135,7 +136,7 @@ class SellersAR extends ActiveRecord {
 			[['create_date', 'update_date'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
-			[['gender', 'is_resident', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted', 'user'], 'integer'],
+			[['gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted', 'user'], 'integer'],
 			[['name', 'surname', 'patronymic', 'login'], 'string', 'max' => 128],
 			[['passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
 			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
@@ -164,6 +165,7 @@ class SellersAR extends ActiveRecord {
 			'create_date' => 'Дата регистрации',
 			'update_date' => 'Дата обновления',
 			'is_resident' => 'Резидент',
+			'non_resident_type' => 'Категория нерезидента',
 			'passport_series' => 'Серия паспорта',
 			'passport_number' => 'Номер паспорта',
 			'passport_whom' => 'Кем выдан паспорт',

@@ -68,6 +68,12 @@ use app\models\seller\active_record\SellersAR;
 		'birthday',
 		'is_resident:boolean',
 		[
+			'attribute' => 'non_resident_type',
+			'value' => static function(Sellers $model) {
+				return ArrayHelper::getValue(ProjectConstants::NON_RESIDENT_TYPE, $model->non_resident_type);
+			},
+		],
+		[
 			'attribute' => 'passport',
 			'value' => static function(Sellers $model) {
 				return "{$model->passport_series} {$model->passport_number}";
