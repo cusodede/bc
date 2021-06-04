@@ -49,6 +49,7 @@ class Products extends ActiveRecord
 			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['price'], 'number'],
+			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],

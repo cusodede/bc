@@ -39,38 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
 		'panel' => [
 			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['продукт', 'продукты', 'продуктов']). ')' : ' (нет продуктов)'),
 		],
-		'summary' => null !== $searchModel ? Html::a('Добавить продукт', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Добавить продукт', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]),
 		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
-			[
-				'class' => ActionColumn::class,
-				'template' => '{edit}{view}',
-				'buttons' => [
-					'edit' => static function(string $url, Model $model)
-					{
-						return Html::a('<i class="fas fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-					'view' => static function(string $url, Model $model)
-					{
-						return Html::a('<i class="fas fa-eye"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
-						]);
-					},
-				],
-			],
 			'id',
 			'name',
 			'price',
