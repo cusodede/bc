@@ -141,7 +141,7 @@ use yii\web\View;
 			'tristate' => false,
 			'pluginOptions' => [
 				'size' => 'mini',
-				'onText' => '<i class="glyphicon glyphicon-check"></i>',
+				'onText' => '<i class="fa fa-check"></i>',
 				'offText' => null
 			],
 		]) ?>
