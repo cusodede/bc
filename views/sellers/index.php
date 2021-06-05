@@ -56,7 +56,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{view}{edit-user}',
+				'template' => '{edit}{view}',
 				'buttons' => [
 					'edit' => static function(string $url, SellersSearch $model) use ($modelName):string {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
