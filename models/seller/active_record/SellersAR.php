@@ -59,6 +59,11 @@ class SellersAR extends ActiveRecord {
 	public $login;
 
 	/**
+	 * @var null|Users $_updatedRelatedUser Используется для предвалидации пользователя при изменении
+	 */
+	private ?Users $_updatedRelatedUser = null;
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
@@ -147,7 +152,14 @@ class SellersAR extends ActiveRecord {
 				['passport_series', 'passport_number'],
 				'unique',
 				'targetAttribute' => ['passport_series', 'passport_number']
-			]
+			],
+			['relatedUser', function(string $attribute) {
+				/*не соображу, как доделать. Пока не критично, отложил*/
+				if (null !== $this->_updatedRelatedUser) {
+					$this->addError('relatedUser', 'Этот аккаунт уже привязан к другому продавцу');
+				}
+
+			},/* 'on' => 'update'*/]
 		];
 	}
 
@@ -217,6 +229,20 @@ class SellersAR extends ActiveRecord {
 	 * @param mixed $relatedUser
 	 */
 	public function setRelatedUser($relatedUser):void {
+		/** @var Users $relatedUser */
+		if ((null !== $relatedUser = self::ensureModel(Users::class, $relatedUser)) && 0 !== (int)self::find()->where(['user' => $relatedUser->id])->andWhere(['not in', 'id', $this->id])->count()) {
+			/* Этот пользователь уже привязан к другому продавцу.
+			 * Возможно, мы захотим прописать логику "отвяжи там, привяжи тут", пока оставим так.
+			 *
+			 * link() не делает валидацию.
+			 * $this->_updatedRelatedUser проверится в валидаторе на save().
+			 *
+			 * Другой вариант - делать связь через релейшен-таблицу со своей валидацией.
+			 */
+			$this->_updatedRelatedUser = $relatedUser;
+			return;
+		}
+
 		$this->link('relatedUser', $relatedUser);
 	}
 
