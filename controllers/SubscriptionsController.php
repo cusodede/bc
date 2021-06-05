@@ -65,7 +65,7 @@ class SubscriptionsController extends DefaultController
 			$product->type_id = RefProductsTypes::ID_SUBSCRIPTION; // Определяем, что это подписка
 
 			$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
-			if ($errors !== []) {
+			if ([] === $errors) {
 				return $this->asJson($errors);
 			}
 
