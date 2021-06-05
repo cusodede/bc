@@ -209,8 +209,8 @@ class DefaultController extends Controller {
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-
-		$posting = $model->updateModelFromPost([], $errors);
+		$errors = [];
+		$posting = $model->updateModelFromPost($errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
@@ -234,7 +234,8 @@ class DefaultController extends Controller {
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$posting = $model->createModelFromPost([], $errors);/* switch тут нельзя использовать из-за его нестрогости */
+		$errors = [];
+		$posting = $model->createModelFromPost($errors);/* switch тут нельзя использовать из-за его нестрогости */
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
 		}

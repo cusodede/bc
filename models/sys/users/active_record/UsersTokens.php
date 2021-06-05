@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $user_id user id foreign key
  * @property string $auth_token Bearer auth token
+ * @property int $type_id Тип токена
  * @property string $created Таймстамп создания
  * @property string|null $valid Действует до, null - бессрочно. Сейчас не используется, но можно сделать принудительный рефреш истекшего токена.
  * @property string|null $ip Адрес авторизации
@@ -49,13 +50,12 @@ class UsersTokens extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['user_id', 'auth_token'], 'required'],
-			[['user_id'], 'integer'],
+			[['user_id', 'auth_token', 'type_id'], 'required'],
+			[['user_id', 'type_id'], 'integer'],
 			[['created', 'valid'], 'safe'],
 			[['auth_token'], 'string', 'max' => 40],
 			[['ip', 'user_agent'], 'string', 'max' => 255],
 			[['user_id', 'auth_token'], 'unique', 'targetAttribute' => ['user_id', 'auth_token']],
-
 		];
 	}
 
@@ -67,6 +67,7 @@ class UsersTokens extends ActiveRecord {
 			'id' => 'ID',
 			'user_id' => 'user id foreign key',
 			'auth_token' => 'Bearer auth token',
+			'type_id' => 'Тип токена',
 			'created' => 'Время создания',
 			'valid' => 'Действует до',
 			'ip' => 'Адрес авторизации',
