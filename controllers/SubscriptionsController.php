@@ -55,7 +55,7 @@ class SubscriptionsController extends DefaultController
 	 */
 	public function actionCreate()
 	{
-		// Иключаем produc_id из валидации
+		// Исключаем product_id из валидации
 		$subscription = new Subscriptions(['scenario' => Subscriptions::SCENARIO_CREATE_AJAX]);
 		$product = new Products();
 
