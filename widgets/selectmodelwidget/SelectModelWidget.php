@@ -18,7 +18,7 @@ use yii\web\JsExpression;
  * Надстройка над Select2, работающая с кастомизированными ActiveRecord-моделями (в основном -- справочниками).
  *
  * @property string $selectModelClass Класс модели, по которой будем выбирать данные
- * @property-read  ActiveRecordInterface $selectModel Загруженная модель
+ * @property-read ActiveRecordInterface $selectModel Загруженная модель
  *
  * @property ActiveRecord $model Перекрываем описание атрибута модели
  * @property array $exclude Записи, исключаемые из выборки. Массив id, либо массив элементов
