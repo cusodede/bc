@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\core\prototypes\DefaultController;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -59,6 +58,9 @@ class SellersAR extends ActiveRecord {
 	public $email;
 	public $login;
 
+	public const SCENARIO_CREATE = 'create';
+	public const SCENARIO_EDIT = 'edit';
+
 	/**
 	 * @var null|Users $_updatedRelatedUser Используется для предвалидации пользователя при изменении
 	 */
@@ -108,8 +110,8 @@ class SellersAR extends ActiveRecord {
 				],
 				'required'
 			],
-			[['email', 'login',], 'required', 'on' => DefaultController::SCENARIO_CREATE],
-			['email', 'email', 'on' => DefaultController::SCENARIO_CREATE],
+			[['email', 'login',], 'required', 'on' => self::SCENARIO_CREATE],
+			['email', 'email', 'on' => self::SCENARIO_CREATE],
 			[
 				'email',
 				function(string $attribute):void {
@@ -117,7 +119,7 @@ class SellersAR extends ActiveRecord {
 						$this->addError('email', 'Пользователь с таким почтовым адресом уже зарегистрирован');
 					}
 				},
-				'on' => DefaultController::SCENARIO_CREATE
+				'on' => self::SCENARIO_CREATE
 			],
 			[
 				'login',
@@ -126,7 +128,7 @@ class SellersAR extends ActiveRecord {
 						$this->addError('login', 'Такой логин уже занят');
 					}
 				},
-				'on' => DefaultController::SCENARIO_CREATE
+				'on' => self::SCENARIO_CREATE
 			],
 			[
 				['entry_date', 'non_resident_type'],
