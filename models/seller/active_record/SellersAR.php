@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\core\prototypes\DefaultController;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -107,8 +108,8 @@ class SellersAR extends ActiveRecord {
 				],
 				'required'
 			],
-			[['email', 'login',], 'required', 'on' => 'create'],
-			['email', 'email', 'on' => 'create'],
+			[['email', 'login',], 'required', 'on' => DefaultController::SCENARIO_CREATE],
+			['email', 'email', 'on' => DefaultController::SCENARIO_CREATE],
 			[
 				'email',
 				function(string $attribute):void {
@@ -116,7 +117,7 @@ class SellersAR extends ActiveRecord {
 						$this->addError('email', 'Пользователь с таким почтовым адресом уже зарегистрирован');
 					}
 				},
-				'on' => 'create'
+				'on' => DefaultController::SCENARIO_CREATE
 			],
 			[
 				'login',
@@ -125,7 +126,7 @@ class SellersAR extends ActiveRecord {
 						$this->addError('login', 'Такой логин уже занят');
 					}
 				},
-				'on' => 'create'
+				'on' => DefaultController::SCENARIO_CREATE
 			],
 			[
 				['entry_date', 'non_resident_type'],
@@ -159,7 +160,7 @@ class SellersAR extends ActiveRecord {
 					$this->addError('relatedUser', 'Этот аккаунт уже привязан к другому продавцу');
 				}
 
-			},/* 'on' => 'update'*/]
+			}]
 		];
 	}
 
