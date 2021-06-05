@@ -5,10 +5,8 @@ namespace app\models\subscriptions\active_record;
 
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
-use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use Yii;
 
 /**
  * This is the model class for table "subscriptions".
