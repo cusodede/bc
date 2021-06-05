@@ -76,7 +76,9 @@ class Users extends ActiveRecord {
 			[['email'], 'unique'],
 			[['daddy'], 'default', 'value' => Yii::$app->user->id],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
-			['phones', PhoneNumberValidator::class]
+			['phones', PhoneNumberValidator::class, 'when' => function() {
+				[] !== array_filter($this->phones);
+			}]
 		];
 	}
 

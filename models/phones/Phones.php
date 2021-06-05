@@ -45,7 +45,7 @@ class Phones extends PhonesAR {
 	 */
 	public static function add(array $phones):array {
 		$results = [];
-		foreach ($phones as $phone) {
+		foreach (array_filter($phones) as $phone) {
 			if (null !== $formattedNumber = self::defaultFormat($phone)) {
 				$results[] = self::Upsert(['phone' => $formattedNumber])->id;
 			}
