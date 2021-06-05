@@ -8,6 +8,7 @@ use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
 use yii\bootstrap4\ActiveForm;
 
@@ -22,6 +23,31 @@ trait ActiveRecordTrait {
 	 */
 	public static function find():LCQuery {
 		return new LCQuery(static::class);
+	}
+
+	/**
+	 * По (int)$pk|(string)$pk пытается вернуть соответствующую ActiveRecord-модель
+	 * @param string|ActiveRecordInterface $className
+	 * @param int|string|ActiveRecordInterface $model
+	 * @return ActiveRecordInterface|null
+	 */
+	public static function ensureModel($className, $model):?ActiveRecordInterface {
+		if (is_string($model) && is_numeric($model)) {
+			$model = (int)$model;
+		}
+		if (is_int($model)) {
+			/** @var ActiveRecordInterface $className */
+			$model = $className::findOne($model);
+		}
+		return is_a($model, ActiveRecordInterface::class, false)?$model:null;
+	}
+
+	/**
+	 * @inheritDoc
+	 * @param ActiveRecordInterface|int|string $model the model to be linked with the current one.
+	 */
+	public function link($name, $model, $extraColumns = []):void {
+		parent::link($name, self::ensureModel($this->$name, $model), $extraColumns);
 	}
 
 	/**
