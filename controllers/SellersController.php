@@ -7,8 +7,11 @@ use app\models\core\prototypes\DefaultController;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
 use pozitronik\sys_exceptions\models\LoggedException;
+use Throwable;
 use Yii;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class SellersController
@@ -37,8 +40,8 @@ class SellersController extends DefaultController {
 		if (Yii::$app->request->post('ajax')) {
 			return $this->asJson($model->validateModelFromPost());
 		}
-
-		$posting = $model->createModelFromPost([], $errors);
+		$errors = [];
+		$posting = $model->createModelFromPost($errors);
 		if (true === $posting) {
 			$model->uploadAttributes();
 			$model->createAccess();
@@ -67,8 +70,9 @@ class SellersController extends DefaultController {
 			return $this->asJson($model->validateModelFromPost());
 		}
 
+		$errors = [];
 		/** @var Sellers $model */
-		$posting = $model->updateModelFromPost([], $errors);
+		$posting = $model->updateModelFromPost($errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
 			$model->uploadAttributes();
@@ -83,6 +87,39 @@ class SellersController extends DefaultController {
 		return (Yii::$app->request->isAjax)
 			?$this->renderAjax('modal/edit', ['model' => $model])
 			:$this->render('edit', ['model' => $model]);
+	}
+
+	/**
+	 * @param int $id
+	 * @return string|Response
+	 * @throws LoggedException
+	 * @throws Throwable
+	 * @throws Exception
+	 */
+	public function actionEditUser(int $id) {
+		if (null === $model = $this->model::findOne($id)) {
+			throw new LoggedException(new NotFoundHttpException());
+		}
+
+		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+			return $this->asJson($model->validateModelFromPost());
+		}
+		$errors = [];
+		/** @var Sellers $model */
+		$posting = $model->updateModelFromPost($errors);
+
+		if (true === $posting) {/* Модель была успешно прогружена */
+			return $this->redirect('index');
+		}
+		/* Пришёл постинг, но есть ошибки */
+		if ((false === $posting) && Yii::$app->request->isAjax) {
+			return $this->asJson($errors);
+		}
+
+		/* Постинга не было */
+		return (Yii::$app->request->isAjax)
+			?$this->renderAjax('modal/edit-user', ['model' => $model])
+			:$this->render('edit-user', ['model' => $model]);
 	}
 
 }
