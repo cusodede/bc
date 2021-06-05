@@ -21,7 +21,6 @@ use Yii;
  * @property mixed $residence Вид на жительство
  * @property mixed $temporaryResidence Разрешение на временное проживание
  * @property mixed $visa Виза
- * @property Users|null $sysUser системный пользователь
  * @property array $registrationErrors массив с ошибками во время регистрации
  *
  * @property string $fio ФИО
@@ -52,12 +51,8 @@ class Sellers extends SellersAR {
 	 * @return void
 	 */
 	public function createAccess():void {
-		if ($this->createUser()) {
-			if (!$this->linkToUser()) {
-				$this->registrationErrors[] = 'Не удалось связать системного пользователя с продавцом';
-			}
-		} else {
-			$this->registrationErrors[] = 'Не удалось создавать системного пользователя';
+		if (!$this->createUser()) {
+			$this->registrationErrors[] = 'Не удалось создать системного пользователя';
 		}
 
 		if ($this->registrationErrors) {
@@ -72,24 +67,16 @@ class Sellers extends SellersAR {
 	 * @return bool
 	 */
 	public function createUser():bool {
-		$this->sysUser = new Users([
+		$user = new Users([
 			'login' => $this->login,
 			'username' => $this->fio,
 			'password' => Users::DEFAULT_PASSWORD,
 			'comment' => "User automatically created from seller's registration",
 			'email' => $this->email
 		]);
-
-		return $this->sysUser->save();
-	}
-
-	/**
-	 * Связка продавец-пользователь
-	 * @return bool
-	 */
-	public function linkToUser():bool {
-		$this->user = $this->sysUser->id;
-		return $this->save(true, ['user']);
+		if (!$user->save()) return false;
+		$this->relatedUser = $user;
+		return true;
 	}
 
 	/**
@@ -101,7 +88,7 @@ class Sellers extends SellersAR {
 		if ($this->saveRestoreCode()) {
 			RestorePasswordForm::sendRestoreMail(
 				'site/confirm-registration',
-				$this->sysUser,
+				$this->relatedUser,
 				'Подтверждение регистрации на '.Yii::$app->name
 			);
 		}
@@ -112,8 +99,8 @@ class Sellers extends SellersAR {
 	 */
 	public function saveRestoreCode():bool {
 		$restoreCode = Users::generateSalt();
-		$this->sysUser->restore_code = $restoreCode;
-		return $this->sysUser->save();
+		$this->relatedUser->restore_code = $restoreCode;
+		return $this->relatedUser->save();
 	}
 
 	/**

@@ -212,4 +212,12 @@ class SellersAR extends ActiveRecord {
 	public function getRelatedUser():ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'user']);
 	}
+
+	/**
+	 * @param mixed $relatedUser
+	 */
+	public function setRelatedUser($relatedUser):void {
+		$this->link('relatedUser', $relatedUser);
+	}
+
 }
