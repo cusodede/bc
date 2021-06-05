@@ -205,4 +205,4 @@ use yii\web\View;
 			'allowVersions' => false
 		]) ?>
 	</div>
-</div
+</div>
