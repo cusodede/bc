@@ -36,6 +36,10 @@ use yii\web\Response;
 class DefaultController extends Controller {
 	use ControllerPermissionsTrait;
 
+	public const SCENARIO_CREATE = 'create';
+	public const SCENARIO_EDIT = 'edit';
+
+
 	/**
 	 * @var string $modelClass
 	 */
@@ -204,6 +208,7 @@ class DefaultController extends Controller {
 		if (null === $model = $this->model::findOne($id)) {
 			throw new LoggedException(new NotFoundHttpException());
 		}
+		$model->scenario = self::SCENARIO_EDIT;
 
 		/** @var ActiveRecordTrait $model */
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
@@ -231,6 +236,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionCreate() {
 		$model = $this->model;
+		$model->scenario = self::SCENARIO_CREATE;
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
