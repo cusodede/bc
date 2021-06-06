@@ -34,7 +34,7 @@ class SellersController extends DefaultController {
 	public function actionCreate() {
 		/** @var Sellers $model */
 		$model = $this->model;
-		$model->scenario = self::SCENARIO_CREATE;
+		$model->scenario = $model::SCENARIO_CREATE;
 		if (Yii::$app->request->post('ajax')) {
 			return $this->asJson($model->validateModelFromPost());
 		}
