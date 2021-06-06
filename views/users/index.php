@@ -50,11 +50,16 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{update-password}',
+				'template' => '{edit}{view}{update-password}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
 						return Html::a('<i class="fas fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+					'view' => static function(string $url, Users $model) {
+						return Html::a('<i class="fas fa-eye"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'update-password' => static function(string $url, Users $model) {
