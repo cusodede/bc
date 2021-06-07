@@ -148,8 +148,14 @@ class SellersAR extends ActiveRecord {
 			[['name', 'surname', 'patronymic', 'login'], 'string', 'max' => 128],
 			[['passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
 			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
-			['inn', 'string', 'max' => 12],
-			['snils', 'string', 'max' => 14],
+			['inn', 'string', 'length' => 12],
+			['inn', 'integer'],
+			[
+				'snils',
+				'match',
+				'pattern' => '/^(\d{3}\-\d{3}-\d{3} \d{2})$/',
+				'message' => 'Значение «СНИЛС» неверно. Формат: 000-000-000 00'
+			],
 			[['inn', 'snils', 'user'], 'unique'],
 			[
 				['passport_series', 'passport_number'],

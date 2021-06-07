@@ -159,6 +159,16 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<?= $form->field($model, 'inn')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'snils')->textInput(['placeholder' => '000-000-000 00']) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?= $form->field($model, 'passportTranslation')->widget(FileInputWidget::class, [
 			'allowVersions' => false
 		]) ?>
