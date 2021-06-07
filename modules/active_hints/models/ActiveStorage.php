@@ -61,11 +61,14 @@ class ActiveStorage extends ActiveRecord {
 	/**
 	 * @param Model|string $model
 	 * @param string $attribute
-	 * @return static|null
+	 * @return static
 	 */
-	public static function findActiveAttribute($model, string $attribute):?self {
+	public static function findActiveAttribute($model, string $attribute):self {
 		if (is_object($model)) $model = get_class($model);
-		return self::find()->where(compact('model', 'attribute'))->one();
+		if (null === $result = self::find()->where(compact('model', 'attribute'))->one()) {
+			$result = new ActiveStorage(compact('model', 'attribute'));
+		}
+		return $result;
 	}
 
 }
