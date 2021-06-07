@@ -85,6 +85,8 @@ use app\models\seller\active_record\SellersAR;
 		'entry_date',
 		'keyword',
 		'is_wireman_shpd:boolean',
+		'inn',
+		'snils',
 		'deleted:boolean',
 		[
 			'attribute' => 'sellerDocs',
