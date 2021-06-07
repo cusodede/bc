@@ -101,7 +101,7 @@ class SubscriptionsController extends DefaultController
 
 		if ($result) {
 			$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
-			if ($errors !== []) {
+			if ([] !== $errors) {
 				return $this->asJson($errors);
 			}
 			$product->save();
