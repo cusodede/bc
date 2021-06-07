@@ -53,7 +53,7 @@ class ActiveHints extends Widget {
 		$this->_toggleButtonClass['hint'] = (null === $this->_record->content)?'no-hint':'has-hint';
 		if ($this->editable) {//Если у хинта нет контента, то показываем его только для редактирования
 			$output = Html::button('<i class="fa fa-question-circle"></i>', ['class' => $this->toggleButtonClass, 'data-toggle' => 'popover-x', 'data-target' => "#hint-{$this->_for}-popover"]);
-
+			/*todo: здесь нельзя рендерить Editable as is, потому что контент будет выводиться в форму. Нужно сделать ajax-загрузку в попап, рендерящийся в конце страницы*/
 			$widget = Editable::widget([
 				'formOptions' => [
 					'action' => $this->editAction
@@ -80,7 +80,7 @@ class ActiveHints extends Widget {
 				]
 			]);
 
-			self::$popoverStack[] = $widget;//мы не можем вывести форму внутри формы, поэтому контент редакторов сохраняется в стеке и рендерится после вывода всего
+			/*self::$popoverStack[] =*/ $output .= $widget;//мы не можем вывести форму внутри формы, поэтому контент редакторов сохраняется в стеке и рендерится после вывода всего
 
 		} elseif (null !== $this->_record->content) {//Если у хинта нет контента, то показываем его только для редактирования
 			$output = PopoverX::widget([
