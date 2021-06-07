@@ -32,7 +32,7 @@ class m000000_000000_init_active_hints_module extends Migration {
 			'attribute' => $this->string()->notNull(),
 			'header' => $this->string()->null(),
 			'content' => $this->text()->null(),
-			'placement' => $this->integer()->null()
+			'placement' => $this->string()->null()
 		]);
 
 		$this->createIndex('model_attribute', $this->tableName, ['model', 'attribute'], true);
