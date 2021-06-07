@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use app\modules\active_hints\models\ActiveField;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -33,6 +34,16 @@ $config = [
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
 	'homeUrl' => '/home/home',//<== строка, не массив
+		'container' => [
+    		'definitions' => [
+    			ActiveForm::class => [//перекрываем дефолтный параметр класса
+    				'fieldClass' => ActiveField::class
+    			]
+    		],
+    		'singletons' => [
+    			// Dependency Injection Container singletons configuration
+    		]
+    	],
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
