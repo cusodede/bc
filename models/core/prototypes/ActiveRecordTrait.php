@@ -8,8 +8,8 @@ use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
-use yii\db\Transaction;
 use yii\bootstrap4\ActiveForm;
 
 /**
@@ -26,19 +26,44 @@ trait ActiveRecordTrait {
 	}
 
 	/**
-	 * @param array $mappedParams
+	 * По (int)$pk|(string)$pk пытается вернуть соответствующую ActiveRecord-модель
+	 * @param string|ActiveRecordInterface $className
+	 * @param int|string|ActiveRecordInterface $model
+	 * @return ActiveRecordInterface|null
+	 */
+	public static function ensureModel($className, $model):?ActiveRecordInterface {
+		if (is_string($model) && is_numeric($model)) {
+			$model = (int)$model;
+		}
+		if (is_int($model)) {
+			/** @var ActiveRecordInterface $className */
+			$model = $className::findOne($model);
+		}
+		return is_a($model, ActiveRecordInterface::class, false)?$model:null;
+	}
+
+	/**
+	 * @inheritDoc
+	 * @param ActiveRecordInterface|int|string $model the model to be linked with the current one.
+	 */
+	public function link($name, $model, $extraColumns = []):void {
+		/** @noinspection PhpMultipleClassDeclarationsInspection
+		 * parent всегда будет ссылаться на BaseActiveRecord, но у нас нет способа это пометить
+		 */
+		parent::link($name, self::ensureModel($this->$name, $model), $extraColumns);
+	}
+
+	/**
 	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
-	 * @return null|bool null
-	 * @throws DbException
+	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
 	 * @throws Throwable
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function createModelFromPost(array $mappedParams = [], ?array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+	public function createModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
 		$errors = [];
 		if ($this->load(Yii::$app->request->post())) {
-			$result = $this->createModel(Yii::$app->request->post($this->formName(), []), $mappedParams);
-			if (!$result) {
+			if (false === $result = $this->save()) {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
 				/** @var ActiveRecord $this */
 				$errors = $AJAXErrorsFormat
@@ -65,69 +90,16 @@ trait ActiveRecordTrait {
 	}
 
 	/**
-	 * @param array $mappedParams
 	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
-	 * @return null|bool
+	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
 	 * @throws DbException
 	 * @throws Throwable
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function updateModelFromPost(array $mappedParams = [], ?array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
 		/* Методы совпадают, но оставлено на будущее */
-		return $this->createModelFromPost($mappedParams, $errors, $AJAXErrorsFormat);
-	}
-
-	/**
-	 * Метод создания модели, выполняющий дополнительную обработку:
-	 *    Обеспечивает последовательное создание модели и заполнение данных по связям (т.е. тех данных, которые не могут быть заполнены до фактического создания модели).
-	 *    Последовательность заключена в транзакцию - сбой на любом шаге ведёт к отмене всей операции.
-	 *
-	 * @param array $paramsArray Массив параметров БЕЗ учёта имени модели в форме (я забыл, почему сделал так, но, видимо, причина была)
-	 * @param array $mappedParams Массив с параметрами для реляционных атрибутов в формате 'имя атрибута' => массив значений
-	 * @return bool - результат операции
-	 * @throws Throwable
-	 * @throws DbException
-	 */
-	public function createModel(array $paramsArray = [], array $mappedParams = []):bool {
-		/** @var Transaction $transaction */
-		$transaction = static::getDb()->beginTransaction();
-		if (true === $saved = $this->save()) {
-			$this->refresh();//переподгрузим атрибуты
-			/*Возьмём разницу атрибутов и массива параметров - в нем будут новые атрибуты, которые теперь можно заполнить*/
-			$relatedParameters = [];
-			foreach ($paramsArray as $item => $value) {//вычисляем связанные параметры, которые не могли быть сохранены до сохранения основной модели
-				if ($this->canSetProperty($item) && $value !== $this->$item) {
-					$relatedParameters[$item] = $value;
-				}
-			}
-			$mappedParams = array_merge($mappedParams, $relatedParameters);
-
-			if ([] !== $mappedParams) {//если было, что сохранять - сохраним
-				foreach ($mappedParams as $paramName => $paramArray) {//дополнительные атрибуты в формате 'имя атрибута' => $paramsArray
-					$this->$paramName = $paramArray;
-				}
-				$saved = $this->save();
-				$this->refresh();
-			}
-		}
-		if ($saved) {
-			$transaction->commit();
-		} else {
-			$transaction->rollBack();
-		}
-		return $saved;
-	}
-
-	/**
-	 * Метод обновления модели, выполняющий дополнительную обработку
-	 * @param array $paramsArray Массив параметров БЕЗ учёта имени модели в форме (я забыл, почему сделал так, но, видимо, причина была)
-	 * @param array $mappedParams Массив с параметрами для реляционных атрибутов в формате 'имя атрибута' => массив значений
-	 * @return bool
-	 * @throws Throwable
-	 */
-	public function updateModel(array $paramsArray = [], array $mappedParams = []):bool {
-		return $this->createModel($paramsArray, $mappedParams);
+		return $this->createModelFromPost($errors, $AJAXErrorsFormat);
 	}
 
 	/**
