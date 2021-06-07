@@ -64,7 +64,7 @@ abstract class OAuthTokenizer implements Tokenizer
 
 	public function getTokenData(): array
 	{
-		$data = ['access_token' => $this->getToken(), 'expires_in' => $this->getExpiresIn()];
+		$data = ['access_token' => $this->getAuthToken(), 'expires_in' => $this->getExpiresIn()];
 		if (null !== $refreshToken = $this->getRefreshToken()) {
 			$data['refresh_token'] = $refreshToken;
 		}
@@ -75,9 +75,17 @@ abstract class OAuthTokenizer implements Tokenizer
 	/**
 	 * {@inheritdoc}
 	 */
+	public function getAuthToken(): string
+	{
+		return $this->_authToken->auth_token;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getRefreshToken(): ?string
 	{
-		return ArrayHelper::getValue($this->_refreshToken, 'auth_key');
+		return ArrayHelper::getValue($this->_refreshToken, 'auth_token');
 	}
 
 	/**

@@ -24,7 +24,7 @@ class JwtTokenizer extends OAuthTokenizer
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getToken(): string
+	public function getAuthToken(): string
 	{
 		$iat = new DateTimeImmutable($this->_authToken->created);
 		$exp = new DateTimeImmutable($this->_authToken->valid);
