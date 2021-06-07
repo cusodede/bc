@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\active_hints\widgets\active_hints;
+namespace app\modules\active_hints\models;
 
-use app\modules\status\ActiveHintsModule;
+use app\modules\active_hints\ActiveHintsModule;
 use pozitronik\core\traits\ARExtended;
 use pozitronik\helpers\DateHelper;
 use Yii;
@@ -11,14 +11,21 @@ use yii\db\ActiveRecord;
 
 /**
  * Class ActiveStorage
+ * @property string $model
+ * @property string $attribute
+ * @property null|string $content
+ * @property null|string $header
+ * @property null|int $placement
+ * @property null|int $user
+ * @property string $at
  */
-class ActiveStorage extends ActiveRecord implements ActiveStorageInterface {
+class ActiveStorage extends ActiveRecord {
 	use ARExtended;
 	/**
 	 * {@inheritDoc}
 	 */
 	public static function tableName():string {
-		return ActiveHintsModule::getConfigParameter('table_name');
+		return ActiveHintsModule::getConfigParameter('tableName');
 	}
 
 	/**
@@ -26,11 +33,11 @@ class ActiveStorage extends ActiveRecord implements ActiveStorageInterface {
 	 */
 	public function rules():array {
 		return [
-			[['id'], 'integer'],
-			[['for', 'header', 'content', 'placement'], 'string'],
-			[['for'], 'unique'],
-			[['daddy'], 'default', 'value' => Yii::$app->user->id],
-			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
+			[['id', 'placement'], 'integer'],
+			[['model', 'attribute', 'content', 'header'], 'string'],
+			[['model', 'attribute'], 'unique', 'targetAttribute' => ['model', 'attribute']],
+			[['user'], 'default', 'value' => Yii::$app->user->id],
+			[['at'], 'default', 'value' => DateHelper::lcDate()],
 		];
 	}
 
@@ -40,7 +47,8 @@ class ActiveStorage extends ActiveRecord implements ActiveStorageInterface {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'for' => 'Идентификатор',
+			'model' => 'Модель',
+			'attribute' => 'Атрибут',
 			'header' => 'Заголовок',
 			'content' => 'Содержимое',
 			'placement' => 'Расположение'
