@@ -6,7 +6,6 @@ namespace app\modules\active_hints\controllers;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\modules\active_hints\models\ActiveStorage;
 use app\modules\active_hints\models\ActiveStorageSearch;
-use app\modules\active_hints\widgets\active_hints\ActiveHints;
 use kartik\grid\EditableColumnAction;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
@@ -32,17 +31,9 @@ class DefaultController extends Controller {
 			 */
 			'editDefault' => [
 				'class' => EditableColumnAction::class,
-				'modelClass' => ActiveStorageSearch::class,
+				'modelClass' => ActiveStorage::class,
 				'showModelErrors' => true,
 			],
-			'editHint' => [
-				'class' => EditableColumnAction::class,
-				'modelClass' => ActiveStorageSearch::class,
-				'showModelErrors' => true,
-				'outputValue' => function(ActiveHints $model, string $attribute, int $key, int $index) {
-					return '';
-				},
-			]
 		]);
 	}
 
@@ -140,6 +131,24 @@ class DefaultController extends Controller {
 		/** @noinspection PhpUndefinedMethodInspection */
 		$model->safeDelete();
 		return $this->redirect('index');
+	}
+
+	/**
+	 * @param string $for
+	 * @return array
+	 */
+	public function actionSetHint(string $model, string $attribute):array {
+		if (null !== Yii::$app->request->post('hasEditable')) {
+			$popover = ActiveStorage::findActiveAttribute($model, $attribute);
+			$popover->loadArray([
+				'content' => Yii::$app->request->post()
+			]);
+			if (!$popover->save()) {
+				return ['output' => '', 'message' => $popover->errors];
+			}
+		}
+
+		return ['output' => '0', 'message' => ''];//0 - Для displayValueConfig в виджете
 	}
 
 }
