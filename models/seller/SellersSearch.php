@@ -41,7 +41,7 @@ final class SellersSearch extends Sellers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'passport', 'keyword', 'birthday', 'entry_date',
-					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId'
+					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId', 'inn', 'snils'
 				],
 				'filter',
 				'filter' => 'trim'
@@ -54,7 +54,15 @@ final class SellersSearch extends Sellers {
 			[['birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i'],
 			[['keyword'], 'string', 'max' => 64],
-			[['name', 'surname', 'patronymic', 'passport'], 'string', 'max' => 128]
+			[['name', 'surname', 'patronymic', 'passport'], 'string', 'max' => 128],
+			['inn', 'string', 'length' => 12],
+			['inn', 'integer'],
+			[
+				'snils',
+				'match',
+				'pattern' => '/^(\d{3}\-\d{3}-\d{3} \d{2})$/',
+				'message' => 'Значение «СНИЛС» неверно. Формат: 000-000-000 00'
+			]
 		];
 	}
 
@@ -111,6 +119,8 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([self::tableName().'.is_resident' => $this->is_resident])
 			->andFilterWhere([self::tableName().'.non_resident_type' => $this->non_resident_type])
 			->andFilterWhere([self::tableName().'.is_wireman_shpd' => $this->is_wireman_shpd])
+			->andFilterWhere([self::tableName().'.inn' => $this->inn])
+			->andFilterWhere([self::tableName().'.snils' => $this->snils])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere([Users::tableName().'.id' => $this->userId])
@@ -142,6 +152,8 @@ final class SellersSearch extends Sellers {
 				'is_resident',
 				'non_resident_type',
 				'is_wireman_shpd',
+				'inn',
+				'snils',
 				'userId' => [
 					'asc' => [Users::tableName().'.id' => SORT_ASC],
 					'desc' => [Users::tableName().'.id' => SORT_DESC]
