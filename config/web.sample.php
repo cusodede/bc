@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -166,7 +167,12 @@ $config = [
 					]
 				]
 			]
-		]
+		],
+		'jwt' => [
+			'class' => Jwt::class,
+			'signer' => Jwt::HS256,
+			'signerKey' => '$2y$13$JaaVi0UlqXYCi/qG8YxEguknaWuNRgmShVq6uV17WPhtMqNig/B4O',
+		],
 	],
 	'params' => $params,
 ];
