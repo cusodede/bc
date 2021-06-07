@@ -24,112 +24,112 @@ use app\controllers\AbonentsController;
 <?= SideBarWidget::widget([
 	'items' => [
 		[
-			'label' => 'Домой',
-			'url' => [Url::home()],
+			'label'     => 'Домой',
+			'url'       => [Url::home()],
 			'iconClass' => 'fa-home'
 		],
 		[
-			'label' => 'Партнеры',
-			'url' => [PartnersController::to('index')],
+			'label'     => 'Партнеры',
+			'url'       => [PartnersController::to('index')],
 			'iconClass' => 'fa-briefcase'
 		],
 		[
-			'label' => 'Продукты',
-			'url' => '#',
+			'label'     => 'Продукты',
+			'url'       => '#',
 			'iconClass' => 'fa-shopping-cart',
-			'items' => [
+			'items'     => [
 				[
 					'label' => 'Все продукты',
-					'url' => [ProductsController::to('index')]
+					'url'   => [ProductsController::to('index')]
 				],
 				[
 					'label' => 'Подписки',
-					'url' => [SubscriptionsController::to('index')]
+					'url'   => [SubscriptionsController::to('index')]
 				]
 			],
 		],
 		[
-			'label' => 'Абоненты',
-			'url' => [AbonentsController::to('index')],
+			'label'     => 'Абоненты',
+			'url'       => [AbonentsController::to('index')],
 			'iconClass' => 'fa-phone'
 		],
 		[
-			'label' => 'Пользователи',
-			'url' => '#',
+			'label'     => 'Пользователи',
+			'url'       => '#',
 			'iconClass' => 'fa-users-cog',
-			'items' => [
+			'items'     => [
 				[
-					'label' => 'Все',
-					'url' => [UsersController::to('index')],
+					'label'   => 'Все',
+					'url'     => [UsersController::to('index')],
 					'visible' => UsersController::hasPermission('index')
 				]
 			],
 		],
 		[
-			'label' => 'Прототипирование',
-			'url' => '#',
+			'label'     => 'Прототипирование',
+			'url'       => '#',
 			'iconClass' => 'fa-digging',
-			'items' => DefaultController::MenuItems()
+			'items'     => DefaultController::MenuItems()
 		],
 		[
-			'label' => 'Доступы',
-			'url' => '#',
+			'label'     => 'Доступы',
+			'url'       => '#',
 			'iconClass' => 'fa-lock',
-			'items' => [
+			'items'     => [
 				[
-					'label' => 'Редактор разрешений',
-					'url' => [PermissionsController::to('index')],
+					'label'   => 'Редактор разрешений',
+					'url'     => [PermissionsController::to('index')],
 					'visible' => PermissionsController::hasPermission('index')
 				],
 				[
-					'label' => 'Группы разрешений',
-					'url' => [PermissionsCollectionsController::to('index')],
+					'label'   => 'Группы разрешений',
+					'url'     => [PermissionsCollectionsController::to('index')],
 					'visible' => PermissionsCollectionsController::hasPermission('index')
 				],
 			],
 		],
 		[
-			'label' => 'Система',
-			'url' => '#',
+			'label'     => 'Система',
+			'url'       => '#',
 			'iconClass' => 'fa-wrench',
-			'items' => [
+			'items'     => [
 				[
 					'label' => 'Справочники',
-					'url' => [ReferencesModule::to('references')],
+					'url'   => [ReferencesModule::to('references')],
 				],
 				[
 					'label' => 'Протокол сбоев',
-					'url' => [SysExceptionsModule::to('index')]
+					'url'   => [SysExceptionsModule::to('index')]
 				],
 				[
 					'label' => 'Процессы на БД',
-					'url' => [DbController::to('process-list')]
+					'url'   => [DbController::to('process-list')]
 				],
 				[
 					'label' => 'Файловый менеджер',
-					'url' => [FSModule::to('index')]
+					'url'   => [FSModule::to('index')]
 				],
 				[
 					'label' => 'История изменений',
-					'url' => [HistoryModule::to('index')]
+					'url'   => [HistoryModule::to('index')]
 				],
 				[
 					'label' => 'Настройки системы',
-					'url' => [SiteController::to('options')]
+					'url'   => [SiteController::to('options')]
 				]
 			],
 		],
 		[
-			'label' => 'REST API',
-			'url' => '#',
+			'label'     => 'REST API',
+			'url'       => '#',
 			'iconClass' => 'fa-cloud',
-			'items' => [
+			'items'     => [
 				[
 					'label' => 'Пользователи',
-					'url' => ['/api/users'],
+					'url'   => ['/api/users'],
 				]
 			],
-			'visible' => Users::Current()->hasPermission(['system'])
+			'visible'   => Users::Current()->hasPermission(['system'])
 		],
 	]
 ]) ?>
