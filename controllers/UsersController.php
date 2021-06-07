@@ -6,7 +6,6 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
@@ -20,7 +19,6 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends DefaultController {
-	use ControllerTrait;
 
 	/**
 	 * Поисковая модель пользователя
