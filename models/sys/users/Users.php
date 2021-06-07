@@ -6,13 +6,13 @@ namespace app\models\sys\users;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
+use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
-use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
@@ -93,14 +93,18 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * Finds an identity by the given token.
 	 * @param string $token the token to be looked for
-	 * @param null|HttpBearerAuth $type the type of the token. The value of this parameter depends on the implementation.
+	 * @param null|string $type the type of the token. The value of this parameter depends on the implementation.
 	 * For example, [[\yii\filters\auth\HttpBearerAuth]] will set this parameter to be `yii\filters\auth\HttpBearerAuth`.
 	 * @return IdentityInterface|null the identity object that matches the given token.
 	 * Null should be returned if such an identity cannot be found
 	 * or the identity is not in an active state (disabled, deleted, etc.)
+	 * @throws Exception
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::find()->joinWith('relatedUsersTokens')->where(['auth_token' => $token])->one();
+		return static::find()->joinWith('relatedUsersTokens rut')
+			->where(['rut.auth_token' => $token])
+			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
+			->one();
 	}
 
 	/**

@@ -10,6 +10,8 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
+use app\models\core\prototypes\DefaultController;
+use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
@@ -63,7 +65,8 @@ use app\controllers\AbonentsController;
 			'items' => [
 				[
 					'label' => 'Все',
-					'url' => [UsersController::to('index')]
+					'url' => [UsersController::to('index')],
+					'visible' => UsersController::hasPermission('index')
 				]
 			],
 		],
@@ -74,11 +77,13 @@ use app\controllers\AbonentsController;
 			'items' => [
 				[
 					'label' => 'Редактор разрешений',
-					'url' => [PermissionsController::to('index')]
+					'url' => [PermissionsController::to('index')],
+					'visible' => PermissionsController::hasPermission('index')
 				],
 				[
 					'label' => 'Группы разрешений',
-					'url' => [PermissionsCollectionsController::to('index')]
+					'url' => [PermissionsCollectionsController::to('index')],
+					'visible' => PermissionsCollectionsController::hasPermission('index')
 				],
 			],
 		],
@@ -89,29 +94,30 @@ use app\controllers\AbonentsController;
 			'items' => [
 				[
 					'label' => 'Справочники',
-					'url' => ReferencesModule::to('references')
+					'url' => [ReferencesModule::to('references')],
 				],
 				[
 					'label' => 'Протокол сбоев',
-					'url' => SysExceptionsModule::to('index')
+					'url' => [SysExceptionsModule::to('index')]
 				],
 				[
 					'label' => 'Процессы на БД',
-					'url' => DbController::to('process-list')
+					'url' => [DbController::to('process-list')]
 				],
 				[
 					'label' => 'Файловый менеджер',
-					'url' => FSModule::to('index')
+					'url' => [FSModule::to('index')]
 				],
 				[
 					'label' => 'История изменений',
-					'url' => HistoryModule::to('index')
+					'url' => [HistoryModule::to('index')]
 				],
 				[
 					'label' => 'Настройки системы',
-					'url' => SiteController::to('options')
+					'url' => [SiteController::to('options')]
 				]
 			],
+			'visible' => Users::Current()->hasPermission(['system'])
 		],
 		[
 			'label' => 'REST API',
@@ -122,7 +128,8 @@ use app\controllers\AbonentsController;
 					'label' => 'Пользователи',
 					'url' => ['/api/users'],
 				]
-			]
+			],
+			'visible' => Users::Current()->hasPermission(['system'])
 		],
 	]
 ]) ?>

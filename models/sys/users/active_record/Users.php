@@ -3,11 +3,17 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record;
 
+use app\models\phones\active_record\PhonesAR;
+use app\models\phones\PhoneNumberValidator;
+use app\models\phones\Phones;
+use app\models\sys\users\active_record\relations\RelUsersToPhones;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
+use Throwable;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "sys_users".
@@ -26,8 +32,13 @@ use yii\db\ActiveRecord;
  * @property bool $deleted Флаг удаления
  *
  * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
+ * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
+ * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
+ * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
  */
 class Users extends ActiveRecord {
+
+	private ?array $_phones = null;
 
 	/**
 	 * @inheritDoc
@@ -64,7 +75,10 @@ class Users extends ActiveRecord {
 			[['login'], 'unique'],
 			[['email'], 'unique'],
 			[['daddy'], 'default', 'value' => Yii::$app->user->id],
-			[['create_date'], 'default', 'value' => DateHelper::lcDate()]//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
+			[['create_date'], 'default', 'value' => DateHelper::lcDate()],//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
+			['phones', PhoneNumberValidator::class, 'when' => function() {
+				[] !== array_filter($this->phones);
+			}]
 		];
 	}
 
@@ -94,6 +108,60 @@ class Users extends ActiveRecord {
 	 */
 	public function getRelatedUsersTokens():ActiveQuery {
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersToPhones():ActiveQuery {
+		return $this->hasMany(RelUsersToPhones::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPhones():ActiveQuery {
+		return $this->hasMany(PhonesAR::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
+	}
+
+	/**
+	 * @param mixed $relatedPhones
+	 * @throws Throwable
+	 */
+	public function setRelatedPhones($relatedPhones):void {
+		RelUsersToPhones::linkModels($this, $relatedPhones);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getPhones():array {
+		if (null === $this->_phones) {
+			$this->_phones = ArrayHelper::getColumn($this->relatedPhones, 'phone');
+		}
+		return $this->_phones;
+	}
+
+	/**
+	 * @param mixed $phones
+	 */
+	public function setPhones($phones):void {
+		$this->_phones = (array)$phones;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function save($runValidation = true, $attributeNames = null):bool {
+		if (true === $saved = parent::save($runValidation, $attributeNames)) {
+			/*
+			 * Это не очень красиво, и я предполагал сделать это через релейшен-атрибуты, проверяемые в
+			 * \app\models\core\prototypes\ActiveRecordTrait::createModel(mappedParams)
+			 * Вышло так, пусть будет. По крайней мере, выглядит логично.
+			*/
+			$this->relatedPhones = Phones::add($this->_phones);
+		}
+		return $saved;
 	}
 
 }

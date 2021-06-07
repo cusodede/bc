@@ -7,14 +7,12 @@ use app\models\core\prototypes\DefaultController;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
 
 /**
  * Class PermissionsController
  */
 class PermissionsController extends DefaultController {
-	use ControllerTrait;
 
 	public string $modelClass = Permissions::class;
 	public string $modelSearchClass = PermissionsSearch::class;

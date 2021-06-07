@@ -16,8 +16,6 @@ use pozitronik\helpers\ArrayHelper;
 use yii\bootstrap4\Html;
 use yii\web\View;
 
-$this->registerCss(".ms-container {width:100%}");
-
 ?>
 
 <div class="row">
