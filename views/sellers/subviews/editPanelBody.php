@@ -63,7 +63,8 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model->relatedUser??$model, 'login')->textInput(['readonly' => !$model->isNewRecord]) ?>
+		<?= $form->field($model->relatedUser??$model, 'login')
+			->textInput(['readonly' => !$model->isNewRecord, 'placeholder' => '9123456789']) ?>
 	</div>
 </div>
 <div class="row">

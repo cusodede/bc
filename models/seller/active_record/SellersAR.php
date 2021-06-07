@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\phones\PhoneNumberValidator;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -130,6 +131,7 @@ class SellersAR extends ActiveRecord {
 				},
 				'on' => self::SCENARIO_CREATE
 			],
+			['login', PhoneNumberValidator::class],
 			[
 				['entry_date', 'non_resident_type'],
 				'required',
