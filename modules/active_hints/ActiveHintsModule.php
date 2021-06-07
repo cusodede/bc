@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\status;
+namespace app\modules\active_hints;
 
 use pozitronik\core\helpers\ModuleHelper;
 use pozitronik\core\traits\ModuleExtended;
