@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * @property string $attribute
  * @property null|string $content
  * @property null|string $header
- * @property null|int $placement
+ * @property null|string $placement
  * @property null|int $user
  * @property string $at
  */
@@ -36,8 +36,8 @@ class ActiveStorage extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['id', 'placement'], 'integer'],
-			[['model', 'attribute', 'content', 'header'], 'string'],
+			[['id'], 'integer'],
+			[['model', 'attribute', 'content', 'header', 'placement'], 'string'],
 			[['model', 'attribute'], 'unique', 'targetAttribute' => ['model', 'attribute']],
 			[['user'], 'default', 'value' => Yii::$app->user->id],
 			[['at'], 'default', 'value' => DateHelper::lcDate()],
