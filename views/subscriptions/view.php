@@ -19,6 +19,7 @@ use yii\widgets\DetailView;
 			'attribute' => 'product.name',
 			'label' => 'Наименование',
 		],
+		'product.description',
 		[
 			'attribute' => 'product.price',
 			'label' => 'Стоимость',

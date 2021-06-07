@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Products $product
+ * @var Subscriptions $subscription
  */
 
-use yii\base\Model;
 use yii\web\View;
 use yii\widgets\ActiveForm;
+use app\models\products\Products;
+use app\models\subscriptions\Subscriptions;
 
 ?>
 
@@ -17,11 +19,10 @@ use yii\widgets\ActiveForm;
 	<div class="panel-heading">
 	</div>
 	<div class="panel-body">
-		<?= $this->render('subviews/editPanelBody', compact('model', 'form')) ?>
-
+		<?= $this->render('subviews/editPanelBody', compact('subscription', 'form', 'product')) ?>
 	</div>
 	<div class="panel-footer">
-		<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
+		<?= $this->render('subviews/editPanelFooter', ['model' => $subscription, 'form' => $form]) ?>
 		<div class="clearfix"></div>
 	</div>
 </div>

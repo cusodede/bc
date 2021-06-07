@@ -48,7 +48,7 @@ class Products extends ActiveRecord
 			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['price'], 'number'],
+			[['price'], 'number', 'min' => 0 , 'max' => 999999],
 			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],

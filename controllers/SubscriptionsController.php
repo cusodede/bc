@@ -8,13 +8,14 @@ use app\models\products\Products;
 use app\models\ref_products_types\RefProductsTypes;
 use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\SubscriptionsSearch;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Yii;
+use yii\db\Transaction;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use Exception;
 
 /**
  * Class SubscriptionsController
@@ -22,8 +23,6 @@ use yii\widgets\ActiveForm;
  */
 class SubscriptionsController extends DefaultController
 {
-	use ControllerTrait;
-
 	/**
 	 * Поисковая модель подписок
 	 * @var string
@@ -46,11 +45,6 @@ class SubscriptionsController extends DefaultController
 	}
 
 	/**
-	 * Создание двух пустых моделей (продукт и подписка).
-	 * Новая подписка, по сути - новый продукт с дополнительными атрибутами.
-	 * Транзакции нам не помогут, так как надо сохранить модель продукта,
-	 * до того как, сохранить модель подписки, для связки по product_id.
-	 * Поэтому предохраняемся валидацией ActiveForm::validate(), а потом сохраняем.
 	 * @return string|Response
 	 */
 	public function actionCreate()
@@ -58,24 +52,35 @@ class SubscriptionsController extends DefaultController
 		// Исключаем product_id из валидации
 		$subscription = new Subscriptions(['scenario' => Subscriptions::SCENARIO_CREATE_AJAX]);
 		$product = new Products();
+		$product->type_id = RefProductsTypes::ID_SUBSCRIPTION; // Определяем, что это подписка
 
-		if (Yii::$app->request->post('ajax')) {
-			$subscription->load(Yii::$app->request->post());
-			$product->load(Yii::$app->request->post());
-			$product->type_id = RefProductsTypes::ID_SUBSCRIPTION; // Определяем, что это подписка
+		$postingProduct = $product->load(Yii::$app->request->post());
+		$postingSubscription = $subscription->load(Yii::$app->request->post());
 
-			$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
-			if ([] === $errors) {
-				return $this->asJson($errors);
-			}
-
-			$product->save();
-			$subscription->link('product', $product); // Цепляем к партнеру и сохраняем
-
-			return $this->redirect('index');
+		$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
+		if ([] !== $errors && Yii::$app->request->isAjax && true === $postingSubscription && true === $postingProduct) {
+			return $this->asJson($errors);
 		}
 
-		return $this->renderAjax('modal/create', compact('subscription', 'product'));
+		if (true === $postingProduct && true === $postingSubscription) {
+			/** @var Transaction $transaction */
+			$transaction = Yii::$app->db->beginTransaction();
+			try {
+				$product->save();
+				$subscription->link('product', $product);
+				$transaction->commit();
+				return $this->redirect('index');
+			} catch (Exception $e) {
+				$transaction->rollBack();
+				if (Yii::$app->request->isAjax) {
+					return $this->asJson($errors);
+				}
+			}
+		}
+
+		return Yii::$app->request->isAjax ?
+			$this->renderAjax('modal/create', compact('subscription', 'product')) :
+			$this->render('create', compact('subscription', 'product'));
 	}
 
 	/**
@@ -95,20 +100,32 @@ class SubscriptionsController extends DefaultController
 			throw new LoggedException(new NotFoundHttpException());
 		}
 
-		$result = Yii::$app->request->post('ajax')
-			&& $subscription->load(Yii::$app->request->post())
-			&& $product->load(Yii::$app->request->post());
+		$postingProduct = $product->load(Yii::$app->request->post());
+		$postingSubscription = $subscription->load(Yii::$app->request->post());
 
-		if ($result) {
-			$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
-			if ([] !== $errors) {
-				return $this->asJson($errors);
-			}
-			$product->save();
-			$subscription->link('product', $product); // Цепляем к партнеру и сохраняем
-			return $this->redirect('index');
+		$errors = ArrayHelper::merge(ActiveForm::validate($product), ActiveForm::validate($subscription));
+		if ([] !== $errors && Yii::$app->request->isAjax && true === $postingSubscription && true === $postingProduct) {
+			return $this->asJson($errors);
 		}
 
-		return $this->renderAjax('modal/edit', compact('subscription', 'product'));
+		if (true === $postingProduct && true === $postingSubscription) {
+			/** @var Transaction $transaction */
+			$transaction = Yii::$app->db->beginTransaction();
+			try {
+				$product->save();
+				$subscription->link('product', $product);
+				$transaction->commit();
+				return $this->redirect('index');
+			} catch (Exception $e) {
+				$transaction->rollBack();
+				if (Yii::$app->request->isAjax) {
+					return $this->asJson($errors);
+				}
+			}
+		}
+
+		return Yii::$app->request->isAjax ?
+			$this->renderAjax('modal/edit', compact('subscription', 'product')) :
+			$this->render('edit', compact('subscription', 'product'));
 	}
 }
