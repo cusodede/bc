@@ -14,7 +14,7 @@ class ActiveHintsAssets extends AssetBundle {
 	 */
 	public function init():void {
 		$this->sourcePath = __DIR__.'/assets';
-		$this->css = ['css/popover_hints.css'];
+		$this->css = ['css/active_hints.css'];
 //		$this->publishOptions = ['forceCopy' => YII_ENV_DEV];
 		parent::init();
 	}
