@@ -1,0 +1,27 @@
+.hint-button {
+	text-align: center;
+	display: flex;
+	white-space: nowrap;
+	cursor: pointer;
+	background: transparent;
+	position: relative;
+	float: left;
+	font-size: 14px;
+	padding: 1px;
+	border-color: transparent;
+}
+
+.hint-button:active {
+	color: #995a31;
+}
+.hint-button:hover {
+	color: #995a31;
+}
+
+.no-hint {
+	color:red;
+}
+
+.has-hint {
+	color:green;
+}
