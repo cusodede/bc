@@ -28,7 +28,7 @@ class m000000_000000_init_active_hints_module extends Migration {
 			'id' => $this->primaryKey(),
 			'at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
 			'user' => $this->integer()->null()->defaultValue(null),
-			'model' => $this->string()->notNull(),
+			'model' => $this->string(512)->notNull(),
 			'attribute' => $this->string()->notNull(),
 			'header' => $this->string()->null(),
 			'content' => $this->text()->null(),
