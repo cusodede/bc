@@ -37,7 +37,7 @@ ModalHelperAsset::register($this);
 		],
 		'toolbar' => [
 			[
-				'content' => Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn pull-left btn-info'])
+				'content' => Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn float-left btn-info'])
 			]
 		],
 		'summary' => null !== $searchModel?Html::a('Новая группа', PermissionsCollectionsController::to('create'), [

@@ -25,7 +25,7 @@ use yii\web\JsExpression;
  * @property ActiveQuery $selectionQuery Переопределение запроса, если нужны какие-то модификации, но не нужно передавать данные в $data
  * @property string $mapAttribute Названия атрибута, который будет отображаться на выбиралку
  * @property string|null $pkName Имя ключевого атрибута модели, если не указано -- подберётся автоматически
- * @property int $ajaxMinimumInputLength Количество симоволов для старта поиска при аксовом режиме
+ * @property int $ajaxMinimumInputLength Количество символов для старта поиска при аксовом режиме
  * @property string $ajaxSearchUrl Путь к экшену ajax-поиска.
  * @property int $loadingMode self::DATA_MODE_AJAX -- фоновая загрузка, DATA_MODE_LOAD -- вычисляемые данные
  * @property bool $multiple true by default
