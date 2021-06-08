@@ -10,12 +10,10 @@ use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\SubscriptionsSearch;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Yii;
-use yii\db\Transaction;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
-use Exception;
 
 /**
  * Class SubscriptionsController
@@ -49,7 +47,6 @@ class SubscriptionsController extends DefaultController
 	 */
 	public function actionCreate()
 	{
-		// Исключаем product_id из валидации
 		$subscription = new Subscriptions(['scenario' => Subscriptions::SCENARIO_CREATE_AJAX]);
 		$product = new Products();
 		$product->type_id = RefProductsTypes::ID_SUBSCRIPTION; // Определяем, что это подписка
@@ -63,18 +60,12 @@ class SubscriptionsController extends DefaultController
 		}
 
 		if (true === $postingProduct && true === $postingSubscription) {
-			/** @var Transaction $transaction */
-			$transaction = Yii::$app->db->beginTransaction();
-			try {
-				$product->save();
-				$subscription->link('product', $product);
-				$transaction->commit();
+			$subscription->product = $product;
+			if ($subscription->save()) {
 				return $this->redirect('index');
-			} catch (Exception $e) {
-				$transaction->rollBack();
-				if (Yii::$app->request->isAjax) {
-					return $this->asJson($errors);
-				}
+			}
+			if (Yii::$app->request->isAjax) {
+				return $this->asJson($errors);
 			}
 		}
 
@@ -109,18 +100,12 @@ class SubscriptionsController extends DefaultController
 		}
 
 		if (true === $postingProduct && true === $postingSubscription) {
-			/** @var Transaction $transaction */
-			$transaction = Yii::$app->db->beginTransaction();
-			try {
-				$product->save();
-				$subscription->link('product', $product);
-				$transaction->commit();
+			$subscription->product = $product;
+			if ($subscription->save()) {
 				return $this->redirect('index');
-			} catch (Exception $e) {
-				$transaction->rollBack();
-				if (Yii::$app->request->isAjax) {
-					return $this->asJson($errors);
-				}
+			}
+			if (Yii::$app->request->isAjax) {
+				return $this->asJson($errors);
 			}
 		}
 
