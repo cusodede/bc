@@ -72,7 +72,8 @@ class Sellers extends SellersAR {
 			'username' => $this->fio,
 			'password' => Users::DEFAULT_PASSWORD,
 			'comment' => "User automatically created from seller's registration",
-			'email' => $this->email
+			'email' => $this->email,
+			'phones' => $this->login
 		]);
 		if (!$user->save()) return false;
 		$this->relatedUser = $user;
