@@ -5,6 +5,7 @@ namespace app\models\subscriptions;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\subscriptions\active_record\Subscriptions as ActiveRecordSubscriptions;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -26,6 +27,32 @@ class Subscriptions extends ActiveRecordSubscriptions
 		return ArrayHelper::merge(parent::scenarios(), [
 			// Валидация только нужных атрибутов, при создании/обновлении ajax
 			self::SCENARIO_CREATE_AJAX => ['category_id', 'trial', 'trial_days_count'],
+		]);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function behaviors(): array
+	{
+		return ArrayHelper::merge(parent::behaviors(), [
+			'saveRelations' => [
+				'class'     => SaveRelationsBehavior::class,
+				'relations' => [
+					'product',
+				],
+			],
+		]);
+	}
+
+	/**
+	 * Транзакции для SaveRelationsBehavior
+	 * @return array
+	 */
+	public function transactions(): array
+	{
+		return ArrayHelper::merge(parent::transactions(), [
+			self::SCENARIO_DEFAULT => self::OP_ALL,
 		]);
 	}
 }
