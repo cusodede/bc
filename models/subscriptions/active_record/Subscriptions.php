@@ -3,8 +3,12 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\core\prototypes\RelationValidator;
+use app\models\ref_products_types\RefProductsTypes;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
+use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -22,6 +26,8 @@ use yii\db\ActiveRecord;
  */
 class Subscriptions extends ActiveRecord
 {
+	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -83,5 +89,17 @@ class Subscriptions extends ActiveRecord
 	public function getProduct(): ActiveQuery
 	{
 		return $this->hasOne(Products::class, ['id' => 'product_id']);
+	}
+
+	/**
+	 * @param mixed $product
+	 * Универсальный сеттер: в $product может придти как модель, так и её ключ (строкой или цифрой).
+	 */
+	public function setProduct($product): void
+	{
+		if (null === $product = self::ensureModel(Products::class, $product)) {
+			throw new InvalidArgumentException("Невозможно обнаружить соответствующую модель");
+		}
+		$this->link('product', $product);
 	}
 }
