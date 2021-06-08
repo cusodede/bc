@@ -8,6 +8,7 @@ use DateTime;
 use InvalidArgumentException;
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Key;
+use pozitronik\helpers\ArrayHelper;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
@@ -48,21 +49,20 @@ class CallbackParams
 	/**
 	 * @var Signer компонент для подписи body-параметров
 	 */
-	private Signer $_signer;
+	private ?Signer $_signer;
 	/**
 	 * @var Key плюч для подписи
 	 */
-	private Key $_signerKey;
+	private ?Key $_signerKey;
 
 	/**
 	 * CallbackParams constructor.
 	 * @throws InvalidConfigException
-	 * @noinspection PhpFieldAssignmentTypeMismatchInspection
 	 */
 	public function __construct()
 	{
-		$this->_signer    = Instance::ensure(Yii::$app->params['vet-expert']['callback']['signer'], Signer::class);
-		$this->_signerKey = Instance::ensure(Yii::$app->params['vet-expert']['callback']['signerKey'], Key::class);
+		$this->_signer    = Instance::ensure(ArrayHelper::getValue(Yii::$app->params, 'callback.signer', new InvalidConfigException("Callback signer not set")), Signer::class);
+		$this->_signerKey = Instance::ensure(ArrayHelper::getValue(Yii::$app->params, 'callback.signerKey', new InvalidConfigException("Callback signerKey not set")), Key::class);
 	}
 
 	/**
@@ -171,12 +171,12 @@ class CallbackParams
 	 */
 	public function getParams(): array
 	{
-		$params = [
-			'phone'           => $this->_phone,
-			'email'           => $this->_email,
-			'first_name'      => $this->_firstName,
-			'last_name'       => $this->_lastName,
-			'middle_name'     => $this->_middleName,
+		$params         = [
+			'phone' => $this->_phone,
+			'email' => $this->_email,
+			'first_name' => $this->_firstName,
+			'last_name' => $this->_lastName,
+			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
 		$params['sign'] = $this->getParamsSignature($params);
