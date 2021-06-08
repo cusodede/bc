@@ -30,9 +30,33 @@ class Phones extends PhonesAR {
 
 	}
 
+	/**
+	 * @param string $phone
+	 * @return string|null
+	 */
 	public static function defaultFormat(string $phone):?string {
-		if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
-			return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+		try {
+			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
+				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+			}
+		} catch (NumberParseException $exception) {
+			return null;
+		}
+		return null;
+	}
+
+	/**
+	 * @param string $phone
+	 * @return string|null
+	 * @noinspection BadExceptionsProcessingInspection
+	 */
+	public static function nationalFormat(string $phone):?string {
+		try {
+			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
+				return PhoneNumberUtil::getInstance()->getNationalSignificantNumber($phoneNumber);
+			}
+		} catch (NumberParseException $exception) {
+			return null;
 		}
 		return null;
 	}

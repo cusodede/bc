@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\users;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Exception;
@@ -36,7 +37,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
 
-	private const DEFAULT_PASSWORD = 'Qq123456';
+	public const DEFAULT_PASSWORD = 'Qq123456';
 
 	/*файловые атрибуты*/
 	public $avatar;
@@ -81,6 +82,15 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public static function findByRestoreCode(string $restoreCode):?Users {
 		return self::findOne(['restore_code' => $restoreCode]);
+	}
+
+	/**
+	 * @param string $phoneNumber
+	 * @return Users|null
+	 */
+	public static function findByPhoneNumber(string $phoneNumber):?Users {
+		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) return null;
+		return self::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
 	}
 
 	/**
