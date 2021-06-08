@@ -48,6 +48,7 @@ class Subscriptions extends ActiveRecord
 			[['trial_days_count'], 'default', 'value' => 0],
 			[['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSubscriptionCategories::class, 'targetAttribute' => ['category_id' => 'id']],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
+			['product', RelationValidator::class],
 		];
 	}
 
