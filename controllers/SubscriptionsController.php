@@ -52,7 +52,7 @@ class SubscriptionsController extends DefaultController
 			return $this->asJson($model->validateModelFromPost());
 		}
 		$errors = [];
-		$posting = $model->createModelFromPost($errors, null, ['productR']);//todo: релейшены можно вычислять из свойств модели
+		$posting = $model->createModelFromPost($errors, null, ['product']);//todo: релейшены можно вычислять из свойств модели
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
 		}
