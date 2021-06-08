@@ -14,7 +14,6 @@ use yii\web\View;
 use kartik\select2\Select2;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\partners\Partners;
-use kartik\switchinput\SwitchInput;
 use kartik\touchspin\TouchSpin;
 
 ?>
@@ -30,10 +29,10 @@ use kartik\touchspin\TouchSpin;
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<?= $form->field($model->product, 'price')->textInput(['type' => 'number']) ?>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-8">
 		<?= $form->field($model->product, 'partner_id')->widget(Select2::class, [
 			'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
 			'pluginOptions' => [
@@ -47,18 +46,10 @@ use kartik\touchspin\TouchSpin;
 </div>
 
 <div class="row">
-	<div class="col-md-3">
-		<?= $form->field($model, 'trial')->widget(SwitchInput::class, [
-			'pluginOptions' => [
-				'onText' => 'Да',
-				'offText' => 'Нет',
-			]
-		]) ?>
-	</div>
-	<div class="col-md-3">
+	<div class="col-md-4">
 		<?= $form->field($model, 'trial_days_count')->widget(TouchSpin::class) ?>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-8">
 		<?= $form->field($model, 'category_id')->widget(Select2::class, [
 			'data' => RefSubscriptionCategories::mapData(),
 			'pluginOptions' => [

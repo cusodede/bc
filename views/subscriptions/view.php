@@ -24,11 +24,6 @@ use yii\widgets\DetailView;
 			'attribute' => 'product.price',
 			'label' => 'Стоимость',
 		],
-		[
-			'attribute' => 'trial',
-			'label' => 'Триальный период',
-			'format' => 'boolean',
-		],
 		'trial_days_count',
 		[
 			'attribute' => 'category.name',

@@ -85,11 +85,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value' => 'product.price',
 				'label' => 'Стоимость'
 			],
-			[
-				'attribute' => 'trial',
-				'label' => 'Триальный период',
-				'format' => 'boolean',
-			],
 			'trial_days_count',
 			[
 				'filter' => Select2::widget([
