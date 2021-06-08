@@ -45,7 +45,18 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public function rules():array {
 		return array_merge(parent::rules(), [
 			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
-			[['email'], 'email']
+			[['email'], 'email'],
+			[['relatedPermissions', 'relatedPermissionsCollections'], 'safe']
+		]);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels(), [
+			'relatedPermissions' => 'Прямые разрешения',
+			'relatedPermissionsCollections' => 'Группы разрешений',
 		]);
 	}
 
