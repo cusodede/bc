@@ -21,6 +21,8 @@ class EnumProductsTypes
 	];
 
 	/**
+	 * @param int $typeId
+	 * @return string|null
 	 * @throws Exception
 	 */
 	public static function getType(int $typeId): ?string
