@@ -1,30 +1,28 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Products $product
- * @var Subscriptions $subscription
+ * @var Subscriptions $model
  */
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\web\View;
 use kartik\form\ActiveForm;
-use app\models\products\Products;
 use app\models\subscriptions\Subscriptions;
 
-$modelName = $subscription->formName();
+$modelName = $model->formName();
 ?>
 <?php
 Modal::begin([
-	'id' => "{$modelName}-modal-edit-{$subscription->id}",
+	'id' => "{$modelName}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
 	'title' => BadgeWidget::widget([
-		'items' => $subscription,
+		'items' => $model,
 		'subItem' => 'product.name'
 	]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
-		'model' => $subscription,
+		'model' => $model,
 		'form' => "{$modelName}-modal-edit"
 	]),
 	'options' => [
@@ -32,11 +30,11 @@ Modal::begin([
 	]
 ]); ?>
 <?php $form = ActiveForm::begin([
-		'id' => "{$modelName}-modal-edit",
-		'enableAjaxValidation' => true,
-		'validateOnChange' => false,
-		'validateOnBlur' => false,
-	]) ?>
-<?= $this->render('../subviews/editPanelBody', compact('subscription', 'form', 'product')) ?>
+	'id' => "{$modelName}-modal-edit",
+	'enableAjaxValidation' => true,
+	'validateOnChange' => false,
+	'validateOnBlur' => false,
+]) ?>
+<?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
