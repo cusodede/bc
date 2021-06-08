@@ -19,9 +19,10 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use kartik\select2\Select2;
-use app\models\ref_products_types\active_record\RefProductsTypes;
 use app\models\partners\Partners;
 use pozitronik\helpers\ArrayHelper;
+use app\models\products\EnumProductsTypes;
+use app\models\products\Products;
 
 ModalHelperAsset::register($this);
 $this->title = 'Продукты';
@@ -49,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'type_id',
-					'data' => RefProductsTypes::mapData(),
+					'data' => EnumProductsTypes::PRODUCTS_TYPES,
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
@@ -57,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'type_id',
 				'format' => 'text',
-				'value' => 'type.name',
+				'value' => static fn(Products $product) => EnumProductsTypes::getType($product->type_id),
 			],
 			[
 				'filter' => Select2::widget([

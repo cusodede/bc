@@ -5,7 +5,7 @@ namespace app\models\subscriptions\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
-use app\models\ref_products_types\RefProductsTypes;
+use app\models\products\EnumProductsTypes;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
 use yii\base\InvalidArgumentException;
@@ -66,10 +66,10 @@ class Subscriptions extends ActiveRecord
 		];
 	}
 
-	public function init()
+	public function init(): void
 	{
 		parent::init();
-		$this->populateRelation('product', $this->product ?? new Products(['type_id' => RefProductsTypes::ID_SUBSCRIPTION]));
+		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::ID_SUBSCRIPTION]));
 	}
 
 	/**

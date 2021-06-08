@@ -28,8 +28,6 @@ $modelName = $model->formName();
 <?php $form = ActiveForm::begin([
 	'id' => "{$modelName}-modal-create",
 	'enableAjaxValidation' => true,
-	'validateOnChange' => false,
-	'validateOnBlur' => false,
 ]); ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
