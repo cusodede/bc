@@ -59,6 +59,12 @@ class Subscriptions extends ActiveRecord
 		];
 	}
 
+	public function init()
+	{
+		parent::init();
+		$this->populateRelation('product', $this->product ?? new Products(['type_id' => RefProductsTypes::ID_SUBSCRIPTION]));
+	}
+
 	/**
 	 * Gets query for [[Category]].
 	 *
