@@ -9,9 +9,13 @@ use app\modules\active_hints\models\ActiveStorageSearch;
 use kartik\grid\EditableColumnAction;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
+use pozitronik\helpers\ReflectionHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
+use ReflectionException;
 use Throwable;
 use Yii;
+use yii\base\UnknownClassException;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -40,7 +44,7 @@ class DefaultController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionIndex() {
+	public function actionIndex():string {
 		$params = Yii::$app->request->queryParams;
 		$searchModel = new ActiveStorageSearch();
 		return $this->render('index', [
@@ -134,21 +138,51 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @param string $for
+	 * @param string $model
+	 * @param string $attribute
 	 * @return array
+	 * old action for kartik editable
 	 */
 	public function actionSetHint(string $model, string $attribute):array {
 		if (null !== Yii::$app->request->post('hasEditable')) {
 			$popover = ActiveStorage::findActiveAttribute($model, $attribute);
-			$popover->loadArray([
+			$popover->load([
 				'content' => Yii::$app->request->post()
-			]);
+			], '');
 			if (!$popover->save()) {
 				return ['output' => '', 'message' => $popover->errors];
 			}
 		}
 
 		return ['output' => '0', 'message' => ''];//0 - Для displayValueConfig в виджете
+	}
+
+	/**
+	 * @param string $model
+	 * @param string $attribute
+	 * @return string|Response
+	 * @throws Throwable
+	 * @throws ReflectionException
+	 * @throws UnknownClassException
+	 * @throws Exception
+	 * @todo: check setter
+	 */
+	public function actionEditHint(string $model, string $attribute) {
+		$storage = ActiveStorage::findActiveAttribute($model, $attribute);
+		$errors = [];
+		$posting = $storage->updateModelFromPost($errors);
+
+		if (true === $posting) {/* Модель была успешно прогружена */
+			return $this->redirect('index');
+		}
+		/* Пришёл постинг, но есть ошибки */
+		if ((false === $posting) && Yii::$app->request->isAjax) {
+			return $this->asJson($errors);
+		}
+		/* Постинга не было */
+		return (Yii::$app->request->isAjax)
+			?$this->renderAjax('modalEditor', ['storage' => $storage, 'model' => ReflectionHelper::GetClassShortName($model), 'attribute' => $attribute])
+			:$this->render('edit', ['model' => $storage]);
 	}
 
 }
