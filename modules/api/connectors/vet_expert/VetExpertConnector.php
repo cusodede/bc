@@ -4,8 +4,9 @@ declare(strict_types = 1);
 namespace app\modules\api\connectors\vet_expert;
 
 use app\modules\api\connectors\BaseHttpConnector;
+use pozitronik\helpers\ArrayHelper;
 use Yii;
-use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 use yii\httpclient\Exception as HttpClientException;
 
 /**
@@ -14,18 +15,20 @@ use yii\httpclient\Exception as HttpClientException;
  */
 class VetExpertConnector extends BaseHttpConnector
 {
-	private string $_authToken;
+	private ?string $_authToken;
 
 	/**
 	 * VetExpertConnector constructor.
 	 * @param array $config
-	 * @noinspection PhpFieldAssignmentTypeMismatchInspection
 	 */
 	public function __construct(array $config = [])
 	{
-		$params = Yii::$app->params['vet-expert']['connector'];
+		/** @var array $params */
+		$params = ArrayHelper::getValue(Yii::$app->params, 'vet-expert.connector', new InvalidConfigException("Не заданы параметры коннектора"));//мой хелпер умеет так, со стандартным можно делать как ниже, с ArrayHelper::remove()
 
-		$this->_authToken = ArrayHelper::remove($params, 'authToken');
+		if (null === $this->_authToken = ArrayHelper::remove($params, 'authToken')) {
+			throw new InvalidConfigException("Токен не задан");
+		}
 
 		parent::__construct($params, $config);
 	}
@@ -66,6 +69,6 @@ class VetExpertConnector extends BaseHttpConnector
 					->send();
 
 				return $response->data['token'] ?? null;
-		}, 900);
+			}, 900);
 	}
 }
