@@ -6,7 +6,6 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\products\Products;
 use app\models\products\ProductsSearch;
-use pozitronik\core\traits\ControllerTrait;
 
 /**
  * Class ProductsController
@@ -14,8 +13,6 @@ use pozitronik\core\traits\ControllerTrait;
  */
 class ProductsController extends DefaultController
 {
-	use ControllerTrait;
-
 	/**
 	 * Поисковая модель продуктов
 	 * @var string

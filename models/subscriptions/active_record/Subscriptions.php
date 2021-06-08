@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\core\prototypes\RelationValidator;
+use app\models\products\EnumProductsTypes;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
-use app\models\sys\users\Users;
+use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use Yii;
 
 /**
  * This is the model class for table "subscriptions".
@@ -16,18 +18,16 @@ use Yii;
  * @property int $id
  * @property int $product_id id продукта
  * @property int $category_id id категории подписки
- * @property int $user_id id пользователя, создателя
- * @property int $deleted Флаг активности
  * @property int $trial Триальный период
- * @property string $created_at Дата создания партнера
- * @property string $updated_at Дата обновления партнера
+ * @property int $trial_days_count
  *
  * @property RefSubscriptionCategories $category
  * @property Products $product
- * @property Users $user
  */
 class Subscriptions extends ActiveRecord
 {
+	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -42,13 +42,13 @@ class Subscriptions extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['user_id'], 'default', 'value' => Yii::$app->user->id],
-			[['product_id', 'category_id', 'user_id'], 'required', 'message' => 'Выберите {attribute}'],
-			[['product_id', 'category_id', 'user_id', 'deleted', 'trial'], 'integer'],
+			[['product_id', 'category_id'], 'required', 'message' => 'Выберите {attribute}'],
+			[['product_id', 'category_id', 'trial', 'trial_days_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
+			[['trial_days_count'], 'default', 'value' => 0],
 			[['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSubscriptionCategories::class, 'targetAttribute' => ['category_id' => 'id']],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
-			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+			['product', RelationValidator::class],
 		];
 	}
 
@@ -61,12 +61,15 @@ class Subscriptions extends ActiveRecord
 			'id' => 'ID',
 			'product_id' => 'Продукт',
 			'category_id' => 'Категория подписки',
-			'user_id' => 'Пользователь',
-			'deleted' => 'Флаг удаления',
 			'trial' => 'Триальный период',
-			'created_at' => 'Дата создания',
-			'updated_at' => 'Дата обновления',
+			'trial_days_count' => 'Количество пробных дней',
 		];
+	}
+
+	public function init(): void
+	{
+		parent::init();
+		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::ID_SUBSCRIPTION]));
 	}
 
 	/**
@@ -90,12 +93,14 @@ class Subscriptions extends ActiveRecord
 	}
 
 	/**
-	 * Gets query for [[User]].
-	 *
-	 * @return ActiveQuery
+	 * @param mixed $product
+	 * Универсальный сеттер: в $product может придти как модель, так и её ключ (строкой или цифрой).
 	 */
-	public function getUser(): ActiveQuery
+	public function setProduct($product): void
 	{
-		return $this->hasOne(Users::class, ['id' => 'user_id']);
+		if (null === $product = self::ensureModel(Products::class, $product)) {
+			throw new InvalidArgumentException("Невозможно обнаружить соответствующую модель");
+		}
+		$this->link('product', $product);
 	}
 }

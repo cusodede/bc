@@ -17,7 +17,7 @@ class SubscriptionsSearch extends Subscriptions
 	public function rules(): array
 	{
 		return [
-			[['id', 'product_id', 'category_id', 'user_id'], 'integer'],
+			[['id', 'product_id', 'category_id'], 'integer'],
 		];
 	}
 
@@ -44,7 +44,7 @@ class SubscriptionsSearch extends Subscriptions
 			return $dataProvider;
 		}
 
-		$query->joinWith(['category', 'product', 'user']);
+		$query->joinWith(['category', 'product']);
 
 		$query->andFilterWhere(['subscriptions.id' => $this->id])
 			->andFilterWhere(['subscriptions.category_id' => $this->category_id]);

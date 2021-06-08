@@ -6,21 +6,17 @@ declare(strict_types = 1);
  * @var Model $model
  */
 
-use pozitronik\widgets\BadgeWidget;
 use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
 
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
 	'id' => "{$modelName}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'title' => BadgeWidget::widget([
-		'items' => $model,
-		'subItem' => 'id'
-	]),
+	'title' => 'Новый партнер',
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => "{$modelName}-modal-create"

@@ -46,8 +46,6 @@ class ProductsSearch extends Products
 			return $dataProvider;
 		}
 
-		$query->joinWith(['type', 'partner']);
-
 		$query->andFilterWhere(['products.id' => $this->id])
 			->andFilterWhere(['products.type_id' => $this->type_id])
 			->andFilterWhere(['products.partner_id' => $this->partner_id])

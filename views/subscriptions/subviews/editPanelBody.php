@@ -3,35 +3,62 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Subscriptions $model
  * @var ActiveForm $form
  */
 
 use kartik\form\ActiveForm;
 use pozitronik\helpers\ArrayHelper;
-use yii\base\Model;
+use app\models\subscriptions\Subscriptions;
 use yii\web\View;
 use kartik\select2\Select2;
 use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
-use app\models\products\Products;
+use app\models\partners\Partners;
+use kartik\switchinput\SwitchInput;
+use kartik\touchspin\TouchSpin;
 
 ?>
 
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'product_id')->widget(Select2::class, [
-			'data' => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
+		<?= $form->field($model->product, 'name')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->product, 'description')->textarea() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<?= $form->field($model->product, 'price')->textInput(['type' => 'number']) ?>
+	</div>
+	<div class="col-md-6">
+		<?= $form->field($model->product, 'partner_id')->widget(Select2::class, [
+			'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
 			'pluginOptions' => [
 				'multiple' => false,
 				'allowClear' => true,
-				'placeholder' => 'Выберите продукт',
+				'placeholder' => 'Выберите партнера',
 				'tags' => true
 			]
 		]) ?>
 	</div>
 </div>
+
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-3">
+		<?= $form->field($model, 'trial')->widget(SwitchInput::class, [
+			'pluginOptions' => [
+				'onText' => 'Да',
+				'offText' => 'Нет',
+			]
+		]) ?>
+	</div>
+	<div class="col-md-3">
+		<?= $form->field($model, 'trial_days_count')->widget(TouchSpin::class) ?>
+	</div>
+	<div class="col-md-6">
 		<?= $form->field($model, 'category_id')->widget(Select2::class, [
 			'data' => RefSubscriptionCategories::mapData(),
 			'pluginOptions' => [
