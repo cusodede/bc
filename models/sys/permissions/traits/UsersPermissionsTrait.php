@@ -29,16 +29,6 @@ use yii\db\ActiveRecord;
 trait UsersPermissionsTrait {
 
 	/**
-	 * @inheritDoc
-	 */
-	public function attributeLabels():array {
-		return array_merge(parent::attributeLabels(), [
-			'relatedPermissions' => 'Прямые разрешения',
-			'relatedPermissionsCollections' => 'Группы разрешений',
-		]);
-	}
-
-	/**
 	 * Проверяет, имеет ли пользователь указанный набор прав с указанной логикой проверки.
 	 * Примеры:
 	 * $user->hasPermission(['execute_order_66'])
