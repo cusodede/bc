@@ -140,26 +140,6 @@ class DefaultController extends Controller {
 	/**
 	 * @param string $model
 	 * @param string $attribute
-	 * @return array
-	 * old action for kartik editable
-	 */
-	public function actionSetHint(string $model, string $attribute):array {
-		if (null !== Yii::$app->request->post('hasEditable')) {
-			$popover = ActiveStorage::findActiveAttribute($model, $attribute);
-			$popover->load([
-				'content' => Yii::$app->request->post()
-			], '');
-			if (!$popover->save()) {
-				return ['output' => '', 'message' => $popover->errors];
-			}
-		}
-
-		return ['output' => '0', 'message' => ''];//0 - Для displayValueConfig в виджете
-	}
-
-	/**
-	 * @param string $model
-	 * @param string $attribute
 	 * @return string|Response
 	 * @throws Throwable
 	 * @throws ReflectionException
