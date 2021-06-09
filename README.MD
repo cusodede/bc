@@ -126,15 +126,3 @@ public function actionProfile(int $id):?string {
 
 **Вывод произвольных множеств**: @vendor/pozitronik/yii2-badgewidget/src/BadgeWidget.php<br />
 Виджет, которому на вход можно подать любой произвольный набор данных (от скалярной переменной до массива замыканий), и получить вывод в виде набора bootstrap badge. Оформление вывода можно конфигурировать: вешать на них ссылки, действия, оформление, etc.
-
-# Настройка phpStorm
-
-1) Ставим плагины: SonarLint, Grazie
-2) Читаем: https://teletype.in/@pozitronik/tws-inspections
-3) Скачиваем один из трех конфигов:
--  https://github.com/pozitronik/PHPStormConfigs/blob/master/TWSQuick.xml
--  https://github.com/pozitronik/PHPStormConfigs/blob/master/TWSFull.xml
--  https://github.com/pozitronik/PHPStormConfigs/blob/master/TWSYii2.xml
-4) Подключаем файл (https://www.jetbrains.com/help/phpstorm/settings-code-style-xml.html):
-   - File | Settings | Editor | Code Style | XML (for Windows and Linux)
-   - PhpStorm | Preferences | Editor | Code Style | XML (for macOS)
