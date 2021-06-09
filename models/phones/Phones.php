@@ -1,4 +1,4 @@
-<?php /** @noinspection BadExceptionsProcessingInspection */
+<?php
 declare(strict_types = 1);
 
 namespace app\models\phones;
@@ -24,7 +24,7 @@ class Phones extends PhonesAR {
 		try {
 			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
 			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
-		} catch (NumberParseException $exception) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
 			return false;
 		}
 
@@ -39,7 +39,7 @@ class Phones extends PhonesAR {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
 			}
-		} catch (NumberParseException $exception) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
 			return null;
 		}
 		return null;
@@ -69,7 +69,7 @@ class Phones extends PhonesAR {
 	 */
 	public static function add(array $phones):array {
 		$results = [];
-		foreach ($phones as $phone) {
+		foreach (array_filter($phones) as $phone) {
 			if (null !== $formattedNumber = self::defaultFormat($phone)) {
 				$results[] = self::Upsert(['phone' => $formattedNumber])->id;
 			}
