@@ -8,7 +8,6 @@ declare(strict_types = 1);
  * @var string $attribute
  */
 
-use app\assets\ModalHelperAsset;
 use app\modules\active_hints\models\ActiveStorage;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
@@ -17,12 +16,11 @@ use yii\web\View;
 use yii\bootstrap4\ActiveForm;
 
 $id = "{$model}-{$attribute}";
-ModalHelperAsset::register($this);
 ?>
 
 <?php Modal::begin([
 	'id' => "{$id}-modal",
-	'size' => Modal::SIZE_LARGE,
+	'size' => Modal::SIZE_SMALL,
 	'title' => "{$model} - {$attribute}",
 	'footer' => Html::submitButton('Сохранить', [
 		'class' => $storage->isNewRecord?'btn btn-success float-right':'btn btn-primary float-right',
