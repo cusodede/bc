@@ -76,7 +76,7 @@ ModalHelperAsset::register($this);
 						<?= SearchWidget::widget() ?>
 					</div>
 					<div>
-						<?php if (Yii::$app->user->isLoginAsAnotherUser()) { ?>
+						<?php if (Yii::$app->user->isLoginAsAnotherUser()): ?>
 							<?= Html::a('<i class="fal fa-eye-slash"></i>', UsersController::to('login-back'), [
 								'class' => "header-icon d-inline-block",
 								'data-toggle' => "tooltip",
@@ -84,7 +84,7 @@ ModalHelperAsset::register($this);
 								'title' => "",
 								'data-original-title' => "Вернуться в свой профиль"
 							]) ?>
-						<?php } ?>
+						<?php endif; ?>
 
 
 						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
