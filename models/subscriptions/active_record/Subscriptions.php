@@ -18,7 +18,6 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $product_id id продукта
  * @property int $category_id id категории подписки
- * @property int $trial Триальный период
  * @property int $trial_days_count
  *
  * @property RefSubscriptionCategories $category
@@ -43,7 +42,7 @@ class Subscriptions extends ActiveRecord
 	{
 		return [
 			[['product_id', 'category_id'], 'required', 'message' => 'Выберите {attribute}'],
-			[['product_id', 'category_id', 'trial', 'trial_days_count'], 'integer'],
+			[['product_id', 'category_id', 'trial_days_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['trial_days_count'], 'default', 'value' => 0],
 			[['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSubscriptionCategories::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -61,7 +60,6 @@ class Subscriptions extends ActiveRecord
 			'id' => 'ID',
 			'product_id' => 'Продукт',
 			'category_id' => 'Категория подписки',
-			'trial' => 'Триальный период',
 			'trial_days_count' => 'Количество пробных дней',
 		];
 	}
