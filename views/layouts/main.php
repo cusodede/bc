@@ -41,18 +41,6 @@ ModalHelperAsset::register($this);
 	<div class="page-inner">
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
-			<?php if (Yii::$app->session->hasFlash('success')) { ?>
-				<div class="alert alert-success flash-success text-center">
-					<?= Yii::$app->session->getFlash('success') ?>
-				</div>
-			<?php } ?>
-
-			<?php if (Yii::$app->session->hasFlash('error')) { ?>
-				<div class="alert alert-danger flash-error text-center">
-					<?= Yii::$app->session->getFlash('error') ?>
-				</div>
-			<?php } ?>
-
 			<header class="page-header" role="banner">
 				<div class="hidden-md-down dropdown-icon-menu position-relative">
 					<a href="#" class="header-btn btn js-waves-off" data-action="toggle"
