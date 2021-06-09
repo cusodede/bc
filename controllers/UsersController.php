@@ -57,7 +57,7 @@ class UsersController extends DefaultController {
 			'verbs' => [
 				'class' => VerbFilter::class,
 				'actions' => [
-					'login-as-another-user'  => ['POST'],
+					'login-as-another-user' => ['POST'],
 				],
 			],
 		]);
@@ -148,7 +148,7 @@ class UsersController extends DefaultController {
 	 */
 	public function actionLoginAsAnotherUser() {
 		try {
-			$userId = (int) Yii::$app->request->post('userId');
+			$userId = (int)Yii::$app->request->post('userId');
 			Yii::$app->user->loginAsAnotherUser($userId);
 			Yii::$app->session->setFlash('success', 'Вы успешно авторизовались');
 			return $this->redirect(['profile', 'id' => $userId]);
@@ -163,8 +163,7 @@ class UsersController extends DefaultController {
 	 *
 	 * @return Response
 	 */
-	public function actionLoginBack()
-	{
+	public function actionLoginBack() {
 		try {
 			$originalId = Yii::$app->user->getOriginalUserId();
 			Yii::$app->user->loginBackToOriginUser();
