@@ -6,10 +6,12 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
+use app\models\sys\permissions\filters\PermissionFilter;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -20,6 +22,17 @@ class SellersController extends DefaultController {
 
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		]);
+	}
 
 	/**
 	 * @inheritDoc
