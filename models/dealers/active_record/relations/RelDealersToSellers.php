@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\dealer\active_record\relations;
+namespace app\models\dealers\active_record\relations;
 
 use pozitronik\core\traits\Relations;
 use yii\db\ActiveRecord;

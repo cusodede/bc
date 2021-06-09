@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\seller;
 
+use app\models\dealers\Dealers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\Status;
@@ -12,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use Throwable;
+use pozitronik\sys_exceptions\models\LoggedException;
 
 /**
  * Class StoresSearch
@@ -82,7 +84,7 @@ final class SellersSearch extends Sellers {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
-		$query->joinWith(['relStatus', 'stores', 'relatedUser']);
+		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -102,6 +104,8 @@ final class SellersSearch extends Sellers {
 	/**
 	 * @param $query
 	 * @return void
+	 * @throws LoggedException
+	 * @throws Throwable
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
@@ -127,6 +131,29 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([Users::tableName().'.email' => $this->userEmail])
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus]);
+
+		$this->filterDataByUser($query);
+	}
+
+	/**
+	 * Filters the records shown for current user
+	 * @param $query
+	 * @throws Throwable
+	 * @throws LoggedException
+	 */
+	private function filterDataByUser($query):void {
+		#TODO remove $fakeStoresId and $fakeDealersId and use real properties
+		$fakeStoresId = [1, 22];
+		$fakeDealersId = [1];
+		$user = Users::Current();
+		if ($user->isAllPermissionsGranted()) {
+			return;
+		}
+		if ($user->hasPermission(['dealer_sellers'])) {
+			$query->andFilterWhere(['in', Dealers::tableName().'.id', $fakeDealersId]);
+		} elseif ($user->hasPermission(['dealer_store_sellers'])) {
+			$query->andFilterWhere(['in', Stores::tableName().'.id', $fakeStoresId]);
+		}
 	}
 
 	/**

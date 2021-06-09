@@ -7,6 +7,9 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
+use app\models\dealers\active_record\relations\RelDealersToSellers;
+use app\models\seller\Sellers;
+use Throwable;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
@@ -29,6 +32,8 @@ use yii\db\ActiveRecord;
  * @property RefDealersTypes $refDealersTypes Справочник типов
  * @property RefDealersGroups $refDealersGroups Справочник групп дилеров
  * @property RefBranches $refBranches Справочник филиалов
+ * @property RelDealersToSellers[] $relatedDealersToSellers Связь к промежуточной таблице к продавцам
+ * @property Sellers[] $sellers Все продавцы дилера
  */
 class DealersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -105,5 +110,27 @@ class DealersAR extends ActiveRecord {
 	 */
 	public function getRefBranches():ActiveQuery {
 		return $this->hasOne(RefBranches::class, ['id' => 'branch']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedDealersToSellers():ActiveQuery {
+		return $this->hasMany(RelDealersToSellers::class, ['dealer_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getSellers():ActiveQuery {
+		return $this->hasMany(Sellers::class, ['id' => 'seller_id'])->via('relatedDealersToSellers');
+	}
+
+	/**
+	 * @param mixed $sellers
+	 * @throws Throwable
+	 */
+	public function setSellers($sellers):void {
+		RelDealersToSellers::linkModels($this, $sellers);
 	}
 }
