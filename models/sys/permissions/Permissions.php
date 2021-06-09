@@ -75,19 +75,6 @@ class Permissions extends ActiveRecordPermissions {
 		return $query->asArray($asArray)->all();
 	}
 
-	/**
-	 * @return Permissions
-	 */
-	public static function loginAsAnotherUser()
-    {
-		$self = new self();
-		$self->name = 'login_as_another_user';
-		$self->controller = 'users';
-		$self->action = 'login-as-another-user';
-		$self->verb = 'POST';
-		return $self;
-    }
-
     /**
 	 * При изменении права, нужно удалить кеши прав всем пользователям, у которых:
 	 *    - право назначено напрямую
