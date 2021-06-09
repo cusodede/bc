@@ -52,13 +52,7 @@ class UsersController extends DefaultController {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
-			],
-			'verbs' => [
-				'class' => VerbFilter::class,
-				'actions' => [
-					'login-as-another-user' => ['POST'],
-				],
-			],
+			]
 		]);
 	}
 
@@ -145,9 +139,8 @@ class UsersController extends DefaultController {
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionLoginAsAnotherUser():?Response {
+	public function actionLoginAsAnotherUser(int $userId):?Response {
 		try {
-			$userId = (int)Yii::$app->request->post('userId');
 			Yii::$app->user->loginAsAnotherUser($userId);
 			Yii::$app->session->setFlash('success', 'Вы успешно авторизовались');
 			return $this->redirect(['profile', 'id' => $userId]);

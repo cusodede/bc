@@ -18,7 +18,6 @@ use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\grid\GridView;
@@ -68,17 +67,8 @@ ModalHelperAsset::register($this);
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'login-as-another-user' => static function (string $url, Users $model) {
-						$action = Url::toRoute(['users/login-as-another-user']);
-
-						$form = Html::beginForm($action, 'post', ['id' => 'login-as-another-user', 'class' => 'd-inline-block']);
-						$form .= Html::hiddenInput('userId', $model->id);
-						$form .= Html::a('<i class="fas fa-eye"></i>', '#', [
-							'class' => 'as-link',
-							'onclick' => new JsExpression("$('#login-as-another-user').submit();")
-						]);
-						$form .= Html::endForm();
-						return $form;
+					'login-as-another-user' => static function(string $url, Users $model) {
+						return Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]));
 					}
 				],
 			],
