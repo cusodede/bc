@@ -14,7 +14,6 @@ use yii\db\Exception;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -146,7 +145,7 @@ class UsersController extends DefaultController {
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionLoginAsAnotherUser() {
+	public function actionLoginAsAnotherUser():?Response {
 		try {
 			$userId = (int)Yii::$app->request->post('userId');
 			Yii::$app->user->loginAsAnotherUser($userId);
@@ -154,7 +153,7 @@ class UsersController extends DefaultController {
 			return $this->redirect(['profile', 'id' => $userId]);
 		} catch (DomainException $e) {
 			Yii::$app->session->setFlash('error', 'Ошибка доступа');
-			return $this->redirect(Url::toRoute(['users/index']));
+			return $this->redirect('index');
 		}
 	}
 
@@ -163,7 +162,7 @@ class UsersController extends DefaultController {
 	 *
 	 * @return Response
 	 */
-	public function actionLoginBack() {
+	public function actionLoginBack():?Response {
 		try {
 			$originalId = Yii::$app->user->getOriginalUserId();
 			Yii::$app->user->loginBackToOriginUser();
@@ -171,7 +170,7 @@ class UsersController extends DefaultController {
 			return $this->redirect(['profile', 'id' => $originalId]);
 		} catch (DomainException $e) {
 			Yii::$app->session->setFlash('error', 'Ошибка доступа');
-			return $this->redirect(Url::toRoute(['users/index']));
+			return $this->redirect('index');
 		}
 	}
 
