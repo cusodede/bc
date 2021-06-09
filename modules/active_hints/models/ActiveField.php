@@ -45,7 +45,7 @@ class ActiveField extends ActiveFieldBs4 {
 			'model' => $this->model,
 			'attribute' => $this->attribute,
 			'editable' => $this->enableActiveHint,
-			'editAction' => ActiveHintsModule::to(['default/edit-hint', 'model' => $this->model, 'attribute' => $this->attribute])
+			'editAction' => ActiveHintsModule::to(['default/edit-hint', 'model' => get_class($this->model), 'attribute' => $this->attribute])
 		]);
 	}
 
