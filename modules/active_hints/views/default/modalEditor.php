@@ -29,6 +29,9 @@ $id = "{$model}-{$attribute}";
 	'options' => [
 		'class' => 'modal-dialog-large',
 		'onsubmit' => new JsExpression("formSubmitAjax(event);$(this).modal('hide')")
+	],
+	'clientOptions' => [
+		'backdrop' => false
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => "{$id}-form",]) ?>
