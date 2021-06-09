@@ -68,7 +68,9 @@ ModalHelperAsset::register($this);
 						]);
 					},
 					'login-as-another-user' => static function(string $url, Users $model) {
-						return Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]));
+						return (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')
+							?Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]))
+							:Html::a('<i class="fas fa-question-square"></i>', '#', ['title' => 'Не поддерживается (не сконфигурирован WebUser?)']));
 					}
 				],
 			],
