@@ -50,7 +50,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{view}{update-password}',
+				'template' => '{edit}{view}{update-password}{login-as-another-user}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
 						return Html::a('<i class="fas fa-edit"></i>', $url, [
@@ -67,6 +67,9 @@ ModalHelperAsset::register($this);
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
+					'login-as-another-user' => static function(string $url, Users $model) {
+						return Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]));
+					}
 				],
 			],
 			'id',
