@@ -5,7 +5,6 @@ namespace app\models\sys\users;
 
 use DomainException;
 use Throwable;
-use Webmozart\Assert\Assert;
 use Yii;
 use yii\web\Cookie;
 use yii\web\User;
@@ -67,7 +66,6 @@ class WebUser extends User {
 	 * @throws Throwable
 	 */
 	public function loginAsAnotherUser(int $userId):void {
-		Assert::greaterThan($userId, 0, 'ID пользователя должен быть больше 0');
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
 			throw new DomainException("Вы не авторизованы");
