@@ -6,13 +6,11 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
-use DomainException;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\db\Exception;
 use yii\filters\ContentNegotiator;
-use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -136,18 +134,14 @@ class UsersController extends DefaultController {
 	/**
 	 * Авторизоваться под другим пользователем
 	 *
+	 * @param int $userId
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionLoginAsAnotherUser(int $userId):?Response {
-		try {
-			Yii::$app->user->loginAsAnotherUser($userId);
-			Yii::$app->session->setFlash('success', 'Вы успешно авторизовались');
-			return $this->redirect(['profile', 'id' => $userId]);
-		} catch (DomainException $e) {
-			Yii::$app->session->setFlash('error', 'Ошибка доступа');
-			return $this->redirect('index');
-		}
+	public function actionLoginAsAnotherUser(int $userId):Response {
+		Yii::$app->user->loginAsAnotherUser($userId);
+		Yii::$app->session->setFlash('success', 'Вы успешно авторизовались');
+		return $this->redirect(['profile', 'id' => $userId]);
 	}
 
 	/**
@@ -155,16 +149,10 @@ class UsersController extends DefaultController {
 	 *
 	 * @return Response
 	 */
-	public function actionLoginBack():?Response {
-		try {
-			$originalId = Yii::$app->user->getOriginalUserId();
-			Yii::$app->user->loginBackToOriginUser();
-			Yii::$app->session->setFlash('success', 'Вы успешно вернулись обратно');
-			return $this->redirect(['profile', 'id' => $originalId]);
-		} catch (DomainException $e) {
-			Yii::$app->session->setFlash('error', 'Ошибка доступа');
-			return $this->redirect('index');
-		}
+	public function actionLoginBack():Response {
+		Yii::$app->user->loginBackToOriginUser();
+		Yii::$app->session->setFlash('success', 'Вы успешно вернулись обратно');
+		return $this->redirect(['profile', 'id' => Yii::$app->user->getOriginalUserId()]);
 	}
 
 }
