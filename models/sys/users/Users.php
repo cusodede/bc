@@ -13,7 +13,6 @@ use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
 use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
-use Webmozart\Assert\Assert;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -221,16 +220,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 		return (null === $fileAvatar = $this->fileAvatar)
 			?PathHelper::PathToUrl(PathHelper::RelativePath(Yii::getAlias(self::DEFAULT_AVATAR_ALIAS_PATH), "@webroot"))
 			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
-	}
-
-	/**
-	 * @param string $username
-	 * @return $this
-	 */
-	public function changeUserName(string $username):self {
-		Assert::notEmpty($username, 'username не может быть пустым');
-		$this->username = $username;
-		return $this;
 	}
 
 }
