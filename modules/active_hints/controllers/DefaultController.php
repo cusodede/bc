@@ -165,7 +165,6 @@ class DefaultController extends Controller {
 	 * @throws ReflectionException
 	 * @throws UnknownClassException
 	 * @throws Exception
-	 * @todo: check setter
 	 */
 	public function actionEditHint(string $model, string $attribute) {
 		$storage = ActiveStorage::findActiveAttribute($model, $attribute);
@@ -173,7 +172,7 @@ class DefaultController extends Controller {
 		$posting = $storage->updateModelFromPost($errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
-			return $this->redirect('index');
+			return $this->asJson([]);
 		}
 		/* Пришёл постинг, но есть ошибки */
 		if ((false === $posting) && Yii::$app->request->isAjax) {
