@@ -51,7 +51,7 @@ class WebUser extends User {
 			throw new DomainException("Вы не авторизованы");
 		}
 
-		if (null === $existentUser  = Users::findIdentity($id = $this->getOriginalUserId())) {
+		if (null === $existentUser = Users::findIdentity($id = $this->getOriginalUserId())) {
 			throw new DomainException("Пользователь с id $id не найден");
 		}
 
