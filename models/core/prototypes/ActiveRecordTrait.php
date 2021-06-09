@@ -83,7 +83,6 @@ trait ActiveRecordTrait {
 						return false;
 					}
 				}
-				$this->refresh();
 			}
 
 			if (false !== $result = $this->save()) {
