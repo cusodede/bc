@@ -8,13 +8,16 @@ declare(strict_types = 1);
  * @var string $attribute
  */
 
+use app\assets\ModalHelperAsset;
 use app\modules\active_hints\models\ActiveStorage;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Modal;
+use yii\web\JsExpression;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
 
-$id = "{$model}-{$attribute}"
+$id = "{$model}-{$attribute}";
+ModalHelperAsset::register($this);
 ?>
 
 <?php Modal::begin([
@@ -27,6 +30,7 @@ $id = "{$model}-{$attribute}"
 	]),
 	'options' => [
 		'class' => 'modal-dialog-large',
+		'onsubmit' => new JsExpression("formSubmitAjax(event);$(this).modal('hide')")
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => "{$id}-form",]) ?>
