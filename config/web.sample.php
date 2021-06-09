@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\dol\models\DolAPI;
+use app\models\sys\users\WebUser;
 use app\modules\history\HistoryModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
@@ -95,6 +96,7 @@ $config = [
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
+			'class' => WebUser::class,
 			'identityClass' => Users::class,
 			'enableAutoLogin' => true
 		],

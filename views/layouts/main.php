@@ -9,6 +9,7 @@ declare(strict_types = 1);
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
 use app\controllers\SiteController;
+use app\controllers\UsersController;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
 use yii\bootstrap4\Html;
@@ -35,10 +36,23 @@ ModalHelperAsset::register($this);
 
 <body class="mod-bg-1 header-function-fixed nav-function-fixed mod-nav-link mod-skin-light">
 <?php $this->beginBody(); ?>
+
 <div class="page-wrapper">
 	<div class="page-inner">
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
+			<?php if (Yii::$app->session->hasFlash('success')) { ?>
+				<div class="alert alert-success flash-success text-center">
+					<?= Yii::$app->session->getFlash('success') ?>
+				</div>
+			<?php } ?>
+
+			<?php if (Yii::$app->session->hasFlash('error')) { ?>
+				<div class="alert alert-danger flash-error text-center">
+					<?= Yii::$app->session->getFlash('error') ?>
+				</div>
+			<?php } ?>
+
 			<header class="page-header" role="banner">
 				<div class="hidden-md-down dropdown-icon-menu position-relative">
 					<a href="#" class="header-btn btn js-waves-off" data-action="toggle"
@@ -74,8 +88,19 @@ ModalHelperAsset::register($this);
 						<?= SearchWidget::widget() ?>
 					</div>
 					<div>
+						<?php if (Yii::$app->user->isLoginAsAnotherUser()) { ?>
+							<?= Html::a('<i class="fal fa-eye-slash"></i>', UsersController::to('login-back'), [
+								'class' => "header-icon d-inline-block",
+								'data-toggle' => "tooltip",
+								'data-placement' => "bottom",
+								'title' => "",
+								'data-original-title' => "Вернуться в свой профиль"
+							]) ?>
+						<?php } ?>
+
+
 						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
-							'class' => "header-icon",
+							'class' => "header-icon d-inline-block",
 							'data-toggle' => "tooltip",
 							'data-placement' => "bottom",
 							'title' => "",

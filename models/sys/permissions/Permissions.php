@@ -75,7 +75,7 @@ class Permissions extends ActiveRecordPermissions {
 		return $query->asArray($asArray)->all();
 	}
 
-	/**
+    /**
 	 * При изменении права, нужно удалить кеши прав всем пользователям, у которых:
 	 *    - право назначено напрямую
 	 *    - право есть в  группе прав, назначенной пользователю

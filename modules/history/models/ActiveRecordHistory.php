@@ -75,6 +75,10 @@ class ActiveRecordHistory extends History {
 	 */
 	public static function push(?ActiveRecord $model, array $oldAttributes, array $newAttributes, ?ActiveRecord $relationModel = null, ?Event $event = null):void {
 		$log = new self(['storeShortClassNames' => ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), "storeShortClassNames", false)]);
+
+		$webUser = Yii::$app->user;
+		$delegate = $webUser->isLoginAsAnotherUser() ? (string) $webUser->getOriginalUserId() : null;
+
 		$log->setAttributes([
 			'user' => Yii::$app->user->id,//Предполагается, что фреймворк сконфигурирован с использованием user identity class
 			'model_class' => null === $model?null:$log->getStoredClassName($model),
@@ -84,7 +88,7 @@ class ActiveRecordHistory extends History {
 			'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
 			'event' => null === $event?null:$event->name,
 			'scenario' => $model->scenario,
-			'delegate' => null,/*пока не поддерживается*/
+			'delegate' => $delegate,
 			'operation_identifier' => Yii::$app->request->csrfToken
 		]);
 		$log->save();

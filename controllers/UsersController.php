@@ -50,7 +50,7 @@ class UsersController extends DefaultController {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
-			],
+			]
 		]);
 	}
 
@@ -130,4 +130,29 @@ class UsersController extends DefaultController {
 			$user->fileAvatar->download();
 		}
 	}
+
+	/**
+	 * Авторизоваться под другим пользователем
+	 *
+	 * @param int $userId
+	 * @return Response
+	 * @throws Throwable
+	 */
+	public function actionLoginAsAnotherUser(int $userId):Response {
+		Yii::$app->user->loginAsAnotherUser($userId);
+		Yii::$app->session->setFlash('success', 'Вы успешно авторизовались');
+		return $this->redirect(['profile', 'id' => $userId]);
+	}
+
+	/**
+	 * Вернуться в свою учетную запись
+	 *
+	 * @return Response
+	 */
+	public function actionLoginBack():Response {
+		Yii::$app->user->loginBackToOriginUser();
+		Yii::$app->session->setFlash('success', 'Вы успешно вернулись обратно');
+		return $this->redirect(['profile', 'id' => Yii::$app->user->getOriginalUserId()]);
+	}
+
 }
