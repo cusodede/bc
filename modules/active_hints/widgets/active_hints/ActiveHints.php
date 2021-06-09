@@ -3,15 +3,13 @@ declare(strict_types = 1);
 
 namespace app\modules\active_hints\widgets\active_hints;
 
-use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
 use app\modules\active_hints\ActiveHintsModule;
 use app\modules\active_hints\models\ActiveStorage;
 use kartik\popover\PopoverX;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\bootstrap4\BootstrapAsset;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 
 /**
@@ -19,7 +17,7 @@ use yii\web\JsExpression;
  * @property Model $model Модель подсказки
  * @property string $attribute Атрибут модели подсказки
  * @property string $editAction Url экшена для сохранения подсказки
- * @property-read string $toggleButtonClass -- сгенерированный класс кнопки
+ * @property-read string $toggleButtonClass Сгенерированный класс кнопки
  */
 class ActiveHints extends Widget {
 	private string $_for;
@@ -44,6 +42,7 @@ class ActiveHints extends Widget {
 		$this->_record = ActiveStorage::findActiveAttribute($this->model, $this->attribute);
 		$this->editAction = $this->editAction??ActiveHintsModule::to(['default/set-hint', 'model' => $this->_record->model, 'attribute' => $this->_record->attribute]);
 		$this->_for = "{$this->model->formName()}-{$this->attribute}";
+		$this->_toggleButtonClass['hint'] = (null === $this->_record->content)?'no-hint':'has-hint';
 	}
 
 	/**
@@ -51,7 +50,7 @@ class ActiveHints extends Widget {
 	 */
 	public function run():string {
 		$output = '';
-		$this->_toggleButtonClass['hint'] = (null === $this->_record->content)?'no-hint':'has-hint';
+
 		if ($this->editable) {//Если у хинта нет контента, то показываем его только для редактирования
 			$output = Html::button('<i class="fa fa-comment-alt-edit"></i>', [
 				'class' => $this->toggleButtonClass,
@@ -75,7 +74,7 @@ class ActiveHints extends Widget {
 	/**
 	 * @return string
 	 */
-	public function getToggleButtonClass():string {//todo use Html::addCssClass instead
+	public function getToggleButtonClass():string {
 		return implode(' ', array_unique($this->_toggleButtonClass));
 	}
 }
