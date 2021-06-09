@@ -67,7 +67,7 @@ ModalHelperAsset::register($this);
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'login-as-another-user' => static function(string $url, Users $model) {
+					'login-as-another-user' => static function(string $url, Users $model) {/*todo: вытащить в виджет кнопку авторизации и кнопку выхода*/
 						return (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')
 							?Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]))
 							:Html::a('<i class="fas fa-question-square"></i>', '#', ['title' => 'Не поддерживается (не сконфигурирован WebUser?)']));
