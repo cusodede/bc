@@ -21,7 +21,6 @@ class WebUser extends User {
 	/**
 	 * Вернуть id оригинального пользователя,
 	 * из под которого авторизовались под другим пользователем
-	 *
 	 * @return int
 	 */
 	public function getOriginalUserId():int {
@@ -45,7 +44,6 @@ class WebUser extends User {
 
 	/**
 	 * Вернуться в родную учетную запись
-	 *
 	 * @return void
 	 */
 	public function loginBackToOriginUser():void {
@@ -54,8 +52,7 @@ class WebUser extends User {
 			throw new DomainException("Вы не авторизованы");
 		}
 
-		$existentUser = Users::findIdentity($id = $this->getOriginalUserId());
-		if (is_null($existentUser)) {
+		if (null === $existentUser  = Users::findIdentity($id = $this->getOriginalUserId())) {
 			throw new DomainException("Пользователь с id $id не найден");
 		}
 
@@ -80,8 +77,7 @@ class WebUser extends User {
 			throw new DomainException("Вы не можете авторизоваться под другим пользователем");
 		}
 
-		$existentUser = Users::findIdentity($userId);
-		if (is_null($existentUser)) {
+		if (null === $existentUser = Users::findIdentity($userId)) {
 			throw new DomainException("Пользователь с id $userId не найден");
 		}
 
@@ -101,7 +97,7 @@ class WebUser extends User {
 	 * @param bool $destroySession
 	 * @return bool
 	 */
-	public function logout($destroySession = true) {
+	public function logout($destroySession = true):bool {
 		$isLogout = parent::logout($destroySession);
 		if ($isLogout) {
 			Yii::$app->response->cookies->remove('fear');
