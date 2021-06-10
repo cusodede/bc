@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\managers;
 
+use app\models\dealers\Dealers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use pozitronik\core\models\LCQuery;
@@ -15,6 +16,7 @@ use Throwable;
  * @property null|string $userLogin
  * @property null|string $userEmail
  * @property null|string $store
+ * @property null|string $dealer
  */
 final class ManagersSearch extends Managers {
 
@@ -22,6 +24,7 @@ final class ManagersSearch extends Managers {
 	public ?string $userEmail = null;
 	public ?string $userLogin = null;
 	public ?string $store = null;
+	public ?string $dealer = null;
 
 	/**
 	 * {@inheritdoc}
@@ -39,7 +42,7 @@ final class ManagersSearch extends Managers {
 			[['id', 'userId'], 'integer'],
 			[['name', 'surname', 'patronymic'], 'string', 'max' => 128],
 			[['deleted'], 'boolean'],
-			[['userEmail', 'store'], 'string', 'max' => 255],
+			[['userEmail', 'store', 'dealer'], 'string', 'max' => 255],
 			['userLogin', 'string', 'max' => 64],
 			['userEmail', 'email'],
 			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i']
@@ -86,7 +89,8 @@ final class ManagersSearch extends Managers {
 			->andFilterWhere([Users::tableName().'.id' => $this->userId])
 			->andFilterWhere([Users::tableName().'.email' => $this->userEmail])
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
-			->andFilterWhere(['like', Stores::tableName().'.name', $this->store]);
+			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
+			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
 	}
 
 	/**

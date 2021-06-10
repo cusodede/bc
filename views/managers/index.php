@@ -10,6 +10,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\controllers\DealersController;
 use app\controllers\StoresController;
 use app\models\managers\ManagersSearch;
 use kartik\datetime\DateTimePicker;
@@ -142,6 +143,23 @@ ModalHelperAsset::register($this);
 						'urlScheme' => [StoresController::to('view'), 'id' => 'id'],
 						'options' => static function($mapAttributeValue, $model):array {
 							$url = StoresController::to('view', ['id' => $model->id]);
+							return [
+								'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
+							];
+						}
+					]);
+				}
+			],
+			[
+				'attribute' => 'dealer',
+				'format' => 'raw',
+				'value' => static function(ManagersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->dealers,
+						'subItem' => 'name',
+						'urlScheme' => [DealersController::to('view'), 'id' => 'id'],
+						'options' => static function($mapAttributeValue, $model):array {
+							$url = DealersController::to('view', ['id' => $model->id]);
 							return [
 								'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
 							];

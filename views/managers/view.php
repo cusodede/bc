@@ -49,6 +49,16 @@ use yii\widgets\DetailView;
 				]);
 			}
 		],
+		[
+			'attribute' => 'dealers',
+			'format' => 'raw',
+			'value' => static function(Managers $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->dealers,
+					'subItem' => 'name'
+				]);
+			}
+		],
 		'deleted:boolean'
 	]
 ]) ?>

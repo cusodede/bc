@@ -34,6 +34,7 @@ use yii\db\ActiveRecord;
  *
  * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к магазам
  * @property Stores[] $stores Магазины менеджера
+ * @property RelDealersToManagers[] $relatedDealersToManagers Связь к промежуточной таблице к дилерам
  * @property Dealers[] $dealers Дилеры менеджера
  * @property Users $relatedUser Пользователь связанный с менеджером
  */
@@ -106,7 +107,7 @@ class ManagersAR extends ActiveRecord {
 				'on' => self::SCENARIO_CREATE
 			],
 			['login', PhoneNumberValidator::class],
-			[['create_date', 'update_date', 'stores'], 'safe'],
+			[['create_date', 'update_date', 'stores', 'dealers'], 'safe'],
 			[['deleted', 'user'], 'integer'],
 			['user', 'unique']
 		];
