@@ -4,3 +4,10 @@
 /web/uploads/
 /.phpunit.result.cache
 /config/local/
+/untracked
+
+#for tests
+/models/tests
+/tests-c/
+/config/test.sample.php
+codeception.yml
