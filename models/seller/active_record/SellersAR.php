@@ -106,6 +106,7 @@ class SellersAR extends ActiveRecord {
 				'filter',
 				'filter' => 'trim'
 			],
+			[['inn', 'snils'], 'default', 'value' => null],
 			[
 				[
 					'name', 'surname', 'passport_series', 'passport_number', 'passport_whom',
