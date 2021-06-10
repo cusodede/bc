@@ -75,10 +75,6 @@ class ActiveRecordHistory extends History {
 	 */
 	public static function push(?ActiveRecord $model, array $oldAttributes, array $newAttributes, ?ActiveRecord $relationModel = null, ?Event $event = null):void {
 		$log = new self(['storeShortClassNames' => ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), "storeShortClassNames", false)]);
-
-		$webUser = Yii::$app->user;
-		$delegate = $webUser->isLoginAsAnotherUser() ? (string) $webUser->getOriginalUserId() : null;
-
 		$log->setAttributes([
 			'user' => Yii::$app->user->id,//Предполагается, что фреймворк сконфигурирован с использованием user identity class
 			'model_class' => null === $model?null:$log->getStoredClassName($model),
@@ -88,7 +84,7 @@ class ActiveRecordHistory extends History {
 			'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
 			'event' => null === $event?null:$event->name,
 			'scenario' => $model->scenario,
-			'delegate' => $delegate,
+			'delegate' => self::ensureDelegate(),
 			'operation_identifier' => Yii::$app->request->csrfToken
 		]);
 		$log->save();
@@ -114,6 +110,16 @@ class ActiveRecordHistory extends History {
 		/** @var self $taggedRecord */
 		$taggedRecord->tag = $tag;
 		return true;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	private static function ensureDelegate() {
+		if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')) {
+			return Yii::$app->user->isLoginAsAnotherUser();
+		}
+		return null;
 	}
 
 	/**

@@ -20,18 +20,11 @@ class WebUser extends User {
 	/**
 	 * Вернуть id оригинального пользователя,
 	 * из под которого авторизовались под другим пользователем
-	 * @return int
+	 * @return null|int null, если текущий пользователь и есть оригинальный
 	 */
-	public function getOriginalUserId():int {
-		if (!$this->isLoginAsAnotherUser()) {
-			throw new DomainException("Неправильный сценарий использования");
-		}
+	public function getOriginalUserId():?int {
+		return $this->isLoginAsAnotherUser()?(int)Yii::$app->request->cookies->get('fear')->value:null;
 
-		$userId = (int)Yii::$app->request->cookies->get('fear')->value;
-		if ($userId <= 0) {
-			throw new DomainException("Неправильное значение оригинального id");
-		}
-		return $userId;
 	}
 
 	/**
@@ -51,7 +44,7 @@ class WebUser extends User {
 			throw new DomainException("Вы не авторизованы");
 		}
 
-		if (null === $existentUser  = Users::findIdentity($id = $this->getOriginalUserId())) {
+		if (null === $existentUser = Users::findIdentity($id = $this->getOriginalUserId())) {
 			throw new DomainException("Пользователь с id $id не найден");
 		}
 

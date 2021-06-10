@@ -3,3 +3,4 @@
 /web/assets/
 /web/uploads/
 /.phpunit.result.cache
+/config/local/
