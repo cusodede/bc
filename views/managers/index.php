@@ -10,6 +10,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\controllers\StoresController;
 use app\models\managers\ManagersSearch;
 use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
@@ -130,6 +131,23 @@ ModalHelperAsset::register($this);
 						'alwaysShowCalendars' => true
 					]
 				]
+			],
+			[
+				'attribute' => 'store',
+				'format' => 'raw',
+				'value' => static function(ManagersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->stores,
+						'subItem' => 'name',
+						'urlScheme' => [StoresController::to('view'), 'id' => 'id'],
+						'options' => static function($mapAttributeValue, $model):array {
+							$url = StoresController::to('view', ['id' => $model->id]);
+							return [
+								'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
+							];
+						}
+					]);
+				}
 			],
 			'deleted:boolean'
 		]

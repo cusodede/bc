@@ -32,9 +32,10 @@ use yii\db\ActiveRecord;
  * @property string $email
  * @property string $login
  *
- * @property Stores[] $stores Магазины продавца
- * @property Dealers[] $dealers Дилеры продавца
- * @property Users $relatedUser Пользователь связанный с продавцом
+ * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к магазам
+ * @property Stores[] $stores Магазины менеджера
+ * @property Dealers[] $dealers Дилеры менеджера
+ * @property Users $relatedUser Пользователь связанный с менеджером
  */
 class ManagersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -105,7 +106,7 @@ class ManagersAR extends ActiveRecord {
 				'on' => self::SCENARIO_CREATE
 			],
 			['login', PhoneNumberValidator::class],
-			[['create_date', 'update_date',], 'safe'],
+			[['create_date', 'update_date', 'stores'], 'safe'],
 			[['deleted', 'user'], 'integer'],
 			['user', 'unique']
 		];
@@ -146,7 +147,7 @@ class ManagersAR extends ActiveRecord {
 	 * @throws Throwable
 	 */
 	public function setStores($stores):void {
-		RelManagersToStores::linkModels($stores, $this, true);
+		RelManagersToStores::linkModels($this, $stores);
 	}
 
 	/**

@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\models\managers\Managers;
+use pozitronik\widgets\BadgeWidget;
 use yii\web\View;
 use yii\widgets\DetailView;
 
@@ -38,6 +39,16 @@ use yii\widgets\DetailView;
 		'surname',
 		'name',
 		'patronymic',
+		[
+			'attribute' => 'stores',
+			'format' => 'raw',
+			'value' => static function(Managers $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->stores,
+					'subItem' => 'name'
+				]);
+			}
+		],
 		'deleted:boolean'
 	]
 ]) ?>
