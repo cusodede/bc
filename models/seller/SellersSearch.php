@@ -173,8 +173,6 @@ final class SellersSearch extends Sellers {
 				'create_date',
 				'update_date',
 				'entry_date',
-				'create_date',
-				'update_date',
 				'keyword',
 				'is_resident',
 				'non_resident_type',
