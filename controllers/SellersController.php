@@ -6,7 +6,6 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\db\Exception;
@@ -61,7 +60,7 @@ class SellersController extends DefaultController {
 	 */
 	public function actionEdit(int $id) {
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
@@ -90,13 +89,12 @@ class SellersController extends DefaultController {
 	/**
 	 * @param int $id
 	 * @return string|Response
-	 * @throws LoggedException
 	 * @throws Throwable
 	 * @throws Exception
 	 */
 	public function actionEditUser(int $id) {
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
