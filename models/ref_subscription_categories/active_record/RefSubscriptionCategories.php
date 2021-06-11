@@ -8,7 +8,7 @@ use pozitronik\references\models\Reference;
 /**
  * Справочник категорий подписок
  * Class RefSubscriptionCategories
- * @package app\models\ref_products_types\active_record
+ * @package app\models\ref_subscription_categories\active_record
  */
 class RefSubscriptionCategories extends Reference
 {

@@ -55,7 +55,8 @@ class PermissionsCollections extends ActiveRecord {
 			[['comment'], 'string'],
 			[['name'], 'string', 'max' => 128],
 			[['name'], 'unique'],
-			[['name'], 'required']
+			[['name'], 'required'],
+			[['relatedPermissions', 'relatedUsers'], 'safe']
 		];
 	}
 

@@ -19,15 +19,12 @@ use yii\widgets\DetailView;
 			'attribute' => 'product.name',
 			'label' => 'Наименование',
 		],
+		'product.description',
 		[
 			'attribute' => 'product.price',
 			'label' => 'Стоимость',
 		],
-		[
-			'attribute' => 'trial',
-			'label' => 'Триальный период',
-			'format' => 'boolean',
-		],
+		'trial_days_count',
 		[
 			'attribute' => 'category.name',
 			'label' => 'Категория',
@@ -37,11 +34,11 @@ use yii\widgets\DetailView;
 			'label' => 'Партнер',
 		],
 		[
-			'attribute' => 'created_at',
+			'attribute' => 'product.created_at',
 			'format' => ['date', 'php:d.m.Y H:i'],
 		],
 		[
-			'attribute' => 'updated_at',
+			'attribute' => 'product.updated_at',
 			'format' => ['date', 'php:d.m.Y H:i'],
 		],
 	],

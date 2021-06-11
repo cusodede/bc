@@ -736,11 +736,11 @@ html {
     direction: ltr;
     text-rendering: optimizeLegibility;
     background-color: #fff; }
-    html body a {
+    html body a, html body .as-link {
       color: #886ab5;
       text-decoration: none;
       background-color: transparent; }
-      html body a:hover {
+      html body a:hover, html body .as-link:hover {
         color: #967bbd;
         text-decoration: underline; }
 

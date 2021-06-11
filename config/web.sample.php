@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use app\modules\graphql\GraphqlModule;
 use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
@@ -66,7 +67,6 @@ $config = [
 			'defaultRoute' => 'references',
 			'params' => [
 				'baseDir' => [
-					'@app/models/ref_products_types/active_record',
 					'@app/models/ref_subscription_categories/active_record'
 				],
 			],
@@ -74,6 +74,10 @@ $config = [
 		'history' => [
 			'class' => HistoryModule::class,
 			'defaultRoute' => 'index'
+		],
+		'graphql' => [
+			'class' => GraphqlModule::class,
+			'defaultRoute' => 'graphql',
 		],
 	],
 	'components' => [

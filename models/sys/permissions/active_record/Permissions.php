@@ -27,9 +27,9 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissions[] $relatedUsersToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к таблице к группам прав доступа через промежуточную таблицу
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице прав доступа из групп прав доступа
- * @property Users[] $relatedUsers Связь к пользователям, имеющим этот доступ напрямую
- * @property PermissionsCollections[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
- * @property Users[] $relatedUsersViaPermissionsCollections Связь к пользователям, имеющим этот доступ через группу доступов
+ * @property-read Users[] $relatedUsers Связь к пользователям, имеющим этот доступ напрямую
+ * @property-read PermissionsCollections[] $relatedPermissionsCollections Связь к группам прав доступа, в которые входит доступ
+ * @property-read Users[] $relatedUsersViaPermissionsCollections Связь к пользователям, имеющим этот доступ через группу доступов
  */
 class Permissions extends ActiveRecord {
 	use ActiveRecordTrait;

@@ -31,7 +31,7 @@ use yii\helpers\ArrayHelper;
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
  *
- * @property UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
+ * @property-read UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
  * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
  * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
@@ -76,7 +76,10 @@ class Users extends ActiveRecord {
 			[['email'], 'unique'],
 			[['daddy'], 'default', 'value' => Yii::$app->user->id],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
-			['phones', PhoneNumberValidator::class]
+			['phones', PhoneNumberValidator::class, 'when' => function() {
+				[] !== array_filter($this->phones);
+			}],
+			['relatedPhones', 'safe']
 		];
 	}
 

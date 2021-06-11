@@ -55,13 +55,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}',
 				'buttons' => [
-					'edit' => static function(string $url, Model $model)
+					'edit' => static function(string $url, Model $model): string
 					{
 						return Html::a('<i class="fas fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'view' => static function(string $url, Model $model)
+					'view' => static function(string $url, Model $model): string
 					{
 						return Html::a('<i class="fas fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
@@ -85,11 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value' => 'product.price',
 				'label' => 'Стоимость'
 			],
-			[
-				'attribute' => 'trial',
-				'label' => 'Триальный период',
-				'format' => 'boolean',
-			],
+			'trial_days_count',
 			[
 				'filter' => Select2::widget([
 					'model' => $searchModel,
@@ -106,12 +102,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'created_at',
+				'attribute' => 'product.created_at',
 				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'updated_at',
+				'attribute' => 'product.updated_at',
 				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],

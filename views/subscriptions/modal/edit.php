@@ -1,15 +1,15 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Subscriptions $model
  */
 use pozitronik\widgets\BadgeWidget;
-use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+use app\models\subscriptions\Subscriptions;
 
 $modelName = $model->formName();
 ?>
@@ -29,7 +29,12 @@ Modal::begin([
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => "{$modelName}-modal-edit", 'enableAjaxValidation' => true]) ?>
+<?php $form = ActiveForm::begin([
+	'id' => "{$modelName}-modal-edit",
+	'enableAjaxValidation' => true,
+	'validateOnChange' => false,
+	'validateOnBlur' => false,
+]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>

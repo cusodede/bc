@@ -7,7 +7,6 @@ use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\modules\import\models\ImportAction;
 use app\modules\import\models\ProcessImportAction;
 use pozitronik\core\helpers\ControllerHelper;
-use pozitronik\sys_exceptions\models\LoggedException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Throwable;
@@ -183,7 +182,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionView(int $id):string {
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 		if (Yii::$app->request->isAjax) {
 			return $this->renderAjax('modal/view', [
@@ -202,15 +201,15 @@ class DefaultController extends Controller {
 	 */
 	public function actionEdit(int $id) {
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 
 		/** @var ActiveRecordTrait $model */
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-
-		$posting = $model->updateModelFromPost([], $errors);
+		$errors = [];
+		$posting = $model->updateModelFromPost($errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
@@ -234,7 +233,8 @@ class DefaultController extends Controller {
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$posting = $model->createModelFromPost([], $errors);/* switch тут нельзя использовать из-за его нестрогости */
+		$errors = [];
+		$posting = $model->createModelFromPost($errors);/* switch тут нельзя использовать из-за его нестрогости */
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
 		}
@@ -255,7 +255,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionDelete(int $id):Response {
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 		/** @noinspection PhpUndefinedMethodInspection */
 		$model->safeDelete();

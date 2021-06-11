@@ -9,7 +9,7 @@ use pozitronik\widgets\BadgeWidget;
 use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
 
 $modelName = $model->formName();
 ?>

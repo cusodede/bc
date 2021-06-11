@@ -6,9 +6,9 @@ namespace app\controllers;
 use app\widgets\search\SearchHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\core\traits\ControllerTrait;
-use pozitronik\sys_exceptions\models\LoggedException;
 use pozitronik\sys_options\models\SysOptions;
 use Yii;
+use yii\base\UnknownPropertyException;
 use yii\filters\ContentNegotiator;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -46,7 +46,7 @@ class AjaxController extends Controller {
 	 * @param string $alias
 	 * @param string|null $term
 	 * @return string[][]
-	 * @throws LoggedException
+	 * @throws UnknownPropertyException
 	 */
 	public function actionSearch(string $alias, ?string $term):array {
 		if (null !== $ARClass = ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.class")) {
