@@ -5,7 +5,6 @@ namespace app\models\sys\permissions\traits;
 
 use app\models\sys\users\Users;
 use pozitronik\core\traits\ControllerTrait;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use yii\web\NotFoundHttpException;
 
@@ -21,12 +20,11 @@ trait ControllerPermissionsTrait {
 	 * @param null|string $actionId ActionId, если не указан - то проверяется доступ ко всему контроллеру
 	 * @param int|null $userId id пользователя, если не указан - текущий
 	 * @return bool
-	 * @throws LoggedException
 	 * @throws Throwable
 	 */
 	public static function hasPermission(?string $actionId = null, ?int $userId = null):bool {
 		if (null === ($user = null === $userId?Users::Current():Users::findOne($userId))) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 
 		return $user->hasControllerPermission(self::ExtractControllerId(static::class), $actionId);

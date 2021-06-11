@@ -5,7 +5,6 @@ namespace app\widgets\search;
 
 use app\models\core\TemporaryHelper;
 use Exception;
-use pozitronik\sys_exceptions\models\LoggedException;
 use yii\base\UnknownPropertyException;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -49,7 +48,7 @@ class SearchHelper {
 	 * где searchType - одна из SEARCH_TYPE_* - констант.
 	 * Если параметр не задан, атрибуты подхватываются из правил валидации модели (все строковые атрибуты)
 	 * @return array
-	 * @throws LoggedException
+	 * @throws UnknownPropertyException
 	 */
 	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null):array {
 		/*В модели можно полностью переопределить поиск*/
@@ -59,7 +58,7 @@ class SearchHelper {
 
 		/** @var ActiveRecord $modelClass */
 		if ((null === $pk = ArrayHelper::getValue($modelClass::primaryKey(), 0))) {
-			throw new LoggedException(new UnknownPropertyException('Primary key not configured'));
+			throw new UnknownPropertyException('Primary key not configured');
 		}
 		$tableName = $modelClass::tableName();
 		$swTermCyr = TemporaryHelper::SwitchKeyboard($term);

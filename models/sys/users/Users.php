@@ -11,7 +11,6 @@ use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -62,11 +61,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @return static
-	 * @throws LoggedException
+	 * @throws ForbiddenHttpException
 	 */
 	public static function Current():self {
 		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
-			throw new LoggedException(new ForbiddenHttpException('Пользователь не авторизован'));
+			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
 		return $user;
 	}
