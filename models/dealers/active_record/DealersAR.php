@@ -7,7 +7,9 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
+use app\models\dealers\active_record\relations\RelDealersToManagers;
 use app\models\dealers\active_record\relations\RelDealersToSellers;
+use app\models\managers\Managers;
 use app\models\seller\Sellers;
 use Throwable;
 use app\modules\history\behaviors\HistoryBehavior;
@@ -34,6 +36,8 @@ use yii\db\ActiveRecord;
  * @property RefBranches $refBranches Справочник филиалов
  * @property RelDealersToSellers[] $relatedDealersToSellers Связь к промежуточной таблице к продавцам
  * @property Sellers[] $sellers Все продавцы дилера
+ * @property RelDealersToSellers[] $relatedDealersToManagers Связь к промежуточной таблице к менеджерам
+ * @property Sellers[] $managers Все менеджеры дилера
  */
 class DealersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -63,7 +67,7 @@ class DealersAR extends ActiveRecord {
 		return [
 			[['name', 'code', 'client_code', 'group', 'branch'], 'required'],
 			[['group', 'branch', 'type', 'daddy', 'deleted'], 'integer'],
-			[['create_date'], 'safe'],
+			[['create_date', 'sellers', 'managers'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],/*если делаем так, то не ставим required*/
 			[['name'], 'string', 'max' => 255],
 			[['code'], 'string', 'max' => 4],
@@ -132,5 +136,27 @@ class DealersAR extends ActiveRecord {
 	 */
 	public function setSellers($sellers):void {
 		RelDealersToSellers::linkModels($this, $sellers);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedDealersToManagers():ActiveQuery {
+		return $this->hasMany(RelDealersToManagers::class, ['dealer_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getManagers():ActiveQuery {
+		return $this->hasMany(Managers::class, ['id' => 'manager_id'])->via('relatedDealersToManagers');
+	}
+
+	/**
+	 * @param mixed $managers
+	 * @throws Throwable
+	 */
+	public function setManagers($managers):void {
+		RelDealersToManagers::linkModels($this, $managers);
 	}
 }
