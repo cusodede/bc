@@ -58,6 +58,7 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'sellers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'mapAttribute' => 'fio',
 			'selectModelClass' => Sellers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => SellersController::to('ajax-search')
