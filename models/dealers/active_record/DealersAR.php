@@ -40,6 +40,8 @@ use yii\db\ActiveRecord;
  * @property Sellers[] $sellers Все продавцы дилера
  * @property RelDealersToSellers[] $relatedDealersToManagers Связь к промежуточной таблице к менеджерам
  * @property Sellers[] $managers Все менеджеры дилера
+ * @property RelDealersToStores[] $relatedDealersToStores Связь к промежуточной таблице к магазам
+ * @property Stores[] $stores Все магазы дилера
  */
 class DealersAR extends ActiveRecord {
 	use ActiveRecordTrait;

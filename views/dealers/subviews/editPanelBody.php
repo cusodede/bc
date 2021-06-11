@@ -9,11 +9,13 @@ declare(strict_types = 1);
 
 use app\controllers\ManagersController;
 use app\controllers\SellersController;
+use app\controllers\StoresController;
 use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\models\managers\Managers;
 use app\models\seller\Sellers;
+use app\models\store\Stores;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
 use app\models\dealers\Dealers;
@@ -67,7 +69,6 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'sellers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
-			'mapAttribute' => 'name',
 			'selectModelClass' => Sellers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => SellersController::to('ajax-search')
@@ -78,10 +79,19 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'managers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
-			'mapAttribute' => 'name',
 			'selectModelClass' => Managers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => ManagersController::to('ajax-search')
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'stores')->widget(SelectModelWidget::class, [
+			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'selectModelClass' => Stores::class,
+			'options' => ['placeholder' => ''],
+			'ajaxSearchUrl' => StoresController::to('ajax-search')
 		]) ?>
 	</div>
 </div>
