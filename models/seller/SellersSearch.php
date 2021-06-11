@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\seller;
 
 use app\models\dealers\Dealers;
+use app\models\managers\Managers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\Status;
@@ -142,17 +143,31 @@ final class SellersSearch extends Sellers {
 	 * @throws LoggedException
 	 */
 	private function filterDataByUser($query):void {
-		#TODO remove $fakeStoresId and $fakeDealersId and use real properties
-		$fakeStoresId = [1, 22];
-		$fakeDealersId = [1];
 		$user = Users::Current();
 		if ($user->isAllPermissionsGranted()) {
 			return;
 		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null === $manager) {
+			return;
+		}
+
 		if ($user->hasPermission(['dealer_sellers'])) {
-			$query->andFilterWhere(['in', Dealers::tableName().'.id', $fakeDealersId]);
+			$query->andFilterWhere(
+				[
+					'in',
+					Dealers::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
 		} elseif ($user->hasPermission(['dealer_store_sellers'])) {
-			$query->andFilterWhere(['in', Stores::tableName().'.id', $fakeStoresId]);
+			$query->andFilterWhere(
+				[
+					'in',
+					Stores::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
+				]
+			);
 		}
 	}
 
