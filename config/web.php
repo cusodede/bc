@@ -13,6 +13,7 @@ use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
+use pozitronik\sys_exceptions\models\ErrorHandler;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
@@ -104,6 +105,7 @@ $config = [
 			'enableAutoLogin' => true
 		],
 		'errorHandler' => [
+			'class' => ErrorHandler::class,
 			'errorAction' => 'site/error'
 		],
 		'mailer' => [
