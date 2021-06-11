@@ -27,7 +27,7 @@ class EditableFieldAction extends Action {
 
 	/**
 	 * @param int $id
-	 * @return array[]|object|string[]|string[][]|Response|Response[]
+	 * @return array[]|object|Response[]|string[]|string[][]
 	 * @throws Throwable
 	 * @throws InvalidConfigException
 	 * @throws Exception

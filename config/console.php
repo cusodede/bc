@@ -1,11 +1,14 @@
 <?php
 declare(strict_types = 1);
 
+/*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
+if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+
 use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
-use \yii\gii\Module as GiiModule;
+use yii\gii\Module as GiiModule;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';

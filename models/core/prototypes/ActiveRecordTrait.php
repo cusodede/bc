@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
 use yii\bootstrap4\ActiveForm;
+use yii\db\Transaction;
 
 /**
  * Trait ActiveRecordTrait
@@ -56,19 +57,43 @@ trait ActiveRecordTrait {
 	/**
 	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
+	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
-	 * @throws Throwable
+	 * @throws DbException
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function createModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+	public function createModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []):?bool {
 		$errors = [];
 		if ($this->load(Yii::$app->request->post())) {
-			if (false === $result = $this->save()) {
+			/**
+			 * Все изменения заключаются в транзакцию с тем, чтобы откатывать сохранения записей, задаваемых в relational-атрибутах
+			 * @var Transaction $transaction
+			 */
+			$transaction = static::getDb()->beginTransaction();
+			/**
+			 * Если сохранение одной модели завязано на сохранение другой модели, привязанной через relational-атрибут,
+			 * то пытаемся сохранить связанную модель, при неудаче - откатываемся.
+			 */
+			if ([] !== $relationAttributes) {
+				foreach ($relationAttributes as $relationAttributeName) {
+					if ($this->hasProperty($relationAttributeName) && $this->canSetProperty($relationAttributeName)
+						&& false === $this->$relationAttributeName->createModelFromPost($errors, $AJAXErrorsFormat)) {
+						/*Ошибка сохранения связанной модели, откатим изменения*/
+						$transaction->rollBack();
+						return false;
+					}
+				}
+			}
+
+			if (false !== $result = $this->save()) {
+				$transaction->commit();
+			} else {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
 				/** @var ActiveRecord $this */
 				$errors = $AJAXErrorsFormat
 					?ActiveForm::validate($this)
 					:$this->errors;
+				$transaction->rollBack();
 			}
 
 			return $result;
@@ -92,14 +117,15 @@ trait ActiveRecordTrait {
 	/**
 	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
+	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
 	 * @throws DbException
 	 * @throws Throwable
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null):?bool {
+	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []):?bool {
 		/* Методы совпадают, но оставлено на будущее */
-		return $this->createModelFromPost($errors, $AJAXErrorsFormat);
+		return $this->createModelFromPost($errors, $AJAXErrorsFormat, $relationAttributes);
 	}
 
 	/**

@@ -1,10 +1,13 @@
 <?php
 declare(strict_types = 1);
 
+/*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
+if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+
 use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
-use app\modules\dol\models\DolAPI;
+use app\models\sys\users\WebUser;
 use app\modules\history\HistoryModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
@@ -32,11 +35,12 @@ $statusRules = require __DIR__.'/status_rules.php';
 
 $config = [
 	'id' => 'basic',
-	'name' => 'DPL',
+	'name' => 'Beeline Cabinet',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
 	'homeUrl' => '/home/home',//<== строка, не массив
+
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
@@ -95,6 +99,7 @@ $config = [
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
+			'class' => WebUser::class,
 			'identityClass' => Users::class,
 			'enableAutoLogin' => true
 		],
@@ -155,18 +160,10 @@ $config = [
 			],
 			'grantAll' => [1]/*User ids, that receive all permissions by default*/
 		],
-		'dolApi' => [
-			'class' => DolAPI::class,
-			'baseUrl' => 'https://dolfront.beelinetst.ru/api/',
-			'debugPhones' => [
-				/* fake phone  =>  sms code */
-				'9250000000' => '0000'
-			]
-		],
 		'assetManager' => [
 			'bundles' => [
 				BootstrapPluginAsset::class => [
-					'js'=>[]
+					'js' => []
 				],
 				BootstrapAsset::class => [
 					'css' => [],

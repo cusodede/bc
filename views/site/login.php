@@ -21,7 +21,7 @@ $this->title = 'Вход';
 	<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 m-auto">
 		<div class="card p-4 rounded-plus bg-faded">
 
-			<?php $form = ActiveForm::begin(); ?>
+			<?php $form = ActiveForm::begin(['id' => 'login_form']); ?>
 			<?= $form->field($login, 'login')->textInput(['placeholder' => 'Пожалуйста, введите логин']) ?>
 			<?= $form->field($login, 'password')->passwordInput(['placeholder' => 'Пожалуйста, введите пароль']) ?>
 			<div class="row mb-lg-4">
