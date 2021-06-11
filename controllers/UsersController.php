@@ -118,11 +118,10 @@ class UsersController extends DefaultController {
 		if (null === $user) {
 			throw new NotFoundHttpException();
 		}
-		if (null === $user->fileAvatar) {
-			Yii::$app->response->sendFile(Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH));
-		} else {
-			$user->fileAvatar->download();
-		}
+		Yii::$app->response->sendFile(null === $user->fileAvatar
+			?Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH)
+			:$user->fileAvatar->path
+		);
 	}
 
 	/**
