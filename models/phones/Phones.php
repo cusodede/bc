@@ -39,7 +39,7 @@ class Phones extends PhonesAR {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
 			}
-		} catch (NumberParseException $exception) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
 			return null;
 		}
 		return null;

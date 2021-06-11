@@ -11,7 +11,6 @@ use app\models\site\UpdatePasswordForm;
 use app\models\sys\users\Users;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_exceptions\models\LoggedException;
 use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
@@ -95,12 +94,12 @@ class SiteController extends Controller {
 	 * в основном шаблоне приложения
 	 *
 	 * @return string|Response
-	 * @throws LoggedException
+	 * @throws UnauthorizedHttpException
 	 */
 	public function actionUpdatePassword() {
 		/** @var Users|null $loggedUser */
 		if (null === $loggedUser = Yii::$app->user->identity) {
-			throw new LoggedException(new UnauthorizedHttpException('Пользователь не авторизован'));
+			throw new UnauthorizedHttpException('Пользователь не авторизован');
 		}
 
 		$updatePasswordModel = new UpdatePasswordForm(['user' => $loggedUser]);
@@ -118,7 +117,7 @@ class SiteController extends Controller {
 	 */
 	public function actionRestorePassword():string {
 		if (!(Yii::$app->user->isGuest || true === ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated'))) {
-			throw new LoggedException(new ForbiddenHttpException('Восстановление пароля недоступно после авторизации'));
+			throw new ForbiddenHttpException('Восстановление пароля недоступно после авторизации');
 		}
 		$restorePasswordForm = new RestorePasswordForm();
 		if ($restorePasswordForm->load(Yii::$app->request->post())) {/*это постинг формы с емейлом*/
