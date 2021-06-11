@@ -55,7 +55,7 @@ class StoresAR extends ActiveRecord {
 		return [
 			[['name', 'type', 'selling_channel', 'branch', 'region'], 'required'],
 			[['type', 'deleted'], 'integer'],
-			[['create_date'], 'safe'],
+			[['create_date', 'sellers'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['name'], 'string', 'max' => 255],
 		];
@@ -143,7 +143,7 @@ class StoresAR extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefRegions(): ActiveQuery {
+	public function getRefRegions():ActiveQuery {
 		return $this->hasOne(RefRegions::class, ['id' => 'region']);
 	}
 
