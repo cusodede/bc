@@ -5,6 +5,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
+use app\modules\graphql\GraphqlModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -72,6 +73,10 @@ $config = [
 		'history' => [
 			'class' => HistoryModule::class,
 			'defaultRoute' => 'index'
+		],
+		'graphql' => [
+			'class' => GraphqlModule::class,
+			'defaultRoute' => 'graphql',
 		],
 	],
 	'components' => [
