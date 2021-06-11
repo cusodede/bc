@@ -37,3 +37,62 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 		document.dispatchEvent(new Event('modalIsReady'));
 	}).show();
 }
+
+function formSubmitAjax(event) {
+	event.preventDefault();
+	var form = jQuery(event.target);
+	var self = this;
+	if (form.attr('method') !== 'GET' && window.FormData !== undefined) {
+
+		// Convert form to ajax submit
+		jQuery.ajax({
+			method: form.attr('method'),
+			url: form.attr('action'),
+			data: new FormData(form[0]),
+			processData: false,
+			contentType: false,
+			context: this,
+			beforeSend: function(xhr, settings) {
+				jQuery(self.element).triggerHandler('AjaxBeforeSubmit', [xhr, settings]);
+			},
+			success: function(data, status, xhr) {
+				var contentType = xhr.getResponseHeader('content-type') || '';
+				if (contentType.indexOf('html') > -1) {
+					// Assume form contains errors if html
+					this.injectHtml(data);
+					status = false;
+				}
+				jQuery(self.element).triggerHandler('AjaxSubmit', [data, status, xhr, this.selector]);
+			},
+			complete: function(xhr, textStatus) {
+				jQuery(self.element).triggerHandler('AjaxSubmitComplete', [xhr, textStatus]);
+			}
+		});
+	} else {
+		// Convert form to ajax submit
+		jQuery.ajax({
+			method: form.attr('method'),
+			url: form.attr('action'),
+			data: form.serialize(),
+			context: this,
+			beforeSend: function(xhr, settings) {
+				jQuery(self.element).triggerHandler('AjaxBeforeSubmit', [xhr, settings]);
+			},
+			success: function(data, status, xhr) {
+				var contentType = xhr.getResponseHeader('content-type') || '';
+				if (contentType.indexOf('html') > -1) {
+					// Assume form contains errors if html
+					this.injectHtml(data);
+					status = false;
+				}
+				jQuery(self.element).triggerHandler('AjaxSubmit', [data, status, xhr, this.selector]);
+			},
+			complete: function(xhr, textStatus) {
+				jQuery(self.element).triggerHandler('AjaxSubmitComplete', [xhr, textStatus]);
+			}
+		});
+	}
+
+	return false;
+
+};
