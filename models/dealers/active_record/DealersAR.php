@@ -9,8 +9,10 @@ use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\models\dealers\active_record\relations\RelDealersToManagers;
 use app\models\dealers\active_record\relations\RelDealersToSellers;
+use app\models\dealers\active_record\relations\RelDealersToStores;
 use app\models\managers\Managers;
 use app\models\seller\Sellers;
+use app\models\store\Stores;
 use Throwable;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
@@ -67,13 +69,13 @@ class DealersAR extends ActiveRecord {
 		return [
 			[['name', 'code', 'client_code', 'group', 'branch'], 'required'],
 			[['group', 'branch', 'type', 'daddy', 'deleted'], 'integer'],
-			[['create_date', 'sellers', 'managers'], 'safe'],
+			[['create_date', 'sellers', 'managers', 'stores'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],/*если делаем так, то не ставим required*/
 			[['name'], 'string', 'max' => 255],
 			[['code'], 'string', 'max' => 4],
 			[['client_code'], 'string', 'max' => 9],
 			[['code'], 'unique'],
-			[['client_code'], 'unique'],
+			[['client_code'], 'unique']
 		];
 	}
 
@@ -158,5 +160,27 @@ class DealersAR extends ActiveRecord {
 	 */
 	public function setManagers($managers):void {
 		RelDealersToManagers::linkModels($this, $managers);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedDealersToStores():ActiveQuery {
+		return $this->hasMany(RelDealersToStores::class, ['dealer_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getStores():ActiveQuery {
+		return $this->hasMany(Stores::class, ['id' => 'store_id'])->via('relatedDealersToStores');
+	}
+
+	/**
+	 * @param mixed $stores
+	 * @throws Throwable
+	 */
+	public function setStores($stores):void {
+		RelDealersToStores::linkModels($this, $stores);
 	}
 }
