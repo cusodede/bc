@@ -40,8 +40,7 @@ $config = [
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history'],
-	'homeUrl' => '/home/home',//<== строка, не массив
-
+	'homeUrl' => '/users/profile',//<== строка, не массив
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
@@ -73,9 +72,9 @@ $config = [
 			'defaultRoute' => 'references',
 			'params' => [
 				'baseDir' => [
-					'@app/models/',
-				]
-			]
+					'@app/models/ref_subscription_categories/active_record'
+				],
+			],
 		],
 		'history' => [
 			'class' => HistoryModule::class,
