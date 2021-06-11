@@ -56,7 +56,7 @@ class Permissions extends ActiveRecordPermissions {
 	 * @return self[]
 	 * @throws Throwable
 	 */
-	private static function GetConfigurationPermissions(?array $filter = null):array {
+	public static function GetConfigurationPermissions(?array $filter = null):array {
 		$permissionsConfig = self::ConfigurationParameter(self::CONFIGURATION_PERMISSIONS, []);
 		if (null !== $filter) $permissionsConfig = ArrayHelper::filter($permissionsConfig, $filter);
 		$result = [];
