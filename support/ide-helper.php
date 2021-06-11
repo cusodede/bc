@@ -1,8 +1,9 @@
 <?php
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 use app\models\sys\users\WebUser;
+use cusodede\jwt\Jwt;
 use yii\BaseYii;
 
 /**
@@ -23,6 +24,7 @@ class Yii extends BaseYii {
  * Used for properties that are identical for both WebApplication and ConsoleApplication
  *
  * @property WebUser $user
+ * @property-read Jwt $jwt
  */
 abstract class BaseApplication extends yii\base\Application {
 
