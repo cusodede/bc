@@ -12,4 +12,7 @@ use app\models\product\active_record\SimCardAR;
  */
 class SimCard extends SimCardAR implements ProductInterface {
 
+	public function doSell():?bool {
+		// TODO: Implement doSell() method.
+	}
 }
