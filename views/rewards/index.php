@@ -75,7 +75,7 @@ ModalHelperAsset::register($this);
 				],
 			],
 			'id',
-			'value',
+			'quantity',
 			[
 				'attribute' => 'create_date',
 				'filterType' => DateTimePicker::class,

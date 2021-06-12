@@ -32,7 +32,7 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	public function rules():array {
 		return [
-			[['id', 'value', 'deleted', 'operation', 'currentStatus'], 'integer'],
+			[['id', 'quantity', 'deleted', 'operation', 'currentStatus'], 'integer'],
 			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
 			[['userName', 'ruleName'], 'string', 'max' => 255],
 			[['currentStatus'], 'filter', 'filter' => static function($value) {
@@ -101,7 +101,7 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
-			->andFilterWhere([self::tableName().'.value' => $this->value])
+			->andFilterWhere([self::tableName().'.quantity' => $this->quantity])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
 			->andFilterWhere([self::tableName().'.operation' => $this->operation])
 			->andFilterWhere(['like', RefRewardsRules::tableName().'.name', $this->ruleName])
@@ -119,7 +119,7 @@ final class RewardsSearch extends RewardsAR {
 			'defaultOrder' => ['id' => SORT_ASC],
 			'attributes' => [
 				'id',
-				'value',
+				'quantity',
 				'create_date',
 				'deleted',
 				'currentStatus' => [

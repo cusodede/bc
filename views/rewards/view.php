@@ -19,7 +19,7 @@ use yii\widgets\DetailView;
 	'attributes' => [
 		'id',
 		'create_date',
-		'value',
+		'quantity',
 		[
 			'attribute' => 'operation',
 			'format' => 'raw',

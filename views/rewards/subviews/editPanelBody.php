@@ -23,7 +23,7 @@ use yii\web\View;
 
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'value')->textInput() ?>
+		<?= $form->field($model, 'quantity')->textInput() ?>
 	</div>
 </div>
 <div class="row">

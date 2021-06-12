@@ -18,9 +18,11 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $user Аккаунт
  * @property int $operation Операция
+ * @property int $reason Причина начисления
  * @property int $rule Правило расчёта
- * @property int $status Правило расчёта
- * @property int $value Расчётное вознаграждение
+ * @property int $status Статус
+ * @property int $quantity Расчётное вознаграждение
+ * @property string|null $waiting Ожидаемое событие
  * @property string $comment Произвольный комментарий
  * @property string $create_date Дата создания
  * @property int $override Переопределено
@@ -38,7 +40,7 @@ class RewardsAR extends ActiveRecord {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'reward';
+		return 'rewards';
 	}
 
 	/**
@@ -48,8 +50,8 @@ class RewardsAR extends ActiveRecord {
 		return [
 			[['user', 'operation', 'rule'], 'required'],
 			['create_date', 'default', 'value' => DateHelper::lcDate()],
-			[['user', 'operation', 'rule', 'value', 'override', 'deleted'], 'integer'],
-			[['comment'], 'string'],
+			[['user', 'operation', 'rule', 'quantity', 'override', 'deleted'], 'integer'],
+			[['comment', 'waiting'], 'string'],
 			[['create_date'], 'safe'],
 			[['override'], 'unique'],
 		];
@@ -65,7 +67,7 @@ class RewardsAR extends ActiveRecord {
 			'user' => 'Аккаунт',
 			'operation' => 'Операция',
 			'rule' => 'Правило расчёта',
-			'value' => 'Расчётное вознаграждение',
+			'quantity' => 'Расчётное вознаграждение',
 			'comment' => 'Произвольный комментарий',
 			'create_date' => 'Дата создания',
 			'override' => 'Переопределено',
