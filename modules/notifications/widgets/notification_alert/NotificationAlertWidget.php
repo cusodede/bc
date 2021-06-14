@@ -4,10 +4,14 @@ declare(strict_types = 1);
 namespace app\modules\notifications\widgets\notification_alert;
 
 use app\modules\notifications\models\Notifications;
+use app\modules\notifications\NotificationsModule;
+use app\modules\notifications\NotificationsModuleAssets;
 use Exception;
 use yii\bootstrap4\Alert;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+use yii\web\JsExpression;
 
 /**
  * Class NotificationAlertWidget
@@ -56,12 +60,12 @@ class NotificationAlertWidget extends Alert {
 	 */
 	public function init() {
 		$this->body = $this->getBody();
+		NotificationsModuleAssets::register($this->view);
 		$this->options = [
 			'class' => ArrayHelper::getValue(self::TYPE_CLASSES, $this->type, '')
 		];
 		parent::init();
-		$this->getView()->registerJs("$('#{$this->id}').show()");
-		$this->notification->delete();
+		$this->view->registerJs("$('#{$this->id}').show()");
 	}
 
 	private function getBody():string {
@@ -111,10 +115,11 @@ class NotificationAlertWidget extends Alert {
 	 */
 	private function getAcknowledgeButton():string {
 		if (false === $this->acknowledgeButton) return '';
-		return $this->acknowledgeButton??Html::button("Прочитано", [
+		return $this->acknowledgeButton??Html::a("Прочитано", '#' ,[
 				'class' => "btn btn-info btn-pills btn-sm btn-w-m  mr-1 waves-effect waves-themed",
 				'data-dismiss' => "alert",
-				'aria-label' => "Прочитано"
+				'aria-label' => "Прочитано",
+				'onclick' => new JsExpression("post('".NotificationsModule::to(['default/acknowledge'])."', ".Json::encode(['id' => $this->notification->id]).")")
 			]);
 	}
 }
