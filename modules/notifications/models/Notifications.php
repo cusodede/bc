@@ -38,18 +38,9 @@ class Notifications extends ActiveRecord {
 
 	/*Константы типов*/
 	public const TYPE_DEFAULT = 0;//уведомление без особого типа
-	public const TYPE_TARGET_ASSIGN = 1;//уведомление о новом назначении цели
-	public const TYPE_TARGET_CHANGED = 2;//уведомление о редактировании назначенной цели
-	public const TYPE_TARGET_DELETED = 3;//уведомление о удалении назначенной цели
-	public const TYPE_TARGET_UNASSIGN = 4;//уведомление о удалении назначенной цели
-	public const TYPE_TARGET_APPROVAL_APPROVED = 5;//уведомление о согласовании назначенной цели
-	public const TYPE_TARGET_APPROVAL_REJECTED = 6;//уведомление о отказе согласования назначенной цели
+
 	public const NOTIFICATIONS_TYPES = [
-		self::TYPE_DEFAULT => 'Общее уведомление',
-		self::TYPE_TARGET_ASSIGN => 'Назначено',
-		self::TYPE_TARGET_CHANGED => 'Цель изменена',
-		self::TYPE_TARGET_DELETED => 'Цель удалена',
-		self::TYPE_TARGET_UNASSIGN => 'Удаление из исполнителей'
+
 	];
 
 	/**
@@ -93,14 +84,13 @@ class Notifications extends ActiveRecord {
 	 * @throws Throwable
 	 */
 	public function getMessage():string {
+		if (self::TYPE_DEFAULT === $this->type) return $this->comment;
+
 		$message = ArrayHelper::getValue(self::NOTIFICATIONS_TYPES, $this->type, '');
 		if ('' !== $this->message) {
-			if (null === $this->initiator) {
-				$message .= " (система)";
-			} else {
-				$message .= " пользователем {$this->getInitiatorName($this->initiator)}";
-			}
-
+			$message .= (null === $this->initiator)
+				?" (система)"
+				:" пользователем {$this->getInitiatorName($this->initiator)}";
 		}
 		return $message;
 	}
@@ -131,6 +121,32 @@ class Notifications extends ActiveRecord {
 	}
 
 	/**
+	 * Отправка дефолтного текстового сообщения
+	 * @param string $message
+	 * @param null|int|int[] $receivers
+	 * @param int|null $initiator
+	 */
+	public static function message(string $message, $receivers = null, ?int $initiator = null) {
+		if (null === $receivers) $receivers = Users::Current()->id;
+		$receivers = (array)$receivers;
+		$insertData = [];
+		foreach ($receivers as $receiver) {
+			$insertData[] = [
+				'type' => Notifications::TYPE_DEFAULT,
+				'initiator' => $initiator,
+				'receiver' => $receiver,
+				'comment' => $message
+			];
+		}
+		if ([] !== $insertData) {
+			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
+					->batchInsert(Notifications::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
+					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
+				->execute();
+		}
+	}
+
+	/**
 	 * Отправить оповещение типа $type, связанное с объектом $object получателям $receivers
 	 * @param int|null $object
 	 * @param int[] $receivers
@@ -154,7 +170,10 @@ class Notifications extends ActiveRecord {
 			];
 		}
 		if ([] !== $insertData) {
-			Yii::$app->db->createCommand(Yii::$app->db->createCommand()->batchInsert(Notifications::tableName(), ['type', 'initiator', 'receiver', 'object_id', 'comment'], $insertData)->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")->execute();//угу, официальный upsert работает так
+			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
+					->batchInsert(Notifications::tableName(), ['type', 'initiator', 'receiver', 'object_id', 'comment'], $insertData)
+					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
+				->execute();//угу, официальный upsert работает так
 		}
 	}
 
@@ -164,7 +183,7 @@ class Notifications extends ActiveRecord {
 	 * @param int|null $receiver получатель уведомления, null - текущий пользователь
 	 * @param int[]|null $type null - очищает все уведомления, связанные с целью у пользователя
 	 */
-	public static function acknowledge(?int $object, ?int $receiver = null, ?array $type = null):void {
+	public static function Acknowledge(?int $object, ?int $receiver = null, ?array $type = null):void {
 		$dropCondition = [
 			'receiver' => $receiver??Users::Current()->id,
 			'type' => $type??self::TYPE_DEFAULT
