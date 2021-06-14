@@ -11,6 +11,7 @@ use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\history\HistoryModule;
+use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
@@ -175,6 +176,9 @@ $config = [
 					'comment' => 'Разрешение авторизоваться под другим пользователем',
 				]
 			]
+		],
+		'notifications' => [
+			'class' => NotificationsModule::class
 		],
 		'assetManager' => [
 			'bundles' => [
