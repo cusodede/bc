@@ -27,6 +27,7 @@ use yii\db\Exception;
  * @property null|int $receiver Получатель уведомления, null - определяется типом
  * @property null|int $object_id Идентификатор объекта уведомления, null - определяется типом
  * @property null|string $comment Свободный комментарий уведомления
+ * @property string $timestamp Таймстамп создания уведомления
  *
  * @property null|Users $relatedReceiver Пользователь, получающий оповещение
  * @property null|Users $relInitiator Пользователь, создавший оповещение
@@ -65,7 +66,7 @@ class Notifications extends ActiveRecord {
 		return [
 			[['type', 'initiator', 'receiver', 'object_id'], 'integer'],
 			[['type'], 'required'],
-			[['comment'], 'safe'],
+			[['comment', 'timestamp'], 'safe'],
 			['type', 'default', 'value' => self::TYPE_DEFAULT],
 			[['type', 'receiver', 'object_id'], 'unique', 'targetAttribute' => ['type', 'receiver', 'object_id'], 'message' => 'Notification already posted']
 		];
@@ -82,7 +83,8 @@ class Notifications extends ActiveRecord {
 			'receiver' => 'Получатель',
 			'object_id' => 'Идентификатор объекта',
 			'message' => 'Сообщение',
-			'comment' => 'Описание'
+			'comment' => 'Описание',
+			'timestamp' => 'Время создания'
 		];
 	}
 

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\notifications\migrations;
 use app\modules\notifications\models\Notifications;
+use yii\db\Expression;
 use yii\db\Migration;
 
 /**
@@ -19,7 +20,8 @@ class m201103_064856_sys_notifications extends Migration {
 			'initiator' => $this->integer()->null()->comment('автор уведомления, null - система'),
 			'receiver' => $this->integer()->null()->comment('получатель уведомления, null - определяется типом'),
 			'object_id' => $this->integer()->null()->comment('идентификатор объекта уведомления, null - определяется типом'),
-			'comment' => $this->text()->null()
+			'comment' => $this->text()->null(),
+			'timestamp' => $this->dateTime()->defaultValue(new Expression('NOW()'))
 		]);
 
 		$this->createIndex('type', 'sys_notifications', 'type');
