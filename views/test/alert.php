@@ -17,6 +17,3 @@ use yii\web\View;
 		'notification' => $notification,
 	]) ?>
 <?php endforeach; ?>
-azdfgv
-dfgdf
-dfg

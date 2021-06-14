@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\notifications\widgets\notification_alert;
 
 use app\modules\notifications\models\Notifications;
+use Exception;
 use yii\bootstrap4\Alert;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,10 @@ use yii\helpers\ArrayHelper;
 /**
  * Class NotificationAlertWidget
  * @property Notifications $notification
- * @property int $type
+ * @property int $type См. константы
+ * @property null|false|string $icon
+ * @property null|false|string $acknowledgeButton
+ * @property null|false|string $dismissButton
  */
 class NotificationAlertWidget extends Alert {
 
