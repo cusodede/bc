@@ -14,7 +14,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use Throwable;
-use pozitronik\sys_exceptions\models\LoggedException;
+use pozitronik\sys_exceptions\models\ErrorHandler;
 
 /**
  * Class StoresSearch
@@ -105,7 +105,7 @@ final class SellersSearch extends Sellers {
 	/**
 	 * @param $query
 	 * @return void
-	 * @throws LoggedException
+	 * @throws ErrorHandler
 	 * @throws Throwable
 	 */
 	private function filterData($query):void {
@@ -140,7 +140,7 @@ final class SellersSearch extends Sellers {
 	 * Filters the records shown for current user
 	 * @param $query
 	 * @throws Throwable
-	 * @throws LoggedException
+	 * @throws ErrorHandler
 	 */
 	private function filterDataByUser($query):void {
 		$user = Users::Current();

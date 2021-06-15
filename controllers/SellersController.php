@@ -7,7 +7,6 @@ use app\models\core\prototypes\DefaultController;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
 use app\models\sys\permissions\filters\PermissionFilter;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\db\Exception;
