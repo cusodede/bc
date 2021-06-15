@@ -32,7 +32,7 @@ use yii\db\ActiveRecord;
  * @property string $email
  * @property string $login
  *
- * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к магазам
+ * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к магазинам
  * @property Stores[] $stores Магазины менеджера
  * @property RelDealersToManagers[] $relatedDealersToManagers Связь к промежуточной таблице к дилерам
  * @property Dealers[] $dealers Дилеры менеджера

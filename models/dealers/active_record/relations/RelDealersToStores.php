@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 
 /**
  *
- * Связь дилеров с магазами
+ * Связь дилеров с магазинами
  * @property int $id
  * @property int $dealer_id
  * @property int $store_id
