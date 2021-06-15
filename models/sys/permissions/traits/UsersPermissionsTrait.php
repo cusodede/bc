@@ -77,7 +77,7 @@ trait UsersPermissionsTrait {
 		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]);
 		if ($force) Yii::$app->cache->delete($cacheKey);
 		return Yii::$app->cache->getOrSet($cacheKey, function() {
-			return Permissions::allUserPermissions($this->id);
+			return array_merge(Permissions::allUserPermissions($this->id), Permissions::allUserConfigurationPermissions($this->id));
 		}, null, new TagDependency(['tags' => $cacheKey]));
 	}
 
@@ -169,7 +169,7 @@ trait UsersPermissionsTrait {
 					'controller' => $controllerId,
 					'action' => $actionId,
 					'verb' => $verb
-				]);
+				]) || [] !== Permissions::allUserConfigurationPermissions($this->id);
 		}, null, new TagDependency([
 			'tags' => [
 				CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]),//сброс кеша при изменении прав пользователя

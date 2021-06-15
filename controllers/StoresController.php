@@ -37,6 +37,7 @@ class StoresController extends DefaultController {
 						if (null === $record = RefBranches::find()->where(['like', 'name', "%$attributeValue%", false])->one()) {
 							return null;
 						}
+						/** @var RefBranches $record */
 						return $record->id;
 					},
 					'class' => RefBranches::class,

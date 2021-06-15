@@ -5,6 +5,8 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
+use app\controllers\PermissionsController;
+use app\controllers\UsersController;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
@@ -13,6 +15,7 @@ use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
+use pozitronik\sys_exceptions\models\ErrorHandler;
 use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
@@ -21,6 +24,7 @@ use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap4\BootstrapPluginAsset;
+use yii\caching\DummyCache;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
@@ -95,7 +99,7 @@ $config = [
 			]
 		],
 		'cache' => [
-			'class' => FileCache::class,
+			'class' => YII_ENV_DEV?DummyCache::class:FileCache::class,
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
@@ -104,6 +108,7 @@ $config = [
 			'enableAutoLogin' => true
 		],
 		'errorHandler' => [
+			'class' => ErrorHandler::class,
 			'errorAction' => 'site/error'
 		],
 		'mailer' => [
@@ -158,7 +163,18 @@ $config = [
 				'@app/controllers' => '',
 				'@app/controllers/api' => 'api'
 			],
-			'grantAll' => [1]/*User ids, that receive all permissions by default*/
+			'grantAll' => [1],/*User ids, that receive all permissions by default*/
+			'grant' => [/*перечисление прямых назначений*/
+				1 => ['login_as_another_user', 'some_other_permission']
+			],
+			'permissions' => [//параметры контроллер-экшен-etc в этой конфигурации не поддерживаются
+				'system' => [
+					'comment' => 'Разрешение на доступ к системным параметрам',
+				],
+				'login_as_another_user' => [
+					'comment' => 'Разрешение авторизоваться под другим пользователем',
+				]
+			]
 		],
 		'assetManager' => [
 			'bundles' => [
