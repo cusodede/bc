@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\products\active_record;
 
 use app\models\partners\active_record\Partners;
-use app\models\ref_products_types\active_record\RefProductsTypes;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -25,7 +24,6 @@ use Yii;
  * @property string $updated_at Дата обновления партнера
  *
  * @property Partners $partner
- * @property RefProductsTypes $type
  * @property Users $user
  */
 class Products extends ActiveRecord
@@ -45,14 +43,14 @@ class Products extends ActiveRecord
 	{
 		return [
 			[['user_id'], 'default', 'value' => Yii::$app->user->id],
-			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute} продукта.'],
+			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['price'], 'number'],
+			[['price'], 'number', 'min' => 0 , 'max' => 999999],
+			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
-			[['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefProductsTypes::class, 'targetAttribute' => ['type_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
 		];
 	}
@@ -84,16 +82,6 @@ class Products extends ActiveRecord
 	public function getPartner(): ActiveQuery
 	{
 		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
-	}
-
-	/**
-	 * Gets query for [[Type]].
-	 *
-	 * @return ActiveQuery
-	 */
-	public function getType(): ActiveQuery
-	{
-		return $this->hasOne(RefProductsTypes::class, ['id' => 'type_id']);
 	}
 
 	/**

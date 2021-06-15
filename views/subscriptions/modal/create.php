@@ -3,24 +3,20 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Subscriptions $model
  */
 
-use pozitronik\widgets\BadgeWidget;
-use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+use app\models\subscriptions\Subscriptions;
 
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
 	'id' => "{$modelName}-modal-create-new",
 	'size' => Modal::SIZE_LARGE,
-	'title' => BadgeWidget::widget([
-		'items' => $model,
-		'subItem' => 'id'
-	]),
+	'title' => 'Новая подписка',
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => "{$modelName}-modal-create"
@@ -29,7 +25,10 @@ $modelName = $model->formName();
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => "{$modelName}-modal-create", 'enableAjaxValidation' => true]) ?>
+<?php $form = ActiveForm::begin([
+	'id' => "{$modelName}-modal-create",
+	'enableAjaxValidation' => true,
+]); ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>

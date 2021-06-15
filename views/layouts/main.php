@@ -9,6 +9,7 @@ declare(strict_types = 1);
 use app\assets\AppAsset;
 use app\assets\ModalHelperAsset;
 use app\controllers\SiteController;
+use app\controllers\UsersController;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
 use yii\bootstrap4\Html;
@@ -35,6 +36,7 @@ ModalHelperAsset::register($this);
 
 <body class="mod-bg-1 header-function-fixed nav-function-fixed mod-nav-link mod-skin-light">
 <?php $this->beginBody(); ?>
+
 <div class="page-wrapper">
 	<div class="page-inner">
 		<?= $this->render('subviews/sidebar') ?>
@@ -74,8 +76,18 @@ ModalHelperAsset::register($this);
 						<?= SearchWidget::widget() ?>
 					</div>
 					<div>
+						<?php if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser') && Yii::$app->user->isLoginAsAnotherUser()): ?>
+							<?= Html::a('<i class="fal fa-eye-slash"></i>', UsersController::to('login-back'), [
+								'class' => "header-icon d-inline-block",
+								'data-toggle' => "tooltip",
+								'data-placement' => "bottom",
+								'title' => "",
+								'data-original-title' => "Вернуться в свой профиль"
+							]) ?>
+						<?php endif; ?>
+
 						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
-							'class' => "header-icon",
+							'class' => "header-icon d-inline-block",
 							'data-toggle' => "tooltip",
 							'data-placement' => "bottom",
 							'title' => "",

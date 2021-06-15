@@ -50,11 +50,16 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{update-password}',
+				'template' => '{edit}{view}{update-password}{login-as-another-user}',
 				'buttons' => [
 					'edit' => static function(string $url, Users $model) {
 						return Html::a('<i class="fas fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
+						]);
+					},
+					'view' => static function(string $url, Users $model) {
+						return Html::a('<i class="fas fa-eye"></i>', $url, [
+							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
 					'update-password' => static function(string $url, Users $model) {
@@ -62,6 +67,11 @@ ModalHelperAsset::register($this);
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
 						]);
 					},
+					'login-as-another-user' => static function(string $url, Users $model) {/*todo: вытащить в виджет кнопку авторизации и кнопку выхода*/
+						return (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')
+							?Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]))
+							:Html::a('<i class="fas fa-question-square"></i>', '#', ['title' => 'Не поддерживается (не сконфигурирован WebUser?)']));
+					}
 				],
 			],
 			'id',

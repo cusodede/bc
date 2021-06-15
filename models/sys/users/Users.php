@@ -4,13 +4,13 @@ declare(strict_types = 1);
 namespace app\models\sys\users;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -36,7 +36,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
 
-	private const DEFAULT_PASSWORD = 'Qq123456';
+	public const DEFAULT_PASSWORD = 'Qq123456';
 
 	/*файловые атрибуты*/
 	public $avatar;
@@ -44,17 +44,28 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public function rules():array {
 		return array_merge(parent::rules(), [
 			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
-			[['email'], 'email']
+			[['email'], 'email'],
+			[['relatedPermissions', 'relatedPermissionsCollections'], 'safe']
+		]);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels(), [
+			'relatedPermissions' => 'Прямые разрешения',
+			'relatedPermissionsCollections' => 'Группы разрешений',
 		]);
 	}
 
 	/**
 	 * @return static
-	 * @throws LoggedException
+	 * @throws ForbiddenHttpException
 	 */
 	public static function Current():self {
 		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
-			throw new LoggedException(new ForbiddenHttpException('Пользователь не авторизован'));
+			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
 		return $user;
 	}
@@ -81,6 +92,15 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public static function findByRestoreCode(string $restoreCode):?Users {
 		return self::findOne(['restore_code' => $restoreCode]);
+	}
+
+	/**
+	 * @param string $phoneNumber
+	 * @return Users|null
+	 */
+	public static function findByPhoneNumber(string $phoneNumber):?Users {
+		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) return null;
+		return self::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
 	}
 
 	/**

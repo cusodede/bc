@@ -27,7 +27,7 @@ class EditableFieldAction extends Action {
 
 	/**
 	 * @param int $id
-	 * @return array[]|object|string[]|string[][]|Response|Response[]
+	 * @return array[]|object|Response[]|string[]|string[][]
 	 * @throws Throwable
 	 * @throws InvalidConfigException
 	 * @throws Exception
@@ -44,8 +44,8 @@ class EditableFieldAction extends Action {
 		}
 
 		$model->scenario = $this->scenario;
-
-		if (!$model->updateModelFromPost([], $errors, false)) {
+		$errors = [];
+		if (!$model->updateModelFromPost($errors, false)) {
 			$result = ['output' => '', 'message' => TemporaryHelper::Errors2String($errors)];
 		}
 		return Yii::createObject(['class' => Response::class, 'format' => Response::FORMAT_JSON, 'data' => $result]);

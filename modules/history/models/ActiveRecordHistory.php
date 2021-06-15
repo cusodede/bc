@@ -84,7 +84,7 @@ class ActiveRecordHistory extends History {
 			'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
 			'event' => null === $event?null:$event->name,
 			'scenario' => $model->scenario,
-			'delegate' => null,/*пока не поддерживается*/
+			'delegate' => self::ensureDelegate(),
 			'operation_identifier' => Yii::$app->request->csrfToken
 		]);
 		$log->save();
@@ -110,6 +110,16 @@ class ActiveRecordHistory extends History {
 		/** @var self $taggedRecord */
 		$taggedRecord->tag = $tag;
 		return true;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	private static function ensureDelegate() {
+		if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')) {
+			return Yii::$app->user->isLoginAsAnotherUser();
+		}
+		return null;
 	}
 
 	/**

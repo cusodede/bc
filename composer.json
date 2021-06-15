@@ -35,6 +35,7 @@
 		"kartik-v/yii2-widget-touchspin": "dev-master",
 		"odannyc/yii2-sse": "dev-master",
 		"cusodede/yii2-multi-select-widget" : "dev-master",
+		"cusodede/yii2-jwt" : "dev-master",
 		"simialbi/yii2-rest-client": "dev-master",
 		"yii2mod/yii2-swagger": "dev-master",
 		"webonyx/graphql-php": "dev-master",
@@ -46,7 +47,14 @@
 		"yiisoft/yii2-debug": "~2.0.0",
 		"yiisoft/yii2-gii": "~2.0.0",
 		"yiisoft/yii2-faker": "~2.0.0",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^9.5",
+		"codeception/codeception": "^4.1",
+		"codeception/module-asserts": "^1.3",
+		"codeception/module-phpbrowser": "^1.0.0",
+		"codeception/module-yii2": "^1.1",
+		"codeception/module-db": "^1.1",
+		"codeception/module-filesystem": "^1.0",
+		"vlucas/phpdotenv": "^4"
 	},
 	"config": {
 		"process-timeout": 1800,
@@ -62,7 +70,8 @@
 			"yii\\composer\\Installer::postCreateProject",
 			"yii\\composer\\Installer::postInstall"
 		],
-		"test": "phpunit"
+		"test": "phpunit",
+		"codeception": "vendor/bin/codecept run"
 	},
 	"extra": {
 		"yii\\composer\\Installer::postCreateProject": {
@@ -87,7 +96,11 @@
 		},
 		{
 			"type": "github",
-			"url": "https://github.com/cusodede/yii2-multi-select-widget.git"
+			"url": "https://github.com/cusodede/yii2-multi-select-widget"
+		},
+		{
+			"type": "github",
+			"url": "https://github.com/cusodede/yii2-jwt"
 		}
 	]
 }
