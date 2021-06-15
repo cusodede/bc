@@ -5,12 +5,11 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
-use app\controllers\PermissionsController;
-use app\controllers\UsersController;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\history\HistoryModule;
+use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
@@ -89,6 +88,9 @@ $config = [
 			'params' => [
 				'rules' => $statusRules
 			]
+		],
+		'notifications' => [
+			'class' => NotificationsModule::class
 		],
 	],
 	'components' => [

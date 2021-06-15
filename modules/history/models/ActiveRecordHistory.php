@@ -113,11 +113,11 @@ class ActiveRecordHistory extends History {
 	}
 
 	/**
-	 * @return bool|null
+	 * @return int|null
 	 */
-	private static function ensureDelegate() {
-		if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')) {
-			return Yii::$app->user->isLoginAsAnotherUser();
+	private static function ensureDelegate():?int {
+		if (method_exists(Yii::$app->user, 'getOriginalUserId')) {
+			return Yii::$app->user->getOriginalUserId();
 		}
 		return null;
 	}
