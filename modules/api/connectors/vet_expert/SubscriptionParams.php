@@ -9,7 +9,9 @@ use InvalidArgumentException;
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Key;
 use pozitronik\helpers\ArrayHelper;
+use Throwable;
 use Yii;
+use yii\base\Arrayable;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
 
@@ -17,10 +19,10 @@ use yii\di\Instance;
  * Источник данных для формирования подписки в VetExpert.
  * Для удобства накручивания валидации при инициализации атрибутов, а также для формирования body-параметров для API.
  *
- * Class CallbackParams
+ * Class SubscriptionParams
  * @package app\modules\api\connectors\vetexpert
  */
-class CallbackParams
+class SubscriptionParams implements Arrayable
 {
 	/**
 	 * @var string
@@ -47,22 +49,29 @@ class CallbackParams
 	 */
 	private string $_subscriptionTo = '';
 	/**
-	 * @var Signer компонент для подписи body-параметров
+	 * @var Signer|null компонент для подписи body-параметров
 	 */
 	private ?Signer $_signer;
 	/**
-	 * @var Key плюч для подписи
+	 * @var Key|null плюч для подписи
 	 */
 	private ?Key $_signerKey;
 
 	/**
-	 * CallbackParams constructor.
+	 * SubscriptionParams constructor.
 	 * @throws InvalidConfigException
+	 * @throws Throwable
 	 */
 	public function __construct()
 	{
-		$this->_signer    = Instance::ensure(ArrayHelper::getValue(Yii::$app->params, 'callback.signer', new InvalidConfigException("Callback signer not set")), Signer::class);
-		$this->_signerKey = Instance::ensure(ArrayHelper::getValue(Yii::$app->params, 'callback.signerKey', new InvalidConfigException("Callback signerKey not set")), Key::class);
+		$this->_signer    = Instance::ensure(
+			ArrayHelper::getValue(Yii::$app->params, 'callback.signer', new InvalidConfigException("Callback signer not set")),
+			Signer::class
+		);
+		$this->_signerKey = Instance::ensure(
+			ArrayHelper::getValue(Yii::$app->params, 'callback.signerKey', new InvalidConfigException("Callback signerKey not set")),
+			Key::class
+		);
 	}
 
 	/**
@@ -70,12 +79,12 @@ class CallbackParams
 	 */
 	public function setPhone(string $phone): void
 	{
-		if (!Phones::isValidNumber($phone)) {
+		if (!Phones::isValidNumber($phone) || (null === $formattedPhone = Phones::nationalFormat($this->_phone))) {
 			throw new InvalidArgumentException('Некорректное значение телефонного номера.');
 		}
 
-		/** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-		$this->_phone = str_replace('+', '', Phones::defaultFormat($this->_phone));
+		/** @var string $formattedPhone */
+		$this->_phone = $formattedPhone;
 	}
 
 	/**
@@ -127,9 +136,9 @@ class CallbackParams
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getMiddleName(): string
+	public function getMiddleName(): ?string
 	{
 		return $this->_middleName;
 	}
@@ -167,21 +176,37 @@ class CallbackParams
 	}
 
 	/**
-	 * @return array список параметров для запроса на подписку/обновление для VetExpert.
+	 * {@inheritdoc}
 	 */
-	public function getParams(): array
+	public function fields(): array
 	{
-		$params         = [
+		return [
 			'phone' => $this->_phone,
 			'email' => $this->_email,
-			'first_name' => $this->_firstName,
-			'last_name' => $this->_lastName,
+			'first_name'  => $this->_firstName,
+			'last_name'   => $this->_lastName,
 			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
-		$params['sign'] = $this->getParamsSignature($params);
+	}
 
-		return $params;
+	/**
+	 * {@inheritdoc}
+	 */
+	public function extraFields(): array
+	{
+		return ['sign' => $this->getParamsSignature($this->fields())];
+	}
+
+	/**
+	 * @param array $fields
+	 * @param array $expand
+	 * @param bool $recursive
+	 * @return array
+	 */
+	public function toArray(array $fields = [], array $expand = [], $recursive = true): array
+	{
+		return array_merge($this->fields(), $this->extraFields());
 	}
 
 	/**
