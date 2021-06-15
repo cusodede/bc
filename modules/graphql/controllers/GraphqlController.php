@@ -8,11 +8,11 @@ use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
-use Throwable;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\ActiveController;
+use Throwable;
 
 /**
  * Class GraphqlController
@@ -23,7 +23,7 @@ class GraphqlController extends ActiveController
 	public $modelClass = '';
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	protected function verbs(): array
 	{
@@ -33,7 +33,7 @@ class GraphqlController extends ActiveController
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function actions(): array
 	{
@@ -69,6 +69,7 @@ class GraphqlController extends ActiveController
 		return GraphQL::executeQuery(
 			new Schema([
 				'query' => Types::query(),
+				'mutation' => Types::mutation(),
 			]),
 			$query,
 			null,
