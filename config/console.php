@@ -56,7 +56,8 @@ $config = [
 			'migrationNamespaces' => [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
 				'app\modules\status\migrations',
-				'app\modules\import\migrations'
+				'app\modules\import\migrations',
+				'app\modules\notifications\migrations'
 			],
 		],
 	],

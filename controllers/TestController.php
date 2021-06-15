@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\site\sse\MessageEventHandler;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
+use app\modules\notifications\models\Notifications;
 use pozitronik\core\models\SqlDebugInfo;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\helpers\Utils;
@@ -94,5 +95,18 @@ class TestController extends Controller {
 	 */
 	public function actionBadges():string {
 		return $this->render('badges');
+	}
+
+	public function actionTestNotification():string {
+		Notifications::message('Вы получили уведомление');
+		return $this->render('notification', [
+			'notifications' => Notifications::UserNotifications()
+		]);
+	}
+	public function actionTestNotificationAlert():string {
+		Notifications::message('Вы получили уведомление');
+		return $this->render('alert', [
+			'notifications' => Notifications::UserNotifications()
+		]);
 	}
 }
