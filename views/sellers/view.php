@@ -25,7 +25,7 @@ use app\models\seller\active_record\SellersAR;
 		[
 			'attribute' => 'currentStatus',
 			'value' => static function(Sellers $model) {
-				return $model->currentStatus->name;
+				return $model->currentStatus->name??null;
 			},
 		],
 		'surname',
@@ -61,6 +61,16 @@ use app\models\seller\active_record\SellersAR;
 			'value' => static function(SellersAR $model):string {
 				return BadgeWidget::widget([
 					'items' => $model->stores,
+					'subItem' => 'name'
+				]);
+			}
+		],
+		[
+			'attribute' => 'dealers',
+			'format' => 'raw',
+			'value' => static function(SellersAR $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->dealers,
 					'subItem' => 'name'
 				]);
 			}

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
+use app\models\dealers\Dealers;
 use app\models\seller\Sellers;
 use app\models\store\Stores;
 use app\widgets\selectmodelwidget\SelectModelWidget;
@@ -153,6 +154,16 @@ use yii\web\View;
 		<?= $form->field($model, 'stores')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
 			'selectModelClass' => Stores::class,
+			'options' => ['placeholder' => ''],
+			'ajaxSearchUrl' => StoresController::to('ajax-search')
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'dealers')->widget(SelectModelWidget::class, [
+			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'selectModelClass' => Dealers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => StoresController::to('ajax-search')
 		]) ?>
