@@ -54,7 +54,7 @@ use yii\widgets\DetailView;
 			'value' => static function(StoresAR $model):string {
 				return BadgeWidget::widget([
 					'items' => $model->sellers,
-					'subItem' => 'name'
+					'subItem' => 'fio'
 				]);
 			}
 		],
@@ -64,7 +64,7 @@ use yii\widgets\DetailView;
 			'value' => static function(StoresAR $model):string {
 				return BadgeWidget::widget([
 					'items' => $model->managers,
-					'subItem' => 'name'
+					'subItem' => 'fio'
 				]);
 			}
 		],
