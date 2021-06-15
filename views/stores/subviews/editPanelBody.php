@@ -38,21 +38,24 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'branch')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefBranches::class
+			'referenceClass' => RefBranches::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'region')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRegions::class
+			'referenceClass' => RefRegions::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'selling_channel')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefSellingChannels::class
+			'referenceClass' => RefSellingChannels::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
