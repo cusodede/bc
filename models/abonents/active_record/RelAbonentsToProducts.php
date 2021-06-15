@@ -16,7 +16,6 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $abonent_id
  * @property int $product_id
- * @property string $created_at
  *
  * @property ProductStatuses[] $relatedProductStatuses
  * @property Abonents $relatedAbonent
@@ -45,8 +44,7 @@ class RelAbonentsToProducts extends ActiveRecord
 			[['abonent_id', 'product_id'], 'integer'],
 			[['abonent_id', 'product_id'], 'unique', 'targetAttribute' => ['abonent_id', 'product_id']],
 			[['abonent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Abonents::class, 'targetAttribute' => ['abonent_id' => 'id']],
-			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
-			[['created_at'], 'safe']
+			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']]
 		];
 	}
 
@@ -58,8 +56,7 @@ class RelAbonentsToProducts extends ActiveRecord
 		return [
 			'id'         => 'ID',
 			'abonent_id' => 'Abonent ID',
-			'product_id' => 'Product ID',
-			'created_at' => 'Created At',
+			'product_id' => 'Product ID'
 		];
 	}
 
