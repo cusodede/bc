@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_record;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -16,6 +17,8 @@ use yii\db\ActiveRecord;
  * @property int $deleted Флаг активности
  * @property string $created_at Дата создания абонента
  * @property string $updated_at Дата обновления абонента
+ *
+ * @property RelAbonentsToProducts[] $relatedAbonentsToProducts
  */
 class Abonents extends ActiveRecord
 {
@@ -48,14 +51,22 @@ class Abonents extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id' => 'ID',
-			'surname' => 'Фамилия',
-			'name' => 'Имя',
+			'id'         => 'ID',
+			'surname'    => 'Фамилия',
+			'name'       => 'Имя',
 			'patronymic' => 'Отчество',
-			'phone' => 'Телефон',
-			'deleted' => 'Флаг удаления',
+			'phone'      => 'Телефон',
+			'deleted'    => 'Флаг удаления',
 			'created_at' => 'Дата создания',
 			'updated_at' => 'Дата обновления',
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonentsToProducts(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['abonent_id' => 'id']);
 	}
 }
