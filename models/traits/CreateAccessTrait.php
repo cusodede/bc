@@ -104,4 +104,10 @@ trait CreateAccessTrait {
 			->setSubject("Ошибки при регистрации {$this->fio} (".self::RUS_CLASS_NAME.')')
 			->send();
 	}
+
+	/**
+	 * URL для нахождения сущности по ID
+	 * @return string
+	 */
+	abstract public function getUrlToEntity():string;
 }

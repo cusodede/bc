@@ -69,6 +69,9 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'sellers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'mapAttribute' => 'fio',
+			'searchAttribute' => 'surname',
+			'concatFields' => 'surname, name, patronymic',
 			'selectModelClass' => Sellers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => SellersController::to('ajax-search')
@@ -79,6 +82,9 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'managers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'mapAttribute' => 'fio',
+			'searchAttribute' => 'surname',
+			'concatFields' => 'surname, name, patronymic',
 			'selectModelClass' => Managers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => ManagersController::to('ajax-search')

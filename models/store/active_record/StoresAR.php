@@ -5,6 +5,8 @@ namespace app\models\store\active_record;
 
 use app\models\branches\active_record\references\RefBranches;
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\managers\active_record\relations\RelManagersToStores;
+use app\models\managers\Managers;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
@@ -34,8 +36,10 @@ use yii\db\ActiveRecord;
  * @property RefBranches $refBranches Филиал (справочник)
  * @property RefRegions $refRegions Регионы (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
- * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Sellers[] $sellers Все продавцы точки
+ * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к менеджерам
+ * @property Managers[] $managers Все менеджеры точки
+ * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Users[] $users Пользователи, входящие под магазином
  */
 class StoresAR extends ActiveRecord {
@@ -55,7 +59,7 @@ class StoresAR extends ActiveRecord {
 		return [
 			[['name', 'type', 'selling_channel', 'branch', 'region'], 'required'],
 			[['type', 'deleted'], 'integer'],
-			[['create_date', 'sellers'], 'safe'],
+			[['create_date', 'sellers', 'managers'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['name'], 'string', 'max' => 255],
 		];
@@ -80,6 +84,28 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function getRefStoresTypes():ActiveQuery {
 		return $this->hasOne(RefStoresTypes::class, ['id' => 'type']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedManagersToStores():ActiveQuery {
+		return $this->hasMany(RelManagersToStores::class, ['store_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getManagers():ActiveQuery {
+		return $this->hasMany(Managers::class, ['id' => 'manager_id'])->via('relatedManagersToStores');
+	}
+
+	/**
+	 * @param mixed $managers
+	 * @throws Throwable
+	 */
+	public function setManagers($managers):void {
+		RelManagersToStores::linkModels($managers, $this, true);
 	}
 
 	/**
