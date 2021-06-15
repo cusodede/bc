@@ -60,14 +60,10 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	}
 
 	/**
-	 * @return null|static
+	 * @return static
 	 * @throws ForbiddenHttpException
 	 */
-	public static function Current():?self {
-		if (null === Yii::$app->user) {/*assume console app*/
-			return null;
-		}
-
+	public static function Current():self {
 		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
 			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
