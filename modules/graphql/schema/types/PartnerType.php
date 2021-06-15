@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
 class PartnerType extends ObjectType
 {
 	/**
-	 * PartnerType constructor.
+	 * {@inheritdoc}
 	 */
 	public function __construct()
 	{

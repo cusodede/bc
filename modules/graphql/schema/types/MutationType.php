@@ -8,10 +8,10 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Class QueryType
- * @package app\schema
+ * Class MutationType
+ * @package app\modules\graphql\schema\types
  */
-class QueryType extends ObjectType
+class MutationType extends ObjectType
 {
 	/**
 	 * {@inheritdoc}
@@ -20,21 +20,14 @@ class QueryType extends ObjectType
 	{
 		parent::__construct([
 			'fields' => [
-				'partners' => [
-					'type' => Type::listOf(Types::partner()),
-					'args' => [
-						'inn' => Type::string(),
-					],
-					'resolve' => fn(Partners $partner = null, array $args = []): ?array => Partners::find()->where($args)->all(),
-				],
 				'partner' => [
-					'type' => Types::partner(),
+					'type' => Types::partnerMutation(),
 					'args' => [
 						'id' => Type::nonNull(Type::int()),
 					],
 					'resolve' => fn(Partners $partner = null, array $args = []): ?Partners => Partners::find()->where($args)->one(),
 				],
-			],
+			]
 		]);
 	}
 }
