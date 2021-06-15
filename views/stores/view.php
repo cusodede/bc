@@ -40,6 +40,16 @@ use yii\widgets\DetailView;
 				]);
 			}
 		],
+		[
+			'attribute' => 'managers',
+			'format' => 'raw',
+			'value' => static function(StoresAR $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->managers,
+					'subItem' => 'name'
+				]);
+			}
+		],
 		'deleted:boolean'
 	]
 ]) ?>
