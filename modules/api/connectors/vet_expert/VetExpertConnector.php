@@ -57,25 +57,23 @@ class VetExpertConnector extends BaseHttpConnector
 	/**
 	 * Запрос Bearer-токена. Время жизни токена - 15 минут.
 	 * @return string
-	 * @throws HttpClientException
-	 * @throws Throwable
+	 * @throws RuntimeException
 	 */
 	private function getToken(): string
 	{
-		$token = Yii::$app->cache->get('api:vet-expert:token');
-		if (empty($token)) {
-			$response = $this->getClient()
-				->get('/get_token', null, ['Authorization' => 'Basic ' . $this->_authToken])
-				->send();
+		return Yii::$app->cache->getOrSet(
+			'api:vet-expert:token',
+			function() {
+				$response = $this->getClient()
+					->get('/get_token', null, ['Authorization' => 'Basic ' . $this->_authToken])
+					->send();
 
-			$token = $response->isOk ? ArrayHelper::getValue($response->data, 'token') : null;
-			if (null === $token) {
-				throw new RuntimeException('Запрос на получение токена от VetExpert выполнился с ошибкой: ' . $response->toString());
-			}
+				$token = $response->isOk ? ArrayHelper::getValue($response->data, 'token') : null;
+				if (null === $token) {
+					throw new RuntimeException('Запрос на получение токена от VetExpert выполнился с ошибкой: ' . $response->toString());
+				}
 
-			Yii::$app->cache->set('api:vet-expert:token', $token, 900);
-		}
-
-		return $token;
+				return $token;
+			}, 900);
 	}
 }
