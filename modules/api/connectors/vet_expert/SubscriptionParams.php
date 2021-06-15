@@ -4,16 +4,13 @@ declare(strict_types = 1);
 namespace app\modules\api\connectors\vet_expert;
 
 use app\models\phones\Phones;
+use app\modules\api\signatures\SignatureService;
+use app\modules\api\signatures\SignatureServiceFactory;
 use DateTime;
 use InvalidArgumentException;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\Signer\Key;
-use pozitronik\helpers\ArrayHelper;
 use Throwable;
-use Yii;
 use yii\base\Arrayable;
 use yii\base\InvalidConfigException;
-use yii\di\Instance;
 
 /**
  * Источник данных для формирования подписки в VetExpert.
@@ -49,13 +46,9 @@ class SubscriptionParams implements Arrayable
 	 */
 	private string $_subscriptionTo = '';
 	/**
-	 * @var Signer|null компонент для подписи body-параметров
+	 * @var SignatureService компонент для подписи body-параметров.
 	 */
-	private ?Signer $_signer;
-	/**
-	 * @var Key|null плюч для подписи
-	 */
-	private ?Key $_signerKey;
+	private SignatureService $_signatureService;
 
 	/**
 	 * SubscriptionParams constructor.
@@ -64,14 +57,7 @@ class SubscriptionParams implements Arrayable
 	 */
 	public function __construct()
 	{
-		$this->_signer    = Instance::ensure(
-			ArrayHelper::getValue(Yii::$app->params, 'callback.signer', new InvalidConfigException("Callback signer not set")),
-			Signer::class
-		);
-		$this->_signerKey = Instance::ensure(
-			ArrayHelper::getValue(Yii::$app->params, 'callback.signerKey', new InvalidConfigException("Callback signerKey not set")),
-			Key::class
-		);
+		$this->_signatureService = SignatureServiceFactory::build('ivi');
 	}
 
 	/**
@@ -219,6 +205,7 @@ class SubscriptionParams implements Arrayable
 		array_walk($params, static function(&$item, $key) {
 			$item = "{$key}={$item}";
 		});
-		return $this->_signer->sign(implode('&', $params), $this->_signerKey);
+
+		return $this->_signatureService->sign(implode('&', $params));
 	}
 }
