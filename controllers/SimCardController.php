@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\core\prototypes\DefaultController;
 use app\models\product\SimCard;
 use app\models\product\SimCardSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class SimCardController
@@ -23,10 +24,12 @@ class SimCardController extends DefaultController {
 	}
 
 	/**
-	 * Продажа карты
+	 * Продажа карты (протипирую)
 	 * @param int $id
 	 */
 	public function actionSell(int $id):void {
-		//todo
+		if (null === $model = SimCard::findOne($id)) throw new NotFoundHttpException();
+
+		$model->doSell();
 	}
 }

@@ -15,4 +15,11 @@ class ProductController extends DefaultController {
 	public string $modelClass = Product::class;
 	public string $modelSearchClass = ProductSearch::class;
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getViewPath():string {
+		return '@app/views/products';
+	}
+
 }

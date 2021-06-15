@@ -4,6 +4,9 @@ declare(strict_types = 1);
 namespace app\models\product;
 
 use app\models\product\active_record\SimCardAR;
+use app\models\reward\Rewards;
+use app\models\sales\Sales;
+use yii\base\ModelEvent;
 
 /**
  * Class SimCard
@@ -13,6 +16,16 @@ use app\models\product\active_record\SimCardAR;
 class SimCard extends SimCardAR implements ProductInterface {
 
 	public function doSell():?bool {
-		// TODO: Implement doSell() method.
+		$sale = Sales::register($this);
+		Rewards::register($sale->rewards);
+		$event = new ModelEvent();
+		$this->trigger(self::EVENT_SELL, $event);
+		return $event->isValid;
+	}
+
+	public function doConfirm():?bool {
+		$event = new ModelEvent();
+		$this->trigger(self::EVENT_CONFIRM, $event);
+		return $event->isValid;
 	}
 }
