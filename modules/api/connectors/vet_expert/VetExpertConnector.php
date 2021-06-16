@@ -43,7 +43,7 @@ class VetExpertConnector extends BaseHttpConnector
 	 * @throws HttpClientException
 	 * @throws Throwable
 	 */
-	public function subscribe(SubscriptionParams $params): void
+	public function makeSubscribe(SubscriptionParams $params): void
 	{
 		$response = $this->getClient()
 			->post('/callback', $params->toArray(), ['Authorization' => 'Bearer ' . $this->getToken()])
