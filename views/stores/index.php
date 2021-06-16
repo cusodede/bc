@@ -111,7 +111,7 @@ ModalHelperAsset::register($this);
 				'value' => static function(StoresSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->sellers,
-						'subItem' => 'name',
+						'subItem' => 'fio',
 						'urlScheme' => [SellersController::to('view'), 'id' => 'id'],
 						'options' => static function($mapAttributeValue, $model):array {
 							$url = SellersController::to('view', ['id' => $model->id]);

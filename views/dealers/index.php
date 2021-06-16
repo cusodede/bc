@@ -115,7 +115,7 @@ ModalHelperAsset::register($this);
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->managers,
-						'subItem' => 'name',
+						'subItem' => 'fio',
 						'urlScheme' => [ManagersController::to('index'), 'ManagersSearch[id]' => 'id']
 					]);
 				}
@@ -126,7 +126,7 @@ ModalHelperAsset::register($this);
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->sellers,
-						'subItem' => 'name',
+						'subItem' => 'fio',
 						'urlScheme' => [SellersController::to('index'), 'SellersSearch[id]' => 'id']
 					]);
 				}
