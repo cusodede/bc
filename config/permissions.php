@@ -26,6 +26,16 @@ return [
 		],
 		'login_as_another_user' => [
 			'comment' => 'Разрешение авторизоваться под другим пользователем',
+		],
+		'dealer_sellers' => [
+			'controller' => 'seller',
+			'action' => 'index',
+			'comment' => 'Фильтрация продавцов по дилеру. Показываем всех продавцов дилера, но не больше.'
+		],
+		'dealer_store_sellers' => [
+			'controller' => 'seller',
+			'action' => 'index',
+			'comment' => 'Фильтрация продавцов по магазину. Показываем всех продавцов магазина, но не больше.'
 		]
 	]
 ];
