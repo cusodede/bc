@@ -5,8 +5,10 @@ namespace app\models\sales\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
-use app\models\product\Product;
+use app\models\products\Products;
+use app\models\products\ProductsInterface;
 use app\models\sys\users\Users;
+use Exception;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -15,13 +17,14 @@ use yii\db\ActiveRecord;
  * This is the model class for table "sales".
  *
  * @property int $id
- * @property int $product Товар
+ * @property int $product_id id товара
+ * @property int $product_type id типа товара
  * @property int $seller Продавец
  * @property string $create_date Дата регистрации
  * @property int $status Статус
  * @property int $deleted
  *
- * @property Product $relatedProduct Связанный проданный продукт
+ * @property null|ProductsInterface $relatedProducts Связанный проданный продукт
  * @property Users $relatedSeller Связанный продавец
  */
 class Sales extends ActiveRecord {
@@ -39,11 +42,11 @@ class Sales extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['product', 'seller'], 'required'],
-			[['product', 'seller', 'status', 'deleted'], 'integer'],
+			[['product_id', 'product_type', 'seller'], 'required'],
+			[['product_id', 'product_type' , 'seller', 'status', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
-			[['product'], 'unique'],
-			[['relatedProduct', 'relatedSeller'], RelationValidator::class],
+			[['product_id', 'product_type'], 'unique', 'targetAttribute' => ['product_id', 'product_type']],
+			[[/*'relatedProducts',*/ 'relatedSeller'], RelationValidator::class],
 		];
 	}
 
@@ -53,7 +56,8 @@ class Sales extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'product' => 'Товар',
+			'product_id' => 'Id товара',
+			'product_type' => 'Тип товара',
 			'seller' => 'Продавец',
 			'create_date' => 'Дата регистрации',
 			'status' => 'Статус',
@@ -62,21 +66,20 @@ class Sales extends ActiveRecord {
 	}
 
 	/**
-	 * @return ActiveQuery
+	 * @return ProductsInterface|null
+	 * @throws Exception
 	 */
-	public function getRelatedProduct():ActiveQuery {
-		return $this->hasOne(Product::class, ['id' => 'product']);
+	public function getRelatedProducts():?ProductsInterface {
+		return Products::getModel($this->product_id, $this->product_type);
 	}
 
 	/**
-	 * @param mixed $product
-	 * Универсальный сеттер: в $product может придти как модель, так и её ключ (строкой или цифрой).
+	 * Ну, допустим
+	 * @param ProductsInterface $product
 	 */
-	public function setRelatedProduct($product):void {
-		if (null === $product = self::ensureModel(Product::class, $product)) {
-			throw new InvalidArgumentException("Невозможно обнаружить соответствующую модель");
-		}
-		$this->link('product', $product);
+	public function setRelatedProducts(ProductsInterface $product):void {
+		$this->product_id = $product->id;
+		$this->product_type = $product->type;
 	}
 
 	/**
@@ -90,10 +93,10 @@ class Sales extends ActiveRecord {
 	 * @param mixed $seller
 	 */
 	public function setRelatedSeller($seller):void {
-		if (null === $seller
-				= self::ensureModel(Users::class, $seller)) {
+		if (null === $seller = self::ensureModel(Users::class, $seller)) {
 			throw new InvalidArgumentException("Невозможно обнаружить соответствующую модель");
 		}
-		$this->link('seller', $seller);
+		/** @var Users $seller */
+		$this->seller = $seller->id;
 	}
 }
