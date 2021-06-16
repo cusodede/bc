@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\store;
 
+use app\models\managers\Managers;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\StoresAR;
@@ -12,11 +13,13 @@ use yii\data\ActiveDataProvider;
 /**
  * Class StoresSearch
  * @property null|string $seller
+ * @property null|string $manager
  * @property null|string $typeName
  */
 final class StoresSearch extends StoresAR {
 
 	public ?string $seller = null;
+	public ?string $manager = null;
 	public ?string $typeName = null;
 
 	/**
@@ -25,7 +28,7 @@ final class StoresSearch extends StoresAR {
 	public function rules():array {
 		return [
 			[['id', 'deleted'], 'integer'],
-			[['name', 'seller', 'typeName'], 'string', 'max' => 255],
+			[['name', 'seller', 'manager', 'typeName'], 'string', 'max' => 255],
 		];
 	}
 
@@ -42,7 +45,7 @@ final class StoresSearch extends StoresAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['sellers', 'refStoresTypes']);
+		$query->joinWith(['sellers', 'managers', 'refStoresTypes']);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -60,7 +63,8 @@ final class StoresSearch extends StoresAR {
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', RefStoresTypes::tableName().'.name', $this->typeName])
-			->andFilterWhere(['like', Sellers::tableName().'.name', $this->seller]);
+			->andFilterWhere(['like', Sellers::tableName().'.surname', $this->seller])
+			->andFilterWhere(['like', Managers::tableName().'.surname', $this->manager]);
 	}
 
 	/**
