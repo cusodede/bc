@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\reward\active_record\references;
 
-use app\models\product\Product;
-use app\models\product\ProductInterface;
+use app\models\products\ProductsInterface;
 use app\models\reward\Rewards;
+use Exception;
 use pozitronik\references\models\CustomisableReference;
-use yii\base\Model;
+use yii\base\DynamicModel;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -22,7 +22,7 @@ class RefRewardsRules extends CustomisableReference {
 	/*Прототипирую правила*/
 	private const RULES = [
 		/*product_id => [[rule1],[rule2]] */
-		1 => [
+		1 => [//simcard
 			[
 				'reason' => Rewards::REASON_SALE_REGISTERED,
 				'status' => Rewards::STATUS_APPLY,
@@ -33,7 +33,7 @@ class RefRewardsRules extends CustomisableReference {
 				'reason' => Rewards::REASON_SALE_CONFIRMED,
 				'status' => Rewards::STATUS_WAIT,
 				'quantity' => 50,
-				'waiting' => Product::EVENT_CONFIRM
+				'waiting' => ProductsInterface::EVENT_CONFIRM
 			],
 		]
 	];
@@ -45,8 +45,19 @@ class RefRewardsRules extends CustomisableReference {
 		return 'ref_rewards_rules';
 	}
 
-	public static function findRules(ProductInterface $product):array {
-		return new Model(ArrayHelper::getValue(self::RULES, $product->id));
+	/**
+	 * Пока вместо нормального генератора правил используем такую заглушку
+	 * @param ProductsInterface $product
+	 * @return DynamicModel[]
+	 * @throws Exception
+	 */
+	public static function findRules(ProductsInterface $product):array {
+		$rules = ArrayHelper::getValue(self::RULES, $product->type);
+		$result = [];
+		foreach ($rules as $rule) {
+			$result[] = new DynamicModel($rule);
+		}
+		return $result;
 	}
 
 }
