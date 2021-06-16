@@ -106,7 +106,7 @@ class Permissions extends ActiveRecordPermissions {
 	 */
 	public static function allUserConfigurationPermissions(int $user_id /*, array $permissionFilters = [], bool $asArray = true*/ /*todo*/):array {
 		/** @var array $userConfigurationGrantedPermissions */
-		$userConfigurationGrantedPermissions = ArrayHelper::getValue(self::ConfigurationParameter(self::GRANT_PERMISSIONS, []), $user_id);
+		$userConfigurationGrantedPermissions = ArrayHelper::getValue(self::ConfigurationParameter(self::GRANT_PERMISSIONS, []), $user_id, []);
 		return self::GetConfigurationPermissions($userConfigurationGrantedPermissions);
 	}
 
