@@ -19,6 +19,10 @@ use yii\helpers\ArrayHelper;
  * @property-read null|string $waiting
  */
 class RefRewardsRules extends CustomisableReference {
+	public int $reason;
+	public int $status;
+	public int $quantity;
+	public ?string $waiting;
 
 	public $menuCaption = "Справочник правил расчета вознаграждения";
 	public $moduleId = "Вознаграждения";
@@ -52,14 +56,14 @@ class RefRewardsRules extends CustomisableReference {
 	/**
 	 * Пока вместо нормального генератора правил используем такую заглушку
 	 * @param ProductsInterface $product
-	 * @return DynamicModel[]
+	 * @return self[]
 	 * @throws Exception
 	 */
 	public static function findRules(ProductsInterface $product):array {
 		$rules = ArrayHelper::getValue(self::RULES, $product->type);
 		$result = [];
 		foreach ($rules as $rule) {
-			$result[] = new DynamicModel($rule);
+			$result[] = new self($rule);
 		}
 		return $result;
 	}
