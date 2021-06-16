@@ -266,9 +266,11 @@ class DefaultController extends Controller {
 	 * Аяксовый поиск в Select2
 	 * @param string|null $term
 	 * @param string $column
+	 * @param string|null $concatFields Это список полей для конкатенации. Если этот параметр передан, то вернем
+	 * результат CONCAT() для этих полей вместо поля параметра $column
 	 * @return string[][]
 	 */
-	public function actionAjaxSearch(?string $term, string $column = 'name'):array {
+	public function actionAjaxSearch(?string $term, string $column = 'name', string $concatFields = null):array {
 		$out = [
 			'results' => [
 				'id' => '',
@@ -277,8 +279,16 @@ class DefaultController extends Controller {
 		];
 		if (null !== $term) {
 			$tableName = $this->model::tableName();
+			if ($concatFields) {
+				// добавляем название таблицы перед каждым полем
+				$concatFieldsArray = preg_filter('/^/', "{$tableName}.", explode(',', $concatFields));
+				// создаем CONCAT() функцию. Формат: CONCAT(tableName.surname,' ',tableName. name)
+				$textFields = 'CONCAT('.implode(",' ',", $concatFieldsArray).')';
+			} else {
+				$textFields = "{$tableName}.{$column}";
+			}
 			$data = $this->model::find()
-				->select(["{$tableName}.id", "{$tableName}.{$column} as text"])
+				->select(["{$tableName}.id", "{$textFields} as text"])
 				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()
 				->distinct()
