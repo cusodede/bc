@@ -10,6 +10,8 @@ use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\Stores;
 use app\models\store\StoresSearch;
+use app\models\sys\permissions\filters\PermissionFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class StoresController
@@ -18,6 +20,17 @@ class StoresController extends DefaultController {
 
 	public string $modelClass = Stores::class;
 	public string $modelSearchClass = StoresSearch::class;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		]);
+	}
 
 	public function getMappingRules():array {
 		return [

@@ -9,6 +9,8 @@ use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\models\dealers\Dealers;
 use app\models\dealers\DealersSearch;
+use app\models\sys\permissions\filters\PermissionFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * Управление дилерами
@@ -49,6 +51,17 @@ class DealersController extends DefaultController {
 		5 => ['attribute' => 'code'],
 		6 => ['attribute' => 'client_code']
 	];
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		]);
+	}
 
 	/**
 	 * @inheritDoc

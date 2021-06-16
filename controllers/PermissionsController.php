@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
 use kartik\grid\EditableColumnAction;
@@ -17,6 +18,17 @@ class PermissionsController extends DefaultController {
 	public string $modelClass = Permissions::class;
 	public string $modelSearchClass = PermissionsSearch::class;
 	public bool $enablePrototypeMenu = false;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return \yii\helpers\ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		]);
+	}
 
 	/**
 	 * @inheritDoc
