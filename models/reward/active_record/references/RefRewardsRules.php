@@ -13,6 +13,10 @@ use yii\helpers\ArrayHelper;
 /**
  * Class RefRewardsRules
  * Справочник правил расчета вознаграждения
+ * @property-read int $reason
+ * @property-read int $status
+ * @property-read int $quantity
+ * @property-read null|string $waiting
  */
 class RefRewardsRules extends CustomisableReference {
 
