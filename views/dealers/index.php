@@ -10,6 +10,9 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\controllers\ManagersController;
+use app\controllers\SellersController;
+use app\controllers\StoresController;
 use app\models\dealers\DealersSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
@@ -94,7 +97,40 @@ ModalHelperAsset::register($this);
 						'subItem' => 'name'
 					]);
 				}
-			]
+			],
+			[
+				'attribute' => 'stores',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->stores,
+						'subItem' => 'name',
+						'urlScheme' => [StoresController::to('index'), 'StoresSearch[id]' => 'id']
+					]);
+				}
+			],
+			[
+				'attribute' => 'managers',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->managers,
+						'subItem' => 'name',
+						'urlScheme' => [ManagersController::to('index'), 'ManagersSearch[id]' => 'id']
+					]);
+				}
+			],
+			[
+				'attribute' => 'seller',
+				'format' => 'raw',
+				'value' => static function(DealersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->sellers,
+						'subItem' => 'name',
+						'urlScheme' => [SellersController::to('index'), 'SellersSearch[id]' => 'id']
+					]);
+				}
+			],
 		]
 	]),
 ]) ?>

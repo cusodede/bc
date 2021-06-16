@@ -31,12 +31,40 @@ use yii\widgets\DetailView;
 			}
 		],
 		[
+			'attribute' => 'branches',
+			'value' => static function(StoresAR $model) {
+				return $model->refBranches->name??null;
+			}
+		],
+		[
+			'attribute' => 'regions',
+			'value' => static function(StoresAR $model) {
+				return $model->refRegions->name??null;
+			}
+		],
+		[
+			'attribute' => 'sellingChannels',
+			'value' => static function(StoresAR $model) {
+				return $model->refSellingChannels->name??null;
+			}
+		],
+		[
 			'attribute' => 'sellers',
 			'format' => 'raw',
 			'value' => static function(StoresAR $model):string {
 				return BadgeWidget::widget([
 					'items' => $model->sellers,
-					'subItem' => 'name'
+					'subItem' => 'fio'
+				]);
+			}
+		],
+		[
+			'attribute' => 'managers',
+			'format' => 'raw',
+			'value' => static function(StoresAR $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->managers,
+					'subItem' => 'fio'
 				]);
 			}
 		],

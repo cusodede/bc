@@ -204,6 +204,8 @@ ModalHelperAsset::register($this);
 			],
 			'keyword',
 			'is_wireman_shpd:boolean',
+			'inn',
+			'snils',
 			[
 				'attribute' => 'store',
 				'format' => 'raw',

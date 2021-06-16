@@ -33,7 +33,7 @@ $config = [
 				'models_subdirs' => true,//файлы каждой модели кладутся в подкаталог с именем модели
 				'name_subdirs_length' => 2//если больше 0, то файлы загружаются в подкаталоги по именам файлов (параметр регулирует длину имени подкаталогов)
 			]
-		]
+		],
 	],
 	'components' => [
 		'cache' => [
@@ -47,6 +47,7 @@ $config = [
 				],
 			],
 		],
+		'permissions' => require __DIR__.'/permissions.php',
 		'db' => $db,
 	],
 	'controllerMap' => [
@@ -56,7 +57,8 @@ $config = [
 			'migrationNamespaces' => [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
 				'app\modules\status\migrations',
-				'app\modules\import\migrations'
+				'app\modules\import\migrations',
+				'app\modules\notifications\migrations'
 			],
 		],
 	],

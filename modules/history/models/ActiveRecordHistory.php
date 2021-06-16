@@ -19,6 +19,7 @@ use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\UnknownClassException;
 use yii\base\UnknownPropertyException;
+use yii\console\Application;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -75,18 +76,34 @@ class ActiveRecordHistory extends History {
 	 */
 	public static function push(?ActiveRecord $model, array $oldAttributes, array $newAttributes, ?ActiveRecord $relationModel = null, ?Event $event = null):void {
 		$log = new self(['storeShortClassNames' => ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), "storeShortClassNames", false)]);
-		$log->setAttributes([
-			'user' => Yii::$app->user->id,//Предполагается, что фреймворк сконфигурирован с использованием user identity class
-			'model_class' => null === $model?null:$log->getStoredClassName($model),
-			'model_key' => is_numeric($model->primaryKey)?$model->primaryKey:null,//$pKey может быть массивом
-			'old_attributes' => $log->serialize($oldAttributes),
-			'new_attributes' => $log->serialize($newAttributes),
-			'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-			'event' => null === $event?null:$event->name,
-			'scenario' => $model->scenario,
-			'delegate' => self::ensureDelegate(),
-			'operation_identifier' => Yii::$app->request->csrfToken
-		]);
+		if (get_class(Yii::$app) === Application::class) {
+			$log->setAttributes([
+				'user' => null,
+				'model_class' => null === $model?null:$log->getStoredClassName($model),
+				'model_key' => is_numeric($model->primaryKey)?$model->primaryKey:null,//$pKey может быть массивом
+				'old_attributes' => $log->serialize($oldAttributes),
+				'new_attributes' => $log->serialize($newAttributes),
+				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
+				'event' => null === $event?null:$event->name,
+				'scenario' => $model->scenario,
+				'delegate' => null,
+				'operation_identifier' => "Console operation"
+			]);
+		} else {
+			$log->setAttributes([
+				'user' => Yii::$app->user->id,//Предполагается, что фреймворк сконфигурирован с использованием user identity class
+				'model_class' => null === $model?null:$log->getStoredClassName($model),
+				'model_key' => is_numeric($model->primaryKey)?$model->primaryKey:null,//$pKey может быть массивом
+				'old_attributes' => $log->serialize($oldAttributes),
+				'new_attributes' => $log->serialize($newAttributes),
+				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
+				'event' => null === $event?null:$event->name,
+				'scenario' => $model->scenario,
+				'delegate' => self::ensureDelegate(),
+				'operation_identifier' => Yii::$app->request->csrfToken
+			]);
+		}
+
 		$log->save();
 	}
 
@@ -113,11 +130,11 @@ class ActiveRecordHistory extends History {
 	}
 
 	/**
-	 * @return bool|null
+	 * @return int|null
 	 */
-	private static function ensureDelegate() {
-		if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')) {
-			return Yii::$app->user->isLoginAsAnotherUser();
+	private static function ensureDelegate():?int {
+		if (method_exists(Yii::$app->user, 'getOriginalUserId')) {
+			return Yii::$app->user->getOriginalUserId();
 		}
 		return null;
 	}

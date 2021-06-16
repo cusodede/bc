@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\seller;
 
+use app\models\dealers\Dealers;
+use app\models\managers\Managers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\Status;
@@ -41,7 +43,7 @@ final class SellersSearch extends Sellers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'passport', 'keyword', 'birthday', 'entry_date',
-					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId'
+					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId', 'inn', 'snils'
 				],
 				'filter',
 				'filter' => 'trim'
@@ -54,7 +56,15 @@ final class SellersSearch extends Sellers {
 			[['birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i'],
 			[['keyword'], 'string', 'max' => 64],
-			[['name', 'surname', 'patronymic', 'passport'], 'string', 'max' => 128]
+			[['name', 'surname', 'patronymic', 'passport'], 'string', 'max' => 128],
+			['inn', 'string', 'length' => 12],
+			['inn', 'integer'],
+			[
+				'snils',
+				'match',
+				'pattern' => '/^(\d{3}\-\d{3}-\d{3} \d{2})$/',
+				'message' => 'Значение «СНИЛС» неверно. Формат: 000-000-000 00'
+			]
 		];
 	}
 
@@ -74,7 +84,7 @@ final class SellersSearch extends Sellers {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
-		$query->joinWith(['relStatus', 'stores', 'relatedUser']);
+		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -94,6 +104,7 @@ final class SellersSearch extends Sellers {
 	/**
 	 * @param $query
 	 * @return void
+	 * @throws Throwable
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
@@ -111,12 +122,50 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([self::tableName().'.is_resident' => $this->is_resident])
 			->andFilterWhere([self::tableName().'.non_resident_type' => $this->non_resident_type])
 			->andFilterWhere([self::tableName().'.is_wireman_shpd' => $this->is_wireman_shpd])
+			->andFilterWhere([self::tableName().'.inn' => $this->inn])
+			->andFilterWhere([self::tableName().'.snils' => $this->snils])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere([Users::tableName().'.id' => $this->userId])
 			->andFilterWhere([Users::tableName().'.email' => $this->userEmail])
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus]);
+
+		$this->filterDataByUser($query);
+	}
+
+	/**
+	 * Filters the records shown for current user
+	 * @param $query
+	 * @throws Throwable
+	 */
+	private function filterDataByUser($query):void {
+		$user = Users::Current();
+		if ($user->isAllPermissionsGranted()) {
+			return;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null === $manager) {
+			return;
+		}
+
+		if ($user->hasPermission(['dealer_sellers'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					Dealers::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
+		} elseif ($user->hasPermission(['dealer_store_sellers'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					Stores::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
+				]
+			);
+		}
 	}
 
 	/**
@@ -136,12 +185,12 @@ final class SellersSearch extends Sellers {
 				'create_date',
 				'update_date',
 				'entry_date',
-				'create_date',
-				'update_date',
 				'keyword',
 				'is_resident',
 				'non_resident_type',
 				'is_wireman_shpd',
+				'inn',
+				'snils',
 				'userId' => [
 					'asc' => [Users::tableName().'.id' => SORT_ASC],
 					'desc' => [Users::tableName().'.id' => SORT_DESC]
