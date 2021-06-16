@@ -14,6 +14,8 @@ use yii\base\Model;
  */
 class Types
 {
+	public const SCHEMA_ERROR_NAME = 'ValidationErrorType';
+
 	// Запрос и мутации
 	private static ?QueryType $query = null;
 	private static ?MutationType $mutation = null;
@@ -21,7 +23,7 @@ class Types
 	// Валидация
 	private static ?ValidationErrorType $validationError = null;
 	private static ?ValidationErrorsListType $validationErrorsList = null;
-	private static $valitationTypes;
+	private static array $valitationTypes = [];
 
 	// Типы для наших сущностей
 	private static ?PartnerType $partner = null;
@@ -69,11 +71,11 @@ class Types
 	 * В resolveType, в случае успеха, нам придет наш сохраненный/измененный объект.
 	 * В случае ошибок валидации придет ассоциативный массив из $model->getError()
 	 * @param ObjectType $type
-	 * @return array|UnionType
+	 * @return UnionType
 	 */
-	public static function validationErrorsUnionType(ObjectType $type)
+	public static function validationErrorsUnionType(ObjectType $type): UnionType
 	{
-		$typeNameValidationErrorsType = $type->name . ValidationErrorType::class;
+		$typeNameValidationErrorsType = $type->name . self::SCHEMA_ERROR_NAME;
 		return static::$valitationTypes[$typeNameValidationErrorsType] ??
 			static::$valitationTypes[$typeNameValidationErrorsType] = new UnionType([
 				'name' => $typeNameValidationErrorsType,
