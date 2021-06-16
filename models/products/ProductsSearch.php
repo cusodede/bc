@@ -1,22 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product;
+namespace app\models\products;
 
-use app\models\product\active_record\SimCardAR;
+use app\models\products\active_record\ProductsAR;
+use app\models\products\active_record\ProductsClassesAR;
 use yii\data\ActiveDataProvider;
 
 /**
- * Class SimCardSearch
+ * Class ProductSearch
  * todo
  */
-class SimCardSearch extends SimCardAR {
+class ProductsSearch extends ProductsClassesAR {
+
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = self::find()->active();
+		$query = ProductsAR::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
@@ -34,4 +36,5 @@ class SimCardSearch extends SimCardAR {
 
 		return $dataProvider;
 	}
+
 }
