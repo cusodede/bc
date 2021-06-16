@@ -30,7 +30,7 @@ class RelationValidator extends Validator {
 				$model->$model_fk = $model->$attribute->$relation_fk;
 
 				$model->clearErrors($model_fk);
-				$model->validate($model_fk);
+				$model->validate($model_fk, false);
 			}
 		} else {
 			$model->addError($attribute, get_class($this).' has no relation named '.$attribute);
