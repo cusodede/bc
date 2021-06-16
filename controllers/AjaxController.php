@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\widgets\search\SearchHelper;
 use app\widgets\search\SearchWidget;
 use pozitronik\core\traits\ControllerTrait;
@@ -38,6 +39,9 @@ class AjaxController extends Controller {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		];
 	}
