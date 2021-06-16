@@ -5,7 +5,10 @@ namespace app\models\core;
 
 use pozitronik\core\helpers\ControllerHelper;
 use pozitronik\helpers\ArrayHelper;
+use pozitronik\helpers\ReflectionHelper;
+use ReflectionException;
 use Throwable;
+use yii\base\UnknownClassException;
 use yii\data\BaseDataProvider;
 use yii\web\Controller;
 
@@ -39,6 +42,39 @@ class TemporaryHelper {
 			});
 		}
 		return $result;
+	}
+
+	/**
+	 * todo: перенести метод в ControllerHelper, а ControllerTrait сделать только обёртку
+	 * Возвращает все экшены контроллера
+	 * @param string $controller_class
+	 * @param bool $asRequestName Привести имя экшена к виду в запросе
+	 * @return string[]
+	 * @throws ReflectionException
+	 * @throws UnknownClassException
+	 */
+	public static function GetControllerActions(string $controller_class, bool $asRequestName = true):array {
+		$names = ArrayHelper::getColumn(ReflectionHelper::GetMethods($controller_class), 'name');
+		$names = preg_filter('/^action([A-Z])(\w+?)/', '$1$2', $names);
+		if ($asRequestName) {
+			foreach ($names as &$name) $name = self::GetActionRequestName($name);
+		}
+		return $names;
+	}
+
+	/**
+	 * todo: перенести метод в ControllerHelper, а ControllerTrait сделать только обёртку
+	 * Переводит вид имени экшена к виду запроса, который этот экшен дёргает.
+	 * @param string $action
+	 * @return string
+	 * @example actionSomeActionName => some-action-name
+	 * @example OtherActionName => other-action-name
+	 */
+	public static function GetActionRequestName(string $action):string {
+		/** @var array $lines */
+		$lines = preg_split('/(?=[A-Z])/', $action, -1, PREG_SPLIT_NO_EMPTY);
+		if ('action' === $lines[0]) unset($lines[0]);
+		return mb_strtolower(implode('-', $lines));
 	}
 
 	/**
