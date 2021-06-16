@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace app\modules\notifications\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\notifications\models\Notifications;
 use app\modules\notifications\models\TargetsNotifications;
 use Throwable;
@@ -26,6 +27,9 @@ class DefaultController extends Controller {
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
+			'access' => [
+				'class' => PermissionFilter::class
+			]
 		];
 	}
 
