@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sales;
 
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\product\ProductInterface;
+use app\models\products\ProductsInterface;
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\Rewards;
 use app\models\sales\active_record\Sales as SalesAR;
@@ -23,19 +23,18 @@ class Sales extends SalesAR {
 	public const STATUS_REGISTERED = 0;
 
 	/**
-	 * @param ProductInterface $product
+	 * @param ProductsInterface $product
 	 * @param Users|null $user
 	 * @return static
 	 * @throws Exception
 	 * @throws ForbiddenHttpException
 	 */
-	public static function register(ProductInterface $product, ?Users $user = null):self {
+	public static function register(ProductsInterface $product, ?Users $user = null):self {
 		$user = $user??Users::Current();
-		$sale = new self([
-			'relatedProduct' => $product,
-			'relatedSeller' => $user,
-			'status' => self::STATUS_REGISTERED
-		]);
+		$sale = self::findForProduct($product);
+		if (!$sale->isNewRecord) return $sale;//already registered, but ok while prototype
+		$sale->relatedSeller = $user;
+		$sale->status = self::STATUS_REGISTERED;
 		if ($sale->save()) return $sale;
 		/*todo: log errors*/
 		throw new Exception("Cannot register sale");
@@ -45,11 +44,11 @@ class Sales extends SalesAR {
 	 * @return Rewards[]
 	 */
 	public function getRewards():array {
-		$rules = RefRewardsRules::findRules($this->relatedProduct);
+		$rules = RefRewardsRules::findRules($this->relatedProducts);
 		$rewards = [];
 		foreach ($rules as $rule) {
 			$rewards = new Rewards([
-				'relatedProduct' => $this->relatedProduct,//товар, за который начисляется бонус
+				'relatedProducts' => $this->relatedProducts,//товар, за который начисляется бонус
 				'relatedRule' => $rule,
 				'operation' => Rewards::OPERATION_SELL,//инициирующая операция
 				'reason' => $rule->rewardReason,//причина начисления
