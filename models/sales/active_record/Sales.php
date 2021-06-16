@@ -43,7 +43,7 @@ class Sales extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['product_id', 'product_type', 'seller'], 'required'],
-			[['product_id', 'product_type' , 'seller', 'status', 'deleted'], 'integer'],
+			[['product_id', 'product_type', 'seller', 'status', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 			[['product_id', 'product_type'], 'unique', 'targetAttribute' => ['product_id', 'product_type']],
 			[[/*'relatedProducts',*/ 'relatedSeller'], RelationValidator::class],
@@ -63,6 +63,17 @@ class Sales extends ActiveRecord {
 			'status' => 'Статус',
 			'deleted' => 'Deleted',
 		];
+	}
+
+	/**
+	 * @param ProductsInterface $product
+	 * @return $this
+	 */
+	public static function findForProduct(ProductsInterface $product):self {
+		if (null === $sale = self::find()->where(['product_id' => $product->id, 'product_type' => $product->type])->one()) {
+			$sale = new self(['product_id' => $product->id, 'product_type' => $product->type]);
+		}
+		return $sale;
 	}
 
 	/**
