@@ -182,7 +182,7 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	private function isAllPermissionsGranted():bool {
+	public function isAllPermissionsGranted():bool {
 		return in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true);
 	}
 

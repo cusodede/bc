@@ -7,8 +7,10 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
+use app\controllers\ManagersController;
 use app\controllers\SellersController;
 use app\models\branches\active_record\references\RefBranches;
+use app\models\managers\Managers;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
@@ -36,21 +38,24 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'branch')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefBranches::class
+			'referenceClass' => RefBranches::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'region')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRegions::class
+			'referenceClass' => RefRegions::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'selling_channel')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefSellingChannels::class
+			'referenceClass' => RefSellingChannels::class,
+			'options' => ['placeholder' => '']
 		]) ?>
 	</div>
 </div>
@@ -58,9 +63,25 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'sellers')->widget(SelectModelWidget::class, [
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'mapAttribute' => 'fio',
+			'searchAttribute' => 'surname',
+			'concatFields' => 'surname, name, patronymic',
 			'selectModelClass' => Sellers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => SellersController::to('ajax-search')
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'managers')->widget(SelectModelWidget::class, [
+			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'mapAttribute' => 'fio',
+			'searchAttribute' => 'surname',
+			'concatFields' => 'surname, name, patronymic',
+			'selectModelClass' => Managers::class,
+			'options' => ['placeholder' => ''],
+			'ajaxSearchUrl' => ManagersController::to('ajax-search')
 		]) ?>
 	</div>
 </div>

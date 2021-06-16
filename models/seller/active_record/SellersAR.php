@@ -4,6 +4,9 @@ declare(strict_types = 1);
 namespace app\models\seller\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\dealers\active_record\relations\RelDealersToSellers;
+use app\models\dealers\Dealers;
+use app\models\phones\PhoneNumberValidator;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -38,9 +41,7 @@ use yii\db\ActiveRecord;
  * @property string $snils СНИЛС
  * @property string $keyword Ключевое слово для  «Горячей линии»
  * @property int $is_wireman_shpd Монтажник ШПД
- * @property int $dealer Дилер
  * @property int $user Пользователь
- * @property int $sale_point Торговая точка
  * @property int $contract_signing_address Адрес подписания договора
  * @property int $deleted
  *
@@ -49,6 +50,8 @@ use yii\db\ActiveRecord;
  *
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property Stores[] $stores Магазины продавца
+ * @property RelDealersToSellers[] $relatedDealersToSellers Связь от промежуточной таблице дилеров к продавцам
+ * @property Dealers[] $dealers Дилеры продавца
  * @property Users $relatedUser Пользователь связанный с продавцом
  */
 class SellersAR extends ActiveRecord {
@@ -98,11 +101,12 @@ class SellersAR extends ActiveRecord {
 			[
 				[
 					'name', 'surname', 'patronymic', 'keyword', 'birthday', 'entry_date', 'email', 'login',
-					'passport_series', 'passport_number', 'passport_whom', 'passport_when'
+					'passport_series', 'passport_number', 'passport_whom', 'passport_when', 'inn', 'snils'
 				],
 				'filter',
 				'filter' => 'trim'
 			],
+			[['inn', 'snils'], 'default', 'value' => null],
 			[
 				[
 					'name', 'surname', 'passport_series', 'passport_number', 'passport_whom',
@@ -130,6 +134,7 @@ class SellersAR extends ActiveRecord {
 				},
 				'on' => self::SCENARIO_CREATE
 			],
+			['login', PhoneNumberValidator::class],
 			[
 				['entry_date', 'non_resident_type'],
 				'required',
@@ -141,15 +146,20 @@ class SellersAR extends ActiveRecord {
 					return !document.getElementById('sellers-is_resident').checked;
 				}"
 			],
-			[['create_date', 'update_date'], 'safe'],
+			[['create_date', 'update_date', 'stores', 'dealers'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
-			[['gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'sale_point', 'dealer', 'deleted', 'user'], 'integer'],
-			[['name', 'surname', 'patronymic', 'login'], 'string', 'max' => 128],
-			[['passport_series', 'passport_number', 'keyword'], 'string', 'max' => 64],
+			[['gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'deleted', 'user', 'inn'], 'integer'],
+			[['name', 'surname', 'patronymic'], 'string', 'max' => 128],
+			[['passport_series', 'passport_number', 'keyword', 'login'], 'string', 'max' => 64],
 			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
-			['inn', 'string', 'max' => 12],
-			['snils', 'string', 'max' => 14],
+			['inn', 'string', 'length' => 12],
+			[
+				'snils',
+				'match',
+				'pattern' => '/^(\d{3}\-\d{3}-\d{3} \d{2})$/',
+				'message' => 'Значение «СНИЛС» неверно. Формат: 000-000-000 00'
+			],
 			[['inn', 'snils', 'user'], 'unique'],
 			[
 				['passport_series', 'passport_number'],
@@ -192,8 +202,6 @@ class SellersAR extends ActiveRecord {
 			'snils' => 'СНИЛС',
 			'keyword' => 'Ключевое слово для  «Горячей линии»',
 			'is_wireman_shpd' => 'Монтажник ШПД',
-			'dealer' => 'Дилер',
-			'sale_point' => 'Торговая точка',
 			'contract_signing_address' => 'Адрес подписания договора',
 			'deleted' => 'Deleted'
 		];
@@ -219,6 +227,28 @@ class SellersAR extends ActiveRecord {
 	 */
 	public function setStores($stores):void {
 		RelStoresToSellers::linkModels($stores, $this, true);/* Соединение идёт "наоборот", добавляем ключ backLink */
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedDealersToSellers():ActiveQuery {
+		return $this->hasMany(RelDealersToSellers::class, ['seller_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getDealers():ActiveQuery {
+		return $this->hasMany(Dealers::class, ['id' => 'dealer_id'])->via('relatedDealersToSellers');
+	}
+
+	/**
+	 * @param mixed $dealers
+	 * @throws Throwable
+	 */
+	public function setDealers($dealers):void {
+		RelDealersToSellers::linkModels($dealers, $this, true);
 	}
 
 	/**
