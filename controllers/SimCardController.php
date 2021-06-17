@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
-use app\models\product\SimCard;
-use app\models\product\SimCardSearch;
+use app\models\products\SimCard;
+use app\models\products\SimCardSearch;
 use yii\web\NotFoundHttpException;
 
 /**
