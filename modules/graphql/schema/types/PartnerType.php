@@ -31,6 +31,18 @@ class PartnerType extends ObjectType
 					'type' => Type::string(),
 					'description' => 'ИНН партнера',
 				],
+				'phone' => [
+					'type' => Type::string(),
+					'description' => 'Телефон поддержки партнера',
+				],
+				'email' => [
+					'type' => Type::string(),
+					'description' => 'Почтовый адрес поддержки партнера',
+				],
+				'comment' => [
+					'type' => Type::string(),
+					'description' => 'Комментарий',
+				],
 			],
 		]);
 	}
