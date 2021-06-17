@@ -13,7 +13,8 @@ use yii\base\ModelEvent;
  * Описание симки и всех её жизненных процессов.
  * Симка заказывается
  */
-class SimCard extends SimCardAR implements ProductInterface {
+class SimCard extends SimCardAR implements ProductsInterface {
+	public int $type = 1;
 
 	public function doSell():?bool {
 		$sale = Sales::register($this);
@@ -28,4 +29,5 @@ class SimCard extends SimCardAR implements ProductInterface {
 		$this->trigger(self::EVENT_CONFIRM, $event);
 		return $event->isValid;
 	}
+
 }
