@@ -58,7 +58,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{view}',
+				'template' => '{edit}{view}{why}',
 				'buttons' => [
 					'edit' => static function(string $url, RewardsSearch $model) use ($modelName) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
@@ -72,11 +72,24 @@ ModalHelperAsset::register($this);
 								"'{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
+					'why' => static function(string $url, RewardsSearch $model) {
+						return Html::a('<i class="fa fa-lightbulb-dollar"></i>', $url, [
+							'onclick' => new JsExpression("alert('todo: будем показывать причинно-следственные связи начисления');event.preventDefault();")
+						]);
+					},
 				],
 			],
 			'id',
+			[
+				'format' => 'raw',
+				'attribute' => 'reason',
+				'value' => static function(RewardsSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => ArrayHelper::getValue(Rewards::reasons(), $model->reason)
+					]);
+				}
+			],
 			'quantity',
-			'reason',
 			'waiting',
 			[
 				'attribute' => 'create_date',
