@@ -146,7 +146,7 @@ class SellersAR extends ActiveRecord {
 					return !document.getElementById('sellers-is_resident').checked;
 				}"
 			],
-			[['create_date', 'update_date', 'stores', 'dealers'], 'safe'],
+			[['create_date', 'update_date', 'stores', 'dealers', 'currentStatusId'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
 			[['gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'deleted', 'user', 'inn'], 'integer'],
