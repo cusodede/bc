@@ -139,7 +139,7 @@ trait CreateAccessTrait {
 		if (count(array_intersect(['name', 'surname', 'patronymic'], array_keys($this->dirtyAttributes))) > 0) {
 			$this->isFioChanged = true;
 		}
-		return parent::beforeValidate();
+		return static::beforeValidate();
 	}
 
 }
