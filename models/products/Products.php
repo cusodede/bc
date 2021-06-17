@@ -3,9 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
+use app\models\products\active_record\ProductsAR;
+use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -14,12 +15,10 @@ use yii\helpers\ArrayHelper;
  * @property-read string $name
  * @property-read string $class
  */
-class Products extends Model {
+class Products extends ProductsAR {
 	public ?int $id = null;
 	public ?string $name = null;
 	public ?string $class = null;
-
-	public array $config = [];
 
 	/**
 	 * @return self[]
@@ -35,11 +34,18 @@ class Products extends Model {
 			]);
 		}
 		return $result;
-
 	}
 
-	public function init() {
-		parent::init();
+	/**
+	 * @param int $modelId
+	 * @param int $productType
+	 * @return ProductsInterface|null
+	 * @throws Exception
+	 */
+	public static function getModel(int $modelId, int $productType):?ProductsInterface {
+		if (null === $modelClass = ArrayHelper::getValue(Yii::$app, "params.productsConfig.{$productType}.class")) return null;
+		return $modelClass::findOne($modelId);
 	}
+
 
 }
