@@ -8,6 +8,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
+use app\modules\api\ApiModule;
 use app\modules\history\HistoryModule;
 use app\modules\status\StatusModule;
 use app\modules\graphql\GraphqlModule;
@@ -91,6 +92,9 @@ $config = [
 				'rules' => $statusRules
 			]
 		],
+		'api' => [
+			'class' => ApiModule::class
+		]
 	],
 	'components' => [
 		'request' => [
