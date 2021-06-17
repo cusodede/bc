@@ -58,16 +58,22 @@ class PartnersSearch extends Partners
 
 	/**
 	 * Статичный поиск по параметрам для GraphQl
-	 * @param $params
+	 * @param array $params
 	 * @return array
 	 * @throws Exception
 	 */
-	public static function searchWithParams($params): array
+	public static function searchWithParams(array $params): array
 	{
 		$query = Partners::find();
+		//Обрабатываем комбинированный параметр $search
 		if ($search = ArrayHelper::getValue($params, 'search')) {
-			$query->andFilterWhere(['or', ['like', 'inn', $search], ['like', 'name', $search]]);
+			$query->andFilterWhere([
+				'or',
+				['like', 'inn', $search],
+				['like', 'name', $search],
+			]);
 		}
+		// Не забываем удалить, так как нет такого параметра в partners
 		ArrayHelper::remove($params, 'search');
 		$query->andFilterWhere($params);
 		return $query->all();
