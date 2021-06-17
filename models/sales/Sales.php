@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sales;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\products\Products;
 use app\models\products\ProductsInterface;
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\Rewards;
@@ -16,6 +17,7 @@ use yii\web\ForbiddenHttpException;
  * Class Sales prototype
  *
  * @property-read Rewards[] $rewards Вознаграждения, начисляемые за продажу товара
+ * @property null|ProductsInterface $relatedProducts Связанный проданный продукта
  */
 class Sales extends SalesAR {
 	use ActiveRecordTrait;
@@ -42,23 +44,40 @@ class Sales extends SalesAR {
 
 	/**
 	 * @return Rewards[]
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getRewards():array {
 		$rules = RefRewardsRules::findRules($this->relatedProducts);
 		$rewards = [];
 		foreach ($rules as $rule) {
-			$rewards = new Rewards([
+			$rewards[] = new Rewards([
 				'relatedProducts' => $this->relatedProducts,//товар, за который начисляется бонус
-				'relatedRule' => $rule,
+				'rule' => null,//временная фигня, пока правила у нас накиданы хардкодом
 				'operation' => Rewards::OPERATION_SELL,//инициирующая операция
 				'reason' => $rule->reason,//причина начисления
 				'status' => $rule->status,//статус
 				'quantity' => $rule->quantity,
-				'waiting' => $rule->waiting
+				'waiting' => $rule->waiting,
+				'relatedUser' => $this->seller
 			]);
 		}
 		return $rewards;
+	}
 
+	/**
+	 * @return ProductsInterface|null
+	 * @throws Exception
+	 */
+	public function getRelatedProducts():?ProductsInterface {
+		return Products::getModel($this->product_id, $this->product_type);
+	}
+
+	/**
+	 * Ну, допустим
+	 * @param ProductsInterface $product
+	 */
+	public function setRelatedProducts(ProductsInterface $product):void {
+		$this->product_id = $product->id;
+		$this->product_type = $product->type;
 	}
 }

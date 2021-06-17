@@ -5,10 +5,8 @@ namespace app\models\sales\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
-use app\models\products\Products;
 use app\models\products\ProductsInterface;
 use app\models\sys\users\Users;
-use Exception;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -24,7 +22,6 @@ use yii\db\ActiveRecord;
  * @property int $status Статус
  * @property int $deleted
  *
- * @property null|ProductsInterface $relatedProducts Связанный проданный продукт
  * @property Users $relatedSeller Связанный продавец
  */
 class Sales extends ActiveRecord {
@@ -46,7 +43,7 @@ class Sales extends ActiveRecord {
 			[['product_id', 'product_type', 'seller', 'status', 'deleted'], 'integer'],
 			[['create_date'], 'safe'],
 			[['product_id', 'product_type'], 'unique', 'targetAttribute' => ['product_id', 'product_type']],
-			[[/*'relatedProducts',*/ 'relatedSeller'], RelationValidator::class],
+			[['relatedSeller'], RelationValidator::class],
 		];
 	}
 
@@ -74,23 +71,6 @@ class Sales extends ActiveRecord {
 			$sale = new self(['product_id' => $product->id, 'product_type' => $product->type]);
 		}
 		return $sale;
-	}
-
-	/**
-	 * @return ProductsInterface|null
-	 * @throws Exception
-	 */
-	public function getRelatedProducts():?ProductsInterface {
-		return Products::getModel($this->product_id, $this->product_type);
-	}
-
-	/**
-	 * Ну, допустим
-	 * @param ProductsInterface $product
-	 */
-	public function setRelatedProducts(ProductsInterface $product):void {
-		$this->product_id = $product->id;
-		$this->product_type = $product->type;
 	}
 
 	/**
