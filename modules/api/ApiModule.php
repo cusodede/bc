@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api;
 
+use app\modules\api\mobile_api\MyBeelineModule;
 use Yii;
 use yii\base\Module as YiiBaseModule;
 use yii\web\Response;
@@ -35,5 +36,11 @@ class ApiModule extends YiiBaseModule
 		$errorHandler->register();
 
 		Yii::$app->set('errorHandler', $errorHandler);
+
+		$this->modules = [
+			'mb' => [
+				'class' => MyBeelineModule::class
+			]
+		];
 	}
 }
