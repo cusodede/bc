@@ -8,8 +8,9 @@ namespace app\models\products;
  * Описывает любой товар, передаваемый в продажу
  *
  * @property int $id
+ * @property int $type уникальный id типа продукта
  */
-interface ProductInterface {
+interface ProductsInterface {
 	const EVENT_CONFIRM = 'Confirm';
 	const EVENT_SELL = 'Sell';
 
