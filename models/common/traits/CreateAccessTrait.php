@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\traits;
+namespace app\models\common\traits;
 
 use app\models\site\RestorePasswordForm;
 use app\models\sys\users\Users;

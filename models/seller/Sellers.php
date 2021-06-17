@@ -5,7 +5,7 @@ namespace app\models\seller;
 
 use app\controllers\SellersController;
 use app\models\seller\active_record\SellersAR;
-use app\models\traits\CreateAccessTrait;
+use app\models\common\traits\CreateAccessTrait;
 use app\models\sys\users\Users;
 use pozitronik\filestorage\traits\FileStorageTrait;
 

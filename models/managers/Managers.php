@@ -5,7 +5,7 @@ namespace app\models\managers;
 
 use app\controllers\ManagersController;
 use app\models\managers\active_record\ManagersAR;
-use app\models\traits\CreateAccessTrait;
+use app\models\common\traits\CreateAccessTrait;
 
 /**
  * Class Managers
