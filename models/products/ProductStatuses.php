@@ -4,14 +4,14 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use app\models\abonents\RelAbonentsToProducts;
-use app\models\products\active_record\ProductStatuses as ProductsAliasAR;
+use app\models\products\active_record\ProductStatuses as ActiveRecordProductStatuses;
 use yii\db\ActiveQuery;
 
 /**
  * Class ProductStatuses
  * @package app\models\products
  */
-class ProductStatuses extends ProductsAliasAR
+class ProductStatuses extends ActiveRecordProductStatuses
 {
 	/**
 	 * @return ActiveQuery

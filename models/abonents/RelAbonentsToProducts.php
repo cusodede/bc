@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
-use app\models\abonents\active_record\RelAbonentsToProducts as RelAbonentsToProductsAR;
+use app\models\abonents\active_record\RelAbonentsToProducts as ActiveRecordRelAbonentsToProducts;
 use app\models\products\Products;
 use app\models\products\ProductStatuses;
 use yii\db\ActiveQuery;
@@ -17,7 +17,7 @@ use yii\db\ActiveQuery;
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
  */
-class RelAbonentsToProducts extends RelAbonentsToProductsAR
+class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 {
 	/**
 	 * @return ActiveQuery

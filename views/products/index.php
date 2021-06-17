@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'type_id',
 				'format' => 'text',
-				'value' => static fn(Products $product) => EnumProductsTypes::getType($product->type_id),
+				'value' => static fn(Products $product) => EnumProductsTypes::getTypeName($product->type_id),
 			],
 			[
 				'filter' => Select2::widget([

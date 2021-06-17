@@ -3,14 +3,16 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
-use app\models\abonents\active_record\Abonents as AbonentsAR;
+use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use yii\db\ActiveQuery;
 
 /**
  * Class Abonents
  * @package app\models\abonents
+ *
+ * @property RelAbonentsToProducts[] $relatedAbonentsToProducts
  */
-class Abonents extends AbonentsAR
+class Abonents extends ActiveRecordAbonents
 {
 	/**
 	 * @return ActiveQuery
