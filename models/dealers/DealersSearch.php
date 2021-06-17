@@ -4,8 +4,12 @@ declare(strict_types = 1);
 namespace app\models\dealers;
 
 use app\models\dealers\active_record\DealersAR;
+use app\models\managers\Managers;
 use app\models\store\Stores;
+use app\models\sys\users\Users;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use Throwable;
 
 /**
  * Class StoresSearch
@@ -55,6 +59,34 @@ final class DealersSearch extends DealersAR {
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store]);
+
+		$this->filterDataByUser($query);
+	}
+
+	/**
+	 * Filters the records shown for current user
+	 * @param $query
+	 * @throws Throwable
+	 */
+	private function filterDataByUser($query):void {
+		$user = Users::Current();
+		if ($user->isAllPermissionsGranted()) {
+			return;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null === $manager) {
+			return;
+		}
+
+		if ($user->hasPermission(['manager_dealer'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					self::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
+		}
 	}
 
 	/**
