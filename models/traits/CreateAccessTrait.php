@@ -47,7 +47,7 @@ trait CreateAccessTrait {
 	 * @return void
 	 */
 	public function modifyName():void {
-		if ($this->isFioChanged) {
+		if ($this->isFioChanged & null !== $this->relatedUser) {
 			$user = $this->relatedUser;
 			$user->username = $this->fio;
 			if (!$user->save()) {
