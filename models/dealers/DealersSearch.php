@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\dealers;
 
 use app\models\dealers\active_record\DealersAR;
+use app\models\dealers\active_record\relations\RelDealersToStores;
 use app\models\managers\Managers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -42,6 +43,7 @@ final class DealersSearch extends DealersAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
+		$query->joinWith(['relatedDealersToStores']);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -78,11 +80,11 @@ final class DealersSearch extends DealersAR {
 			return;
 		}
 
-		if ($user->hasPermission(['manager_dealer'])) {
+		if ($user->hasPermission(['dealer_managers'])) {
 			$query->andFilterWhere(
 				[
 					'in',
-					self::tableName().'.id',
+					RelDealersToStores::tableName().'.dealer_id',
 					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
 				]
 			);
