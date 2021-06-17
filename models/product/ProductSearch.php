@@ -5,6 +5,7 @@ namespace app\models\product;
 
 use app\models\product\active_record\ProductAR;
 use yii\data\ActiveDataProvider;
+use DomainException;
 
 /**
  * Class ProductSearch
@@ -31,9 +32,22 @@ class ProductSearch extends ProductAR {
 
 		$this->load($params);
 
-		if (!$this->validate()) return $dataProvider;
+		if (!$this->validate()) {
+			return $dataProvider;
+		}
 
 		return $dataProvider;
+	}
+
+	/**
+	 * @param int $orderId
+	 * @return ProductOrder
+	 */
+	public function getExistentSimcardOrder(int $orderId):ProductOrder {
+		if ($find = ProductOrder::find()->where(['type' => 1, 'id' => $orderId])) {
+			return $find;
+		}
+		throw new DomainException("Не получилось найти заказ по симкарте с id $orderId");
 	}
 
 }

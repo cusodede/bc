@@ -7,6 +7,7 @@ use app\models\product\Product;
 use app\models\product\active_record\relations\RelOrderToProduct;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
+use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;
@@ -30,6 +31,16 @@ use yii\db\ActiveRecord;
  */
 class ProductOrderAR extends ActiveRecord {
 	use StatusesTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			ProductOrderSimcardAsyncBehaviour::class
+		];
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
