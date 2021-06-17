@@ -33,6 +33,7 @@ final class DealersSearch extends DealersAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws Throwable
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();

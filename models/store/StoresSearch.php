@@ -41,6 +41,7 @@ final class StoresSearch extends StoresAR {
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws Throwable
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = $this->setQuery();
