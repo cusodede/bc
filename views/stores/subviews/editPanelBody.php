@@ -7,9 +7,11 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
+use app\controllers\DealersController;
 use app\controllers\ManagersController;
 use app\controllers\SellersController;
 use app\models\branches\active_record\references\RefBranches;
+use app\models\dealers\Dealers;
 use app\models\managers\Managers;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
@@ -82,6 +84,16 @@ use yii\web\View;
 			'selectModelClass' => Managers::class,
 			'options' => ['placeholder' => ''],
 			'ajaxSearchUrl' => ManagersController::to('ajax-search')
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'dealer')->widget(SelectModelWidget::class, [
+			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
+			'selectModelClass' => Dealers::class,
+			'options' => ['placeholder' => '', 'multiple' => false],
+			'ajaxSearchUrl' => DealersController::to('ajax-search')
 		]) ?>
 	</div>
 </div>
