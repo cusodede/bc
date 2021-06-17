@@ -55,6 +55,7 @@ final class DealersSearch extends DealersAR {
 	/**
 	 * @param $query
 	 * @return void
+	 * @throws Throwable
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])

@@ -63,6 +63,7 @@ final class StoresSearch extends StoresAR {
 	/**
 	 * @param $query
 	 * @return void
+	 * @throws Throwable
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
