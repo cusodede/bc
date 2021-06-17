@@ -42,6 +42,7 @@ class Sales extends SalesAR {
 
 	/**
 	 * @return Rewards[]
+	 * @throws \Exception
 	 */
 	public function getRewards():array {
 		$rules = RefRewardsRules::findRules($this->relatedProducts);

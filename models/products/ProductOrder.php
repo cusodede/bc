@@ -11,4 +11,10 @@ use app\models\products\active_record\ProductOrderAR;
  */
 class ProductOrder extends ProductOrderAR {
 
+	/**
+	 * Заглушка, чтобы инспектор не ругался на пустой стаб
+	 */
+	public function dummy_todo_function():void {
+
+	}
 }

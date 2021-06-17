@@ -11,4 +11,10 @@ use app\models\store\active_record\StoresAR;
  */
 class Stores extends StoresAR {
 
+	/**
+	 * Заглушка, чтобы инспектор не ругался на пустой стаб
+	 */
+	public function dummy_todo_function():void {
+
+	}
 }
