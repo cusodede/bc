@@ -15,11 +15,14 @@ use app\models\products\active_record\Products;
  * @property string $name Название партнера
  * @property string $created_at Дата создания партнера
  * @property string $inn ИНН партнера
+ * @property string $phone Телефон поддержки партнера
+ * @property string $email Почтовый адрес поддержки партнера
  * @property int $category_id id категории партнера
  * @property int $deleted Флаг активности
  * @property string $updated_at Дата обновления партнера
+ * @property string $comment Комментарий
  *
- * @property-read ActiveQuery $category
+ * @property ActiveQuery $category
  * @property Products[] $products
  */
 class Partners extends ActiveRecord
@@ -41,10 +44,14 @@ class Partners extends ActiveRecord
 			[['name', 'inn', 'category_id'], 'required', 'message' => 'Заполните {attribute} партнера!'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['deleted', 'category_id'], 'integer'],
+			[['comment'], 'string'],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['inn'], 'string', 'max' => 12],
 			[['inn'], 'unique', 'message' => 'Партнер с таким {attribute} уже существует'],
 			[['inn'], 'match', 'pattern' => '/^\d{10}(?:\d{2})?$/', 'message' => 'Некорректный {attribute}'],
+			[['phone'], 'match', 'pattern' => '/^\d{11}$/', 'message' => 'Значение не верно, пример: 79050968533'],
+			[['email'], 'string', 'max' => 255],
+			[['email'], 'email'],
 			[['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefPartnersCategories::class, 'targetAttribute' => ['category_id' => 'id']],
 		];
 	}
@@ -59,9 +66,12 @@ class Partners extends ActiveRecord
 			'name' => 'Наименование',
 			'created_at' => 'Дата создания',
 			'inn' => 'ИНН',
+			'phone' => 'Телефон поддержки',
+			'email' => 'Почтовый адрес поддержки',
 			'category_id' => 'Категория партнера',
 			'deleted' => 'Флаг удаления',
 			'updated_at' => 'Дата обновления',
+			'comment' => 'Комментарий',
 		];
 	}
 
