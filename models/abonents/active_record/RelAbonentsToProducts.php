@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\models\abonents\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\products\active_record\Products;
 use app\models\products\active_record\ProductStatuses;
-use app\models\products\Products;
 use pozitronik\core\traits\Relations;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property int $product_id
  *
  * @property ProductStatuses[] $relatedProductStatuses
+ * @property ProductStatuses $relatedLastProductStatus
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
  */
@@ -66,6 +67,14 @@ class RelAbonentsToProducts extends ActiveRecord
 	public function getRelatedProductStatuses(): ActiveQuery
 	{
 		return $this->hasMany(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedLastProductStatus(): ActiveQuery
+	{
+		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['product_statuses.created_at' => SORT_DESC]);
 	}
 
 	/**
