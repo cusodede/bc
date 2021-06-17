@@ -65,5 +65,6 @@ use yii\grid\ActionColumn;
 		],
 
 	]
-]) ?>
+])
+?>
 
