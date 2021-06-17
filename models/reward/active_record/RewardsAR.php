@@ -4,11 +4,14 @@ declare(strict_types = 1);
 namespace app\models\reward\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\products\Products;
+use app\models\products\ProductsInterface;
 use app\models\reward\active_record\references\RefRewardsOperations;
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
+use yii\base\Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -19,11 +22,12 @@ use yii\db\ActiveRecord;
  * @property int $user Аккаунт
  * @property int $operation Операция
  * @property int $reason Причина начисления
- * @property int $rule Правило расчёта
- * @property int $status Статус
+ * @property null|int $rule Правило расчёта
  * @property int $quantity Расчётное вознаграждение
  * @property string|null $waiting Ожидаемое событие
  * @property string $comment Произвольный комментарий
+ * @property int|null $product_id id товара, связанного с вознаграждением (если есть)
+ * @property int|null $product_type id типа товара, связанного с вознаграждением (если есть)
  * @property string $create_date Дата создания
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
@@ -31,10 +35,13 @@ use yii\db\ActiveRecord;
  * @property RefRewardsOperations $refRewardsOperations Справочник операций
  * @property RefRewardsRules $refRewardsRules Справочник правил расчета вознаграждения
  * @property Users $relatedUser Пользователь к которому относится вознаграждение
+ *
  */
 class RewardsAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	use StatusesTrait;
+
+	private int $status;//костыль для присвоения статуса новой модели
 
 	/**
 	 * {@inheritdoc}
@@ -48,9 +55,9 @@ class RewardsAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['user', 'operation', 'rule'], 'required'],
+			[['user', 'operation'], 'required'],
 			['create_date', 'default', 'value' => DateHelper::lcDate()],
-			[['user', 'operation', 'rule', 'quantity', 'override', 'deleted'], 'integer'],
+			[['user', 'operation', 'rule', 'quantity', 'override', 'deleted', 'product_id', 'product_type'], 'integer'],
 			[['comment', 'waiting'], 'string'],
 			[['create_date'], 'safe'],
 			[['override'], 'unique'],
@@ -63,7 +70,6 @@ class RewardsAR extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
-			'status' => 'Статус',
 			'user' => 'Аккаунт',
 			'operation' => 'Операция',
 			'rule' => 'Правило расчёта',
@@ -73,6 +79,14 @@ class RewardsAR extends ActiveRecord {
 			'override' => 'Переопределено',
 			'deleted' => 'Флаг удаления'
 		];
+	}
+
+	/**
+	 * @return ProductsInterface|null
+	 * @throws Exception
+	 */
+	public function getRelatedProducts():?ProductsInterface {
+		return Products::getModel($this->product_id, $this->product_type);
 	}
 
 	/**
@@ -90,9 +104,49 @@ class RewardsAR extends ActiveRecord {
 	}
 
 	/**
+	 * @param mixed $rule
+	 */
+	public function setRefRewardsRules($rule):void {
+		if (null !== $rule = self::ensureModel(RefRewardsRules::class, $rule)) {
+			/** @var RefRewardsRules $rule */
+			$this->rule = $rule->id;
+		}
+	}
+
+	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUser():ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'user']);
 	}
+
+
+	/**
+	 * @param mixed $relatedUser
+	 */
+	public function setRelatedUser($relatedUser):void {
+		if (null !== $user = self::ensureModel(Users::class, $relatedUser)) {
+			/** @var Users $user */
+			$this->user = $user->id;
+		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getStatus():int {
+		return $this->currentStatusId;
+	}
+
+	/**
+	 * @param int $status
+	 */
+	public function setStatus(int $status):void {
+		if ($this->isNewRecord) {
+			$this->on(ActiveRecord::EVENT_AFTER_INSERT, function($event) {//отложим связывание после сохранения
+				$this->currentStatusId = $event->data[0];
+			}, [$status]);
+		}
+	}
+
 }
