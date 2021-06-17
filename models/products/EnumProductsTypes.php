@@ -17,7 +17,7 @@ class EnumProductsTypes
 
 	public const PRODUCTS_TYPES = [
 		self::ID_SUBSCRIPTION => 'Подписка',
-		self::ID_BUNDLE => 'Бандл',
+		self::ID_BUNDLE       => 'Бандл',
 	];
 
 	/**
@@ -25,7 +25,7 @@ class EnumProductsTypes
 	 * @return string|null
 	 * @throws Exception
 	 */
-	public static function getType(int $typeId): ?string
+	public static function getTypeName(int $typeId): ?string
 	{
 		return ArrayHelper::getValue(self::PRODUCTS_TYPES, $typeId);
 	}
