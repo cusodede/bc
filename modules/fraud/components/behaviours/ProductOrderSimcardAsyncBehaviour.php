@@ -13,6 +13,10 @@ use yii\db\AfterSaveEvent;
 use yii\db\Exception;
 use DomainException;
 
+/**
+ * Class ProductOrderSimcardAsyncBehaviour
+ * @package app\modules\fraud\components\behaviours
+ */
 class ProductOrderSimcardAsyncBehaviour extends Behavior
 {
 	public array $validators = [
@@ -34,18 +38,9 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior
 	 */
 	public function afterInsert(AfterSaveEvent $event)
 	{
-		$insertRows = array_map(function ($class) use ($event) {
-			$step = FraudCheckStep::newStep($event->sender->id, get_class($event->sender), $class);
-			return array_values($step->toArray());
-		}, $this->validators);
-
-		$insertedRows = Yii::$app->db->createCommand()->batchInsert(FraudCheckStep::tableName(),
-			['entity_id', 'entity_class', 'fraud_validator', 'status', 'created_at', 'updated_at'],
-			$insertRows
-		)->execute();
-		if ($insertedRows !== count($insertRows)) {
-			throw new DomainException("Не получилось вставить все записи");
-		}
+		(new FraudCheckStep())->addNewSteps(array_map(function ($class) use ($event) {
+			return FraudCheckStep::newStep($event->sender->id, get_class($event->sender), $class);
+		}, $this->validators));
 
 		foreach ($this->validators as $validatorClass) {
 			Yii::$app->queue->push(new FraudValidatorJob([

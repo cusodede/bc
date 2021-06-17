@@ -11,7 +11,7 @@ class IsActiveSimcardValidator implements FraudValidator
 {
 	/**
 	 * Например, ID заказа
-	 * @param int $entityId
+	 * @param int $productOrderId
 	 */
 	public function validate(int $productOrderId) {
 		$existentOrder = (new ProductSearch())->getExistentSimcardOrder($productOrderId);
@@ -25,7 +25,6 @@ class IsActiveSimcardValidator implements FraudValidator
 	/**
 	 * Если нужно повторно запустить проверку, передается id шага
 	 * @param int $fraudStepId
-	 * @return mixed
 	 */
 	public function repeatValidate(int $fraudStepId) {
 		$stepId = (new FraudCheckStepSearch())->getById($fraudStepId);

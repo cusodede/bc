@@ -4,6 +4,9 @@ declare(strict_types = 1);
 namespace app\modules\fraud\models;
 
 use app\modules\fraud\models\active_record\FraudCheckStepAr;
+use DomainException;
+use Yii;
+use yii\db\Exception;
 
 /**
  * Фродовая проверка
@@ -50,8 +53,27 @@ class FraudCheckStep extends FraudCheckStepAr {
 	public function getStatusName():?string
 	{
 		if ( ! array_key_exists($this->status, self::$statusesWithNames)) {
-			return nulll;
+			return null;
 		}
 		return self::$statusesWithNames[$this->status];
+	}
+
+	/**
+	 * @param array $steps
+	 * @throws Exception
+	 */
+	public function addNewSteps(array $steps)
+	{
+		$insertRows = array_map(function (FraudCheckStep $step)  {
+			return array_values($step->toArray());
+		}, $steps);
+
+		$insertedRows = Yii::$app->db->createCommand()->batchInsert(FraudCheckStep::tableName(),
+			['entity_id', 'entity_class', 'fraud_validator', 'status', 'created_at', 'updated_at'],
+			$insertRows
+		)->execute();
+		if ($insertedRows !== count($insertRows)) {
+			throw new DomainException("Не получилось вставить все записи");
+		}
 	}
 }

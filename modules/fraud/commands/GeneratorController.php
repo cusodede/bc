@@ -6,20 +6,23 @@ use app\models\product\ProductOrder;
 use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
 use app\modules\fraud\models\FraudCheckStep;
 use yii\console\Controller;
-use Yii;
+use yii\db\Exception;
 
+/**
+ * Class GeneratorController
+ * @package app\modules\fraud\commands
+ */
 class GeneratorController extends Controller
 {
+	/**
+	 * @throws Exception
+	 */
 	public function actionNewSteps()
 	{
-		$insertRows = array_map(function ($class) {
-			$step = FraudCheckStep::newStep(rand(1, 100), ProductOrder::class, $class);
-			return array_values($step->toArray());
-		}, (new ProductOrderSimcardAsyncBehaviour())->validators);
+		$behaviour = new ProductOrderSimcardAsyncBehaviour();
 
-		Yii::$app->db->createCommand()->batchInsert(FraudCheckStep::tableName(),
-			['entity_id', 'entity_class', 'fraud_validator', 'status', 'created_at', 'updated_at'],
-			$insertRows
-		)->execute();
+		(new FraudCheckStep())->addNewSteps(array_map(function (string $validatorClass){
+			return FraudCheckStep::newStep(random_int(1, 100), ProductOrder::class, $validatorClass);
+		}, $behaviour->validators));
 	}
 }
