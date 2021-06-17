@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product\active_record;
+namespace app\models\products\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\modules\history\behaviors\HistoryBehavior;
@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * @property string $create_date Дата регистрации
  * @property int $deleted
  */
-class ProductAR extends ActiveRecord {
+class ProductsClassesAR extends ActiveRecord {
 	use ActiveRecordTrait;
 
 	/**
@@ -35,7 +35,7 @@ class ProductAR extends ActiveRecord {
 	 * {@inheritdoc}
 	 */
 	public static function tableName():string {
-		return 'product';
+		return 'products_classes';
 	}
 
 	/**
