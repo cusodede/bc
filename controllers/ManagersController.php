@@ -7,9 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\DefaultController;
 use app\models\managers\Managers;
 use app\models\managers\ManagersSearch;
-use app\models\sys\permissions\filters\PermissionFilter;
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -19,17 +17,6 @@ class ManagersController extends DefaultController {
 
 	public string $modelClass = Managers::class;
 	public string $modelSearchClass = ManagersSearch::class;
-
-	/**
-	 * @inheritDoc
-	 */
-	public function behaviors():array {
-		return ArrayHelper::merge(parent::behaviors(), [
-			'access' => [
-				'class' => PermissionFilter::class
-			]
-		]);
-	}
 
 	/**
 	 * @inheritDoc

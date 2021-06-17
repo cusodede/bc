@@ -7,6 +7,7 @@ use app\models\core\prototypes\DefaultController;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 
+
 /**
  * Class RewardsController
  */

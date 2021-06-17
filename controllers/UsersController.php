@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
@@ -50,6 +51,9 @@ class UsersController extends DefaultController {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		]);
 	}
