@@ -11,8 +11,8 @@ namespace app\models\products;
  * @property int $type уникальный id типа продукта
  */
 interface ProductsInterface {
-	const EVENT_CONFIRM = 'Confirm';
-	const EVENT_SELL = 'Sell';
+	public const EVENT_CONFIRM = 'Confirm';
+	public const EVENT_SELL = 'Sell';
 
 	/**
 	 * Регистрация продажи товара
