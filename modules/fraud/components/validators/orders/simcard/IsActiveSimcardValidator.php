@@ -7,6 +7,10 @@ use app\models\product\ProductSearch;
 use app\modules\fraud\components\FraudValidator;
 use app\modules\fraud\models\FraudCheckStepSearch;
 
+/**
+ * Class IsActiveSimcardValidator
+ * @package app\modules\fraud\components\validators\orders\simcard
+ */
 class IsActiveSimcardValidator implements FraudValidator
 {
 	/**
