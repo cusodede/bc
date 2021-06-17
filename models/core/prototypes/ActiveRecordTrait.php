@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
-use pozitronik\core\models\LCQuery;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
@@ -20,10 +19,10 @@ use yii\db\Transaction;
 trait ActiveRecordTrait {
 
 	/**
-	 * @return LCQuery
+	 * @return ActiveQuery
 	 */
-	public static function find():LCQuery {
-		return new LCQuery(static::class);
+	public static function find():ActiveQuery {
+		return new ActiveQuery(static::class);
 	}
 
 	/**
