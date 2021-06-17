@@ -7,19 +7,34 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\core\prototypes\ActiveFieldMap;
+use app\models\ref_partners_categories\active_record\RefPartnersCategories;
 use kartik\form\ActiveForm;
 use yii\base\Model;
 use yii\web\View;
+use kartik\select2\Select2;
 
 ?>
 
-<?php foreach ($model->attributes() as $attribute): ?>
-	<?php if ($model->isAttributeRequired($attribute)): ?>
-		<div class="row">
-			<div class="col-md-12">
-				<?= $form->field($model, $attribute)->widget(ActiveFieldMap::class) ?>
-			</div>
-		</div>
-	<?php endif ?>
-<?php endforeach; ?>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'name')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'inn')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'category_id')->widget(Select2::class, [
+			'data' => RefPartnersCategories::mapData(),
+			'pluginOptions' => [
+				'multiple' => false,
+				'allowClear' => true,
+				'placeholder' => 'Выберите категорию партнера',
+				'tags' => true
+			]
+		]) ?>
+	</div>
+</div>

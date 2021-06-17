@@ -21,8 +21,6 @@ use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
-use kartik\select2\Select2;
-use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 
 ModalHelperAsset::register($this);
 $this->title = 'Подписки';
@@ -86,20 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label' => 'Стоимость'
 			],
 			'trial_days_count',
-			[
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'category_id',
-					'data' => RefSubscriptionCategories::mapData(),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				]),
-				'attribute' => 'category_id',
-				'format' => 'text',
-				'value' => 'category.name',
-			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'product.created_at',

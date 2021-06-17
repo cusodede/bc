@@ -6,7 +6,6 @@ namespace app\models\subscriptions\active_record;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
 use app\models\products\EnumProductsTypes;
-use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\products\Products;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
@@ -17,10 +16,8 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int $product_id id продукта
- * @property int $category_id id категории подписки
  * @property int $trial_days_count
  *
- * @property RefSubscriptionCategories $category
  * @property Products $product
  */
 class Subscriptions extends ActiveRecord
@@ -41,11 +38,10 @@ class Subscriptions extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['product_id', 'category_id'], 'required', 'message' => 'Выберите {attribute}'],
-			[['product_id', 'category_id', 'trial_days_count'], 'integer'],
+			[['product_id'], 'required', 'message' => 'Выберите {attribute}'],
+			[['product_id', 'trial_days_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['trial_days_count'], 'default', 'value' => 0],
-			[['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSubscriptionCategories::class, 'targetAttribute' => ['category_id' => 'id']],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 			['product', RelationValidator::class],
 		];
@@ -59,7 +55,6 @@ class Subscriptions extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'product_id' => 'Продукт',
-			'category_id' => 'Категория подписки',
 			'trial_days_count' => 'Количество пробных дней',
 		];
 	}
@@ -68,16 +63,6 @@ class Subscriptions extends ActiveRecord
 	{
 		parent::init();
 		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::ID_SUBSCRIPTION]));
-	}
-
-	/**
-	 * Gets query for [[Category]].
-	 *
-	 * @return ActiveQuery
-	 */
-	public function getCategory(): ActiveQuery
-	{
-		return $this->hasOne(RefSubscriptionCategories::class, ['id' => 'category_id']);
 	}
 
 	/**
@@ -91,13 +76,13 @@ class Subscriptions extends ActiveRecord
 	}
 
 	/**
-	 * @param mixed $product
 	 * Универсальный сеттер: в $product может придти как модель, так и её ключ (строкой или цифрой).
+	 * @param mixed $product
 	 */
 	public function setProduct($product): void
 	{
-		if (null === $product = self::ensureModel(Products::class, $product)) {
-			throw new InvalidArgumentException("Невозможно обнаружить соответствующую модель");
+		if (null === $product = static::ensureModel(Products::class, $product)) {
+			throw new InvalidArgumentException('Невозможно обнаружить соответствующую модель');
 		}
 		$this->link('product', $product);
 	}

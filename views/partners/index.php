@@ -21,6 +21,8 @@ use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\select2\Select2;
+use app\models\ref_partners_categories\active_record\RefPartnersCategories;
 
 ModalHelperAsset::register($this);
 $this->title = 'Партнеры';
@@ -70,6 +72,20 @@ $this->params['breadcrumbs'][] = $this->title;
 			'id',
 			'name',
 			'inn',
+			[
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'category_id',
+					'data' => RefPartnersCategories::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
+				'attribute' => 'category_id',
+				'format' => 'text',
+				'value' => 'category.name',
+			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',
