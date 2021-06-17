@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\reward;
 
+use app\models\products\ProductsInterface;
 use app\models\reward\active_record\RewardsAR;
 
 /**
@@ -10,6 +11,8 @@ use app\models\reward\active_record\RewardsAR;
  * Логика над вознаграждениями.
  *
  * За что было вознаграждение? Я что-то продал
+ *
+ * @property null|ProductsInterface $relatedProducts Связанный проданный продукта
  */
 class Rewards extends RewardsAR {
 
@@ -27,9 +30,44 @@ class Rewards extends RewardsAR {
 	public const OPERATION_SELL = 1;
 
 	/**
-	 * @param array $rewards
+	 * @param self[] $rewards
 	 */
 	public static function register(array $rewards):void {
+		foreach ($rewards as $reward) {
+			$reward->save();
+		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function reasons():array {
+		return [
+			self::REASON_SALE_REGISTERED => 'Товар продан',
+			self::REASON_SALE_CONFIRMED => 'Подтверждение продажи',
+			self::REASON_FRAUD => 'Подозрительная операция'
+		];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function statuses():array {
+		return [
+			self::STATUS_APPLY => 'Начислено',
+			self::STATUS_WAIT => 'Ожидается',
+			self::STATUS_HOLD => 'Заморожено',
+			self::STATUS_ERROR => 'Ошибочное начисление'
+		];
+	}
+
+	/**
+	 * Ну, допустим
+	 * @param ProductsInterface $product
+	 */
+	public function setRelatedProducts(ProductsInterface $product):void {
+		$this->product_id = $product->id;
+		$this->product_type = $product->type;
 	}
 
 }
