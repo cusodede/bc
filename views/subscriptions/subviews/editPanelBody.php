@@ -12,7 +12,6 @@ use pozitronik\helpers\ArrayHelper;
 use app\models\subscriptions\Subscriptions;
 use yii\web\View;
 use kartik\select2\Select2;
-use app\models\ref_subscription_categories\active_record\RefSubscriptionCategories;
 use app\models\partners\Partners;
 use kartik\touchspin\TouchSpin;
 
@@ -48,17 +47,6 @@ use kartik\touchspin\TouchSpin;
 <div class="row">
 	<div class="col-md-4">
 		<?= $form->field($model, 'trial_days_count')->widget(TouchSpin::class) ?>
-	</div>
-	<div class="col-md-8">
-		<?= $form->field($model, 'category_id')->widget(Select2::class, [
-			'data' => RefSubscriptionCategories::mapData(),
-			'pluginOptions' => [
-				'multiple' => false,
-				'allowClear' => true,
-				'placeholder' => 'Выберите категорию подписки',
-				'tags' => true
-			]
-		]) ?>
 	</div>
 </div>
 

@@ -18,7 +18,7 @@ class PartnersSearch extends Partners
 	public function rules(): array
 	{
 		return [
-			[['id'], 'integer'],
+			[['id', 'category_id'], 'integer'],
 			[['name', 'inn'], 'safe'],
 		];
 	}
@@ -47,6 +47,7 @@ class PartnersSearch extends Partners
 		}
 
 		$query->andFilterWhere(['id' => $this->id])
+			->andFilterWhere(['category_id' => $this->category_id])
 			->andFilterWhere(['like', 'inn', $this->inn])
 			->andFilterWhere(['like', 'name', $this->name]);
 

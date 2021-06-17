@@ -73,7 +73,7 @@ $config = [
 			'defaultRoute' => 'references',
 			'params' => [
 				'baseDir' => [
-					'@app/models/ref_subscription_categories/active_record'
+					'@app/models/ref_partners_categories/active_record'
 				],
 			],
 		],

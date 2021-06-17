@@ -26,7 +26,7 @@ use yii\widgets\DetailView;
 		],
 		'trial_days_count',
 		[
-			'attribute' => 'category.name',
+			'attribute' => 'product.partner.category.name',
 			'label' => 'Категория',
 		],
 		[
