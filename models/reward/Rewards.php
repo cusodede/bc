@@ -29,7 +29,7 @@ class Rewards extends RewardsAR {
 	/**
 	 * @param array $rewards
 	 */
-	public static function register(array $rewards) {
+	public static function register(array $rewards):void {
 	}
 
 }

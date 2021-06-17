@@ -7,7 +7,6 @@ use app\models\products\ProductsInterface;
 use app\models\reward\Rewards;
 use Exception;
 use pozitronik\references\models\CustomisableReference;
-use yii\base\DynamicModel;
 use yii\helpers\ArrayHelper;
 
 /**

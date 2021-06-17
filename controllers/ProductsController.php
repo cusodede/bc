@@ -6,6 +6,8 @@ namespace app\controllers;
 
 use app\models\products\Products;
 use pozitronik\helpers\ReflectionHelper;
+use ReflectionException;
+use yii\base\UnknownClassException;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 
@@ -16,8 +18,10 @@ class ProductsController extends Controller {
 
 	/**
 	 * @return string
+	 * @throws ReflectionException
+	 * @throws UnknownClassException
 	 */
-	public function actionIndex() {
+	public function actionIndex():string {
 
 		return $this->render('index', [
 				'dataProvider' => new ArrayDataProvider([

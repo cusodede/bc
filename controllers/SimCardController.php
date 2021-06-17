@@ -26,6 +26,7 @@ class SimCardController extends DefaultController {
 	/**
 	 * Продажа карты (протипирую)
 	 * @param int $id
+	 * @throws NotFoundHttpException
 	 */
 	public function actionSell(int $id):void {
 		if (null === $model = SimCard::findOne($id)) throw new NotFoundHttpException();

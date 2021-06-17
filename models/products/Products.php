@@ -22,6 +22,7 @@ class Products extends ProductsAR {
 
 	/**
 	 * @return self[]
+	 * @throws Exception
 	 */
 	public static function all():array {
 		$config = ArrayHelper::getValue(Yii::$app, 'params.productsConfig', []);
