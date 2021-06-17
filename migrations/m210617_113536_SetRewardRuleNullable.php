@@ -11,6 +11,7 @@ class m210617_113536_SetRewardRuleNullable extends Migration {
 	 */
 	public function safeUp() {
 		$this->alterColumn('rewards', 'rule', $this->integer()->null()->comment('Правило расчёта'));
+		$this->alterColumn('rewards', 'waiting', $this->string()->null()->comment('Ожидает события'));
 	}
 
 	/**
@@ -18,6 +19,7 @@ class m210617_113536_SetRewardRuleNullable extends Migration {
 	 */
 	public function safeDown() {
 		$this->alterColumn('rewards', 'rule', $this->integer()->notNull()->comment('Правило расчёта'));
+		$this->alterColumn('rewards', 'waiting', $this->string()->notNull()->comment('Ожидает события'));
 	}
 
 }
