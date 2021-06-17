@@ -51,8 +51,8 @@ class Sales extends SalesAR {
 				'relatedProducts' => $this->relatedProducts,//товар, за который начисляется бонус
 				'relatedRule' => $rule,
 				'operation' => Rewards::OPERATION_SELL,//инициирующая операция
-				'reason' => $rule->rewardReason,//причина начисления
-				'status' => $rule->rewardStatus,//статус
+				'reason' => $rule->reason,//причина начисления
+				'status' => $rule->status,//статус
 				'quantity' => $rule->quantity,
 				'waiting' => $rule->waiting
 			]);
