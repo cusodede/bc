@@ -5,9 +5,9 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
-use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
+use app\modules\fraud\FraudModule;
 use app\modules\history\HistoryModule;
 use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
@@ -34,6 +34,7 @@ use yii\web\JsonParser;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
+$queue = require __DIR__ . '/queue.php';
 $statusRules = require __DIR__.'/status_rules.php';
 
 $config = [
@@ -41,7 +42,7 @@ $config = [
 	'name' => 'Beeline Cabinet',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log', 'history'],
+	'bootstrap' => ['log', 'history', 'queue'],
 	'homeUrl' => '/home/home',//<== строка, не массив
 
 	'aliases' => [
@@ -92,6 +93,9 @@ $config = [
 		'notifications' => [
 			'class' => NotificationsModule::class
 		],
+		'fraud' => [
+			'class' => FraudModule::class
+		]
 	],
 	'components' => [
 		'request' => [
@@ -142,6 +146,7 @@ $config = [
 			'itemsProperty' => 'items'
 		],
 		'db' => $db,
+		'queue' => $queue,
 		'urlManager' => [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
