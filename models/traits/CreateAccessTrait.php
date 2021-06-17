@@ -11,16 +11,19 @@ use Yii;
  * Trait CreateAccessTrait
  *
  * @property array $registrationErrors массив с ошибками во время регистрации
+ * @property bool $isFioChanged менялись ли значения полей name, surname, patronymic
  *
  * @property string $email
  * @property string $login
  *
  * @property Users $relatedUser Пользователь связанный с продавцом/менеджером
  *
+ * @property string $fio ФИО
  * @property string $urlToEntity
  */
 trait CreateAccessTrait {
 	public array $registrationErrors = [];
+	public bool $isFioChanged = false;
 
 	/**
 	 * Создает учетную запись для продавца/менеджера и привязывает ее к продавцу/менеджеру. Если не удается,
@@ -36,6 +39,24 @@ trait CreateAccessTrait {
 			$this->sendErrors();
 		} else {
 			$this->confirmRegistrationRequest();
+		}
+	}
+
+	/**
+	 * Обновляет поле username для системного пользователя на основе данных для продавца/менеджера.
+	 * @return void
+	 */
+	public function modifyName():void {
+		if ($this->isFioChanged) {
+			$user = $this->relatedUser;
+			$user->username = $this->fio;
+			if (!$user->save()) {
+				$this->registrationErrors[] = 'Не удалось модифицировать ФИО системного пользователя';
+			}
+
+			if ($this->registrationErrors) {
+				$this->sendErrors();
+			}
 		}
 	}
 
@@ -110,4 +131,15 @@ trait CreateAccessTrait {
 	 * @return string
 	 */
 	abstract public function getUrlToEntity():string;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function beforeSave($insert):bool {
+		if (count(array_intersect(['name', 'surname', 'patronymic'], array_keys($this->dirtyAttributes))) > 0) {
+			$this->isFioChanged = true;
+		}
+		return parent::beforeValidate();
+	}
+
 }

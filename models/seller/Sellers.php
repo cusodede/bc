@@ -21,7 +21,6 @@ use pozitronik\filestorage\traits\FileStorageTrait;
  * @property mixed $temporaryResidence Разрешение на временное проживание
  * @property mixed $visa Виза
  *
- * @property string $fio ФИО
  * @property string $urlToEntity
  */
 class Sellers extends SellersAR {

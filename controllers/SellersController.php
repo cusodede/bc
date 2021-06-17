@@ -86,6 +86,7 @@ class SellersController extends DefaultController {
 
 		if (true === $posting) {/* Модель была успешно прогружена */
 			$model->uploadAttributes();
+			$model->modifyName();
 			return $this->redirect('index');
 		}
 		/* Пришёл постинг, но есть ошибки */
