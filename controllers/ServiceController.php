@@ -22,7 +22,6 @@ class ServiceController extends Controller {
 				'class' => PermissionFilter::class
 			]
 		];
-
 	}
 
 	/**
