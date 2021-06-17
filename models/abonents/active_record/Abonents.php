@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_record;
 
+use app\models\abonents\active_query\AbonentsActiveQuery;
+use app\models\core\prototypes\ActiveRecordTrait;
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -22,6 +26,8 @@ use yii\db\ActiveRecord;
  */
 class Abonents extends ActiveRecord
 {
+	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -68,5 +74,14 @@ class Abonents extends ActiveRecord
 	public function getRelatedAbonentsToProducts(): ActiveQuery
 	{
 		return $this->hasMany(RelAbonentsToProducts::class, ['abonent_id' => 'id']);
+	}
+
+	/**
+	 * @return AbonentsActiveQuery
+	 * @throws InvalidConfigException
+	 */
+	public static function find(): AbonentsActiveQuery
+	{
+		return Yii::createObject(AbonentsActiveQuery::class, [static::class]);
 	}
 }
