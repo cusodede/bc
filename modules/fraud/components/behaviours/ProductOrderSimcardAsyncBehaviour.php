@@ -45,7 +45,7 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior
 		foreach ($this->validators as $validatorClass) {
 			Yii::$app->queue->push(new FraudValidatorJob([
 				'validatorClass' => $validatorClass,
-				'productOrderId' => $event->sender->id
+				'entityId' => $event->sender->id
 			]));
 		}
 	}

@@ -13,7 +13,7 @@ use yii\queue\Queue;
  */
 class FraudValidatorJob extends BaseObject implements JobInterface
 {
-	public int $productOrderId;
+	public int $entityId;
 	public string $validatorClass;
 
 	/**
@@ -25,6 +25,6 @@ class FraudValidatorJob extends BaseObject implements JobInterface
 		 * @var FraudValidator $validator
 		 */
 		$validator = new $this->validatorClass();
-		$validator->validate($this->productOrderId);
+		$validator->validate($this->entityId);
 	}
 }
