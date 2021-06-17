@@ -4,6 +4,7 @@ declare(strict_types = 1);
 /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
+use app\models\products\SimCard;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
@@ -43,6 +44,12 @@ return [
 			'attributes' => [
 				'name',
 			]
+		]
+	],
+	'productsConfig' => [
+		1 => [
+			'class' => SimCard::class,
+			'name' => 'Сим-карты'
 		]
 	]
 
