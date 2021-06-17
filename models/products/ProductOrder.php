@@ -8,7 +8,6 @@ use app\models\products\active_record\ProductOrderAR;
 /**
  * Class ProductOrder
  * Описание заказа
- * @property ProductInterface[] $default Список товаров в заказе
  */
 class ProductOrder extends ProductOrderAR {
 
