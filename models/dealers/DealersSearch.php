@@ -25,8 +25,11 @@ final class DealersSearch extends DealersAR {
 	 */
 	public function rules():array {
 		return [
+			[['id', 'client_code', 'code', 'name'], 'filter', 'filter' => 'trim'],
 			[['id', 'deleted'], 'integer'],
 			[['name'], 'string', 'max' => 255],
+			[['code'], 'string', 'max' => 4],
+			[['client_code'], 'string', 'max' => 9]
 		];
 	}
 
@@ -61,6 +64,8 @@ final class DealersSearch extends DealersAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere([self::tableName().'.code' => $this->code])
+			->andFilterWhere([self::tableName().'.client_code' => $this->client_code])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store]);
 
@@ -99,7 +104,7 @@ final class DealersSearch extends DealersAR {
 	private function setSort($dataProvider):void {
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
-			'attributes' => ['id', 'name', 'deleted']
+			'attributes' => ['id', 'name', 'code', 'client_code', 'deleted']
 		]);
 	}
 }
