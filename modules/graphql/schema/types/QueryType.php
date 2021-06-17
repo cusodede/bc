@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types;
 
 use app\models\partners\Partners;
+use app\models\partners\PartnersSearch;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -23,9 +24,9 @@ class QueryType extends ObjectType
 				'partners' => [
 					'type' => Type::listOf(Types::partner()),
 					'args' => [
-						'inn' => Type::string(),
+						'search' => Type::string(),
 					],
-					'resolve' => fn(Partners $partner = null, array $args = []): ?array => Partners::find()->where($args)->all(),
+					'resolve' => fn(Partners $partner = null, array $args = []): ?array => PartnersSearch::searchWithParams($args),
 				],
 				'partner' => [
 					'type' => Types::partner(),

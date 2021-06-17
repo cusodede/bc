@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\partners;
 
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use Exception;
 
 /**
  * Модель поиска по партнерам
@@ -52,5 +54,22 @@ class PartnersSearch extends Partners
 			->andFilterWhere(['like', 'name', $this->name]);
 
 		return $dataProvider;
+	}
+
+	/**
+	 * Статичный поиск по параметрам для GraphQl
+	 * @param $params
+	 * @return array
+	 * @throws Exception
+	 */
+	public static function searchWithParams($params): array
+	{
+		$query = Partners::find();
+		if ($search = ArrayHelper::getValue($params, 'search')) {
+			$query->andFilterWhere(['or', ['like', 'inn', $search], ['like', 'name', $search]]);
+		}
+		ArrayHelper::remove($params, 'search');
+		$query->andFilterWhere($params);
+		return $query->all();
 	}
 }
