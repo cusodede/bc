@@ -18,6 +18,7 @@ class StoresController extends DefaultController {
 
 	public string $modelClass = Stores::class;
 	public string $modelSearchClass = StoresSearch::class;
+	public bool $enablePrototypeMenu = false;
 
 	public function getMappingRules():array {
 		return [

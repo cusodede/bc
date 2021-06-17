@@ -17,6 +17,7 @@ class DealersController extends DefaultController {
 
 	public string $modelClass = Dealers::class;
 	public string $modelSearchClass = DealersSearch::class;
+	public bool $enablePrototypeMenu = false;
 
 	public array $mappingRules = [
 		/*номер столбца => правило сопоставления*/
