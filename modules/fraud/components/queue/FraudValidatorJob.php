@@ -13,8 +13,8 @@ use yii\queue\Queue;
  */
 class FraudValidatorJob extends BaseObject implements JobInterface
 {
-	public int $entityId;
-	public string $validatorClass;
+	public $entityId;
+	public $validatorClass;
 
 	/**
 	 * @param Queue $queue which pushed and is handling the job

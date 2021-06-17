@@ -11,7 +11,6 @@ use yii\db\ActiveRecord;
 use Yii;
 use yii\db\AfterSaveEvent;
 use yii\db\Exception;
-use DomainException;
 
 /**
  * Class ProductOrderSimcardAsyncBehaviour
@@ -36,9 +35,8 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior
 	 * @param AfterSaveEvent $event
 	 * @throws Exception
 	 */
-	public function afterInsert(AfterSaveEvent $event)
-	{
-		(new FraudCheckStep())->addNewSteps(array_map(function ($class) use ($event) {
+	public function afterInsert(AfterSaveEvent $event):void {
+		(new FraudCheckStep())->addNewSteps(array_map(static function ($class) use ($event) {
 			return FraudCheckStep::newStep($event->sender->id, get_class($event->sender), $class);
 		}, $this->validators));
 

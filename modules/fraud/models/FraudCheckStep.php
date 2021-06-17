@@ -52,28 +52,39 @@ class FraudCheckStep extends FraudCheckStepAr {
 	 */
 	public function getStatusName():?string
 	{
-		if ( ! array_key_exists($this->status, self::$statusesWithNames)) {
-			return null;
-		}
-		return self::$statusesWithNames[$this->status];
+		return self::$statusesWithNames[$this->status]??null;
 	}
 
 	/**
 	 * @param array $steps
 	 * @throws Exception
 	 */
-	public function addNewSteps(array $steps)
-	{
-		$insertRows = array_map(function (FraudCheckStep $step)  {
+	public function addNewSteps(array $steps):void {
+		$insertRows = array_map(static function (FraudCheckStep $step)  {
 			return array_values($step->toArray());
 		}, $steps);
 
-		$insertedRows = Yii::$app->db->createCommand()->batchInsert(FraudCheckStep::tableName(),
+		$insertedRows = Yii::$app->db->createCommand()->batchInsert(self::tableName(),
 			['entity_id', 'entity_class', 'fraud_validator', 'status', 'created_at', 'updated_at'],
 			$insertRows
 		)->execute();
 		if ($insertedRows !== count($insertRows)) {
 			throw new DomainException("Не получилось вставить все записи");
 		}
+	}
+
+	public function statusSuccess():self {
+		$this->status = self::STATUS_SUCCESS;
+		return $this;
+	}
+
+	public function statusProcess():self {
+		$this->status = self::STATUS_PROCESS;
+		return $this;
+	}
+
+	public function statusFail():self {
+		$this->status = self::STATUS_FAIL;
+		return $this;
 	}
 }

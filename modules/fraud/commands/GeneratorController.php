@@ -19,9 +19,11 @@ class GeneratorController extends Controller
 	 */
 	public function actionNewSteps()
 	{
+		FraudCheckStep::deleteAll();
+
 		$behaviour = new ProductOrderSimcardAsyncBehaviour();
 
-		(new FraudCheckStep())->addNewSteps(array_map(function (string $validatorClass){
+		(new FraudCheckStep())->addNewSteps(array_map(static function (string $validatorClass){
 			return FraudCheckStep::newStep(random_int(1, 100), ProductOrder::class, $validatorClass);
 		}, $behaviour->validators));
 	}

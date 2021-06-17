@@ -16,15 +16,18 @@ class IndexController extends Controller
 {
 	/**
 	 * @return string
+	 * @throws \Throwable
 	 */
-	public function actionList()
-	{
+	public function actionList():string {
 		$request = Yii::$app->request;
-		if ($request->isPost) {
-			if ($repeatValidateId = (int) $request->post('repeat_validate_id')) {
+		$notification = null;
+
+		if ($request->isPost && $repeatValidateId = (int) $request->post('repeat_validate_id')) {
+			if ($repeatValidateId > 0) {
 				Yii::$app->queue->push(new FraudValidatorRepeatJob([
 					'fraudStepId' => $repeatValidateId
 				]));
+				$notification = 'Задание на перерасчет фрода успешно добавлено в очередь';
 			}
 		}
 
@@ -32,7 +35,8 @@ class IndexController extends Controller
 		$searchModel = new FraudCheckStepSearch();
 		return $this->render('list', [
 			'searchModel' => $searchModel,
-			'dataProvider' => $searchModel->search($params)
+			'dataProvider' => $searchModel->search($params),
+			'notification' => $notification
 		]);
 	}
 }

@@ -2,6 +2,10 @@
 
 namespace app\modules\fraud\components;
 
+/**
+ * Interface FraudValidator
+ * @package app\modules\fraud\components
+ */
 interface FraudValidator
 {
 	/**

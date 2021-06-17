@@ -5,6 +5,7 @@ namespace app\modules\fraud\models;
 
 use app\modules\fraud\models\active_record\FraudCheckStepAr;
 use DomainException;
+use Throwable;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -19,7 +20,7 @@ class FraudCheckStepSearch extends FraudCheckStepAr
 	 * @return ActiveDataProvider
 	 * @throws Throwable
 	 */
-	public function search(array $params, $pagination = true):ActiveDataProvider {
+	public function search(array $params, bool $pagination = true):ActiveDataProvider {
 		$query = FraudCheckStep::find();
 
 		$dataProvider = new ActiveDataProvider([
@@ -37,7 +38,9 @@ class FraudCheckStepSearch extends FraudCheckStepAr
 		]);
 
 		$this->load($params);
-		if (false === $pagination) $dataProvider->pagination = $pagination;
+		if (false === $pagination) {
+			$dataProvider->pagination = $pagination;
+		}
 
 		//if (!$this->validate()) return $dataProvider;
 

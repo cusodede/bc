@@ -20,6 +20,9 @@ class IsActiveSimcardValidator implements FraudValidator
 	public function validate(int $productOrderId) {
 		$existentOrder = (new ProductSearch())->getExistentSimcardOrder($productOrderId);
 		$validatorOrderRow = (new FraudCheckStepSearch())->getByOrderWithValidator($productOrderId, get_class($this));
+		$validatorOrderRow->statusProcess()->saveAndReturn();
+		sleep(10);
+		$validatorOrderRow->statusSuccess()->saveAndReturn();
 	}
 
 	public function name():string {
@@ -31,6 +34,9 @@ class IsActiveSimcardValidator implements FraudValidator
 	 * @param int $fraudStepId
 	 */
 	public function repeatValidate(int $fraudStepId) {
-		$stepId = (new FraudCheckStepSearch())->getById($fraudStepId);
+		$step = (new FraudCheckStepSearch())->getById($fraudStepId);
+		$step->statusProcess()->saveAndReturn();
+		sleep(10);
+		$step->statusFail()->saveAndReturn();
 	}
 }
