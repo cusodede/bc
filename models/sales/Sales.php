@@ -10,7 +10,7 @@ use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\Rewards;
 use app\models\sales\active_record\Sales as SalesAR;
 use app\models\sys\users\Users;
-use yii\base\Exception;
+use Exception;
 use yii\web\ForbiddenHttpException;
 
 /**

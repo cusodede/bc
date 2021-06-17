@@ -10,8 +10,8 @@ use app\models\reward\active_record\references\RefRewardsOperations;
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
+use Exception;
 use pozitronik\helpers\DateHelper;
-use yii\base\Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
