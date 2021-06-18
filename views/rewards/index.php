@@ -10,7 +10,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
-use app\models\reward\active_record\references\RefRewardsOperations;
+use app\models\reward\config\RewardsOperationsConfig;
 use app\models\reward\Rewards;
 use app\models\reward\RewardsSearch;
 use app\modules\status\models\StatusRulesModel;
@@ -60,19 +60,19 @@ ModalHelperAsset::register($this);
 				'class' => ActionColumn::class,
 				'template' => '{edit}{view}{why}',
 				'buttons' => [
-					'edit' => static function(string $url, RewardsSearch $model) use ($modelName) {
+					'edit' => static function(string $url, Rewards $model) use ($modelName) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', ".
 								"'{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'view' => static function(string $url, RewardsSearch $model) use ($modelName) {
+					'view' => static function(string $url, Rewards $model) use ($modelName) {
 						return Html::a('<i class="fa fa-eye"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', ".
 								"'{$modelName}-modal-view-{$model->id}');event.preventDefault();")
 						]);
 					},
-					'why' => static function(string $url, RewardsSearch $model) {
+					'why' => static function(string $url, Rewards $model) {
 						return Html::a('<i class="fa fa-lightbulb-dollar"></i>', $url, [
 							'onclick' => new JsExpression("alert('todo: будем показывать причинно-следственные связи начисления');event.preventDefault();")
 						]);
@@ -81,9 +81,29 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			[
+				'attribute' => 'operationName',
+				'format' => 'raw',
+				'value' => static function(Rewards $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relatedOperation,
+						'subItem' => 'name',
+						'useBadges' => false
+					]);
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'operation',
+					'data' => RewardsOperationsConfig::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
+			],
+			[
 				'format' => 'raw',
 				'attribute' => 'reason',
-				'value' => static function(RewardsSearch $model):string {
+				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
 						'items' => ArrayHelper::getValue(Rewards::reasons(), $model->reason)
 					]);
@@ -104,7 +124,7 @@ ModalHelperAsset::register($this);
 			[
 				'attribute' => 'userName',
 				'format' => 'raw',
-				'value' => static function(RewardsSearch $model):string {
+				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->relatedUser,
 						'subItem' => 'username',
@@ -115,6 +135,13 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'currentStatus',
+				'value' => static function(Rewards $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->currentStatus,
+						'subItem' => 'name',
+						'useBadges' => false
+					]);
+				},
 				'format' => 'raw',
 				'filterType' => GridView::FILTER_SELECT2,
 				'filter' => ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name'),
@@ -123,29 +150,9 @@ ModalHelperAsset::register($this);
 				]
 			],
 			[
-				'attribute' => 'operationName',
-				'format' => 'raw',
-				'value' => static function(RewardsSearch $model):string {
-					return BadgeWidget::widget([
-						'items' => $model->refRewardsOperations,
-						'subItem' => 'name',
-						'useBadges' => false
-					]);
-				},
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'operation',
-					'data' => RefRewardsOperations::mapData(),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				])
-			],
-			[
 				'attribute' => 'ruleName',
 				'format' => 'raw',
-				'value' => static function(RewardsSearch $model):string {
+				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refRewardsRules,
 						'subItem' => 'name',
