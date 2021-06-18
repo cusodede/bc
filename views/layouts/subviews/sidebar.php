@@ -17,7 +17,7 @@ use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
-use \app\controllers\DealersController;
+use app\controllers\DealersController;
 
 ?>
 

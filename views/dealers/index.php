@@ -27,7 +27,7 @@ use yii\grid\ActionColumn;
 use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
-use \app\models\dealers\active_record\references\RefDealersGroups;
+use app\models\dealers\active_record\references\RefDealersGroups;
 
 ModalHelperAsset::register($this);
 ?>
