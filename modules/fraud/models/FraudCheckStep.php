@@ -50,8 +50,7 @@ class FraudCheckStep extends FraudCheckStepAr {
 	/**
 	 * @return string|null
 	 */
-	public function getStatusName():?string
-	{
+	public function getStatusName():?string {
 		return self::$statusesWithNames[$this->status]??null;
 	}
 
@@ -60,7 +59,7 @@ class FraudCheckStep extends FraudCheckStepAr {
 	 * @throws Exception
 	 */
 	public function addNewSteps(array $steps):void {
-		$insertRows = array_map(static function (FraudCheckStep $step)  {
+		$insertRows = array_map(static function(FraudCheckStep $step) {
 			return array_values($step->toArray());
 		}, $steps);
 
@@ -85,6 +84,16 @@ class FraudCheckStep extends FraudCheckStepAr {
 
 	public function statusFail():self {
 		$this->status = self::STATUS_FAIL;
+		return $this;
+	}
+
+	/**
+	 * @param string $message
+	 * @return FraudCheckStep
+	 */
+	public function addFraudMessage(string $message):self {
+		$result['fraud_message'] = $message;
+		$this->step_info = $result;
 		return $this;
 	}
 }

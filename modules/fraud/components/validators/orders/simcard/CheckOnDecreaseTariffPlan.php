@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\components\validators\orders\simcard;
 
+use app\modules\fraud\components\FraudException;
 use app\modules\fraud\components\FraudValidator;
 
 /**
@@ -15,6 +16,6 @@ class CheckOnDecreaseTariffPlan implements FraudValidator {
 	}
 
 	public function validate(int $entityId):void {
-
+		throw new FraudException("Зафиксировано понижение тарифа");
 	}
 }

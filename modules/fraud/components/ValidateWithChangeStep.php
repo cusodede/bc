@@ -35,6 +35,7 @@ class ValidateWithChangeStep {
 			$this->validator->validate($step->entity_id);
 			$step->statusSuccess()->saveAndReturn();
 		} catch (FraudException $e) {
+			$step->addFraudMessage($e->getMessage());
 			$step->statusFail()->saveAndReturn();
 		}
 	}
