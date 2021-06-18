@@ -20,7 +20,7 @@ use yii\db\ActiveQuery;
 class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 {
 	/**
-	 * @return ActiveQuery
+	 * {@inheritdoc}
 	 */
 	public function getRelatedProductStatuses(): ActiveQuery
 	{
@@ -28,16 +28,7 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	}
 
 	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedLastProductStatus(): ActiveQuery
-	{
-		//TODO: учесть алиас таблицы в orderBy
-		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['product_statuses.created_at' => SORT_DESC]);
-	}
-
-	/**
-	 * @return ActiveQuery
+	 * {@inheritdoc}
 	 */
 	public function getRelatedAbonent(): ActiveQuery
 	{
@@ -45,10 +36,19 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	}
 
 	/**
-	 * @return ActiveQuery
+	 * {@inheritdoc}
 	 */
 	public function getRelatedProduct(): ActiveQuery
 	{
 		return $this->hasOne(Products::class, ['id' => 'product_id']);
+	}
+
+	/**
+	 * Получение актуального статуса по продукту из журнала.
+	 * @return ActiveQuery
+	 */
+	public function getRelatedLastProductStatus(): ActiveQuery
+	{
+		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['created_at' => SORT_DESC]);
 	}
 }

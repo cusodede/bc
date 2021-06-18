@@ -18,7 +18,6 @@ use yii\db\ActiveRecord;
  * @property int $product_id
  *
  * @property ProductStatuses[] $relatedProductStatuses
- * @property ProductStatuses $relatedLastProductStatus
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
  */
@@ -67,14 +66,6 @@ class RelAbonentsToProducts extends ActiveRecord
 	public function getRelatedProductStatuses(): ActiveQuery
 	{
 		return $this->hasMany(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id']);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedLastProductStatus(): ActiveQuery
-	{
-		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['product_statuses.created_at' => SORT_DESC]);
 	}
 
 	/**
