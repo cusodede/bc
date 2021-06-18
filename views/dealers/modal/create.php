@@ -19,7 +19,7 @@ $modelName = $model->formName();
 	'size' => Modal::SIZE_LARGE,
 	'title' => BadgeWidget::widget([
 		'items' => $model,
-		'subItem' => 'name'
+		'subItem' => 'id'
 	]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
