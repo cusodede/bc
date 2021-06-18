@@ -69,6 +69,18 @@ final class SellersSearch extends Sellers {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'passport' => 'Паспорт',
+			'currentStatus' => 'Статус',
+			'store' => 'Магазин',
+			'dealer' => 'Дилер'
+		]);
+	}
+
+	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelStatus():ActiveQuery {
