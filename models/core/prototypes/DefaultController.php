@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\modules\import\models\ImportAction;
 use app\modules\import\models\ProcessImportAction;
@@ -88,6 +89,9 @@ class DefaultController extends Controller {
 			[
 				'class' => AjaxFilter::class,
 				'only' => ['ajax-search']
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		];
 	}

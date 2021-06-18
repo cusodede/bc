@@ -7,6 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
+use app\controllers\DealersController;
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
 use app\models\dealers\Dealers;
@@ -165,7 +166,7 @@ use yii\web\View;
 			'loadingMode' => SelectModelWidget::DATA_MODE_AJAX,
 			'selectModelClass' => Dealers::class,
 			'options' => ['placeholder' => ''],
-			'ajaxSearchUrl' => StoresController::to('ajax-search')
+			'ajaxSearchUrl' => DealersController::to('ajax-search')
 		]) ?>
 	</div>
 </div>

@@ -68,6 +68,16 @@ use yii\widgets\DetailView;
 				]);
 			}
 		],
+		[
+			'attribute' => 'dealer',
+			'format' => 'raw',
+			'value' => static function(StoresAR $model):string {
+				return BadgeWidget::widget([
+					'items' => $model->dealer,
+					'subItem' => 'name'
+				]);
+			}
+		],
 		'deleted:boolean'
 	]
 ]) ?>

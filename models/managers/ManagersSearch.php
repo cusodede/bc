@@ -9,6 +9,7 @@ use app\models\sys\users\Users;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use Throwable;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ManagersSearch
@@ -91,6 +92,34 @@ final class ManagersSearch extends Managers {
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
+
+		$this->filterDataByUser($query);
+	}
+
+	/**
+	 * Filters the records shown for current user
+	 * @param $query
+	 * @throws Throwable
+	 */
+	private function filterDataByUser($query):void {
+		$user = Users::Current();
+		if ($user->isAllPermissionsGranted()) {
+			return;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null === $manager) {
+			return;
+		}
+
+		if ($user->hasPermission(['manager_dealer'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					Dealers::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
+		}
 	}
 
 	/**

@@ -5,7 +5,7 @@ namespace app\models\seller;
 
 use app\controllers\SellersController;
 use app\models\seller\active_record\SellersAR;
-use app\models\traits\CreateAccessTrait;
+use app\models\common\traits\CreateAccessTrait;
 use app\models\sys\users\Users;
 use pozitronik\filestorage\traits\FileStorageTrait;
 
@@ -21,7 +21,6 @@ use pozitronik\filestorage\traits\FileStorageTrait;
  * @property mixed $temporaryResidence Разрешение на временное проживание
  * @property mixed $visa Виза
  *
- * @property string $fio ФИО
  * @property string $urlToEntity
  */
 class Sellers extends SellersAR {

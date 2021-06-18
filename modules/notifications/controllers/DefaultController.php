@@ -4,7 +4,6 @@ namespace app\modules\notifications\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\notifications\models\Notifications;
-use app\modules\notifications\models\TargetsNotifications;
 use Throwable;
 use Yii;
 use yii\filters\ContentNegotiator;
@@ -41,7 +40,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionAcknowledge():array {
 		if (null !== $notification = Notifications::findOne(Yii::$app->request->post('id'))) {
-			TargetsNotifications::Acknowledge($notification->object_id);
+			Notifications::Acknowledge($notification->object_id);
 			return ['output' => 'ok', 'message' => ''];
 		}
 		return [];

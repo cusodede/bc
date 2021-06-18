@@ -3,12 +3,12 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\core\prototypes\DefaultController;
 use app\models\managers\Managers;
 use app\models\managers\ManagersSearch;
-use app\models\sys\permissions\filters\PermissionFilter;
 use Yii;
-use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class ManagersController
@@ -17,17 +17,6 @@ class ManagersController extends DefaultController {
 
 	public string $modelClass = Managers::class;
 	public string $modelSearchClass = ManagersSearch::class;
-
-	/**
-	 * @inheritDoc
-	 */
-	public function behaviors():array {
-		return ArrayHelper::merge(parent::behaviors(), [
-			'access' => [
-				'class' => PermissionFilter::class
-			]
-		]);
-	}
 
 	/**
 	 * @inheritDoc
@@ -62,4 +51,35 @@ class ManagersController extends DefaultController {
 			?$this->renderAjax('modal/create', ['model' => $model])
 			:$this->render('create', ['model' => $model]);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function actionEdit(int $id) {
+		/** @var Managers $model */
+		if (null === $model = $this->model::findOne($id)) {
+			throw new NotFoundHttpException();
+		}
+
+		/** @var ActiveRecordTrait $model */
+		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+			return $this->asJson($model->validateModelFromPost());
+		}
+		$errors = [];
+		$posting = $model->updateModelFromPost($errors);
+
+		if (true === $posting) {/* Модель была успешно прогружена */
+			$model->modifyName();
+			return $this->redirect('index');
+		}
+		/* Пришёл постинг, но есть ошибки */
+		if ((false === $posting) && Yii::$app->request->isAjax) {
+			return $this->asJson($errors);
+		}
+		/* Постинга не было */
+		return (Yii::$app->request->isAjax)
+			?$this->renderAjax('modal/edit', ['model' => $model])
+			:$this->render('edit', ['model' => $model]);
+	}
+
 }
