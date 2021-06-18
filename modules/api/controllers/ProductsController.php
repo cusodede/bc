@@ -1,14 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\api\mobile_api\controllers;
+namespace app\modules\api\controllers;
 
+use app\models\abonents\Abonents;
 use app\models\sys\permissions\filters\PermissionFilter;
-use app\modules\api\mobile_api\resources\ProductsResource;
+use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -42,11 +44,22 @@ class ProductsController extends YiiRestController
 		];
 	}
 
-	public function actionIndex(string $phone): array
+	/**
+	 * Получением списка продуктов по номеру абонента.
+	 * @param string $phone
+	 * @return array
+	 * @throws NotFoundHttpException
+	 */
+	public function actionGetForSub(string $phone): array
 	{
+		$abonent = Abonents::findByPhone($phone);
+		if (null === $abonent) {
+			throw new NotFoundHttpException('Не удалось установить абонента по телефону: ' . $phone);
+		}
+
 		$resource = new ProductsResource();
 
-		return $resource->getProductsByPhone($phone);
+		return $resource->getAbonentProducts($abonent);
 	}
 
 	/**
@@ -55,7 +68,7 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'index' => ['GET']
+			'get-for-sub' => ['GET']
 		];
 	}
 }
