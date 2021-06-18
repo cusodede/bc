@@ -10,7 +10,7 @@ use app\modules\fraud\components\FraudValidator;
  * Class HasActivityOnSimcard
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class HasActivityOnSimcard implements FraudValidator {
+class HasActivityOnSimcardValidator implements FraudValidator {
 	public function name():string {
 		return 'Есть активность по симке(звонки, интернет)';
 	}

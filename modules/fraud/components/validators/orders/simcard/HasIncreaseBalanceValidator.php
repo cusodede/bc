@@ -6,13 +6,13 @@ namespace app\modules\fraud\components\validators\orders\simcard;
 use app\modules\fraud\components\FraudValidator;
 
 /**
- * Class IncomingCallFromOneDevice
+ * Class HasIncreaseBalance
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class IncomingCallFromOneDevice implements FraudValidator {
+class HasIncreaseBalanceValidator implements FraudValidator {
 
 	public function name():string {
-		return "Проверка на совершение исходящих звонков по проданным тарифам с одного устройства";
+		return "Проверка на использование пополнение баланса сим-карты в течение Х (1-3 дней) дней с даты продажи";
 	}
 
 	public function validate(int $entityId):void {

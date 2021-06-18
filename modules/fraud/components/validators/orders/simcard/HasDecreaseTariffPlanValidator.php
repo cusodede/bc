@@ -10,7 +10,7 @@ use app\modules\fraud\components\FraudValidator;
  * Class CheckOnDecreaseTariffPlan
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class HasDecreaseTariffPlan implements FraudValidator {
+class HasDecreaseTariffPlanValidator implements FraudValidator {
 	public function name():string {
 		return "Проверка на соответствие тарифного плана в течение Х дней (проверка на понижение тарифа)";
 	}

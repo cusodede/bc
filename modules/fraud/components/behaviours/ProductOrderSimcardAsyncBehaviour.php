@@ -5,14 +5,14 @@ namespace app\modules\fraud\components\behaviours;
 
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
-use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPassportData;
-use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlan;
-use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
-use app\modules\fraud\components\validators\orders\simcard\HasIncreaseBalance;
-use app\modules\fraud\components\validators\orders\simcard\HasPaySubscriptionFeeAndHasntCalls;
-use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDevice;
-use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumber;
-use app\modules\fraud\components\validators\orders\simcard\IsAbonentBlockByFraud;
+use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPassportDataValidator;
+use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlanValidator;
+use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcardValidator;
+use app\modules\fraud\components\validators\orders\simcard\HasIncreaseBalanceValidator;
+use app\modules\fraud\components\validators\orders\simcard\HasPaySubscriptionFeeAndHasntCallsValidator;
+use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDeviceValidator;
+use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumberValidator;
+use app\modules\fraud\components\validators\orders\simcard\IsAbonentBlockByFraudValidator;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
 use app\modules\fraud\models\FraudCheckStep;
 use yii\base\Behavior;
@@ -28,14 +28,14 @@ use yii\db\Exception;
 class ProductOrderSimcardAsyncBehaviour extends Behavior {
 	public array $validators = [
 		IsActiveSimcardValidator::class,
-		HasActivityOnSimcard::class,
-		HasDecreaseTariffPlan::class,
-		IncomingCallToOneNumber::class,
-		IncomingCallFromOneDevice::class,
-		HasDuplicateAbonentPassportData::class,
-		HasIncreaseBalance::class,
-		HasPaySubscriptionFeeAndHasntCalls::class,
-		IsAbonentBlockByFraud::class
+		HasActivityOnSimcardValidator::class,
+		HasDecreaseTariffPlanValidator::class,
+		IncomingCallToOneNumberValidator::class,
+		IncomingCallFromOneDeviceValidator::class,
+		HasDuplicateAbonentPassportDataValidator::class,
+		HasIncreaseBalanceValidator::class,
+		HasPaySubscriptionFeeAndHasntCallsValidator::class,
+		IsAbonentBlockByFraudValidator::class
 	];
 
 	/**
