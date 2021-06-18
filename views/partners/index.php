@@ -86,6 +86,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => 'text',
 				'value' => 'category.name',
 			],
+			'phone',
+			'email',
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',

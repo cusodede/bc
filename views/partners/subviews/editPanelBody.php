@@ -38,3 +38,16 @@ use kartik\select2\Select2;
 		]) ?>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-6">
+		<?= $form->field($model, 'phone')->textInput() ?>
+	</div>
+	<div class="col-md-6">
+		<?= $form->field($model, 'email')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'comment')->textarea() ?>
+	</div>
+</div>

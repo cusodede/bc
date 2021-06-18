@@ -58,10 +58,10 @@ class GraphqlController extends ActiveController
 			$operation = ArrayHelper::getValue($input, 'operation');
 		}
 
-		if ([] !== $variables) {
+		if (!empty($variables) && !is_array($variables)) {
 			try {
 				$variables = Json::decode($variables);
-			} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $t) {
+			} catch (Throwable $t) {
 				$variables = null;
 			}
 		}
