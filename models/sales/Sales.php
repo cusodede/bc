@@ -7,6 +7,7 @@ use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\products\Products;
 use app\models\products\ProductsInterface;
 use app\models\reward\active_record\references\RefRewardsRules;
+use app\models\reward\config\RewardsOperationsConfig;
 use app\models\reward\Rewards;
 use app\models\sales\active_record\Sales as SalesAR;
 use app\models\sys\users\Users;
@@ -53,7 +54,7 @@ class Sales extends SalesAR {
 			$rewards[] = new Rewards([
 				'relatedProducts' => $this->relatedProducts,//товар, за который начисляется бонус
 				'rule' => null,//временная фигня, пока правила у нас накиданы хардкодом
-				'operation' => Rewards::OPERATION_SELL,//инициирующая операция
+				'operation' => RewardsOperationsConfig::OPERATION_SELL,//инициирующая операция
 				'reason' => $rule->reason,//причина начисления
 				'status' => $rule->status,//статус
 				'quantity' => $rule->quantity,
