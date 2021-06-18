@@ -24,8 +24,8 @@ use Yii;
  * @property string $created_at Дата создания продукта
  * @property string $updated_at Дата обновления партнера
  *
- * @property Partners $partner
- * @property Users $user
+ * @property Partners $relatedPartner
+ * @property Users $relatedUser
  */
 class Products extends ActiveRecord
 {
@@ -82,7 +82,7 @@ class Products extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getPartner(): ActiveQuery
+	public function getRelatedPartner(): ActiveQuery
 	{
 		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
 	}
@@ -92,7 +92,7 @@ class Products extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getUser(): ActiveQuery
+	public function getRelatedUser(): ActiveQuery
 	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}

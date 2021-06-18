@@ -12,12 +12,12 @@ use Exception;
  */
 class EnumProductsTypes
 {
-	public const ID_SUBSCRIPTION = 1;
-	public const ID_BUNDLE = 2;
+	public const TYPE_SUBSCRIPTION = 1;
+	public const TYPE_BUNDLE = 2;
 
 	public const PRODUCTS_TYPES = [
-		self::ID_SUBSCRIPTION => 'Подписка',
-		self::ID_BUNDLE       => 'Бандл',
+		self::TYPE_SUBSCRIPTION => 'Подписка',
+		self::TYPE_BUNDLE       => 'Бандл',
 	];
 
 	/**
