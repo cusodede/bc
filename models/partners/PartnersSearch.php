@@ -76,6 +76,6 @@ class PartnersSearch extends Partners
 		// Не забываем удалить, так как нет такого параметра в partners
 		ArrayHelper::remove($params, 'search');
 		$query->andFilterWhere($params);
-		return $query->all();
+		return $query->active()->all();
 	}
 }

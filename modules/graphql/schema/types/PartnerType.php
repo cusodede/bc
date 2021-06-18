@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types;
 
+use app\models\partners\active_record\Partners;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -42,6 +43,11 @@ class PartnerType extends ObjectType
 				'comment' => [
 					'type' => Type::string(),
 					'description' => 'Комментарий',
+				],
+				'category' => [
+					'type' => Types::partnerCategory(),
+					'description' => 'Категория партнера',
+					'resolve' => fn(Partners $partner) => $partner->category,
 				],
 			],
 		]);
