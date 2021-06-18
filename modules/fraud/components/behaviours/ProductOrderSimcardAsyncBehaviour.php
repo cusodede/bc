@@ -5,8 +5,10 @@ namespace app\modules\fraud\components\behaviours;
 
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
+use app\modules\fraud\components\validators\orders\simcard\CheckDuplicateAbonentPassportData;
 use app\modules\fraud\components\validators\orders\simcard\CheckOnDecreaseTariffPlan;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
+use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDevice;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumber;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
 use app\modules\fraud\models\FraudCheckStep;
@@ -25,7 +27,9 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior {
 		IsActiveSimcardValidator::class,
 		HasActivityOnSimcard::class,
 		CheckOnDecreaseTariffPlan::class,
-		IncomingCallToOneNumber::class
+		IncomingCallToOneNumber::class,
+		IncomingCallFromOneDevice::class,
+		CheckDuplicateAbonentPassportData::class
 	];
 
 	/**
