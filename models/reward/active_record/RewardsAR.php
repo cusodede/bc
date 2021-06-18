@@ -6,7 +6,6 @@ namespace app\models\reward\active_record;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\products\Products;
 use app\models\products\ProductsInterface;
-use app\models\reward\active_record\references\RefRewardsOperations;
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
@@ -32,7 +31,7 @@ use yii\db\ActiveRecord;
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
  *
- * @property RefRewardsOperations $refRewardsOperations Справочник операций
+
  * @property RefRewardsRules $refRewardsRules Справочник правил расчета вознаграждения
  * @property Users $relatedUser Пользователь к которому относится вознаграждение
  *
@@ -77,7 +76,8 @@ class RewardsAR extends ActiveRecord {
 			'comment' => 'Произвольный комментарий',
 			'create_date' => 'Дата создания',
 			'override' => 'Переопределено',
-			'deleted' => 'Флаг удаления'
+			'deleted' => 'Флаг удаления',
+			'currentStatus' => 'Статус вознаграждения'
 		];
 	}
 
@@ -87,13 +87,6 @@ class RewardsAR extends ActiveRecord {
 	 */
 	public function getRelatedProducts():?ProductsInterface {
 		return Products::getModel($this->product_id, $this->product_type);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRefRewardsOperations():ActiveQuery {
-		return $this->hasOne(RefRewardsOperations::class, ['id' => 'operation']);
 	}
 
 	/**
