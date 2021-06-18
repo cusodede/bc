@@ -9,6 +9,7 @@ use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPa
 use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlan;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
 use app\modules\fraud\components\validators\orders\simcard\HasIncreaseBalance;
+use app\modules\fraud\components\validators\orders\simcard\HasSubscriptionFeeAndHasntCalls;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDevice;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumber;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
@@ -31,7 +32,8 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior {
 		IncomingCallToOneNumber::class,
 		IncomingCallFromOneDevice::class,
 		HasDuplicateAbonentPassportData::class,
-		HasIncreaseBalance::class
+		HasIncreaseBalance::class,
+		HasSubscriptionFeeAndHasntCalls::class
 	];
 
 	/**
