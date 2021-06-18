@@ -9,6 +9,7 @@ use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
 use app\models\dealers\active_record\relations\RelDealersToStores;
 use app\models\managers\Managers;
+use app\models\seller\Sellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use pozitronik\core\models\LCQuery;
@@ -19,19 +20,23 @@ use yii\helpers\ArrayHelper;
 /**
  * Class StoresSearch
  * @property null|string $store
+ * @property null|string $manager
+ * @property null|string $seller
  */
 final class DealersSearch extends DealersAR {
 
 	public ?string $store = null;
+	public ?string $manager = null;
+	public ?string $seller = null;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
-			[['id', 'client_code', 'code', 'name'], 'filter', 'filter' => 'trim'],
+			[['id', 'client_code', 'code', 'name', 'store', 'manager', 'seller'], 'filter', 'filter' => 'trim'],
 			[['id', 'deleted', 'type', 'group', 'branch'], 'integer'],
-			[['name'], 'string', 'max' => 255],
+			[['name', 'store', 'manager', 'seller'], 'string', 'max' => 255],
 			[['code'], 'string', 'max' => 4],
 			[['client_code'], 'string', 'max' => 9]
 		];
@@ -44,7 +49,7 @@ final class DealersSearch extends DealersAR {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find();
-		$query->joinWith(['relatedDealersToStores', 'refDealersGroups', 'refDealersTypes', 'refBranches']);
+		$query->joinWith(['stores', 'managers', 'sellers', 'refDealersGroups', 'refDealersTypes', 'refBranches']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -75,7 +80,9 @@ final class DealersSearch extends DealersAR {
 			->andFilterWhere([self::tableName().'.branch' => $this->branch])
 			->andFilterWhere([self::tableName().'.client_code' => $this->client_code])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
-			->andFilterWhere(['like', Stores::tableName().'.name', $this->store]);
+			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
+			->andFilterWhere(['like', Managers::tableName().'.surname', $this->manager])
+			->andFilterWhere(['like', Sellers::tableName().'.surname', $this->seller]);
 
 		$this->filterDataByUser($query);
 	}

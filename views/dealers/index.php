@@ -130,7 +130,7 @@ ModalHelperAsset::register($this);
 				])
 			],
 			[
-				'attribute' => 'stores',
+				'attribute' => 'store',
 				'format' => 'raw',
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
@@ -141,7 +141,7 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'managers',
+				'attribute' => 'manager',
 				'format' => 'raw',
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
