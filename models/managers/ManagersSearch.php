@@ -51,6 +51,20 @@ final class ManagersSearch extends Managers {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'userLogin' => 'Логин',
+			'userId' => 'Ид пользователя',
+			'userEmail' => 'Почта',
+			'seller' => 'Продавец',
+			'store' => 'Магазин',
+			'dealer' => 'Дилер'
+		]);
+	}
+
+	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 * @throws Throwable

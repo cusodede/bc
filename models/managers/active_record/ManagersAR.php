@@ -125,6 +125,8 @@ class ManagersAR extends ActiveRecord {
 			'name' => 'Имя',
 			'surname' => 'Фамилия',
 			'patronymic' => 'Отчество',
+			'stores' => 'Магазины',
+			'dealers' => 'Дилеры',
 			'deleted' => 'Deleted'
 		];
 	}
