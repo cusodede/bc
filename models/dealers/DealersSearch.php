@@ -43,6 +43,20 @@ final class DealersSearch extends DealersAR {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'groupName' => 'Группа',
+			'typeName' => 'Тип',
+			'branchName' => 'Филиал',
+			'seller' => 'Продавец',
+			'store' => 'Магазин',
+			'manager' => 'Менеджер'
+		]);
+	}
+
+	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 * @throws Throwable
