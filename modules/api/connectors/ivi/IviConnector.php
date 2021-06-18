@@ -23,7 +23,9 @@ class IviConnector extends BaseHttpConnector
 	 * @var string|null идентификатор приложения, генерируемый на стороне Ivi.
 	 */
 	private ?string $_appID;
-
+	/**
+	 * @var SignatureService компонент для подписи body-параметров.
+	 */
 	private SignatureService $_signatureService;
 
 	/**
@@ -47,6 +49,7 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
+	 * Получение опций покупки по абоненту. Время жизни опций покупки - один час.
 	 * @param ProductOptions $options
 	 * @return PurchaseOptionsHandler
 	 * @throws Exception
@@ -68,6 +71,8 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
+	 * Создание/обновление подписки в ivi. Необходимо предварительно запросить актуальный список опций через.
+	 * @see getPurchaseOptions()
 	 * @param ProductOptions $options
 	 * @param PurchaseOptionsItem $purchaseOptions
 	 * @return PurchaseResultHandler
@@ -80,7 +85,7 @@ class IviConnector extends BaseHttpConnector
 			'app_version'          => $options->getAppVersion(),
 			'partner_id'           => $options->getProduct(),
 			'access_token'         => $this->getAccessTokenByPhone($options),
-			'ps_extra_signed_data' => "ps_transaction_id=1000&sign={$purchaseOptions->getSignParam()}",
+			'ps_extra_signed_data' => "ps_transaction_id={$options->getTransactionId()}&sign={$purchaseOptions->getSignParam()}",
 			'sign'                 => $purchaseOptions->getSignParam()
 		];
 		$postData = array_merge(
@@ -105,7 +110,7 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
-	 * Получение токена доступа, привязанного к номеру телефона.
+	 * Получение токена доступа по номеру абонента.
 	 * @param ProductOptions $options
 	 * @return string|null
 	 */
@@ -115,7 +120,7 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
-	 * Получение токена для взаимодействия с API.
+	 * Получение токена для взаимодействия с API. Время жизни токена - бессрочно.
 	 * @param string $param название поля для получения токена
 	 * @param string $value значение поля для получения токена
 	 * @param string $appVersion
@@ -144,7 +149,7 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
-	 * Генерация подписи для параметров передачи в API
+	 * Генерация подписи для параметров передачи в API.
 	 * @param array|string $params
 	 * @return string
 	 */

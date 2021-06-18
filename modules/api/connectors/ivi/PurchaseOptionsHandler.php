@@ -6,7 +6,7 @@ namespace app\modules\api\connectors\ivi;
 use yii\helpers\ArrayHelper;
 
 /**
- * Класс для инкапсуляции логики взаимодействия с данными, полученными от ivi.
+ * Класс для инкапсуляции логики взаимодействия с параметрами опций, полученными от ivi.
  * Class PurchasesOptionsHandler
  * @package app\modules\api\connectors\ivi
  */
