@@ -28,6 +28,7 @@ class Types
 	// Типы для наших сущностей
 	private static ?PartnerType $partner = null;
 	private static ?PartnerMutationType $partnerMutation = null;
+	private static ?PartnerCategoryType $partnerCategory = null;
 
 	/**
 	 * Запрос
@@ -100,5 +101,14 @@ class Types
 	public static function partnerMutation(): PartnerMutationType
 	{
 		return static::$partnerMutation ?: static::$partnerMutation = new PartnerMutationType();
+	}
+
+	/**
+	 * Категории партнеров
+	 * @return PartnerCategoryType
+	 */
+	public static function partnerCategory(): PartnerCategoryType
+	{
+		return static::$partnerCategory ?: static::$partnerCategory = new PartnerCategoryType();
 	}
 }
