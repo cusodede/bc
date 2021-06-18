@@ -15,6 +15,7 @@ use app\modules\notifications\models\Notifications;
 use yii\data\ActiveDataProvider;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\grid\ActionColumn;
@@ -74,7 +75,12 @@ use yii\grid\ActionColumn;
 				return $model->getStatusName() ?: "Статус не определен $model->status";
 			}
 		],
-
+		[
+			'attribute' => 'step_info',
+			'value' => static function (FraudCheckStep $model) {
+				return ArrayHelper::getValue($model->step_info, 'fraud_message');
+			}
+		]
 	]
 ])
 ?>

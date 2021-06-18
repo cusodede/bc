@@ -5,6 +5,7 @@ namespace app\modules\fraud\commands;
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
 use app\modules\fraud\models\FraudCheckStep;
+use pozitronik\helpers\DateHelper;
 use yii\console\Controller;
 use yii\db\Exception;
 
@@ -14,6 +15,17 @@ use yii\db\Exception;
  */
 class GeneratorController extends Controller
 {
+	public function actionOrder()
+	{
+		FraudCheckStep::deleteAll();
+		$newOrder = new ProductOrder();
+		$newOrder->initiator = 1;
+		$newOrder->store = 2;
+		$newOrder->status = 3;
+		$newOrder->create_date = DateHelper::lcDate();
+		$newOrder->saveAndReturn();
+	}
+
 	/**
 	 * @throws Exception
 	 */

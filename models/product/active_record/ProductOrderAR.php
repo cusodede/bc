@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\product\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\product\Product;
 use app\models\product\active_record\relations\RelOrderToProduct;
 use app\models\store\Stores;
@@ -31,6 +32,7 @@ use yii\db\ActiveRecord;
  */
 class ProductOrderAR extends ActiveRecord {
 	use StatusesTrait;
+	use ActiveRecordTrait;
 
 	/**
 	 * @inheritDoc
