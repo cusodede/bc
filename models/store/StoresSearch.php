@@ -39,6 +39,18 @@ final class StoresSearch extends StoresAR {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'dealerSearch' => 'Дилер',
+			'seller' => 'Продавец',
+			'manager' => 'Менеджер',
+			'typeName' => 'Тип'
+		]);
+	}
+
+	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 * @throws Throwable
@@ -102,7 +114,7 @@ final class StoresSearch extends StoresAR {
 				]
 			);
 		} elseif ($user->hasPermission(['manager_store'])) {
-				$query->andFilterWhere(
+			$query->andFilterWhere(
 				[
 					'in',
 					self::tableName().'.id',
