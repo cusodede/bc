@@ -5,7 +5,7 @@ namespace app\modules\fraud\components\behaviours;
 
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
-use app\modules\fraud\components\validators\orders\simcard\HasActivitySimcardWithInOneBaseStationValidator;
+use app\modules\fraud\components\validators\orders\simcard\HasActivitySimcardWithOneBaseStationValidator;
 use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPassportDataValidator;
 use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlanValidator;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcardValidator;
@@ -37,7 +37,7 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior {
 		HasIncreaseBalanceValidator::class,
 		HasPaySubscriptionFeeAndHasntCallsValidator::class,
 		IsAbonentBlockByFraudValidator::class,
-		HasActivitySimcardWithInOneBaseStationValidator::class
+		HasActivitySimcardWithOneBaseStationValidator::class
 	];
 
 	/**

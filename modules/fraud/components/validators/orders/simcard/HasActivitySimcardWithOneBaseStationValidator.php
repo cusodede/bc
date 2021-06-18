@@ -9,7 +9,7 @@ use app\modules\fraud\components\FraudValidator;
  * Class HasActivitySimcardWithInOneBaseStationValidator
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class HasActivitySimcardWithInOneBaseStationValidator implements FraudValidator {
+class HasActivitySimcardWithOneBaseStationValidator implements FraudValidator {
 
 	public function name():string {
 		return "Проверка на активность сим-карты в течение Х дней в рамках одной базовой станции ";
