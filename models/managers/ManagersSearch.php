@@ -35,7 +35,7 @@ final class ManagersSearch extends Managers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'create_date', 'update_date', 'userEmail', 'userLogin',
-					'userId'
+					'userId','store', 'dealer', 'create_date', 'update_date'
 				],
 				'filter',
 				'filter' => 'trim'

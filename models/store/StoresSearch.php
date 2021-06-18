@@ -42,8 +42,9 @@ final class StoresSearch extends StoresAR {
 	 */
 	public function rules():array {
 		return [
+			[['id', 'name', 'seller', 'manager', 'dealerSearch'], 'filter', 'filter' => 'trim'],
 			[['id', 'deleted', 'type', 'region', 'branch', 'selling_channel'], 'integer'],
-			[['name', 'seller', 'manager', 'dealerSearch',], 'string', 'max' => 255]
+			[['name', 'seller', 'manager', 'dealerSearch'], 'string', 'max' => 255]
 		];
 	}
 
