@@ -9,9 +9,10 @@ use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPa
 use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlan;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
 use app\modules\fraud\components\validators\orders\simcard\HasIncreaseBalance;
-use app\modules\fraud\components\validators\orders\simcard\HasSubscriptionFeeAndHasntCalls;
+use app\modules\fraud\components\validators\orders\simcard\HasPaySubscriptionFeeAndHasntCalls;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDevice;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumber;
+use app\modules\fraud\components\validators\orders\simcard\IsAbonentBlockByFraud;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
 use app\modules\fraud\models\FraudCheckStep;
 use yii\base\Behavior;
@@ -33,7 +34,8 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior {
 		IncomingCallFromOneDevice::class,
 		HasDuplicateAbonentPassportData::class,
 		HasIncreaseBalance::class,
-		HasSubscriptionFeeAndHasntCalls::class
+		HasPaySubscriptionFeeAndHasntCalls::class,
+		IsAbonentBlockByFraud::class
 	];
 
 	/**
