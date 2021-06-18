@@ -31,7 +31,7 @@ class ProductsResource
 	}
 
 	/**
-	 * Получением списка продуктов по номеру абонента.
+	 * Получением списка продуктов по абоненту.
 	 * @param Abonents $abonent
 	 * @return array
 	 * @throws DomainException в случае, если абонент не найден в системе.
