@@ -1,0 +1,49 @@
+<?php
+declare(strict_types = 1);
+
+namespace app\modules\api\resources\formatters;
+
+use app\helpers\DateHelper;
+use app\models\partners\Partners;
+use app\models\products\Products;
+use app\models\products\ProductStatuses;
+use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use pozitronik\helpers\ArrayHelper;
+
+/**
+ * Class ProductFormatter
+ * @package app\modules\api\resources\formatters
+ */
+class ProductFormatter implements ProductFormatterInterface
+{
+	/**
+	 * {@inheritdoc}
+	 */
+	public function format(Products $product): array
+	{
+		return ArrayHelper::toArray($product, [
+			Products::class => [
+				'name',
+				'description',
+				'type' => 'typeName',
+				'price',
+				'typeRelatedOptions' => 'relatedInstance',
+				'partner' => 'relatedPartner',
+				'subscription' => 'actualStatus'
+			],
+			Partners::class => [
+				'name',
+				'category' => 'relatedCategory'
+			],
+			RefPartnersCategories::class => [
+				'name'
+			],
+			ProductStatuses::class => [
+				'status'     => 'statusName',
+				'expireDate' => static function (ProductStatuses $status) {
+					return DateHelper::toIso8601($status->expire_date);
+				}
+			]
+		]);
+	}
+}
