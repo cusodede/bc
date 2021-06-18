@@ -3,7 +3,7 @@
 namespace app\modules\fraud\components\queue;
 
 use app\modules\fraud\components\FraudValidator;
-use app\modules\fraud\components\validators\orders\ValidateProductOrderWithChangeStep;
+use app\modules\fraud\components\ValidateWithChangeStep;
 use yii\base\BaseObject;
 use yii\queue\JobInterface;
 use yii\queue\Queue;
@@ -31,7 +31,7 @@ class ChangeFraudStepWithValidateJob extends BaseObject implements JobInterface 
 		/**
 		 * @var FraudValidator $validator
 		 */
-		$validator = new ValidateProductOrderWithChangeStep(new $this->validatorClass());
+		$validator = new ValidateWithChangeStep(new $this->validatorClass());
 		$validator->validate($this->entityId);
 	}
 }
