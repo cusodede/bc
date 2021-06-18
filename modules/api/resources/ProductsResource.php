@@ -7,7 +7,6 @@ use app\models\abonents\Abonents;
 use app\models\products\Products;
 use app\modules\api\resources\formatters\ProductFormatter;
 use app\modules\api\resources\formatters\ProductFormatterInterface;
-use DomainException;
 use pozitronik\helpers\ArrayHelper;
 
 /**
@@ -34,7 +33,6 @@ class ProductsResource
 	 * Получением списка продуктов по абоненту.
 	 * @param Abonents $abonent
 	 * @return array
-	 * @throws DomainException в случае, если абонент не найден в системе.
 	 */
 	public function getAbonentProducts(Abonents $abonent): array
 	{
