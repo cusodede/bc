@@ -38,9 +38,9 @@ use yii\grid\ActionColumn;
 			'template' => '{repeat-validate}',
 			'buttons' => [
 				'repeat-validate' => static function(string $url, FraudCheckStep $model) {
-					$form = Html::beginForm('/fraud/index/list', 'POST', ['class' => 'd-inline-block']);
+					$form = Html::beginForm('/fraud/index/list', 'POST', ['class' => 'd-inline-block form-inline']);
 					$form .= Html::hiddenInput('repeat_validate_id', $model->id);
-					$form .= Html::submitButton('<i class="fas fa-edit"></i>');
+					$form .= Html::submitButton('<i class="fas fa-redo"></i>', ['class' => 'btn']);
 					$form .= Html::endForm();
 					return $form;
 				}

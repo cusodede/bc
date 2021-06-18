@@ -5,9 +5,10 @@ namespace app\modules\fraud\components\behaviours;
 
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
-use app\modules\fraud\components\validators\orders\simcard\CheckDuplicateAbonentPassportData;
-use app\modules\fraud\components\validators\orders\simcard\CheckOnDecreaseTariffPlan;
+use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPassportData;
+use app\modules\fraud\components\validators\orders\simcard\HasDecreaseTariffPlan;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
+use app\modules\fraud\components\validators\orders\simcard\HasIncreaseBalance;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallFromOneDevice;
 use app\modules\fraud\components\validators\orders\simcard\IncomingCallToOneNumber;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
@@ -26,10 +27,11 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior {
 	public array $validators = [
 		IsActiveSimcardValidator::class,
 		HasActivityOnSimcard::class,
-		CheckOnDecreaseTariffPlan::class,
+		HasDecreaseTariffPlan::class,
 		IncomingCallToOneNumber::class,
 		IncomingCallFromOneDevice::class,
-		CheckDuplicateAbonentPassportData::class
+		HasDuplicateAbonentPassportData::class,
+		HasIncreaseBalance::class
 	];
 
 	/**

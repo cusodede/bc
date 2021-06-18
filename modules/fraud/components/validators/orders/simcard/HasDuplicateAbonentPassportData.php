@@ -9,7 +9,7 @@ use app\modules\fraud\components\FraudValidator;
  * Class CheckDuplicateAbonentPassportData
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class CheckDuplicateAbonentPassportData implements FraudValidator {
+class HasDuplicateAbonentPassportData implements FraudValidator {
 	public function name():string {
 		return "Проверка на корректность паспорт данных при продаже тарифа (дубли, есть ли абоненты с теми же паспортными данными, но с различными ФИО).";
 	}
