@@ -3,9 +3,12 @@ declare(strict_types = 1);
 
 namespace app\models\store;
 
+use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\Dealers;
 use app\models\managers\Managers;
+use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
+use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\StoresAR;
 use app\models\sys\users\Users;
@@ -20,6 +23,9 @@ use Throwable;
  * @property null|string $manager
  * @property null|string $dealerSearch
  * @property null|string $typeName
+ * @property null|string $regionName
+ * @property null|string $sellingChannelName
+ * @property null|string $branchName
  */
 final class StoresSearch extends StoresAR {
 
@@ -27,14 +33,17 @@ final class StoresSearch extends StoresAR {
 	public ?string $dealerSearch = null;
 	public ?string $manager = null;
 	public ?string $typeName = null;
+	public ?string $regionName = null;
+	public ?string $sellingChannelName = null;
+	public ?string $branchName = null;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
-			[['id', 'deleted'], 'integer'],
-			[['name', 'seller', 'manager', 'dealerSearch', 'typeName'], 'string', 'max' => 255],
+			[['id', 'deleted', 'type', 'region', 'branch', 'selling_channel'], 'integer'],
+			[['name', 'seller', 'manager', 'dealerSearch',], 'string', 'max' => 255]
 		];
 	}
 
@@ -46,7 +55,10 @@ final class StoresSearch extends StoresAR {
 			'dealerSearch' => 'Дилер',
 			'seller' => 'Продавец',
 			'manager' => 'Менеджер',
-			'typeName' => 'Тип'
+			'typeName' => 'Тип',
+			'regionName' => 'Регион',
+			'branchName' => 'Филиал',
+			'sellingChannelName' => 'Канал продаж',
 		]);
 	}
 
@@ -64,7 +76,15 @@ final class StoresSearch extends StoresAR {
 
 		$this->setSort($dataProvider);
 		$this->load($params);
-		$query->joinWith(['sellers', 'managers', 'dealer', 'refStoresTypes']);
+		$query->joinWith([
+			'sellers',
+			'managers',
+			'dealer',
+			'refStoresTypes',
+			'refRegions',
+			'refSellingChannels',
+			'refBranches'
+		]);
 
 		if (!$this->validate()) return $dataProvider;
 
@@ -81,6 +101,10 @@ final class StoresSearch extends StoresAR {
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
+			->andFilterWhere([self::tableName().'.type' => $this->type])
+			->andFilterWhere([self::tableName().'.region' => $this->region])
+			->andFilterWhere([self::tableName().'.branch' => $this->branch])
+			->andFilterWhere([self::tableName().'.selling_channel' => $this->selling_channel])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted])
 			->andFilterWhere(['like', RefStoresTypes::tableName().'.name', $this->typeName])
 			->andFilterWhere(['like', Sellers::tableName().'.surname', $this->seller])
@@ -138,6 +162,18 @@ final class StoresSearch extends StoresAR {
 					'asc' => [RefStoresTypes::tableName().'.name' => SORT_ASC],
 					'desc' => [RefStoresTypes::tableName().'.name' => SORT_DESC]
 				],
+				'branchName' => [
+					'asc' => [RefBranches::tableName().'.name' => SORT_ASC],
+					'desc' => [RefBranches::tableName().'.name' => SORT_DESC]
+				],
+				'regionName' => [
+					'asc' => [RefRegions::tableName().'.name' => SORT_ASC],
+					'desc' => [RefRegions::tableName().'.name' => SORT_DESC]
+				],
+				'sellingChannelName' => [
+					'asc' => [RefSellingChannels::tableName().'.name' => SORT_ASC],
+					'desc' => [RefSellingChannels::tableName().'.name' => SORT_DESC]
+				],
 				'dealerSearch' => [
 					'asc' => [Dealers::tableName().'.name' => SORT_ASC],
 					'desc' => [Dealers::tableName().'.name' => SORT_DESC]
@@ -155,6 +191,9 @@ final class StoresSearch extends StoresAR {
 				[
 					self::tableName().'.*',
 					RefStoresTypes::tableName().'.name  AS typeName',
+					RefRegions::tableName().'.name  AS regionName',
+					RefBranches::tableName().'.name  AS branchName',
+					RefSellingChannels::tableName().'.name  AS sellingChannelsName',
 					Dealers::tableName().'.name  AS dealerSearch'
 				]
 			)
