@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\components\behaviours;
 
-use app\modules\fraud\components\queue\FraudValidatorJob;
+use app\models\product\ProductOrder;
+use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
+use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
 use app\modules\fraud\models\FraudCheckStep;
 use yii\base\Behavior;
@@ -16,10 +18,10 @@ use yii\db\Exception;
  * Class ProductOrderSimcardAsyncBehaviour
  * @package app\modules\fraud\components\behaviours
  */
-class ProductOrderSimcardAsyncBehaviour extends Behavior
-{
+class ProductOrderSimcardAsyncBehaviour extends Behavior {
 	public array $validators = [
-		IsActiveSimcardValidator::class
+		IsActiveSimcardValidator::class,
+		HasActivityOnSimcard::class
 	];
 
 	/**
@@ -36,12 +38,20 @@ class ProductOrderSimcardAsyncBehaviour extends Behavior
 	 * @throws Exception
 	 */
 	public function afterInsert(AfterSaveEvent $event):void {
-		(new FraudCheckStep())->addNewSteps(array_map(static function ($class) use ($event) {
+		/**
+		 * @var ActiveRecord $model
+		 */
+		$model = $event->sender;
+		if (!($model instanceof ProductOrder && $model->isSimcard())) {
+			return;
+		}
+
+		(new FraudCheckStep())->addNewSteps(array_map(static function($class) use ($event) {
 			return FraudCheckStep::newStep($event->sender->id, get_class($event->sender), $class);
 		}, $this->validators));
 
 		foreach ($this->validators as $validatorClass) {
-			Yii::$app->queue->push(new FraudValidatorJob([
+			Yii::$app->queue->push(new ChangeFraudStepWithValidateJob([
 				'validatorClass' => $validatorClass,
 				'entityId' => $event->sender->id
 			]));

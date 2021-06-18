@@ -11,5 +11,7 @@ use app\models\product\active_record\ProductOrderAR;
  * @property ProductInterface[] $default Список товаров в заказе
  */
 class ProductOrder extends ProductOrderAR {
-
+	public function isSimcard():bool {
+		return true;
+	}
 }

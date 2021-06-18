@@ -3,40 +3,23 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\components\validators\orders\simcard;
 
-use app\models\product\ProductSearch;
 use app\modules\fraud\components\FraudValidator;
-use app\modules\fraud\models\FraudCheckStepSearch;
 
 /**
  * Class IsActiveSimcardValidator
  * @package app\modules\fraud\components\validators\orders\simcard
  */
-class IsActiveSimcardValidator implements FraudValidator
-{
-	/**
-	 * Например, ID заказа
-	 * @param int $productOrderId
-	 */
-	public function validate(int $productOrderId) {
-		$existentOrder = (new ProductSearch())->getExistentSimcardOrder($productOrderId);
-		$validatorOrderRow = (new FraudCheckStepSearch())->getByOrderWithValidator($productOrderId, get_class($this));
-		$validatorOrderRow->statusProcess()->saveAndReturn();
-		sleep(10);
-		$validatorOrderRow->statusSuccess()->saveAndReturn();
-	}
+class IsActiveSimcardValidator implements FraudValidator {
 
 	public function name():string {
 		return 'Активность симкарты';
 	}
 
 	/**
-	 * Если нужно повторно запустить проверку, передается id шага
-	 * @param int $fraudStepId
+	 * Например, ID заказа
+	 * @param int $entityId
 	 */
-	public function repeatValidate(int $fraudStepId) {
-		$step = (new FraudCheckStepSearch())->getById($fraudStepId);
-		$step->statusProcess()->saveAndReturn();
-		sleep(10);
-		$step->statusFail()->saveAndReturn();
+	public function validate(int $entityId):void {
+
 	}
 }

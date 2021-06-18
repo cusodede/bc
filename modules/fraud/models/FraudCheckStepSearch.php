@@ -57,7 +57,7 @@ class FraudCheckStepSearch extends FraudCheckStepAr
 	public function getByOrderWithValidator(int $productOrderId, string $validatorClass) : FraudCheckStep
 	{
 		$step = FraudCheckStep::find()
-				->andWhere(['entity_id' => $productOrderId, 'fraud_class' => $validatorClass])
+				->andWhere(['entity_id' => $productOrderId, 'fraud_validator' => $validatorClass])
 				->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
 				->orderBy('created_at DESC')
 				->limit(1)

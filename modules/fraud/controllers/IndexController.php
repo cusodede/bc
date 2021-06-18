@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\controllers;
 
-use app\modules\fraud\components\queue\FraudValidatorRepeatJob;
+use app\modules\fraud\components\queue\ChangeFraudStepWithRepeatValidateJob;
 use app\modules\fraud\models\FraudCheckStepSearch;
 use yii\web\Controller;
 use Yii;
@@ -24,7 +24,7 @@ class IndexController extends Controller
 
 		if ($request->isPost && $repeatValidateId = (int) $request->post('repeat_validate_id')) {
 			if ($repeatValidateId > 0) {
-				Yii::$app->queue->push(new FraudValidatorRepeatJob([
+				Yii::$app->queue->push(new ChangeFraudStepWithRepeatValidateJob([
 					'fraudStepId' => $repeatValidateId
 				]));
 				$notification = 'Задание на перерасчет фрода успешно добавлено в очередь';

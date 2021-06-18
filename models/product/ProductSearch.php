@@ -44,7 +44,7 @@ class ProductSearch extends ProductAR {
 	 * @return ProductOrder
 	 */
 	public function getExistentSimcardOrder(int $orderId):ProductOrder {
-		if ($find = ProductOrder::find()->where(['type' => 1, 'id' => $orderId])) {
+		if ($find = ProductOrder::findOne(['id' => $orderId])) {
 			return $find;
 		}
 		throw new DomainException("Не получилось найти заказ по симкарте с id $orderId");
