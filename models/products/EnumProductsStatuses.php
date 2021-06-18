@@ -12,13 +12,13 @@ use yii\helpers\ArrayHelper;
 class EnumProductsStatuses
 {
 	public const STATUS_ENABLED = 1;
-	public const STATUS_PROLONGATION = 2;
+	public const STATUS_RENEWED = 2;
 	public const STATUS_DISABLED = 3;
 
 	public const STATUSES = [
-		self::STATUS_ENABLED      => 'Подключено',
-		self::STATUS_PROLONGATION => 'Продлено',
-		self::STATUS_DISABLED     => 'Отключено',
+		self::STATUS_ENABLED  => 'Подключено',
+		self::STATUS_RENEWED  => 'Продлено',
+		self::STATUS_DISABLED => 'Отключено',
 	];
 
 	public static function getStatusName(int $statusId): ?string

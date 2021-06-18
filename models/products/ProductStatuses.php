@@ -10,14 +10,24 @@ use yii\db\ActiveQuery;
 /**
  * Class ProductStatuses
  * @package app\models\products
+ *
+ * @property-read string|null $statusName
  */
 class ProductStatuses extends ActiveRecordProductStatuses
 {
 	/**
-	 * @return ActiveQuery
+	 * {@inheritdoc}
 	 */
 	public function getRelatedAbonentsToProducts(): ActiveQuery
 	{
 		return $this->hasOne(RelAbonentsToProducts::class, ['id' => 'rel_abonents_to_products_id']);
+	}
+
+	/**
+	 * @return string|null именованное обозначение статуса.
+	 */
+	public function getStatusName(): ?string
+	{
+		return EnumProductsStatuses::getStatusName($this->status_id);
 	}
 }
