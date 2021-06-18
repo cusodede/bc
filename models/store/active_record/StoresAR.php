@@ -62,7 +62,7 @@ class StoresAR extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['name', 'type', 'selling_channel', 'branch', 'region'], 'required'],
-			[['type', 'deleted'], 'integer'],
+			[['type', 'deleted', 'selling_channel', 'branch', 'region'], 'integer'],
 			[['create_date', 'sellers', 'managers', 'dealer'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['name'], 'string', 'max' => 255],
@@ -78,7 +78,12 @@ class StoresAR extends ActiveRecord {
 			'name' => 'Название магазина',
 			'type' => 'Тип магазина',
 			'create_date' => 'Дата регистрации',
+			'selling_channel' => 'Канал продаж',
+			'branch' => 'Филиал',
+			'region' => 'Регион',
 			'sellers' => 'Продавцы',
+			'managers' => 'Менеджеры',
+			'dealer' => 'Дилер',
 			'deleted' => 'Deleted',
 		];
 	}

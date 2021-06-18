@@ -35,7 +35,7 @@ final class ManagersSearch extends Managers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'create_date', 'update_date', 'userEmail', 'userLogin',
-					'userId'
+					'userId','store', 'dealer', 'create_date', 'update_date'
 				],
 				'filter',
 				'filter' => 'trim'
@@ -48,6 +48,20 @@ final class ManagersSearch extends Managers {
 			['userEmail', 'email'],
 			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i']
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'userLogin' => 'Логин',
+			'userId' => 'Ид пользователя',
+			'userEmail' => 'Почта',
+			'seller' => 'Продавец',
+			'store' => 'Магазин',
+			'dealer' => 'Дилер'
+		]);
 	}
 
 	/**

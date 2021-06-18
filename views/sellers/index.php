@@ -225,7 +225,7 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'dealers',
+				'attribute' => 'dealer',
 				'format' => 'raw',
 				'value' => static function(SellersSearch $model):string {
 					return BadgeWidget::widget([

@@ -17,7 +17,7 @@ $modelName = $model->formName();
 Modal::begin([
 	'id' => "{$modelName}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'title' => BadgeWidget::widget([
+	'title' => 'ID:'.BadgeWidget::widget([
 		'items' => $model,
 		'subItem' => 'id'
 	]),

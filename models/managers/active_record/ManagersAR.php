@@ -122,9 +122,14 @@ class ManagersAR extends ActiveRecord {
 			'create_date' => 'Дата регистрации',
 			'update_date' => 'Дата обновления',
 			'user' => 'Пользователь',
+			'userEmail' => 'Почта',
+			'userId' => 'Ид пользователя',
+			'userLogin' => 'Логин',
 			'name' => 'Имя',
 			'surname' => 'Фамилия',
 			'patronymic' => 'Отчество',
+			'stores' => 'Магазины',
+			'dealers' => 'Дилеры',
 			'deleted' => 'Deleted'
 		];
 	}

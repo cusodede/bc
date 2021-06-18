@@ -27,6 +27,7 @@ use yii\web\Response;
  * Все контроллеры и все вью плюс-минус одинаковые, поэтому можно сэкономить на прототипировании
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
+ * @property null|string $modelTitle Заголовок
  * @property bool $enablePrototypeMenu Включать ли контроллер в меню списка прототипов
  * @property array $mappingRules Настройки параметров импорта
  *
@@ -51,6 +52,11 @@ class DefaultController extends Controller {
 	public bool $enablePrototypeMenu = true;
 
 	/**
+	 * @var null|string $modelTitle
+	 */
+	public ?string $modelTitle = null;
+
+	/**
 	 * @return array
 	 */
 	public function getMappingRules():array {
@@ -61,7 +67,11 @@ class DefaultController extends Controller {
 	 * @inheritDoc
 	 */
 	public function beforeAction($action):bool {
-		$this->view->title = $this->view->title??$this->id;
+		if ($this->modelTitle) {
+			$this->view->title = $this->modelTitle;
+		} else {
+			$this->view->title = $this->view->title??$this->id;
+		}
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {
 				$this->view->params['breadcrumbs'][] = $this->id;

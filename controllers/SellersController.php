@@ -19,6 +19,8 @@ class SellersController extends DefaultController {
 
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;
+	public bool $enablePrototypeMenu = false;
+	public ?string $modelTitle = Sellers::RUS_CLASS_NAME;
 
 	/**
 	 * @inheritDoc
