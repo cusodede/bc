@@ -5,6 +5,7 @@ namespace app\modules\fraud\components\behaviours;
 
 use app\models\product\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
+use app\modules\fraud\components\validators\orders\simcard\CheckOnDecreaseTariffPlan;
 use app\modules\fraud\components\validators\orders\simcard\HasActivityOnSimcard;
 use app\modules\fraud\components\validators\orders\simcard\IsActiveSimcardValidator;
 use app\modules\fraud\models\FraudCheckStep;
@@ -21,7 +22,8 @@ use yii\db\Exception;
 class ProductOrderSimcardAsyncBehaviour extends Behavior {
 	public array $validators = [
 		IsActiveSimcardValidator::class,
-		HasActivityOnSimcard::class
+		HasActivityOnSimcard::class,
+		CheckOnDecreaseTariffPlan::class
 	];
 
 	/**

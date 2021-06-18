@@ -1,0 +1,20 @@
+<?php
+declare(strict_types = 1);
+
+namespace app\modules\fraud\components\validators\orders\simcard;
+
+use app\modules\fraud\components\FraudValidator;
+
+/**
+ * Class CheckOnDecreaseTariffPlan
+ * @package app\modules\fraud\components\validators\orders\simcard
+ */
+class CheckOnDecreaseTariffPlan implements FraudValidator {
+	public function name():string {
+		return "Проверка на соответствие тарифного плана в течение Х дней (проверка на понижение тарифа)";
+	}
+
+	public function validate(int $entityId):void {
+
+	}
+}
