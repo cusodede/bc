@@ -34,4 +34,13 @@ class Abonents extends ActiveRecordAbonents
 			return $abonentsToProduct->relatedProduct;
 		}, $this->relatedAbonentsToProducts);
 	}
+
+	/**
+	 * @param string $phone
+	 * @return static|null
+	 */
+	public static function findByPhone(string $phone): ?self
+	{
+		return static::findOne(['phone' => $phone]);
+	}
 }
