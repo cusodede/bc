@@ -18,6 +18,7 @@ use Throwable;
 /**
  * Class StoresSearch
  * @property null|string $store
+ * @property null|string $dealer
  *
  * @property null|string $passportExplodedSeries
  * @property null|string $passportExplodedNumber
@@ -32,6 +33,7 @@ final class SellersSearch extends Sellers {
 	public ?string $userEmail = null;
 	public ?string $userLogin = null;
 	public ?string $store = null;
+	public ?string $dealer = null;
 	public ?string $passport = null;
 	public ?string $currentStatus = null;
 
@@ -43,14 +45,14 @@ final class SellersSearch extends Sellers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'passport', 'keyword', 'birthday', 'entry_date',
-					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId', 'inn', 'snils'
+					'create_date', 'update_date', 'store', 'userEmail', 'userLogin', 'userId', 'inn', 'snils', 'dealer'
 				],
 				'filter',
 				'filter' => 'trim'
 			],
 			[['id', 'userId', 'gender', 'non_resident_type', 'currentStatus'], 'integer'],
 			[['deleted', 'is_wireman_shpd', 'is_resident'], 'boolean'],
-			[['store', 'userEmail'], 'string', 'max' => 255],
+			[['store', 'dealer', 'userEmail'], 'string', 'max' => 255],
 			['userLogin', 'string', 'max' => 64],
 			['userEmail', 'email'],
 			[['birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
@@ -141,7 +143,8 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([Users::tableName().'.id' => $this->userId])
 			->andFilterWhere([Users::tableName().'.email' => $this->userEmail])
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
-			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus]);
+			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus])
+			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
 
 		$this->filterDataByUser($query);
 	}
