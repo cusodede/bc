@@ -134,7 +134,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
-				'attribute' => 'currentStatus',
+				'attribute' => 'currentStatusFilter',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->currentStatus,
