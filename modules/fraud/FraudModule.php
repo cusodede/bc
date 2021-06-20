@@ -20,6 +20,7 @@ class FraudModule extends Module implements BootstrapInterface
 	/**
 	 * @param Application $app
 	 * @return void
+	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function bootstrap($app) {
 		if ($app instanceof ConsoleApplication) {

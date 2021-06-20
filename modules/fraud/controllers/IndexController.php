@@ -18,6 +18,7 @@ class IndexController extends Controller
 	/**
 	 * @return string
 	 * @throws Throwable
+	 * @noinspection NestedPositiveIfStatementsInspection
 	 */
 	public function actionList():string {
 		$request = Yii::$app->request;

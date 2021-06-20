@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace app\modules\fraud\commands;
 
@@ -15,8 +16,7 @@ use yii\db\Exception;
  */
 class GeneratorController extends Controller
 {
-	public function actionOrder()
-	{
+	public function actionOrder():void {
 		FraudCheckStep::deleteAll();
 		$newOrder = new ProductOrder();
 		$newOrder->initiator = 1;
@@ -29,8 +29,7 @@ class GeneratorController extends Controller
 	/**
 	 * @throws Exception
 	 */
-	public function actionNewSteps()
-	{
+	public function actionNewSteps():void {
 		FraudCheckStep::deleteAll();
 
 		$behaviour = new ProductOrderSimcardAsyncBehaviour();

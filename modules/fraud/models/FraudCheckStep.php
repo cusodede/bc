@@ -5,6 +5,7 @@ namespace app\modules\fraud\models;
 
 use app\modules\fraud\models\active_record\FraudCheckStepAr;
 use DomainException;
+use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\db\Exception;
 
@@ -43,7 +44,8 @@ class FraudCheckStep extends FraudCheckStepAr {
 		$new->entity_class = $entityClass;
 		$new->fraud_validator = $fraudValidatorClass;
 		$new->status = self::STATUS_WAIT;
-		$new->created_at = $new->updated_at = date('Y-m-d H:i:s');
+		$new->updated_at = DateHelper::lcDate();
+		$new->created_at = $new->updated_at;
 		return $new;
 	}
 
