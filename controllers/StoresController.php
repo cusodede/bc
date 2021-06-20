@@ -16,10 +16,11 @@ use app\models\store\StoresSearch;
  */
 class StoresController extends DefaultController {
 
+	protected const DEFAULT_TITLE = "Магазины";
+
 	public string $modelClass = Stores::class;
 	public string $modelSearchClass = StoresSearch::class;
 	public bool $enablePrototypeMenu = false;
-	public ?string $modelTitle = Stores::RUS_CLASS_NAME;
 
 	public function getMappingRules():array {
 		return [

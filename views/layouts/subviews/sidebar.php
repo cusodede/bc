@@ -29,7 +29,7 @@ use app\controllers\DealersController;
 			'iconClass' => 'fa-home'
 		],
 		[
-			'label' => 'Пользователи',
+			'label' => UsersController::Title(),
 			'url' => '#',
 			'iconClass' => 'fa-users-cog',
 			'items' => [
@@ -42,22 +42,22 @@ use app\controllers\DealersController;
 			//'visible' => UsersController::hasPermission() для проверки доступа ко всему контроллеру и отключения всего списка
 		],
 		[
-			'label' => 'Дилер',
+			'label' => DealersController::Title(),
 			'url' => [DealersController::to('index')],
 			'iconClass' => 'fa-building'
 		],
 		[
-			'label' => 'Менеджер',
+			'label' => ManagersController::Title(),
 			'url' => [ManagersController::to('index')],
 			'iconClass' => 'fa fa-user-tie'
 		],
 		[
-			'label' => 'Магазин',
+			'label' => StoresController::Title(),
 			'url' => [StoresController::to('index')],
 			'iconClass' => 'fa-store'
 		],
 		[
-			'label' => 'Продавец',
+			'label' => SellersController::Title(),
 			'url' => [SellersController::to('index')],
 			'iconClass' => 'fa-smile-beam'
 		],

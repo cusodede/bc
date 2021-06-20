@@ -15,10 +15,12 @@ use yii\web\NotFoundHttpException;
  */
 class ManagersController extends DefaultController {
 
+	protected const DEFAULT_TITLE = "Менеджеры";
+
 	public string $modelClass = Managers::class;
 	public string $modelSearchClass = ManagersSearch::class;
 	public bool $enablePrototypeMenu = false;
-	public ?string $modelTitle = Managers::RUS_CLASS_NAME;
+
 
 	/**
 	 * @inheritDoc
