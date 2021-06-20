@@ -182,11 +182,15 @@ class SellersAR extends ActiveRecord {
 	public function attributeLabels():array {
 		return [
 			'id' => 'ID',
+			'currentStatusId' => 'Статус',
 			'user' => 'Пользователь',
 			'name' => 'Имя',
 			'surname' => 'Фамилия',
 			'patronymic' => 'Отчество',
 			'birthday' => 'Дата рождения',
+			'userEmail' => 'Почта',
+			'userId' => 'Ид пользователя',
+			'userLogin' => 'Логин',
 			'create_date' => 'Дата регистрации',
 			'update_date' => 'Дата обновления',
 			'is_resident' => 'Резидент',
@@ -203,6 +207,8 @@ class SellersAR extends ActiveRecord {
 			'keyword' => 'Ключевое слово для  «Горячей линии»',
 			'is_wireman_shpd' => 'Монтажник ШПД',
 			'contract_signing_address' => 'Адрес подписания договора',
+			'stores' => 'Магазин',
+			'dealers' => 'Дилер',
 			'deleted' => 'Deleted'
 		];
 	}

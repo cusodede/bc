@@ -8,6 +8,7 @@ use app\models\seller\active_record\SellersAR;
 use app\models\common\traits\CreateAccessTrait;
 use app\models\sys\users\Users;
 use pozitronik\filestorage\traits\FileStorageTrait;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Sellers
@@ -37,6 +38,22 @@ class Sellers extends SellersAR {
 	public ?Users $sysUser = null;
 
 	public const RUS_CLASS_NAME = 'Продавец';
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'sellerDocs' => 'Сканы',
+			'passportTranslation' => 'Скан нотариально заверенного перевода',
+			'migrationCard' => 'Миграционная карта',
+			'placeOfStay' => 'Отрывная часть бланка к уведомлению о прибытии в место пребывания',
+			'patent' => 'Патент + квитанция об оплате',
+			'residence' => 'Вид на жительство',
+			'visa' => 'Виза',
+			'temporaryResidence' => 'Разрешение на временное проживание'
+		]);
+	}
 
 	/**
 	 * URL для нахождения продавца по ID

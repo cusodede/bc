@@ -23,7 +23,7 @@ use app\models\seller\active_record\SellersAR;
 		'create_date',
 		'update_date',
 		[
-			'attribute' => 'currentStatus',
+			'attribute' => 'currentStatusId',
 			'value' => static function(Sellers $model) {
 				return $model->currentStatus->name??null;
 			},

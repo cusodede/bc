@@ -95,6 +95,9 @@ class DealersAR extends ActiveRecord {
 			'type' => 'Тип',
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
+			'sellers' => 'Продавец',
+			'stores' => 'Магазин',
+			'managers' => 'Менеджер',
 			'deleted' => 'Deleted'
 		];
 	}

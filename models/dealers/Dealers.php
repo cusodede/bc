@@ -9,6 +9,7 @@ use app\models\dealers\active_record\DealersAR;
  * Class Dealers
  */
 class Dealers extends DealersAR {
+	public const RUS_CLASS_NAME = 'Дилер';
 
 	/**
 	 * Заглушка, чтобы инспектор не ругался на пустой стаб
