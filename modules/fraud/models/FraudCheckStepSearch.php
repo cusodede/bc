@@ -7,6 +7,7 @@ use app\modules\fraud\models\active_record\FraudCheckStepAr;
 use DomainException;
 use Throwable;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
 
 /**
  * Class FraudCheckStepSearch
@@ -52,10 +53,10 @@ class FraudCheckStepSearch extends FraudCheckStepAr
 	/**
 	 * @param int $entityId
 	 * @param string $validatorClass
-	 * @return FraudCheckStep
+	 * @return FraudCheckStep|array|ActiveRecord
+	 * @throws DomainException
 	 */
-	public function getByEntityIdWithValidator(int $entityId, string $validatorClass) : FraudCheckStep
-	{
+	public function getByEntityIdWithValidator(int $entityId, string $validatorClass):FraudCheckStep {
 		$step = FraudCheckStep::find()
 				->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
 				->andWhere(['status' => FraudCheckStep::STATUS_WAIT])

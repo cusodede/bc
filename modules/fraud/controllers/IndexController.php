@@ -5,6 +5,7 @@ namespace app\modules\fraud\controllers;
 
 use app\modules\fraud\components\queue\ChangeFraudStepWithRepeatValidateJob;
 use app\modules\fraud\models\FraudCheckStepSearch;
+use Throwable;
 use yii\web\Controller;
 use Yii;
 
@@ -16,7 +17,7 @@ class IndexController extends Controller
 {
 	/**
 	 * @return string
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function actionList():string {
 		$request = Yii::$app->request;

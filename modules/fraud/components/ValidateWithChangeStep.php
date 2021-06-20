@@ -3,9 +3,6 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\components;
 
-use app\models\product\ProductSearch;
-use app\modules\fraud\components\FraudException;
-use app\modules\fraud\components\FraudValidator;
 use app\modules\fraud\models\FraudCheckStep;
 use app\modules\fraud\models\FraudCheckStepSearch;
 
