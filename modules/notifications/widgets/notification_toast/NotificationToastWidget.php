@@ -28,5 +28,4 @@ class NotificationToastWidget extends Toast {
 		$this->notification->delete();
 	}
 
-
 }

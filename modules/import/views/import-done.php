@@ -23,7 +23,7 @@ use yii\web\View;
 		<div class="panel-tag">
 			Обработано: <?= Utils::pluralForm($model->count, ['строка', 'строки', 'строк']) ?>
 			<br/>
-			С ошибкой:  <?= Utils::pluralForm($model->errorCount, ['строка', 'строки', 'строк']) ?>.
+			С ошибкой: <?= Utils::pluralForm($model->errorCount, ['строка', 'строки', 'строк']) ?>.
 		</div>
 		<div class="panel-content">
 			<?= Html::a('Загрузить ещё что-нибудь', $controller::to('import'), [

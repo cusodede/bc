@@ -20,8 +20,7 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  */
-class FraudCheckStepAr extends ActiveRecord
-{
+class FraudCheckStepAr extends ActiveRecord {
 	use ActiveRecordTrait;
 
 	/**
@@ -39,36 +38,36 @@ class FraudCheckStepAr extends ActiveRecord
 	}
 
 	/**
-     * {@inheritdoc}
-     */
-    public static function tableName():string {
-        return 'fraud_checks_steps';
-    }
+	 * {@inheritdoc}
+	 */
+	public static function tableName():string {
+		return 'fraud_checks_steps';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules():array {
-        return [
-            [['entity_id', 'status'], 'integer'],
-            [['step_info', 'created_at', 'updated_at'], 'safe'],
-            [['entity_class', 'fraud_validator'], 'string', 'max' => 255],
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules():array {
+		return [
+			[['entity_id', 'status'], 'integer'],
+			[['step_info', 'created_at', 'updated_at'], 'safe'],
+			[['entity_class', 'fraud_validator'], 'string', 'max' => 255],
+		];
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels():array {
-        return [
-            'id' => 'ID',
-            'entity_id' => 'ID заказа какой-то сущности',
-            'entity_class' => 'Класс сущности заказа',
-            'fraud_validator' => 'Класс фрода, который реализует проверку',
-            'step_info' => 'Дополнительная информация',
-            'status' => 'Статус проверки',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return [
+			'id' => 'ID',
+			'entity_id' => 'ID заказа какой-то сущности',
+			'entity_class' => 'Класс сущности заказа',
+			'fraud_validator' => 'Класс фрода, который реализует проверку',
+			'step_info' => 'Дополнительная информация',
+			'status' => 'Статус проверки',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
+		];
+	}
 }

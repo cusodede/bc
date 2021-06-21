@@ -13,8 +13,7 @@ use yii\db\ActiveRecord;
  * Class FraudCheckStepSearch
  * @package app\modules\fraud\models
  */
-class FraudCheckStepSearch extends FraudCheckStepAr
-{
+class FraudCheckStepSearch extends FraudCheckStepAr {
 	/**
 	 * @param array $params
 	 * @param bool $pagination
@@ -58,19 +57,18 @@ class FraudCheckStepSearch extends FraudCheckStepAr
 	 */
 	public function getByEntityIdWithValidator(int $entityId, string $validatorClass):FraudCheckStep|array|ActiveRecord {
 		$step = FraudCheckStep::find()
-				->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
-				->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
-				->orderBy('created_at DESC')
-				->limit(1)
-				->one();
+			->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
+			->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
+			->orderBy('created_at DESC')
+			->limit(1)
+			->one();
 		if (null === $step) {
 			throw new DomainException("Не найдена запись фродовой проверки.");
 		}
 		return $step;
 	}
 
-	public function getById(int $id):FraudCheckStep
-	{
+	public function getById(int $id):FraudCheckStep {
 		if ($find = FraudCheckStep::findOne(['id' => $id])) {
 			return $find;
 		}

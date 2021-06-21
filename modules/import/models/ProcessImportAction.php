@@ -28,7 +28,6 @@ class ProcessImportAction extends Action {
 		$messages = [];
 		$isImportDone = $importModel->import($messages);
 
-
 		if (Yii::$app->request->isAjax) {
 			return $this->controller->asJson([
 				'done' => $isImportDone,

@@ -13,8 +13,7 @@ use Yii;
  * Class IndexController
  * @package app\modules\fraud\controllers
  */
-class IndexController extends Controller
-{
+class IndexController extends Controller {
 	/**
 	 * @return string
 	 * @throws Throwable
@@ -24,7 +23,7 @@ class IndexController extends Controller
 		$request = Yii::$app->request;
 		$notification = null;
 
-		if ($request->isPost && $repeatValidateId = (int) $request->post('repeat_validate_id')) {
+		if ($request->isPost && $repeatValidateId = (int)$request->post('repeat_validate_id')) {
 			if ($repeatValidateId > 0) {
 				Yii::$app->queue->push(new ChangeFraudStepWithRepeatValidateJob([
 					'fraudStepId' => $repeatValidateId

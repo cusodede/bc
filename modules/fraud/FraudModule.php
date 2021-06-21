@@ -13,8 +13,7 @@ use yii\console\Application as ConsoleApplication;
  * Class FraudModule
  * @package app\modules\fraud
  */
-class FraudModule extends Module implements BootstrapInterface
-{
+class FraudModule extends Module implements BootstrapInterface {
 	use ModuleExtended;
 
 	/**

@@ -21,7 +21,7 @@ use yii\web\View;
 use yii\grid\ActionColumn;
 
 ?>
-<?php if(!empty($notification)):?>
+<?php if (!empty($notification)): ?>
 	<div class="alert alert-success">
 		<?= $notification ?>
 	</div>
@@ -55,8 +55,8 @@ use yii\grid\ActionColumn;
 		[
 			'attribute' => 'fraud_validator',
 			'value' => static function(FraudCheckStep $model) {
-				if ( ! class_exists($model->fraud_validator)) {
-					return 'Валидатор не найден.' . $model->fraud_validator;
+				if (!class_exists($model->fraud_validator)) {
+					return 'Валидатор не найден.'.$model->fraud_validator;
 				}
 
 				/**
@@ -71,13 +71,13 @@ use yii\grid\ActionColumn;
 			'attribute' => 'status',
 			'format' => 'raw',
 			'filter' => FraudCheckStep::$statusesWithNames,
-			'value' => static function (FraudCheckStep $model) {
-				return $model->getStatusName() ?: "Статус не определен $model->status";
+			'value' => static function(FraudCheckStep $model) {
+				return $model->getStatusName()?:"Статус не определен $model->status";
 			}
 		],
 		[
 			'attribute' => 'step_info',
-			'value' => static function (FraudCheckStep $model) {
+			'value' => static function(FraudCheckStep $model) {
 				return ArrayHelper::getValue($model->step_info, 'fraud_message');
 			}
 		]

@@ -14,8 +14,7 @@ use yii\db\Exception;
  * Class GeneratorController
  * @package app\modules\fraud\commands
  */
-class GeneratorController extends Controller
-{
+class GeneratorController extends Controller {
 	public function actionOrder():void {
 		FraudCheckStep::deleteAll();
 		$newOrder = new ProductOrder();
@@ -34,7 +33,7 @@ class GeneratorController extends Controller
 
 		$behaviour = new ProductOrderSimcardAsyncBehaviour();
 
-		(new FraudCheckStep())->addNewSteps(array_map(static function (string $validatorClass){
+		(new FraudCheckStep())->addNewSteps(array_map(static function(string $validatorClass) {
 			return FraudCheckStep::newStep(random_int(1, 100), ProductOrder::class, $validatorClass);
 		}, $behaviour->validators));
 	}

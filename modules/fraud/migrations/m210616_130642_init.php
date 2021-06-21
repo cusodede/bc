@@ -7,8 +7,8 @@ use yii\base\Exception;
 use yii\db\Migration;
 
 /**
-* Class m210616_130642_init
-*/
+ * Class m210616_130642_init
+ */
 class m210616_130642_init extends Migration {
 	/**
 	 * {@inheritdoc}

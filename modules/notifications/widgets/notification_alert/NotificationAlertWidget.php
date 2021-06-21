@@ -115,7 +115,7 @@ class NotificationAlertWidget extends Alert {
 	 */
 	private function getAcknowledgeButton():string {
 		if (false === $this->acknowledgeButton) return '';
-		return $this->acknowledgeButton??Html::a("Прочитано", '#' ,[
+		return $this->acknowledgeButton??Html::a("Прочитано", '#', [
 				'class' => "btn btn-info btn-pills btn-sm btn-w-m  mr-1 waves-effect waves-themed",
 				'data-dismiss' => "alert",
 				'aria-label' => "Прочитано",
