@@ -81,19 +81,19 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			[
-				'attribute' => 'operationName',
+				'attribute' => 'operationFilter',
 				'label' => 'Действие',
 				'format' => 'raw',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->relatedOperation,
+						'items' => $model->relatedOperations,
 						'subItem' => 'name',
 						'useBadges' => false
 					]);
 				},
 				'filter' => Select2::widget([
 					'model' => $searchModel,
-					'attribute' => 'operation',
+					'attribute' => 'operationFilter',
 					'data' => RewardsOperationsConfig::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
@@ -137,7 +137,7 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'label' => 'Статус',
-				'attribute' => 'currentStatusFilter',
+				'attribute' => 'statusFilter',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->currentStatus,
@@ -153,12 +153,12 @@ ModalHelperAsset::register($this);
 				]
 			],
 			[
-				'attribute' => 'ruleName',
+				'attribute' => 'ruleFilter',
 				'label' => 'Правило',
 				'format' => 'raw',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refRewardsRules,
+						'items' => $model->relatedRules,
 						'subItem' => 'name',
 						'useBadges' => false
 					]);
