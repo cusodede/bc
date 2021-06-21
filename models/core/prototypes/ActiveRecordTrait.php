@@ -213,5 +213,4 @@ trait ActiveRecordTrait {
 		}
 		return $this;
 	}
-
 }
