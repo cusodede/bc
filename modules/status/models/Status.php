@@ -90,10 +90,10 @@ class Status extends ActiveRecord {
 	/**
 	 * @param ActiveRecord $model
 	 * @param int $status
-	 * @throws InvalidConfigException
+	 * @return bool
 	 * @throws Throwable
 	 * @throws StaleObjectException
-	 * @return bool
+	 * @throws InvalidConfigException
 	 */
 	public static function setCurrentStatus(ActiveRecord $model, int $status):bool {
 		$attributes = self::ExtractModelIdentifiers($model);

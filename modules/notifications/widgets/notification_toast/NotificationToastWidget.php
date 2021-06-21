@@ -17,7 +17,7 @@ class NotificationToastWidget extends Toast {
 	/**
 	 * @inheritDoc
 	 */
-	public function init() {
+	public function init():void {
 		$this->dateTime = $this->notification->timestamp;
 		$this->body = $this->notification->message;
 		$this->options = [
@@ -27,6 +27,5 @@ class NotificationToastWidget extends Toast {
 		$this->getView()->registerJs("$('#{$this->id}').show()");
 		$this->notification->delete();
 	}
-
 
 }

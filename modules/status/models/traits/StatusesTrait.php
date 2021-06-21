@@ -26,8 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property-read int[] $nextStatusesId Массив id статусов для следующего шага.
  * @property-read null|StatusModel $currentStatus Модель текущего статуса
  * @property null|int $currentStatusId id текущего статуса цели
- *
- * @property-read $className
+ * @property-read string $className
  *
  * @property-read null|Status $relStatus Релейшен к таблице статусов. Используем только для чтения, для записи обращаемся к Status::setCurrentStatus - там учитываются создатель и делегат. Если они не будут нужны, можно и через свойство.
  */
@@ -156,4 +155,5 @@ trait StatusesTrait {
 			'model_key' => 'id'
 		])->andOnCondition(['model_name' => $this->className]);
 	}
+
 }
