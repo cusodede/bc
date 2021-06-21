@@ -150,7 +150,7 @@ trait StatusesTrait {
 	 * Status::getCurrentStatus работает альтернативно, но вариант с релейшеном корректнее архитектурно
 	 */
 	public function getRelStatus():ActiveQuery {
-		/** @var ActiveRecord $this */
+		/** @var ActiveRecord|self $this */
 		return $this->hasOne(Status::class, [
 			'model_key' => 'id'
 		])->andOnCondition(['model_name' => $this->className]);
