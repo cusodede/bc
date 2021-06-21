@@ -30,15 +30,9 @@ use app\controllers\DealersController;
 		],
 		[
 			'label' => UsersController::Title(),
-			'url' => '#',
 			'iconClass' => 'fa-users-cog',
-			'items' => [
-				[
-					'label' => 'Все',
-					'url' => [UsersController::to('index')],
-					'visible' => UsersController::hasPermission('index')
-				]
-			],
+			'url' => [UsersController::to('index')],
+			'visible' => UsersController::hasPermission('index')
 			//'visible' => UsersController::hasPermission() для проверки доступа ко всему контроллеру и отключения всего списка
 		],
 		[
