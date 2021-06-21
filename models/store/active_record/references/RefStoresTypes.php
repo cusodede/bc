@@ -11,7 +11,7 @@ use pozitronik\references\models\CustomisableReference;
  */
 class RefStoresTypes extends CustomisableReference {
 
-	public $menuCaption = "Типы магазинов";
+	public string $menuCaption = "Типы магазинов";
 	public $moduleId = "Магазины";
 	/**
 	 * {@inheritdoc}
