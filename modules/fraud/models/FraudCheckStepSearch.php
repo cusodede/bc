@@ -68,7 +68,7 @@ class FraudCheckStepSearch extends FraudCheckStepAr {
 	}
 
 	public function getById(int $id):FraudCheckStep {
-		if ($find = FraudCheckStep::findOne(['id' => $id])) {
+		if (null !== $find = FraudCheckStep::findOne(['id' => $id])) {
 			return $find;
 		}
 		throw new DomainException("Не найдена запись фродовой проверку по id. ID: $id");
