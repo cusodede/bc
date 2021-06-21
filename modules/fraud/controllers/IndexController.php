@@ -34,7 +34,7 @@ class IndexController extends Controller {
 		return $this->render('list', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $searchModel->search($params),
-			'notification' => $notification
+			'notification' => $notification//todo: переделать на Notifications::message()
 		]);
 	}
 }
