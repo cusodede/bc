@@ -43,7 +43,7 @@ class DolAPI extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public function init() {
+	public function init():void {
 		$this->baseUrl = ArrayHelper::getValue(Yii::$app->components, "dolApi.baseUrl", $this->baseUrl);
 		$this->_debugPhones = ArrayHelper::getValue(Yii::$app->components, "dolApi.debugPhones", $this->_debugPhones);
 	}
