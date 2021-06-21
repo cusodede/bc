@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  */
 class SimCardAR extends ActiveRecord {
 	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */

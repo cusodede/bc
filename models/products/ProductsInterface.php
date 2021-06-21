@@ -20,5 +20,4 @@ interface ProductsInterface {
 	 */
 	public function doSell():?bool;
 
-
 }

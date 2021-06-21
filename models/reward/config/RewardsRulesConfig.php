@@ -26,7 +26,6 @@ class RewardsRulesConfig extends ArrayReference {
 	public int $quantity;
 	public ?string $waiting;
 
-
 	/*Прототипирую правила*/
 	private const RULES = [
 		/*product_id => [[rule1],[rule2]] */

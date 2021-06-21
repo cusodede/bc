@@ -48,5 +48,4 @@ class Products extends ProductsAR {
 		return $modelClass::findOne($modelId);
 	}
 
-
 }

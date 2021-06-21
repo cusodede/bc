@@ -96,7 +96,6 @@ class RewardsAR extends ActiveRecord {
 		return $this->hasOne(Users::class, ['id' => 'user']);
 	}
 
-
 	/**
 	 * @param mixed $relatedUser
 	 */

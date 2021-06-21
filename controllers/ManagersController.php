@@ -21,7 +21,6 @@ class ManagersController extends DefaultController {
 	public string $modelSearchClass = ManagersSearch::class;
 	public bool $enablePrototypeMenu = false;
 
-
 	/**
 	 * @inheritDoc
 	 */

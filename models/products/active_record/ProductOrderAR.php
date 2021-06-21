@@ -30,6 +30,7 @@ use yii\db\ActiveRecord;
  */
 class ProductOrderAR extends ActiveRecord {
 	use StatusesTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
