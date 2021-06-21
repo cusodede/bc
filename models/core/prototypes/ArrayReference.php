@@ -44,7 +44,6 @@ class ArrayReference extends Model implements ReferenceInterface {
 	public static function loadModel(int $index):ArrayReference {
 		$model = new static(['id' => $index]);
 		$model->load((array)ArrayHelper::getValue($model->items, $index, []), '');
-		//if (!$model->validate()) throw new InvalidConfigException("Wrong reference config: ".TemporaryHelper::Errors2String($model->errors));
 		return $model;
 	}
 
@@ -54,7 +53,6 @@ class ArrayReference extends Model implements ReferenceInterface {
 	public function rules():array {
 		return [
 			[['name'], 'required'],
-//			[['name'], 'unique'],//todo
 			[['id'], 'integer'],
 			[['deleted'], 'boolean'],
 			[['name'], 'string', 'max' => 256]
