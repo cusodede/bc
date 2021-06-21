@@ -60,7 +60,7 @@ class NotificationAlertWidget extends Alert {
 	/**
 	 * @inheritDoc
 	 */
-	public function init() {
+	public function init():void {
 		$this->body = $this->getBody();
 		NotificationsModuleAssets::register($this->view);
 		$this->options = [

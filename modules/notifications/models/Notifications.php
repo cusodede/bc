@@ -129,13 +129,13 @@ class Notifications extends ActiveRecord {
 	 * @throws Exception
 	 * @throws ForbiddenHttpException
 	 */
-	public static function message(string $message, $receivers = null, ?int $initiator = null) {
+	public static function message(string $message, $receivers = null, ?int $initiator = null):void {
 		if (null === $receivers) $receivers = Users::Current()->id;
 		$receivers = (array)$receivers;
 		$insertData = [];
 		foreach ($receivers as $receiver) {
 			$insertData[] = [
-				'type' => Notifications::TYPE_DEFAULT,
+				'type' => self::TYPE_DEFAULT,
 				'initiator' => $initiator,
 				'receiver' => $receiver,
 				'comment' => $message
@@ -143,7 +143,7 @@ class Notifications extends ActiveRecord {
 		}
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
-					->batchInsert(Notifications::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
+					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
 					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
 				->execute();
 		}
@@ -174,7 +174,7 @@ class Notifications extends ActiveRecord {
 		}
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
-					->batchInsert(Notifications::tableName(), ['type', 'initiator', 'receiver', 'object_id', 'comment'], $insertData)
+					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'object_id', 'comment'], $insertData)
 					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
 				->execute();//угу, официальный upsert работает так
 		}
@@ -195,7 +195,7 @@ class Notifications extends ActiveRecord {
 
 		if (null !== $object) $dropCondition['object_id'] = $object;
 
-		Notifications::deleteAll($dropCondition);
+		self::deleteAll($dropCondition);
 	}
 
 	/**
