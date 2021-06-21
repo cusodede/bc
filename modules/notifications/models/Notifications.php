@@ -11,6 +11,7 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Потенциальная проблема с уведомлениями: при вставке пользователей в TargetUserAssignedNotificationBehavior на каждого пользователя будет происходить один вызов. Если пользователей много -- это будут тормоза вечности.
@@ -125,6 +126,8 @@ class Notifications extends ActiveRecord {
 	 * @param string $message
 	 * @param null|int|int[] $receivers
 	 * @param int|null $initiator
+	 * @throws Exception
+	 * @throws ForbiddenHttpException
 	 */
 	public static function message(string $message, $receivers = null, ?int $initiator = null) {
 		if (null === $receivers) $receivers = Users::Current()->id;
@@ -182,6 +185,7 @@ class Notifications extends ActiveRecord {
 	 * @param int|null $object объект уведомления
 	 * @param int|null $receiver получатель уведомления, null - текущий пользователь
 	 * @param int[]|null $type null - очищает все уведомления, связанные с целью у пользователя
+	 * @throws ForbiddenHttpException
 	 */
 	public static function Acknowledge(?int $object, ?int $receiver = null, ?array $type = null):void {
 		$dropCondition = [
@@ -199,6 +203,7 @@ class Notifications extends ActiveRecord {
 	 * @param int $object
 	 * @param int|null $receiver получатель уведомления, null - текущий пользователь
 	 * @return self[]
+	 * @throws ForbiddenHttpException
 	 */
 	public static function Notifications(int $object, ?int $receiver = null):array {
 		if (null === $receiver) $receiver = Users::Current()->id;
@@ -209,6 +214,7 @@ class Notifications extends ActiveRecord {
 	 * Возвращает все уведомления текущего пользователя
 	 * @param int|null $receiver получатель уведомления, null - текущий пользователь
 	 * @return self[]
+	 * @throws ForbiddenHttpException
 	 */
 	public static function UserNotifications(?int $receiver = null):array {
 		if (null === $receiver) $receiver = Users::Current()->id;

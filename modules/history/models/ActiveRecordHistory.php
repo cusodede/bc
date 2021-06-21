@@ -169,7 +169,7 @@ class ActiveRecordHistory extends History {
 	/**
 	 * @param null|string $key
 	 * @param mixed $default
-	 * @return int|string|null|array
+	 * @return mixed
 	 * @throws Throwable
 	 */
 	private function getModelRules(?string $key = null, $default = null) {
