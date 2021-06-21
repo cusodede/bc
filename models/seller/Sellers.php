@@ -37,8 +37,6 @@ class Sellers extends SellersAR {
 	public $visa;
 	public ?Users $sysUser = null;
 
-	public const RUS_CLASS_NAME = 'Продавец';
-
 	/**
 	 * {@inheritdoc}
 	 */

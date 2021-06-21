@@ -16,8 +16,6 @@ use app\models\common\traits\CreateAccessTrait;
 class Managers extends ManagersAR {
 	use CreateAccessTrait;
 
-	public const RUS_CLASS_NAME = 'Менеджер';
-
 	/**
 	 * URL для нахождения менеджера по ID
 	 * @return string

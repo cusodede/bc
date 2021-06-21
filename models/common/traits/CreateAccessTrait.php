@@ -78,7 +78,7 @@ trait CreateAccessTrait {
 			'login' => $this->login,
 			'username' => $this->fio,
 			'password' => Users::DEFAULT_PASSWORD,
-			'comment' => 'Пользователь автоматический создан. '.self::RUS_CLASS_NAME.' связан с этой УЗ.',
+			'comment' => "Пользователь создан автоматически для модели".static::class,
 			'email' => $this->email,
 			'phones' => $this->login
 		]);
@@ -116,13 +116,13 @@ trait CreateAccessTrait {
 	public function sendErrors():void {
 		Yii::$app->mailer->compose('registration/registration-errors', [
 			'entity' => $this,
-			'entityName' => self::RUS_CLASS_NAME,
+			'entityName' => static::class,
 			'entityUrl' => $this->urlToEntity,
 			'errors' => $this->registrationErrors
 		])
 			->setFrom('todo@config.param')/*todo*/
 			->setTo('todo@config.param')/*todo*/
-			->setSubject("Ошибки при регистрации {$this->fio} (".self::RUS_CLASS_NAME.')')
+			->setSubject("Ошибки при регистрации {$this->fio} (".static::class.')')
 			->send();
 	}
 

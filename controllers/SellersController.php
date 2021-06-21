@@ -17,10 +17,11 @@ use yii\web\Response;
  */
 class SellersController extends DefaultController {
 
+	protected const DEFAULT_TITLE = "Продавцы";
+
 	public string $modelClass = Sellers::class;
 	public string $modelSearchClass = SellersSearch::class;
 	public bool $enablePrototypeMenu = false;
-	public ?string $modelTitle = Sellers::RUS_CLASS_NAME;
 
 	/**
 	 * @inheritDoc
