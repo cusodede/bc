@@ -11,13 +11,15 @@ use app\modules\fraud\components\FraudValidator;
  */
 class IsActiveSimcardValidator implements FraudValidator {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function name():string {
 		return 'Активность симкарты';
 	}
 
 	/**
-	 * Например, ID заказа
-	 * @param int $entityId
+	 * @inheritDoc
 	 */
 	public function validate(int $entityId):void {
 

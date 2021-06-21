@@ -11,10 +11,16 @@ use app\modules\fraud\components\FraudValidator;
  */
 class IsAbonentBlockByFraudValidator implements FraudValidator {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function name():string {
 		return "Заблокирован ли абонент за фрод.";
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function validate(int $entityId):void {
 
 	}

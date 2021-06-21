@@ -11,10 +11,16 @@ use app\modules\fraud\components\FraudValidator;
  */
 class HasDuplicateAbonentPassportDataValidator implements FraudValidator {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function name():string {
 		return "Проверка на корректность паспорт данных при продаже тарифа (дубли, есть ли абоненты с теми же паспортными данными, но с различными ФИО).";
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function validate(int $entityId):void {
 
 	}

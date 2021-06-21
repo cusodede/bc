@@ -11,10 +11,16 @@ use app\modules\fraud\components\FraudValidator;
  */
 class IncomingCallToOneNumberValidator implements FraudValidator {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function name():string {
 		return "Проверка на совершение исходящих звонков на один номер телефона";
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function validate(int $entityId):void {
 
 	}
