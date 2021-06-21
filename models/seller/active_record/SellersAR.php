@@ -110,7 +110,7 @@ class SellersAR extends ActiveRecord {
 			[
 				[
 					'name', 'surname', 'passport_series', 'passport_number', 'passport_whom',
-					'passport_when', 'birthday', 'reg_address', 'keyword', 'is_wireman_shpd', 'is_resident'
+					'passport_when', 'birthday', 'reg_address', 'inn'
 				],
 				'required'
 			],
