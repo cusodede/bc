@@ -1,30 +1,29 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\reward\active_record\references;
+namespace app\models\reward\config;
 
+use app\models\core\prototypes\ArrayReference;
 use app\models\products\ProductsInterface;
 use app\models\reward\Rewards;
 use Exception;
-use pozitronik\references\models\CustomisableReference;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class RefRewardsRules
- * Справочник правил расчета вознаграждения
+ * Class RewardsRulesConfig
+ * Временная затычка на месте конфигуратора правил вознаграждений. Пока что задаём все правила массивом.
+ *
  * @property-read int $reason
  * @property-read int $status
  * @property-read int $quantity
  * @property-read null|string $waiting
  */
-class RefRewardsRules extends CustomisableReference {
+class RewardsRulesConfig extends ArrayReference {
 	public int $reason;
 	public int $status;
 	public int $quantity;
 	public ?string $waiting;
 
-	public $menuCaption = "Справочник правил расчета вознаграждения";
-	public $moduleId = "Вознаграждения";
 
 	/*Прототипирую правила*/
 	private const RULES = [
@@ -46,13 +45,6 @@ class RefRewardsRules extends CustomisableReference {
 	];
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public static function tableName():string {
-		return 'ref_rewards_rules';
-	}
-
-	/**
 	 * Пока вместо нормального генератора правил используем такую заглушку
 	 * @param ProductsInterface $product
 	 * @return self[]
@@ -66,5 +58,4 @@ class RefRewardsRules extends CustomisableReference {
 		}
 		return $result;
 	}
-
 }

@@ -6,7 +6,6 @@ namespace app\models\reward\active_record;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\products\Products;
 use app\models\products\ProductsInterface;
-use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\sys\users\Users;
 use app\modules\status\models\traits\StatusesTrait;
 use Exception;
@@ -31,10 +30,7 @@ use yii\db\ActiveRecord;
  * @property int $override Переопределено
  * @property int $deleted Флаг удаления
  *
-
- * @property RefRewardsRules $refRewardsRules Справочник правил расчета вознаграждения
  * @property Users $relatedUser Пользователь к которому относится вознаграждение
- *
  */
 class RewardsAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -91,23 +87,6 @@ class RewardsAR extends ActiveRecord {
 	 */
 	public function getRelatedProducts():?ProductsInterface {
 		return Products::getModel($this->product_id, $this->product_type);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRefRewardsRules():ActiveQuery {
-		return $this->hasOne(RefRewardsRules::class, ['id' => 'rule']);
-	}
-
-	/**
-	 * @param mixed $rule
-	 */
-	public function setRefRewardsRules($rule):void {
-		if (null !== $rule = self::ensureModel(RefRewardsRules::class, $rule)) {
-			/** @var RefRewardsRules $rule */
-			$this->rule = $rule->id;
-		}
 	}
 
 	/**

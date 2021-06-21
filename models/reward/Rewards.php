@@ -6,6 +6,7 @@ namespace app\models\reward;
 use app\models\products\ProductsInterface;
 use app\models\reward\active_record\RewardsAR;
 use app\models\reward\config\RewardsOperationsConfig;
+use app\models\reward\config\RewardsRulesConfig;
 use app\models\sys\users\Users;
 use Throwable;
 
@@ -16,7 +17,8 @@ use Throwable;
  * За что было вознаграждение? Я что-то продал
  *
  * @property null|ProductsInterface $relatedProducts Связанный проданный продукт
- * @property-read null|RewardsOperationsConfig $relatedOperation Конфигурация статусов операций
+ * @property-read null|RewardsOperationsConfig $relatedOperations Конфигурация статусов операций
+ * @property-read null|RewardsRulesConfig $relatedRules Конфигурация правил расчёта вознаграждений
  */
 class Rewards extends RewardsAR {
 
@@ -39,7 +41,8 @@ class Rewards extends RewardsAR {
 	public function attributeLabels():array {
 		return array_merge(parent::attributeLabels() + [
 				'relatedProducts' => 'Товар', //за который начислили бонус
-				'relatedOperation' => 'Действие' //за которое начислили бонус
+				'relatedOperations' => 'Действие', //за которое начислили бонус
+				'relatedRules' => 'Правило' //которое определило расчёт
 			]);
 	}
 
@@ -106,6 +109,7 @@ class Rewards extends RewardsAR {
 	}
 
 	/**
+	 * todo: пока тут откладываем усложнение, непонятно, где причины будут, и в каком виде
 	 * @return string[]
 	 */
 	public static function reasons():array {
@@ -129,8 +133,16 @@ class Rewards extends RewardsAR {
 	 * @return null|RewardsOperationsConfig
 	 * @throws Throwable
 	 */
-	public function getRelatedOperation():?RewardsOperationsConfig {
+	public function getRelatedOperations():?RewardsOperationsConfig {
 		return RewardsOperationsConfig::loadModel($this->operation);
+	}
+
+	/**
+	 * @return RewardsRulesConfig|null
+	 * @throws Throwable
+	 */
+	public function getRelatedRules():?RewardsRulesConfig {
+		return RewardsRulesConfig::loadModel($this->operation);
 	}
 
 }

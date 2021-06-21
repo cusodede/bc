@@ -8,8 +8,8 @@ declare(strict_types = 1);
  */
 
 use app\controllers\UsersController;
-use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\config\RewardsOperationsConfig;
+use app\models\reward\config\RewardsRulesConfig;
 use app\models\reward\Rewards;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
@@ -58,7 +58,7 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'rule')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRewardsRules::class
+			'referenceClass' => RewardsRulesConfig::class
 		]) ?>
 	</div>
 </div>

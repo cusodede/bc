@@ -6,8 +6,8 @@ namespace app\models\sales;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\products\Products;
 use app\models\products\ProductsInterface;
-use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\config\RewardsOperationsConfig;
+use app\models\reward\config\RewardsRulesConfig;
 use app\models\reward\Rewards;
 use app\models\sales\active_record\Sales as SalesAR;
 use app\models\sys\users\Users;
@@ -48,7 +48,7 @@ class Sales extends SalesAR {
 	 * @throws Exception
 	 */
 	public function getRewards():array {
-		$rules = RefRewardsRules::findRules($this->relatedProducts);
+		$rules = RewardsRulesConfig::findRules($this->relatedProducts);
 		$rewards = [];
 		foreach ($rules as $rule) {
 			$rewards[] = new Rewards([
