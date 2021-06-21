@@ -24,7 +24,7 @@ class StatusModule extends Module {
 	 */
 	public static function getClassRules(string $className):array {
 		$rules = ArrayHelper::getValue(Yii::$app->modules, "statuses.params.rules.$className", []);
-		if (is_string($rules)) return call_user_func($rules);
+		if (is_string($rules)) return $rules();
 
 		if (!is_array($rules)) throw new InvalidConfigException("Настройки статусов класса $className заданы некорректно");
 		return $rules;
