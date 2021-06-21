@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\reward\config;
 
-use app\models\core\prototypes\ArrayReference;
 use app\models\products\ProductsInterface;
 use app\models\reward\Rewards;
 use Exception;
+use pozitronik\references\models\ArrayReference;
 use yii\helpers\ArrayHelper;
 
 /**

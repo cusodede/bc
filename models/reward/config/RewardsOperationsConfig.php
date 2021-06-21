@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\reward\config;
 
-use app\models\core\prototypes\ArrayReference;
+use pozitronik\references\models\ArrayReference;
 
 /**
  * Class RewardsOperationsConfig
