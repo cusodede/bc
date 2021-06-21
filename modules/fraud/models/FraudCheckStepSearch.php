@@ -52,10 +52,10 @@ class FraudCheckStepSearch extends FraudCheckStepAr {
 	/**
 	 * @param int $entityId
 	 * @param string $validatorClass
-	 * @return FraudCheckStep|array|ActiveRecord
+	 * @return FraudCheckStep
 	 * @throws DomainException
 	 */
-	public function getByEntityIdWithValidator(int $entityId, string $validatorClass):FraudCheckStep|array|ActiveRecord {
+	public function getByEntityIdWithValidator(int $entityId, string $validatorClass):FraudCheckStep {
 		$step = FraudCheckStep::find()
 			->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
 			->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
