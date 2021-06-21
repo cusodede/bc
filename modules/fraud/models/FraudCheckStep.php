@@ -8,6 +8,7 @@ use DomainException;
 use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * Фродовая проверка
@@ -53,7 +54,7 @@ class FraudCheckStep extends FraudCheckStepAr {
 	 * @return string|null
 	 */
 	public function getStatusName():?string {
-		return self::$statusesWithNames[$this->status]??null;
+		return ArrayHelper::getValue(self::$statusesWithNames, $this->status);
 	}
 
 	/**
