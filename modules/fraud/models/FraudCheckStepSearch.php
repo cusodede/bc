@@ -56,13 +56,12 @@ class FraudCheckStepSearch extends FraudCheckStepAr {
 	 * @throws DomainException
 	 */
 	public function getByEntityIdWithValidator(int $entityId, string $validatorClass):FraudCheckStep {
-		$step = FraudCheckStep::find()
-			->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
-			->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
-			->orderBy('created_at DESC')
-			->limit(1)
-			->one();
-		if (null === $step) {
+		if (null === $step = FraudCheckStep::find()
+				->andWhere(['entity_id' => $entityId, 'fraud_validator' => $validatorClass])
+				->andWhere(['status' => FraudCheckStep::STATUS_WAIT])
+				->orderBy('created_at DESC')
+				->limit(1)
+				->one()) {
 			throw new DomainException("Не найдена запись фродовой проверки.");
 		}
 		return $step;
