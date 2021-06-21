@@ -103,6 +103,7 @@ class TestController extends Controller {
 			'notifications' => Notifications::UserNotifications()
 		]);
 	}
+
 	public function actionTestNotificationAlert():string {
 		Notifications::message('Вы получили уведомление');
 		return $this->render('alert', [

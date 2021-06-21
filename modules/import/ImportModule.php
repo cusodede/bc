@@ -11,5 +11,4 @@ use yii\base\Module;
  */
 class ImportModule extends Module {
 	use ModuleExtended;
-
 }

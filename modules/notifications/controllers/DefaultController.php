@@ -1,5 +1,6 @@
 <?php
 declare(strict_types = 1);
+
 namespace app\modules\notifications\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
