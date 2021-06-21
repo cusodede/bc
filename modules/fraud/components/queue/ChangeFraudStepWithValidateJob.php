@@ -27,7 +27,6 @@ class ChangeFraudStepWithValidateJob extends BaseObject implements JobInterface 
 	/**
 	 * @param Queue $queue which pushed and is handling the job
 	 * @return void result of the job execution
-	 * @noinspection ReturnTypeCanBeDeclaredInspection
 	 */
 	public function execute($queue) {
 		/**

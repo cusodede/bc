@@ -22,17 +22,14 @@ class HasActivityOnSimcardValidator implements FraudValidator {
 		}
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	protected function hasIncomingCalls(int $minutes, int $days):bool {
 		return true;
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	protected function hasOutgoingCalls(int $minutes, int $days):bool {
 		return false;
 	}
 
-	/** @noinspection PhpUnusedParameterInspection */
 	protected function hasInternetTraffic(int $MB, int $days):bool {
 		return true;
 	}
