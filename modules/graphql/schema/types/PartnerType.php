@@ -44,6 +44,10 @@ class PartnerType extends ObjectType
 					'type' => Type::string(),
 					'description' => 'Комментарий',
 				],
+				'category_id' => [
+					'type' => Type::string(),
+					'description' => 'Идентификатор категории',
+				],
 				'category' => [
 					'type' => Types::partnerCategory(),
 					'description' => 'Категория партнера',

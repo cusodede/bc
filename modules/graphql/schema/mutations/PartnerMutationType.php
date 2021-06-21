@@ -26,12 +26,35 @@ class PartnerMutationType extends ObjectType
 					'type' => Types::validationErrorsUnionType(Types::partner()),
 					'description' => 'Обновление партнера',
 					'args' => [
-						'name' => Type::string(),
-						'inn' => Type::string(),
+						'name' => [
+							'type' => Type::string(),
+							'description' => 'Наименование юридического лица партнера',
+						],
+						'inn' => [
+							'type' => Type::string(),
+							'description' => 'ИНН партнера',
+						],
+						'phone' => [
+							'type' => Type::string(),
+							'description' => 'Телефон поддержки партнера',
+						],
+						'email' => [
+							'type' => Type::string(),
+							'description' => 'Почтовый адрес поддержки партнера',
+						],
+						'comment' => [
+							'type' => Type::string(),
+							'description' => 'Комментарий',
+						],
+						'category_id' => [
+							'type' => Type::int(),
+							'description' => 'Идентификатор категории',
+						],
 					],
 					'resolve' => function(Partners $partner, array $args = []) {
 						$partner->setAttributes($args);
-						return $partner->save() ? $partner : GraphqlHelper::getErrors($partner->getErrors());
+						return $partner->save() ? GraphqlHelper::getResult(true, 'Партнер успешно обновлён') :
+							GraphqlHelper::getErrors($partner->getErrors());
 					}
 				],
 			]
