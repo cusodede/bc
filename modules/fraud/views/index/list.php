@@ -12,11 +12,11 @@ use app\modules\fraud\components\FraudValidator;
 use app\modules\fraud\models\FraudCheckStep;
 use app\modules\fraud\models\FraudCheckStepSearch;
 use app\modules\notifications\models\Notifications;
+use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\web\View;
 use yii\grid\ActionColumn;
 
