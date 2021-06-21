@@ -21,7 +21,7 @@ class ChangeFraudStepWithRepeatValidateJob extends BaseObject implements JobInte
 	 * @param Queue $queue which pushed and is handling the job
 	 * @return void result of the job execution
 	 */
-	public function execute($queue) {
+	public function execute($queue):void {
 		/**
 		 * @var FraudValidator $validator
 		 */

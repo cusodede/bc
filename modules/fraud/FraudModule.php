@@ -20,7 +20,7 @@ class FraudModule extends Module implements BootstrapInterface {
 	 * @param Application $app
 	 * @return void
 	 */
-	public function bootstrap($app) {
+	public function bootstrap($app):void {
 		if ($app instanceof ConsoleApplication) {
 			$this->controllerNamespace = 'app\modules\fraud\commands';
 		}
