@@ -28,7 +28,7 @@ use yii\db\ActiveRecord;
  * @property string $name Название магазина
  * @property int $type Тип магазина
  * @property int $branch Филиал
- * @property int $region Филиал
+ * @property int $region Регион
  * @property int $selling_channel Тип магазина
  * @property string $create_date Дата регистрации
  * @property int $deleted
