@@ -9,6 +9,8 @@ use pozitronik\references\models\ArrayReference;
  * Class RewardsOperationsConfig
  */
 class RewardsOperationsConfig extends ArrayReference {
+	public string $menuCaption = 'Конфигурация операций вознаграждений';
+
 	public const OPERATION_SELL = 1;
 	public const ACHIEVEMENT = 2;
 

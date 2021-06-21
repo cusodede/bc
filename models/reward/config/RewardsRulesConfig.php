@@ -19,6 +19,8 @@ use yii\helpers\ArrayHelper;
  * @property-read null|string $waiting
  */
 class RewardsRulesConfig extends ArrayReference {
+	public string $menuCaption = 'Конфигурация правил вознаграждений';
+
 	public int $reason;
 	public int $status;
 	public int $quantity;
