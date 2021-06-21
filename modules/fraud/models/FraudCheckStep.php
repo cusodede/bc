@@ -32,7 +32,7 @@ class FraudCheckStep extends FraudCheckStepAr {
 	 * @param int $productOrderId
 	 * @param string $entityClass
 	 * @param string $fraudValidatorClass
-	 * @return static
+	 * @return static //fixme: так self или static?
 	 */
 	public static function newStep(
 		int $productOrderId,
