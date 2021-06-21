@@ -75,16 +75,25 @@ class FraudCheckStep extends FraudCheckStepAr {
 		}
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function statusSuccess():self {
 		$this->status = self::STATUS_SUCCESS;
 		return $this;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function statusProcess():self {
 		$this->status = self::STATUS_PROCESS;
 		return $this;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function statusFail():self {
 		$this->status = self::STATUS_FAIL;
 		return $this;
