@@ -9,6 +9,7 @@ declare(strict_types = 1);
  */
 
 use app\modules\fraud\components\FraudValidator;
+use app\modules\fraud\FraudModule;
 use app\modules\fraud\models\FraudCheckStep;
 use app\modules\fraud\models\FraudCheckStepSearch;
 use app\modules\notifications\models\Notifications;
@@ -38,11 +39,13 @@ use yii\grid\ActionColumn;
 			'template' => '{repeat-validate}',
 			'buttons' => [
 				'repeat-validate' => static function(string $url, FraudCheckStep $model) {
-					$form = Html::beginForm('/fraud/index/list', 'POST', ['class' => 'd-inline-block form-inline']);
-					$form .= Html::hiddenInput('repeat_validate_id', $model->id);
-					$form .= Html::submitButton('<i class="fas fa-redo"></i>', ['class' => 'btn']);
-					$form .= Html::endForm();
-					return $form;
+					return Html::a('<i class="fas fa-redo"></i>', FraudModule::to(['index/list']), [
+						'class' => 'btn',
+						'data-method' => 'POST',
+						'data-params' => [
+							'repeat_validate_id' => $model->id,
+						]
+					]);
 				}
 			],
 		],
