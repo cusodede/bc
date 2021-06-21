@@ -9,7 +9,7 @@ use app\models\products\ProductsInterface;
 use app\models\reward\config\RewardsOperationsConfig;
 use app\models\reward\config\RewardsRulesConfig;
 use app\models\reward\Rewards;
-use app\models\sales\active_record\Sales as SalesAR;
+use app\models\sales\active_record\SalesAR;
 use app\models\sys\users\Users;
 use Exception;
 use yii\web\ForbiddenHttpException;

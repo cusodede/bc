@@ -24,7 +24,7 @@ use yii\db\ActiveRecord;
  *
  * @property Users $relatedSeller Связанный продавец
  */
-class Sales extends ActiveRecord {
+class SalesAR extends ActiveRecord {
 	use ActiveRecordTrait;
 
 	/**
