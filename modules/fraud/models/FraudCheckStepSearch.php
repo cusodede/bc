@@ -7,7 +7,6 @@ use app\modules\fraud\models\active_record\FraudCheckStepAr;
 use DomainException;
 use Throwable;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveRecord;
 
 /**
  * Class FraudCheckStepSearch
