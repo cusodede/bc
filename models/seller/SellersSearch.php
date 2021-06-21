@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\seller;
 
+use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\Dealers;
 use app\models\managers\Managers;
 use app\models\store\Stores;
@@ -26,6 +27,7 @@ use Throwable;
  * @property null|string $userLogin
  * @property null|string $userEmail
  * @property null|string $currentStatus
+ * @property null|string $citizenName
  */
 final class SellersSearch extends Sellers {
 
@@ -36,6 +38,7 @@ final class SellersSearch extends Sellers {
 	public ?string $dealer = null;
 	public ?string $passport = null;
 	public ?string $currentStatus = null;
+	public ?string $citizenName = null;
 
 	/**
 	 * {@inheritdoc}
@@ -50,7 +53,7 @@ final class SellersSearch extends Sellers {
 				'filter',
 				'filter' => 'trim'
 			],
-			[['id', 'userId', 'gender', 'non_resident_type', 'currentStatus'], 'integer'],
+			[['id', 'userId', 'gender', 'non_resident_type', 'currentStatus', 'citizen'], 'integer'],
 			[['deleted', 'is_wireman_shpd', 'is_resident'], 'boolean'],
 			[['store', 'dealer', 'userEmail'], 'string', 'max' => 255],
 			['userLogin', 'string', 'max' => 64],
@@ -78,7 +81,8 @@ final class SellersSearch extends Sellers {
 			'passport' => 'Паспорт',
 			'currentStatus' => 'Статус',
 			'store' => 'Магазин',
-			'dealer' => 'Дилер'
+			'dealer' => 'Дилер',
+			'citizenName' => 'Гражданство'
 		]);
 	}
 
@@ -98,7 +102,7 @@ final class SellersSearch extends Sellers {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
-		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser']);
+		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser', 'refCountries']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -129,6 +133,7 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([self::tableName().'.birthday' => $this->birthday])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
 			->andFilterWhere(['>=', self::tableName().'.update_date', $this->update_date])
+			->andFilterWhere([self::tableName().'.citizen' => $this->citizen])
 			->andFilterWhere([self::tableName().'.passport_series' => $this->passportExplodedSeries])
 			->andFilterWhere([self::tableName().'.passport_number' => $this->passportExplodedNumber])
 			->andFilterWhere([self::tableName().'.entry_date' => $this->entry_date])
@@ -221,6 +226,10 @@ final class SellersSearch extends Sellers {
 				'currentStatus' => [
 					'asc' => ['currentStatus' => SORT_ASC],
 					'desc' => ['currentStatus' => SORT_DESC]
+				],
+				'citizenName' => [
+					'asc' => [RefCountries::tableName().'.name' => SORT_ASC],
+					'desc' => [RefCountries::tableName().'.name' => SORT_DESC]
 				]
 			]
 		]);
@@ -251,6 +260,7 @@ final class SellersSearch extends Sellers {
 	private function initQuery(LCQuery $query):void {
 		$query->select([
 			self::tableName().'.*',
+			RefCountries::tableName().'.name  AS citizenName',
 			Users::tableName().'.id AS userId',
 			Users::tableName().'.login AS userLogin',
 			Users::tableName().'.email AS userEmail',

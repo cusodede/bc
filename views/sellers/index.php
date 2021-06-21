@@ -13,6 +13,7 @@ use app\assets\ModalHelperAsset;
 use app\controllers\DealersController;
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
+use app\models\countries\active_record\references\RefCountries;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
 use app\modules\status\models\StatusRulesModel;
@@ -20,6 +21,7 @@ use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
@@ -170,6 +172,25 @@ ModalHelperAsset::register($this);
 						'alwaysShowCalendars' => true
 					]
 				]
+			],
+			[
+				'attribute' => 'citizenName',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->refCountries,
+						'subItem' => 'name'
+					]);
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'citizen',
+					'data' => RefCountries::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			'is_resident:boolean',
 			[

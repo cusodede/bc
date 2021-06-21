@@ -76,6 +76,12 @@ use app\models\seller\active_record\SellersAR;
 			}
 		],
 		'birthday',
+		[
+			'attribute' => 'citizen',
+			'value' => static function(SellersAR $model) {
+				return $model->refCountries->name??null;
+			}
+		],
 		'is_resident:boolean',
 		[
 			'attribute' => 'non_resident_type',

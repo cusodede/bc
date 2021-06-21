@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use app\controllers\DealersController;
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
+use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\Dealers;
 use app\models\seller\Sellers;
 use app\models\store\Stores;
@@ -18,6 +19,7 @@ use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\switchinput\SwitchInput;
 use pozitronik\filestorage\widgets\file_input\FileInputWidget;
+use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
@@ -72,6 +74,14 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model->relatedUser??$model, 'email')->textInput(['readonly' => !$model->isNewRecord]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'citizen')->widget(ReferenceSelectWidget::class, [
+			'referenceClass' => RefCountries::class,
+			'options' => ['placeholder' => '']
+		]) ?>
 	</div>
 </div>
 <div class="row">
