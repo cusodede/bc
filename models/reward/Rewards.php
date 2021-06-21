@@ -15,7 +15,7 @@ use Throwable;
  *
  * За что было вознаграждение? Я что-то продал
  *
- * @property null|ProductsInterface $relatedProducts Связанный проданный продукта
+ * @property null|ProductsInterface $relatedProducts Связанный проданный продукт
  * @property-read null|RewardsOperationsConfig $relatedOperation Конфигурация статусов операций
  */
 class Rewards extends RewardsAR {
@@ -32,6 +32,16 @@ class Rewards extends RewardsAR {
 	public const STATUS_ERROR = 4;//ошибочное начисление
 	public const STATUS_PAID = 5;//выведен в налик
 	public const STATUS_DENY = 6;//Отказ в начислении
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels() + [
+				'relatedProducts' => 'Товар', //за который начислили бонус
+				'relatedOperation' => 'Действие' //за которое начислили бонус
+			]);
+	}
 
 	/**
 	 * @return array[]

@@ -72,12 +72,16 @@ class RewardsAR extends ActiveRecord {
 			'user' => 'Аккаунт',
 			'operation' => 'Операция',
 			'rule' => 'Правило расчёта',
+			'reason' => 'Причина начисления',
 			'quantity' => 'Расчётное вознаграждение',
 			'comment' => 'Произвольный комментарий',
 			'create_date' => 'Дата создания',
 			'override' => 'Переопределено',
 			'deleted' => 'Флаг удаления',
-			'currentStatus' => 'Статус вознаграждения'
+			'currentStatus' => 'Статус вознаграждения',
+			'refRewardsRules' => 'Правило расчёта',
+			'relatedUser' => 'Пользователь',
+			'waiting' => 'Ожидаемое событие'
 		];
 	}
 

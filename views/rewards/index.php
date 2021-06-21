@@ -82,6 +82,7 @@ ModalHelperAsset::register($this);
 			'id',
 			[
 				'attribute' => 'operationName',
+				'label' => 'Действие',
 				'format' => 'raw',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
@@ -123,6 +124,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'attribute' => 'userName',
+				'label' => 'Получатель',
 				'format' => 'raw',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
@@ -134,6 +136,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'class' => DataColumn::class,
+				'label' => 'Статус',
 				'attribute' => 'currentStatusFilter',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
@@ -151,6 +154,7 @@ ModalHelperAsset::register($this);
 			],
 			[
 				'attribute' => 'ruleName',
+				'label' => 'Правило',
 				'format' => 'raw',
 				'value' => static function(Rewards $model):string {
 					return BadgeWidget::widget([
