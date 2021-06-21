@@ -5,6 +5,7 @@ namespace app\models\reward;
 
 use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\active_record\RewardsAR;
+use app\models\reward\config\RewardsOperationsConfig;
 use app\modules\status\models\Status;
 use app\modules\status\models\StatusRulesModel;
 use pozitronik\core\models\LCQuery;
@@ -25,6 +26,16 @@ final class RewardsSearch extends RewardsAR {
 	public ?string $userName = null;
 	public ?string $ruleName = null;
 	public ?string $currentStatusFilter = null;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels() + [
+				'relatedProducts' => 'Товар', //за который начислили бонус
+				'relatedOperation' => 'Действие' //за которое начислили бонус
+			]);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -60,11 +71,8 @@ final class RewardsSearch extends RewardsAR {
 			RefRewardsRules::tableName().'.name AS ruleName',
 			Users::tableName().'.username AS userName',
 			/*Так обеспечивается наполнение атрибута + алфавитная сортировка*/
-			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
-				StatusRulesModel::getAllStatuses(Rewards::class),
-				'id',
-				'name'
-			))."') AS currentStatusFilter"
+			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name'))."') AS currentStatusFilter",
+			"ELT(".self::tableName().'.operation'.", '".implode("','", RewardsOperationsConfig::mapData())."') AS operationName"//todo: сделать для таких полей отдельный метод
 		])
 			->distinct()
 			->active();
@@ -125,10 +133,10 @@ final class RewardsSearch extends RewardsAR {
 					'asc' => ['currentStatusFilter' => SORT_ASC],
 					'desc' => ['currentStatusFilter' => SORT_DESC]
 				],
-//				'operationName' => [
-//					'asc' => [RefRewardsOperations::tableName().'.name' => SORT_ASC],
-//					'desc' => [RefRewardsOperations::tableName().'.name' => SORT_DESC]
-//				],
+				'operationName' => [
+					'asc' => ['operationName' => SORT_ASC],
+					'desc' => ['operationName' => SORT_DESC]
+				],
 				'ruleName' => [
 					'asc' => [RefRewardsRules::tableName().'.name' => SORT_ASC],
 					'desc' => [RefRewardsRules::tableName().'.name' => SORT_DESC]
