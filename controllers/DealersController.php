@@ -15,8 +15,11 @@ use app\models\dealers\DealersSearch;
  */
 class DealersController extends DefaultController {
 
+	protected const DEFAULT_TITLE = "Дилеры";
+
 	public string $modelClass = Dealers::class;
 	public string $modelSearchClass = DealersSearch::class;
+	public bool $enablePrototypeMenu = false;
 
 	public array $mappingRules = [
 		/*номер столбца => правило сопоставления*/

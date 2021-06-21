@@ -9,6 +9,7 @@ use app\models\sys\users\Users;
 use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use Throwable;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ManagersSearch
@@ -34,7 +35,7 @@ final class ManagersSearch extends Managers {
 			[
 				[
 					'id', 'name', 'surname', 'patronymic', 'create_date', 'update_date', 'userEmail', 'userLogin',
-					'userId'
+					'userId','store', 'dealer', 'create_date', 'update_date'
 				],
 				'filter',
 				'filter' => 'trim'
@@ -47,6 +48,20 @@ final class ManagersSearch extends Managers {
 			['userEmail', 'email'],
 			[['create_date', 'update_date'], 'date', 'format' => 'php:Y-m-d H:i']
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'userLogin' => 'Логин',
+			'userId' => 'Ид пользователя',
+			'userEmail' => 'Почта',
+			'seller' => 'Продавец',
+			'store' => 'Магазин',
+			'dealer' => 'Дилер'
+		]);
 	}
 
 	/**
@@ -91,6 +106,34 @@ final class ManagersSearch extends Managers {
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
+
+		$this->filterDataByUser($query);
+	}
+
+	/**
+	 * Filters the records shown for current user
+	 * @param $query
+	 * @throws Throwable
+	 */
+	private function filterDataByUser($query):void {
+		$user = Users::Current();
+		if ($user->isAllPermissionsGranted()) {
+			return;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null === $manager) {
+			return;
+		}
+
+		if ($user->hasPermission(['manager_dealer'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					Dealers::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
+		}
 	}
 
 	/**

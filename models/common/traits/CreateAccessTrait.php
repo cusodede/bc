@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\traits;
+namespace app\models\common\traits;
 
 use app\models\site\RestorePasswordForm;
 use app\models\sys\users\Users;
@@ -11,16 +11,19 @@ use Yii;
  * Trait CreateAccessTrait
  *
  * @property array $registrationErrors массив с ошибками во время регистрации
+ * @property bool $isFioChanged менялись ли значения полей name, surname, patronymic
  *
  * @property string $email
  * @property string $login
  *
  * @property Users $relatedUser Пользователь связанный с продавцом/менеджером
  *
+ * @property string $fio ФИО
  * @property string $urlToEntity
  */
 trait CreateAccessTrait {
 	public array $registrationErrors = [];
+	public bool $isFioChanged = false;
 
 	/**
 	 * Создает учетную запись для продавца/менеджера и привязывает ее к продавцу/менеджеру. Если не удается,
@@ -36,6 +39,24 @@ trait CreateAccessTrait {
 			$this->sendErrors();
 		} else {
 			$this->confirmRegistrationRequest();
+		}
+	}
+
+	/**
+	 * Обновляет поле username для системного пользователя на основе данных для продавца/менеджера.
+	 * @return void
+	 */
+	public function modifyName():void {
+		if ($this->isFioChanged & null !== $this->relatedUser) {
+			$user = $this->relatedUser;
+			$user->username = $this->fio;
+			if (!$user->save()) {
+				$this->registrationErrors[] = 'Не удалось модифицировать ФИО системного пользователя';
+			}
+
+			if ($this->registrationErrors) {
+				$this->sendErrors();
+			}
 		}
 	}
 
@@ -57,7 +78,7 @@ trait CreateAccessTrait {
 			'login' => $this->login,
 			'username' => $this->fio,
 			'password' => Users::DEFAULT_PASSWORD,
-			'comment' => 'Пользователь автоматический создан. '.self::RUS_CLASS_NAME.' связан с этой УЗ.',
+			'comment' => "Пользователь создан автоматически для модели".static::class,
 			'email' => $this->email,
 			'phones' => $this->login
 		]);
@@ -95,13 +116,13 @@ trait CreateAccessTrait {
 	public function sendErrors():void {
 		Yii::$app->mailer->compose('registration/registration-errors', [
 			'entity' => $this,
-			'entityName' => self::RUS_CLASS_NAME,
+			'entityName' => static::class,
 			'entityUrl' => $this->urlToEntity,
 			'errors' => $this->registrationErrors
 		])
 			->setFrom('todo@config.param')/*todo*/
 			->setTo('todo@config.param')/*todo*/
-			->setSubject("Ошибки при регистрации {$this->fio} (".self::RUS_CLASS_NAME.')')
+			->setSubject("Ошибки при регистрации {$this->fio} (".static::class.')')
 			->send();
 	}
 
@@ -110,4 +131,15 @@ trait CreateAccessTrait {
 	 * @return string
 	 */
 	abstract public function getUrlToEntity():string;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function beforeSave($insert):bool {
+		if (count(array_intersect(['name', 'surname', 'patronymic'], array_keys($this->dirtyAttributes))) > 0) {
+			$this->isFioChanged = true;
+		}
+		return static::beforeValidate();
+	}
+
 }

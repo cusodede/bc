@@ -1,9 +1,12 @@
 <?php
 declare(strict_types = 1);
 
+use app\controllers\ManagersController;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\controllers\SellersController;
 use app\controllers\SiteController;
+use app\controllers\StoresController;
 use app\controllers\UsersController;
 use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
@@ -14,6 +17,7 @@ use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\helpers\Url;
 use app\controllers\DbController;
+use app\controllers\DealersController;
 
 ?>
 
@@ -25,17 +29,31 @@ use app\controllers\DbController;
 			'iconClass' => 'fa-home'
 		],
 		[
-			'label' => 'Пользователи',
-			'url' => '#',
+			'label' => UsersController::Title(),
 			'iconClass' => 'fa-users-cog',
-			'items' => [
-				[
-					'label' => 'Все',
-					'url' => [UsersController::to('index')],
-					'visible' => UsersController::hasPermission('index')
-				]
-			],
+			'url' => [UsersController::to('index')],
+			'visible' => UsersController::hasPermission('index')
 			//'visible' => UsersController::hasPermission() для проверки доступа ко всему контроллеру и отключения всего списка
+		],
+		[
+			'label' => DealersController::Title(),
+			'url' => [DealersController::to('index')],
+			'iconClass' => 'fa-building'
+		],
+		[
+			'label' => ManagersController::Title(),
+			'url' => [ManagersController::to('index')],
+			'iconClass' => 'fa fa-user-tie'
+		],
+		[
+			'label' => StoresController::Title(),
+			'url' => [StoresController::to('index')],
+			'iconClass' => 'fa-store'
+		],
+		[
+			'label' => SellersController::Title(),
+			'url' => [SellersController::to('index')],
+			'iconClass' => 'fa-smile-beam'
 		],
 		[
 			'label' => 'Прототипирование',

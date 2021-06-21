@@ -5,6 +5,8 @@ namespace app\models\store\active_record;
 
 use app\models\branches\active_record\references\RefBranches;
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\dealers\active_record\relations\RelDealersToStores;
+use app\models\dealers\Dealers;
 use app\models\managers\active_record\relations\RelManagersToStores;
 use app\models\managers\Managers;
 use app\models\regions\active_record\references\RefRegions;
@@ -39,6 +41,8 @@ use yii\db\ActiveRecord;
  * @property Sellers[] $sellers Все продавцы точки
  * @property RelManagersToStores[] $relatedManagersToStores Связь к промежуточной таблице к менеджерам
  * @property Managers[] $managers Все менеджеры точки
+ * @property RelDealersToStores $relatedDealersToStores Связь к промежуточной таблице к дилерам
+ * @property Dealers $dealer Дилер магазина
  * @property RelStoresToUsers[] $relatedStoresToUsers Связь к промежуточной таблице к пользователям
  * @property Users[] $users Пользователи, входящие под магазином
  */
@@ -58,8 +62,8 @@ class StoresAR extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['name', 'type', 'selling_channel', 'branch', 'region'], 'required'],
-			[['type', 'deleted'], 'integer'],
-			[['create_date', 'sellers', 'managers'], 'safe'],
+			[['type', 'deleted', 'selling_channel', 'branch', 'region'], 'integer'],
+			[['create_date', 'sellers', 'managers', 'dealer'], 'safe'],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],
 			[['name'], 'string', 'max' => 255],
 		];
@@ -74,7 +78,12 @@ class StoresAR extends ActiveRecord {
 			'name' => 'Название магазина',
 			'type' => 'Тип магазина',
 			'create_date' => 'Дата регистрации',
+			'selling_channel' => 'Канал продаж',
+			'branch' => 'Филиал',
+			'region' => 'Регион',
 			'sellers' => 'Продавцы',
+			'managers' => 'Менеджеры',
+			'dealer' => 'Дилер',
 			'deleted' => 'Deleted',
 		];
 	}
@@ -106,6 +115,28 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function setManagers($managers):void {
 		RelManagersToStores::linkModels($managers, $this, true);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedDealersToStores():ActiveQuery {
+		return $this->hasOne(RelDealersToStores::class, ['store_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getDealer():ActiveQuery {
+		return $this->hasOne(Dealers::class, ['id' => 'dealer_id'])->via('relatedDealersToStores');
+	}
+
+	/**
+	 * @param mixed $dealer
+	 * @throws Throwable
+	 */
+	public function setDealer($dealer):void {
+		RelDealersToStores::linkModels($dealer, $this, true);
 	}
 
 	/**

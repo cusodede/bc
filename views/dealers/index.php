@@ -13,8 +13,11 @@ use app\assets\ModalHelperAsset;
 use app\controllers\ManagersController;
 use app\controllers\SellersController;
 use app\controllers\StoresController;
+use app\models\branches\active_record\references\RefBranches;
+use app\models\dealers\active_record\references\RefDealersTypes;
 use app\models\dealers\DealersSearch;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
@@ -24,6 +27,7 @@ use yii\grid\ActionColumn;
 use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
+use app\models\dealers\active_record\references\RefDealersGroups;
 
 ModalHelperAsset::register($this);
 ?>
@@ -69,37 +73,64 @@ ModalHelperAsset::register($this);
 			'code',
 			'client_code',
 			[
-				'attribute' => 'group',
+				'attribute' => 'groupName',
 				'format' => 'raw',
-				'value' => static function(DealersSearch $model, int $key, int $index) {
+				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refDealersGroups,
 						'subItem' => 'name'
 					]);
-				}
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'group',
+					'data' => RefDealersGroups::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
-				'attribute' => 'type',
+				'attribute' => 'typeName',
 				'format' => 'raw',
-				'value' => static function(DealersSearch $model, int $key, int $index) {
+				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refDealersTypes,
 						'subItem' => 'name'
 					]);
-				}
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'type',
+					'data' => RefDealersTypes::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
-				'attribute' => 'branch',
+				'attribute' => 'branchName',
 				'format' => 'raw',
-				'value' => static function(DealersSearch $model, int $key, int $index) {
+				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->refBranches,
 						'subItem' => 'name'
 					]);
-				}
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'branch',
+					'data' => RefBranches::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
-				'attribute' => 'stores',
+				'attribute' => 'store',
 				'format' => 'raw',
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
@@ -110,12 +141,12 @@ ModalHelperAsset::register($this);
 				}
 			],
 			[
-				'attribute' => 'managers',
+				'attribute' => 'manager',
 				'format' => 'raw',
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->managers,
-						'subItem' => 'name',
+						'subItem' => 'fio',
 						'urlScheme' => [ManagersController::to('index'), 'ManagersSearch[id]' => 'id']
 					]);
 				}
@@ -126,7 +157,7 @@ ModalHelperAsset::register($this);
 				'value' => static function(DealersSearch $model):string {
 					return BadgeWidget::widget([
 						'items' => $model->sellers,
-						'subItem' => 'name',
+						'subItem' => 'fio',
 						'urlScheme' => [SellersController::to('index'), 'SellersSearch[id]' => 'id']
 					]);
 				}

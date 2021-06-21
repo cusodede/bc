@@ -5,9 +5,10 @@ namespace app\models\seller;
 
 use app\controllers\SellersController;
 use app\models\seller\active_record\SellersAR;
-use app\models\traits\CreateAccessTrait;
+use app\models\common\traits\CreateAccessTrait;
 use app\models\sys\users\Users;
 use pozitronik\filestorage\traits\FileStorageTrait;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Sellers
@@ -21,7 +22,6 @@ use pozitronik\filestorage\traits\FileStorageTrait;
  * @property mixed $temporaryResidence Разрешение на временное проживание
  * @property mixed $visa Виза
  *
- * @property string $fio ФИО
  * @property string $urlToEntity
  */
 class Sellers extends SellersAR {
@@ -37,7 +37,21 @@ class Sellers extends SellersAR {
 	public $visa;
 	public ?Users $sysUser = null;
 
-	public const RUS_CLASS_NAME = 'Продавец';
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels():array {
+		return ArrayHelper::merge(parent::attributeLabels(), [
+			'sellerDocs' => 'Сканы',
+			'passportTranslation' => 'Скан нотариально заверенного перевода',
+			'migrationCard' => 'Миграционная карта',
+			'placeOfStay' => 'Отрывная часть бланка к уведомлению о прибытии в место пребывания',
+			'patent' => 'Патент + квитанция об оплате',
+			'residence' => 'Вид на жительство',
+			'visa' => 'Виза',
+			'temporaryResidence' => 'Разрешение на временное проживание'
+		]);
+	}
 
 	/**
 	 * URL для нахождения продавца по ID

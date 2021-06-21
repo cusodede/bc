@@ -16,10 +16,10 @@ $modelName = $model->formName();
 <?php Modal::begin([
 	'id' => "{$modelName}-modal-edit-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
-	'title' => BadgeWidget::widget([
-		'items' => $model,
-		'subItem' => 'name'
-	]),
+	'title' => 'ID:'.BadgeWidget::widget([
+			'items' => $model,
+			'subItem' => 'id'
+		]),
 	'footer' => $this->render('../subviews/editPanelFooter', [
 		'model' => $model,
 		'form' => "{$modelName}-modal-edit"

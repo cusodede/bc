@@ -9,5 +9,4 @@ use app\models\dealers\active_record\DealersAR;
  * Class Dealers
  */
 class Dealers extends DealersAR {
-
 }

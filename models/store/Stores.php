@@ -10,5 +10,4 @@ use app\models\store\active_record\StoresAR;
  * Точка продажи товаров (как организация): собственный офис, франчайзи, дилеры, etc.
  */
 class Stores extends StoresAR {
-
 }

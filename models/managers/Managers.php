@@ -5,7 +5,7 @@ namespace app\models\managers;
 
 use app\controllers\ManagersController;
 use app\models\managers\active_record\ManagersAR;
-use app\models\traits\CreateAccessTrait;
+use app\models\common\traits\CreateAccessTrait;
 
 /**
  * Class Managers
@@ -15,8 +15,6 @@ use app\models\traits\CreateAccessTrait;
  */
 class Managers extends ManagersAR {
 	use CreateAccessTrait;
-
-	public const RUS_CLASS_NAME = 'Менеджер';
 
 	/**
 	 * URL для нахождения менеджера по ID

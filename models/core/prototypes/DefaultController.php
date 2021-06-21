@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\core\prototypes;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\modules\import\models\ImportAction;
 use app\modules\import\models\ProcessImportAction;
@@ -35,6 +36,8 @@ use yii\web\Response;
 class DefaultController extends Controller {
 	use ControllerPermissionsTrait;
 
+	protected const DEFAULT_TITLE = null;
+
 	/**
 	 * @var string $modelClass
 	 */
@@ -57,10 +60,17 @@ class DefaultController extends Controller {
 	}
 
 	/**
+	 * @return string
+	 */
+	public static function Title():string {
+		return static::DEFAULT_TITLE??self::ExtractControllerId(static::class);
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function beforeAction($action):bool {
-		$this->view->title = $this->view->title??$this->id;
+		$this->view->title = static::DEFAULT_TITLE??($this->view->title??$this->id);
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {
 				$this->view->params['breadcrumbs'][] = $this->id;
@@ -88,6 +98,9 @@ class DefaultController extends Controller {
 			[
 				'class' => AjaxFilter::class,
 				'only' => ['ajax-search']
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		];
 	}

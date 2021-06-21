@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\models\core\prototypes\DefaultController;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
@@ -19,6 +20,8 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends DefaultController {
+
+	protected const DEFAULT_TITLE = "Пользователи";
 
 	/**
 	 * Поисковая модель пользователя
@@ -50,6 +53,9 @@ class UsersController extends DefaultController {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		]);
 	}
