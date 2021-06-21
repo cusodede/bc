@@ -11,7 +11,7 @@ use pozitronik\references\models\CustomisableReference;
  */
 class RefRewardsOperations extends CustomisableReference {
 
-	public $menuCaption = "Справочник операций";
+	public string $menuCaption = "Справочник операций";
 	public $moduleId = "Вознаграждения";
 
 	/**
