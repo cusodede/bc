@@ -134,7 +134,7 @@ class Rewards extends RewardsAR {
 	 * @throws Throwable
 	 */
 	public function getRelatedOperations():?RewardsOperationsConfig {
-		return RewardsOperationsConfig::loadModel($this->operation);
+		return RewardsOperationsConfig::getRecord($this->operation);
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Rewards extends RewardsAR {
 	 * @throws Throwable
 	 */
 	public function getRelatedRules():?RewardsRulesConfig {
-		return RewardsRulesConfig::loadModel($this->operation);
+		return RewardsRulesConfig::getRecord($this->operation);
 	}
 
 }
