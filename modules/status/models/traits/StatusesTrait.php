@@ -155,4 +155,5 @@ trait StatusesTrait {
 			'model_key' => 'id'
 		])->andOnCondition(['model_name' => $this->className]);
 	}
+
 }

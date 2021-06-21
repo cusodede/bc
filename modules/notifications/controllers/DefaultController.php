@@ -4,7 +4,6 @@ namespace app\modules\notifications\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\notifications\models\Notifications;
-use Throwable;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
