@@ -64,6 +64,9 @@ final class RewardsSearch extends RewardsAR {
 	 * @param array $dataArray Массив с перечислением атрибутов
 	 * @param string $filterAlias Алиас, под которым задастся фильтр
 	 * @return string
+	 * todo: это полезная штука, куда-то в общее пространство её вытащить
+	 *
+	 * @throws InvalidConfigException
 	 */
 	private static function arrayFilter(string $tableName, string $fieldName, array $dataArray, string $filterAlias):string {
 		$indexArray = [];//в массиве могут быть "дыры", их необходимо заполнить, чтобы ELT обращался к правильному значению
