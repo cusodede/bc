@@ -9,13 +9,13 @@ use app\models\addresses\active_record\AddressesAR;
  * Class Addresses
  * @package app\models\addresses
  *
- * @property string $regAddressString Полный адрес
+ * @property string $addressString Полный адрес
  */
 class Addresses extends AddressesAR {
 	/**
 	 * @return string
 	 */
-	public function getRegAddressString():string {
+	public function getAddressString():string {
 		return trim(
 			implode(
 				', ',
