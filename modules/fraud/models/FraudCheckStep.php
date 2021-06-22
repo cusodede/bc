@@ -104,6 +104,7 @@ class FraudCheckStep extends FraudCheckStepAr {
 	 * @return FraudCheckStep
 	 */
 	public function addFraudMessage(string $message):self {
+		$result = $this->step_info;
 		$result['fraud_message'] = $message;
 		$this->step_info = $result;
 		return $this;
