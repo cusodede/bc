@@ -20,7 +20,18 @@ class ValidationErrorsListType extends ObjectType
 	{
 		parent::__construct([
 			'fields' => [
-				'errors' => Type::listOf(Types::validationError()),
+				'result' => [
+					'type' => Type::boolean(),
+					'description' => 'Результат запроса',
+				],
+				'message' => [
+					'type' => Type::string(),
+					'description' => 'Ответное сообщение',
+				],
+				'errors' => [
+					'type' => Type::listOf(Types::validationError()),
+					'description' => 'Массив ошибок, если есть',
+				],
 			],
 		]);
 	}

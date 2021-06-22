@@ -20,8 +20,14 @@ class ValidationErrorType extends ObjectType
 	{
 		parent::__construct([
 			'fields' => [
-				'field' => Type::string(),
-				'messages' => Type::listOf(Type::string()),
+				'field' => [
+					'type' => Type::string(),
+					'description' => 'Наименование атрибута, при валидации которого произошла ошибка',
+				],
+				'messages' => [
+					'type' => Type::listOf(Type::string()),
+					'description' => 'Массмив ошибок атрибута',
+				],
 			],
 		]);
 	}
