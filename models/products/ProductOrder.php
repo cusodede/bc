@@ -10,6 +10,12 @@ use app\models\products\active_record\ProductOrderAR;
  * Описание заказа
  */
 class ProductOrder extends ProductOrderAR {
+	/**
+	 * @return bool
+	 */
+	public function isSimcard():bool {
+		return true;
+	}
 
 	/**
 	 * Заглушка, чтобы инспектор не ругался на пустой стаб

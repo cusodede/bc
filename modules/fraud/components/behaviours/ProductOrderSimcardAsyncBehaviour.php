@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\components\behaviours;
 
-use app\models\product\ProductOrder;
+use app\models\products\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;
 use app\modules\fraud\components\validators\orders\simcard\HasActivitySimcardWithOneBaseStationValidator;
 use app\modules\fraud\components\validators\orders\simcard\HasDuplicateAbonentPassportDataValidator;
