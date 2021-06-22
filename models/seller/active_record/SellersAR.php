@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\seller\active_record;
 
+use app\models\addresses\Addresses;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\active_record\relations\RelDealersToSellers;
@@ -37,7 +38,7 @@ use yii\db\ActiveRecord;
  * @property string $passport_whom Кем выдан паспорт
  * @property string $passport_when Когда выдан паспорт
  * @property int $gender Пол
- * @property string $reg_address Адрес регистрации
+ * @property string $reg_address Адрес регистрации/проживания
  * @property string $entry_date Дата въезда в страну
  * @property string $inn ИНН
  * @property string $snils СНИЛС
@@ -47,15 +48,13 @@ use yii\db\ActiveRecord;
  * @property int $contract_signing_address Адрес подписания договора
  * @property int $deleted
  *
- * @property string $email
- * @property string $login
- *
  * @property RefCountries $refCountries Страны (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property Stores[] $stores Магазины продавца
  * @property RelDealersToSellers[] $relatedDealersToSellers Связь от промежуточной таблице дилеров к продавцам
  * @property Dealers[] $dealers Дилеры продавца
  * @property Users $relatedUser Пользователь связанный с продавцом
+ * @property Addresses $relAddress Адрес регистрации/проживания связанный с продавцом
  */
 class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -113,7 +112,7 @@ class SellersAR extends ActiveRecord {
 			[
 				[
 					'name', 'surname', 'passport_series', 'passport_number', 'passport_whom',
-					'passport_when', 'birthday', 'reg_address', 'inn', 'citizen'
+					'passport_when', 'birthday', 'inn', 'citizen'
 				],
 				'required'
 			],
@@ -153,12 +152,15 @@ class SellersAR extends ActiveRecord {
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
 			[
-				['gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'deleted', 'user', 'inn', 'citizen'],
+				[
+					'gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'deleted', 'user', 'inn', 'citizen',
+					'reg_address'
+				],
 				'integer'
 			],
 			[['name', 'surname', 'patronymic'], 'string', 'max' => 128],
 			[['passport_series', 'passport_number', 'keyword', 'login'], 'string', 'max' => 64],
-			[['passport_whom', 'email', 'reg_address', 'contract_signing_address'], 'string', 'max' => 255],
+			[['passport_whom', 'email', 'contract_signing_address'], 'string', 'max' => 255],
 			['inn', 'string', 'length' => 12],
 			[
 				'snils',
@@ -202,12 +204,14 @@ class SellersAR extends ActiveRecord {
 			'is_resident' => 'Резидент',
 			'citizen' => 'Гражданство',
 			'non_resident_type' => 'Категория нерезидента',
+			'passport' => 'Паспорт',
 			'passport_series' => 'Серия паспорта',
 			'passport_number' => 'Номер паспорта',
 			'passport_whom' => 'Кем выдан паспорт',
 			'passport_when' => 'Когда выдан паспорт',
 			'gender' => 'Пол',
-			'reg_address' => 'Адрес регистрации',
+			'reg_address' => 'Адрес регистрации/проживания',
+			'relAddress' => 'Адрес регистрации/проживания',
 			'entry_date' => 'Дата въезда в страну',
 			'inn' => 'ИНН',
 			'snils' => 'СНИЛС',
@@ -297,5 +301,20 @@ class SellersAR extends ActiveRecord {
 	 */
 	public function getRefCountries():ActiveQuery {
 		return $this->hasOne(RefCountries::class, ['id' => 'citizen']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelAddress():ActiveQuery {
+		return $this->hasOne(Addresses::class, ['id' => 'reg_address']);
+	}
+
+	/**
+	 * @param mixed $relAddress
+	 */
+	public function setRelAddress($relAddress):void {
+		/** @var Addresses $relAddress */
+		$this->link('relAddress', $relAddress);
 	}
 }
