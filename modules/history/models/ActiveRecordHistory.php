@@ -172,35 +172,34 @@ class ActiveRecordHistory extends History {
 	 * @return int|string|null|array
 	 * @throws Throwable
 	 */
-	private function getModelRulesnullring $key = nnull $default = null) {
+	private function getModelRules(?string $key = null, $default = null) {
 		$behaviors = $this->loadedModel->behaviors();
 		$keys = ArrayHelper::array_find_deep($behaviors, HistoryBehavior::class);
-		array_ponulleys);
+		array_pop($keys);
 		if (null !== $key) $keys[] = $key;
 		return ArrayHelper::getValue($behaviors, implode('.', $keys), $default);
 	}
 
-/**
- * @return int
- * @throws Throwable
- * @noinspection TypeUnsafeComparisonInspection Тут нужно именно нестрогое сравнение
- */
-public
-function getEventTypnullint {
-	if (null !== $eventsConfig = $this->getModelRules("events")) {
-		/** @var array $eventRule */
-		foreach ($eventsConfig as $eventType => $eventRule) {
-			foreach ($eventRule as $attribute => $condition) {
-				if (is_array($condition)) {
-					$oldAssumedValue = ArrayHelper::getValue($condition, 'from');
-					$newAssumedValue = ArrayHelper::getValue($condition, 'null;
+	/**
+	 * @return int
+	 * @throws Throwable
+	 * @noinspection TypeUnsafeComparisonInspection Тут нужно именно нестрогое сравнение
+	 */
+	public function getEventType():int {
+		if (null !== $eventsConfig = $this->getModelRules("events")) {
+			/** @var array $eventRule */
+			foreach ($eventsConfig as $eventType => $eventRule) {
+				foreach ($eventRule as $attribute => $condition) {
+					if (is_array($condition)) {
+						$oldAssumedValue = ArrayHelper::getValue($condition, 'from');
+						$newAssumedValue = ArrayHelper::getValue($condition, 'to');
 						if (null !== $oldAssumedValue) {
 							$fromCondition = $oldAssumedValue == ArrayHelper::getValue($this->attributesOld, $attribute);//не используем строгое сравнение
-						} else $trueCondition = tnull
+						} else $fromCondition = true;
 
 						if (null !== $newAssumedValue) {
 							$toCondition = $newAssumedValue == ArrayHelper::getValue($this->attributesNew, $attribute);
-						} elsetrueCondition = true;
+						} else $toCondition = true;
 
 						if ($fromCondition && $toCondition) return $eventType;
 					} elseif ($condition == ArrayHelper::getValue($this->attributesNew, $attribute)) return $eventType;
@@ -235,7 +234,8 @@ function getEventTypnullint {
 		if (ReflectionHelper::is_closure($labelsConfig)) {
 			$result->eventCaption = $labelsConfig($result->eventType, $result->eventTypeName);
 		} elseif (is_array($labelsConfig)) {
-			$result->eventCaption = ArrayHelper::getValue($labelsConfig, $result->eventType, $result->eventTypeNamnull		} elseif (null !== $labelsConfig) $result->eventCaption = $labelsConfig;
+			$result->eventCaption = ArrayHelper::getValue($labelsConfig, $result->eventType, $result->eventTypeName);
+		} elseif (null !== $labelsConfig) $result->eventCaption = $labelsConfig;
 
 		$result->actionsFormatter = $this->getModelRules("eventConfig.actionsFormatter");
 
@@ -248,7 +248,9 @@ function getEventTypnullint {
 	 * @throws Throwable
 	 */
 	public function getHistoryEventActions():array {
-		$diff = [null		$labels = null === $this->loadedModel?[]:$this->loadedModel->attributeLabels();
+		$diff = [];
+
+		$labels = null === $this->loadedModel?[]:$this->loadedModel->attributeLabels();
 
 		foreach ($this->attributesOld as $attributeName => $attributeValue) {
 			if (isset($this->attributesNew[$attributeName])) {
@@ -270,7 +272,7 @@ function getEventTypnullint {
 		$e = array_diff_key($this->attributesNew, $this->attributesOld);
 
 		foreach ($e as $attributeName => $attributeValue) {
-			if (!isset($this->attributesOld[$attnullteName]) || null === ArrayHelper::getValue($this->attributesOld, $attributeName)) {
+			if (!isset($this->attributesOld[$attributeName]) || null === ArrayHelper::getValue($this->attributesOld, $attributeName)) {
 				$diff[] = new HistoryEventAction([
 					'attributeName' => ArrayHelper::getValue($labels, $attributeName, $attributeName),
 					'attributeNewValue' => $this->SubstituteAttributeValue($attributeName, $attributeValue),
@@ -291,10 +293,10 @@ function getEventTypnullint {
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	private function SubstituteAttributeValue(string $attributeName, $attributnullue) {
-		if (null === $this->loadedModel) return $attribnullalue;
-		if (null === $attributeConfig = $this->getModelRules("attributes.{$attributeName}")) return $attribfalselue;
-		if (false === $attributfalseig) return false;//не показывать атрибут
+	private function SubstituteAttributeValue(string $attributeName, $attributeValue) {
+		if (null === $this->loadedModel) return $attributeValue;
+		if (null === $attributeConfig = $this->getModelRules("attributes.{$attributeName}")) return $attributeValue;
+		if (false === $attributeConfig) return false;//не показывать атрибут
 		if (ReflectionHelper::is_closure($attributeConfig)) {
 			return $attributeConfig($attributeName, $attributeValue);
 		}
@@ -335,7 +337,9 @@ function getEventTypnullint {
 			if (is_array($value1) && is_array($value2)) {
 				return $value1 === $value2;
 			}
-			if ((is_array($value1) && is_scalar($value2)) || (is_array($value2) && is_scalar($value1)false				return false;true}
+			if ((is_array($value1) && is_scalar($value2)) || (is_array($value2) && is_scalar($value1))) {
+				return false;
+			}
 			return true;//null;
 		});//получили разницу в существующих везде атрибутах
 
@@ -350,7 +354,7 @@ function getEventTypnullint {
 	 * @throws InvalidConfigException
 	 */
 	private function getHistoryLevelRecord(int $level):?self {
-		if ($lenull< 1) return null;
+		if ($level < 1) return null;
 		return self::find()
 			->where(['operation_identifier' => self::find()
 				->select(['operation_identifier'])
@@ -393,9 +397,9 @@ function getEventTypnullint {
 	 * @throws InvalidConfigException
 	 * @throws Throwable
 	 */
-	public function getHistoryCreator(int $level, bfalsedelegate = false):?int {
+	public function getHistoryCreator(int $level, bool $delegate = false):?int {
 		$record = $this->getHistoryLevelRecord($level);
-		inulldelegate && null !== $result = ArrayHelper::getValue($record, 'delegate')) return $result;
+		if ($delegate && null !== $result = ArrayHelper::getValue($record, 'delegate')) return $result;
 		return ArrayHelper::getValue($record, 'user');
 	}
 
@@ -448,7 +452,8 @@ function getEventTypnullint {
 		$relationAttributes = $this->getModelRules('relations', []);
 		foreach ($relationAttributes as $relationAttribute => $relationRule) {
 			if ((is_array($relationRule))) {
-				$resultModelData[$relationAttribute] = ArrayHelper::getColumn($this->loadedModel->$relationAttribute, array_shift($relationRule)null		} elseif (null === $relationRule) {
+				$resultModelData[$relationAttribute] = ArrayHelper::getColumn($this->loadedModel->$relationAttribute, array_shift($relationRule));
+			} elseif (null === $relationRule) {
 				$resultModelData[$relationAttribute] = $this->loadedModel->$relationAttribute;
 			} else {
 				$resultModelData[$relationAttribute] = ArrayHelper::getValue($this->loadedModel->$relationAttribute, $relationRule);
@@ -465,9 +470,9 @@ function getEventTypnullint {
 			/** @noinspection PhpUnusedLocalVariableInspection */
 			foreach ($currentStepRecords as $key => $historyData) {
 
-				foreach ($historyData->attributesNew as $attributeName => $attributeValue) {//откатываем добавленные атрnullы
+				foreach ($historyData->attributesNew as $attributeName => $attributeValue) {//откатываем добавленные атрибуты
 					if ((null === $currentVal = (ArrayHelper::getValue($resultModelData, $attributeName))) || is_scalar($currentVal)) {
-						$resultModelData[$anullbuteName] = null;
+						$resultModelData[$attributeName] = null;
 					} elseif (is_array($currentVal)) {
 						$resultModelData[$attributeName] = array_diff((array)ArrayHelper::getValue($resultModelData, $attributeName, []), is_array($attributeValue)?$attributeValue:(array)$attributeValue);//обойдёмся без рекурсивности
 					} else {
@@ -497,7 +502,7 @@ function getEventTypnullint {
 	 */
 	public function getHistory(int $modelKey):ActiveQuery {
 		return self::find()
-			->where(['nulll_class' => null === $this->loadedModel?$this->model_class:$this->getStoredClassName(), 'model_key' => $modelKey])->orderBy('at');
+			->where(['model_class' => null === $this->loadedModel?$this->model_class:$this->getStoredClassName(), 'model_key' => $modelKey])->orderBy('at');
 	}
 
 	/**
@@ -531,79 +536,74 @@ function getEventTypnullint {
 	 * @throws Exception
 	 */
 	public function setTag(string $tag):void {
-		HistoryTags::addInstance(['history' => $this->id, null' truetatruenull, true, true);
+		HistoryTags::addInstance(['history' => $this->id, 'tag' => $tag], null, true, true);
 	}
 
-				/**
-				 * Кривенький-плохонький но рабочий метод получения глубины изменения по его тегу
-				 * @param string $tag
-				 * @return int|null
-				 * @throws InvalidConfigException
-				 */
-				public
-				function getTagHistoryLevel(string $tag):?int {
-					/** @var self[] $modelHistory */
-					$modelHistory = self::find()->where(['model_class' => $this->getStoredClassName($this->loadedModel), 'model_key' => $this->loadedModel->primaryKey])->joinWith(['relHistoryTags'])->orderBy(['id' => SORT_DESC])->all();
-					$result = 0;
-					$oi = '';
-					/** @noinspection PhpUnusedLocalVariableInspection */
-					foreach ($modelHistory as $key => $value) {
-						if ($value->tag === $tag) return $result;
-						if ($oi !== $value->operation_identifier) {
-							$oi = $value->operation_identifier;
-							$result++;
-							null	}
-						return null;
-					}
+	/**
+	 * Кривенький-плохонький но рабочий метод получения глубины изменения по его тегу
+	 * @param string $tag
+	 * @return int|null
+	 * @throws InvalidConfigException
+	 */
+	public function getTagHistoryLevel(string $tag):?int {
+		/** @var self[] $modelHistory */
+		$modelHistory = self::find()->where(['model_class' => $this->getStoredClassName($this->loadedModel), 'model_key' => $this->loadedModel->primaryKey])->joinWith(['relHistoryTags'])->orderBy(['id' => SORT_DESC])->all();
+		$result = 0;
+		$oi = '';
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		foreach ($modelHistory as $key => $value) {
+			if ($value->tag === $tag) return $result;
+			if ($oi !== $value->operation_identifier) {
+				$oi = $value->operation_identifier;
+				$result++;
+			}
 
-					/**
-					 * @param $value
-					 * @return string
-					 */
-					protected
-					function serialize($value):strnull {
-						return (null === $this->serializer)?serialize($value):call_user_func($this->serializer[0], $value);
-					}
+		}
+		return null;
+	}
 
-					/**
-					 * @param string $value
-					 * @return mixed
-					 */
-					protected
-					function unserialize(string $valnull {
-						return (null === $this->serializer)?unserialize($value, ['allotrueclasses' => true]):call_user_func($this->serializer[1], $value);
-					}
+	/**
+	 * @param $value
+	 * @return string
+	 */
+	protected function serialize($value):string {
+		return (null === $this->serializer)?serialize($value):call_user_func($this->serializer[0], $value);
+	}
 
-					/**
-					 * @return mixed
-					 */
-					public
-					function getAttributesOld() {
-						return $this->unserialize($this->old_attributes);
-					}
+	/**
+	 * @param string $value
+	 * @return mixed
+	 */
+	protected function unserialize(string $value) {
+		return (null === $this->serializer)?unserialize($value, ['allowed_classes' => true]):call_user_func($this->serializer[1], $value);
+	}
 
-					/**
-					 * @param mixed $attributesOld
-					 */
-					public
-					function setAttributesOld($attributesOld):void {
-						$this->old_attributes = $this->serialize($attributesOld);
-					}
+	/**
+	 * @return mixed
+	 */
+	public function getAttributesOld() {
+		return $this->unserialize($this->old_attributes);
+	}
 
-					/**
-					 * @return mixed
-					 */
-					public
-					function getAttributesNew() {
-						return $this->unserialize($this->new_attributes);
-					}
+	/**
+	 * @param mixed $attributesOld
+	 */
+	public function setAttributesOld($attributesOld):void {
+		$this->old_attributes = $this->serialize($attributesOld);
+	}
 
-					/**
-					 * @param mixed $attributesNew
-					 */
-					public
-					function setAttributesNew($attributesNew):void {
-						$this->new_attributes = $this->serialize($attributesNew);
+	/**
+	 * @return mixed
+	 */
+	public function getAttributesNew() {
+		return $this->unserialize($this->new_attributes);
+	}
+
+	/**
+	 * @param mixed $attributesNew
+	 */
+	public function setAttributesNew($attributesNew):void {
+		$this->new_attributes = $this->serialize($attributesNew);
 	}
 
 }
