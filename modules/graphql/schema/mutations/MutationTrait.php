@@ -15,7 +15,7 @@ use Exception;
 trait MutationTrait
 {
 	/**
-	 * Cохранение модели для GraphQL
+	 * Сохранение модели для GraphQL
 	 * @param ActiveRecord $model
 	 * @param array $attributes
 	 * @param array $messages
