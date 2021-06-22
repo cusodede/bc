@@ -97,7 +97,12 @@ use app\models\seller\active_record\SellersAR;
 		],
 		'passport_whom',
 		'passport_when',
-		'reg_address',
+		[
+			'attribute' => 'relAddress',
+			'value' => static function(Sellers $model) {
+				return $model->relAddress->addressString??null;
+			}
+		],
 		'entry_date',
 		'keyword',
 		'is_wireman_shpd:boolean',

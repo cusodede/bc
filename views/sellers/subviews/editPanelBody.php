@@ -112,7 +112,32 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'reg_address')->textarea(['row' => 6]) ?>
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'index')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'area')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'region')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'city')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'street')->textInput() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'building')->textInput() ?>
 	</div>
 </div>
 <div class="row">

@@ -212,7 +212,6 @@ ModalHelperAsset::register($this);
 			],
 			'passport_whom',
 			'passport_when',
-			'reg_address',
 			[
 				'attribute' => 'entry_date',
 				'filterType' => DatePicker::class,
