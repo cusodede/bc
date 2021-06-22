@@ -7,6 +7,9 @@ use app\modules\fraud\models\FraudCheckStep;
 use app\modules\fraud\models\FraudCheckStepSearch;
 
 /**
+ * Обертка для валидаторов, после валидации
+ * меняем статусы у записи фродовой проверки в бд
+ *
  * Class ValidateWithChangeStep
  * @package app\modules\fraud\components
  */
