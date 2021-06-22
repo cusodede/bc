@@ -8,7 +8,7 @@ use app\models\products\ProductsInterface;
 use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
-use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
+use app\modules\fraud\models\behaviours\ProductOrderSimcardAsyncBehaviour;
 use app\modules\status\models\traits\StatusesTrait;
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveQuery;

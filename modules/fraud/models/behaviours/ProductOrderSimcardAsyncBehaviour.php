@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\fraud\components\behaviours;
+namespace app\modules\fraud\models\behaviours;
 
 use app\models\products\ProductOrder;
 use app\modules\fraud\components\queue\ChangeFraudStepWithValidateJob;

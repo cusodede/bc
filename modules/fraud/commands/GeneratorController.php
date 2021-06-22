@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\fraud\commands;
 
-use app\models\product\ProductOrder;
-use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
+use app\models\products\ProductOrder;
+use app\modules\fraud\models\behaviours\ProductOrderSimcardAsyncBehaviour;
 use app\modules\fraud\models\FraudCheckStep;
 use pozitronik\helpers\DateHelper;
 use yii\console\Controller;
