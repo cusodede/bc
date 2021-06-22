@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product;
+namespace app\models\products;
 
-use app\models\product\active_record\ProductAR;
+use app\models\products\active_record\ProductsAR;
+use app\models\products\active_record\ProductsClassesAR;
 use yii\data\ActiveDataProvider;
 use DomainException;
 
@@ -11,14 +12,14 @@ use DomainException;
  * Class ProductSearch
  * todo
  */
-class ProductSearch extends ProductAR {
+class ProductsSearch extends ProductsClassesAR {
 
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = self::find()->active();
+		$query = ProductsAR::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query

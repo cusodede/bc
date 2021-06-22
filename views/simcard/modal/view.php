@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use pozitronik\widgets\BadgeWidget;
-use app\models\product\SimCard;
+use app\models\products\SimCard;
 use yii\bootstrap4\Modal;
 use yii\web\View;
 

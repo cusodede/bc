@@ -10,7 +10,7 @@ use pozitronik\references\models\CustomisableReference;
  */
 class RefDealersGroups extends CustomisableReference {
 
-	public $menuCaption = "Справочник групп дилеров";
+	public string $menuCaption = "Справочник групп дилеров";
 	public $moduleId = "Дилеры";
 
 	/**

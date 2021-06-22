@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product;
+namespace app\models\products;
 
-use app\models\product\active_record\SimCardAR;
+use app\models\products\active_record\SimCardAR;
 use yii\data\ActiveDataProvider;
 
 /**

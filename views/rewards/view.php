@@ -6,7 +6,6 @@ declare(strict_types = 1);
  * @var Rewards $model
  */
 
-use app\models\reward\active_record\RewardsAR;
 use app\models\reward\Rewards;
 use pozitronik\widgets\BadgeWidget;
 use yii\web\View;
@@ -19,13 +18,13 @@ use yii\widgets\DetailView;
 	'attributes' => [
 		'id',
 		'create_date',
-		'value',
+		'quantity',
 		[
 			'attribute' => 'operation',
 			'format' => 'raw',
-			'value' => static function(RewardsAR $model):string {
+			'value' => static function(Rewards $model):string {
 				return BadgeWidget::widget([
-					'items' => $model->refRewardsOperations,
+					'items' => $model->relatedOperations,
 					'subItem' => 'name'
 				]);
 			}
@@ -33,9 +32,9 @@ use yii\widgets\DetailView;
 		[
 			'attribute' => 'rule',
 			'format' => 'raw',
-			'value' => static function(RewardsAR $model):string {
+			'value' => static function(Rewards $model):string {
 				return BadgeWidget::widget([
-					'items' => $model->refRewardsRules,
+					'items' => $model->relatedRules,
 					'subItem' => 'name'
 				]);
 			}

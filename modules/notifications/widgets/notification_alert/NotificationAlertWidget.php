@@ -7,6 +7,8 @@ use app\modules\notifications\models\Notifications;
 use app\modules\notifications\NotificationsModule;
 use app\modules\notifications\NotificationsModuleAssets;
 use Exception;
+use Throwable;
+use yii\base\InvalidConfigException;
 use yii\bootstrap4\Alert;
 use yii\bootstrap4\Html;
 use yii\helpers\ArrayHelper;
@@ -58,7 +60,7 @@ class NotificationAlertWidget extends Alert {
 	/**
 	 * @inheritDoc
 	 */
-	public function init() {
+	public function init():void {
 		$this->body = $this->getBody();
 		NotificationsModuleAssets::register($this->view);
 		$this->options = [
@@ -112,6 +114,8 @@ class NotificationAlertWidget extends Alert {
 
 	/**
 	 * @return string
+	 * @throws Throwable
+	 * @throws InvalidConfigException
 	 */
 	private function getAcknowledgeButton():string {
 		if (false === $this->acknowledgeButton) return '';

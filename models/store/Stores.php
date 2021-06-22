@@ -10,4 +10,12 @@ use app\models\store\active_record\StoresAR;
  * Точка продажи товаров (как организация): собственный офис, франчайзи, дилеры, etc.
  */
 class Stores extends StoresAR {
+	public const RUS_CLASS_NAME = 'Магазин';
+
+	/**
+	 * Заглушка, чтобы инспектор не ругался на пустой стаб
+	 */
+	public function dummy_todo_function():void {
+
+	}
 }

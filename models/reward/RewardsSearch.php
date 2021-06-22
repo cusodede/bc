@@ -3,39 +3,45 @@ declare(strict_types = 1);
 
 namespace app\models\reward;
 
-use app\models\reward\active_record\references\RefRewardsOperations;
-use app\models\reward\active_record\references\RefRewardsRules;
 use app\models\reward\active_record\RewardsAR;
+use app\models\reward\config\RewardsOperationsConfig;
+use app\models\reward\config\RewardsRulesConfig;
 use app\modules\status\models\Status;
 use app\modules\status\models\StatusRulesModel;
 use pozitronik\core\models\LCQuery;
+use pozitronik\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
-use yii\helpers\ArrayHelper;
 use Throwable;
 
 /**
  * Class RewardsSearch
  * @property null|string $userName
  * @property null|string $ruleName
- * @property null|string $currentStatus
+ * @property null|int $statusFilter
+ * @property null|int $operationFilter
+ * @property null|int $ruleFilter
  */
 final class RewardsSearch extends RewardsAR {
 
 	public ?string $userName = null;
 	public ?string $ruleName = null;
-	public ?string $currentStatus = null;
+	/*хотя фильтры номерные, данные приходят в строковом виде. Нормализуем в rules()*/
+	public ?string $statusFilter = null;
+	public ?string $operationFilter = null;
+	public ?string $ruleFilter = null;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function rules():array {
 		return [
-			[['id', 'value', 'deleted', 'operation', 'currentStatus'], 'integer'],
+			[['id', 'quantity', 'deleted', 'operation', 'statusFilter', 'operationFilter', 'ruleFilter'], 'integer'],
 			['create_date', 'date', 'format' => 'php:Y-m-d H:i'],
 			[['userName', 'ruleName'], 'string', 'max' => 255],
-			[['currentStatus'], 'filter', 'filter' => static function($value) {
+			[['statusFilter', 'operationFilter', 'ruleFilter'], 'filter', 'filter' => static function($value) {
 				return ('' === $value || null === $value)?null:(int)$value;
 			}],
 		];
@@ -51,21 +57,48 @@ final class RewardsSearch extends RewardsAR {
 	}
 
 	/**
+	 * Для "таблиц", перечисляемых массивом key=>value, генерируем фильтр и его алиас,
+	 * Так обеспечивается наполнение атрибута + алфавитная сортировка
+	 * @param string $tableName Имя таблицы, содержащей ключ атрибута
+	 * @param string $fieldName Имя поля, содержащего ключ атрибута
+	 * @param array $dataArray Массив с перечислением атрибутов
+	 * @param string $filterAlias Алиас, под которым задастся фильтр
+	 * @return string
+	 * todo: это полезная штука, куда-то в общее пространство её вытащить
+	 *
+	 * @throws InvalidConfigException
+	 */
+	private static function arrayFilter(string $tableName, string $fieldName, array $dataArray, string $filterAlias):string {
+		$indexArray = [];//в массиве могут быть "дыры", их необходимо заполнить, чтобы ELT обращался к правильному значению
+		$index = 1;
+		foreach ($dataArray as $key => $value) {
+			if ($key < $index) throw new InvalidConfigException('Ключи должны идти от 1 по возрастанию');
+
+			if ($key > $index) {
+				$emptyItemsCount = $key - $index;
+				$indexArray = array_pad($indexArray, count($indexArray) + $emptyItemsCount, null);
+			}
+			$indexArray[] = $value;
+			$index++;
+		}
+
+		$dataArrayStr = implode("', '", $indexArray);
+		return "ELT({$tableName}.{$fieldName}, '{$dataArrayStr}') AS {$filterAlias}";
+	}
+
+	/**
 	 * @param LCQuery $query
 	 * @throws Throwable
 	 */
 	private function initQuery(LCQuery $query):void {
 		$query->select([
 			self::tableName().'.*',
-			RefRewardsOperations::tableName().'.name AS operationName',
-			RefRewardsRules::tableName().'.name AS ruleName',
 			Users::tableName().'.username AS userName',
+			self::arrayFilter(Status::tableName(), 'status', ArrayHelper::map(StatusRulesModel::getAllStatuses(Rewards::class), 'id', 'name'), 'statusFilter'),
+			self::arrayFilter(self::tableName(), 'operation', RewardsOperationsConfig::mapData(), 'operationFilter'),
+			self::arrayFilter(self::tableName(), 'rule', RewardsRulesConfig::mapData(), 'ruleFilter'),
+
 			/*Так обеспечивается наполнение атрибута + алфавитная сортировка*/
-			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
-				StatusRulesModel::getAllStatuses(Rewards::class),
-				'id',
-				'name'
-			))."') AS currentStatus"
 		])
 			->distinct()
 			->active();
@@ -77,8 +110,8 @@ final class RewardsSearch extends RewardsAR {
 	 * @throws Throwable
 	 */
 	public function search(array $params):ActiveDataProvider {
-		$query = self::find();
-		$query->joinWith(['relStatus', 'relatedUser', 'refRewardsOperations', 'refRewardsRules']);
+		$query = Rewards::find();
+		$query->joinWith(['relStatus', 'relatedUser']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -101,13 +134,12 @@ final class RewardsSearch extends RewardsAR {
 	 */
 	private function filterData($query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
-			->andFilterWhere([self::tableName().'.value' => $this->value])
+			->andFilterWhere([self::tableName().'.quantity' => $this->quantity])
 			->andFilterWhere(['>=', self::tableName().'.create_date', $this->create_date])
-			->andFilterWhere([self::tableName().'.operation' => $this->operation])
-			->andFilterWhere(['like', RefRewardsRules::tableName().'.name', $this->ruleName])
+			->andFilterWhere([Status::tableName().'.status' => $this->statusFilter])
+			->andFilterWhere([self::tableName().'.operation' => $this->operationFilter])
+			->andFilterWhere([self::tableName().'.rule' => $this->ruleFilter])
 			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
-			->andFilterWhere(['like', Users::tableName().'.username', $this->userName])
-			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus])
 			->andFilterWhere([self::tableName().'.deleted' => $this->deleted]);
 	}
 
@@ -119,20 +151,20 @@ final class RewardsSearch extends RewardsAR {
 			'defaultOrder' => ['id' => SORT_ASC],
 			'attributes' => [
 				'id',
-				'value',
+				'quantity',
 				'create_date',
 				'deleted',
-				'currentStatus' => [
-					'asc' => ['currentStatus' => SORT_ASC],
-					'desc' => ['currentStatus' => SORT_DESC]
+				'statusFilter' => [
+					'asc' => ['statusFilter' => SORT_ASC],
+					'desc' => ['statusFilter' => SORT_DESC]
 				],
-				'operationName' => [
-					'asc' => [RefRewardsOperations::tableName().'.name' => SORT_ASC],
-					'desc' => [RefRewardsOperations::tableName().'.name' => SORT_DESC]
+				'operationFilter' => [
+					'asc' => ['operationFilter' => SORT_ASC],
+					'desc' => ['operationFilter' => SORT_DESC]
 				],
-				'ruleName' => [
-					'asc' => [RefRewardsRules::tableName().'.name' => SORT_ASC],
-					'desc' => [RefRewardsRules::tableName().'.name' => SORT_DESC]
+				'ruleFilter' => [
+					'asc' => ['ruleFilter' => SORT_ASC],
+					'desc' => ['ruleFilter' => SORT_DESC]
 				],
 				'userName' => [
 					'asc' => [Users::tableName().'.username' => SORT_ASC],

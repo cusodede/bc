@@ -10,9 +10,9 @@ use pozitronik\references\models\CustomisableReference;
  */
 class RefRegions extends CustomisableReference {
 
-	public $menuCaption = "Справочник регионов";
-
+	public string $menuCaption = "Справочник регионов";
 	public $moduleId = "Регионы";
+
 	/**
 	 * {@inheritdoc}
 	 */

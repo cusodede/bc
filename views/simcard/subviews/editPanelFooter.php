@@ -8,7 +8,7 @@ declare(strict_types = 1);
  */
 
 use kartik\form\ActiveForm;
-use app\models\product\SimCard;
+use app\models\products\SimCard;
 use yii\bootstrap4\Html;
 use yii\web\View;
 

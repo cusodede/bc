@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product\active_record;
+namespace app\models\products\active_record;
 
+use app\models\products\active_record\relations\RelOrderToProduct;
+use app\models\products\ProductsInterface;
 use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\product\Product;
-use app\models\product\active_record\relations\RelOrderToProduct;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\fraud\components\behaviours\ProductOrderSimcardAsyncBehaviour;
@@ -25,7 +25,7 @@ use yii\db\ActiveRecord;
  * @property int $deleted
  *
  * @property RelOrderToProduct[] $relatedOrderToProduct Связь к промежуточной таблице к товарам заказа
- * @property Product[] $product Товары в заказе
+ * @property ProductsInterface[] $relatedProducts Товары в заказе todo пока непонятно, как это всё будет, вернёмся к заказам позже
  *
  * @property Users $initiatorUser Пользователь, создавший заказ
  * @property Stores $storeStore Магазин поставки заказа
@@ -80,13 +80,6 @@ class ProductOrderAR extends ActiveRecord {
 	 */
 	public function getRelatedOrderToProduct():ActiveQuery {
 		return $this->hasMany(RelOrderToProduct::class, ['order_id' => 'id']);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getProduct():ActiveQuery {
-		return $this->hasMany(Product::class, ['id' => 'product_id'])->via('relatedOrderToProduct');
 	}
 
 	/**s

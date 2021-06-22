@@ -36,13 +36,10 @@ class ProcessImportAction extends Action {
 			]);
 		}
 		if (!$this->ignoreErrors && [] !== $messages) { //на итерации найдены ошибки
-			return $this->controller->render('@app/modules/import/views/import-errors', [
-				'messages' => $messages,
-				'domain' => $domain
-			]);
+			return $this->controller->render('@app/modules/import/views/import-errors', compact('messages', 'domain'));
 		}
 		if ($isImportDone) {
-			$count = $importModel->count;
+//			$count = $importModel->count;
 			$importModel->clear();/*очищаем, чтоб не мусорить, поэтому count вызываем, он сохранится*/
 			return $this->controller->render('@app/modules/import/views/import-done', [
 				'controller' => get_class($this->controller),

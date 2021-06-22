@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\product\active_record;
+namespace app\models\products\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
 use yii\db\ActiveRecord;
@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  */
 class SimCardAR extends ActiveRecord {
 	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
