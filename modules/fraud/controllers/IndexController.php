@@ -5,6 +5,7 @@ namespace app\modules\fraud\controllers;
 
 use app\modules\fraud\components\queue\ChangeFraudStepWithRepeatValidateJob;
 use app\modules\fraud\models\FraudCheckStepSearch;
+use app\modules\notifications\models\Notifications;
 use Throwable;
 use yii\web\Controller;
 use Yii;
@@ -20,13 +21,12 @@ class IndexController extends Controller {
 	 */
 	public function actionList():string {
 		$request = Yii::$app->request;
-		$notification = null;
 
 		if (($request->isPost && $repeatValidateId = (int)$request->post('repeat_validate_id')) && $repeatValidateId > 0) {
 			Yii::$app->queue->push(new ChangeFraudStepWithRepeatValidateJob([
 				'fraudStepId' => $repeatValidateId
 			]));
-			$notification = 'Задание на перерасчет фрода успешно добавлено в очередь';
+			Notifications::message('Задание на перерасчет фрода успешно добавлено в очередь');
 		}
 
 		$params = $request->queryParams;
@@ -34,7 +34,7 @@ class IndexController extends Controller {
 		return $this->render('list', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $searchModel->search($params),
-			'notification' => $notification//todo: переделать на Notifications::message()
+			'notifications' => Notifications::UserNotifications()
 		]);
 	}
 }

@@ -13,6 +13,7 @@ use app\modules\fraud\FraudModule;
 use app\modules\fraud\models\FraudCheckStep;
 use app\modules\fraud\models\FraudCheckStepSearch;
 use app\modules\notifications\models\Notifications;
+use app\modules\notifications\widgets\notification_alert\NotificationAlertWidget;
 use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\grid\DataColumn;
@@ -22,11 +23,12 @@ use yii\web\View;
 use yii\grid\ActionColumn;
 
 ?>
-<?php if (!empty($notification)): ?>
-	<div class="alert alert-success">
-		<?= $notification ?>
-	</div>
-<?php endif; ?>
+<?php foreach ($notifications as $notification): ?>
+	<?= NotificationAlertWidget::widget([
+		'type' => NotificationAlertWidget::TYPE_SUCCESS,
+		'notification' => $notification,
+	]) ?>
+<?php endforeach; ?>
 
 <?= GridView::widget([
 	'dataProvider' => $dataProvider,
