@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\mutations;
 
 use app\models\partners\Partners;
-use app\modules\graphql\GraphqlHelper;
+use app\modules\graphql\MutationTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use app\modules\graphql\schema\types\Types;
@@ -15,6 +15,8 @@ use app\modules\graphql\schema\types\Types;
  */
 class PartnerMutationType extends ObjectType
 {
+	use MutationTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -51,11 +53,7 @@ class PartnerMutationType extends ObjectType
 							'description' => 'Идентификатор категории',
 						],
 					],
-					'resolve' => function(Partners $partner, array $args = []) {
-						$partner->setAttributes($args);
-						return $partner->save() ? GraphqlHelper::getResult(true, 'Партнер успешно обновлён') :
-							GraphqlHelper::getErrors($partner->getErrors());
-					}
+					'resolve' => fn(Partners $partner, array $args = []) => $this->save($partner, $args),
 				],
 			]
 		]);
