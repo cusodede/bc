@@ -41,7 +41,8 @@
 		"webonyx/graphql-php": "dev-master",
 		"kartik-v/yii2-widget-datetimepicker": "dev-master",
 		"moonlandsoft/yii2-phpexcel": "dev-master",
-		"giggsey/libphonenumber-for-php": "^8.12"
+		"giggsey/libphonenumber-for-php": "^8.12",
+		"yiisoft/yii2-queue": "^2.3"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
