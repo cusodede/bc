@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  */
 class HistoryTags extends ActiveRecord {
 	use ARExtended;
+
 	public const TAG_CREATED = 'created';
 
 	/**

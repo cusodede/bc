@@ -29,7 +29,7 @@ class HistorySearch extends History {
 	 * @return ActiveDataProvider
 	 * @throws Throwable
 	 */
-	public function search(array $params, $pagination = true):ActiveDataProvider {
+	public function search(array $params, bool $pagination = true):ActiveDataProvider {
 		$query = ActiveRecordHistory::find();
 
 		$dataProvider = new ActiveDataProvider([

@@ -43,7 +43,7 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= ([] === $permissions = Permissions::find()->all())
+		<?= ([] === $permissions = Permissions::find()->all())/*Можно назначить только права из БД*/
 			?Html::a('Сначала создайте доступы', PermissionsController::to('index'), ['class' => 'btn btn-warning'])
 			:$form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
 				'options' => [
