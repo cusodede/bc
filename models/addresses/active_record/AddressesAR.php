@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\models\addresses\active_record;
 
+use app\models\regions\active_record\references\RefRegions;
 use pozitronik\helpers\DateHelper;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -12,12 +14,14 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $create_date Дата создания
  * @property int $index Индекс
- * @property string $area Область
+ * @property int $area Область
  * @property string $region Регион/район
  * @property string $city Город/н.п.
  * @property string $street Улица
  * @property string $building Дом
  * @property int $deleted
+ *
+ * @property RefRegions $refRegion Область (справочник)
  */
 class AddressesAR extends ActiveRecord {
 	/**
@@ -32,10 +36,10 @@ class AddressesAR extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['index', 'city', 'street'], 'required'],
+			[['city', 'street', 'building'], 'required'],
 			['create_date', 'default', 'value' => DateHelper::lcDate()],
-			[['index', 'deleted'], 'integer'],
-			[['area', 'region', 'city', 'street', 'building'], 'string', 'max' => 255]
+			[['index', 'area', 'deleted'], 'integer'],
+			[['region', 'city', 'street', 'building'], 'string', 'max' => 255]
 		];
 	}
 
@@ -54,5 +58,12 @@ class AddressesAR extends ActiveRecord {
 			'building' => 'Дом',
 			'deleted' => 'Deleted'
 		];
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRegion():ActiveQuery {
+		return $this->hasOne(RefRegions::class, ['id' => 'area']);
 	}
 }

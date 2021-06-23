@@ -19,7 +19,7 @@ class Addresses extends AddressesAR {
 		return trim(
 			implode(
 				', ',
-				array_filter([$this->index, $this->area, $this->region, $this->city, $this->street, $this->building])
+				array_filter([$this->index, $this->refRegion->name, $this->region, $this->city, $this->street, $this->building])
 			)
 		);
 	}
