@@ -103,7 +103,7 @@ final class SellersSearch extends Sellers {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
-		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser', 'refCountries']);
+		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser', 'refCountry']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
