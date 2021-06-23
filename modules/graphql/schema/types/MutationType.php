@@ -23,9 +23,10 @@ class MutationType extends ObjectType
 				'partner' => [
 					'type' => Types::partnerMutation(),
 					'args' => [
-						'id' => Type::nonNull(Type::int()),
+						'id' => Type::int(),
 					],
-					'resolve' => fn(Partners $partner = null, array $args = []): ?Partners => Partners::find()->where($args)->one(),
+					'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
+						=> Partners::find()->where($args)->one(),
 				],
 			]
 		]);

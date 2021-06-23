@@ -32,7 +32,15 @@ class PartnerMutationType extends ObjectType implements MutationInterface
 					'type' => Types::validationErrorsUnionType(Types::partner()),
 					'description' => 'Обновление партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = []) => $this->save($partner, $args, $this->getMessages()),
+					'resolve' => fn(Partners $partner, array $args = [])
+						=> $this->save($partner, $args, $this->getMessages()),
+				],
+				'create' => [
+					'type' => Types::validationErrorsUnionType(Types::partner()),
+					'description' => 'Создание партнера',
+					'args' => $this->getArgs(),
+					'resolve' => fn(Partners $partner, array $args = [])
+						=> $this->create($partner, $args, $this->getMessages()),
 				],
 			]
 		]);

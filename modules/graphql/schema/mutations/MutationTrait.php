@@ -15,7 +15,22 @@ use Exception;
 trait MutationTrait
 {
 	/**
-	 * Cохранение модели для GraphQL
+	 * Создание новых моделей
+	 * @param ActiveRecord $model
+	 * @param array $attributes
+	 * @param array $messages
+	 * @return array
+	 * @throws Exception
+	 */
+	public function create(ActiveRecord $model, array $attributes, array $messages): array
+	{
+		$model = new $model();
+		$model->setAttributes($attributes);
+		return $this->getResult($model->save(), $model->getErrors(), $messages);
+	}
+
+	/**
+	 * Сохранение модели для GraphQL
 	 * @param ActiveRecord $model
 	 * @param array $attributes
 	 * @param array $messages
