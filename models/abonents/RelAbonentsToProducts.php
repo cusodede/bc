@@ -43,6 +43,11 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 		return $this->hasOne(Products::class, ['id' => 'product_id']);
 	}
 
+	public function setRelatedLastProductStatus(ProductStatuses $status): void
+	{
+		$this->unlink('relatedLastProductStatus', $status);
+	}
+
 	/**
 	 * Получение актуального статуса по продукту из журнала.
 	 * @return ActiveQuery
