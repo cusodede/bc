@@ -45,7 +45,7 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 
 	public function setRelatedLastProductStatus(ProductStatuses $status): void
 	{
-		$this->unlink('relatedLastProductStatus', $status);
+		$this->link('relatedLastProductStatus', $status);
 	}
 
 	/**
