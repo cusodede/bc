@@ -135,17 +135,6 @@ class SellersAR extends ActiveRecord {
 				'on' => self::SCENARIO_CREATE
 			],
 			['login', PhoneNumberValidator::class],
-			[
-				['entry_date', 'non_resident_type'],
-				'required',
-				'when' => static function($model) {
-					/** @var self $model */
-					return !$model->is_resident;
-				},
-				'whenClient' => "function() {
-					return !document.getElementById('sellers-is_resident').checked;
-				}"
-			],
 			[['create_date', 'update_date', 'stores', 'dealers', 'currentStatusId'], 'safe'],
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
