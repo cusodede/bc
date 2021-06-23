@@ -193,6 +193,61 @@ ModalHelperAsset::register($this);
 				])
 			],
 			[
+				'attribute' => 'index',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress,
+						'subItem' => 'index',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'region',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress,
+						'subItem' => 'region',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'city',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress,
+						'subItem' => 'city',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'street',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress,
+						'subItem' => 'street',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
+				'attribute' => 'building',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress,
+						'subItem' => 'building',
+						'useBadges' => false
+					]);
+				}
+			],
+			[
 				'attribute' => 'passport',
 				'value' => static function(SellersSearch $model) {
 					return "{$model->passport_series} {$model->passport_number}";
