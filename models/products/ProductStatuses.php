@@ -12,6 +12,12 @@ use yii\db\ActiveQuery;
  * @package app\models\products
  *
  * @property-read string|null $statusName
+ * @property-read bool $isEnabled
+ * @property-read bool $isRenewed
+ * @property-read bool $isDisabled
+ * @property-read bool $isExpired
+ *
+ * @property RelAbonentsToProducts $relatedAbonentsToProducts
  */
 class ProductStatuses extends ActiveRecordProductStatuses
 {
@@ -29,5 +35,37 @@ class ProductStatuses extends ActiveRecordProductStatuses
 	public function getStatusName(): ?string
 	{
 		return EnumProductsStatuses::getStatusName($this->status_id);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsEnabled(): bool
+	{
+		return EnumProductsStatuses::STATUS_ENABLED === $this->status_id;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsRenewed(): bool
+	{
+		return EnumProductsStatuses::STATUS_RENEWED === $this->status_id;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsDisabled(): bool
+	{
+		return EnumProductsStatuses::STATUS_DISABLED === $this->status_id;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsExpired(): bool
+	{
+		return time() > strtotime($this->expire_date);
 	}
 }
