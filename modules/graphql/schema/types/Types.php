@@ -6,7 +6,7 @@ namespace app\modules\graphql\schema\types;
 use app\modules\graphql\schema\mutations\PartnerMutationType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\UnionType;
-use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Types
@@ -16,9 +16,10 @@ class Types
 {
 	public const SCHEMA_ERROR_NAME = 'ValidationErrorType';
 
-	// Запрос и мутации
+	// Запрос, мутации, ответы
 	private static ?QueryType $query = null;
 	private static ?MutationType $mutation = null;
+	private static ?ResponseType $response = null;
 
 	// Валидация
 	private static ?ValidationErrorType $validationError = null;
@@ -46,6 +47,15 @@ class Types
 	public static function mutation(): MutationType
 	{
 		return static::$mutation ?: static::$mutation = new MutationType();
+	}
+
+	/**
+	 * Успешный ответ при мутациях
+	 * @return ResponseType
+	 */
+	public static function response(): ResponseType
+	{
+		return static::$response ?: static::$response = new ResponseType();
 	}
 
 	/**
@@ -80,8 +90,9 @@ class Types
 		return static::$valitationTypes[$typeNameValidationErrorsType] ??
 			static::$valitationTypes[$typeNameValidationErrorsType] = new UnionType([
 				'name' => $typeNameValidationErrorsType,
-				'types' => [$type, static::validationErrorsList()],
-				'resolveType' => fn($value) => $value instanceof Model ? $type : static::validationErrorsList()
+				'types' => [$type, static::validationErrorsList(), static::response()],
+				'resolveType' => fn($value) => ArrayHelper::getValue($value, 'result', false) ?
+					static::response() : static::validationErrorsList()
 			]);
 	}
 

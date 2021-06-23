@@ -23,4 +23,15 @@ class GraphqlHelper
 		}
 		return ['errors' => $modelErrors];
 	}
+
+	/**
+	 * Ответ на создание/обновление
+	 * @param bool $result
+	 * @param string $message
+	 * @return array
+	 */
+	public static function getResult(bool $result,  string $message = ''): array
+	{
+		return compact('result', 'message');
+	}
 }
