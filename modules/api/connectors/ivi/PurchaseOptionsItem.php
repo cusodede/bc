@@ -18,6 +18,11 @@ class PurchaseOptionsItem
 		$this->_data = $data;
 	}
 
+	public function getProductId(): ?string
+	{
+		return ArrayHelper::getValue($this->_data, 'product_identifier');
+	}
+
 	public function getPurchaseParams(): array
 	{
 		$params = ArrayHelper::getValue($this->_data, 'payment_options.0.purchase_params', []);
