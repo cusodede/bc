@@ -87,6 +87,17 @@ use app\models\regions\active_record\references\RefRegions;
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<?= $form->field($model, 'entry_date')->widget(DatePicker::class, [
+			'type' => DatePicker::TYPE_COMPONENT_APPEND,
+			'pluginOptions' => [
+				'autoclose' => true,
+				'format' => 'yyyy-mm-dd'
+			]
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?= $form->field($model, 'passport_series')->textInput() ?>
 	</div>
 </div>
@@ -142,34 +153,6 @@ use app\models\regions\active_record\references\RefRegions;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model->relAddress??$model->addressesInstance, 'building')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'is_resident')->widget(SwitchInput::class, [
-			'tristate' => false,
-			'pluginOptions' => [
-				'size' => 'mini',
-				'onText' => '<i class="fa fa-check"></i>',
-				'offText' => null
-			],
-		]) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'non_resident_type')->dropDownList(ProjectConstants::NON_RESIDENT_TYPE, ['prompt' => '']) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'entry_date')->widget(DatePicker::class, [
-			'type' => DatePicker::TYPE_COMPONENT_APPEND,
-			'pluginOptions' => [
-				'autoclose' => true,
-				'format' => 'yyyy-mm-dd'
-			]
-		]) ?>
 	</div>
 </div>
 <div class="row">

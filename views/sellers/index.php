@@ -192,18 +192,6 @@ ModalHelperAsset::register($this);
 					]
 				])
 			],
-			'is_resident:boolean',
-			[
-				'attribute' => 'non_resident_type',
-				'value' => static function(SellersSearch $model) {
-					return ArrayHelper::getValue(ProjectConstants::NON_RESIDENT_TYPE, $model->non_resident_type);
-				},
-				'format' => 'raw',
-				'filter' => ProjectConstants::NON_RESIDENT_TYPE,
-				'filterWidgetOptions' => [
-					'pluginOptions' => ['allowClear' => true, 'placeholder' => '']
-				]
-			],
 			[
 				'attribute' => 'passport',
 				'value' => static function(SellersSearch $model) {

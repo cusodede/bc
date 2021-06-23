@@ -30,9 +30,7 @@ use yii\db\ActiveRecord;
  * @property string $birthday Дата рождения
  * @property string $create_date Дата регистрации
  * @property string $update_date Дата обновления
- * @property int $is_resident Резидент
  * @property int $citizen Гражданство
- * @property int $non_resident_type Категория нерезидента
  * @property string $passport_series Серия паспорта
  * @property string $passport_number Номер паспорта
  * @property string $passport_whom Кем выдан паспорт
@@ -153,7 +151,7 @@ class SellersAR extends ActiveRecord {
 			['patronymic', 'default', 'value' => null],
 			[
 				[
-					'gender', 'is_resident', 'non_resident_type', 'is_wireman_shpd', 'deleted', 'user', 'inn', 'citizen',
+					'gender', 'is_wireman_shpd', 'deleted', 'user', 'inn', 'citizen',
 					'reg_address'
 				],
 				'integer'
@@ -201,9 +199,7 @@ class SellersAR extends ActiveRecord {
 			'userLogin' => 'Логин',
 			'create_date' => 'Дата регистрации',
 			'update_date' => 'Дата обновления',
-			'is_resident' => 'Резидент',
 			'citizen' => 'Гражданство',
-			'non_resident_type' => 'Категория нерезидента',
 			'passport' => 'Паспорт',
 			'passport_series' => 'Серия паспорта',
 			'passport_number' => 'Номер паспорта',
