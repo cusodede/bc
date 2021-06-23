@@ -8,6 +8,7 @@ use app\models\partners\Partners;
 use app\models\products\Products;
 use app\models\products\ProductStatuses;
 use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\subscriptions\Subscriptions;
 use pozitronik\helpers\ArrayHelper;
 
 /**
@@ -30,6 +31,9 @@ class ProductFormatter implements ProductFormatterInterface
 				'typeRelatedOptions' => 'relatedInstance',
 				'partner' => 'relatedPartner',
 				'subscription' => 'actualStatus'
+			],
+			Subscriptions::class => [
+				'trial_days_count'
 			],
 			Partners::class => [
 				'name',

@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace app\modules\api\connectors\vet_expert;
 
+use app\models\abonents\Abonents;
 use app\models\phones\Phones;
 use app\modules\api\signatures\SignatureService;
 use app\modules\api\signatures\SignatureServiceFactory;
 use DateTime;
 use InvalidArgumentException;
-use Throwable;
 use yii\base\Arrayable;
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
 /**
@@ -19,7 +20,7 @@ use yii\base\InvalidConfigException;
  * Class SubscriptionParams
  * @package app\modules\api\connectors\vetexpert
  */
-class SubscriptionParams implements Arrayable
+class SubscriptionParams extends BaseObject implements Arrayable
 {
 	/**
 	 * @var string
@@ -52,12 +53,14 @@ class SubscriptionParams implements Arrayable
 
 	/**
 	 * SubscriptionParams constructor.
+	 * @param array $config
 	 * @throws InvalidConfigException
-	 * @throws Throwable
 	 */
-	public function __construct()
+	public function __construct($config = [])
 	{
-		$this->_signatureService = SignatureServiceFactory::build('ivi');
+		parent::__construct($config);
+
+		$this->_signatureService = SignatureServiceFactory::build('vet-expert');
 	}
 
 	/**
@@ -193,6 +196,21 @@ class SubscriptionParams implements Arrayable
 	public function toArray(array $fields = [], array $expand = [], $recursive = true): array
 	{
 		return array_merge($this->fields(), $this->extraFields());
+	}
+
+	/**
+	 * @param Abonents $abonent
+	 * @return static
+	 * @throws InvalidConfigException
+	 */
+	public static function createInstance(Abonents $abonent): self
+	{
+		return new static([
+			'phone'      => $abonent->phone,
+			'lastName'   => $abonent->surname,
+			'middleName' => $abonent->patronymic,
+			'firstName'  => $abonent->name
+		]);
 	}
 
 	/**
