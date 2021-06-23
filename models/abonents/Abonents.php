@@ -5,13 +5,16 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use app\models\products\Products;
+use pozitronik\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 
 /**
  * Class Abonents
  * @package app\models\abonents
  *
- * @property RelAbonentsToProducts[] $relatedAbonentsToProducts
+ * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
+ * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
+ * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
  */
 class Abonents extends ActiveRecordAbonents
 {
@@ -24,15 +27,38 @@ class Abonents extends ActiveRecordAbonents
 	}
 
 	/**
-	 * @return Products[] получение закрепленных за абонентом продуктов с фиксацией актуального статуса по каждому из них.
+	 * @return Products[]
+	 */
+	public function getUnrelatedProducts(): array
+	{
+		return Products::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])->all();
+	}
+
+	/**
+	 * Получение закрепленных за абонентом продуктов с фиксацией актуального статуса по каждому из них.
+	 * @return Products[]
 	 */
 	public function getExistentProducts(): array
 	{
-		return array_map(static function ($abonentsToProduct) {
-			$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductStatus;
+		return array_map(
+			static function (RelAbonentsToProducts $abonentsToProduct) {
+				$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductStatus;
+				return $abonentsToProduct->relatedProduct;
+			},
+			//принудительно запрашиваем все линки для соответствия потребностям метода
+			$this->getRelatedAbonentsToProducts()
+				->indexBy('product_id')
+				->all()
+		);
+	}
 
-			return $abonentsToProduct->relatedProduct;
-		}, $this->relatedAbonentsToProducts);
+	/**
+	 * @param int $productId
+	 * @return Products|null
+	 */
+	public function getExistentProductById(int $productId): ?Products
+	{
+		return $this->existentProducts[$productId] ?? null;
 	}
 
 	/**
