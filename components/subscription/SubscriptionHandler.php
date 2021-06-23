@@ -42,7 +42,7 @@ abstract class SubscriptionHandler extends Component
 	 * При успешном выполнии операции - фиксируем новый статус в журнале статусов.
 	 * @param int $abonentId
 	 */
-	final public function enable(int $abonentId): void
+	final public function provide(int $abonentId): void
 	{
 		$this->abonentInit($abonentId);
 
@@ -55,7 +55,7 @@ abstract class SubscriptionHandler extends Component
 	 * При успешном выполнии операции - фиксируем новый статус в журнале статусов.
 	 * @param int $abonentId
 	 */
-	final public function disable(int $abonentId): void
+	final public function revoke(int $abonentId): void
 	{
 		$this->abonentInit($abonentId);
 

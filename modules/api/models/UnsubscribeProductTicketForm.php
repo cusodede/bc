@@ -4,10 +4,10 @@ declare(strict_types = 1);
 namespace app\modules\api\models;
 
 /**
- * Class DisableProductTicketForm
+ * Class UnsubscribeProductTicketForm
  * @package app\modules\api\models
  */
-class DisableProductTicketForm extends ProductTicketForm
+class UnsubscribeProductTicketForm extends ProductTicketForm
 {
 	public function validateProductActivity(): void
 	{

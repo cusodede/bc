@@ -10,16 +10,16 @@ use DomainException;
 use yii\queue\RetryableJobInterface;
 
 /**
- * Class EnableProductJob
+ * Class UnsubscribeProductJob
  * @package app\modules\api\components\queue\job
  */
-class EnableProductJob implements RetryableJobInterface
+class UnsubscribeProductJob implements RetryableJobInterface
 {
 	private int $_productId;
 	private int $_abonentId;
 
 	/**
-	 * EnableProductJob constructor.
+	 * UnsubscribeProductJob constructor.
 	 * @param int $productId
 	 * @param int $abonentId
 	 */
@@ -42,7 +42,7 @@ class EnableProductJob implements RetryableJobInterface
 
 		$service = SubscriptionHandler::createInstanceByProduct($product);
 
-		$service->enable($this->_abonentId);
+		$service->revoke($this->_abonentId);
 	}
 
 	/**

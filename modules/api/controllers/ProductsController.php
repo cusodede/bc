@@ -7,8 +7,8 @@ use app\components\tickets\ProductTicketsService;
 use app\models\abonents\Abonents;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
-use app\modules\api\models\EnableProductTicketForm;
-use app\modules\api\models\DisableProductTicketForm;
+use app\modules\api\models\SubscribeProductTicketForm;
+use app\modules\api\models\UnsubscribeProductTicketForm;
 use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
 use Yii;
@@ -72,9 +72,9 @@ class ProductsController extends YiiRestController
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
 	 */
-	public function actionEnable(): array
+	public function actionSubscribe(): array
 	{
-		$form = new EnableProductTicketForm();
+		$form = new SubscribeProductTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
 			throw new ValidationException(current($form->errors));
@@ -82,7 +82,7 @@ class ProductsController extends YiiRestController
 
 		$ticketService = new ProductTicketsService();
 
-		return ['ticketId' => $ticketService->enable($form->productId, $form->abonent->id)];
+		return ['ticketId' => $ticketService->subscribe($form->productId, $form->abonent->id)];
 	}
 
 	/**
@@ -90,9 +90,9 @@ class ProductsController extends YiiRestController
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
 	 */
-	public function actionDisable(): array
+	public function actionUnsubscribe(): array
 	{
-		$form = new DisableProductTicketForm();
+		$form = new UnsubscribeProductTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
 			throw new ValidationException(current($form->errors));
@@ -100,7 +100,7 @@ class ProductsController extends YiiRestController
 
 		$ticketService = new ProductTicketsService();
 
-		return ['ticketId' => $ticketService->disable($form->productId, $form->abonent->id)];
+		return ['ticketId' => $ticketService->unsubscribe($form->productId, $form->abonent->id)];
 	}
 
 	/**
@@ -123,8 +123,8 @@ class ProductsController extends YiiRestController
 		return [
 			'get-for-sub'       => ['GET'],
 			'get-ticket-status' => ['GET'],
-			'enable'            => ['POST'],
-			'disable'           => ['POST']
+			'subscribe'         => ['POST'],
+			'unsubscribe'       => ['POST']
 		];
 	}
 }

@@ -8,8 +8,8 @@ use app\components\tickets\statuses\TicketStatusInProgress;
 use app\components\tickets\statuses\TicketStatusInterface;
 use app\components\tickets\statuses\TicketStatusWaiting;
 use app\helpers\DateHelper;
-use app\modules\api\components\queue\job\EnableProductJob;
-use app\modules\api\components\queue\job\DisableProductJob;
+use app\modules\api\components\queue\job\SubscribeProductJob;
+use app\modules\api\components\queue\job\UnsubscribeProductJob;
 use Yii;
 use yii\queue\Queue;
 
@@ -26,9 +26,9 @@ class ProductTicketsService
 	 * @param int $abonentId идентификатор абонента.
 	 * @return string идентификатор созданного тикета (джобы).
 	 */
-	public function enable(int $productId, int $abonentId): string
+	public function subscribe(int $productId, int $abonentId): string
 	{
-		return Yii::$app->productTicketsQueue->push(new EnableProductJob($productId, $abonentId));
+		return Yii::$app->productTicketsQueue->push(new SubscribeProductJob($productId, $abonentId));
 	}
 
 	/**
@@ -37,9 +37,9 @@ class ProductTicketsService
 	 * @param int $abonentId идентификатор абонента.
 	 * @return string идентификатор созданного тикета (джобы).
 	 */
-	public function disable(int $productId, int $abonentId): string
+	public function unsubscribe(int $productId, int $abonentId): string
 	{
-		return Yii::$app->productTicketsQueue->push(new DisableProductJob($productId, $abonentId));
+		return Yii::$app->productTicketsQueue->push(new UnsubscribeProductJob($productId, $abonentId));
 	}
 
 	/**
