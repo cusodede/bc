@@ -20,8 +20,8 @@ use yii\widgets\LinkPager;
 
 <?= LinkPager::widget([
 	'pagination' => new Pagination([
-		'totalCount' => $levelCount-1,
-		'page' => $level-1,
+		'totalCount' => $levelCount - 1,
+		'page' => $level - 1,
 		'pageSize' => 1,
 		'pageParam' => 'level',
 		'pageSizeParam' => false,

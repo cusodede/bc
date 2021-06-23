@@ -11,7 +11,7 @@ declare(strict_types = 1);
 
 use app\assets\ModalHelperAsset;
 use app\models\core\TemporaryHelper;
-use app\models\product\SimCardSearch;
+use app\models\products\SimCardSearch;
 use kartik\grid\GridView;
 use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;

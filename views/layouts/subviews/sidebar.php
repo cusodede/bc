@@ -10,6 +10,7 @@ use app\controllers\StoresController;
 use app\controllers\UsersController;
 use app\models\core\prototypes\DefaultController;
 use app\models\sys\users\Users;
+use app\modules\fraud\FraudModule;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
@@ -59,6 +60,11 @@ use app\controllers\DealersController;
 			'url' => [SellersController::to('index')],
 			'iconClass' => 'fa-smile-beam',
 			'visible' => SellersController::hasPermission('index')
+		],
+		[
+			'label' => 'Фродмониторинг',
+			'url' => [FraudModule::to('index/list')],
+			'iconClass' => 'fa-alien'
 		],
 		[
 			'label' => 'Прототипирование',

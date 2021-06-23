@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var SimCard $model
  */
 
-use app\models\product\SimCard;
+use app\models\products\SimCard;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
 

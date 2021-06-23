@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var SimCard $model
  */
 
-use app\models\product\SimCard;
+use app\models\products\SimCard;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\web\View;

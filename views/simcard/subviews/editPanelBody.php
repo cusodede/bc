@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 use app\models\core\prototypes\ActiveFieldMap;
 use kartik\form\ActiveForm;
-use app\models\product\SimCard;
+use app\models\products\SimCard;
 use yii\web\View;
 
 ?>

@@ -31,7 +31,6 @@ class m000000_000000_init_status_module extends Migration {
 		$this->createIndex('daddy', self::MAIN_TABLE_NAME, ['daddy']);
 		$this->createIndex('status', self::MAIN_TABLE_NAME, ['status']);
 
-
 	}
 
 	/**

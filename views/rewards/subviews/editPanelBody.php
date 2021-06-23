@@ -8,12 +8,12 @@ declare(strict_types = 1);
  */
 
 use app\controllers\UsersController;
-use app\models\reward\active_record\references\RefRewardsOperations;
-use app\models\reward\active_record\references\RefRewardsRules;
+use app\models\reward\config\RewardsOperationsConfig;
+use app\models\reward\config\RewardsRulesConfig;
 use app\models\reward\Rewards;
 use app\widgets\selectmodelwidget\SelectModelWidget;
 use kartik\form\ActiveForm;
-use  app\models\sys\users\Users;
+use app\models\sys\users\Users;
 use kartik\select2\Select2;
 use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;
 use yii\helpers\ArrayHelper;
@@ -23,7 +23,7 @@ use yii\web\View;
 
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'value')->textInput() ?>
+		<?= $form->field($model, 'quantity')->textInput() ?>
 	</div>
 </div>
 <div class="row">
@@ -51,14 +51,14 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'operation')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRewardsOperations::class
+			'referenceClass' => RewardsOperationsConfig::class//todo: ReferenceSelectWidget переносит нас к редактору, которого нет
 		]) ?>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'rule')->widget(ReferenceSelectWidget::class, [
-			'referenceClass' => RefRewardsRules::class
+			'referenceClass' => RewardsRulesConfig::class
 		]) ?>
 	</div>
 </div>

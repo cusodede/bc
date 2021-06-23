@@ -13,6 +13,7 @@ class RefStoresTypes extends CustomisableReference {
 
 	public string $menuCaption = "Типы магазинов";
 	public $moduleId = "Магазины";
+
 	/**
 	 * {@inheritdoc}
 	 */
