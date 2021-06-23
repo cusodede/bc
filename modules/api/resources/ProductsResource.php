@@ -4,10 +4,8 @@ declare(strict_types = 1);
 namespace app\modules\api\resources;
 
 use app\models\abonents\Abonents;
-use app\models\products\Products;
 use app\modules\api\resources\formatters\ProductFormatter;
 use app\modules\api\resources\formatters\ProductFormatterInterface;
-use pozitronik\helpers\ArrayHelper;
 
 /**
  * Class ProductsResource
@@ -18,7 +16,7 @@ class ProductsResource
 	/**
 	 * @var ProductFormatterInterface|null
 	 */
-	private ?ProductFormatterInterface $_formatter;
+	private ProductFormatterInterface $_formatter;
 
 	/**
 	 * ProductsResource constructor.
@@ -34,14 +32,9 @@ class ProductsResource
 	 * @param Abonents $abonent
 	 * @return array
 	 */
-	public function getAbonentProducts(Abonents $abonent): array
+	public function getByAbonent(Abonents $abonent): array
 	{
-		$products = array_merge(
-			$abonent->getExistentProducts(),
-			Products::find()
-				->where(['NOT IN', 'id', ArrayHelper::getColumn($abonent->relatedAbonentsToProducts, 'product_id')])
-				->all()
-		);
+		$products = array_merge($abonent->existentProducts, $abonent->unrelatedProducts);
 
 		return array_map([$this->_formatter, 'format'], $products);
 	}
