@@ -178,7 +178,7 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(SellersSearch $model):string {
 					return BadgeWidget::widget([
-						'items' => $model->refCountries,
+						'items' => $model->refCountry,
 						'subItem' => 'name'
 					]);
 				},

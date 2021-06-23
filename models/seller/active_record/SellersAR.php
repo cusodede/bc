@@ -48,7 +48,7 @@ use yii\db\ActiveRecord;
  * @property int $contract_signing_address Адрес подписания договора
  * @property int $deleted
  *
- * @property RefCountries $refCountries Страны (справочник)
+ * @property RefCountries $refCountry Страна (справочник)
  * @property RelStoresToSellers[] $relatedStoresToSellers Связь к промежуточной таблице к продавцам
  * @property Stores[] $stores Магазины продавца
  * @property RelDealersToSellers[] $relatedDealersToSellers Связь от промежуточной таблице дилеров к продавцам
@@ -299,7 +299,7 @@ class SellersAR extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRefCountries():ActiveQuery {
+	public function getRefCountry():ActiveQuery {
 		return $this->hasOne(RefCountries::class, ['id' => 'citizen']);
 	}
 

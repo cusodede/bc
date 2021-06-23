@@ -22,6 +22,7 @@ use pozitronik\filestorage\widgets\file_input\FileInputWidget;
 use pozitronik\references\widgets\reference_select\ReferenceSelectWidget;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
+use app\models\regions\active_record\references\RefRegions;
 
 ?>
 <?php if (!$model->isNewRecord): ?>
@@ -117,7 +118,10 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model->relAddress??$model->addressesInstance, 'area')->textInput() ?>
+		<?= $form->field($model->relAddress??$model->addressesInstance, 'area')->widget(ReferenceSelectWidget::class, [
+			'referenceClass' => RefRegions::class,
+			'options' => ['placeholder' => '']
+		]) ?>
 	</div>
 </div>
 <div class="row">

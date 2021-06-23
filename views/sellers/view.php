@@ -79,7 +79,7 @@ use app\models\seller\active_record\SellersAR;
 		[
 			'attribute' => 'citizen',
 			'value' => static function(SellersAR $model) {
-				return $model->refCountries->name??null;
+				return $model->refCountry->name??null;
 			}
 		],
 		'is_resident:boolean',
