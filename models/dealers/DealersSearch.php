@@ -16,6 +16,7 @@ use pozitronik\core\models\LCQuery;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Class StoresSearch
@@ -126,20 +127,22 @@ final class DealersSearch extends DealersAR {
 		if ($user->isAllPermissionsGranted()) {
 			return;
 		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null === $manager) {
+		if ($user->hasPermission(['show_all_dealers'])) {
 			return;
 		}
-
-		if ($user->hasPermission(['dealer_managers'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					RelDealersToStores::tableName().'.dealer_id',
-					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-				]
-			);
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null !== $manager) {
+			if ($user->hasPermission(['dealer_managers'])) {
+				$query->andFilterWhere(
+					[
+						'in',
+						RelDealersToStores::tableName().'.dealer_id',
+						ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+					]
+				);
+			}
 		}
+		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
 
 	/**

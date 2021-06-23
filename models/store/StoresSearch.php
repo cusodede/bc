@@ -16,6 +16,7 @@ use pozitronik\core\models\LCQuery;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use Throwable;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Class StoresSearch
@@ -125,28 +126,30 @@ final class StoresSearch extends StoresAR {
 		if ($user->isAllPermissionsGranted()) {
 			return;
 		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null === $manager) {
+		if ($user->hasPermission(['show_all_stores'])) {
 			return;
 		}
-
-		if ($user->hasPermission(['dealer_stores'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					Dealers::tableName().'.id',
-					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-				]
-			);
-		} elseif ($user->hasPermission(['manager_store'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					self::tableName().'.id',
-					ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
-				]
-			);
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null !== $manager) {
+			if ($user->hasPermission(['dealer_stores'])) {
+				$query->andFilterWhere(
+					[
+						'in',
+						Dealers::tableName().'.id',
+						ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+					]
+				);
+			} elseif ($user->hasPermission(['manager_store'])) {
+				$query->andFilterWhere(
+					[
+						'in',
+						self::tableName().'.id',
+						ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
+					]
+				);
+			}
 		}
+		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
 
 	/**

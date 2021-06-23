@@ -15,6 +15,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use Throwable;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Class StoresSearch
@@ -164,28 +165,30 @@ final class SellersSearch extends Sellers {
 		if ($user->isAllPermissionsGranted()) {
 			return;
 		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null === $manager) {
+		if ($user->hasPermission(['show_all_sellers'])) {
 			return;
 		}
-
-		if ($user->hasPermission(['dealer_sellers'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					Dealers::tableName().'.id',
-					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-				]
-			);
-		} elseif ($user->hasPermission(['dealer_store_sellers'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					Stores::tableName().'.id',
-					ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
-				]
-			);
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null !== $manager) {
+			if ($user->hasPermission(['dealer_sellers'])) {
+				$query->andFilterWhere(
+					[
+						'in',
+						Dealers::tableName().'.id',
+						ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+					]
+				);
+			} elseif ($user->hasPermission(['dealer_store_sellers'])) {
+				$query->andFilterWhere(
+					[
+						'in',
+						Stores::tableName().'.id',
+						ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
+					]
+				);
+			}
 		}
+		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
 
 	/**
