@@ -9,6 +9,7 @@ use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\active_record\relations\RelDealersToSellers;
 use app\models\dealers\Dealers;
 use app\models\phones\PhoneNumberValidator;
+use app\models\regions\active_record\references\RefRegions;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -53,6 +54,7 @@ use yii\db\ActiveRecord;
  * @property Dealers[] $dealers Дилеры продавца
  * @property Users $relatedUser Пользователь связанный с продавцом
  * @property Addresses $relAddress Адрес регистрации/проживания связанный с продавцом
+ * @property RefRegions $refRegion
  */
 class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -301,5 +303,12 @@ class SellersAR extends ActiveRecord {
 	public function setRelAddress($relAddress):void {
 		/** @var Addresses $relAddress */
 		$this->link('relAddress', $relAddress);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRefRegion():ActiveQuery {
+		return $this->hasOne(RefRegions::class, ['id' => 'area'])->via('relAddress');
 	}
 }

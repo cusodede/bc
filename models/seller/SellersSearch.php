@@ -7,6 +7,7 @@ use app\models\addresses\Addresses;
 use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\Dealers;
 use app\models\managers\Managers;
+use app\models\regions\active_record\references\RefRegions;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
 use app\modules\status\models\Status;
@@ -32,6 +33,8 @@ use yii\web\ForbiddenHttpException;
  * @property null|string $citizenName
  * @property null|string $index
  * @property null|string $region
+ * @property null|string $area
+ * @property null|string $areaName
  * @property null|string $city
  * @property null|string $street
  * @property null|string $building
@@ -47,6 +50,8 @@ final class SellersSearch extends Sellers {
 	public ?string $currentStatus = null;
 	public ?string $citizenName = null;
 	public ?string $index = null;
+	public ?string $area = null;
+	public ?string $areaName = null;
 	public ?string $region = null;
 	public ?string $city = null;
 	public ?string $street = null;
@@ -66,7 +71,7 @@ final class SellersSearch extends Sellers {
 				'filter',
 				'filter' => 'trim'
 			],
-			[['id', 'userId', 'gender', 'currentStatus', 'citizen', 'index'], 'integer'],
+			[['id', 'userId', 'gender', 'currentStatus', 'citizen', 'index', 'area'], 'integer'],
 			[['deleted', 'is_wireman_shpd'], 'boolean'],
 			[['store', 'dealer', 'userEmail', 'region', 'city', 'street', 'building'], 'string', 'max' => 255],
 			['userLogin', 'string', 'max' => 64],
@@ -97,7 +102,7 @@ final class SellersSearch extends Sellers {
 			'dealer' => 'Дилер',
 			'citizenName' => 'Гражданство',
 			'index' => 'Индекс',
-			'area' => 'Область',
+			'areaName' => 'Область',
 			'region' => 'Регион/район',
 			'city' => 'Город/н.п.',
 			'street' => 'Улица',
@@ -121,7 +126,7 @@ final class SellersSearch extends Sellers {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
-		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser', 'refCountry', 'relAddress']);
+		$query->joinWith(['relStatus', 'stores', 'dealers', 'relatedUser', 'refCountry', 'relAddress', 'refRegion']);
 		$this->initQuery($query);
 
 		$dataProvider = new ActiveDataProvider([
@@ -167,6 +172,7 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere([Status::tableName().'.status' => $this->currentStatus])
 			->andFilterWhere([Addresses::tableName().'.index' => $this->index])
+			->andFilterWhere([Addresses::tableName().'.area' => $this->area])
 			->andFilterWhere([Addresses::tableName().'.region' => $this->region])
 			->andFilterWhere([Addresses::tableName().'.city' => $this->city])
 			->andFilterWhere([Addresses::tableName().'.street' => $this->street])
@@ -257,6 +263,10 @@ final class SellersSearch extends Sellers {
 					'asc' => [Addresses::tableName().'.index' => SORT_ASC],
 					'desc' => [Addresses::tableName().'.index' => SORT_DESC]
 				],
+				'areaName' => [
+					'asc' => [RefRegions::tableName().'.name' => SORT_ASC],
+					'desc' => [RefRegions::tableName().'.name' => SORT_DESC]
+				],
 				'region' => [
 					'asc' => [Addresses::tableName().'.region' => SORT_ASC],
 					'desc' => [Addresses::tableName().'.region' => SORT_DESC]
@@ -311,6 +321,7 @@ final class SellersSearch extends Sellers {
 			Addresses::tableName().'.city AS city',
 			Addresses::tableName().'.street AS street',
 			Addresses::tableName().'.building AS building',
+			RefRegions::tableName().'.name AS areaName',
 			/*Так обеспечивается наполнение атрибута + алфавитная сортировка*/
 			"ELT(".Status::tableName().'.status'.", '".implode("','", ArrayHelper::map(
 				StatusRulesModel::getAllStatuses(Sellers::class),

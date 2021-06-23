@@ -14,6 +14,7 @@ use app\controllers\DealersController;
 use app\controllers\StoresController;
 use app\models\core\prototypes\ProjectConstants;
 use app\models\countries\active_record\references\RefCountries;
+use app\models\regions\active_record\references\RefRegions;
 use app\models\seller\Sellers;
 use app\models\seller\SellersSearch;
 use app\modules\status\models\StatusRulesModel;
@@ -202,6 +203,25 @@ ModalHelperAsset::register($this);
 						'useBadges' => false
 					]);
 				}
+			],
+			[
+				'attribute' => 'areaName',
+				'format' => 'raw',
+				'value' => static function(SellersSearch $model):string {
+					return BadgeWidget::widget([
+						'items' => $model->relAddress->refRegion??null,
+						'subItem' => 'name'
+					]);
+				},
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'area',
+					'data' => RefRegions::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				])
 			],
 			[
 				'attribute' => 'region',
