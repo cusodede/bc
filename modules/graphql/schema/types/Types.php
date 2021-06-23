@@ -22,7 +22,7 @@ class Types
 	// Валидация
 	private static ?ValidationErrorType $validationError = null;
 	private static ?ValidationErrorsListType $validationErrorsList = null;
-	private static array $valitationTypes = [];
+	private static array $validationTypes = [];
 
 	// Типы для наших сущностей
 	private static ?PartnerType $partner = null;
@@ -76,8 +76,8 @@ class Types
 	public static function validationErrorsUnionType(ObjectType $type): UnionType
 	{
 		$typeNameValidationErrorsType = $type->name . self::SCHEMA_ERROR_NAME;
-		return static::$valitationTypes[$typeNameValidationErrorsType] ??
-			static::$valitationTypes[$typeNameValidationErrorsType] = new UnionType([
+		return static::$validationTypes[$typeNameValidationErrorsType] ??
+			static::$validationTypes[$typeNameValidationErrorsType] = new UnionType([
 				'name' => $typeNameValidationErrorsType,
 				'types' => [$type, static::validationErrorsList()],
 				'resolveType' => fn($value) => static::validationErrorsList()

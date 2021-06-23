@@ -26,7 +26,7 @@ class ValidationErrorType extends ObjectType
 				],
 				'messages' => [
 					'type' => Type::listOf(Type::string()),
-					'description' => 'Массмив ошибок атрибута',
+					'description' => 'Массив ошибок атрибута',
 				],
 			],
 		]);
