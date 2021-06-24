@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\core\prototypes;
+namespace app\components\db;
 
 use pozitronik\helpers\ArrayHelper;
 use Throwable;

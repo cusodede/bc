@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
-use app\models\core\prototypes\ActiveRecordTrait;
+use app\components\db\ActiveRecordTrait;
 use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
