@@ -228,9 +228,11 @@ class StoresAR extends ActiveRecord {
 					[Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
 				);
 			}
-			return $query->andFilterWhere(
-				[self::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
-			);
+			if ($user->hasPermission(['manager_store'])) {
+				return $query->andFilterWhere(
+					[self::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
+				);
+			}
 		}
 		return $query->where(['0=1']);
 	}
