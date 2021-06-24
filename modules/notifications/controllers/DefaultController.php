@@ -5,10 +5,10 @@ namespace app\modules\notifications\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\notifications\models\Notifications;
+use Throwable;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
-use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
@@ -35,8 +35,9 @@ class DefaultController extends Controller {
 
 	/**
 	 * Acknowledge user notification
+	 * @param string $id
 	 * @return string[]
-	 * @throws ForbiddenHttpException
+	 * @throws Throwable
 	 */
 	public function actionAcknowledge():array {
 		if (null !== $notification = Notifications::findOne(Yii::$app->request->post('id'))) {
