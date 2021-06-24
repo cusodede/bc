@@ -223,16 +223,19 @@ class ManagersAR extends ActiveRecord {
 	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
 		/** @var Users $user */
 		if ($user->isAllPermissionsGranted()) {//todo: это можно вынести в базовую функцию трейта
-			return;
+			return $query;
 		}
 		if ($user->hasPermission(['show_all_managers'])) {
-			return;
+			return $query;
 		}
 		$manager = self::findOne(['user' => $user->id]);
 		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
-			$query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
-		} else {
-			$query->where(['0=1']);//пользователь получает сасай
+			// можно делать вот такую проверку либо просто joinить буз проверки, даже если 100 раз yii делает это 1 раз
+			if (!in_array(Dealers::tableName(), $query->joinWith[0][0], true)) {
+				$query->joinWith([Dealers::tableName()]);
+			}
+			return $query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
 		}
+		return $query->where(['0=1']);//пользователь получает сасай
 	}
 }
