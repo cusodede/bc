@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\abonents;
 
 use app\models\abonents\active_record\RelAbonentsToProducts as ActiveRecordRelAbonentsToProducts;
+use app\models\billing_journal\BillingJournal;
 use app\models\products\Products;
 use app\models\products\ProductStatuses;
 use yii\db\ActiveQuery;
@@ -14,6 +15,7 @@ use yii\db\ActiveQuery;
  *
  * @property ProductStatuses[] $relatedProductStatuses
  * @property ProductStatuses $relatedLastProductStatus
+ * @property BillingJournal[] $relatedBillingJournal
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
  */
@@ -55,5 +57,13 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	public function getRelatedLastProductStatus(): ActiveQuery
 	{
 		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['created_at' => SORT_DESC]);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedBillingJournal(): ActiveQuery
+	{
+		return $this->hasMany(BillingJournal::class, ['rel_abonents_to_products_id' => 'id']);
 	}
 }
