@@ -51,7 +51,7 @@ class PartnerType extends ObjectType
 				'category' => [
 					'type' => Types::partnerCategory(),
 					'description' => 'Категория партнера',
-					'resolve' => fn(Partners $partner) => $partner->category,
+					'resolve' => fn(Partners $partner) => $partner->relatedCategory,
 				],
 			],
 		]);
