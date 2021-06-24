@@ -15,11 +15,15 @@ use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\active_record\relations\RelStoresToUsers;
+use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "stores".
@@ -48,6 +52,7 @@ use yii\db\ActiveRecord;
  */
 class StoresAR extends ActiveRecord {
 	use ActiveRecordTrait;
+	use ActiveRecordPermissionsTrait;
 
 	/**
 	 * {@inheritdoc}
@@ -202,6 +207,32 @@ class StoresAR extends ActiveRecord {
 	 */
 	public function getRefRegions():ActiveQuery {
 		return $this->hasOne(RefRegions::class, ['id' => 'region']);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+		/** @var Users $user */
+		if ($user->isAllPermissionsGranted()) {
+			return $query;
+		}
+		if ($user->hasPermission(['show_all_stores'])) {
+			return $query;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null !== $manager) {
+			if ($user->hasPermission(['dealer_stores'])) {
+				$query->joinWith(['dealer']);
+				return $query->andFilterWhere(
+					[Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
+				);
+			}
+			return $query->andFilterWhere(
+				[self::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
+			);
+		}
+		return $query->where(['0=1']);
 	}
 
 }
