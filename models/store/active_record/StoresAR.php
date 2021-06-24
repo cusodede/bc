@@ -234,7 +234,7 @@ class StoresAR extends ActiveRecord {
 				);
 			}
 		}
-		return $query->where(['0=1']);
+		return $query->where([self::tableName().'.id' => '0']);
 	}
 
 }

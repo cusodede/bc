@@ -213,6 +213,6 @@ class DealersAR extends ActiveRecord {
 				[RelDealersToStores::tableName().'.dealer_id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
 			);
 		}
-		return $query->where(['0=1']);
+		return $query->where([self::tableName().'.id' => '0']);
 	}
 }

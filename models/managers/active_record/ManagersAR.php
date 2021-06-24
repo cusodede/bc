@@ -215,10 +215,7 @@ class ManagersAR extends ActiveRecord {
 	}
 
 	/**
-	 * Интерфейс функции установки области доступа пользователя в этой таблице
-	 * @param ActiveQueryInterface $query
-	 * @param IdentityInterface $user
-	 * @return mixed
+	 * @inheritDoc
 	 */
 	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
 		/** @var Users $user */
@@ -234,6 +231,6 @@ class ManagersAR extends ActiveRecord {
 			$query->joinWith(['dealers']);
 			return $query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
 		}
-		return $query->where(['0=1']);//пользователь получает сасай
+		return $query->where([self::tableName().'.id' => '0']);//пользователь получает сасай
 	}
 }
