@@ -10,7 +10,6 @@ use app\models\sys\users\Users;
 use yii\data\ActiveDataProvider;
 use Throwable;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class ManagersSearch
@@ -107,8 +106,8 @@ final class ManagersSearch extends Managers {
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
-		$query->scope(Managers::class, Users::Current());
 
+		$query->scope(Managers::class, Users::Current());
 	}
 
 	/**
