@@ -44,4 +44,3 @@ use app\models\partners\Partners;
 		]) ?>
 	</div>
 </div>
-
