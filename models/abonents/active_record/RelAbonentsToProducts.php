@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\models\abonents\active_record;
 
 use app\models\core\prototypes\ActiveRecordTrait;
+use app\models\products\active_record\Products;
 use app\models\products\active_record\ProductStatuses;
-use app\models\products\Products;
 use pozitronik\core\traits\Relations;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;

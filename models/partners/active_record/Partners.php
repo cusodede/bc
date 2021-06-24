@@ -22,8 +22,8 @@ use app\models\products\active_record\Products;
  * @property string $updated_at Дата обновления партнера
  * @property string $comment Комментарий
  *
- * @property ActiveQuery $category
- * @property Products[] $products
+ * @property-read RefPartnersCategories $relatedCategory
+ * @property Products[] $relatedProducts
  */
 class Partners extends ActiveRecord
 {
@@ -80,7 +80,7 @@ class Partners extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getProducts(): ActiveQuery
+	public function getRelatedProducts(): ActiveQuery
 	{
 		return $this->hasMany(Products::class, ['partner_id' => 'id']);
 	}
@@ -88,7 +88,7 @@ class Partners extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getCategory(): ActiveQuery
+	public function getRelatedCategory(): ActiveQuery
 	{
 		return $this->hasOne(RefPartnersCategories::class, ['id' => 'category_id']);
 	}

@@ -8,6 +8,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
+use app\modules\api\ApiModule;
 use app\modules\history\HistoryModule;
 use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
@@ -96,6 +97,9 @@ $config = [
 		'notifications' => [
 			'class' => NotificationsModule::class
 		],
+		'api' => [
+			'class' => ApiModule::class
+		]
 	],
 	'components' => [
 		'request' => [

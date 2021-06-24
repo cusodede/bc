@@ -62,7 +62,7 @@ class Subscriptions extends ActiveRecord
 	public function init(): void
 	{
 		parent::init();
-		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::ID_SUBSCRIPTION]));
+		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::TYPE_SUBSCRIPTION]));
 	}
 
 	/**

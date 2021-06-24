@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\products\active_record;
 
+use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
@@ -23,11 +24,13 @@ use Yii;
  * @property string $created_at Дата создания продукта
  * @property string $updated_at Дата обновления партнера
  *
- * @property Partners $partner
- * @property Users $user
+ * @property Partners $relatedPartner
+ * @property Users $relatedUser
  */
 class Products extends ActiveRecord
 {
+	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -79,7 +82,7 @@ class Products extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getPartner(): ActiveQuery
+	public function getRelatedPartner(): ActiveQuery
 	{
 		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
 	}
@@ -89,7 +92,7 @@ class Products extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getUser(): ActiveQuery
+	public function getRelatedUser(): ActiveQuery
 	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}

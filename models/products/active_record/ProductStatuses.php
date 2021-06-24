@@ -14,8 +14,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $rel_abonents_to_products_id
  * @property int $status_id
- * @property string $start_date
- * @property string $end_date
+ * @property string $expire_date
  * @property string $created_at
  *
  * @property RelAbonentsToProducts $relatedAbonentsToProducts
@@ -38,10 +37,10 @@ class ProductStatuses extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['rel_abonents_to_products_id', 'status_id', 'start_date'], 'required'],
+			[['rel_abonents_to_products_id', 'status_id'], 'required'],
 			[['rel_abonents_to_products_id', 'status_id'], 'integer'],
 			[['rel_abonents_to_products_id'], 'exist', 'skipOnError' => true, 'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']],
-			[['start_date', 'end_date', 'created_at'], 'safe'],
+			[['expire_date', 'created_at'], 'safe'],
 		];
 	}
 
@@ -54,8 +53,7 @@ class ProductStatuses extends ActiveRecord
 			'id'                          => 'ID',
 			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
 			'status_id'                   => 'Status ID',
-			'start_date'                  => 'Start Date',
-			'end_date'                    => 'End Date',
+			'expire_date'                 => 'Expire Date',
 			'created_at'                  => 'Created At',
 		];
 	}
