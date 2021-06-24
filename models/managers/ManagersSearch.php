@@ -90,11 +90,11 @@ final class ManagersSearch extends Managers {
 	}
 
 	/**
-	 * @param $query
+	 * @param ActiveQuery $query
 	 * @return void
 	 * @throws Throwable
 	 */
-	private function filterData($query):void {
+	private function filterData(ActiveQuery $query):void {
 		$query->andFilterWhere([self::tableName().'.id' => $this->id])
 			->andFilterWhere(['like', self::tableName().'.name', $this->name])
 			->andFilterWhere(['like', self::tableName().'.surname', $this->surname])
@@ -107,34 +107,8 @@ final class ManagersSearch extends Managers {
 			->andFilterWhere([Users::tableName().'.login' => $this->userLogin])
 			->andFilterWhere(['like', Stores::tableName().'.name', $this->store])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
+		$query->scope(Managers::class, Users::Current());
 
-		$this->filterDataByUser($query);
-	}
-
-	/**
-	 * Filters the records shown for current user
-	 * @param $query
-	 * @throws Throwable
-	 */
-	private function filterDataByUser($query):void {
-		$user = Users::Current();
-		if ($user->isAllPermissionsGranted()) {
-			return;
-		}
-		if ($user->hasPermission(['show_all_managers'])) {
-			return;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					Dealers::tableName().'.id',
-					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-				]
-			);
-		}
-		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
 
 	/**

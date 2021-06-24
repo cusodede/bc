@@ -9,13 +9,17 @@ use app\models\dealers\Dealers;
 use app\models\managers\active_record\relations\RelManagersToStores;
 use app\models\phones\PhoneNumberValidator;
 use app\models\store\Stores;
+use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use app\models\sys\users\Users;
 use app\modules\history\behaviors\HistoryBehavior;
+use pozitronik\helpers\ArrayHelper;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "managers".
@@ -40,6 +44,7 @@ use yii\db\ActiveRecord;
  */
 class ManagersAR extends ActiveRecord {
 	use ActiveRecordTrait;
+	use ActiveRecordPermissionsTrait;
 
 	public $email;
 	public $login;
@@ -207,5 +212,27 @@ class ManagersAR extends ActiveRecord {
 		}
 
 		$this->link('relatedUser', $relatedUser);
+	}
+
+	/**
+	 * Интерфейс функции установки области доступа пользователя в этой таблице
+	 * @param ActiveQueryInterface $query
+	 * @param IdentityInterface $user
+	 * @return mixed
+	 */
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+		/** @var Users $user */
+		if ($user->isAllPermissionsGranted()) {//todo: это можно вынести в базовую функцию трейта
+			return;
+		}
+		if ($user->hasPermission(['show_all_managers'])) {
+			return;
+		}
+		$manager = self::findOne(['user' => $user->id]);
+		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
+			$query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
+		} else {
+			$query->where(['0=1']);//пользователь получает сасай
+		}
 	}
 }
