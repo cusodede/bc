@@ -8,10 +8,10 @@ use GraphQL\Type\Definition\Type;
 
 /**
  * Тип для серверной валидации моделей, список ValidationErrorType
- * Class ValidationErrorsListType
+ * Class Response
  * @package app\modules\graphql\schema\types
  */
-class ValidationErrorsListType extends ObjectType
+class Response extends ObjectType
 {
 	/**
 	 * {@inheritdoc}
