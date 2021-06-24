@@ -8,10 +8,12 @@ use app\models\addresses\Addresses;
 use app\models\countries\active_record\references\RefCountries;
 use app\models\dealers\active_record\relations\RelDealersToSellers;
 use app\models\dealers\Dealers;
+use app\models\managers\Managers;
 use app\models\phones\PhoneNumberValidator;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\store\active_record\relations\RelStoresToSellers;
 use app\models\store\Stores;
+use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use app\models\sys\users\Users;
 use app\modules\history\behaviors\HistoryBehavior;
 use app\modules\status\models\traits\StatusesTrait;
@@ -19,7 +21,10 @@ use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "sellers".
@@ -59,6 +64,7 @@ use yii\db\ActiveRecord;
 class SellersAR extends ActiveRecord {
 	use ActiveRecordTrait;
 	use StatusesTrait;
+	use ActiveRecordPermissionsTrait;
 
 	public $email;
 	public $login;
@@ -321,5 +327,34 @@ class SellersAR extends ActiveRecord {
 	 */
 	public function getRefRegion():ActiveQuery {
 		return $this->hasOne(RefRegions::class, ['id' => 'area'])->via('relAddress');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+		/** @var Users $user */
+		if ($user->isAllPermissionsGranted()) {
+			return $query;
+		}
+		if ($user->hasPermission(['show_all_sellers'])) {
+			return $query;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if (null !== $manager) {
+			if ($user->hasPermission(['dealer_sellers'])) {
+				$query->joinWith(['dealers']);
+				return $query->andFilterWhere(
+					[Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
+				);
+			}
+			if ($user->hasPermission(['dealer_store_sellers'])) {
+				$query->joinWith(['stores']);
+				return $query->andFilterWhere(
+					[Stores::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
+				);
+			}
+		}
+		return $query->where(['0=1']);
 	}
 }

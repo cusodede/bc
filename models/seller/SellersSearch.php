@@ -178,43 +178,7 @@ final class SellersSearch extends Sellers {
 			->andFilterWhere([Addresses::tableName().'.building' => $this->building])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealer]);
 
-		$this->filterDataByUser($query);
-	}
-
-	/**
-	 * Filters the records shown for current user
-	 * @param $query
-	 * @throws Throwable
-	 */
-	private function filterDataByUser($query):void {
-		$user = Users::Current();
-		if ($user->isAllPermissionsGranted()) {
-			return;
-		}
-		if ($user->hasPermission(['show_all_sellers'])) {
-			return;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null !== $manager) {
-			if ($user->hasPermission(['dealer_sellers'])) {
-				$query->andFilterWhere(
-					[
-						'in',
-						Dealers::tableName().'.id',
-						ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-					]
-				);
-			} elseif ($user->hasPermission(['dealer_store_sellers'])) {
-				$query->andFilterWhere(
-					[
-						'in',
-						Stores::tableName().'.id',
-						ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')
-					]
-				);
-			}
-		}
-		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
+		$query->scope(Sellers::class, Users::Current());
 	}
 
 	/**
