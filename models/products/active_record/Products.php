@@ -20,6 +20,9 @@ use Yii;
  * @property int|null $type_id id типа (подписка, бандл и т.д)
  * @property int $user_id id пользователя, создателя
  * @property int $partner_id id партнера, к кому привязан
+ * @property string $start_date Дата начала действия продукта
+ * @property string $end_date Дата окончания действия продукта
+ * @property int $payment_period Периодичность списания
  * @property int $deleted Флаг удаления
  * @property string $created_at Дата создания продукта
  * @property string $updated_at Дата обновления партнера
@@ -47,8 +50,8 @@ class Products extends ActiveRecord
 		return [
 			[['user_id'], 'default', 'value' => Yii::$app->user->id],
 			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
-			[['type_id', 'user_id', 'partner_id', 'deleted'], 'integer'],
-			[['created_at', 'updated_at'], 'safe'],
+			[['type_id', 'user_id', 'partner_id', 'deleted', 'payment_period'], 'integer'],
+			[['start_date', 'end_date', 'created_at', 'updated_at'], 'safe'],
 			[['price'], 'number', 'min' => 0 , 'max' => 999999],
 			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
@@ -70,6 +73,9 @@ class Products extends ActiveRecord
 			'type_id' => 'Тип продукта',
 			'user_id' => 'Пользователь',
 			'partner_id' => 'Партнер',
+			'start_date' => 'Начало действия',
+			'end_date' => 'Окончания действия',
+			'payment_period' => 'Периодичность списания',
 			'deleted' => 'Флаг удаления',
 			'created_at' => 'Дата создания',
 			'updated_at' => 'Дата обновления',

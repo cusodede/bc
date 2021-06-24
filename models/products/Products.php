@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property Users $relatedUser
  * @property ProductStatuses|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read string|null $typeName именованное обозначение типа продукта.
+ * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  */
 class Products extends ActiveRecordProducts
@@ -70,7 +71,7 @@ class Products extends ActiveRecordProducts
 	/**
 	 * @return bool
 	 */
-	public function getIsSubscription(): bool
+	public function isSubscription(): bool
 	{
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}

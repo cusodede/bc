@@ -76,6 +76,6 @@ class GraphqlController extends ActiveController
 			null,
 			$variables ?: null,
 			$operation ?: null
-		)->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
+		)->toArray(YII_DEBUG ? DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE : DebugFlag::NONE);
 	}
 }
