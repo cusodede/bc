@@ -23,11 +23,11 @@ use yii\base\InvalidConfigException;
 class ProductOptions extends BaseObject
 {
 	/**
-	 * @var string|null идентификатор продукта, выдываемый партнером ivi.
+	 * @var string|null идентификатор продукта, выдаваемый партнером ivi.
 	 */
 	private ?string $_product;
 	/**
-	 * @var string|null идентификатор версии приложения, выдываемый партнером ivi (уникальное значение для каждого продукта).
+	 * @var string|null идентификатор версии приложения, выдаваемый партнером ivi (уникальное значение для каждого продукта).
 	 */
 	private ?string $_appVersion;
 	/**

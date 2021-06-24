@@ -33,7 +33,7 @@ class SignatureService
 	}
 
 	/**
-	 * Подписання строка.
+	 * Подписанная строка.
 	 * @param string $payload
 	 * @return string
 	 */
