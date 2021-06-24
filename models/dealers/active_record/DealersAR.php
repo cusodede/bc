@@ -13,11 +13,16 @@ use app\models\dealers\active_record\relations\RelDealersToStores;
 use app\models\managers\Managers;
 use app\models\seller\Sellers;
 use app\models\store\Stores;
+use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
+use app\models\sys\users\Users;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use app\modules\history\behaviors\HistoryBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "dealers".
@@ -45,6 +50,7 @@ use yii\db\ActiveRecord;
  */
 class DealersAR extends ActiveRecord {
 	use ActiveRecordTrait;
+	use ActiveRecordPermissionsTrait;
 
 	/**
 	 * @inheritDoc
@@ -187,5 +193,26 @@ class DealersAR extends ActiveRecord {
 	 */
 	public function setStores($stores):void {
 		RelDealersToStores::linkModels($this, $stores);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+		/** @var Users $user */
+		if ($user->isAllPermissionsGranted()) {
+			return $query;
+		}
+		if ($user->hasPermission(['show_all_dealers'])) {
+			return $query;
+		}
+		$manager = Managers::findOne(['user' => $user->id]);
+		if ((null !== $manager) && $user->hasPermission(['dealer_managers'])) {
+			$query->joinWith(['relatedDealersToStores']);
+			return $query->andFilterWhere(
+				[RelDealersToStores::tableName().'.dealer_id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
+			);
+		}
+		return $query->where(['0=1']);
 	}
 }

@@ -8,7 +8,6 @@ use app\models\branches\active_record\references\RefBranches;
 use app\models\dealers\active_record\DealersAR;
 use app\models\dealers\active_record\references\RefDealersGroups;
 use app\models\dealers\active_record\references\RefDealersTypes;
-use app\models\dealers\active_record\relations\RelDealersToStores;
 use app\models\managers\Managers;
 use app\models\seller\Sellers;
 use app\models\store\Stores;
@@ -16,7 +15,6 @@ use app\models\sys\users\Users;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class StoresSearch
@@ -99,7 +97,7 @@ final class DealersSearch extends DealersAR {
 			->andFilterWhere(['like', Managers::tableName().'.surname', $this->manager])
 			->andFilterWhere(['like', Sellers::tableName().'.surname', $this->seller]);
 
-		$this->filterDataByUser($query);
+		$query->scope(Dealers::class, Users::Current());
 	}
 
 	/**
@@ -115,32 +113,6 @@ final class DealersSearch extends DealersAR {
 		])
 			->distinct()
 			->active();
-	}
-
-	/**
-	 * Filters the records shown for current user
-	 * @param $query
-	 * @throws Throwable
-	 */
-	private function filterDataByUser($query):void {
-		$user = Users::Current();
-		if ($user->isAllPermissionsGranted()) {
-			return;
-		}
-		if ($user->hasPermission(['show_all_dealers'])) {
-			return;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if ((null !== $manager) && $user->hasPermission(['dealer_managers'])) {
-			$query->andFilterWhere(
-				[
-					'in',
-					RelDealersToStores::tableName().'.dealer_id',
-					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-				]
-			);
-		}
-		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
 
 	/**
