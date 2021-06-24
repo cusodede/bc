@@ -7,6 +7,8 @@ use pozitronik\references\models\CustomisableReference;
 
 /**
  * Class RefCountries
+ *
+ * @property int is_homeland Это Россия?
  */
 class RefCountries extends CustomisableReference {
 
@@ -18,5 +20,12 @@ class RefCountries extends CustomisableReference {
 	 */
 	public static function tableName():string {
 		return 'ref_countries';
+	}
+
+	/**
+	 * @return RefCountries|null
+	 */
+	public static function getHomelandCountry():?RefCountries {
+		return self::findOne(['is_homeland' => true]);
 	}
 }

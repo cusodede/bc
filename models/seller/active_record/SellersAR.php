@@ -141,6 +141,17 @@ class SellersAR extends ActiveRecord {
 			[['passport_when', 'birthday', 'entry_date'], 'date', 'format' => 'php:Y-m-d'],
 			['patronymic', 'default', 'value' => null],
 			[
+				'entry_date',
+				'required',
+				'when' => static function($model) {
+					/** @var self $model */
+					return 0 === $model->refCountry->is_homeland;
+				},
+				'whenClient' => "function() {
+					return '".RefCountries::getHomelandCountry()->id."' !== document.getElementById('sellers-citizen').value;
+				}"
+			],
+			[
 				[
 					'gender', 'is_wireman_shpd', 'deleted', 'user', 'inn', 'citizen',
 					'reg_address'
