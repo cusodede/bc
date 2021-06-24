@@ -71,7 +71,7 @@ class Products extends ActiveRecordProducts
 	/**
 	 * @return bool
 	 */
-	public function isSubscription(): bool
+	public function getIsSubscription(): bool
 	{
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}
