@@ -34,6 +34,10 @@ class Permissions extends ActiveRecordPermissions {
 	public const COMPONENT_NAME = 'permissions';
 	public const GRANT_ALL = 'grantAll';
 	public const CONTROLLER_DIRS = 'controllerDirs';
+	/*Название параметра с преднастроенными правилами доступов*/
+	public const CONFIGURATION_PERMISSIONS = 'permissions';
+	/*Перечисление назначений конфигураций через конфиги, id => ['...', '...']*/
+	public const GRANT_PERMISSIONS = 'grant';
 
 	/**
 	 * Возвращает значение конфига для компонента
@@ -48,6 +52,24 @@ class Permissions extends ActiveRecordPermissions {
 	}
 
 	/**
+	 * Вернуть список преднастроенных правил из конфига
+	 * @return self[]
+	 * @throws Throwable
+	 */
+	public static function GetConfigurationPermissions(?array $filter = null):array {
+		$permissionsConfig = self::ConfigurationParameter(self::CONFIGURATION_PERMISSIONS, []);
+		if (null !== $filter) $permissionsConfig = ArrayHelper::filter($permissionsConfig, $filter);
+		$result = [];
+		/*convert to models*/
+		foreach ($permissionsConfig as $name => $permissionConfig) {
+			$permissionConfig['name'] = $name;
+			$result[] = (new self($permissionConfig))->attributes;
+		}
+		return $result;
+	}
+
+	/**
+	 * Все доступы пользователя из БД
 	 * @param int $user_id
 	 * @param string[] $permissionFilters
 	 * @param bool $asArray
@@ -73,6 +95,19 @@ class Permissions extends ActiveRecordPermissions {
 
 		}
 		return $query->asArray($asArray)->all();
+	}
+
+	/**
+	 * Все доступы пользователя из конфига (без фильтрации, просто всё, что назначено)
+	 * @param int $user_id
+	 * @return self[]
+	 * @throws Throwable
+	 * @throws Throwable
+	 */
+	public static function allUserConfigurationPermissions(int $user_id /*, array $permissionFilters = [], bool $asArray = true*/ /*todo*/):array {
+		/** @var array $userConfigurationGrantedPermissions */
+		$userConfigurationGrantedPermissions = ArrayHelper::getValue(self::ConfigurationParameter(self::GRANT_PERMISSIONS, []), $user_id, []);
+		return self::GetConfigurationPermissions($userConfigurationGrantedPermissions);
 	}
 
 	/**

@@ -10,6 +10,7 @@ use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\api\ApiModule;
 use app\modules\history\HistoryModule;
+use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
 use app\modules\graphql\GraphqlModule;
 use kartik\dialog\DialogBootstrapAsset;
@@ -24,6 +25,7 @@ use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap4\BootstrapPluginAsset;
+use yii\caching\DummyCache;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
@@ -92,6 +94,9 @@ $config = [
 				'rules' => $statusRules
 			]
 		],
+		'notifications' => [
+			'class' => NotificationsModule::class
+		],
 		'api' => [
 			'class' => ApiModule::class
 		]
@@ -104,7 +109,7 @@ $config = [
 			]
 		],
 		'cache' => [
-			'class' => FileCache::class,
+			'class' => YII_ENV_DEV?DummyCache::class:FileCache::class,
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
@@ -155,21 +160,7 @@ $config = [
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
 			]
 		],
-		'permissions' => [
-			'class' => Permissions::class,
-			/*
-			 * Пути к расположениям контроллеров, для подсказок в выбиралках.
-			 * Формат:
-			 * 	алиас каталога => префикс id
-			 * Так проще и быстрее, чем пытаться вычислять префикс из контроллера (в нём id появляется только в момент вызова,
-			 * и зависит от множества настроек), учитывая, что это нужно только в админке, и только в выбиралке.
-			 */
-			'controllerDirs' => [
-				'@app/controllers' => '',
-				'@app/controllers/api' => 'api'
-			],
-			'grantAll' => [1]/*User ids, that receive all permissions by default*/
-		],
+		'permissions' => require __DIR__.'/permissions.php',
 		'assetManager' => [
 			'bundles' => [
 				BootstrapPluginAsset::class => [

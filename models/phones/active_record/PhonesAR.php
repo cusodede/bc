@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\phones\active_record;
 
-
 use pozitronik\helpers\DateHelper;
 use yii\db\ActiveRecord;
 

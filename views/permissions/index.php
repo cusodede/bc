@@ -57,7 +57,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}',
+				'template' => '{edit}{delete}',
 				'buttons' => [
 					'edit' => static function(string $url, Permissions $model) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [

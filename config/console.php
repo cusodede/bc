@@ -49,6 +49,7 @@ $config = [
 				],
 			],
 		],
+		'permissions' => require __DIR__.'/permissions.php',
 		'db' => $db,
 		'productTicketsQueue' => [
 			'class' => DbQueue::class,
@@ -67,7 +68,8 @@ $config = [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
 				'app\modules\status\migrations',
 				'app\modules\import\migrations',
-				'yii\queue\db\migrations',
+				'app\modules\notifications\migrations',
+				'yii\queue\db\migrations'
 			],
 		],
 	],

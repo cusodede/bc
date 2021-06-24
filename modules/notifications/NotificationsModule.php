@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\import;
+namespace app\modules\notifications;
 
 use pozitronik\core\traits\ModuleExtended;
 use yii\base\Module;
 
 /**
- * Class ImportModule
+ * Class NotificationsModule
  */
-class ImportModule extends Module {
+class NotificationsModule extends Module {
 	use ModuleExtended;
 }

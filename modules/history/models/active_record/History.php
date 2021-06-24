@@ -20,7 +20,7 @@ use yii\db\ActiveRecord;
  * @property string|null $scenario Опциональный сценарий события
  * @property string|null $event Событие, вызвавшее сохранение слепка истории
  * @property string|null $operation_identifier Уникальный идентификатор (обычно клиентский csrf), связывающий несколько последовательных изменений, происходящих в одном событии
- * @property string|null $delegate Опционально: идентификатор "перекрывающего" пользователя, если поддерживается приложением
+ * @property int|null $delegate Опционально: идентификатор "перекрывающего" пользователя, если поддерживается приложением
  */
 class History extends ActiveRecord {
 	/**
@@ -35,9 +35,9 @@ class History extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['user', 'model_key'], 'integer'],
+			[['user', 'model_key', 'delegate'], 'integer'],
 			[['old_attributes', 'new_attributes'], 'string'],
-			[['model_class', 'relation_model', 'scenario', 'event', 'operation_identifier', 'delegate'], 'string', 'max' => 255],
+			[['model_class', 'relation_model', 'scenario', 'event', 'operation_identifier'], 'string', 'max' => 255],
 		];
 	}
 
