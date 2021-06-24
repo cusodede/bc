@@ -35,7 +35,6 @@ class DefaultController extends Controller {
 
 	/**
 	 * Acknowledge user notification
-	 * @param string $id
 	 * @return string[]
 	 * @throws Throwable
 	 */
