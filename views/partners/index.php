@@ -22,7 +22,7 @@ use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\select2\Select2;
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\common\RefPartnersCategories;
 
 ModalHelperAsset::register($this);
 $this->title = 'Партнеры';

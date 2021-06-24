@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\ref_partners_categories\active_record;
+namespace app\models\common;
 
 use pozitronik\references\models\Reference;
 
@@ -11,7 +11,7 @@ use pozitronik\references\models\Reference;
  */
 class RefPartnersCategories extends Reference
 {
-	public string $menuCaption  = 'Категории партнеров';
+	public $menuCaption  = 'Категории партнеров';
 
 	/**
 	 * {@inheritdoc}

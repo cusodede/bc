@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\common\RefPartnersCategories;
 use kartik\form\ActiveForm;
 use yii\base\Model;
 use yii\web\View;

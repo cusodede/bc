@@ -10,13 +10,12 @@ use app\modules\api\tokenizers\grant_types\GrantTypeInterface;
 use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
 use app\modules\api\tokenizers\JwtTokenizer;
-use pozitronik\sys_exceptions\models\LoggedException;
-use pozitronik\sys_exceptions\models\SysExceptions;
-use Throwable;
 use Yii;
+use yii\db\Exception;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
@@ -55,8 +54,8 @@ class AuthController extends YiiRestController
 
 	/**
 	 * @return array
-	 * @throws Throwable
-	 * @throws LoggedException
+	 * @throws Exception
+	 * @throws ForbiddenHttpException
 	 */
 	public function actionToken(): array
 	{
@@ -64,15 +63,10 @@ class AuthController extends YiiRestController
 
 		$grantType = $this->getGrantType();
 		$grantType->loadRequest(Yii::$app->request);
-		try {
-			$tokenizer = new JwtTokenizer($user, $grantType);
 
-			return $tokenizer->getTokenData();
-		} catch (Throwable $e) {
-			SysExceptions::log($e, true);
-		}
+		$tokenizer = new JwtTokenizer($user, $grantType);
 
-		return [];
+		return $tokenizer->getTokenData();
 	}
 
 	/**
