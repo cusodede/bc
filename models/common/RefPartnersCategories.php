@@ -11,7 +11,7 @@ use pozitronik\references\models\Reference;
  */
 class RefPartnersCategories extends Reference
 {
-	public $menuCaption  = 'Категории партнеров';
+	public string $menuCaption  = 'Категории партнеров';
 
 	/**
 	 * {@inheritdoc}
