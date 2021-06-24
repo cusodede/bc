@@ -125,16 +125,14 @@ final class ManagersSearch extends Managers {
 			return;
 		}
 		$manager = Managers::findOne(['user' => $user->id]);
-		if (null !== $manager) {
-			if ($user->hasPermission(['manager_dealer'])) {
-				$query->andFilterWhere(
-					[
-						'in',
-						Dealers::tableName().'.id',
-						ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
-					]
-				);
-			}
+		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
+			$query->andFilterWhere(
+				[
+					'in',
+					Dealers::tableName().'.id',
+					ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')
+				]
+			);
 		}
 		throw new ForbiddenHttpException('Пользователь не авторизован на просмотр. Необходимо настроить область видимости.');
 	}
