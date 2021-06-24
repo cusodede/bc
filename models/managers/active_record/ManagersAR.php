@@ -230,10 +230,8 @@ class ManagersAR extends ActiveRecord {
 		}
 		$manager = self::findOne(['user' => $user->id]);
 		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
-			// можно делать вот такую проверку либо просто joinить буз проверки, даже если 100 раз yii делает это 1 раз
-			if (!in_array(Dealers::tableName(), $query->joinWith[0][0], true)) {
-				$query->joinWith([Dealers::tableName()]);
-			}
+			// можно делать вот такую if (!in_array('dealers', $query->joinWith[0][0], true)) проверку либо просто joinить буз проверки, даже если 100 раз yii делает это 1 раз
+			$query->joinWith(['dealers']);
 			return $query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
 		}
 		return $query->where(['0=1']);//пользователь получает сасай
