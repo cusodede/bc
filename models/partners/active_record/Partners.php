@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\partners\active_record;
 
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\common\RefPartnersCategories;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use app\models\products\active_record\Products;
