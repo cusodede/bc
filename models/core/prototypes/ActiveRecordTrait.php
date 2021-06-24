@@ -204,6 +204,9 @@ trait ActiveRecordTrait {
 		return $model;
 	}
 
+	/**
+	 * fixme ну это не
+	 */
 	public function saveAndReturn():self {
 		if (!$this->save()) {
 			throw new DomainException(
