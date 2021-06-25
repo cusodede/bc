@@ -23,7 +23,9 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
+use yii\web\JsExpression;
 
 /**
  * This is the model class for table "sellers".
@@ -148,17 +150,15 @@ class SellersAR extends ActiveRecord {
 			[
 				'entry_date',
 				'required',
-				'when' => static function($model) {//todo: разобраться с поведением при пустом справочнике стран
+				'when' => static function($model) {
 					/** @var self $model */
-//					return 0 === $model->refCountry->is_homeland;
+					return 0 === (null !== $model->refCountry?$model->refCountry->is_homeland:1);
 				},
-				/*
-				 * todo: 1) переписать проверку на js-функцию function isHomelander(ArrayHelper::getColumn(RefCountries::getHomelandCountry(),'id', []));
-				 * 2) js-функцию вынести в ассет
-				 */
-//				'whenClient' => new JsExpression("function() {
-//					return '".RefCountries::getHomelandCountry()->id."' !== document.getElementById('sellers-citizen').value;
-//				)}")
+				'whenClient' => new JsExpression("function() {
+					return isForeigner([".
+					implode(',', ArrayHelper::getColumn(RefCountries::getHomelandCountries(), 'id', [])).
+					"], document.getElementById('sellers-citizen').value)
+					}"),
 			],
 			[
 				[

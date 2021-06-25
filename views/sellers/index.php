@@ -34,8 +34,10 @@ use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use yii\web\View;
 use app\controllers\UsersController;
+use app\assets\ValidationAsset;
 
 ModalHelperAsset::register($this);
+ValidationAsset::register($this);
 ?>
 <?= GridConfig::widget([
 	'id' => "{$modelName}-index-grid",
