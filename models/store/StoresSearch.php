@@ -12,7 +12,6 @@ use app\models\seller\Sellers;
 use app\models\store\active_record\references\RefSellingChannels;
 use app\models\store\active_record\references\RefStoresTypes;
 use app\models\store\active_record\StoresAR;
-use app\models\sys\users\Users;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use Throwable;
@@ -70,6 +69,7 @@ final class StoresSearch extends StoresAR {
 	 */
 	public function search(array $params):ActiveDataProvider {
 		$query = self::find()->distinct()->active();
+		$query->scope(Stores::class);
 		$query->joinWith([
 			'sellers',
 			'managers',
@@ -112,8 +112,6 @@ final class StoresSearch extends StoresAR {
 			->andFilterWhere(['like', Sellers::tableName().'.surname', $this->seller])
 			->andFilterWhere(['like', Managers::tableName().'.surname', $this->manager])
 			->andFilterWhere(['like', Dealers::tableName().'.name', $this->dealerSearch]);
-
-		$query->scope(Stores::class, Users::Current());
 	}
 
 	/**

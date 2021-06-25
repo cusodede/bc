@@ -22,7 +22,6 @@ use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -212,29 +211,24 @@ class StoresAR extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
 		/** @var Users $user */
-		if ($user->isAllPermissionsGranted()) {
-			return $query;
-		}
-		if ($user->hasPermission(['show_all_stores'])) {
-			return $query;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null !== $manager) {
+		if ($user->isAllPermissionsGranted()) return $query;
+		if ($user->hasPermission(['show_all_stores'])) return $query;
+
+		$query->where([self::tableName().'.id' => '0']);
+
+		if (null !== $manager = Managers::findOne(['user' => $user->id])) {
 			if ($user->hasPermission(['dealer_stores'])) {
 				$query->joinWith(['dealer']);
-				return $query->andFilterWhere(
-					[Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
-				);
+				$query->orWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 			}
 			if ($user->hasPermission(['manager_store'])) {
-				return $query->andFilterWhere(
-					[self::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
-				);
+				$query->orWhere([self::tableName().'.id' => $manager->getRelatedManagersToStores()->select('store_id')]);
 			}
+
 		}
-		return $query->where([self::tableName().'.id' => '0']);
+		return $query;
 	}
 
 }
