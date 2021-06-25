@@ -218,9 +218,7 @@ class ManagersAR extends ActiveRecord {
 	public static function scope(ActiveQueryInterface $query, Users $user):ActiveQueryInterface {
 		if ($user->isAllPermissionsGranted()) return $query;
 		if ($user->hasPermission(['show_all_managers'])) return $query;
-
-		$manager = self::findOne(['user' => $user->id]);
-		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
+		if ((null !== $manager = self::findOne(['user' => $user->id])) && $user->hasPermission(['manager_dealer'])) {
 			$query->joinWith(['dealers']);
 			return $query->andFilterWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 		}
