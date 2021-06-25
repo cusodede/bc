@@ -23,11 +23,9 @@ trait ActiveRecordPermissionsTrait {
 	 */
 	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
 		/** @var Users $user */
-		if ($user->isAllPermissionsGranted()) {
-			return $query;
-		}
-
-		return $query->where([self::tableName().'.id' => '0']);
+		return ($user->isAllPermissionsGranted())
+			?$query
+			:$query->where([self::tableName().'.id' => '0']);
 	}
 
 }
