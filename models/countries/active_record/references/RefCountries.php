@@ -8,13 +8,29 @@ use pozitronik\references\models\CustomisableReference;
 /**
  * Class RefCountries
  *
- * @property int is_homeland Это Россия?
+ * @property int $is_homeland Этот флаг отвечает за упрощённую логику регистрации продавца с гражданством этой страны
  */
 class RefCountries extends CustomisableReference {
 
 	public string $menuCaption = "Справочник стран";
 
 	public $moduleId = "Страны";
+
+	/**
+	 * @inheritdoc
+	 */
+	public function rules():array {
+		return array_merge(parent::rules(), [
+			[['is_homeland'], 'bool']//теоретически, таких стран может быть много (например, упрощёнку введём для Беларуси).
+		]);
+	}
+
+	public function attributeLabels():array {
+		return array_merge(parent::attributeLabels(), [
+			'is_homeland' => 'Упрощённые правила'
+		]);
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -23,9 +39,9 @@ class RefCountries extends CustomisableReference {
 	}
 
 	/**
-	 * @return RefCountries|null
+	 * @return self[]
 	 */
-	public static function getHomelandCountry():?RefCountries {
-		return self::findOne(['is_homeland' => true]);
+	public static function getHomelandCountries():array {
+		return self::findAll(['is_homeland' => true]);
 	}
 }
