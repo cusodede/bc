@@ -201,9 +201,13 @@ class DealersAR extends ActiveRecord {
 		/** @var Users $user */
 		if ($user->isAllPermissionsGranted()) return $query;
 		if ($user->hasPermission(['show_all_dealers'])) return $query;
+
+		$query->where([self::tableName().'.id' => '0']);
+
 		if ((null !== $manager = Managers::findOne(['user' => $user->id])) && $user->hasPermission(['dealer_managers'])) {
-			return $query->andFilterWhere([self::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
+			$query->orWhere([self::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 		}
-		return $query->where([self::tableName().'.id' => '0']);
+
+		return $query;
 	}
 }

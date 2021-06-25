@@ -218,10 +218,14 @@ class ManagersAR extends ActiveRecord {
 	public static function scope(ActiveQueryInterface $query, Users $user):ActiveQueryInterface {
 		if ($user->isAllPermissionsGranted()) return $query;
 		if ($user->hasPermission(['show_all_managers'])) return $query;
+
+		$query->where([self::tableName().'.id' => '0']);//пользователь получает сасай
+
 		if ((null !== $manager = self::findOne(['user' => $user->id])) && $user->hasPermission(['manager_dealer'])) {
 			$query->joinWith(['dealers']);
-			return $query->andFilterWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
+			return $query->orWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 		}
-		return $query->where([self::tableName().'.id' => '0']);//пользователь получает сасай
+
+		return $query;
 	}
 }
