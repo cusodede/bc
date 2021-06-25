@@ -12,14 +12,12 @@ use app\models\store\Stores;
 use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use app\models\sys\users\Users;
 use app\modules\history\behaviors\HistoryBehavior;
-use pozitronik\helpers\ArrayHelper;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "managers".
@@ -217,19 +215,14 @@ class ManagersAR extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
-		/** @var Users $user */
-		if ($user->isAllPermissionsGranted()) {//todo: это можно вынести в базовую функцию трейта
-			return $query;
-		}
-		if ($user->hasPermission(['show_all_managers'])) {
-			return $query;
-		}
+	public static function scope(ActiveQueryInterface $query, Users $user):ActiveQueryInterface {
+		if ($user->isAllPermissionsGranted()) return $query;
+		if ($user->hasPermission(['show_all_managers'])) return $query;
+
 		$manager = self::findOne(['user' => $user->id]);
 		if ((null !== $manager) && $user->hasPermission(['manager_dealer'])) {
-			// можно делать вот такую if (!in_array('dealers', $query->joinWith[0][0], true)) проверку либо просто joinить буз проверки, даже если 100 раз yii делает это 1 раз
 			$query->joinWith(['dealers']);
-			return $query->andFilterWhere([Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]);//todo: возможно, тут через джойны получилось бы эффективнее.
+			return $query->andFilterWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 		}
 		return $query->where([self::tableName().'.id' => '0']);//пользователь получает сасай
 	}
