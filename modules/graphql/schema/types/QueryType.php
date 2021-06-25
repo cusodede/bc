@@ -18,14 +18,6 @@ class QueryType extends ObjectType {
 	public function __construct() {
 		parent::__construct([
 			'fields' => [
-				/**
-				 * query {
-				 *        examples {
-				 *            id,
-				 *            username
-				 *        }
-				 *    }
-				 */
 				'examples' => [
 					'type' => Type::listOf(Types::example()),
 					'args' => [
@@ -38,14 +30,6 @@ class QueryType extends ObjectType {
 						];
 					}
 				],
-				/**
-				 * query {
-				 *        example(id: 10) {
-				 *            id,
-				 *            username
-				 *        },
-				 *    }
-				 */
 				'example' => [
 					'type' => Types::example(),
 					'args' => [
