@@ -21,7 +21,6 @@ use app\modules\history\behaviors\HistoryBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
