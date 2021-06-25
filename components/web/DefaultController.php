@@ -22,6 +22,7 @@ use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -285,6 +286,7 @@ class DefaultController extends Controller {
 	 * @param string|null $concatFields Это список полей для конкатенации. Если этот параметр передан, то вернем
 	 * результат CONCAT() для этих полей вместо поля параметра $column
 	 * @return string[][]
+	 * @throws ForbiddenHttpException
 	 */
 	public function actionAjaxSearch(?string $term, string $column = 'name', string $concatFields = null):array {
 		$out = [
