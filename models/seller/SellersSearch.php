@@ -7,7 +7,6 @@ use app\models\addresses\Addresses;
 use app\models\countries\active_record\references\RefCountries;
 use app\components\db\ActiveQuery;
 use app\models\dealers\Dealers;
-use app\models\managers\Managers;
 use app\models\regions\active_record\references\RefRegions;
 use app\models\store\Stores;
 use app\models\sys\users\Users;
@@ -16,7 +15,6 @@ use app\modules\status\models\StatusRulesModel;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use Throwable;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class StoresSearch
