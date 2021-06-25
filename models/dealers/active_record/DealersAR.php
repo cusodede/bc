@@ -198,20 +198,12 @@ class DealersAR extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
 		/** @var Users $user */
-		if ($user->isAllPermissionsGranted()) {
-			return $query;
-		}
-		if ($user->hasPermission(['show_all_dealers'])) {
-			return $query;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if ((null !== $manager) && $user->hasPermission(['dealer_managers'])) {
-			$query->joinWith(['relatedDealersToStores']);
-			return $query->andFilterWhere(
-				[RelDealersToStores::tableName().'.dealer_id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
-			);
+		if ($user->isAllPermissionsGranted()) return $query;
+		if ($user->hasPermission(['show_all_dealers'])) return $query;
+		if ((null !== $manager = Managers::findOne(['user' => $user->id])) && $user->hasPermission(['dealer_managers'])) {
+			return $query->andFilterWhere([self::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 		}
 		return $query->where([self::tableName().'.id' => '0']);
 	}
