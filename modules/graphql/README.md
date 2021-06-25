@@ -1,6 +1,6 @@
 ### queries
 
-```code
+```code json
 query {
     examples {
         id,
@@ -93,9 +93,16 @@ mutation {
     "data": {
         "example": {
             "update": {
-                "result": true,
-                "message": "Партнер успешно сохранен",
-                "errors": []
+                "result": false,
+                "message": "Ошибка сохранения партнера",
+                "errors": [
+                    {
+                        "field": "username",
+                        "messages": [
+                            "Пример ответа с ошибкой в поле"
+                        ]
+                    }
+                ]
             }
         }
     }

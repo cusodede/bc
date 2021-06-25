@@ -33,7 +33,9 @@ class ExampleMutationType extends ObjectType implements MutationInterface {
 					'resolve' => function(array $argsFromMutationType, array $args) {
 						$existentUser = new Users(['id' => $argsFromMutationType['id']]);
 						$existentUser->load($args);
-						return $this->getResult(true, [], self::MESSAGES);
+						return $this->getResult(false, [
+							'username' => ['Пример ответа с ошибкой в поле']
+						], self::MESSAGES);
 					},
 				],
 				'create' => [
