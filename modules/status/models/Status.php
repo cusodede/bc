@@ -99,7 +99,7 @@ class Status extends ActiveRecord {
 		$attributes = self::ExtractModelIdentifiers($model);
 		$currentStatus = self::getInstance($attributes);
 		if ($currentStatus->isNewRecord) {
-			$currentStatus->loadArray($attributes);
+			$currentStatus->load($attributes, '');
 		}
 		$currentStatus->status = $status;
 		$currentStatus->daddy = Users::Current()->id;
