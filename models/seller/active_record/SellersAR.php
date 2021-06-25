@@ -23,7 +23,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -149,13 +148,17 @@ class SellersAR extends ActiveRecord {
 			[
 				'entry_date',
 				'required',
-				'when' => static function($model) {
+				'when' => static function($model) {//todo: разобраться с поведением при пустом справочнике стран
 					/** @var self $model */
-					return 0 === $model->refCountry->is_homeland;
+//					return 0 === $model->refCountry->is_homeland;
 				},
-				'whenClient' => "function() {
-					return '".RefCountries::getHomelandCountry()->id."' !== document.getElementById('sellers-citizen').value;
-				}"
+				/*
+				 * todo: 1) переписать проверку на js-функцию function isHomelander(ArrayHelper::getColumn(RefCountries::getHomelandCountry(),'id', []));
+				 * 2) js-функцию вынести в ассет
+				 */
+//				'whenClient' => new JsExpression("function() {
+//					return '".RefCountries::getHomelandCountry()->id."' !== document.getElementById('sellers-citizen').value;
+//				)}")
 			],
 			[
 				[
@@ -332,29 +335,23 @@ class SellersAR extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public static function scope(ActiveQueryInterface $query, IdentityInterface $user) {
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
 		/** @var Users $user */
-		if ($user->isAllPermissionsGranted()) {
-			return $query;
-		}
-		if ($user->hasPermission(['show_all_sellers'])) {
-			return $query;
-		}
-		$manager = Managers::findOne(['user' => $user->id]);
-		if (null !== $manager) {
+		if ($user->isAllPermissionsGranted()) return $query;
+		if ($user->hasPermission(['show_all_sellers'])) return $query;
+
+		$query->where([self::tableName().'.id' => '0']);
+
+		if (null !== $manager = Managers::findOne(['user' => $user->id])) {
 			if ($user->hasPermission(['dealer_sellers'])) {
 				$query->joinWith(['dealers']);
-				return $query->andFilterWhere(
-					[Dealers::tableName().'.id' => ArrayHelper::getColumn($manager->relatedDealersToManagers, 'dealer_id')]
-				);
+				$query->orWhere([Dealers::tableName().'.id' => $manager->getRelatedDealersToManagers()->select('dealer_id')]);
 			}
 			if ($user->hasPermission(['dealer_store_sellers'])) {
 				$query->joinWith(['stores']);
-				return $query->andFilterWhere(
-					[Stores::tableName().'.id' => ArrayHelper::getColumn($manager->relatedManagersToStores, 'store_id')]
-				);
+				$query->orWhere([Stores::tableName().'.id' => $manager->getRelatedManagersToStores()->select('store_id')]);
 			}
 		}
-		return $query->where([self::tableName().'.id' => '0']);
+		return $query;
 	}
 }
