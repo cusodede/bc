@@ -25,8 +25,8 @@ class QueryType extends ObjectType {
 					],
 					'resolve' => function($root, $args) {
 						return [
-							new Users(['id' => $r1 = mt_rand(1, 10), 'username' => "hello$r1"]),
-							new Users(['id' => $r2 = mt_rand(11, 20), 'username' => "hello$r2"]),
+							new Users(['id' => $r1 = random_int(1, 10), 'username' => "hello$r1"]),
+							new Users(['id' => $r2 = random_int(11, 20), 'username' => "hello$r2"]),
 						];
 					}
 				],
