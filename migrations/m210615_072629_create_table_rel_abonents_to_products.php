@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-use pozitronik\core\models\RelationMigration;
+use pozitronik\relations\models\RelationMigration;
 
 /**
 * Class m210615_072629_create_table_rel_abonents_to_products
