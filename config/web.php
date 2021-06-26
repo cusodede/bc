@@ -8,6 +8,7 @@ use app\assets\SmartAdminThemeAssets;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
+use app\modules\graphql\GraphqlModule;
 use app\modules\history\HistoryModule;
 use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
@@ -92,6 +93,9 @@ $config = [
 		'notifications' => [
 			'class' => NotificationsModule::class
 		],
+		'graphql' => [
+			'class' => GraphqlModule::class
+		]
 	],
 	'components' => [
 		'request' => [
