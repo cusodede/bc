@@ -18,12 +18,16 @@ use yii\web\JsExpression;
  * Надстройка над Select2, работающая с кастомизированными ActiveRecord-моделями (в основном -- справочниками).
  *
  * @property string $selectModelClass Класс модели, по которой будем выбирать данные
- * @property-read  ActiveRecordInterface $selectModel Загруженная модель
+ * @property-read ActiveRecordInterface $selectModel Загруженная модель
  *
  * @property ActiveRecord $model Перекрываем описание атрибута модели
  * @property array $exclude Записи, исключаемые из выборки. Массив id, либо массив элементов
  * @property ActiveQuery $selectionQuery Переопределение запроса, если нужны какие-то модификации, но не нужно передавать данные в $data
  * @property string $mapAttribute Названия атрибута, который будет отображаться на выбиралку
+ * @property string $searchAttribute Поле по, которому будет производиться поиск. Если не передан, то поиск будет
+ * производиться по $mapAttribute
+ * @property string $concatFields Список полей для конкатенации ответа. Например, ФИО хранится в 3 полей, ищем по
+ * фамилию. Поиск должен вернуть только фамилию, но передав тут 'surname, name, patronymic', получим полное ФИО
  * @property string|null $pkName Имя ключевого атрибута модели, если не указано -- подберётся автоматически
  * @property int $ajaxMinimumInputLength Количество символов для старта поиска при аксовом режиме
  * @property string $ajaxSearchUrl Путь к экшену ajax-поиска.
@@ -47,6 +51,8 @@ class SelectModelWidget extends Select2 {
 	public $selectionQuery;
 	public $exclude = [];
 	public $mapAttribute = 'name';
+	public $searchAttribute;
+	public $concatFields;
 	public $ajaxMinimumInputLength = 1;
 	public $ajaxSearchUrl;
 
@@ -73,13 +79,20 @@ class SelectModelWidget extends Select2 {
 	 * AJAX parameters generator
 	 */
 	private function initAjax():void {
+		if ($this->searchAttribute) {
+			$column = "column: '{$this->searchAttribute}', ";
+		} else {
+			$column = 'name' === $this->mapAttribute?null:"column: '{$this->mapAttribute}', ";
+		}
+		$concat = $this->concatFields?"concatFields: '{$this->concatFields}', ":null;
 		$this->ajaxPluginOptions = [
 			'minimumInputLength' => $this->ajaxMinimumInputLength,
 			'initValueText' => $this->initAjaxValueText(),
 			'ajax' => [
 				'url' => $this->ajaxSearchUrl,
 				'dataType' => 'json',
-				'data' => new JsExpression("function(params) { return {term:params.term, page: params.page}; }"),
+				'data' => new JsExpression("function(params) { return {term:params.term, ".
+					$column.$concat."page: params.page}; }"),
 				'cache' => true
 			]
 		];
@@ -87,9 +100,9 @@ class SelectModelWidget extends Select2 {
 
 	/**
 	 * Генерирует набор данных для подстановки в выбиралку без загрузки. При self::DATA_MODE_AJAX используется для подстановки данных в уже имеющиеся значения (см. self::initAjaxValueText())
-	 * @param array|null $filterValue - если указано, то выборка скукожится только до переданного значения
+	 * @param $filterValue - если указано, то выборка скукожится только до переданного значения
 	 */
-	private function initData(?array $filterValue = null):void {
+	private function initData($filterValue = null):void {
 		if ([] === $this->data) {
 			if (null === $this->selectionQuery) $this->selectionQuery = $this->_selectModel::find();
 			if (is_array($this->exclude) && [] !== $this->exclude) {
@@ -100,7 +113,11 @@ class SelectModelWidget extends Select2 {
 			}
 
 			if (null !== $filterValue) {
+				if (is_array($filterValue)) {
 				$this->selectionQuery->andWhere(['in', $this->pkName, $filterValue]);
+				} else {
+					$this->selectionQuery->andWhere(['id' => $filterValue]);
+				}
 			}
 			$this->data = ArrayHelper::map($this->selectionQuery->all(), $this->pkName, $this->mapAttribute);
 		}
@@ -126,7 +143,7 @@ class SelectModelWidget extends Select2 {
 		parent::init();
 		SelectModelWidgetAssets::register($this->getView());
 
-		$this->pkName = $this->pkName??$this->selectModel::primaryKey();
+		$this->pkName = $this->pkName??$this->selectModel::primaryKey()[0];
 		if (null === $this->pkName) {
 			throw new InvalidConfigException("{$this->selectModel} must have primary key and it should not be composite");
 		}
