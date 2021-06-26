@@ -5,7 +5,9 @@ namespace app\components\web;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\core\prototypes\EditableFieldAction;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
+use app\models\sys\users\Users;
 use app\modules\import\models\ImportAction;
 use app\modules\import\models\ProcessImportAction;
 use pozitronik\helpers\ControllerHelper;
@@ -20,6 +22,7 @@ use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -64,7 +67,7 @@ class DefaultController extends Controller {
 	 * @return string
 	 */
 	public static function Title():string {
-		return static::DEFAULT_TITLE??self::ExtractControllerId(static::class);
+		return static::DEFAULT_TITLE??ControllerHelper::ExtractControllerId(static::class);
 	}
 
 	/**

@@ -82,8 +82,6 @@ trait StatusesTrait {
 	/**
 	 * @param int $status
 	 * @return bool
-	 * @throws InvalidConfigException
-	 * @throws StaleObjectException
 	 * @throws Throwable
 	 *
 	 * Не совсем красиво, что присвоение статуса проксифицируется сюда (дублируются проверки), но пока не заморачиваюсь.

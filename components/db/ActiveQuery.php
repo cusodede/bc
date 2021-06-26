@@ -5,6 +5,7 @@ namespace app\components\db;
 
 use app\models\sys\users\Users;
 use pozitronik\traits\models\ActiveQuery as VendorActiveQuery;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Trait ActiveQueryTrait

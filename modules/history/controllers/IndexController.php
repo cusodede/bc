@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\history\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\history\models\ActiveRecordHistory;
 use app\modules\history\models\HistorySearch;
 use Throwable;
