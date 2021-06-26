@@ -8,7 +8,7 @@ use app\models\core\prototypes\EditableFieldAction;
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\modules\import\models\ImportAction;
 use app\modules\import\models\ProcessImportAction;
-use pozitronik\core\helpers\ControllerHelper;
+use pozitronik\helpers\ControllerHelper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Throwable;
