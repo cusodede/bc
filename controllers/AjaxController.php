@@ -38,6 +38,9 @@ class AjaxController extends Controller {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		];
 	}

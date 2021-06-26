@@ -18,6 +18,17 @@ class DbController extends Controller {
 	use ControllerTrait;
 
 	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+	}
+
+	/**
 	 * Список процессов на базе данных
 	 * @return string
 	 * @throws Throwable

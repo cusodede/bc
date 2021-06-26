@@ -13,6 +13,17 @@ class ServiceController extends Controller {
 	use ControllerTrait;
 
 	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+	}
+
+	/**
 	 * @return string
 	 */
 	public function actionIndex():string {

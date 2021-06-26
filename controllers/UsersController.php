@@ -20,6 +20,8 @@ use yii\web\Response;
  */
 class UsersController extends DefaultController {
 
+	protected const DEFAULT_TITLE = "Пользователи";
+
 	/**
 	 * Поисковая модель пользователя
 	 * @var string
