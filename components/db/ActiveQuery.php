@@ -6,6 +6,7 @@ namespace app\components\db;
 use app\models\sys\users\Users;
 use yii\db\ActiveQuery as YiiActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Trait ActiveQueryTrait
@@ -29,11 +30,13 @@ class ActiveQuery extends YiiActiveQuery {
 	/**
 	 * Возвращает область видимости пользователя $user для модели $modelClass (если та реализует метод self::scope);
 	 * @param string|object $modelObjectOrClass
-	 * @param Users $user
+	 * @param ?Users $user
 	 * @return $this
+	 * @throws ForbiddenHttpException
 	 */
-	public function scope(string $modelObjectOrClass, Users $user):self {
+	public function scope(string $modelObjectOrClass, ?Users $user = null):self {
 		if (method_exists($modelObjectOrClass, 'scope')) {
+			$user = $user??Users::Current();
 			return ($modelObjectOrClass::scope($this, $user));
 		}
 

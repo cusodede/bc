@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\traits;
 
+use app\models\sys\users\Users;
 use yii\db\ActiveQueryInterface;
 use yii\web\IdentityInterface;
+use Throwable;
 
 /**
  * Trait ActiveRecordPermissionsTrait
@@ -17,7 +19,13 @@ trait ActiveRecordPermissionsTrait {
 	 * @param ActiveQueryInterface $query
 	 * @param IdentityInterface $user
 	 * @return mixed
+	 * @throws Throwable
 	 */
-	abstract public static function scope(ActiveQueryInterface $query, IdentityInterface $user);
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
+		/** @var Users $user */
+		return ($user->isAllPermissionsGranted())
+			?$query
+			:$query->where([self::tableName().'.id' => '0']);
+	}
 
 }
