@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\history\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\history\models\ActiveRecordHistory;
 use app\modules\history\models\HistorySearch;
 use Throwable;
@@ -16,6 +17,17 @@ use yii\web\NotFoundHttpException;
  * Class IndexController
  */
 class IndexController extends Controller {
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+	}
 
 	/**
 	 * @return string
