@@ -15,11 +15,13 @@ class ActiveQuery extends VendorActiveQuery {
 	/**
 	 * Возвращает область видимости пользователя $user для модели $modelClass (если та реализует метод self::scope);
 	 * @param string|object $modelObjectOrClass
-	 * @param Users $user
+	 * @param ?Users $user
 	 * @return $this
+	 * @throws ForbiddenHttpException
 	 */
-	public function scope(string $modelObjectOrClass, Users $user):self {
+	public function scope(string $modelObjectOrClass, ?Users $user = null):self {
 		if (method_exists($modelObjectOrClass, 'scope')) {
+			$user = $user??Users::Current();
 			return ($modelObjectOrClass::scope($this, $user));
 		}
 
