@@ -204,4 +204,14 @@ trait ActiveRecordTrait {
 		return $model;
 	}
 
+	/**
+	 * Возвращает существующую запись в ActiveRecord-модели, найденную по условию, если же такой записи нет - возвращает новую модель
+	 * @param array|string $searchCondition
+	 * @return ActiveRecord|self
+	 */
+	public static function getInstance($searchCondition):self {
+		$instance = static::find()->where($searchCondition)->one();
+		return $instance??new static();
+	}
+
 }
