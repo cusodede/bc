@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\api;
 
+use pozitronik\traits\traits\ModuleTrait;
 use Yii;
 use yii\base\Module as YiiBaseModule;
 use yii\web\Response;
-use pozitronik\core\traits\ModuleExtended;
 use app\modules\api\error\ErrorHandler as ApiErrorHandler;
 
 /**
@@ -15,7 +15,7 @@ use app\modules\api\error\ErrorHandler as ApiErrorHandler;
  */
 class ApiModule extends YiiBaseModule
 {
-	use ModuleExtended;
+	use ModuleTrait;
 
 	/**
 	 * {@inheritdoc}

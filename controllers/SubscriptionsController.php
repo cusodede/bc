@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\core\prototypes\DefaultController;
+use app\components\db\ActiveRecordTrait;
+use app\components\web\DefaultController;
 use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\SubscriptionsSearch;
 use Throwable;
