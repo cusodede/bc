@@ -23,6 +23,7 @@ class Yii extends BaseYii {
  * Used for properties that are identical for both WebApplication and ConsoleApplication
  *
  * @property WebUser $user
+ * @property Queue $queue
  */
 abstract class BaseApplication extends yii\base\Application {
 
