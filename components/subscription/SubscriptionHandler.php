@@ -39,7 +39,7 @@ abstract class SubscriptionHandler extends Component
 
 	/**
 	 * Подключение подписки по продукту для заданного абонента.
-	 * При успешном выполнии операции - фиксируем новый статус в журнале статусов.
+	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
 	 * @param int $abonentId
 	 */
 	final public function provide(int $abonentId): void
@@ -52,7 +52,7 @@ abstract class SubscriptionHandler extends Component
 
 	/**
 	 * Отключение подписки по продукту для заданного абонента.
-	 * При успешном выполнии операции - фиксируем новый статус в журнале статусов.
+	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
 	 * @param int $abonentId
 	 */
 	final public function revoke(int $abonentId): void
