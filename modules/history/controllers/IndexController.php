@@ -18,6 +18,17 @@ use yii\web\NotFoundHttpException;
 class IndexController extends Controller {
 
 	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+	}
+
+	/**
 	 * @return string
 	 * @throws Throwable
 	 */
