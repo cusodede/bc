@@ -17,7 +17,7 @@ trait ActiveRecordPermissionsTrait {
 	/**
 	 * Интерфейс функции установки области доступа пользователя в этой таблице
 	 * @see ActiveQueryPermissionsTrait::scope()
-	 * @param ActiveQueryInterface $query
+	 * @param ActiveQueryInterface|ActiveQueryPermissionsTrait $query
 	 * @param IdentityInterface $user
 	 * @return mixed
 	 * @throws Throwable
