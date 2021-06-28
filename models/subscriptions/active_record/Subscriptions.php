@@ -16,7 +16,8 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int $product_id id продукта
- * @property int $trial_days_count
+ * @property int $trial_count Количество триального периода
+ * @property int $units Единицы измерения триального периода
  *
  * @property Products $product
  */
@@ -39,9 +40,11 @@ class Subscriptions extends ActiveRecord
 	{
 		return [
 			[['product_id'], 'required', 'message' => 'Выберите {attribute}'],
-			[['product_id', 'trial_days_count'], 'integer'],
+			[['product_id', 'trial_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['trial_days_count'], 'default', 'value' => 0],
+			[['trial_count'], 'default', 'value' => 0],
+			[['units'], 'default', 'value' => 'days'],
+			[['units'], 'string', 'max' => 10],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 			['product', RelationValidator::class],
 		];
@@ -55,7 +58,8 @@ class Subscriptions extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'product_id' => 'Продукт',
-			'trial_days_count' => 'Количество пробных дней',
+			'trial_count' => 'Количество триального периода',
+			'units' => 'Единица измерения',
 		];
 	}
 

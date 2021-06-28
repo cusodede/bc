@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value' => 'product.price',
 				'label' => 'Стоимость'
 			],
-			'trial_days_count',
+			'trial_count',
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'product.created_at',

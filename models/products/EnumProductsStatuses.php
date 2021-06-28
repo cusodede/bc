@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace app\models\products;
 
 use yii\helpers\ArrayHelper;
+use Exception;
 
 /**
  * Class EnumProductsStatuses
@@ -21,6 +22,11 @@ class EnumProductsStatuses
 		self::STATUS_DISABLED => 'Отключено',
 	];
 
+	/**
+	 * @param int $statusId
+	 * @return string|null
+	 * @throws Exception
+	 */
 	public static function getStatusName(int $statusId): ?string
 	{
 		return ArrayHelper::getValue(self::STATUSES, $statusId);

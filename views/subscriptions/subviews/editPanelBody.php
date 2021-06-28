@@ -46,7 +46,7 @@ use kartik\touchspin\TouchSpin;
 
 <div class="row">
 	<div class="col-md-4">
-		<?= $form->field($model, 'trial_days_count')->widget(TouchSpin::class) ?>
+		<?= $form->field($model, 'trial_count')->widget(TouchSpin::class) ?>
 	</div>
 </div>
 

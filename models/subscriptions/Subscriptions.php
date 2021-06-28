@@ -22,7 +22,7 @@ class Subscriptions extends ActiveRecordSubscriptions
 	{
 		return ArrayHelper::merge(parent::scenarios(), [
 			// Валидация только нужных атрибутов, при создании/обновлении ajax
-			self::SCENARIO_CREATE_AJAX => ['trial_days_count'],
+			self::SCENARIO_CREATE_AJAX => ['trial_count', 'units'],
 		]);
 	}
 }

@@ -33,7 +33,7 @@ class ProductFormatter implements ProductFormatterInterface
 				'subscription' => 'actualStatus'
 			],
 			Subscriptions::class => [
-				'trial_days_count'
+				'trial_count'
 			],
 			Partners::class => [
 				'name',

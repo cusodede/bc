@@ -28,6 +28,7 @@ class Types
 	private static ?PartnerType $partner = null;
 	private static ?PartnerMutationType $partnerMutation = null;
 	private static ?PartnerCategoryType $partnerCategory = null;
+	private static ?ProductType $product = null;
 
 	/**
 	 * Запрос
@@ -109,5 +110,14 @@ class Types
 	public static function partnerCategory(): PartnerCategoryType
 	{
 		return static::$partnerCategory ?: static::$partnerCategory = new PartnerCategoryType();
+	}
+
+	/**
+	 * Продукты
+	 * @return ProductType
+	 */
+	public static function product(): ProductType
+	{
+		return static::$product ?: static::$product = new ProductType();
 	}
 }
