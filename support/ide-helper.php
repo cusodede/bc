@@ -1,4 +1,5 @@
 <?php
+/** @noinspection EmptyClassInspection */
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 declare(strict_types = 1);
 
@@ -27,7 +28,6 @@ class Yii extends BaseYii {
  * @property WebUser $user
  * @property-read Jwt $jwt
  * @property-read DbQueue $productTicketsQueue
- * @property Queue $queue
  */
 abstract class BaseApplication extends yii\base\Application {
 
