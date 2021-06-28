@@ -73,6 +73,9 @@ class PartnerType extends ObjectType implements TypeInterface
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getOneOfType(): array
 	{
 		return [

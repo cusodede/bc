@@ -23,6 +23,7 @@ class QueryType extends ObjectType
 				'partnerCategory' => PartnerCategoryType::getOneOfType(),
 				'partnersCategories' => PartnerCategoryType::getListOfType(),
 				'products' => ProductType::getListOfType(),
+				'product' => ProductType::getOneOfType(),
 			],
 		]);
 	}

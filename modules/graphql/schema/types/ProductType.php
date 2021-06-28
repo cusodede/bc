@@ -88,8 +88,18 @@ class ProductType extends ObjectType implements TypeInterface
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getOneOfType(): array
 	{
-		return [];
+		return [
+			'type' => Types::product(),
+			'args' => [
+				'id' => Type::nonNull(Type::int()),
+			],
+			'resolve' => fn(Products $product = null, array $args = []): ?Products
+				=> Products::find()->where($args)->active()->one(),
+		];
 	}
 }
