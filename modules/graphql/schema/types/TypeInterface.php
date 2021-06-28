@@ -16,5 +16,9 @@ interface TypeInterface
 	 */
 	public static function getListOfType(): array;
 
+	/**
+	 * Одна сущность
+	 * @return array
+	 */
 	public static function getOneOfType(): array;
 }
