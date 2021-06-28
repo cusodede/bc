@@ -11,7 +11,7 @@ use app\modules\graphql\schema\types\Types;
  * Class PartnerMutationType
  * @package app\modules\graphql\schema\mutations
  */
-class PartnerMutationType extends MutationType
+final class PartnerMutationType extends MutationType
 {
 	use MutationTrait;
 
