@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types;
 
+use app\models\ref_partners_categories\active_record\RefPartnersCategories;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -11,8 +12,11 @@ use GraphQL\Type\Definition\Type;
  * Class PartnerCategoryType
  * @package app\modules\graphql\schema\types
  */
-class PartnerCategoryType extends ObjectType
+class PartnerCategoryType extends ObjectType implements TypeInterface
 {
+	/**
+	 * PartnerCategoryType constructor.
+	 */
 	public function __construct()
 	{
 		parent::__construct([
@@ -27,5 +31,32 @@ class PartnerCategoryType extends ObjectType
 				],
 			],
 		]);
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function getListOfType(): array
+	{
+		return [
+			'type' => Type::listOf(Types::partnerCategory()),
+			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?array
+				=> RefPartnersCategories::find()->where($args)->active()->all(),
+		];
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function getOneOfType(): array
+	{
+		return [
+			'type' => Types::partnerCategory(),
+			'args' => [
+				'id' => Type::nonNull(Type::int()),
+			],
+			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?RefPartnersCategories
+				=> RefPartnersCategories::find()->where($args)->active()->one(),
+		];
 	}
 }

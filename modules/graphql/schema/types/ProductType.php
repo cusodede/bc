@@ -87,4 +87,9 @@ class ProductType extends ObjectType implements TypeInterface
 				=> Products::find()->where($args)->active()->all(),
 		];
 	}
+
+	public static function getOneOfType(): array
+	{
+		return [];
+	}
 }

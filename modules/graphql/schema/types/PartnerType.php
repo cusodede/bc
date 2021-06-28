@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types;
 
-use app\models\partners\active_record\Partners;
+use app\models\partners\Partners;
+use app\models\partners\PartnersSearch;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -11,7 +12,7 @@ use GraphQL\Type\Definition\Type;
  * Class PartnerType
  * @package app\modules\graphql\schema\types
  */
-class PartnerType extends ObjectType
+class PartnerType extends ObjectType implements TypeInterface
 {
 	/**
 	 * {@inheritdoc}
@@ -55,5 +56,32 @@ class PartnerType extends ObjectType
 				],
 			],
 		]);
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function getListOfType(): array
+	{
+		return [
+			'type' => Type::listOf(Types::partner()),
+			'args' => [
+				'search' => Type::string(),
+			],
+			'resolve' => fn(Partners $partner = null, array $args = []): ?array
+				=> PartnersSearch::searchWithParams($args),
+		];
+	}
+
+	public static function getOneOfType(): array
+	{
+		return [
+			'type' => Types::partner(),
+			'args' => [
+				'id' => Type::nonNull(Type::int()),
+			],
+			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
+				=> Partners::find()->where($args)->active()->one(),
+		];
 	}
 }
