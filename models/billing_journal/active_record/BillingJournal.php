@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\billing_journal\active_record;
 
+use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_record\RelAbonentsToProducts;
-use app\models\core\prototypes\ActiveRecordTrait;
 use Exception;
 use pozitronik\helpers\Utils;
 use yii\db\ActiveQuery;

@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_query;
 
-use pozitronik\core\models\LCQuery;
+
+use app\components\db\ActiveQuery;
 
 /**
  * Class AbonentsActiveQuery
  * @package app\models\abonents\active_query
  */
-class AbonentsActiveQuery extends LCQuery
+class AbonentsActiveQuery extends ActiveQuery
 {
 	private string $_alias;
 

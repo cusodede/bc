@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use pozitronik\core\traits\ControllerTrait;
+use app\models\sys\permissions\filters\PermissionFilter;
+use pozitronik\traits\traits\ControllerTrait;
 use yii\web\Controller;
 
 /**
@@ -11,6 +12,17 @@ use yii\web\Controller;
  */
 class ServiceController extends Controller {
 	use ControllerTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function behaviors():array {
+		return [
+			'access' => [
+				'class' => PermissionFilter::class
+			]
+		];
+	}
 
 	/**
 	 * @return string

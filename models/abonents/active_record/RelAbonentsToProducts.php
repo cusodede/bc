@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_record;
 
+use app\components\db\ActiveRecordTrait;
 use app\models\billing_journal\active_record\BillingJournal;
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\products\active_record\Products;
 use app\models\products\active_record\ProductStatuses;
-use pozitronik\core\traits\Relations;
+use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -25,7 +25,7 @@ use yii\db\ActiveRecord;
  */
 class RelAbonentsToProducts extends ActiveRecord
 {
-	use Relations;
+	use RelationsTrait;
 	use ActiveRecordTrait;
 
 	/**

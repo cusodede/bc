@@ -48,15 +48,29 @@ class RestorePasswordForm extends Model {
 			$restoreCode = Users::generateSalt();
 			$user->restore_code = $restoreCode;
 			if (!$user->save()) return;
-			Yii::$app->mailer->compose('site/restore-password', [
+			self::sendRestoreMail('site/restore-password', $user, 'Запрос восстановления пароля');
+		}
+	}
+
+	/**
+	 * @param $view
+	 * @param $user
+	 * @param $subject
+	 * @return void
+	 */
+	public static function sendRestoreMail($view, $user, $subject):void {
+		Yii::$app->mailer->compose($view, [
 				'user' => $user,
-				'restoreUrl' => SiteController::to('reset-password', ['code' => $user->restore_code], true)
+			'restoreUrl' => SiteController::to(
+				'reset-password',
+				['code' => $user->restore_code],
+				true
+			)
 			])
 				->setFrom('todo@config.param')/*todo*/
 				->setTo($user->email)
-				->setSubject('Запрос восстановления пароля')
+			->setSubject($subject)
 				->send();
 		}
-	}
 
 }

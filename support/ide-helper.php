@@ -1,4 +1,5 @@
 <?php
+/** @noinspection EmptyClassInspection */
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 declare(strict_types = 1);
 

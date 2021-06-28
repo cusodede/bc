@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
@@ -19,6 +19,8 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends DefaultController {
+
+	protected const DEFAULT_TITLE = "Пользователи";
 
 	/**
 	 * Поисковая модель пользователя

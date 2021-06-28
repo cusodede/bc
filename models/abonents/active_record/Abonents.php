@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_record;
 
+use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_query\AbonentsActiveQuery;
-use app\models\core\prototypes\ActiveRecordTrait;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
