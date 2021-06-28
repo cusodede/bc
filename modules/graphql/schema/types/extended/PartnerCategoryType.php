@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\schema\types\extended;
 
 use app\models\common\RefPartnersCategories;
+use app\modules\graphql\schema\types\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 

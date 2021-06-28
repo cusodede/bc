@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\schema\types\extended;
 
 /**
  * Интерфейс для типов GraphQL
