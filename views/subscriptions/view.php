@@ -24,7 +24,8 @@ use yii\widgets\DetailView;
 			'attribute' => 'product.price',
 			'label' => 'Стоимость',
 		],
-		'trial_days_count',
+		'trial_count',
+		'units',
 		[
 			'attribute' => 'product.partner.category.name',
 			'label' => 'Категория',

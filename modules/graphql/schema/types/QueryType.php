@@ -51,6 +51,7 @@ class QueryType extends ObjectType
 					'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?array
 						=> RefPartnersCategories::find()->where($args)->active()->all(),
 				],
+				'products' => ProductType::getListOfType(),
 			],
 		]);
 	}
