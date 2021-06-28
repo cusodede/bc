@@ -15,4 +15,6 @@ interface TypeInterface
 	 * @return array
 	 */
 	public static function getListOfType(): array;
+
+	public static function getOneOfType(): array;
 }
