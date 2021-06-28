@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\partners\active_record;
 
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\components\db\ActiveRecordTrait;
+use app\models\common\RefPartnersCategories;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use app\models\products\active_record\Products;
@@ -27,6 +28,7 @@ use app\models\products\active_record\Products;
  */
 class Partners extends ActiveRecord
 {
+	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */

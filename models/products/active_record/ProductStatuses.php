@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\products\active_record;
 
+use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_record\RelAbonentsToProducts;
-use app\models\core\prototypes\ActiveRecordTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
+use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -25,6 +26,7 @@ class AbonentsSearch extends Abonents
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws InvalidConfigException
 	 */
 	public function search(array $params): ActiveDataProvider
 	{

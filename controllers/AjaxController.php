@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\widgets\search\SearchHelper;
 use app\widgets\search\SearchWidget;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\sys_options\models\SysOptions;
+use pozitronik\traits\traits\ControllerTrait;
 use Yii;
 use yii\base\UnknownPropertyException;
 use yii\filters\ContentNegotiator;
@@ -38,6 +39,9 @@ class AjaxController extends Controller {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
+			],
+			'access' => [
+				'class' => PermissionFilter::class
 			]
 		];
 	}

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\partners;
 
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\partners\active_record\Partners as ActiveRecordPartners;
 
 /**
@@ -12,5 +11,4 @@ use app\models\partners\active_record\Partners as ActiveRecordPartners;
  */
 class Partners extends ActiveRecordPartners
 {
-	use ActiveRecordTrait;
 }

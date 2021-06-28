@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions\active_record;
 
-use app\models\core\prototypes\ActiveRecordTrait;
+use app\components\db\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;

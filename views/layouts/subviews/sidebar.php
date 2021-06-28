@@ -5,7 +5,7 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;

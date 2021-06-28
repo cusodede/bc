@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\abonents\active_record;
 
-use app\models\core\prototypes\ActiveRecordTrait;
+use app\components\db\ActiveRecordTrait;
+use app\models\billing_journal\active_record\BillingJournal;
 use app\models\products\active_record\Products;
 use app\models\products\active_record\ProductStatuses;
-use pozitronik\core\traits\Relations;
+use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -18,12 +19,13 @@ use yii\db\ActiveRecord;
  * @property int $product_id
  *
  * @property ProductStatuses[] $relatedProductStatuses
+ * @property BillingJournal[] $relatedBillingJournal
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
  */
 class RelAbonentsToProducts extends ActiveRecord
 {
-	use Relations;
+	use RelationsTrait;
 	use ActiveRecordTrait;
 
 	/**
@@ -82,5 +84,13 @@ class RelAbonentsToProducts extends ActiveRecord
 	public function getRelatedProduct(): ActiveQuery
 	{
 		return $this->hasOne(Products::class, ['id' => 'product_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedBillingJournal(): ActiveQuery
+	{
+		return $this->hasMany(BillingJournal::class, ['rel_abonents_to_products_id' => 'id']);
 	}
 }

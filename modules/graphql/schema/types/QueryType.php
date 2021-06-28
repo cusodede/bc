@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types;
 
+use app\models\common\RefPartnersCategories;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
