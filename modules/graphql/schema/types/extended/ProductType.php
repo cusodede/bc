@@ -4,8 +4,10 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\extended;
 
 use app\models\partners\Partners;
+use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\Products;
 use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -15,6 +17,7 @@ use GraphQL\Type\Definition\Type;
  */
 class ProductType extends ObjectType implements TypeInterface
 {
+	use TypeTrait;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -47,8 +50,13 @@ class ProductType extends ObjectType implements TypeInterface
 					'description' => 'Конец действия',
 				],
 				'payment_period' => [
-					'type' => Type::string(),
+					'type' => Types::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(
+								EnumProductsPaymentPeriods::PAYMENT_PERIOD_TYPES,
+								['id' => $product->payment_period]
+							),
 				],
 				'type_id' => [
 					'type' => Type::int(),
@@ -67,11 +75,6 @@ class ProductType extends ObjectType implements TypeInterface
 					'type' => Type::int(),
 					'description' => 'Триальный период',
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
-				],
-				'units' => [
-					'type' => Type::string(),
-					'description' => 'Единицы измерения триального периода',
-					'resolve' => fn(Products $product): string => $product->relatedInstance->units ?? '',
 				],
 			],
 		]);

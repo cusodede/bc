@@ -12,14 +12,14 @@ use Exception;
  */
 class EnumSubscriptionTrialUnits
 {
-	public const UNIT_DAYS = 'days';
-	public const UNIT_WEEK = 'week';
-	public const UNIT_MONTH = 'month';
+	public const UNIT_DAYS = 1;
+	public const UNIT_WEEK = 2;
+	public const UNIT_MONTH = 3;
 
 	public const UNITS = [
-		self::UNIT_DAYS  => 'days',
-		self::UNIT_WEEK  => 'week',
-		self::UNIT_MONTH  => 'month',
+		self::UNIT_DAYS 	=> 'days',
+		self::UNIT_WEEK 	=> 'week',
+		self::UNIT_MONTH 	=> 'month',
 	];
 
 	/**
