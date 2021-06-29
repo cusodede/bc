@@ -5,6 +5,7 @@ namespace app\models\products;
 
 use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\active_record\ProductStatuses as ActiveRecordProductStatuses;
+use Exception;
 use yii\db\ActiveQuery;
 
 /**
@@ -31,10 +32,11 @@ class ProductStatuses extends ActiveRecordProductStatuses
 
 	/**
 	 * @return string|null именованное обозначение статуса.
+	 * @throws Exception
 	 */
 	public function getStatusName(): ?string
 	{
-		return EnumProductsStatuses::getStatusName($this->status_id);
+		return EnumProductsStatuses::getScalar($this->status_id);
 	}
 
 	/**
