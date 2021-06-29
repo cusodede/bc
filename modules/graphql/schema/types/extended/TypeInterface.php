@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\schema\types\extended;
 
 /**
  * Интерфейс для типов GraphQL
@@ -16,5 +16,9 @@ interface TypeInterface
 	 */
 	public static function getListOfType(): array;
 
+	/**
+	 * Одна сущность
+	 * @return array
+	 */
 	public static function getOneOfType(): array;
 }

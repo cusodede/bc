@@ -21,6 +21,8 @@ use yii\web\Response;
 /**
  * Class AuthController
  * @package app\modules\api\controllers
+ *
+ * @property-read GrantTypeInterface $grantType
  */
 class AuthController extends YiiRestController
 {
