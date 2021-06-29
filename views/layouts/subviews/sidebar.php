@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use app\controllers\BillingJournalController;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
@@ -131,5 +132,11 @@ use app\controllers\AbonentsController;
 			],
 			'visible'   => Users::Current()->hasPermission(['system'])
 		],
+		[
+			'label'     => 'История списаний',
+			'url'       => [BillingJournalController::to('index')],
+			'iconClass' => 'fa-money-bill-alt',
+			'visible'   => BillingJournalController::hasPermission('index')
+		]
 	]
 ]) ?>
