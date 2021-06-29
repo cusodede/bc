@@ -41,7 +41,7 @@ class SubscriptionTrialUnitsType extends ObjectType implements TypeInterface
 		return [
 			'type' => Type::listOf(Types::subscriptionTrialUnitsType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumSubscriptionTrialUnits::UNITS),
+				=> static::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
 		];
 	}
 
@@ -56,7 +56,7 @@ class SubscriptionTrialUnitsType extends ObjectType implements TypeInterface
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumSubscriptionTrialUnits::UNITS, $args)
+				=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
 		];
 	}
 }

@@ -54,10 +54,7 @@ class ProductType extends ObjectType implements TypeInterface
 					'type' => Types::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(
-								EnumProductsPaymentPeriods::PAYMENT_PERIOD_TYPES,
-								['id' => $product->payment_period]
-							),
+						=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
 				],
 				'type_id' => [
 					'type' => Type::int(),
@@ -81,9 +78,7 @@ class ProductType extends ObjectType implements TypeInterface
 					'type' => Types::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(
-							EnumSubscriptionTrialUnits::UNITS,
-							['id' => $product->relatedInstance->units ?? 0]
+						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]
 						),
 				],
 			],

@@ -3,8 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions;
 
-use yii\helpers\ArrayHelper;
-use Exception;
+use app\models\common\EnumTrait;
 
 /**
  * Class EnumSubscriptionTrialUnits
@@ -12,23 +11,21 @@ use Exception;
  */
 class EnumSubscriptionTrialUnits
 {
-	public const UNIT_DAYS = 1;
-	public const UNIT_WEEK = 2;
+	use EnumTrait;
+
+	public const UNIT_DAYS 	= 1;
+	public const UNIT_WEEK 	= 2;
 	public const UNIT_MONTH = 3;
 
-	public const UNITS = [
-		self::UNIT_DAYS 	=> 'День',
-		self::UNIT_WEEK 	=> 'Неделя',
-		self::UNIT_MONTH 	=> 'Месяц',
-	];
-
 	/**
-	 * @param string $unitId
-	 * @return string|null
-	 * @throws Exception
+	 * {@inheritdoc}
 	 */
-	public static function getStatusName(string $unitId): ?string
+	public static function mapData(): array
 	{
-		return ArrayHelper::getValue(self::UNITS, $unitId);
+		return [
+			self::UNIT_DAYS 	=> 'День',
+			self::UNIT_WEEK 	=> 'Неделя',
+			self::UNIT_MONTH 	=> 'Месяц',
+		];
 	}
 }

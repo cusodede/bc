@@ -42,7 +42,7 @@ class ProductPaymentPeriodType extends ObjectType implements TypeInterface
 		return [
 			'type' => Type::listOf(Types::productPaymentPeriodType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumProductsPaymentPeriods::PAYMENT_PERIOD_TYPES),
+				=> static::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
 		];
 	}
 
@@ -57,7 +57,7 @@ class ProductPaymentPeriodType extends ObjectType implements TypeInterface
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumProductsPaymentPeriods::PAYMENT_PERIOD_TYPES, $args)
+				=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
 		];
 	}
 }
