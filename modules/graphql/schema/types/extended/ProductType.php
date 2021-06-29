@@ -6,6 +6,7 @@ namespace app\modules\graphql\schema\types\extended;
 use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\schema\types\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
@@ -75,6 +76,15 @@ class ProductType extends ObjectType implements TypeInterface
 					'type' => Type::int(),
 					'description' => 'Триальный период',
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
+				],
+				'trial_unit' => [
+					'type' => Types::subscriptionTrialUnitsType(),
+					'description' => 'Единица измерения триального периода',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(
+							EnumSubscriptionTrialUnits::UNITS,
+							['id' => $product->relatedInstance->units ?? 0]
+						),
 				],
 			],
 		]);

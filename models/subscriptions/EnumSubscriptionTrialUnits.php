@@ -17,9 +17,9 @@ class EnumSubscriptionTrialUnits
 	public const UNIT_MONTH = 3;
 
 	public const UNITS = [
-		self::UNIT_DAYS 	=> 'days',
-		self::UNIT_WEEK 	=> 'week',
-		self::UNIT_MONTH 	=> 'month',
+		self::UNIT_DAYS 	=> 'День',
+		self::UNIT_WEEK 	=> 'Неделя',
+		self::UNIT_MONTH 	=> 'Месяц',
 	];
 
 	/**
