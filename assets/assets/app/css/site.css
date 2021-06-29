@@ -115,3 +115,12 @@ a.desc:after {
 .form-group .ms-container {
 	width: 100%
 }
+
+.subheader-title-custom {
+	margin: -2px 0 0 -1px !important;
+}
+
+.subheader-title-custom .subheader-title {
+	font-weight: 300;
+	font-size: 1.275rem;
+}

@@ -61,13 +61,16 @@ ModalHelperAsset::register($this);
 						</li>
 					</ul>
 				</div>
-				<div class="subheader fa-pull-left mb-0 mr-2">
-					<h1 class="subheader-title">
-						<?= $this->title ?>
-					</h1>
-				</div>
-				<div class="subheader fa-pull-left mb-0">
-					<?= $this->render('subviews/breadcrumbs') ?>
+
+				<div class="d-flex flex-column">
+					<div class="subheader mb-0">
+						<?= $this->render('subviews/breadcrumbs') ?>
+					</div>
+					<div class="subheader subheader-title-custom">
+						<h1 class="subheader-title">
+							<?= $this->title ?>
+						</h1>
+					</div>
 				</div>
 
 				<div class="ml-auto d-flex">
