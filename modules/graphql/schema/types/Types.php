@@ -8,6 +8,7 @@ use app\modules\graphql\schema\types\extended\PartnerCategoryType;
 use app\modules\graphql\schema\types\extended\PartnerType;
 use app\modules\graphql\schema\types\extended\ProductPaymentPeriodType;
 use app\modules\graphql\schema\types\extended\ProductType;
+use app\modules\graphql\schema\types\extended\ProductTypesType;
 use app\modules\graphql\schema\types\extended\SubscriptionTrialUnitsType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\UnionType;
@@ -34,6 +35,7 @@ class Types
 	private static ?PartnerMutationType $partnerMutation = null;
 	private static ?PartnerCategoryType $partnerCategory = null;
 	private static ?ProductType $product = null;
+	private static ?ProductTypesType $productType = null;
 	private static ?ProductPaymentPeriodType $productPayment = null;
 	private static ?SubscriptionTrialUnitsType $trialUnit = null;
 
@@ -144,5 +146,14 @@ class Types
 	public static function subscriptionTrialUnitsType(): SubscriptionTrialUnitsType
 	{
 		return static::$trialUnit ?: static::$trialUnit = new SubscriptionTrialUnitsType();
+	}
+
+	/**
+	 * Типы продуктов
+	 * @return ProductTypesType
+	 */
+	public static function productTypesType(): ProductTypesType
+	{
+		return static::$productType ?: static::$productType = new ProductTypesType();
 	}
 }

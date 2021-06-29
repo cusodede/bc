@@ -3,17 +3,17 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\extended;
 
-use app\models\subscriptions\EnumSubscriptionTrialUnits;
+use app\models\products\EnumProductsTypes;
 use app\modules\graphql\schema\types\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Class SubscriptionTrialUnitsType
+ * Class ProductTypesType
  * @package app\modules\graphql\schema\types\extended
  */
-class SubscriptionTrialUnitsType extends ObjectType
+class ProductTypesType extends ObjectType
 {
 	use TypeTrait;
 
@@ -26,11 +26,11 @@ class SubscriptionTrialUnitsType extends ObjectType
 			'fields' => [
 				'id' => [
 					'type' => Type::int(),
-					'description' => 'Идентификатор единицы измерения',
+					'description' => 'Идентификатор типа продукта',
 				],
 				'name' => [
 					'type' => Type::string(),
-					'description' => 'Наименование единицы измерения',
+					'description' => 'Наименование типа продукта',
 				],
 			],
 		]);
@@ -42,9 +42,9 @@ class SubscriptionTrialUnitsType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::subscriptionTrialUnitsType()),
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
+			'type' => Type::listOf(Types::productTypesType()),
+			'resolve' => fn($productType, array $args = []): ?array
+				=> static::getListFromEnum(EnumProductsTypes::mapData()),
 		];
 	}
 
@@ -54,12 +54,12 @@ class SubscriptionTrialUnitsType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::productPaymentPeriodType(),
+			'type' => Types::productTypesType(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
+			'resolve' => fn($productType, array $args = []): ?array
+				=> static::getOneFromEnum(EnumProductsTypes::mapData(), $args)
 		];
 	}
 }

@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\types\extended;
 
 use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
+use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\schema\types\Types;
@@ -60,6 +61,12 @@ class ProductType extends ObjectType
 					'type' => Type::int(),
 					'description' => 'Идентификатор типа',
 				],
+				'type' => [
+					'type' => Types::productTypesType(),
+					'description' => 'Тип продукта',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
+				],
 				'partner_id' => [
 					'type' => Type::int(),
 					'description' => 'Идентификатор партнёра',
@@ -78,8 +85,7 @@ class ProductType extends ObjectType
 					'type' => Types::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]
-						),
+						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
 				],
 			],
 		]);
