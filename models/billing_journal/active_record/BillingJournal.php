@@ -3,8 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\billing_journal\active_record;
 
-use app\components\db\ActiveRecordTrait;
+use app\models\abonents\active_record\Abonents;
 use app\models\abonents\active_record\RelAbonentsToProducts;
+use app\models\billing_journal\BillingJournalSearch;
+use app\models\products\active_record\Products;
+use app\components\db\ActiveRecordTrait;
 use Exception;
 use pozitronik\helpers\Utils;
 use yii\db\ActiveQuery;
@@ -21,6 +24,8 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  *
  * @property-read RelAbonentsToProducts $relatedAbonentsToProducts
+ * @property-read Abonents $relatedAbonent
+ * @property-read Products $relatedProduct
  */
 class BillingJournal extends ActiveRecord
 {
@@ -55,7 +60,7 @@ class BillingJournal extends ActiveRecord
 	 */
 	public function beforeValidate(): bool
 	{
-		if ($this->isNewRecord) {
+		if ($this->isNewRecord && !$this instanceof BillingJournalSearch) {
 			$this->id = Utils::gen_uuid();
 		}
 
@@ -68,12 +73,12 @@ class BillingJournal extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id' => 'ID',
+			'id'                          => 'ID',
 			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-			'price' => 'Price',
-			'status_id' => 'Status ID',
-			'try_date' => 'Try Date',
-			'created_at' => 'Created At',
+			'price'                       => 'Величина списания',
+			'status_id'                   => 'Статус операции',
+			'try_date'                    => 'Дата операции',
+			'created_at'                  => 'Created At',
 		];
 	}
 
@@ -83,5 +88,21 @@ class BillingJournal extends ActiveRecord
 	public function getRelatedAbonentsToProducts(): ActiveQuery
 	{
 		return $this->hasOne(RelAbonentsToProducts::class, ['id' => 'rel_abonents_to_products_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonent(): ActiveQuery
+	{
+		return $this->hasOne(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedProduct(): ActiveQuery
+	{
+		return $this->hasOne(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
 	}
 }

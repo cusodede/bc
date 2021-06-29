@@ -65,7 +65,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getTypeName(): ?string
 	{
-		return EnumProductsTypes::getTypeName($this->type_id);
+		return EnumProductsTypes::getScalar($this->type_id);
 	}
 
 	/**

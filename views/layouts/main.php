@@ -27,7 +27,6 @@ ModalHelperAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="msapplication-tap-highlight" content="no">
 	<meta name="commit" content="<?= Utils::LastCommit() ?>">
 	<?= Html::csrfMetaTags() ?>
 	<title><?= $this->title ?> [<?= Utils::LastCommit() ?>]</title>
