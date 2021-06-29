@@ -5,6 +5,8 @@
 /.phpunit.result.cache
 /config/local/
 /untracked
+/yii
+/web/index.php
 
 #for tests
 /models/tests
