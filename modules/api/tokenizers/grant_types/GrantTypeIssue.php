@@ -34,13 +34,13 @@ class GrantTypeIssue implements GrantTypeInterface
 	 */
 	public function validate(UsersTokens $authToken, ?UsersTokens $refreshToken): void
 	{
-		if ($authToken->isNewRecord) {
-			$statusIsOk = true;
-		} else {
-			$statusIsOk = (null === $refreshToken) ? !$authToken->isValid() : !$refreshToken->isValid();
-		}
-		if (!$statusIsOk) {
-			throw new InvalidScopeException();
-		}
+//		if ($authToken->isNewRecord) {
+//			$statusIsOk = true;
+//		} else {
+//			$statusIsOk = (null === $refreshToken) ? !$authToken->isValid() : !$refreshToken->isValid();
+//		}
+//		if (!$statusIsOk) {
+//			throw new InvalidScopeException();
+//		}
 	}
 }
