@@ -13,6 +13,7 @@ use app\modules\history\HistoryModule;
 use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
 use app\modules\graphql\GraphqlModule;
+use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -180,6 +181,11 @@ $config = [
 					]
 				]
 			]
+		],
+		'jwt' => [
+			'class' => Jwt::class,
+			'signer' => Jwt::HS256,
+			'signerKey' => 'testkey'
 		]
 	],
 	'params' => $params,

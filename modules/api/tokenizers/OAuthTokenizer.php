@@ -39,6 +39,10 @@ abstract class OAuthTokenizer implements Tokenizer
 	 * @var UsersTokens|null токен для сброса ключа авторизации.
 	 */
 	protected ?UsersTokens $_refreshToken;
+	/**
+	 * @var bool
+	 */
+	protected bool $_useRefreshToken = true;
 
 	/**
 	 * OAuthTokenizer constructor.
@@ -103,9 +107,16 @@ abstract class OAuthTokenizer implements Tokenizer
 	protected function initTokens(): void
 	{
 		$this->initAuthToken();
-		$this->initRefreshToken();
+		if ($this->_useRefreshToken) {
+			$this->initRefreshToken();
+		}
 		//проверяем обоснованность запроса на выпуск токенов
 		$this->_grantType->validate($this->_authToken, $this->_refreshToken);
+
+		$this->configureAuthToken();
+		if ($this->_useRefreshToken) {
+			$this->configureRefreshToken();
+		}
 
 		/** @var Transaction $transaction */
 		$transaction = Yii::$app->db->beginTransaction();
@@ -119,30 +130,38 @@ abstract class OAuthTokenizer implements Tokenizer
 	}
 
 	/**
-	 * Инициализация модели основного токена для взаимодействия с API.
+	 * Инициализация модели основного токена доступа.
 	 */
-	protected function initAuthToken(): void
+	private function initAuthToken(): void
 	{
-		$model = $this->getModelByType($this->getTokenType());
-
-		$exp = strtotime("+ {$this->getExpiresIn()} seconds");
-
-		$model->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class);
-		$model->valid      = DateHelper::from_unix_timestamp($exp);
-
-		$this->_authToken = $model;
+		$this->_authToken = $this->getModelByType($this->getTokenType());
 	}
 
 	/**
 	 * Инициализация модели refresh токена.
 	 */
-	protected function initRefreshToken(): void
+	private function initRefreshToken(): void
 	{
-		$model = $this->getModelByType(RefreshTokenType::class);
+		$this->_refreshToken = $this->getModelByType(RefreshTokenType::class);
+	}
 
-		$model->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class . ":refresh");
+	/**
+	 * Конфигурация модели основного токена доступа.
+	 */
+	private function configureAuthToken(): void
+	{
+		$exp = strtotime("+ {$this->getExpiresIn()} seconds");
 
-		$this->_refreshToken = $model;
+		$this->_authToken->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class);
+		$this->_authToken->valid      = DateHelper::from_unix_timestamp($exp);
+	}
+
+	/**
+	 * Конфигурация модели refresh токена.
+	 */
+	private function configureRefreshToken(): void
+	{
+		$this->_refreshToken->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class . ":refresh");
 	}
 
 	/**
