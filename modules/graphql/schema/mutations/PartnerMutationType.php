@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\mutations;
 
 use app\models\partners\Partners;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use app\modules\graphql\schema\types\Types;
 
@@ -12,12 +11,17 @@ use app\modules\graphql\schema\types\Types;
  * Class PartnerMutationType
  * @package app\modules\graphql\schema\mutations
  */
-class PartnerMutationType extends ObjectType implements MutationInterface
+final class PartnerMutationType extends MutationType
 {
 	use MutationTrait;
 
 	/**
-	 * Список сообщений для popup на фронте
+	 * {@inheritdoc}
+	 */
+	public ?string $model = Partners::class;
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public const MESSAGES = ['Ошибка сохранения партнера', 'Партнер успешно сохранен'];
 
@@ -32,18 +36,30 @@ class PartnerMutationType extends ObjectType implements MutationInterface
 					'type' => Types::validationErrorsUnionType(Types::partner()),
 					'description' => 'Обновление партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = [])
-						=> $this->save($partner, $args, $this->getMessages()),
+					'resolve' => fn(array $rootArgs, array $args = []): array => $this->update($rootArgs, $args),
 				],
 				'create' => [
 					'type' => Types::validationErrorsUnionType(Types::partner()),
 					'description' => 'Создание партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = [])
-						=> $this->create($partner, $args, $this->getMessages()),
+					'resolve' => fn(array $rootArgs, array $args = []): array => $this->create($args),
 				],
 			]
 		]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function mutationType(): array
+	{
+		return [
+			'type' => Types::partnerMutation(),
+			'args' => [
+				'id' => Type::int(),
+			],
+			'resolve' => fn(Partners $partner = null, array $args = []): ?array => $args,
+		];
 	}
 
 	/**
@@ -77,13 +93,5 @@ class PartnerMutationType extends ObjectType implements MutationInterface
 				'description' => 'Идентификатор категории',
 			],
 		];
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getMessages(): array
-	{
-		return self::MESSAGES;
 	}
 }

@@ -15,18 +15,28 @@ use Exception;
 trait MutationTrait
 {
 	/**
-	 * Создание новых моделей
-	 * @param ActiveRecord $model
+	 * Обновление сущностей
+	 * @param array $rootAttributes
 	 * @param array $attributes
-	 * @param array $messages
 	 * @return array
 	 * @throws Exception
 	 */
-	public function create(ActiveRecord $model, array $attributes, array $messages): array
+	public function update(array $rootAttributes, array $attributes): array
 	{
-		$model = new $model();
-		$model->setAttributes($attributes);
-		return $this->getResult($model->save(), $model->getErrors(), $messages);
+		$model = $this->model::findOne($rootAttributes);
+		return $this->save($model, $attributes, self::MESSAGES);
+	}
+
+	/**
+	 * Создание сущности
+	 * @param array $attributes
+	 * @return array
+	 * @throws Exception
+	 */
+	public function create(array $attributes): array
+	{
+		$model = new $this->model();
+		return $this->save($model, $attributes, self::MESSAGES);
 	}
 
 	/**

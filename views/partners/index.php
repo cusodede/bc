@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'category_id',
 				'format' => 'text',
-				'value' => 'category.name',
+				'value' => 'relatedCategory.name',
 			],
 			'phone',
 			'email',

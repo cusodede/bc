@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'partner_id',
 				'format' => 'text',
-				'value' => 'partner.name',
+				'value' => 'relatedPartner.name',
 			],
 			[
 				'class' => DataColumn::class,

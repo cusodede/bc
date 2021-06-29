@@ -4,6 +4,10 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types;
 
 use app\modules\graphql\schema\mutations\PartnerMutationType;
+use app\modules\graphql\schema\types\extended\PartnerCategoryType;
+use app\modules\graphql\schema\types\extended\PartnerType;
+use app\modules\graphql\schema\types\extended\ProductPaymentPeriodType;
+use app\modules\graphql\schema\types\extended\ProductType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\UnionType;
 
@@ -29,6 +33,7 @@ class Types
 	private static ?PartnerMutationType $partnerMutation = null;
 	private static ?PartnerCategoryType $partnerCategory = null;
 	private static ?ProductType $product = null;
+	private static ?ProductPaymentPeriodType $productPayment = null;
 
 	/**
 	 * Запрос
@@ -119,5 +124,14 @@ class Types
 	public static function product(): ProductType
 	{
 		return static::$product ?: static::$product = new ProductType();
+	}
+
+	/**
+	 * Платежный период у продуктов
+	 * @return ProductPaymentPeriodType
+	 */
+	public static function productPaymentPeriodType(): ProductPaymentPeriodType
+	{
+		return static::$productPayment ?: static::$productPayment = new ProductPaymentPeriodType();
 	}
 }
