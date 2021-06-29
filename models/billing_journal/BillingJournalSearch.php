@@ -11,7 +11,13 @@ use yii\data\ActiveDataProvider;
  */
 class BillingJournalSearch extends BillingJournal
 {
+	/**
+	 * @var string|null идентификатор продукта для поиска.
+	 */
 	public ?string $searchProductId = null;
+	/**
+	 * @var string|null телефон абонента для поиска.
+	 */
 	public ?string $searchAbonentPhone = null;
 
 	/**
