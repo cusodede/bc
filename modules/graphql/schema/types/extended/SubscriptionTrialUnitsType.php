@@ -3,51 +3,53 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\extended;
 
-use app\models\products\EnumProductsPaymentPeriods;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\schema\types\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Периодичность списания для продуктов
- * Class ProductPaymentPeriodType
- * @package app\modules\graphql\schema\types
+ * Class SubscriptionTrialUnitsType
+ * @package app\modules\graphql\schema\types\extended
  */
-class ProductPaymentPeriodType extends ObjectType
+class SubscriptionTrialUnitsType extends ObjectType
 {
 	use TypeTrait;
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function __construct()
 	{
 		parent::__construct([
 			'fields' => [
 				'id' => [
 					'type' => Type::int(),
-					'description' => 'Идентификатор списания',
+					'description' => 'Идентификатор единицы измерения',
 				],
 				'name' => [
 					'type' => Type::string(),
-					'description' => 'Наименование списания',
+					'description' => 'Наименование единицы измерения',
 				],
 			],
 		]);
 	}
 
 	/**
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::productPaymentPeriodType()),
+			'type' => Type::listOf(Types::subscriptionTrialUnitsType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
+				=> static::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
 		];
 	}
 
 	/**
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public static function getOneOfType(): array
 	{
@@ -57,7 +59,7 @@ class ProductPaymentPeriodType extends ObjectType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
+				=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
 		];
 	}
 }

@@ -4,8 +4,12 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\extended;
 
 use app\models\partners\Partners;
+use app\models\products\EnumProductsPaymentPeriods;
+use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -13,8 +17,9 @@ use GraphQL\Type\Definition\Type;
  * Class ProductType
  * @package app\modules\graphql\schema\types
  */
-class ProductType extends ObjectType implements TypeInterface
+class ProductType extends ObjectType
 {
+	use TypeTrait;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -47,12 +52,20 @@ class ProductType extends ObjectType implements TypeInterface
 					'description' => 'Конец действия',
 				],
 				'payment_period' => [
-					'type' => Type::string(),
+					'type' => Types::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
 				],
 				'type_id' => [
 					'type' => Type::int(),
 					'description' => 'Идентификатор типа',
+				],
+				'type' => [
+					'type' => Types::productTypesType(),
+					'description' => 'Тип продукта',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
 				],
 				'partner_id' => [
 					'type' => Type::int(),
@@ -68,10 +81,11 @@ class ProductType extends ObjectType implements TypeInterface
 					'description' => 'Триальный период',
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
 				],
-				'units' => [
-					'type' => Type::string(),
-					'description' => 'Единицы измерения триального периода',
-					'resolve' => fn(Products $product): string => $product->relatedInstance->units ?? '',
+				'trial_unit' => [
+					'type' => Types::subscriptionTrialUnitsType(),
+					'description' => 'Единица измерения триального периода',
+					'resolve' => fn(Products $product): ?array
+						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
 				],
 			],
 		]);
