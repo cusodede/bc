@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'type_id',
-					'data' => EnumProductsTypes::PRODUCTS_TYPES,
+					'data' => EnumProductsTypes::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'type_id',
 				'format' => 'text',
-				'value' => static fn(Products $product) => EnumProductsTypes::getTypeName($product->type_id),
+				'value' => static fn(Products $product) => EnumProductsTypes::getScalar($product->type_id),
 			],
 			[
 				'filter' => Select2::widget([
