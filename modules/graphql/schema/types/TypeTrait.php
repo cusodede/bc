@@ -43,4 +43,16 @@ trait TypeTrait
 		$name = ArrayHelper::getValue($enumData, $id, false);
 		return $name ? compact('id', 'name') : null;
 	}
+
+	/**
+	 * Список сущностей
+	 * @return array
+	 */
+	abstract public static function getListOfType(): array;
+
+	/**
+	 * Одна сущность
+	 * @return array
+	 */
+	abstract public static function getOneOfType(): array;
 }

@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\Type;
  * Class ProductType
  * @package app\modules\graphql\schema\types
  */
-class ProductType extends ObjectType implements TypeInterface
+class ProductType extends ObjectType
 {
 	use TypeTrait;
 	/**

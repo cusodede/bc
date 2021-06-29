@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
  * Class SubscriptionTrialUnitsType
  * @package app\modules\graphql\schema\types\extended
  */
-class SubscriptionTrialUnitsType extends ObjectType implements TypeInterface
+class SubscriptionTrialUnitsType extends ObjectType
 {
 	use TypeTrait;
 

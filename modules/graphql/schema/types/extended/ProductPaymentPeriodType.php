@@ -14,7 +14,7 @@ use GraphQL\Type\Definition\Type;
  * Class ProductPaymentPeriodType
  * @package app\modules\graphql\schema\types
  */
-class ProductPaymentPeriodType extends ObjectType implements TypeInterface
+class ProductPaymentPeriodType extends ObjectType
 {
 	use TypeTrait;
 
