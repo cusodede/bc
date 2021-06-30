@@ -8,8 +8,8 @@ use app\components\tickets\statuses\TicketStatusInProgress;
 use app\components\tickets\statuses\TicketStatusInterface;
 use app\components\tickets\statuses\TicketStatusWaiting;
 use app\helpers\DateHelper;
-use app\components\subscription\job\SubscribeProductJob;
-use app\components\subscription\job\UnsubscribeProductJob;
+use app\components\subscription\job\SubscribeJob;
+use app\components\subscription\job\UnsubscribeJob;
 use Yii;
 use yii\queue\Queue;
 
@@ -28,7 +28,7 @@ class ProductTicketsService
 	 */
 	public function subscribe(int $productId, int $abonentId): string
 	{
-		return Yii::$app->productTicketsQueue->push(new SubscribeProductJob($productId, $abonentId));
+		return Yii::$app->productTicketsQueue->push(new SubscribeJob($productId, $abonentId));
 	}
 
 	/**
@@ -39,7 +39,7 @@ class ProductTicketsService
 	 */
 	public function unsubscribe(int $productId, int $abonentId): string
 	{
-		return Yii::$app->productTicketsQueue->push(new UnsubscribeProductJob($productId, $abonentId));
+		return Yii::$app->productTicketsQueue->push(new UnsubscribeJob($productId, $abonentId));
 	}
 
 	/**

@@ -6,8 +6,8 @@ namespace app\components\subscription;
 use app\models\abonents\Abonents;
 use app\models\billing_journal\BillingJournal;
 use app\models\products\Products;
-use app\useCases\SwitchOffProductCase;
-use app\useCases\SwitchOnProductCase;
+use app\components\subscription\use_cases\DeactivateProductCase;
+use app\components\subscription\use_cases\ActivateProductCase;
 use InvalidArgumentException;
 use yii\base\Component;
 use yii\web\NotFoundHttpException;
@@ -60,7 +60,7 @@ abstract class BaseSubscriptionHandler extends Component
 
 		$expireDate = $this->subscribe();
 
-		$useCase = new SwitchOnProductCase();
+		$useCase = new ActivateProductCase();
 		$useCase->execute($abonentId, $this->_product->id, $expireDate);
 
 		return $expireDate;
@@ -78,7 +78,7 @@ abstract class BaseSubscriptionHandler extends Component
 
 		$this->unsubscribe();
 
-		$useCase = new SwitchOffProductCase();
+		$useCase = new DeactivateProductCase();
 		$useCase->execute($abonentId, $this->_product->id);
 	}
 

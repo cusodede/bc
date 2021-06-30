@@ -9,16 +9,16 @@ use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
 
 /**
- * Class SubscribeProductJob
+ * Class UnsubscribeJob
  * @package app\components\subscription\job
  */
-class SubscribeProductJob implements RetryableJobInterface
+class UnsubscribeJob implements RetryableJobInterface
 {
 	private int $_productId;
 	private int $_abonentId;
 
 	/**
-	 * SubscribeProductJob constructor.
+	 * UnsubscribeJob constructor.
 	 * @param int $productId
 	 * @param int $abonentId
 	 */
@@ -40,7 +40,7 @@ class SubscribeProductJob implements RetryableJobInterface
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($product);
 
-		$service->provide($this->_abonentId, '');//TODO add billing operation stuff
+		$service->revoke($this->_abonentId);
 	}
 
 	/**

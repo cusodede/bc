@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\useCases;
+namespace app\components\subscription\use_cases;
 
 use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\EnumProductsStatuses;
 use app\models\products\ProductStatuses;
 
 /**
- * Class SwitchOffProductCase
- * @package app\useCases
+ * Class DeactivateProductCase
+ * @package app\components\subscription\use_cases
  */
-class SwitchOffProductCase
+class DeactivateProductCase
 {
 	/**
 	 * @param int $abonentId
