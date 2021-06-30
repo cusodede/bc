@@ -6,7 +6,6 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
-use app\components\web\DefaultController;
 use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
@@ -65,12 +64,6 @@ use app\controllers\AbonentsController;
 					'visible' => UsersController::hasPermission('index')
 				]
 			],
-		],
-		[
-			'label'     => 'Прототипирование',
-			'url'       => '#',
-			'iconClass' => 'fa-digging',
-			'items'     => DefaultController::MenuItems()
 		],
 		[
 			'label'     => 'Доступы',
