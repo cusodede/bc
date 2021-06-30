@@ -13,7 +13,7 @@ use yii\base\Component;
 use yii\web\NotFoundHttpException;
 
 /**
- * Class BaseSubscriptionHandler
+ * Class SubscriptionHandler
  * @package app\components\subscription
  */
 abstract class SubscriptionHandler extends Component
@@ -32,7 +32,7 @@ abstract class SubscriptionHandler extends Component
 	protected ?BillingJournal $_billingJournalRecord = null;
 
 	/**
-	 * BaseSubscriptionHandler constructor.
+	 * SubscriptionHandler constructor.
 	 * @param Products $product
 	 * @param array $config
 	 */
