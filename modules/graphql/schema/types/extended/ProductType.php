@@ -8,7 +8,7 @@ use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;

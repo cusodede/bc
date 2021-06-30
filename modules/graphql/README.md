@@ -1,3 +1,29 @@
+# Документация по GraphQL модулю
+
+``` bash
+.
+├── GraphqlModule.php
+├── README.md
+├── controllers
+│   └── GraphqlController.php
+└── schema # Схемы для GraphQL
+    ├── common # Общие схемы для mutation и query
+    │   ├── Response.php # Универсальная схема ответа для мутаций
+    │   ├── Types.php # Все наши кастомные типы
+    │   └── ValidationErrorType.php # Схема для ошибок валидации
+    ├── mutations # Мутации
+    │   ├── BaseMutationType.php # Абстрактная мутация 
+    │   ├── MutationTrait.php # Расщирение для мутаций
+    │   ├── MutationType.php # Базовая GraphQL схема для мутаций
+    │   └── extended # Все наши кастомные схемы мутаций, по сути Models
+    │       └── ...
+    └── types # Запросы
+        ├── QueryType.php # Базовая GraphQL схема для запросов
+        ├── TypeTrait.php # Расширение для запросов
+        └── extended # Все наши кастомные схемы запросов, по сути Models
+            └── ...
+```
+
 ### queries
 
 ```code json

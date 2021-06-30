@@ -5,7 +5,7 @@ namespace app\modules\graphql\schema\types\extended;
 
 use app\models\partners\Partners;
 use app\models\partners\PartnersSearch;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 

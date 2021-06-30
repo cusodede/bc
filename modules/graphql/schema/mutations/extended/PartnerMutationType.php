@@ -5,15 +5,15 @@ namespace app\modules\graphql\schema\mutations\extended;
 
 use app\models\partners\Partners;
 use app\modules\graphql\schema\mutations\MutationTrait;
-use app\modules\graphql\schema\mutations\MutationType;
+use app\modules\graphql\schema\mutations\BaseMutationType;
 use GraphQL\Type\Definition\Type;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 
 /**
  * Class PartnerMutationType
  * @package app\modules\graphql\schema\mutations
  */
-final class PartnerMutationType extends MutationType
+final class PartnerMutationType extends BaseMutationType
 {
 	use MutationTrait;
 
