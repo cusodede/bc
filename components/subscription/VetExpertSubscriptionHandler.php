@@ -11,7 +11,7 @@ use app\modules\api\connectors\vet_expert\VetExpertConnector;
  * Class VetExpertSubscriptionHandler
  * @package app\components\subscription
  */
-class VetExpertSubscriptionHandler extends SubscriptionHandler
+class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 {
 	private VetExpertConnector $_apiConnector;
 

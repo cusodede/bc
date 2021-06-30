@@ -15,7 +15,7 @@ use yii\httpclient\Exception;
  * Class IviSubscriptionHandler
  * @package app\components\subscription
  */
-class IviSubscriptionHandler extends SubscriptionHandler
+class IviSubscriptionHandler extends BaseSubscriptionHandler
 {
 	/**
 	 * @var IviConnector

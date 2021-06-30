@@ -8,8 +8,8 @@ use app\components\tickets\statuses\TicketStatusInProgress;
 use app\components\tickets\statuses\TicketStatusInterface;
 use app\components\tickets\statuses\TicketStatusWaiting;
 use app\helpers\DateHelper;
-use app\modules\api\components\queue\job\SubscribeProductJob;
-use app\modules\api\components\queue\job\UnsubscribeProductJob;
+use app\components\subscription\job\SubscribeProductJob;
+use app\components\subscription\job\UnsubscribeProductJob;
 use Yii;
 use yii\queue\Queue;
 

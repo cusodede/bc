@@ -16,7 +16,7 @@ use yii\web\NotFoundHttpException;
  * Class SubscriptionHandler
  * @package app\components\subscription
  */
-abstract class SubscriptionHandler extends Component
+abstract class BaseSubscriptionHandler extends Component
 {
 	/**
 	 * @var Products продукт, по которому будет обрабатываться подписка.
@@ -108,8 +108,7 @@ abstract class SubscriptionHandler extends Component
 	 */
 	private function initAbonent(int $abonentId): void
 	{
-		$this->_abonent = Abonents::findOne($abonentId);
-		if (null === $this->_abonent) {
+		if (null === $this->_abonent = Abonents::findOne($abonentId)) {
 			throw new NotFoundHttpException("Не удалось определить абонента по ID $abonentId");
 		}
 	}
@@ -121,8 +120,7 @@ abstract class SubscriptionHandler extends Component
 	 */
 	private function initBillingJournalRecord(string $billingId): void
 	{
-		$this->_billingJournalRecord = BillingJournal::findOne($billingId);
-		if (null === $this->_billingJournalRecord) {
+		if (null === $this->_billingJournalRecord = BillingJournal::findOne($billingId)) {
 			throw new NotFoundHttpException("Не удалось установить факт списания по ID $billingId");
 		}
 	}
