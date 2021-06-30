@@ -92,9 +92,6 @@ $config = [
 		],
 		'notifications' => [
 			'class' => NotificationsModule::class
-		],
-		'graphql' => [
-			'class' => GraphqlModule::class
 		]
 	],
 	'components' => [
