@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use app\models\sys\users\WebUser;
+use cusodede\jwt\Jwt;
 use yii\BaseYii;
 
 /**
@@ -32,6 +33,7 @@ abstract class BaseApplication extends yii\base\Application {
 /**
  * Class WebApplication
  * Include only Web application related components here
+ * @property Jwt $jwt
  */
 class WebApplication extends yii\web\Application {
 }
