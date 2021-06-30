@@ -12,19 +12,31 @@ use Exception;
  * Trait MutationTrait
  * @package app\modules\graphql\schema\mutations
  */
-trait MutationTrait {
+trait MutationTrait
+{
 	/**
-	 * Создание новых моделей
-	 * @param ActiveRecord $model
+	 * Обновление сущностей
+	 * @param array $rootAttributes
 	 * @param array $attributes
-	 * @param array $messages
 	 * @return array
 	 * @throws Exception
 	 */
-	public function create(ActiveRecord $model, array $attributes, array $messages):array {
-		$model = new $model();
-		$model->setAttributes($attributes);
-		return $this->getResult($model->save(), $model->getErrors(), $messages);
+	public function update(array $rootAttributes, array $attributes): array
+	{
+		$model = $this->model::findOne($rootAttributes);
+		return $this->save($model, $attributes, self::MESSAGES);
+	}
+
+	/**
+	 * Создание сущности
+	 * @param array $attributes
+	 * @return array
+	 * @throws Exception
+	 */
+	public function create(array $attributes): array
+	{
+		$model = new $this->model();
+		return $this->save($model, $attributes, self::MESSAGES);
 	}
 
 	/**
@@ -35,7 +47,8 @@ trait MutationTrait {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function save(ActiveRecord $model, array $attributes, array $messages):array {
+	public function save(ActiveRecord $model, array $attributes, array $messages): array
+	{
 		$model->setAttributes($attributes);
 		return $this->getResult($model->save(), $model->getErrors(), $messages);
 	}
@@ -48,7 +61,8 @@ trait MutationTrait {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getResult(bool $result, array $modelErrors, array $messages):array {
+	public function getResult(bool $result, array $modelErrors, array $messages): array
+	{
 		return [
 			'result' => $result,
 			'message' => $this->getMessage($result, $messages),
@@ -62,7 +76,8 @@ trait MutationTrait {
 	 * @param array $modelErrors
 	 * @return array
 	 */
-	public function getErrors(array $modelErrors):array {
+	public function getErrors(array $modelErrors): array
+	{
 		$errors = [];
 		foreach ($modelErrors as $field => $messages) {
 			$errors[] = compact('field', 'messages');
@@ -77,7 +92,8 @@ trait MutationTrait {
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getMessage(bool $result, array $messages):string {
+	public function getMessage(bool $result, array $messages): string
+	{
 		return ArrayHelper::getValue($messages, $result, '');
 	}
 }

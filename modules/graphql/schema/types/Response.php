@@ -11,11 +11,13 @@ use GraphQL\Type\Definition\Type;
  * Class Response
  * @package app\modules\graphql\schema\types
  */
-class Response extends ObjectType {
+class Response extends ObjectType
+{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct([
 			'fields' => [
 				'result' => [
