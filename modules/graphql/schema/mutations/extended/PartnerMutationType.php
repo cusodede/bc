@@ -1,9 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\mutations;
+namespace app\modules\graphql\schema\mutations\extended;
 
 use app\models\partners\Partners;
+use app\modules\graphql\schema\mutations\MutationTrait;
+use app\modules\graphql\schema\mutations\MutationType;
 use GraphQL\Type\Definition\Type;
 use app\modules\graphql\schema\types\Types;
 

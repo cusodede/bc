@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types;
 
-use app\modules\graphql\schema\mutations\PartnerMutationType;
+use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
