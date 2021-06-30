@@ -15,7 +15,7 @@ use yii\base\InvalidConfigException;
  * Class ProductOptions
  * @package app\modules\api\connectors\ivi
  *
- * @property string|null $product
+ * @property string|null $productId
  * @property string|null $phone
  * @property string|null $transactionId
  * @property-read string|null $appVersion
@@ -25,7 +25,7 @@ class ProductOptions extends BaseObject
 	/**
 	 * @var string|null идентификатор продукта, выдаваемый партнером ivi.
 	 */
-	private ?string $_product;
+	private ?string $_productId;
 	/**
 	 * @var string|null идентификатор версии приложения, выдаваемый партнером ivi (уникальное значение для каждого продукта).
 	 */
@@ -44,9 +44,9 @@ class ProductOptions extends BaseObject
 	/**
 	 * @return string|null
 	 */
-	public function getProduct(): ?string
+	public function getProductId(): ?string
 	{
-		return $this->_product;
+		return $this->_productId;
 	}
 
 	/**
@@ -54,9 +54,9 @@ class ProductOptions extends BaseObject
 	 * Конвертируется в идентификатор продукта на стороне ivi (совместно с appVersion).
 	 * @throws InvalidConfigException|Throwable
 	 */
-	public function setProduct(int $productId): void
+	public function setProductId(int $productId): void
 	{
-		$this->_product    = ArrayHelper::getValue(Yii::$app->params, "ivi.productMap.$productId.productId",
+		$this->_productId  = ArrayHelper::getValue(Yii::$app->params, "ivi.productMap.$productId.productId",
 			new InvalidConfigException('Не заданы параметры продукта для ivi'));
 		$this->_appVersion = ArrayHelper::getValue(Yii::$app->params, "ivi.productMap.$productId.appVersion",
 			new InvalidConfigException('Не заданы параметры продукта для ivi'));

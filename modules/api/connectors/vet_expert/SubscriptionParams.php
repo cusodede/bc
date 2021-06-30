@@ -7,7 +7,6 @@ use app\models\abonents\Abonents;
 use app\models\phones\Phones;
 use app\modules\api\signatures\SignatureService;
 use app\modules\api\signatures\SignatureServiceFactory;
-use DateTime;
 use InvalidArgumentException;
 use yii\base\Arrayable;
 use yii\base\BaseObject;
@@ -19,6 +18,13 @@ use yii\base\InvalidConfigException;
  *
  * Class SubscriptionParams
  * @package app\modules\api\connectors\vetexpert
+ *
+ * @property string $phone
+ * @property string $email
+ * @property string $firstName
+ * @property string|null $middleName
+ * @property string $lastName
+ * @property string $subscriptionTo
  */
 class SubscriptionParams extends BaseObject implements Arrayable
 {
@@ -149,11 +155,11 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	}
 
 	/**
-	 * @param DateTime $date
+	 * @param string $date
 	 */
-	public function setSubscriptionTo(DateTime $date): void
+	public function setSubscriptionTo(string $date): void
 	{
-		$this->_subscriptionTo = $date->format('d.m.Y');
+		$this->_subscriptionTo = date_create($date)->format('d.m.Y');
 	}
 
 	/**
