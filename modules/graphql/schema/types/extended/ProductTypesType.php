@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
  * Class ProductTypesType
  * @package app\modules\graphql\schema\types\extended
  */
-class ProductTypesType extends ObjectType
+final class ProductTypesType extends ObjectType
 {
 	use TypeTrait;
 
@@ -44,7 +44,7 @@ class ProductTypesType extends ObjectType
 		return [
 			'type' => Type::listOf(Types::productTypesType()),
 			'resolve' => fn($productType, array $args = []): ?array
-				=> static::getListFromEnum(EnumProductsTypes::mapData()),
+				=> self::getListFromEnum(EnumProductsTypes::mapData()),
 		];
 	}
 
@@ -59,7 +59,7 @@ class ProductTypesType extends ObjectType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($productType, array $args = []): ?array
-				=> static::getOneFromEnum(EnumProductsTypes::mapData(), $args)
+				=> self::getOneFromEnum(EnumProductsTypes::mapData(), $args)
 		];
 	}
 }

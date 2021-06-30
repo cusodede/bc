@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
  * Class PartnerCategoryType
  * @package app\modules\graphql\schema\types
  */
-class PartnerCategoryType extends ObjectType
+final class PartnerCategoryType extends ObjectType
 {
 	/**
 	 * PartnerCategoryType constructor.

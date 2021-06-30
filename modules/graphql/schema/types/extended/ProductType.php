@@ -17,7 +17,7 @@ use GraphQL\Type\Definition\Type;
  * Class ProductType
  * @package app\modules\graphql\schema\types
  */
-class ProductType extends ObjectType
+final class ProductType extends ObjectType
 {
 	use TypeTrait;
 	/**
@@ -55,7 +55,7 @@ class ProductType extends ObjectType
 					'type' => Types::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
+						=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
 				],
 				'type_id' => [
 					'type' => Type::int(),
@@ -65,7 +65,7 @@ class ProductType extends ObjectType
 					'type' => Types::productTypesType(),
 					'description' => 'Тип продукта',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
+						=> self::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
 				],
 				'partner_id' => [
 					'type' => Type::int(),
@@ -85,7 +85,7 @@ class ProductType extends ObjectType
 					'type' => Types::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
+						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
 				],
 			],
 		]);
