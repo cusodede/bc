@@ -9,6 +9,7 @@ use app\models\billing_journal\active_record\BillingJournal as ActiveRecordBilli
 use app\models\products\Products;
 use Exception;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class BillingJournal
@@ -51,5 +52,18 @@ class BillingJournal extends ActiveRecordBillingJournal
 	public function getStatusDesc(): string
 	{
 		return EnumBillingJournalStatuses::getScalar($this->status_id);
+	}
+
+	/**
+	 * @return string
+	 * @throws Exception
+	 */
+	public function calculateNewPaymentDate(): string
+	{
+		$expireDate  = ArrayHelper::getValue($this->relatedAbonentsToProducts, 'relatedLastProductStatus.expire_date');
+
+		return date_create(($this->try_date < $expireDate) ? $expireDate : $this->try_date)
+			->modify($this->relatedProduct->paymentDateModifier)
+			->format('Y-m-d H:i:s');
 	}
 }
