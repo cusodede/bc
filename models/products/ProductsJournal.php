@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use app\models\abonents\RelAbonentsToProducts;
-use app\models\products\active_record\ProductStatuses as ActiveRecordProductStatuses;
+use app\models\products\active_record\ProductsJournal as ActiveRecordProductsJournal;
 use Exception;
 use yii\db\ActiveQuery;
 
 /**
- * Class ProductStatuses
+ * Class ProductsJournal
  * @package app\models\products
  *
  * @property-read string|null $statusName
@@ -20,7 +20,7 @@ use yii\db\ActiveQuery;
  *
  * @property RelAbonentsToProducts $relatedAbonentsToProducts
  */
-class ProductStatuses extends ActiveRecordProductStatuses
+class ProductsJournal extends ActiveRecordProductsJournal
 {
 	/**
 	 * {@inheritdoc}

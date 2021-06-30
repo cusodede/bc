@@ -5,7 +5,7 @@ namespace app\useCases;
 
 use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\EnumProductsStatuses;
-use app\models\products\ProductStatuses;
+use app\models\products\ProductsJournal;
 
 /**
  * Class ProductStatusCase
@@ -21,14 +21,14 @@ class ProductStatusCase
 	public function update(int $abonentId, int $productId, int $statusId): void
 	{
 		$relation = RelAbonentsToProducts::Upsert(['abonent_id' => $abonentId, 'product_id' => $productId]);
-		if (null === $relation->relatedLastProductStatus) {
+		if (null === $relation->relatedLastProductsJournal) {
 			$config = ['status_id' => EnumProductsStatuses::STATUS_ENABLED, 'expire_date' => ''];//TODO calculate new expire_date
 		} elseif ($statusId === EnumProductsStatuses::STATUS_DISABLED) {
-			$config = ['status_id' => $statusId, 'expire_date' => $relation->relatedLastProductStatus->expire_date];
+			$config = ['status_id' => $statusId, 'expire_date' => $relation->relatedLastProductsJournal->expire_date];
 		} else {
 			$config = ['status_id' => $statusId, 'expire_date' => ''];//TODO calculate new expire_date
 		}
 
-		$relation->relatedLastProductStatus = new ProductStatuses($config);
+		$relation->relatedLastProductsJournal = new ProductsJournal($config);
 	}
 }

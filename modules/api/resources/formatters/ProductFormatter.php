@@ -6,7 +6,7 @@ namespace app\modules\api\resources\formatters;
 use app\helpers\DateHelper;
 use app\models\partners\Partners;
 use app\models\products\Products;
-use app\models\products\ProductStatuses;
+use app\models\products\ProductsJournal;
 use app\models\common\RefPartnersCategories;
 use app\models\subscriptions\Subscriptions;
 use pozitronik\helpers\ArrayHelper;
@@ -42,9 +42,9 @@ class ProductFormatter implements ProductFormatterInterface
 			RefPartnersCategories::class => [
 				'name'
 			],
-			ProductStatuses::class => [
+			ProductsJournal::class => [
 				'status'     => 'statusName',
-				'expireDate' => static function (ProductStatuses $status) {
+				'expireDate' => static function (ProductsJournal $status) {
 					return DateHelper::toIso8601($status->expire_date);
 				}
 			]

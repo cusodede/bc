@@ -18,7 +18,7 @@ use yii\db\ActiveRecord;
  *
  * @property Partners $relatedPartner
  * @property Users $relatedUser
- * @property ProductStatuses|null $actualStatus актуальный статус продукта по абоненту.
+ * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read string|null $typeName именованное обозначение типа продукта.
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
@@ -26,9 +26,9 @@ use yii\db\ActiveRecord;
 class Products extends ActiveRecordProducts
 {
 	/**
-	 * @var ProductStatuses|null актуальный статус продукта по абоненту.
+	 * @var ProductsJournal|null актуальный статус продукта по абоненту.
 	 */
-	public ?ProductStatuses $actualStatus = null;
+	public ?ProductsJournal $actualStatus = null;
 
 	/**
 	 * {@inheritdoc}

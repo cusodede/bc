@@ -6,7 +6,7 @@ namespace app\models\abonents\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\billing_journal\active_record\BillingJournal;
 use app\models\products\active_record\Products;
-use app\models\products\active_record\ProductStatuses;
+use app\models\products\active_record\ProductsJournal;
 use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -18,7 +18,7 @@ use yii\db\ActiveRecord;
  * @property int $abonent_id
  * @property int $product_id
  *
- * @property ProductStatuses[] $relatedProductStatuses
+ * @property ProductsJournal[] $relatedProductsJournal
  * @property BillingJournal[] $relatedBillingJournal
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
@@ -65,9 +65,9 @@ class RelAbonentsToProducts extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedProductStatuses(): ActiveQuery
+	public function getRelatedProductsJournal(): ActiveQuery
 	{
-		return $this->hasMany(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id']);
+		return $this->hasMany(ProductsJournal::class, ['rel_abonents_to_products_id' => 'id']);
 	}
 
 	/**

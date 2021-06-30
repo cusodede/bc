@@ -19,7 +19,7 @@ use yii\db\ActiveRecord;
  *
  * @property RelAbonentsToProducts $relatedAbonentsToProducts
  */
-class ProductStatuses extends ActiveRecord
+class ProductsJournal extends ActiveRecord
 {
 	use ActiveRecordTrait;
 
