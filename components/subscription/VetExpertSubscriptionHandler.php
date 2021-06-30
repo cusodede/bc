@@ -30,12 +30,16 @@ class VetExpertSubscriptionHandler extends SubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function subscribe(): void
+	protected function subscribe(): string
 	{
 		$subscriptionParams = SubscriptionParams::createInstance($this->_abonent);
-		$subscriptionParams->setSubscriptionTo();//TODO calculate subscription date
+
+		$expireDate = $this->_billingJournalRecord->calculateNewPaymentDate();
+		$subscriptionParams->subscriptionTo = $expireDate;
 
 		$this->_apiConnector->makeSubscribe($subscriptionParams);
+
+		return $expireDate;
 	}
 
 	/**
