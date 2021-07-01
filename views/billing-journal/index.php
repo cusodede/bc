@@ -8,8 +8,9 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\components\helpers\Html;
+use app\controllers\AbonentsController;
 use app\controllers\ProductsController;
-use app\controllers\UsersController;
 use app\models\billing_journal\BillingJournal;
 use app\models\billing_journal\EnumBillingJournalStatuses;
 use app\models\products\Products;
@@ -17,7 +18,6 @@ use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\ArrayHelper;
 use yii\base\Model;
-use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
@@ -45,7 +45,10 @@ $this->title = 'История списаний';
 				'attribute' => 'searchAbonentPhone',
 				'label'     => 'Телефон абонента',
 				'content'   => static function(BillingJournal $model) {
-					return Html::a($model->relatedAbonent->phone, UsersController::to('view', ['id' => $model->relatedAbonent->id]));
+					return Html::ajaxModalLink(
+						$model->relatedAbonent->phone,
+						AbonentsController::to('view', ['id' => $model->relatedAbonent->id])
+					);
 				}
 			],
 			[
@@ -53,7 +56,10 @@ $this->title = 'История списаний';
 				'label'     => 'Наименование продукта',
 				'filter'    => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
 				'content'   => static function(BillingJournal $model) {
-					return Html::a($model->relatedProduct->name, ProductsController::to('view', ['id' => $model->relatedProduct->id]));
+					return Html::ajaxModalLink(
+						$model->relatedProduct->name,
+						ProductsController::to('view', ['id' => $model->relatedProduct->id])
+					);
 				}
 			],
 			'price',
