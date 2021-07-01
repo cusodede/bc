@@ -61,7 +61,7 @@ class GraphqlController extends ActiveController
 		if (!empty($variables) && !is_array($variables)) {
 			try {
 				$variables = Json::decode($variables);
-			} catch (Throwable $t) {
+			} /** @noinspection BadExceptionsProcessingInspection Это норма */ catch (Throwable $t) {
 				$variables = null;
 			}
 		}
