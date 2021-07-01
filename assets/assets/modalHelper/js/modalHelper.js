@@ -32,7 +32,14 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 	}
 	modalContainerDiv.addClass('preloading');
 	modalContainerDiv.load(dataUrl, function() {
-		$('#' + modalDivId).modal('show');
+		let modalDiv;
+		if (undefined === modalDivId) {
+			modalDiv = modalContainerDiv.find('.modal:first');
+		} else {
+			modalDiv = $('#' + modalDivId);
+		}
+
+		modalDiv.modal('show');
 		modalContainerDiv.removeClass('preloading');
 		document.dispatchEvent(new Event('modalIsReady'));
 	}).show();
@@ -94,5 +101,9 @@ function formSubmitAjax(event) {
 	}
 
 	return false;
-
 };
+
+$('.el-ajax-modal').on('click', function (e) {
+	e.preventDefault();
+	AjaxModal($(this).data('ajax-url'))
+});
