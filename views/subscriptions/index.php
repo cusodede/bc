@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute' => 'partner_id',
-				'value' => 'product.partner.name',
+				'value' => 'product.relatedPartner.name',
 				'label' => 'Партнер'
 			],
 			[
