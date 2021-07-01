@@ -8,19 +8,18 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
-use app\assets\ModalHelperAsset;
+use app\controllers\ProductsController;
+use app\controllers\UsersController;
 use app\models\billing_journal\BillingJournal;
 use app\models\billing_journal\EnumBillingJournalStatuses;
 use app\models\products\Products;
 use kartik\grid\GridView;
-use kartik\select2\Select2;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\ArrayHelper;
 use yii\base\Model;
+use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
-
-ModalHelperAsset::register($this);
 
 $this->title = 'История списаний';
 
@@ -45,35 +44,23 @@ $this->title = 'История списаний';
 			[
 				'attribute' => 'searchAbonentPhone',
 				'label'     => 'Телефон абонента',
-				'content'   => static fn(BillingJournal $model) => $model->relatedAbonent->phone
+				'content'   => static function(BillingJournal $model) {
+					return Html::a($model->relatedAbonent->phone, UsersController::to('view', ['id' => $model->relatedAbonent->id]));
+				}
 			],
 			[
 				'attribute' => 'searchProductId',
 				'label'     => 'Наименование продукта',
-				'filter'    => Select2::widget([
-					'model'         => $searchModel,
-					'attribute'     => 'searchProductId',
-					'data'          => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
-					'pluginOptions' => [
-						'allowClear'  => true,
-						'placeholder' => ''
-					]
-				]),
-				'content'   => static fn(BillingJournal $model) => $model->relatedProduct->name
+				'filter'    => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
+				'content'   => static function(BillingJournal $model) {
+					return Html::a($model->relatedProduct->name, ProductsController::to('view', ['id' => $model->relatedProduct->id]));
+				}
 			],
 			'price',
 			[
 				'attribute' => 'status_id',
-				'filter'    => Select2::widget([
-					'model'         => $searchModel,
-					'attribute'     => 'status_id',
-					'data'          => EnumBillingJournalStatuses::mapData(),
-					'pluginOptions' => [
-						'allowClear'  => true,
-						'placeholder' => ''
-					]
-				]),
-				'content'   => static fn(BillingJournal $model) => $model->getStatusDesc()
+				'filter'    => EnumBillingJournalStatuses::mapData(),
+				'content'   => static fn(BillingJournal $model) => $model->statusDesc
 			],
 			[
 				'attribute' => 'try_date',

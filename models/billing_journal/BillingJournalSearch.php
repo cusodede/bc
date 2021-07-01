@@ -26,8 +26,8 @@ class BillingJournalSearch extends BillingJournal
 	public function rules(): array
 	{
 		return [
-			[['id'], 'string'],
-			[['status_id', 'searchProductId', 'searchAbonentPhone'], 'integer']
+			[['id', 'searchAbonentPhone'], 'string'],
+			[['status_id', 'searchProductId'], 'integer']
 		];
 	}
 
@@ -52,9 +52,9 @@ class BillingJournalSearch extends BillingJournal
 
 		$query->andFilterWhere([
 			'b.id'        => $this->id,
+			'b.status_id' => $this->status_id,
 			'ra.phone'    => $this->searchAbonentPhone,
 			'rp.id'       => $this->searchProductId,
-			'b.status_id' => $this->status_id
 		]);
 
 		return $dataProvider;

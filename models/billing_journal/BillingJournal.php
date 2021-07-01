@@ -17,6 +17,7 @@ use yii\db\ActiveQuery;
  * @property-read RelAbonentsToProducts $relatedAbonentsToProducts
  * @property-read Abonents $relatedAbonent
  * @property-read Products $relatedProduct
+ * @property-read string $statusDesc
  */
 class BillingJournal extends ActiveRecordBillingJournal
 {
