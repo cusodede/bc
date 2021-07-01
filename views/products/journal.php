@@ -77,11 +77,11 @@ $this->title = 'История подключений';
 				'content'   => static function(ProductsJournal $model) {
 					switch ($model->status_id) {
 						case EnumProductsStatuses::STATUS_ENABLED:
-							return Html::tag('span', $model->statusDesc, ['class' => ['badge border border-success text-success']]);
+							return Html::badgeSuccess($model->statusDesc);
 						case EnumProductsStatuses::STATUS_RENEWED:
-							return Html::tag('span', $model->statusDesc, ['class' => ['badge border border-info text-info']]);
+							return Html::badgeInfo($model->statusDesc);
 						case EnumProductsStatuses::STATUS_DISABLED:
-							return Html::tag('span', $model->statusDesc, ['class' => ['badge border border-danger text-danger']]);
+							return Html::badgeDanger($model->statusDesc);
 						default:
 							return $model->statusDesc;
 					}

@@ -66,15 +66,21 @@ $this->title = 'История списаний';
 			[
 				'attribute' => 'status_id',
 				'filter'    => EnumBillingJournalStatuses::mapData(),
-				'content'   => static fn(BillingJournal $model) => $model->statusDesc
+				'content'   => static function(BillingJournal $model) {
+					switch ($model->status_id) {
+						case EnumBillingJournalStatuses::STATUS_CHARGED:
+							return Html::badgeSuccess($model->statusDesc);
+						case EnumBillingJournalStatuses::STATUS_FAILURE:
+							return Html::badgeDanger($model->statusDesc);
+						default:
+							return $model->statusDesc;
+					}
+				}
 			],
 			[
 				'attribute' => 'try_date',
 				'format'    => ['date', 'php:d.m.Y H:i']
 			]
-		],
-		'rowOptions'       => static function(BillingJournal $model) {
-			return EnumBillingJournalStatuses::STATUS_FAILURE === $model->status_id ? ['class' => 'bg-warning-300'] : ['class' => 'bg-success-300'];
-		}
+		]
 	])
 ]) ?>
