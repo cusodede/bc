@@ -5,7 +5,9 @@ namespace app\controllers;
 
 use app\components\web\DefaultController;
 use app\models\products\Products;
+use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
+use Yii;
 
 /**
  * Class ProductsController
@@ -14,16 +16,29 @@ use app\models\products\ProductsSearch;
 class ProductsController extends DefaultController
 {
 	/**
+	 * Модель продуктов
+	 * @var string
+	 */
+	public string $modelClass = Products::class;
+
+	/**
 	 * Поисковая модель продуктов
 	 * @var string
 	 */
 	public string $modelSearchClass = ProductsSearch::class;
 
 	/**
-	 * Модель продуктов
-	 * @var string
+	 * @return string
 	 */
-	public string $modelClass = Products::class;
+	public function actionJournal(): string
+	{
+		$searchModel = new ProductsJournalSearch();
+
+		return $this->render('journal', [
+			'searchModel'  => $searchModel,
+			'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
+		]);
+	}
 
 	/**
 	 * Переопределим базовую директорию views
