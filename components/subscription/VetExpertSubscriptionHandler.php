@@ -20,7 +20,7 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	 * @param Products $product
 	 * @param array $config
 	 */
-	public function __construct(Products $product, $config = [])
+	public function __construct(Products $product, array $config = [])
 	{
 		parent::__construct($product, $config);
 
