@@ -1,25 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\api\components\queue\job;
+namespace app\components\subscription\job;
 
-use app\components\subscription\SubscriptionHandler;
-use app\models\abonents\Abonents;
+use app\components\subscription\BaseSubscriptionHandler;
 use app\models\products\Products;
-use DomainException;
 use yii\queue\RetryableJobInterface;
+use yii\web\NotFoundHttpException;
 
 /**
- * Class UnsubscribeProductJob
- * @package app\modules\api\components\queue\job
+ * Class SubscribeJob
+ * @package app\components\subscription\job
  */
-class UnsubscribeProductJob implements RetryableJobInterface
+class SubscribeJob implements RetryableJobInterface
 {
 	private int $_productId;
 	private int $_abonentId;
 
 	/**
-	 * UnsubscribeProductJob constructor.
+	 * SubscribeJob constructor.
 	 * @param int $productId
 	 * @param int $abonentId
 	 */
@@ -35,14 +34,13 @@ class UnsubscribeProductJob implements RetryableJobInterface
 	public function execute($queue): void
 	{
 		$product = Products::findOne($this->_productId);
-		$abonent = Abonents::findOne($this->_abonentId);
-		if ((null === $product) || (null === $abonent)) {
-			throw new DomainException('', 404);
+		if (null === $product) {
+			throw new NotFoundHttpException();
 		}
 
-		$service = SubscriptionHandler::createInstanceByProduct($product);
+		$service = BaseSubscriptionHandler::createInstanceByProduct($product);
 
-		$service->revoke($this->_abonentId);
+		$service->provide($this->_abonentId, '');//TODO add billing operation stuff
 	}
 
 	/**
@@ -58,6 +56,6 @@ class UnsubscribeProductJob implements RetryableJobInterface
 	 */
 	public function canRetry($attempt, $error): bool
 	{
-		return !$error instanceof DomainException || 404 !== $error->getCode();
+		return true;
 	}
 }

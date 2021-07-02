@@ -11,7 +11,7 @@ use app\modules\api\connectors\vet_expert\VetExpertConnector;
  * Class VetExpertSubscriptionHandler
  * @package app\components\subscription
  */
-class VetExpertSubscriptionHandler extends SubscriptionHandler
+class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 {
 	private VetExpertConnector $_apiConnector;
 
@@ -20,7 +20,7 @@ class VetExpertSubscriptionHandler extends SubscriptionHandler
 	 * @param Products $product
 	 * @param array $config
 	 */
-	public function __construct(Products $product, $config = [])
+	public function __construct(Products $product, array $config = [])
 	{
 		parent::__construct($product, $config);
 
@@ -30,12 +30,16 @@ class VetExpertSubscriptionHandler extends SubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function subscribe(): void
+	protected function subscribe(): string
 	{
 		$subscriptionParams = SubscriptionParams::createInstance($this->_abonent);
-		$subscriptionParams->setSubscriptionTo();//TODO calculate subscription date
+
+		$expireDate = $this->_billingJournalRecord->calculateNewPaymentDate();
+		$subscriptionParams->subscriptionTo = $expireDate;
 
 		$this->_apiConnector->makeSubscribe($subscriptionParams);
+
+		return $expireDate;
 	}
 
 	/**
