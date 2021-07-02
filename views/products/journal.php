@@ -67,9 +67,8 @@ $this->title = 'История подключений';
 				'value'   	=> 'relatedProduct.typeDesc'
 			],
 			[
-				'attribute' => 'relatedProduct.payment_period',
-				'label'     => 'Тип списания',
-				'value'   	=> 'relatedProduct.paymentPeriodDesc'
+				'attribute' => 'relatedProduct.paymentPeriodDesc',
+				'label'     => 'Тип списания'
 			],
 			[
 				'attribute' => 'status_id',
