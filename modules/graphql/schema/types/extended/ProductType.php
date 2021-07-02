@@ -7,11 +7,13 @@ use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\products\ProductsSearch;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\schema\common\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ProductType
@@ -87,6 +89,10 @@ final class ProductType extends ObjectType
 					'resolve' => fn(Products $product): ?array
 						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
 				],
+				'created_at' => [
+					'type' => Type::string(),
+					'description' => 'Дата создания',
+				],
 			],
 		]);
 	}
@@ -98,8 +104,27 @@ final class ProductType extends ObjectType
 	{
 		return [
 			'type' => Type::listOf(Types::product()),
-			'resolve' => fn(Products $product = null, array $args = []): ?array
-				=> Products::find()->where($args)->active()->all(),
+			'args' => [
+				'sort' => [
+					'type' => Type::string(),
+					'description' => 'Сортировка: name, -name, created_at, -created_at',
+				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id партнёра',
+				],
+				'category_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id категории партнёра',
+				],
+			],
+			'resolve' => function(Products $product = null, array $args = []): array {
+				$productSearch = new ProductsSearch();
+				ArrayHelper::setValue($args, 'pagination', false);
+				return $productSearch
+					->search(self::transformToSearchModelParams($productSearch, $args))
+					->getModels();
+			}
 		];
 	}
 
