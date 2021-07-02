@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\api\connectors\ivi;
 
 use app\components\CollectionInterface;
+use Exception;
 
 /**
  * Коллекция подключенных подписок по абоненту.
@@ -39,5 +40,20 @@ class PurchaseCollection implements CollectionInterface
 	public function isEmpty(): bool
 	{
 		return [] === $this->_items;
+	}
+
+	/**
+	 * @param int $id
+	 * @return PurchaseItem|null
+	 * @throws Exception
+	 */
+	public function extractById(int $id): ?PurchaseItem
+	{
+		foreach ($this->_items as $item) {
+			if ($id === $item->getId()) {
+				return $item;
+			}
+		}
+		return null;
 	}
 }

@@ -6,22 +6,32 @@ namespace app\components\subscription;
 use app\models\products\Products;
 use app\modules\api\connectors\ivi\IviConnector;
 use app\modules\api\connectors\ivi\ProductOptions;
+use app\modules\api\connectors\ivi\PurchaseOptionsHandler;
 use DomainException;
+use Throwable;
+use yii\httpclient\Exception;
 
 /**
  * Class IviSubscriptionHandler
  * @package app\components\subscription
  */
-class IviSubscriptionHandler extends SubscriptionHandler
+class IviSubscriptionHandler extends BaseSubscriptionHandler
 {
+	/**
+	 * @var IviConnector
+	 */
 	private IviConnector $_apiConnector;
+	/**
+	 * @var ProductOptions|null
+	 */
+	private ?ProductOptions $_productOptions = null;
 
 	/**
 	 * IviSubscriptionHandler constructor.
 	 * @param Products $product
 	 * @param array $config
 	 */
-	public function __construct(Products $product, $config = [])
+	public function __construct(Products $product, array $config = [])
 	{
 		parent::__construct($product, $config);
 
@@ -31,25 +41,65 @@ class IviSubscriptionHandler extends SubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function subscribe(): void
+	protected function beforeSubscribe(): void
 	{
-		$productOptions = new ProductOptions(['product' => $this->_product->id, 'phone' => $this->_abonent->phone]);
+		parent::beforeSubscribe();
 
-		//делаем запрос на получение актуального списка опций
-		$response = $this->_apiConnector->getPurchaseOptions($productOptions);
+		$this->_productOptions = new ProductOptions([
+			'productId'     => $this->_product->id,
+			'phone'         => $this->_abonent->phone,
+			'transactionId' => $this->_billingJournalRecord->id
+		]);
+	}
 
-		$purchaseOptions = $response->getPurchasesOptionsCollection();
-		if ($purchaseOptions->isEmpty()) {
-			throw new DomainException('Отсутствуют доступные для подключения опции.');
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function subscribe(): string
+	{
+		$purchaseId = $this->makePurchase();
+		//TODO предусмотреть сохранение идентификатора продукта в системе
+
+		//делаем повторный запрос на получение актуальной информации по подключенной подписке
+		$purchaseOptionsHandler = $this->callPurchaseOptions();
+
+		$purchaseData = $purchaseOptionsHandler->getPurchasesCollection()->extractById($purchaseId);
+		if (null === $purchaseData) {
+			throw new DomainException("Не удалось найти покупку с ID $purchaseId");
 		}
 
-		$productPurchaseOptions = $purchaseOptions->extractProductPurchaseOptions($productOptions->product);
+		return $purchaseData->getExpireDate();
+	}
+
+	/**
+	 * @return PurchaseOptionsHandler
+	 * @throws Exception
+	 * @throws Throwable
+	 */
+	private function callPurchaseOptions(): PurchaseOptionsHandler
+	{
+		return $this->_apiConnector->getPurchaseOptions($this->_productOptions);
+	}
+
+	/**
+	 * @return int ID покупки.
+	 * @throws Exception
+	 * @throws Throwable
+	 */
+	private function makePurchase(): int
+	{
+		$purchaseOptionsHandler = $this->callPurchaseOptions();
+
+		$productPurchaseOptions = $purchaseOptionsHandler
+			->getPurchasesOptionsCollection()
+			->extractProductPurchaseOptions($this->_productOptions->productId);
 		if (null === $productPurchaseOptions) {
-			throw new DomainException("Среди опций покупки отсутствует продукт с идентификатором {$productOptions->product}");
+			throw new DomainException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
 		}
 
-		$purchaseResult = $this->_apiConnector->makePurchase($productOptions, $productPurchaseOptions);
-		$purchaseResult->getPurchaseId();//TODO предусмотреть сохранение идентификатора продукта в системе
+		$result = $this->_apiConnector->makePurchase($this->_productOptions, $productPurchaseOptions);
+
+		return $result->getPurchaseId();
 	}
 
 	/**
