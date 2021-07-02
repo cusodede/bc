@@ -64,12 +64,12 @@ $this->title = 'История подключений';
 				'attribute' => 'searchProductTypeId',
 				'label'     => 'Тип продукта',
 				'filter'    => EnumProductsTypes::mapData(),
-				'content'   => static fn(ProductsJournal $model) => $model->relatedProduct->typeDesc
+				'value'   	=> 'relatedProduct.typeDesc'
 			],
 			[
 				'attribute' => 'relatedProduct.payment_period',
 				'label'     => 'Тип списания',
-				'content'   => static fn(ProductsJournal $model) => $model->relatedProduct->paymentPeriodDesc
+				'value'   	=> 'relatedProduct.paymentPeriodDesc'
 			],
 			[
 				'attribute' => 'status_id',
