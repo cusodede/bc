@@ -17,6 +17,7 @@ use ReflectionClass;
 class ProductsSearch extends Products
 {
 	public ?string $category_id = null;
+	public ?bool $trial = null;
 
 	/**
 	 * @return array[]
@@ -25,6 +26,7 @@ class ProductsSearch extends Products
 	{
 		return [
 			[['id', 'type_id', 'partner_id', 'category_id'], 'integer'],
+			[['trial'], 'boolean'],
 			[['name'], 'safe'],
 		];
 	}
@@ -66,12 +68,17 @@ class ProductsSearch extends Products
 		}
 
 		$query->joinWith(['relatedPartner']);
+		$query->joinWith(['relatedSubscription']);
 
 		$query->andFilterWhere(['products.id' => $this->id])
 			->andFilterWhere(['products.type_id' => $this->type_id])
 			->andFilterWhere(['products.partner_id' => $this->partner_id])
 			->andFilterWhere(['partners.category_id' => $this->category_id])
 			->andFilterWhere(['like', 'products.name', $this->name]);
+
+		if (null !== $this->trial) {
+			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);
+		}
 
 		return $dataProvider;
 	}

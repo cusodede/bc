@@ -117,6 +117,10 @@ final class ProductType extends ObjectType
 					'type' => Type::int(),
 					'description' => 'Фильтр id категории партнёра',
 				],
+				'trial' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр, триальный период (1|0)',
+				],
 			],
 			'resolve' => function(Products $product = null, array $args = []): array {
 				$productSearch = new ProductsSearch();
