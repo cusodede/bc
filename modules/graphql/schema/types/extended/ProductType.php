@@ -7,17 +7,19 @@ use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\products\ProductsSearch;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ProductType
  * @package app\modules\graphql\schema\types
  */
-class ProductType extends ObjectType
+final class ProductType extends ObjectType
 {
 	use TypeTrait;
 	/**
@@ -55,7 +57,7 @@ class ProductType extends ObjectType
 					'type' => Types::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
+						=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
 				],
 				'type_id' => [
 					'type' => Type::int(),
@@ -65,7 +67,7 @@ class ProductType extends ObjectType
 					'type' => Types::productTypesType(),
 					'description' => 'Тип продукта',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
+						=> self::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
 				],
 				'partner_id' => [
 					'type' => Type::int(),
@@ -85,7 +87,11 @@ class ProductType extends ObjectType
 					'type' => Types::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
 					'resolve' => fn(Products $product): ?array
-						=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
+						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
+				],
+				'created_at' => [
+					'type' => Type::string(),
+					'description' => 'Дата создания',
 				],
 			],
 		]);
@@ -98,8 +104,31 @@ class ProductType extends ObjectType
 	{
 		return [
 			'type' => Type::listOf(Types::product()),
-			'resolve' => fn(Products $product = null, array $args = []): ?array
-				=> Products::find()->where($args)->active()->all(),
+			'args' => [
+				'sort' => [
+					'type' => Type::string(),
+					'description' => 'Сортировка: name, -name, created_at, -created_at',
+				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id партнёра',
+				],
+				'category_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id категории партнёра',
+				],
+				'trial' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр, триальный период (1|0)',
+				],
+			],
+			'resolve' => function(Products $product = null, array $args = []): array {
+				$productSearch = new ProductsSearch();
+				ArrayHelper::setValue($args, 'pagination', false);
+				return $productSearch
+					->search(self::transformToSearchModelParams($productSearch, $args))
+					->getModels();
+			}
 		];
 	}
 

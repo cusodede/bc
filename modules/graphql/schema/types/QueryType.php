@@ -8,8 +8,8 @@ use app\modules\graphql\schema\types\extended\ProductPaymentPeriodType;
 use app\modules\graphql\schema\types\extended\ProductType;
 use app\modules\graphql\schema\types\extended\ProductTypesType;
 use app\modules\graphql\schema\types\extended\SubscriptionTrialUnitsType;
-use GraphQL\Type\Definition\ObjectType;
 use app\modules\graphql\schema\types\extended\PartnerType;
+use GraphQL\Type\Definition\ObjectType;
 
 /**
  * Class QueryType

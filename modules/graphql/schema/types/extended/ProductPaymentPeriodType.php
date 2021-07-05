@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\extended;
 
 use app\models\products\EnumProductsPaymentPeriods;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -14,7 +14,7 @@ use GraphQL\Type\Definition\Type;
  * Class ProductPaymentPeriodType
  * @package app\modules\graphql\schema\types
  */
-class ProductPaymentPeriodType extends ObjectType
+final class ProductPaymentPeriodType extends ObjectType
 {
 	use TypeTrait;
 
@@ -42,7 +42,7 @@ class ProductPaymentPeriodType extends ObjectType
 		return [
 			'type' => Type::listOf(Types::productPaymentPeriodType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
+				=> self::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
 		];
 	}
 
@@ -57,7 +57,7 @@ class ProductPaymentPeriodType extends ObjectType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
+				=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
 		];
 	}
 }

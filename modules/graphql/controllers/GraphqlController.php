@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;

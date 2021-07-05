@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\extended;
 
 use app\models\common\RefPartnersCategories;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
  * Class PartnerCategoryType
  * @package app\modules\graphql\schema\types
  */
-class PartnerCategoryType extends ObjectType
+final class PartnerCategoryType extends ObjectType
 {
 	/**
 	 * PartnerCategoryType constructor.

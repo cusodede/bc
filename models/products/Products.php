@@ -77,6 +77,11 @@ class Products extends ActiveRecordProducts
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}
 
+	public function getRelatedSubscription(): ActiveQuery
+	{
+		return $this->hasOne(Subscriptions::class, ['product_id' => 'id']);
+	}
+
 	/**
 	 * @return string
 	 */
