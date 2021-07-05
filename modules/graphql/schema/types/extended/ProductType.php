@@ -47,11 +47,11 @@ final class ProductType extends ObjectType
 				],
 				'start_date' => [
 					'type' => Type::string(),
-					'description' => 'Начало действия',
+					'description' => 'Начало действия Y-m-d H:i:s',
 				],
 				'end_date' => [
 					'type' => Type::string(),
-					'description' => 'Конец действия',
+					'description' => 'Конец действия Y-m-d H:i:s',
 				],
 				'payment_period' => [
 					'type' => Types::productPaymentPeriodType(),
@@ -91,7 +91,7 @@ final class ProductType extends ObjectType
 				],
 				'created_at' => [
 					'type' => Type::string(),
-					'description' => 'Дата создания',
+					'description' => 'Дата создания Y-m-d H:i:s',
 				],
 			],
 		]);
@@ -120,6 +120,10 @@ final class ProductType extends ObjectType
 				'trial' => [
 					'type' => Type::boolean(),
 					'description' => 'Фильтр, триальный период (1|0)',
+				],
+				'active' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр, по активности (1|0)',
 				],
 			],
 			'resolve' => function(Products $product = null, array $args = []): array {
