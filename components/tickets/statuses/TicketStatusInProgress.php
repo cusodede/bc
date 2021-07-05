@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\components\tickets\statuses;
 
-use app\helpers\DateHelper;
+use app\components\helpers\DateHelper;
 use DateTimeImmutable;
 
 /**
