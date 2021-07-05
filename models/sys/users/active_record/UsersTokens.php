@@ -3,8 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record;
 
+use app\models\sys\users\active_record\relations\RelUsersTokensToTokens;
+use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "sys_users_tokens".
@@ -19,6 +22,8 @@ use yii\db\ActiveRecord;
  * @property string|null $user_agent User-Agent
  *
  * @property null|Users $relatedUsers
+ * @property UsersTokens|null $relatedParentToken
+ * @property UsersTokens[] $relatedChildTokens
  */
 class UsersTokens extends ActiveRecord {
 	/**
@@ -43,6 +48,18 @@ class UsersTokens extends ActiveRecord {
 			$this->auth_token = self::GenerateToken();
 		}
 		return parent::beforeValidate();
+	}
+
+	public function beforeDelete(): bool
+	{
+		if (!parent::beforeDelete()) {
+			return false;
+		}
+		if ([] !== $this->relatedChildTokens) {
+			self::deleteAll(['id' => ArrayHelper::getColumn($this->relatedChildTokens, 'id', false)]);
+		}
+
+		return true;
 	}
 
 	/**
@@ -80,5 +97,55 @@ class UsersTokens extends ActiveRecord {
 	 */
 	public function getRelatedUsers():ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedParentToken(): ActiveQuery
+	{
+		return $this->hasOne(static::class, ['id' => 'parent_id'])->via('relatedUsersTokensToParentTokens');
+	}
+
+	/**
+	 * @param array $tokens
+	 * @throws Throwable
+	 */
+	public function setRelatedParentTokens(array $tokens): void
+	{
+		RelUsersTokensToTokens::linkModels($tokens, $this);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedChildTokens(): ActiveQuery
+	{
+		return $this->hasMany(static::class, ['id' => 'child_id'])->via('relatedUsersTokensToChildTokens');
+	}
+
+	/**
+	 * @param array $tokens
+	 * @throws Throwable
+	 */
+	public function setRelatedChildTokens(array $tokens): void
+	{
+		RelUsersTokensToTokens::linkModels($this, $tokens);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersTokensToParentTokens(): ActiveQuery
+	{
+		return $this->hasMany(RelUsersTokensToTokens::class, ['child_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedUsersTokensToChildTokens(): ActiveQuery
+	{
+		return $this->hasMany(RelUsersTokensToTokens::class, ['parent_id' => 'id']);
 	}
 }

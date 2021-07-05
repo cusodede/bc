@@ -12,6 +12,7 @@ use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
 use Throwable;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
@@ -24,9 +25,13 @@ use yii\web\IdentityInterface;
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  *
  * Файловые атрибуты
- * @property mixed $avatar Картинка аватара пользователя (атрибут для загрузки)
- * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
- * @property-read string $currentAvatarUrl Шорткат для получения ссылки на актуальный файл аватарки
+ * @property mixed $avatar картинка аватара пользователя (атрибут для загрузки).
+ * @property-read null|FileStorage $fileAvatar запись об актуальном файле аватара в файловом хранилище.
+ * @property-read string $currentAvatarUrl шорткат для получения ссылки на актуальный файл аватарки.
+ *
+ * @property-read UsersTokens[] $relatedUsersTokens связанные с моделью пользователя модели токенов.
+ * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
+ * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
@@ -219,4 +224,30 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
+	/**
+	 * @return UsersTokens|null
+	 */
+	public function getRelatedUnpopularUserToken(): ?UsersTokens
+	{
+		$tokens = $this->relatedMainUsersTokens;
+		ArrayHelper::multisort($tokens, 'created');
+
+		return array_shift($tokens);
+	}
+
+	/**
+	 * @return UsersTokens[]
+	 */
+	public function getRelatedMainUsersTokens(): array
+	{
+		return array_filter($this->relatedUsersTokens, static fn(UsersTokens $token) => null === $token->relatedParentToken);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedUsersTokens(): ActiveQuery
+	{
+		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+	}
 }
