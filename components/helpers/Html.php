@@ -45,6 +45,6 @@ class Html extends \yii\bootstrap4\Html
 	 */
 	public static function badgeInfo(string $text): string
 	{
-		return Html::tag('span', $text, ['class' => ['badge border border-info text-info']]);
+		return parent::tag('span', $text, ['class' => ['badge border border-info text-info']]);
 	}
 }
