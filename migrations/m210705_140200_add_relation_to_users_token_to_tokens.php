@@ -23,10 +23,9 @@ class m210705_140200_add_relation_to_users_token_to_tokens extends RelationMigra
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		parent::safeDown();
-
 		$this->dropForeignKey('fk_rel_tokens_to_child_token', $this->table_name);
 		$this->dropForeignKey('fk_rel_tokens_to_parent_token', $this->table_name);
+		parent::safeDown();
 	}
 
 }
