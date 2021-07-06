@@ -56,7 +56,7 @@ class UsersTokens extends ActiveRecord {
 			return false;
 		}
 		if ([] !== $this->relatedChildTokens) {
-			self::deleteAll(['id' => ArrayHelper::getColumn($this->relatedChildTokens, 'id', false)]);
+			self::deleteAll(['id' => ArrayHelper::getColumn($this->relatedChildTokens, 'id')]);
 		}
 
 		return true;
