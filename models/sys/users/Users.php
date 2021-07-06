@@ -227,8 +227,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @return UsersTokens|null
 	 */
-	public function getRelatedUnpopularUserToken(): ?UsersTokens
-	{
+	public function getRelatedUnpopularUserToken():?UsersTokens {
 		$tokens = $this->relatedMainUsersTokens;
 		ArrayHelper::multisort($tokens, 'created');
 
@@ -238,16 +237,14 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @return UsersTokens[]
 	 */
-	public function getRelatedMainUsersTokens(): array
-	{
+	public function getRelatedMainUsersTokens():array {
 		return array_filter($this->relatedUsersTokens, static fn(UsersTokens $token) => null === $token->relatedParentToken);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRelatedUsersTokens(): ActiveQuery
-	{
+	public function getRelatedUsersTokens():ActiveQuery {
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
 	}
 }

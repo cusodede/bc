@@ -56,8 +56,7 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	 * Получение самого верхнего родительского токена.
 	 * @return self
 	 */
-	public function getRelatedMainParentToken(): self
-	{
+	public function getRelatedMainParentToken():self {
 		$token = $this;
 		while (null !== $parentToken = $token->relatedParentToken) {
 			$token = $parentToken;

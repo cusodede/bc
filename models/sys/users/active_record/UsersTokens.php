@@ -49,8 +49,7 @@ class UsersTokens extends ActiveRecord {
 		return parent::beforeValidate();
 	}
 
-	public function beforeDelete(): bool
-	{
+	public function beforeDelete():bool {
 		if (!parent::beforeDelete()) {
 			return false;
 		}
@@ -103,8 +102,7 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedParentToken(): ActiveQuery
-	{
+	public function getRelatedParentToken():ActiveQuery {
 		return $this->hasOne(static::class, ['id' => 'parent_id'])->via('relatedUsersTokensToParentTokens');
 	}
 
@@ -112,16 +110,14 @@ class UsersTokens extends ActiveRecord {
 	 * @param array $tokens
 	 * @throws Throwable
 	 */
-	public function setRelatedParentTokens(array $tokens): void
-	{
+	public function setRelatedParentTokens(array $tokens):void {
 		RelUsersTokensToTokens::linkModels($tokens, $this);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedChildTokens(): ActiveQuery
-	{
+	public function getRelatedChildTokens():ActiveQuery {
 		return $this->hasMany(static::class, ['id' => 'child_id'])->via('relatedUsersTokensToChildTokens');
 	}
 
@@ -129,24 +125,21 @@ class UsersTokens extends ActiveRecord {
 	 * @param array $tokens
 	 * @throws Throwable
 	 */
-	public function setRelatedChildTokens(array $tokens): void
-	{
+	public function setRelatedChildTokens(array $tokens):void {
 		RelUsersTokensToTokens::linkModels($this, $tokens);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersTokensToParentTokens(): ActiveQuery
-	{
+	public function getRelatedUsersTokensToParentTokens():ActiveQuery {
 		return $this->hasMany(RelUsersTokensToTokens::class, ['child_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersTokensToChildTokens(): ActiveQuery
-	{
+	public function getRelatedUsersTokensToChildTokens():ActiveQuery {
 		return $this->hasMany(RelUsersTokensToTokens::class, ['parent_id' => 'id']);
 	}
 }
