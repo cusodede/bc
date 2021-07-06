@@ -7,7 +7,6 @@ use app\models\sys\users\active_record\relations\RelUsersTokensToTokens;
 use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "sys_users_tokens".
@@ -55,8 +54,10 @@ class UsersTokens extends ActiveRecord {
 		if (!parent::beforeDelete()) {
 			return false;
 		}
-		if ([] !== $this->relatedChildTokens) {
-			self::deleteAll(['id' => ArrayHelper::getColumn($this->relatedChildTokens, 'id')]);
+
+		//удаляем все дочерние токены, которые привязаны к данному
+		foreach ($this->relatedChildTokens as $token) {
+			$token->delete();
 		}
 
 		return true;
