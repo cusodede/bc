@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\helpers;
+namespace app\components\helpers;
 
 use DateTimeImmutable;
 use pozitronik\helpers\DateHelper as VendorDateHelper;
@@ -29,5 +29,15 @@ class DateHelper extends VendorDateHelper
 	public static function createImmutableFromTimestamp(int $timestamp): DateTimeImmutable
 	{
 		return date_create_immutable(self::from_unix_timestamp($timestamp));
+	}
+
+	/**
+	 * @param string $date
+	 * @param string $format
+	 * @return string
+	 */
+	public static function toFormat(string $date, string $format = 'Y-m-d H:i:s'): string
+	{
+		return date_create($date)->format($format);
 	}
 }

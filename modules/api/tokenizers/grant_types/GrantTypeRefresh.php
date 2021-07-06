@@ -5,22 +5,27 @@ namespace app\modules\api\tokenizers\grant_types;
 
 use app\models\sys\users\UsersTokens;
 use app\modules\api\exceptions\InvalidGrantException;
+use yii\web\BadRequestHttpException;
 use yii\web\Request;
 
 /**
  * Class GrantTypeRefresh
  * @package app\modules\api\tokenizers\grant_types
  */
-class GrantTypeRefresh implements GrantTypeInterface
+class GrantTypeRefresh extends BaseGrantType
 {
-	private ?string $_refreshToken;
-
 	/**
-	 * {@inheritdoc}
+	 * GrantTypeRefresh constructor.
+	 * @param Request $request
+	 * @throws BadRequestHttpException
 	 */
-	public function loadRequest(Request $request): void
+	public function __construct(Request $request)
 	{
-		$this->_refreshToken = $request->post('refresh_token');
+		parent::__construct($request);
+
+		if (null === $this->getRefreshToken()) {
+			throw new BadRequestHttpException('refresh_token param is invalid');
+		}
 	}
 
 	/**
@@ -28,7 +33,7 @@ class GrantTypeRefresh implements GrantTypeInterface
 	 */
 	public function getRefreshToken(): ?string
 	{
-		return $this->_refreshToken;
+		return $this->_request->post('refresh_token');
 	}
 
 	/**

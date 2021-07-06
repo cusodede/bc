@@ -196,6 +196,8 @@ trait ActiveRecordTrait {
 	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
 	 * @param array $attributes
 	 * @return static
+	 * @noinspection PhpDocMissingThrowsInspection Это нормально, метод find может быть перекрыт, и возвращать
+	 * собственные исключения. Можно не включать в пробрасываемый скоуп.
 	 */
 	public static function Upsert(array $attributes):self {
 		if (null === $model = self::find()->where($attributes)->one()) {

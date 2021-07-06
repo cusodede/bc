@@ -7,7 +7,7 @@ use app\components\tickets\statuses\TicketStatusDone;
 use app\components\tickets\statuses\TicketStatusInProgress;
 use app\components\tickets\statuses\TicketStatusInterface;
 use app\components\tickets\statuses\TicketStatusWaiting;
-use app\helpers\DateHelper;
+use app\components\helpers\DateHelper;
 use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
 use Yii;

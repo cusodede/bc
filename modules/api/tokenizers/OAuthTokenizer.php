@@ -3,42 +3,41 @@ declare(strict_types = 1);
 
 namespace app\modules\api\tokenizers;
 
-use app\models\sys\users\Users;
+use app\components\helpers\DateHelper;
 use app\models\sys\users\UsersTokens;
-use app\modules\api\tokenizers\grant_types\GrantTypeInterface;
-use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
-use InvalidArgumentException;
-use pozitronik\helpers\DateHelper;
+use app\modules\api\tokenizers\grant_types\BaseGrantType;
 use RuntimeException;
 use Yii;
+use yii\base\Component;
 use yii\db\Exception;
 use yii\db\Transaction;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class BaseTokenizer
+ * Class OAuthTokenizer
  * @package app\modules\api\tokenizers
+ *
+ * @property-read array $tokenData
+ * @property-read string $tokenType
+ * @property-read string $authToken
+ * @property-read string|null $refreshToken
+ * @property-read int $expiresIn
+ * @property-read int $refreshTokenExpiresIn
  */
-abstract class OAuthTokenizer implements Tokenizer
+abstract class OAuthTokenizer extends Component implements Tokenizer
 {
-	public const ACCESS_TOKEN_DEFAULT_LIFETIME = 3600;
-
 	/**
-	 * @var Users
+	 * @var BaseGrantType
 	 */
-	protected Users $_user;
+	protected BaseGrantType $_grantType;
 	/**
-	 * @var GrantTypeInterface
+	 * @var UsersTokens|null токен авторизации для доступа к интерфейсу API.
 	 */
-	protected GrantTypeInterface $_grantType;
-	/**
-	 * @var UsersTokens токен авторизации для доступа к интерфейсу API.
-	 */
-	protected UsersTokens $_authToken;
+	protected ?UsersTokens $_authToken = null;
 	/**
 	 * @var UsersTokens|null токен для сброса ключа авторизации.
 	 */
-	protected ?UsersTokens $_refreshToken;
+	protected ?UsersTokens $_refreshToken = null;
 	/**
 	 * @var bool
 	 */
@@ -46,19 +45,14 @@ abstract class OAuthTokenizer implements Tokenizer
 
 	/**
 	 * OAuthTokenizer constructor.
-	 * @param Users $user
-	 * @param GrantTypeInterface $grantType
-	 * @throws Exception
+	 * @param BaseGrantType $grantType
+	 * @param array $config
 	 */
-	public function __construct(Users $user, GrantTypeInterface $grantType)
+	public function __construct(BaseGrantType $grantType, array $config = [])
 	{
-		$this->_user      = $user;
-		$this->_grantType = $grantType;
-		if ($grantType instanceof GrantTypeRefresh && (null === $grantType->getRefreshToken())) {
-			throw new InvalidArgumentException('refresh_token param is invalid');
-		}
+		parent::__construct($config);
 
-		$this->initTokens();
+		$this->_grantType = $grantType;
 	}
 
 	/**
@@ -66,11 +60,18 @@ abstract class OAuthTokenizer implements Tokenizer
 	 */
 	abstract protected function getTokenType(): string;
 
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	public function getTokenData(): array
 	{
-		$data = ['access_token' => $this->getAuthToken(), 'expires_in' => $this->getExpiresIn()];
-		if (null !== $refreshToken = $this->getRefreshToken()) {
-			$data['refresh_token'] = $refreshToken;
+		$this->initTokens();
+
+		$data = ['access_token' => $this->authToken, 'expires_in' => $this->expiresIn];
+
+		if (null !== $this->refreshToken) {
+			$data['refresh_token'] = $this->refreshToken;
 		}
 
 		return $data;
@@ -97,30 +98,55 @@ abstract class OAuthTokenizer implements Tokenizer
 	 */
 	public function getExpiresIn(): int
 	{
-		return self::ACCESS_TOKEN_DEFAULT_LIFETIME;
+		return 900;
+	}
+
+	/**
+	 * Устанавливаем дефолтное время жизни рефреш-токена в 1 месяц.
+	 * @return int
+	 */
+	public function getRefreshTokenExpiresIn(): int
+	{
+		return 2592000;
 	}
 
 	/**
 	 * Инициализируем и обрабатываем модели токенов.
 	 * @throws Exception
 	 */
-	protected function initTokens(): void
+	private function initTokens(): void
 	{
-		$this->initAuthToken();
+		$this->_authToken = $this->getTokenModel();
+
 		if ($this->_useRefreshToken) {
-			$this->initRefreshToken();
+			$this->_refreshToken = $this->getTokenModel(RefreshTokenType::class);
 		}
+
 		//проверяем обоснованность запроса на выпуск токенов
 		$this->_grantType->validate($this->_authToken, $this->_refreshToken);
 
-		$this->configureAuthToken();
-		if ($this->_useRefreshToken) {
-			$this->configureRefreshToken();
+		if ($this->_authToken->isNewRecord || !$this->_authToken->isValid()) {
+			$this->configureToken(
+				$this->_authToken,
+				$this->getTokenType(),
+				$this->getExpiresIn()
+			);
+			if ($this->_useRefreshToken) {
+				$this->configureToken(
+					$this->_refreshToken,
+					'refresh',
+					$this->getRefreshTokenExpiresIn()
+				);
+			}
 		}
 
 		/** @var Transaction $transaction */
 		$transaction = Yii::$app->db->beginTransaction();
 		if ($this->_authToken->save() && ((null === $this->_refreshToken) || $this->_refreshToken->save())) {
+			if (null !== $this->_refreshToken) {
+				$this->_authToken->relatedChildTokens = [$this->_refreshToken];
+			}
+
 			$transaction->commit();
 		} else {
 			$transaction->rollBack();
@@ -130,38 +156,33 @@ abstract class OAuthTokenizer implements Tokenizer
 	}
 
 	/**
-	 * Инициализация модели основного токена доступа.
+	 * @param string|null $type
+	 * @return UsersTokens
 	 */
-	private function initAuthToken(): void
+	private function getTokenModel(?string $type = null): UsersTokens
 	{
-		$this->_authToken = $this->getModelByType($this->getTokenType());
+		if (null === $type) {
+			$type = $this->getTokenType();
+		}
+
+		$config = [
+			'type_id'    => UsersTokens::TOKEN_TYPES[$type],
+			'user_id'    => $this->_grantType->getUser()->id,
+			'user_agent' => $this->_grantType->getUserAgent()
+		];
+
+		return UsersTokens::findOne($config) ?? new UsersTokens($config);
 	}
 
 	/**
-	 * Инициализация модели refresh токена.
+	 * @param UsersTokens $token
+	 * @param string $prefix
+	 * @param int $expiresIn
 	 */
-	private function initRefreshToken(): void
+	private function configureToken(UsersTokens $token, string $prefix, int $expiresIn = 0): void
 	{
-		$this->_refreshToken = $this->getModelByType(RefreshTokenType::class);
-	}
-
-	/**
-	 * Конфигурация модели основного токена доступа.
-	 */
-	private function configureAuthToken(): void
-	{
-		$exp = strtotime("+ {$this->getExpiresIn()} seconds");
-
-		$this->_authToken->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class);
-		$this->_authToken->valid      = DateHelper::from_unix_timestamp($exp);
-	}
-
-	/**
-	 * Конфигурация модели refresh токена.
-	 */
-	private function configureRefreshToken(): void
-	{
-		$this->_refreshToken->auth_token = $this->generateRandomToken("{$this->_user->id}:" . static::class . ":refresh");
+		$token->auth_token = $this->generateRandomToken($prefix);
+		$token->valid      = ($expiresIn > 0) ? DateHelper::toFormat("+ $expiresIn seconds") : null;
 	}
 
 	/**
@@ -169,19 +190,10 @@ abstract class OAuthTokenizer implements Tokenizer
 	 * @param string $prefix
 	 * @return string
 	 */
-	protected function generateRandomToken(string $prefix = ''): string
+	protected function generateRandomToken(string $prefix): string
 	{
+		$prefix = $this->_grantType->getUser()->id . ':' . static::class . ':' . $prefix;
+
 		return sha1(uniqid($prefix . mt_rand(), true));
-	}
-
-	/**
-	 * @param string $type
-	 * @return UsersTokens
-	 */
-	private function getModelByType(string $type): UsersTokens
-	{
-		$config = ['user_id' => $this->_user->id, 'type_id' => UsersTokens::TOKEN_TYPES[$type]];
-
-		return UsersTokens::findOne($config) ?? new UsersTokens($config);
 	}
 }
