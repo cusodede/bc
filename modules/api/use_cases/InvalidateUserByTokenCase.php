@@ -39,8 +39,8 @@ class InvalidateUserByTokenCase
 			throw new InvalidArgumentException('Invalid token provided.');
 		}
 
-		if (null !== $request) {
-			$this->validateRequest($neededToken, $request);
+		if ((null !== $request) && !$this->isTrustedRequest($request, $neededToken)) {
+			throw new BadRequestHttpException('Invalid request.');
 		}
 
 		$neededToken->relatedMainParentToken->delete();
@@ -48,14 +48,12 @@ class InvalidateUserByTokenCase
 
 	/**
 	 * Тут настраиваем логику проверки соответствия токена полученному запросу на инвалидацию (ip, user-agent и т.д.).
-	 * @param UsersTokens $token
 	 * @param Request $request
-	 * @throws BadRequestHttpException
+	 * @param UsersTokens $token
+	 * @return bool
 	 */
-	private function validateRequest(UsersTokens $token, Request $request): void
+	private function isTrustedRequest(Request $request, UsersTokens $token): bool
 	{
-		if ($token->user_agent !== $request->userAgent) {
-			throw new BadRequestHttpException();
-		}
+		return $request->userAgent === $token->user_agent;
 	}
 }
