@@ -3,25 +3,43 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
+use app\models\products\active_record\ProductsJournal as ActiveRecordProductsJournal;
+use app\models\abonents\Abonents;
 use app\models\abonents\RelAbonentsToProducts;
-use app\models\products\active_record\ProductStatuses as ActiveRecordProductStatuses;
 use Exception;
 use yii\db\ActiveQuery;
 
 /**
- * Class ProductStatuses
+ * Class ProductsJournal
  * @package app\models\products
  *
- * @property-read string|null $statusName
+ * @property RelAbonentsToProducts $relatedAbonentsToProducts
+ * @property-read Products $relatedProduct
+ * @property-read Abonents $relatedAbonent
+ * @property-read string|null $statusDesc
  * @property-read bool $isEnabled
  * @property-read bool $isRenewed
  * @property-read bool $isDisabled
  * @property-read bool $isExpired
- *
- * @property RelAbonentsToProducts $relatedAbonentsToProducts
  */
-class ProductStatuses extends ActiveRecordProductStatuses
+class ProductsJournal extends ActiveRecordProductsJournal
 {
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedProduct(): ActiveQuery
+	{
+		return $this->hasOne(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonent(): ActiveQuery
+	{
+		return $this->hasOne(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -34,7 +52,7 @@ class ProductStatuses extends ActiveRecordProductStatuses
 	 * @return string|null именованное обозначение статуса.
 	 * @throws Exception
 	 */
-	public function getStatusName(): ?string
+	public function getStatusDesc(): ?string
 	{
 		return EnumProductsStatuses::getScalar($this->status_id);
 	}

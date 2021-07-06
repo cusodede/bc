@@ -18,8 +18,9 @@ use yii\db\ActiveRecord;
  *
  * @property Partners $relatedPartner
  * @property Users $relatedUser
- * @property ProductStatuses|null $actualStatus актуальный статус продукта по абоненту.
- * @property-read string|null $typeName именованное обозначение типа продукта.
+ * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
+ * @property-read string|null $typeDesc именованное обозначение типа продукта.
+ * @property-read string|null $paymentPeriodDesc
  * @property-read string $paymentDateModifier
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
@@ -27,9 +28,9 @@ use yii\db\ActiveRecord;
 class Products extends ActiveRecordProducts
 {
 	/**
-	 * @var ProductStatuses|null актуальный статус продукта по абоненту.
+	 * @var ProductsJournal|null актуальный статус продукта по абоненту.
 	 */
-	public ?ProductStatuses $actualStatus = null;
+	public ?ProductsJournal $actualStatus = null;
 
 	/**
 	 * {@inheritdoc}
@@ -64,9 +65,18 @@ class Products extends ActiveRecordProducts
 	 * @return string|null именованное обозначение типа продукта.
 	 * @throws Exception
 	 */
-	public function getTypeName(): ?string
+	public function getTypeDesc(): ?string
 	{
 		return EnumProductsTypes::getScalar($this->type_id);
+	}
+
+	/**
+	 * @return string|null
+	 * @throws Exception
+	 */
+	public function getPaymentPeriodDesc(): ?string
+	{
+		return EnumProductsPaymentPeriods::getScalar($this->payment_period);
 	}
 
 	/**

@@ -42,7 +42,7 @@ class Abonents extends ActiveRecordAbonents
 	{
 		return array_map(
 			static function (RelAbonentsToProducts $abonentsToProduct) {
-				$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductStatus;
+				$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductsJournal;
 				return $abonentsToProduct->relatedProduct;
 			},
 			//принудительно запрашиваем все линки для соответствия потребностям метода

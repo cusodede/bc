@@ -6,15 +6,15 @@ namespace app\models\abonents;
 use app\models\abonents\active_record\RelAbonentsToProducts as ActiveRecordRelAbonentsToProducts;
 use app\models\billing_journal\BillingJournal;
 use app\models\products\Products;
-use app\models\products\ProductStatuses;
+use app\models\products\ProductsJournal;
 use yii\db\ActiveQuery;
 
 /**
  * Class RelAbonentsToProducts
  * @package app\models\abonents
  *
- * @property ProductStatuses[] $relatedProductStatuses
- * @property ProductStatuses $relatedLastProductStatus
+ * @property ProductsJournal[] $relatedProductsJournal
+ * @property ProductsJournal $relatedLastProductsJournal
  * @property BillingJournal[] $relatedBillingJournal
  * @property Abonents $relatedAbonent
  * @property Products $relatedProduct
@@ -24,9 +24,9 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRelatedProductStatuses(): ActiveQuery
+	public function getRelatedProductsJournal(): ActiveQuery
 	{
-		return $this->hasMany(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id']);
+		return $this->hasMany(ProductsJournal::class, ['rel_abonents_to_products_id' => 'id']);
 	}
 
 	/**
@@ -45,18 +45,18 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 		return $this->hasOne(Products::class, ['id' => 'product_id']);
 	}
 
-	public function setRelatedLastProductStatus(ProductStatuses $status): void
+	public function setRelatedLastProductsJournal(ProductsJournal $status): void
 	{
-		$this->link('relatedLastProductStatus', $status);
+		$this->link('relatedLastProductsJournal', $status);
 	}
 
 	/**
 	 * Получение актуального статуса по продукту из журнала.
 	 * @return ActiveQuery
 	 */
-	public function getRelatedLastProductStatus(): ActiveQuery
+	public function getRelatedLastProductsJournal(): ActiveQuery
 	{
-		return $this->hasOne(ProductStatuses::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['created_at' => SORT_DESC]);
+		return $this->hasOne(ProductsJournal::class, ['rel_abonents_to_products_id' => 'id'])->orderBy(['created_at' => SORT_DESC]);
 	}
 
 	/**

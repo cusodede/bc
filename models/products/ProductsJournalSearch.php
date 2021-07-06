@@ -1,33 +1,37 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\billing_journal;
+namespace app\models\products;
 
 use yii\data\ActiveDataProvider;
 
 /**
- * Class BillingJournalSearch
- * @package app\models\billing_journal
+ * Class ProductsJournalSearch
+ * @package app\models\products
  */
-class BillingJournalSearch extends BillingJournal
+class ProductsJournalSearch extends ProductsJournal
 {
 	/**
 	 * @var string|null идентификатор продукта для поиска.
 	 */
 	public ?string $searchProductId = null;
 	/**
+	 * @var string|null идентификатор продукта для поиска.
+	 */
+	public ?string $searchProductTypeId = null;
+	/**
 	 * @var string|null телефон абонента для поиска.
 	 */
 	public ?string $searchAbonentPhone = null;
 
 	/**
-	 * {@inheritdoc}
+	 * @return array[]
 	 */
 	public function rules(): array
 	{
 		return [
 			[['id', 'searchAbonentPhone'], 'string'],
-			[['status_id', 'searchProductId'], 'integer']
+			[['status_id', 'searchProductId', 'searchProductTypeId'], 'integer']
 		];
 	}
 
@@ -37,24 +41,27 @@ class BillingJournalSearch extends BillingJournal
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
-		$query = BillingJournal::find()->alias('b')->joinWith(['relatedAbonent ra', 'relatedProduct rp']);
+		$query = ProductsJournal::find()->alias('pj')->joinWith(['relatedAbonent ra', 'relatedProduct rp']);
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
+
 		$dataProvider->setSort([
 			'defaultOrder' => ['created_at' => SORT_DESC],
-			'attributes'   => ['created_at', 'status_id', 'try_date']
+			'attributes'   => ['id', 'created_at']
 		]);
 
 		$this->load($params);
+
 		if (!$this->validate()) {
 			return $dataProvider;
 		}
 
 		$query->andFilterWhere([
-			'b.id'        => $this->id,
-			'b.status_id' => $this->status_id,
-			'ra.phone'    => $this->searchAbonentPhone,
-			'rp.id'       => $this->searchProductId,
+			'pj.id'        => $this->id,
+			'pj.status_id' => $this->status_id,
+			'ra.phone'     => $this->searchAbonentPhone,
+			'rp.id'        => $this->searchProductId,
+			'rp.type_id'   => $this->searchProductTypeId
 		]);
 
 		return $dataProvider;

@@ -6,8 +6,6 @@ use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
-use app\components\web\DefaultController;
-use app\models\sys\users\Users;
 use app\modules\history\HistoryModule;
 use app\widgets\smartadmin\sidebar\SideBarWidget;
 use pozitronik\filestorage\FSModule;
@@ -32,7 +30,7 @@ use app\controllers\AbonentsController;
 		[
 			'label'     => 'Партнеры',
 			'url'       => [PartnersController::to('index')],
-			'iconClass' => 'fa-briefcase'
+			'iconClass' => 'fa-handshake'
 		],
 		[
 			'label'     => 'Продукты',
@@ -65,12 +63,6 @@ use app\controllers\AbonentsController;
 					'visible' => UsersController::hasPermission('index')
 				]
 			],
-		],
-		[
-			'label'     => 'Прототипирование',
-			'url'       => '#',
-			'iconClass' => 'fa-digging',
-			'items'     => DefaultController::MenuItems()
 		],
 		[
 			'label'     => 'Доступы',
@@ -121,22 +113,16 @@ use app\controllers\AbonentsController;
 			],
 		],
 		[
-			'label'     => 'REST API',
-			'url'       => '#',
-			'iconClass' => 'fa-cloud',
-			'items'     => [
-				[
-					'label' => 'Пользователи',
-					'url'   => ['/api/users'],
-				]
-			],
-			'visible'   => Users::Current()->hasPermission(['system'])
-		],
-		[
 			'label'     => 'История списаний',
 			'url'       => [BillingJournalController::to('index')],
-			'iconClass' => 'fa-money-bill-alt',
+			'iconClass' => 'fa-money-bill-wave-alt',
 			'visible'   => BillingJournalController::hasPermission('index')
+		],
+		[
+			'label'     => 'История подключений',
+			'url'       => [ProductsController::to('journal')],
+			'iconClass' => 'fa-history',
+			'visible'   => ProductsController::hasPermission('journal')
 		]
 	]
 ]) ?>

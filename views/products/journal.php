@@ -11,30 +11,28 @@ declare(strict_types = 1);
 use app\components\helpers\Html;
 use app\controllers\AbonentsController;
 use app\controllers\ProductsController;
-use app\models\billing_journal\BillingJournal;
-use app\models\billing_journal\EnumBillingJournalStatuses;
-use app\models\products\Products;
+use app\models\products\EnumProductsStatuses;
+use app\models\products\EnumProductsTypes;
+use app\models\products\ProductsJournal;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\ArrayHelper;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
+use app\models\products\Products;
 
-$this->title = 'История списаний';
+$this->title = 'История подключений';
 
 ?>
 
 <?= GridConfig::widget([
-	'id'   => "{$modelName}-index-grid",
+	'id'   => 'products-journal__index-grid',
 	'grid' => GridView::begin([
 		'dataProvider'     => $dataProvider,
 		'filterModel'      => $searchModel,
-		'panel'            => [
-			'heading' => '',
-		],
+		'panel'            => ['heading' => '',],
 		'showOnEmpty'      => true,
-		'striped'          => false,
 		'toolbar'          => false,
 		'export'           => false,
 		'resizableColumns' => true,
@@ -44,7 +42,7 @@ $this->title = 'История списаний';
 			[
 				'attribute' => 'searchAbonentPhone',
 				'label'     => 'Телефон абонента',
-				'content'   => static function(BillingJournal $model) {
+				'content'   => static function(ProductsJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedAbonent->phone,
 						AbonentsController::to('view', ['id' => $model->relatedAbonent->id])
@@ -55,22 +53,33 @@ $this->title = 'История списаний';
 				'attribute' => 'searchProductId',
 				'label'     => 'Наименование продукта',
 				'filter'    => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
-				'content'   => static function(BillingJournal $model) {
+				'content'   => static function(ProductsJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedProduct->name,
 						ProductsController::to('view', ['id' => $model->relatedProduct->id])
 					);
 				}
 			],
-			'price',
+			[
+				'attribute' => 'searchProductTypeId',
+				'label'     => 'Тип продукта',
+				'filter'    => EnumProductsTypes::mapData(),
+				'value'   	=> 'relatedProduct.typeDesc'
+			],
+			[
+				'attribute' => 'relatedProduct.paymentPeriodDesc',
+				'label'     => 'Тип списания'
+			],
 			[
 				'attribute' => 'status_id',
-				'filter'    => EnumBillingJournalStatuses::mapData(),
-				'content'   => static function(BillingJournal $model) {
+				'filter'    => EnumProductsStatuses::mapData(),
+				'content'   => static function(ProductsJournal $model) {
 					switch ($model->status_id) {
-						case EnumBillingJournalStatuses::STATUS_CHARGED:
+						case EnumProductsStatuses::STATUS_ENABLED:
 							return Html::badgeSuccess($model->statusDesc);
-						case EnumBillingJournalStatuses::STATUS_FAILURE:
+						case EnumProductsStatuses::STATUS_RENEWED:
+							return Html::badgeInfo($model->statusDesc);
+						case EnumProductsStatuses::STATUS_DISABLED:
 							return Html::badgeDanger($model->statusDesc);
 						default:
 							return $model->statusDesc;
@@ -78,9 +87,13 @@ $this->title = 'История списаний';
 				}
 			],
 			[
-				'attribute' => 'try_date',
-				'format'    => ['date', 'php:d.m.Y H:i']
-			]
-		]
+				'attribute' => 'expire_date',
+				'format'    => ['date', 'php:d.m.Y H:i'],
+			],
+			[
+				'attribute' => 'created_at',
+				'format'    => ['date', 'php:d.m.Y H:i'],
+			],
+		],
 	])
 ]) ?>

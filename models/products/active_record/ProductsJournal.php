@@ -5,13 +5,15 @@ namespace app\models\products\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_record\RelAbonentsToProducts;
+use app\models\products\ProductsJournalSearch;
+use pozitronik\helpers\Utils;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "product_statuses".
  *
- * @property int $id
+ * @property string $id
  * @property int $rel_abonents_to_products_id
  * @property int $status_id
  * @property string $expire_date
@@ -19,7 +21,7 @@ use yii\db\ActiveRecord;
  *
  * @property RelAbonentsToProducts $relatedAbonentsToProducts
  */
-class ProductStatuses extends ActiveRecord
+class ProductsJournal extends ActiveRecord
 {
 	use ActiveRecordTrait;
 
@@ -28,7 +30,7 @@ class ProductStatuses extends ActiveRecord
 	 */
 	public static function tableName(): string
 	{
-		return 'product_statuses';
+		return 'products_journal';
 	}
 
 	/**
@@ -37,11 +39,25 @@ class ProductStatuses extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['rel_abonents_to_products_id', 'status_id'], 'required'],
+			[['!id', 'rel_abonents_to_products_id', 'status_id'], 'required'],
 			[['rel_abonents_to_products_id', 'status_id'], 'integer'],
 			[['rel_abonents_to_products_id'], 'exist', 'skipOnError' => true, 'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']],
 			[['expire_date', 'created_at'], 'safe'],
+			[['!id'], 'string', 'max' => 36],
+			[['!id'], 'unique'],
 		];
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function beforeValidate(): bool
+	{
+		if ($this->isNewRecord && !$this instanceof ProductsJournalSearch) {
+			$this->id = Utils::gen_uuid();
+		}
+
+		return parent::beforeValidate();
 	}
 
 	/**
@@ -52,9 +68,9 @@ class ProductStatuses extends ActiveRecord
 		return [
 			'id'                          => 'ID',
 			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-			'status_id'                   => 'Status ID',
-			'expire_date'                 => 'Expire Date',
-			'created_at'                  => 'Created At',
+			'status_id'                   => 'Статус подключения',
+			'expire_date'                 => 'Срок действия',
+			'created_at'                  => 'Дата заведения',
 		];
 	}
 
