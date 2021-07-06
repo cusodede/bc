@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\resources\formatters;
 
-use app\helpers\DateHelper;
+use app\components\helpers\DateHelper;
 use app\models\partners\Partners;
 use app\models\products\Products;
 use app\models\products\ProductStatuses;

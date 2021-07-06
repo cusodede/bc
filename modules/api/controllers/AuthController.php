@@ -6,28 +6,29 @@ namespace app\modules\api\controllers;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use app\modules\api\authenticators\HttpBasicCredentialsAuth;
-use app\modules\api\tokenizers\grant_types\GrantTypeInterface;
+use app\modules\api\tokenizers\grant_types\BaseGrantType;
 use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
 use app\modules\api\tokenizers\JwtTokenizer;
+use app\modules\api\use_cases\InvalidateUserByTokenCase;
+use Throwable;
 use Yii;
-use yii\db\Exception;
+use yii\db\StaleObjectException;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
  * Class AuthController
  * @package app\modules\api\controllers
- *
- * @property-read GrantTypeInterface $grantType
  */
 class AuthController extends YiiRestController
 {
-	public const GRANT_TYPE_CREDENTIALS = 'client_credentials';
-	public const GRANT_TYPE_REFRESH     = 'refresh_token';
+	public const GRANT_TYPE_PASSWORD = 'password';
+	public const GRANT_TYPE_REFRESH  = 'refresh_token';
 
 	/**
 	 * {@inheritdoc}
@@ -39,36 +40,47 @@ class AuthController extends YiiRestController
 				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
-				],
+				]
 			],
-			'authenticator' => [
+			'authenticator'     => [
 				'class' => HttpBasicCredentialsAuth::class
 			],
-			'verbFilter' => [
+			'verbFilter'        => [
 				'class'   => VerbFilter::class,
-				'actions' => $this->verbs(),
+				'actions' => $this->verbs()
 			],
-			'access' => [
+			'access'            => [
 				'class' => PermissionFilter::class
 			]
 		];
 	}
 
 	/**
+	 * Запрос на получение токена доступа к API.
 	 * @return array
-	 * @throws Exception
-	 * @throws ForbiddenHttpException
+	 * @throws BadRequestHttpException
 	 */
 	public function actionToken(): array
 	{
-		$user = Users::Current();
+		return (new JwtTokenizer($this->getGrantType()))->tokenData;
+	}
 
-		$grantType = $this->getGrantType();
-		$grantType->loadRequest(Yii::$app->request);
+	/**
+	 * Принудительная инвалидация токена доступа пользователя.
+	 * @param string $token
+	 * @return void
+	 * @throws BadRequestHttpException
+	 * @throws Throwable
+	 * @throws StaleObjectException
+	 * @throws ForbiddenHttpException
+	 */
+	public function actionLogout(string $token): void
+	{
+		$case = new InvalidateUserByTokenCase();
 
-		$tokenizer = new JwtTokenizer($user, $grantType);
+		$case->execute(Users::Current(), $token, Yii::$app->request);
 
-		return $tokenizer->getTokenData();
+		Yii::$app->user->logout();
 	}
 
 	/**
@@ -79,13 +91,17 @@ class AuthController extends YiiRestController
 		return ['token' => ['GET', 'POST']];
 	}
 
-	private function getGrantType(): GrantTypeInterface
+	/**
+	 * @return BaseGrantType
+	 * @throws BadRequestHttpException
+	 */
+	private function getGrantType(): BaseGrantType
 	{
 		$grantType = Yii::$app->request->post('grant_type');
-		if ($grantType === self::GRANT_TYPE_REFRESH) {
-			return new GrantTypeRefresh();
+		if (self::GRANT_TYPE_REFRESH === $grantType) {
+			return new GrantTypeRefresh(Yii::$app->request);
 		}
 
-		return new GrantTypeIssue();
+		return new GrantTypeIssue(Yii::$app->request);
 	}
 }

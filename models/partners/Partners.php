@@ -11,4 +11,9 @@ use app\models\partners\active_record\Partners as ActiveRecordPartners;
  */
 class Partners extends ActiveRecordPartners
 {
+	public function dummy_stub(): void
+	{
+		//todo: временная заглушка
+	}
+
 }

@@ -125,6 +125,7 @@ class IviConnector extends BaseHttpConnector
 	 * @param string $value значение поля для получения токена
 	 * @param string $appVersion
 	 * @return string
+	 * @noinspection PhpSameParameterValueInspection todo: если параметр всегда статичен, то заменить константой
 	 */
 	private function getAccessByParam(string $param, string $value, string $appVersion): string
 	{

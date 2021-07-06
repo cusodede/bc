@@ -17,6 +17,10 @@ use yii\helpers\ArrayHelper;
 /**
  * Class UsersTokens
  * @package app\models\sys\users
+ *
+ * @property UsersTokens|null $relatedParentToken
+ * @property UsersTokens[] $relatedChildTokens
+ * @property-read UsersTokens|null $relatedMainParentToken
  */
 class UsersTokens extends ActiveRecordUsersTokens {
 	use ActiveRecordTrait;
@@ -46,6 +50,19 @@ class UsersTokens extends ActiveRecordUsersTokens {
 				}
 			]
 		]);
+	}
+
+	/**
+	 * Получение самого верхнего родительского токена.
+	 * @return self
+	 */
+	public function getRelatedMainParentToken():self {
+		$token = $this;
+		while (null !== $parentToken = $token->relatedParentToken) {
+			$token = $parentToken;
+		}
+
+		return $token;
 	}
 
 	/**
