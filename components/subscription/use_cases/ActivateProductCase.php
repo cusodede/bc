@@ -5,7 +5,7 @@ namespace app\components\subscription\use_cases;
 
 use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\EnumProductsStatuses;
-use app\models\products\ProductStatuses;
+use app\models\products\ProductsJournal;
 
 /**
  * Class ActivateProductCase
@@ -21,12 +21,12 @@ class ActivateProductCase
 	public function execute(int $abonentId, int $productId, string $expireDate): void
 	{
 		$relation = RelAbonentsToProducts::Upsert(['abonent_id' => $abonentId, 'product_id' => $productId]);
-		if (null === $relation->relatedLastProductStatus) {
+		if (null === $relation->relatedLastProductsJournal) {
 			$config = ['status_id' => EnumProductsStatuses::STATUS_ENABLED, 'expire_date' => $expireDate];
 		} else {
 			$config = ['status_id' => EnumProductsStatuses::STATUS_RENEWED, 'expire_date' => $expireDate];
 		}
 
-		$relation->relatedLastProductStatus = new ProductStatuses($config);
+		$relation->relatedLastProductsJournal = new ProductsJournal($config);
 	}
 }
