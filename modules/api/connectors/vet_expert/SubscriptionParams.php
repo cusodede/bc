@@ -198,6 +198,7 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	 * @param array $expand
 	 * @param bool $recursive
 	 * @return array
+	 * @noinspection ParameterDefaultValueIsNotNullInspection
 	 */
 	public function toArray(array $fields = [], array $expand = [], $recursive = true): array
 	{
