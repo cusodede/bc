@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\extended;
 
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\common\Types;
 use app\modules\graphql\schema\types\TypeTrait;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\Type;
  * Class SubscriptionTrialUnitsType
  * @package app\modules\graphql\schema\types\extended
  */
-class SubscriptionTrialUnitsType extends ObjectType
+final class SubscriptionTrialUnitsType extends ObjectType
 {
 	use TypeTrait;
 
@@ -44,7 +44,7 @@ class SubscriptionTrialUnitsType extends ObjectType
 		return [
 			'type' => Type::listOf(Types::subscriptionTrialUnitsType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
+				=> self::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
 		];
 	}
 
@@ -59,7 +59,7 @@ class SubscriptionTrialUnitsType extends ObjectType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> static::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
+				=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
 		];
 	}
 }

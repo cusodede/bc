@@ -1,15 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\schema\common;
 
-use app\modules\graphql\schema\mutations\PartnerMutationType;
+use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
+use app\modules\graphql\schema\mutations\MutationType;
 use app\modules\graphql\schema\types\extended\PartnerCategoryType;
 use app\modules\graphql\schema\types\extended\PartnerType;
 use app\modules\graphql\schema\types\extended\ProductPaymentPeriodType;
 use app\modules\graphql\schema\types\extended\ProductType;
 use app\modules\graphql\schema\types\extended\ProductTypesType;
 use app\modules\graphql\schema\types\extended\SubscriptionTrialUnitsType;
+use app\modules\graphql\schema\types\QueryType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\UnionType;
 

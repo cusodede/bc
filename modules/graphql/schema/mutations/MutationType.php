@@ -3,34 +3,24 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutations;
 
+use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
- * Class MutationType
- * @package app\modules\graphql\schema\mutations
+ * Class BaseMutationType
+ * @package app\modules\graphql\schema\types
  */
-abstract class MutationType extends ObjectType
+class MutationType extends ObjectType
 {
 	/**
-	 * ActiveRecord модель изменяемых данных
-	 * @var string|null
+	 * {@inheritdoc}
 	 */
-	public ?string $model = null;
-
-	/**
-	 * Список сообщение для фронта
-	 */
-	public const MESSAGES = [];
-
-	/**
-	 * Схема для мутаций
-	 * @return array
-	 */
-	abstract public static function mutationType(): array;
-
-	/**
-	 * Список атрибутов GraphQL типа
-	 * @return array
-	 */
-	abstract public function getArgs(): array;
+	public function __construct()
+	{
+		parent::__construct([
+			'fields' => [
+				'partner' => PartnerMutationType::mutationType(),
+			]
+		]);
+	}
 }

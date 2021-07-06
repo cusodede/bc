@@ -10,6 +10,7 @@ use yii\base\Module;
  * Class GraphqlModule
  * @package app\modules\graphql
  */
-class GraphqlModule extends Module {
+class GraphqlModule extends Module
+{
 	use ModuleTrait;
 }

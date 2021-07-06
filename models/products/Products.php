@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read string|null $typeDesc именованное обозначение типа продукта.
  * @property-read string|null $paymentPeriodDesc
+ * @property-read string $paymentDateModifier
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  */
@@ -84,5 +85,29 @@ class Products extends ActiveRecordProducts
 	public function getIsSubscription(): bool
 	{
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
+	}
+
+	public function getRelatedSubscription(): ActiveQuery
+	{
+		return $this->hasOne(Subscriptions::class, ['product_id' => 'id']);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPaymentDateModifier(): string
+	{
+		switch ($this->payment_period) {
+			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
+				$modify = ' + 1 month';
+			break;
+			case EnumProductsPaymentPeriods::TYPE_DAILY:
+				$modify = ' + 1 day';
+			break;
+			default:
+				$modify = ' + 0 days';
+		}
+
+		return $modify;
 	}
 }
