@@ -56,7 +56,7 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= ([] === $permissionsCollections = PermissionsCollections::find()->where(['<>', 'id', $model->id])->all())/*Проверяем, есть ли другие коллекции, кроме этой*/
+		<?= ([] === $permissionsCollections = PermissionsCollections::find()->where(null === $model->id?'1 = 1':['<>', 'id', $model->id])->all())/*Проверяем, есть ли другие коллекции, кроме этой*/
 			?Html::a('Сначала создайте другие группы доступов', PermissionsCollectionsController::to('index'), ['class' => 'btn btn-warning'])
 			:$form->field($model, 'relatedSlavePermissionsCollections')->widget(MultiSelectListBox::class, [
 				'options' => [
