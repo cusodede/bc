@@ -39,6 +39,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/*файловые атрибуты*/
 	public $avatar;
 
+	private static ?self $_current = null;
+
 	public function rules():array {
 		return array_merge(parent::rules(), [
 			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
@@ -62,10 +64,10 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws ForbiddenHttpException
 	 */
 	public static function Current():self {
-		if (null === $user = Yii::$app->user->identity) {
+		if (null === self::$_current = self::findIdentity(Yii::$app->user->id)) {
 			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
-		return $user;
+		return self::$_current;
 	}
 
 	/**
