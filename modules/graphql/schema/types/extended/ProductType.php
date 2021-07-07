@@ -119,11 +119,11 @@ final class ProductType extends ObjectType
 				],
 				'trial' => [
 					'type' => Type::boolean(),
-					'description' => 'Фильтр, триальный период (1|0)',
+					'description' => 'Фильтр, триальный период (true|false)',
 				],
 				'active' => [
 					'type' => Type::boolean(),
-					'description' => 'Фильтр, по активности (1|0)',
+					'description' => 'Фильтр, по активности (true|false)',
 				],
 			],
 			'resolve' => function(Products $product = null, array $args = []): array {
