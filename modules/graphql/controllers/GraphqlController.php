@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\graphql\schema\common\Types;
+use cusodede\jwt\JwtHttpBearerAuth;
 use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
@@ -30,6 +32,21 @@ class GraphqlController extends ActiveController
 		return [
 			'index' => ['POST', 'OPTIONS']
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors(): array
+	{
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			],
+			'authenticator' => [
+				'class' => JwtHttpBearerAuth::class
+			],
+		]);
 	}
 
 	/**
