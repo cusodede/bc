@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\connectors\ivi;
 
-use app\components\CollectionInterface;
+use app\common\CollectionInterface;
 use Exception;
 
 /**
