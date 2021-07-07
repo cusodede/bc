@@ -10,9 +10,11 @@ declare(strict_types = 1);
 use app\assets\ModalHelperAsset;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\controllers\UsersController;
 use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
+use app\models\sys\users\Users;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
@@ -97,6 +99,24 @@ ModalHelperAsset::register($this);
 				},
 				'format' => 'raw'
 			],
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'relatedUsers',
+				'format' => 'raw',
+				'value' => static function(PermissionsCollections $collections) {
+					return BadgeWidget::widget([
+						'items' => $collections->relatedUsers,
+						'subItem' => 'username',
+						'options' => function($mapAttributeValue, Users $item) {
+							$url = UsersController::to('view', ['id' => $item->id]);
+							return [//навешиваем модальный просмотр
+								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-view-{$item->id}');event.preventDefault();")
+							];
+						},
+						'urlScheme' => [UsersController::to('view'), 'id' => 'id']
+					]);
+				}
+			]
 		]
 	])
 ]) ?>
