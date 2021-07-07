@@ -74,6 +74,7 @@ class PermissionsCollections extends ActiveRecord {
 			'id' => 'ID',
 			'name' => 'Название',
 			'comment' => 'Комментарий',
+			'relatedUsers' => 'Присвоено пользователям',
 			'relatedPermissions' => 'Доступы',
 			'relatedSlavePermissionsCollections' => 'Включённые группы доступов',
 			'relatedPermissionsViaSlaveGroups' => 'Доступы из включённых групп'
