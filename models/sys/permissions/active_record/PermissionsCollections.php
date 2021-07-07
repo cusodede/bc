@@ -71,7 +71,9 @@ class PermissionsCollections extends ActiveRecord {
 		return [
 			'id' => 'ID',
 			'name' => 'Название',
-			'comment' => 'Комментарий'
+			'comment' => 'Комментарий',
+			'relatedPermissions' => 'Включённые доступы',
+			'relatedSlavePermissionsCollections' => 'Включённые группы доступов'
 		];
 	}
 
@@ -133,7 +135,7 @@ class PermissionsCollections extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedSlavePermissionsCollections():ActiveQuery {
-		return $this->hasMany(self::class, ['id' => 'slave_id'])->via('relatedPermissionsCollectionsToPermissions');
+		return $this->hasMany(self::class, ['id' => 'slave_id'])->via('relatedPermissionsCollectionsToPermissionsCollections');
 	}
 
 	/**
