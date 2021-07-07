@@ -29,6 +29,8 @@ use yii\db\ActiveRecord;
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  * @property Users[] $relatedUsers Все пользователи, у которых есть эта группа доступа
  * @property-read Permissions[] $unrelatedPermissions Права доступа, которые не включены в набор
+ * @property RelPermissionsCollectionsToPermissions[] $relatedSlavePermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа для всех ВКЛЮЧЁННЫХ групп
+ * @property-read Permissions[] $relatedPermissionsViaSlaveGroups Права доступа, попавшие в группу из дочерних групп
  */
 class PermissionsCollections extends ActiveRecord {
 	use ActiveRecordTrait;
@@ -72,8 +74,9 @@ class PermissionsCollections extends ActiveRecord {
 			'id' => 'ID',
 			'name' => 'Название',
 			'comment' => 'Комментарий',
-			'relatedPermissions' => 'Включённые доступы',
-			'relatedSlavePermissionsCollections' => 'Включённые группы доступов'
+			'relatedPermissions' => 'Доступы',
+			'relatedSlavePermissionsCollections' => 'Включённые группы доступов',
+			'relatedPermissionsViaSlaveGroups' => 'Доступы из включённых групп'
 		];
 	}
 
@@ -148,6 +151,20 @@ class PermissionsCollections extends ActiveRecord {
 		} else {
 			RelPermissionsCollectionsToPermissionsCollections::linkModels($this, $relatedSlavePermissionsCollections);
 		}
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedSlavePermissionsCollectionsToPermissions():ActiveQuery {
+		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['collection_id' => 'id'])->via('relatedSlavePermissionsCollections');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsViaSlaveGroups():ActiveQuery {
+		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedSlavePermissionsCollectionsToPermissions');
 	}
 
 }
