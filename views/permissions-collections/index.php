@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use app\assets\ModalHelperAsset;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
 use kartik\grid\ActionColumn;
@@ -70,11 +71,29 @@ ModalHelperAsset::register($this);
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'permission',
+				'label' => 'Включённые доступы',
 				'value' => static function(PermissionsCollections $collections) {
-					return BadgeWidget::widget([
-						'items' => $collections->relatedPermissions,
-						'subItem' => 'name'
-					]);
+					return BadgeWidget::widget([//прямые
+							'items' => $collections->relatedPermissions,
+							'subItem' => 'name',
+							'options' => function($mapAttributeValue, Permissions $item) {
+								$url = PermissionsController::to('edit', ['id' => $item->id]);
+								return [//навешиваем модальный редактор
+									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
+								];
+							},
+							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']//вдобавок к модалке оставляем ссылку для прямого перехода
+						]).BadgeWidget::widget([//через группы
+							'items' => $collections->relatedPermissionsViaSlaveGroups,
+							'subItem' => 'name',
+							'options' => function($mapAttributeValue, Permissions $item) {
+								$url = PermissionsController::to('edit', ['id' => $item->id]);
+								return [//навешиваем модальный редактор
+									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
+								];
+							},
+							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']
+						]);
 				},
 				'format' => 'raw'
 			],
