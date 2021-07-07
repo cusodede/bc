@@ -5,6 +5,7 @@ namespace app\models\sys\permissions\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissions;
+use app\models\sys\permissions\active_record\relations\RelPermissionsCollectionsToPermissionsCollections;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\users\Users;
 use app\modules\history\behaviors\HistoryBehavior;
@@ -21,6 +22,9 @@ use yii\db\ActiveRecord;
  * @property string|null $comment Описание группы доступа
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
+ * @property RelPermissionsCollectionsToPermissionsCollections[] $relatedPermissionsCollectionsToPermissionsCollections Связь к промежуточной таблице к ВКЛЮЧЁННЫЕ группам доступа
+ * @property PermissionsCollections[] $relatedSlavePermissionsCollections ВКЛЮЧЁННЫЕ группам доступа
+ * (родительские нам не нужны ни для чего)
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к промежуточной таблице к пользователям
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  * @property Users[] $relatedUsers Все пользователи, у которых есть эта группа доступа
@@ -116,6 +120,32 @@ class PermissionsCollections extends ActiveRecord {
 	 */
 	public function getRelatedUsers():ActiveQuery {
 		return $this->hasMany(Users::class, ['id' => 'user_id'])->via('relatedUsersToPermissionsCollections');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPermissionsCollectionsToPermissionsCollections():ActiveQuery {
+		return $this->hasMany(RelPermissionsCollectionsToPermissionsCollections::class, ['master_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedSlavePermissionsCollections():ActiveQuery {
+		return $this->hasMany(self::class, ['id' => 'slave_id'])->via('relatedPermissionsCollectionsToPermissions');
+	}
+
+	/**
+	 * @param mixed $relatedSlavePermissionsCollections
+	 * @throws Throwable
+	 */
+	public function setRelatedSlavePermissionsCollections(array $relatedSlavePermissionsCollections):void {
+		if (empty($relatedSlavePermissionsCollections)) {
+			RelPermissionsCollectionsToPermissionsCollections::clearLinks($this);
+		} else {
+			RelPermissionsCollectionsToPermissionsCollections::linkModels($this, $relatedSlavePermissionsCollections);
+		}
 	}
 
 }
