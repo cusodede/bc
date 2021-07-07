@@ -60,7 +60,7 @@ class PermissionsCollections extends ActiveRecord {
 			[['name'], 'string', 'max' => 128],
 			[['name'], 'unique'],
 			[['name'], 'required'],
-			[['relatedPermissions', 'relatedUsers'], 'safe']
+			[['relatedPermissions', 'relatedUsers', 'relatedSlavePermissionsCollections'], 'safe']
 		];
 	}
 
