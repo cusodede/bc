@@ -5,6 +5,7 @@ declare(strict_types=1);
 use app\models\sys\users\WebUser;
 use cusodede\jwt\Jwt;
 use yii\BaseYii;
+use yii\queue\Queue;
 
 /**
  * Yii bootstrap file.
