@@ -105,7 +105,7 @@ ModalHelperAsset::register($this);
 				'format' => 'raw',
 				'value' => static function(PermissionsCollections $collections) {
 					return BadgeWidget::widget([
-						'items' => $collections->relatedUsers,
+						'items' => $collections->relatedUsersRecursively,
 						'subItem' => 'username',
 						'options' => function($mapAttributeValue, Users $item) {
 							$url = UsersController::to('view', ['id' => $item->id]);
