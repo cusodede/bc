@@ -132,6 +132,8 @@ class PermissionsCollections extends ActiveRecord {
 
 	/**
 	 * Проблематично построить связь для join'а при использовании CTE, поэтому только live-получение.
+	 * CTE нужен, чтобы рекурсивно вычислять группы, включённые в группы.
+	 * Выборка не проверялась в поисковых моделях, но должно будет работать.
 	 * @return Users[]
 	 */
 	public function getRelatedUsersRecursively():array {
