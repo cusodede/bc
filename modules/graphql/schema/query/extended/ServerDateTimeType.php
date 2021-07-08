@@ -35,6 +35,7 @@ final class ServerDateTimeType extends ObjectType
 	{
 		return [
 			'type' => Type::string(),
+			'description' => 'Серверное время в формате Y-m-d H:i:s',
 			'resolve' => fn(?array $root, array $args): string => date('Y-m-d H:i:s'),
 		];
 	}

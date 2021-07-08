@@ -40,6 +40,7 @@ final class ProductTypesType extends BaseQueryType
 	{
 		return [
 			'type' => Type::listOf(EnumTypes::productTypesType()),
+			'description' => 'Возвращает список типов продуктов',
 			'resolve' => fn($productType, array $args = []): ?array
 				=> self::getListFromEnum(EnumProductsTypes::mapData()),
 		];
@@ -55,6 +56,7 @@ final class ProductTypesType extends BaseQueryType
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
+			'description' => 'Возвращает тип продукта по ключу',
 			'resolve' => fn($productType, array $args = []): ?array
 				=> self::getOneFromEnum(EnumProductsTypes::mapData(), $args)
 		];
