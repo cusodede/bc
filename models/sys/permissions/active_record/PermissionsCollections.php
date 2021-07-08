@@ -29,6 +29,7 @@ use yii\db\ActiveRecord;
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к промежуточной таблице к пользователям
  * @property Permissions[] $relatedPermissions Входящие в группу доступа права доступа
  * @property Users[] $relatedUsers Все пользователи, у которых есть эта группа доступа
+ * @property Users[] $relatedUsersRecursively Все пользователи, с учетом вложенности групп
  * @property-read Permissions[] $unrelatedPermissions Права доступа, которые не включены в набор
  * @property RelPermissionsCollectionsToPermissions[] $relatedSlavePermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа для всех ВКЛЮЧЁННЫХ групп
  * @property-read Permissions[] $relatedPermissionsViaSlaveGroups Права доступа, попавшие в группу из дочерних групп
@@ -130,6 +131,7 @@ class PermissionsCollections extends ActiveRecord {
 	}
 
 	/**
+	 * Проблематично построить связь для join'а при использовании CTE, поэтому только live-получение.
 	 * @return Users[]
 	 */
 	public function getRelatedUsersRecursively():array {
