@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\api\resources\formatters;
 
 use app\components\helpers\DateHelper;
+use app\components\helpers\FileHelper;
 use app\models\partners\Partners;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
@@ -24,6 +25,7 @@ class ProductFormatter implements ProductFormatterInterface
 	{
 		return ArrayHelper::toArray($product, [
 			Products::class => [
+				'id',
 				'name',
 				'description',
 				'type' => 'typeName',
@@ -37,6 +39,9 @@ class ProductFormatter implements ProductFormatterInterface
 			],
 			Partners::class => [
 				'name',
+				'logo' => static function (Partners $partner) {
+					return FileHelper::mimeBase64($partner->fileLogo->path);
+				},
 				'category' => 'relatedCategory'
 			],
 			RefPartnersCategories::class => [

@@ -9,9 +9,12 @@ use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
 use app\modules\api\models\SubscribeProductTicketForm;
 use app\modules\api\models\UnsubscribeProductTicketForm;
+use app\modules\api\resources\formatters\ProductStoryFormatter;
 use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
+use Exception;
 use Yii;
+use yii\base\InvalidRouteException;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
@@ -19,11 +22,16 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
- * Class SubscriptionsController
- * @package app\modules\api\mybeeline\controllers
+ * Class ProductsController
+ * @package app\modules\api\controllers
  */
 class ProductsController extends YiiRestController
 {
+	/**
+	 * @var Abonents|null модель абонента, соответствующая номеру телефона из параметров запроса.
+	 */
+	private ?Abonents $_abonent = null;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -50,21 +58,57 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
-	 * Получением списка продуктов по номеру абонента.
-	 * @param string $phone
-	 * @return array
+	 * @param string $id
+	 * @param array $params
+	 * @return mixed|null
+	 * @throws InvalidRouteException
 	 * @throws NotFoundHttpException
 	 */
-	public function actionGetForSub(string $phone): array
+	public function runAction($id, $params = [])
 	{
-		$abonent = Abonents::findByPhone($phone);
-		if (null === $abonent) {
-			throw new NotFoundHttpException('Не удалось определить абонента по телефону: ' . $phone);
+		$phone = $params['phone'] ?? null;
+		if ((null !== $phone) && null === $this->_abonent = Abonents::findByPhone($phone)) {
+			throw new NotFoundHttpException('Не удалось найти абонента по телефону: ' . $phone);
 		}
 
-		$resource = new ProductsResource();
+		return parent::runAction($id, $params);
+	}
 
-		return $resource->getByAbonent($abonent);
+	/**
+	 * Получение списка продуктов по номеру абонента.
+	 * @param string $phone
+	 * @return array
+	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
+	 * @see runAction()
+	 */
+	public function actionFullList(string $phone): array
+	{
+		return (new ProductsResource())->getFullProductList($this->_abonent);
+	}
+
+	/**
+	 * @param string $phone
+	 * @return array
+	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
+	 * @see runAction()
+	 */
+	public function actionStories(string $phone): array
+	{
+		return (new ProductsResource(new ProductStoryFormatter()))->getFullProductList($this->_abonent);
+	}
+
+	/**
+	 * Получение информации по конкретному продукту в привязке к абоненту.
+	 * @param string $phone
+	 * @param int $id
+	 * @return array
+	 * @throws Exception
+	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
+	 * @see runAction()
+	 */
+	public function actionSingle(string $phone, int $id): array
+	{
+		return (new ProductsResource())->getSingleProduct($this->_abonent, $id);
 	}
 
 	/**
@@ -80,9 +124,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException(current($form->errors));
 		}
 
-		$ticketService = new ProductTicketsService();
-
-		return ['ticketId' => $ticketService->subscribe($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new ProductTicketsService())->subscribe($form->productId, $form->abonent->id)];
 	}
 
 	/**
@@ -98,9 +140,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException(current($form->errors));
 		}
 
-		$ticketService = new ProductTicketsService();
-
-		return ['ticketId' => $ticketService->unsubscribe($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new ProductTicketsService())->unsubscribe($form->productId, $form->abonent->id)];
 	}
 
 	/**
@@ -110,9 +150,7 @@ class ProductsController extends YiiRestController
 	 */
 	public function actionGetTicketStatus(string $ticketId): array
 	{
-		$ticketService = new ProductTicketsService();
-
-		return $ticketService->getTicketStatus($ticketId)->toArray();
+		return (new ProductTicketsService())->getTicketStatus($ticketId)->toArray();
 	}
 
 	/**
@@ -121,10 +159,10 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'get-for-sub'       => ['GET'],
-			'get-ticket-status' => ['GET'],
-			'subscribe'         => ['POST'],
-			'unsubscribe'       => ['POST']
+			'fill-list'   => ['GET'],
+			'single'      => ['GET'],
+			'subscribe'   => ['POST'],
+			'unsubscribe' => ['POST']
 		];
 	}
 }
