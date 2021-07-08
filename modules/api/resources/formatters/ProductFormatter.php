@@ -39,9 +39,7 @@ class ProductFormatter implements ProductFormatterInterface
 			],
 			Partners::class => [
 				'name',
-				'logo' => static function (Partners $partner) {
-					return FileHelper::mimeBase64($partner->fileLogo->path);
-				},
+				'logo' => static fn(Partners $partner) => FileHelper::mimeBase64($partner->fileLogo->path),
 				'category' => 'relatedCategory'
 			],
 			RefPartnersCategories::class => [
