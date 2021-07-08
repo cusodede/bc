@@ -1,23 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\extended;
+namespace app\modules\graphql\schema\query\extended\enum;
 
 use app\models\products\EnumProductsPaymentPeriods;
-use app\modules\graphql\schema\common\Types;
-use app\modules\graphql\schema\types\TypeTrait;
-use GraphQL\Type\Definition\ObjectType;
+use app\modules\graphql\base\BaseQueryType;
+use app\modules\graphql\data\EnumTypes;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Периодичность списания для продуктов
  * Class ProductPaymentPeriodType
- * @package app\modules\graphql\schema\types
+ * @package app\modules\graphql\schema\query\extended\enum
  */
-final class ProductPaymentPeriodType extends ObjectType
+final class ProductPaymentPeriodType extends BaseQueryType
 {
-	use TypeTrait;
-
 	public function __construct()
 	{
 		parent::__construct([
@@ -40,7 +36,7 @@ final class ProductPaymentPeriodType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::productPaymentPeriodType()),
+			'type' => Type::listOf(EnumTypes::productPaymentPeriodType()),
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
 				=> self::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
 		];
@@ -52,7 +48,7 @@ final class ProductPaymentPeriodType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::productPaymentPeriodType(),
+			'type' => EnumTypes::productPaymentPeriodType(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],

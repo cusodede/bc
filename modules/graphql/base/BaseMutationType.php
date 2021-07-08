@@ -1,19 +1,47 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\mutations;
+namespace app\modules\graphql\base;
 
+use GraphQL\Type\Definition\ObjectType;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use Exception;
 
 /**
- * Трейт для GraphQL мутаций
- * Trait MutationTrait
- * @package app\modules\graphql\schema\mutations
+ * Class BaseMutationType
+ * @package app\modules\graphql\base
  */
-trait MutationTrait
+abstract class BaseMutationType extends ObjectType
 {
+	/**
+	 * @var ActiveRecord|null
+	 */
+	protected ?ActiveRecord $model;
+
+	/**
+	 * Список сообщение для фронта
+	 */
+	public const MESSAGES = [];
+
+	/**
+	 * Схема для мутаций
+	 * @return array
+	 */
+	abstract public static function mutationType(): array;
+
+	/**
+	 * Список атрибутов GraphQL типа
+	 * @return array
+	 */
+	abstract public function getArgs(): array;
+
+	/**
+	 * Доступные методы
+	 * @return array
+	 */
+	abstract public function getConfig(): array;
+
 	/**
 	 * Обновление сущностей
 	 * @param array $rootAttributes
@@ -23,8 +51,7 @@ trait MutationTrait
 	 */
 	public function update(array $rootAttributes, array $attributes): array
 	{
-		$model = $this->model::findOne($rootAttributes);
-		return $this->save($model, $attributes, self::MESSAGES);
+		return $this->save($this->model::findOne($rootAttributes), $attributes, static::MESSAGES);
 	}
 
 	/**
@@ -35,8 +62,7 @@ trait MutationTrait
 	 */
 	public function create(array $attributes): array
 	{
-		$model = new $this->model();
-		return $this->save($model, $attributes, self::MESSAGES);
+		return $this->save(new $this->model(), $attributes, static::MESSAGES);
 	}
 
 	/**

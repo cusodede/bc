@@ -7,8 +7,8 @@ use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
- * Class BaseMutationType
- * @package app\modules\graphql\schema\types
+ * Class MutationType
+ * @package app\modules\graphql\schema\mutations
  */
 class MutationType extends ObjectType
 {

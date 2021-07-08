@@ -1,19 +1,32 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\base;
 
-use Exception;
+use GraphQL\Type\Definition\ObjectType;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use Exception;
 use ReflectionClass;
 
 /**
- * Trait TypeTrait
- * @package app\modules\graphql\schema\types
+ * Class BaseQueryType
+ * @package app\modules\graphql\base
  */
-trait TypeTrait
+abstract class BaseQueryType extends ObjectType
 {
+	/**
+	 * Список сущностей
+	 * @return array
+	 */
+	abstract public static function getListOfType(): array;
+
+	/**
+	 * Одна сущность
+	 * @return array
+	 */
+	abstract public static function getOneOfType(): array;
+
 	/**
 	 * Преобразовывает наши Enum списки в массив вида:
 	 * [
@@ -57,16 +70,4 @@ trait TypeTrait
 	{
 		return [(new ReflectionClass($searchModel))->getShortName() => $args];
 	}
-
-	/**
-	 * Список сущностей
-	 * @return array
-	 */
-	abstract public static function getListOfType(): array;
-
-	/**
-	 * Одна сущность
-	 * @return array
-	 */
-	abstract public static function getOneOfType(): array;
 }

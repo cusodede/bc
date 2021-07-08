@@ -13,7 +13,7 @@ namespace app\definitions;
  * @SWG\Get(path="/api/users",
  *     tags={"Users"},
  *     summary="Retrieves the collection of Users resources.",
- *     @SWG\Response(
+ *     @SWG\ResponseTypes(
  *         response = 200,
  *         description = "Users collection response",
  *         @SWG\Schema(ref = "#/definitions/Users")
