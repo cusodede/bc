@@ -8,8 +8,12 @@ use app\models\subscriptions\Subscriptions;
 use app\models\partners\Partners;
 use app\models\sys\users\Users;
 use Exception;
+use pozitronik\filestorage\models\FileStorage;
+use pozitronik\filestorage\traits\FileStorageTrait;
+use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * Логика продуктов, не относящиеся к ActiveRecord
@@ -24,9 +28,12 @@ use yii\db\ActiveRecord;
  * @property-read string $paymentDateModifier
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
+ * @property-read FileStorage|null $fileStoryLogo
  */
 class Products extends ActiveRecordProducts
 {
+	use FileStorageTrait;
+
 	/**
 	 * @var ProductsJournal|null актуальный статус продукта по абоненту.
 	 */
@@ -109,5 +116,15 @@ class Products extends ActiveRecordProducts
 		}
 
 		return $modify;
+	}
+
+	/**
+	 * @return FileStorage|null
+	 * @throws Throwable
+	 */
+	public function getFileStoryLogo(): ?FileStorage
+	{
+		$files = $this->files(['storyLogo']);
+		return ([] !== $files) ? ArrayHelper::getValue($files, 0) : null;
 	}
 }
