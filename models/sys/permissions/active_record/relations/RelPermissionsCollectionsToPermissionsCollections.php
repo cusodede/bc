@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\active_record\relations;
 
-use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
