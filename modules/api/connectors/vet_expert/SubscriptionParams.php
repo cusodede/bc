@@ -3,12 +3,12 @@ declare(strict_types = 1);
 
 namespace app\modules\api\connectors\vet_expert;
 
+use app\common\Arrayable;
 use app\models\abonents\Abonents;
 use app\models\phones\Phones;
 use app\modules\api\signatures\SignatureService;
 use app\modules\api\signatures\SignatureServiceFactory;
 use InvalidArgumentException;
-use yii\base\Arrayable;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
@@ -173,9 +173,9 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	/**
 	 * {@inheritdoc}
 	 */
-	public function fields(): array
+	public function toArray(): array
 	{
-		return [
+		$params = [
 			'phone' => $this->_phone,
 			'email' => $this->_email,
 			'first_name'  => $this->_firstName,
@@ -183,25 +183,10 @@ class SubscriptionParams extends BaseObject implements Arrayable
 			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
-	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function extraFields(): array
-	{
-		return ['sign' => $this->getParamsSignature($this->fields())];
-	}
+		$params['sign'] = $this->getParamsSignature($params);
 
-	/**
-	 * @param array $fields
-	 * @param array $expand
-	 * @param bool $recursive
-	 * @return array
-	 */
-	public function toArray(array $fields = [], array $expand = [], $recursive = true): array
-	{
-		return array_merge($this->fields(), $this->extraFields());
+		return $params;
 	}
 
 	/**
