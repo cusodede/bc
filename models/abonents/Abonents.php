@@ -5,8 +5,8 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use app\models\products\Products;
-use pozitronik\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Abonents
@@ -31,7 +31,18 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public function getUnrelatedProducts(): array
 	{
-		return Products::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])->all();
+		return Products::find()
+			->where(['NOT IN', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])
+			->indexBy('id')
+			->all();
+	}
+
+	/**
+	 * @return Products[]
+	 */
+	public function getFullProductList(): array
+	{
+		return $this->existentProducts + $this->unrelatedProducts;
 	}
 
 	/**
@@ -40,15 +51,15 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public function getExistentProducts(): array
 	{
-		return array_map(
-			static function (RelAbonentsToProducts $abonentsToProduct) {
-				$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductsJournal;
-				return $abonentsToProduct->relatedProduct;
-			},
-			//принудительно запрашиваем все линки для соответствия потребностям метода
-			$this->getRelatedAbonentsToProducts()
-				->indexBy('product_id')
-				->all()
+		return ArrayHelper::index(
+			array_map(
+				static function (RelAbonentsToProducts $relation) {
+					$relation->relatedProduct->actualStatus = $relation->relatedLastProductsJournal;
+					return $relation->relatedProduct;
+				},
+				$this->relatedAbonentsToProducts
+			),
+			'id'
 		);
 	}
 
