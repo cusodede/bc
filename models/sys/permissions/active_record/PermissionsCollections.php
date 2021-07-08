@@ -130,6 +130,32 @@ class PermissionsCollections extends ActiveRecord {
 	}
 
 	/**
+	 * @return Users[]
+	 */
+	public function getRelatedUsersRecursively(): array {
+		return Users::find()
+			->alias('users')
+			->innerJoin('t', 't.user_id = users.id')
+			->withQuery(
+				//initial query
+				RelUsersToPermissionsCollections::find()
+					->alias('users_to_cols')
+					->select(['users_to_cols.collection_id', 'users_to_cols.user_id'])
+					->union(
+						//recursive query
+						RelPermissionsCollectionsToPermissionsCollections::find()
+							->alias('cols_to_cols')
+							->select(['cols_to_cols.slave_id', 't.user_id'])
+							->innerJoin('t', 't.collection_id = cols_to_cols.master_id')
+					),
+				't',
+				true
+			)
+			->where(['t.collection_id' => $this->id])
+			->all();
+	}
+
+	/**
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPermissionsCollectionsToPermissionsCollections():ActiveQuery {
