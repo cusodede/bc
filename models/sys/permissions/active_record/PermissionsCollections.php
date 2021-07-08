@@ -154,7 +154,7 @@ class PermissionsCollections extends ActiveRecord {
 	 * @param mixed $relatedSlavePermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedSlavePermissionsCollections(array $relatedSlavePermissionsCollections):void {
+	public function setRelatedSlavePermissionsCollections($relatedSlavePermissionsCollections):void {
 		if (empty($relatedSlavePermissionsCollections)) {
 			RelPermissionsCollectionsToPermissionsCollections::clearLinks($this);
 		} else {
