@@ -23,6 +23,7 @@ use yii\db\ActiveRecord;
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelPermissionsCollectionsToPermissionsCollections[] $relatedPermissionsCollectionsToPermissionsCollections Связь к промежуточной таблице к ВКЛЮЧЁННЫМ группам доступа
+ * @property RelPermissionsCollectionsToPermissionsCollections[] $relatedMasterPermissionsCollectionsToPermissionsCollections Связь к промежуточной таблице к РОДИТЕЛЬСКИМ группам доступа
  * @property PermissionsCollections[] $relatedSlavePermissionsCollections ВКЛЮЧЁННЫЕ группы доступа
  * (родительские нам не нужны ни для чего)
  * @property RelUsersToPermissionsCollections[] $relatedUsersToPermissionsCollections Связь к промежуточной таблице к пользователям
@@ -133,6 +134,13 @@ class PermissionsCollections extends ActiveRecord {
 	 */
 	public function getRelatedPermissionsCollectionsToPermissionsCollections():ActiveQuery {
 		return $this->hasMany(RelPermissionsCollectionsToPermissionsCollections::class, ['master_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedMasterPermissionsCollectionsToPermissionsCollections():ActiveQuery {
+		return $this->hasOne(RelPermissionsCollectionsToPermissionsCollections::class, ['slave_id' => 'id']);
 	}
 
 	/**
