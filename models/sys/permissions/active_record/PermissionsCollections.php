@@ -132,7 +132,7 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return Users[]
 	 */
-	public function getRelatedUsersRecursively(): array {
+	public function getRelatedUsersRecursively():array {
 		return Users::find()
 			->alias('users')
 			->innerJoin('t', 't.user_id = users.id')
