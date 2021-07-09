@@ -43,6 +43,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/*файловые атрибуты*/
 	public $avatar;
+	/**
+	 * @var string|null параметр для локального хранения токена, по которому данный пользователь был опознан.
+	 * @see findIdentityByAccessToken()
+	 */
+	public ?string $identifiedToken = null;
 
 	private static ?self $_current = null;
 
@@ -127,10 +132,15 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws Exception
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::find()->joinWith('relatedUsersTokens rut')
+		$user = static::find()
+			->joinWith('relatedUsersTokens rut')
 			->where(['rut.auth_token' => $token])
 			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
 			->one();
+		if (null !== $user) {
+			$user->identifiedToken = $token;
+		}
+		return $user;
 	}
 
 	/**
