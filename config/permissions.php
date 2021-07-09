@@ -14,7 +14,8 @@ return [
 	 */
 	'controllerDirs' => [
 		'@app/controllers' => '',
-		'@app/controllers/api' => 'api'
+		'@app/modules/api/controllers' => 'api',
+		'@app/modules/graphql/controllers' => 'graphql'
 	],
 	'grantAll' => [1],/*User ids, that receive all permissions by default*/
 	'grant' => [/*перечисление прямых назначений*/
