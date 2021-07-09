@@ -11,6 +11,7 @@ use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
 use app\modules\api\tokenizers\JwtTokenizer;
 use app\modules\api\use_cases\InvalidateUserByTokenCase;
+use cusodede\jwt\JwtHttpBearerAuth;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
@@ -36,20 +37,25 @@ class AuthController extends YiiRestController
 	public function behaviors(): array
 	{
 		return [
-			'contentNegotiator' => [
+			'contentNegotiator'  => [
 				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
-			'authenticator'     => [
-				'class' => HttpBasicCredentialsAuth::class
+			'authenticatorBasic' => [
+				'class' => HttpBasicCredentialsAuth::class,
+				'only'  => ['token']
 			],
-			'verbFilter'        => [
+			'authenticatorJwt'   => [
+				'class' => JwtHttpBearerAuth::class,
+				'only'  => ['logout']
+			],
+			'verbFilter'         => [
 				'class'   => VerbFilter::class,
 				'actions' => $this->verbs()
 			],
-			'access'            => [
+			'access'             => [
 				'class' => PermissionFilter::class
 			]
 		];
@@ -67,18 +73,22 @@ class AuthController extends YiiRestController
 
 	/**
 	 * Принудительная инвалидация токена доступа пользователя.
-	 * @param string $token
 	 * @return void
 	 * @throws BadRequestHttpException
 	 * @throws Throwable
 	 * @throws StaleObjectException
 	 * @throws ForbiddenHttpException
 	 */
-	public function actionLogout(string $token): void
+	public function actionLogout(): void
 	{
-		$case = new InvalidateUserByTokenCase();
+		/**
+		 * @var Users $user
+		 * [[Users::current()]] не годится, т.к. мы уже имеем преднастроенный identity
+		 */
+		$user = Yii::$app->user->identity;
 
-		$case->execute(Users::Current(), $token, Yii::$app->request);
+		$case = new InvalidateUserByTokenCase();
+		$case->execute($user, $user->identifiedToken, Yii::$app->request);
 
 		Yii::$app->user->logout();
 	}
@@ -88,7 +98,7 @@ class AuthController extends YiiRestController
 	 */
 	protected function verbs(): array
 	{
-		return ['token' => ['GET', 'POST']];
+		return ['token' => ['GET', 'POST'], 'logout' => ['GET']];
 	}
 
 	/**
