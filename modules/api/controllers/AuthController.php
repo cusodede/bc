@@ -5,7 +5,8 @@ namespace app\modules\api\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
-use app\modules\api\authenticators\HttpBasicCredentialsAuth;
+use app\modules\api\authenticators\HttpBasicPasswordAuth;
+use app\modules\api\authenticators\RefreshTokenAuth;
 use app\modules\api\tokenizers\grant_types\BaseGrantType;
 use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
@@ -15,11 +16,13 @@ use cusodede\jwt\JwtHttpBearerAuth;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
+use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\Request;
 use yii\web\Response;
 
 /**
@@ -37,25 +40,26 @@ class AuthController extends YiiRestController
 	public function behaviors(): array
 	{
 		return [
-			'contentNegotiator'  => [
+			'contentNegotiator' => [
 				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
-			'authenticatorBasic' => [
-				'class' => HttpBasicCredentialsAuth::class,
-				'only'  => ['token']
+			'authComposite'     => [
+				'class'       => CompositeAuth::class,
+				'authMethods' => [RefreshTokenAuth::class, HttpBasicPasswordAuth::class],
+				'only'        => ['token']
 			],
-			'authenticatorJwt'   => [
+			'authJwt'           => [
 				'class' => JwtHttpBearerAuth::class,
 				'only'  => ['logout']
 			],
-			'verbFilter'         => [
+			'verbFilter'        => [
 				'class'   => VerbFilter::class,
 				'actions' => $this->verbs()
 			],
-			'access'             => [
+			'access'            => [
 				'class' => PermissionFilter::class
 			]
 		];
@@ -68,7 +72,7 @@ class AuthController extends YiiRestController
 	 */
 	public function actionToken(): array
 	{
-		return (new JwtTokenizer($this->getGrantType()))->tokenData;
+		return (new JwtTokenizer(static::getRequestGrantType()))->tokenData;
 	}
 
 	/**
@@ -102,16 +106,19 @@ class AuthController extends YiiRestController
 	}
 
 	/**
+	 * @param Request|null $request
 	 * @return BaseGrantType
 	 * @throws BadRequestHttpException
 	 */
-	private function getGrantType(): BaseGrantType
+	public static function getRequestGrantType(?Request $request = null): BaseGrantType
 	{
-		$grantType = Yii::$app->request->post('grant_type');
+		$request ??= Yii::$app->request;
+
+		$grantType = $request->post('grant_type');
 		if (self::GRANT_TYPE_REFRESH === $grantType) {
-			return new GrantTypeRefresh(Yii::$app->request);
+			return new GrantTypeRefresh($request);
 		}
 
-		return new GrantTypeIssue(Yii::$app->request);
+		return new GrantTypeIssue($request);
 	}
 }
