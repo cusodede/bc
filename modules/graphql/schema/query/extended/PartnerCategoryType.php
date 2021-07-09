@@ -1,19 +1,18 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\extended;
+namespace app\modules\graphql\schema\query\extended;
 
 use app\models\common\RefPartnersCategories;
-use app\modules\graphql\schema\common\Types;
-use GraphQL\Type\Definition\ObjectType;
+use app\modules\graphql\base\BaseQueryType;
+use app\modules\graphql\data\QueryTypes;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Категории партнеров
  * Class PartnerCategoryType
- * @package app\modules\graphql\schema\types
+ * @package app\modules\graphql\schema\query\extended
  */
-final class PartnerCategoryType extends ObjectType
+final class PartnerCategoryType extends BaseQueryType
 {
 	/**
 	 * PartnerCategoryType constructor.
@@ -40,7 +39,7 @@ final class PartnerCategoryType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::partnerCategory()),
+			'type' => Type::listOf(QueryTypes::partnerCategory()),
 			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?array
 				=> RefPartnersCategories::find()->where($args)->active()->all(),
 		];
@@ -52,7 +51,7 @@ final class PartnerCategoryType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::partnerCategory(),
+			'type' => QueryTypes::partnerCategory(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],

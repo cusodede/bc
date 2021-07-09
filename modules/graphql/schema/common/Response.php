@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\common;
 
+use app\modules\graphql\data\ErrorTypes;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Тип для серверной валидации моделей, список ValidationErrorType
+ * Тип для серверной валидации моделей, список ValidationErrorType.
  * Class Response
- * @package app\modules\graphql\schema\types
+ * @package app\modules\graphql\schema\common
  */
 class Response extends ObjectType
 {
@@ -29,7 +30,7 @@ class Response extends ObjectType
 					'description' => 'Ответное сообщение',
 				],
 				'errors' => [
-					'type' => Type::listOf(Types::validationError()),
+					'type' => Type::listOf(ErrorTypes::validationError()),
 					'description' => 'Массив ошибок, если есть',
 				],
 			],

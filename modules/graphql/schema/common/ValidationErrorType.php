@@ -7,9 +7,9 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Тип для серверной валидации моделей
+ * Тип для серверной валидации моделей.
  * Class ValidationErrorType
- * @package app\modules\graphql\schema\types
+ * @package app\modules\graphql\schema\common
  */
 class ValidationErrorType extends ObjectType
 {

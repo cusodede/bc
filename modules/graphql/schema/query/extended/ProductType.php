@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\extended;
+namespace app\modules\graphql\schema\query\extended;
 
 use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
@@ -9,19 +9,18 @@ use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
 use app\models\products\ProductsSearch;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
-use app\modules\graphql\schema\common\Types;
-use app\modules\graphql\schema\types\TypeTrait;
-use GraphQL\Type\Definition\ObjectType;
+use app\modules\graphql\base\BaseQueryType;
+use app\modules\graphql\data\EnumTypes;
+use app\modules\graphql\data\QueryTypes;
 use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
 
 /**
  * Class ProductType
- * @package app\modules\graphql\schema\types
+ * @package app\modules\graphql\schema\query\extended
  */
-final class ProductType extends ObjectType
+final class ProductType extends BaseQueryType
 {
-	use TypeTrait;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -54,7 +53,7 @@ final class ProductType extends ObjectType
 					'description' => 'Конец действия Y-m-d H:i:s',
 				],
 				'payment_period' => [
-					'type' => Types::productPaymentPeriodType(),
+					'type' => EnumTypes::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
 					'resolve' => fn(Products $product): ?array
 						=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
@@ -64,7 +63,7 @@ final class ProductType extends ObjectType
 					'description' => 'Идентификатор типа',
 				],
 				'type' => [
-					'type' => Types::productTypesType(),
+					'type' => EnumTypes::productTypesType(),
 					'description' => 'Тип продукта',
 					'resolve' => fn(Products $product): ?array
 						=> self::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
@@ -74,7 +73,7 @@ final class ProductType extends ObjectType
 					'description' => 'Идентификатор партнёра',
 				],
 				'partner' => [
-					'type' => Types::partner(),
+					'type' => QueryTypes::partner(),
 					'description' => 'Партнёр',
 					'resolve' => fn(Products $product): ?Partners => $product->relatedPartner,
 				],
@@ -84,7 +83,7 @@ final class ProductType extends ObjectType
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
 				],
 				'trial_unit' => [
-					'type' => Types::subscriptionTrialUnitsType(),
+					'type' => EnumTypes::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
 					'resolve' => fn(Products $product): ?array
 						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
@@ -103,7 +102,7 @@ final class ProductType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::product()),
+			'type' => Type::listOf(QueryTypes::product()),
 			'args' => [
 				'sort' => [
 					'type' => Type::string(),
@@ -119,11 +118,11 @@ final class ProductType extends ObjectType
 				],
 				'trial' => [
 					'type' => Type::boolean(),
-					'description' => 'Фильтр, триальный период (1|0)',
+					'description' => 'Фильтр, триальный период (true|false)',
 				],
 				'active' => [
 					'type' => Type::boolean(),
-					'description' => 'Фильтр, по активности (1|0)',
+					'description' => 'Фильтр, по активности (true|false)',
 				],
 			],
 			'resolve' => function(Products $product = null, array $args = []): array {
@@ -142,7 +141,7 @@ final class ProductType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::product(),
+			'type' => QueryTypes::product(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
