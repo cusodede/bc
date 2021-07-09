@@ -7,6 +7,7 @@ use app\components\queue\DbQueue;
 use app\models\sys\users\WebUser;
 use cusodede\jwt\Jwt;
 use yii\BaseYii;
+use yii\queue\Queue;
 
 /**
  * Yii bootstrap file.
@@ -36,6 +37,7 @@ abstract class BaseApplication extends yii\base\Application {
 /**
  * Class WebApplication
  * Include only Web application related components here
+ * @property Jwt $jwt
  */
 class WebApplication extends yii\web\Application {
 }

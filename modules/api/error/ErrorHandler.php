@@ -37,9 +37,15 @@ class ErrorHandler extends YiiErrorHandler
 			$exception = new HttpException(500, 'An internal server error occurred.');
 		}
 
-		return [
-			'error'             => $exception instanceof HttpException ? $exception->statusCode : $exception->getCode(),
+		$result = [
+			'error' => $exception instanceof HttpException?$exception->statusCode:$exception->getCode(),
 			'error_description' => $exception->getMessage()
 		];
+
+		if (YII_DEBUG) {
+			$result['debug']['trace'] = $exception->getTraceAsString();
+		}
+
+		return $result;
 	}
 }
