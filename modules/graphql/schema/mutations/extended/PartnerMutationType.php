@@ -47,6 +47,7 @@ final class PartnerMutationType extends BaseMutationType
 			'args' => [
 				'id' => Type::int(),
 			],
+			'description' => 'Мутации партнёра',
 			'resolve' => fn(Partners $partner = null, array $args = []): ?array => $args,
 		];
 	}

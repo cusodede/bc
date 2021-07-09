@@ -69,6 +69,7 @@ final class PartnerType extends BaseQueryType
 			'args' => [
 				'search' => Type::string(),
 			],
+			'description' => 'Возвращаем список партнёров',
 			'resolve' => fn(Partners $partner = null, array $args = []): ?array
 				=> PartnersSearch::searchWithParams($args),
 		];
@@ -84,6 +85,7 @@ final class PartnerType extends BaseQueryType
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
+			'description' => 'Возвращает партнёра по id',
 			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
 				=> Partners::find()->where($args)->active()->one(),
 		];

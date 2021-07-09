@@ -125,6 +125,7 @@ final class ProductType extends BaseQueryType
 					'description' => 'Фильтр, по активности (true|false)',
 				],
 			],
+			'description' => 'Возвращает список продуктов',
 			'resolve' => function(Products $product = null, array $args = []): array {
 				$productSearch = new ProductsSearch();
 				ArrayHelper::setValue($args, 'pagination', false);
@@ -145,6 +146,7 @@ final class ProductType extends BaseQueryType
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
+			'description' => 'Возвращает продукт по id',
 			'resolve' => fn(Products $product = null, array $args = []): ?Products
 				=> Products::find()->where($args)->active()->one(),
 		];
