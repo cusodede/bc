@@ -145,7 +145,7 @@ trait UsersPermissionsTrait {
 	 */
 	public function hasActionPermission(Action $action):bool {
 		if ($this->isAllPermissionsGranted()) return true;
-		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method);
+		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, $action->controller->module->id);
 	}
 
 	/**
@@ -153,19 +153,22 @@ trait UsersPermissionsTrait {
 	 * @param string $controllerId
 	 * @param string|null $actionId
 	 * @param string|null $verb
+	 * @param string|null $moduleId
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null):bool {
+	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null, ?string $moduleId = null):bool {
 		if ($this->isAllPermissionsGranted()) return true;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,
+			'module' => $moduleId,
 			'controller' => $controllerId,
 			'action' => $actionId,
 			'verb' => $verb
 		]);
-		return Yii::$app->cache->getOrSet($cacheKey, function() use ($controllerId, $actionId, $verb) {
+		return Yii::$app->cache->getOrSet($cacheKey, function() use ($controllerId, $actionId, $verb, $moduleId) {
 			return [] !== Permissions::allUserPermissions($this->id, [
+					'module' => $moduleId,
 					'controller' => $controllerId,
 					'action' => $actionId,
 					'verb' => $verb
