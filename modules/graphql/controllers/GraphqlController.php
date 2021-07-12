@@ -41,16 +41,16 @@ class GraphqlController extends ActiveController
 	 */
 	public function behaviors(): array
 	{
-		return ArrayHelper::merge(parent::behaviors(), [
-			'access' => [
-				'class' => PermissionFilter::class,
-				'except' => ['schema'],
-			],
-			'authenticator' => [
-				'class' => JwtHttpBearerAuth::class,
-				'except' => ['schema'],
-			],
-		]);
+		return parent::behaviors();
+//		return ArrayHelper::merge(parent::behaviors(), [
+//			'access' => [
+//				'class' => PermissionFilter::class,
+//			],
+//			'authenticator' => [
+//				'class' => JwtHttpBearerAuth::class,
+//				'except' => ['schema'],
+//			],
+//		]);
 	}
 
 	/**
