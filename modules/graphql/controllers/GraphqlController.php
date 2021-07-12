@@ -11,11 +11,13 @@ use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
+use GraphQL\Utils\SchemaPrinter;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\ActiveController;
 use Throwable;
+use yii\web\Response;
 
 /**
  * Class GraphqlController
@@ -41,10 +43,12 @@ class GraphqlController extends ActiveController
 	{
 		return ArrayHelper::merge(parent::behaviors(), [
 			'access' => [
-				'class' => PermissionFilter::class
+				'class' => PermissionFilter::class,
+				'except' => ['schema'],
 			],
 			'authenticator' => [
-				'class' => JwtHttpBearerAuth::class
+				'class' => JwtHttpBearerAuth::class,
+				'except' => ['schema'],
 			],
 		]);
 	}
@@ -94,5 +98,19 @@ class GraphqlController extends ActiveController
 			$variables ?: null,
 			$operation ?: null
 		)->toArray(YII_DEBUG ? DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE : DebugFlag::NONE);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function actionSchema(): string
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		return SchemaPrinter::doPrint(
+			new Schema([
+				'query' => QueryTypes::query(),
+				'mutation' => MutationTypes::mutation(),
+			])
+		);
 	}
 }
