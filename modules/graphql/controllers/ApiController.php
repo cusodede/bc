@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\graphql\data\MutationTypes;
 use app\modules\graphql\data\QueryTypes;
 use cusodede\jwt\JwtHttpBearerAuth;
@@ -12,29 +11,21 @@ use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use Yii;
+use yii\filters\ContentNegotiator;
+use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\ActiveController;
 use Throwable;
+use yii\web\Response;
 
 /**
- * Class GraphqlController
+ * Class ApiController
  * @package app\modules\graphql\controllers
  */
-class GraphqlController extends ActiveController
+class ApiController extends ActiveController
 {
 	public $modelClass = '';
-
-	/**
-	 * @return array
-	 */
-	protected function verbs(): array
-	{
-		return [
-			'index' => ['POST', 'OPTIONS'],
-			'schema' => ['POST', 'OPTIONS'],
-		];
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -42,8 +33,15 @@ class GraphqlController extends ActiveController
 	public function behaviors(): array
 	{
 		return ArrayHelper::merge(parent::behaviors(), [
-			'access' => [
-				'class' => PermissionFilter::class,
+			'contentNegotiator' => [
+				'class'   => ContentNegotiator::class,
+				'formats' => [
+					'application/json' => Response::FORMAT_JSON,
+				],
+			],
+			'verbFilter' => [
+				'class'   => VerbFilter::class,
+				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
 				'class' => JwtHttpBearerAuth::class,
@@ -119,5 +117,16 @@ class GraphqlController extends ActiveController
 			]),
 			$query,
 		)->toArray();
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function verbs(): array
+	{
+		return [
+			'index' => ['POST', 'OPTIONS'],
+			'schema' => ['POST', 'OPTIONS'],
+		];
 	}
 }

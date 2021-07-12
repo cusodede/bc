@@ -86,7 +86,6 @@ $config = [
 		],
 		'graphql' => [
 			'class' => GraphqlModule::class,
-			'defaultRoute' => 'graphql',
 		],
 		'statuses' => [
 			'class' => StatusModule::class,
