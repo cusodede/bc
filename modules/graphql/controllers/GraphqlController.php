@@ -11,13 +11,11 @@ use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
-use GraphQL\Utils\SchemaPrinter;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\ActiveController;
 use Throwable;
-use yii\web\Response;
 
 /**
  * Class GraphqlController
@@ -26,13 +24,15 @@ use yii\web\Response;
 class GraphqlController extends ActiveController
 {
 	public $modelClass = '';
+
 	/**
-	 * {@inheritdoc}
+	 * @return array
 	 */
 	protected function verbs(): array
 	{
 		return [
-			'index' => ['POST', 'OPTIONS']
+			'index' => ['POST', 'OPTIONS'],
+			'schema' => ['POST', 'OPTIONS'],
 		];
 	}
 
@@ -41,16 +41,15 @@ class GraphqlController extends ActiveController
 	 */
 	public function behaviors(): array
 	{
-		return parent::behaviors();
-//		return ArrayHelper::merge(parent::behaviors(), [
-//			'access' => [
-//				'class' => PermissionFilter::class,
-//			],
-//			'authenticator' => [
-//				'class' => JwtHttpBearerAuth::class,
-//				'except' => ['schema'],
-//			],
-//		]);
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class,
+			],
+			'authenticator' => [
+				'class' => JwtHttpBearerAuth::class,
+				'except' => ['schema'],
+			],
+		]);
 	}
 
 	/**
@@ -62,6 +61,7 @@ class GraphqlController extends ActiveController
 	}
 
 	/**
+	 * Основная точка входа для GraphQL клиентов
 	 * @return array
 	 * @throws Exception
 	 */
@@ -101,16 +101,23 @@ class GraphqlController extends ActiveController
 	}
 
 	/**
-	 * @return string
+	 * Точка входа на получение схемы для GraphQL клиентов.
+	 * На фронте, есть некие "сборщики GraphQL схемы", которые,
+	 * ходят по этому action, только для формирования схемы, без авторизации.
+	 * Отрубаем авторизацию и не даём выполнять никаких действий, просто отдаём схему.
+	 * В schemaQuery, hardcode, на получение схемы.
+	 * Можно сделать лучше, но пока я не знаю как, решить эту проблему.
+	 * @return array
 	 */
-	public function actionSchema(): string
+	public function actionSchema(): array
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		return SchemaPrinter::doPrint(
+		$query = file_get_contents(__DIR__ . '/../schemaQuery');
+		return GraphQL::executeQuery(
 			new Schema([
 				'query' => QueryTypes::query(),
 				'mutation' => MutationTypes::mutation(),
-			])
-		);
+			]),
+			$query,
+		)->toArray();
 	}
 }
