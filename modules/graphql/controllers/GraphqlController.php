@@ -3,7 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\schema\common\Types;
+use app\models\sys\permissions\filters\PermissionFilter;
+use app\modules\graphql\data\MutationTypes;
+use app\modules\graphql\data\QueryTypes;
+use cusodede\jwt\JwtHttpBearerAuth;
 use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
@@ -16,12 +19,11 @@ use Throwable;
 
 /**
  * Class GraphqlController
- * @package app\modules\history\controllers
+ * @package app\modules\graphql\controllers
  */
 class GraphqlController extends ActiveController
 {
 	public $modelClass = '';
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -30,6 +32,21 @@ class GraphqlController extends ActiveController
 		return [
 			'index' => ['POST', 'OPTIONS']
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors(): array
+	{
+		return ArrayHelper::merge(parent::behaviors(), [
+			'access' => [
+				'class' => PermissionFilter::class
+			],
+			'authenticator' => [
+				'class' => JwtHttpBearerAuth::class
+			],
+		]);
 	}
 
 	/**
@@ -68,8 +85,8 @@ class GraphqlController extends ActiveController
 
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => Types::query(),
-				'mutation' => Types::mutation(),
+				'query' => QueryTypes::query(),
+				'mutation' => MutationTypes::mutation(),
 			]),
 			$query,
 			null,

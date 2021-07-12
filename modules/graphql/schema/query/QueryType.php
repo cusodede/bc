@@ -1,19 +1,20 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types;
+namespace app\modules\graphql\schema\query;
 
-use app\modules\graphql\schema\types\extended\PartnerCategoryType;
-use app\modules\graphql\schema\types\extended\ProductPaymentPeriodType;
-use app\modules\graphql\schema\types\extended\ProductType;
-use app\modules\graphql\schema\types\extended\ProductTypesType;
-use app\modules\graphql\schema\types\extended\SubscriptionTrialUnitsType;
-use app\modules\graphql\schema\types\extended\PartnerType;
+use app\modules\graphql\schema\query\extended\PartnerCategoryType;
+use app\modules\graphql\schema\query\extended\enum\ProductPaymentPeriodType;
+use app\modules\graphql\schema\query\extended\ProductType;
+use app\modules\graphql\schema\query\extended\enum\ProductTypesType;
+use app\modules\graphql\schema\query\extended\enum\SubscriptionTrialUnitsType;
+use app\modules\graphql\schema\query\extended\PartnerType;
+use app\modules\graphql\schema\query\extended\ServerDateTimeType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
  * Class QueryType
- * @package app\schema
+ * @package app\modules\graphql\schema\query
  */
 class QueryType extends ObjectType
 {
@@ -36,6 +37,7 @@ class QueryType extends ObjectType
 				'productType' 				=> ProductTypesType::getOneOfType(),
 				'subscriptionTrialUnits' 	=> SubscriptionTrialUnitsType::getListOfType(),
 				'subscriptionTrialUnit' 	=> SubscriptionTrialUnitsType::getOneOfType(),
+				'serverDateTime' 			=> ServerDateTimeType::baseFormat(),
 			],
 		]);
 	}

@@ -1,22 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\extended;
+namespace app\modules\graphql\schema\query\extended\enum;
 
 use app\models\products\EnumProductsTypes;
-use app\modules\graphql\schema\common\Types;
-use app\modules\graphql\schema\types\TypeTrait;
-use GraphQL\Type\Definition\ObjectType;
+use app\modules\graphql\base\BaseQueryType;
+use app\modules\graphql\data\EnumTypes;
 use GraphQL\Type\Definition\Type;
 
 /**
  * Class ProductTypesType
- * @package app\modules\graphql\schema\types\extended
+ * @package app\modules\graphql\schema\query\extended\enum
  */
-final class ProductTypesType extends ObjectType
+final class ProductTypesType extends BaseQueryType
 {
-	use TypeTrait;
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -42,7 +39,8 @@ final class ProductTypesType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::productTypesType()),
+			'type' => Type::listOf(EnumTypes::productTypesType()),
+			'description' => 'Возвращает список типов продуктов',
 			'resolve' => fn($productType, array $args = []): ?array
 				=> self::getListFromEnum(EnumProductsTypes::mapData()),
 		];
@@ -54,10 +52,11 @@ final class ProductTypesType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::productTypesType(),
+			'type' => EnumTypes::productTypesType(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
+			'description' => 'Возвращает тип продукта по ключу',
 			'resolve' => fn($productType, array $args = []): ?array
 				=> self::getOneFromEnum(EnumProductsTypes::mapData(), $args)
 		];

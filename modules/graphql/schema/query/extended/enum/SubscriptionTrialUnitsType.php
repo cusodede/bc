@@ -1,22 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\extended;
+namespace app\modules\graphql\schema\query\extended\enum;
 
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
-use app\modules\graphql\schema\common\Types;
-use app\modules\graphql\schema\types\TypeTrait;
-use GraphQL\Type\Definition\ObjectType;
+use app\modules\graphql\base\BaseQueryType;
+use app\modules\graphql\data\EnumTypes;
 use GraphQL\Type\Definition\Type;
 
 /**
  * Class SubscriptionTrialUnitsType
- * @package app\modules\graphql\schema\types\extended
+ * @package app\modules\graphql\schema\query\extended\enum
  */
-final class SubscriptionTrialUnitsType extends ObjectType
+final class SubscriptionTrialUnitsType extends BaseQueryType
 {
-	use TypeTrait;
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -42,7 +39,8 @@ final class SubscriptionTrialUnitsType extends ObjectType
 	public static function getListOfType(): array
 	{
 		return [
-			'type' => Type::listOf(Types::subscriptionTrialUnitsType()),
+			'type' => Type::listOf(EnumTypes::subscriptionTrialUnitsType()),
+			'description' => 'Возвращает список единиц триальных периодов',
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
 				=> self::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
 		];
@@ -54,10 +52,11 @@ final class SubscriptionTrialUnitsType extends ObjectType
 	public static function getOneOfType(): array
 	{
 		return [
-			'type' => Types::productPaymentPeriodType(),
+			'type' => EnumTypes::productPaymentPeriodType(),
 			'args' => [
 				'id' => Type::nonNull(Type::int()),
 			],
+			'description' => 'Возвращает единицу триального периода по ключу',
 			'resolve' => fn($paymentPeriod, array $args = []): ?array
 				=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
 		];
