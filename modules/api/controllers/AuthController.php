@@ -21,7 +21,6 @@ use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
 use yii\web\BadRequestHttpException;
-use yii\web\ForbiddenHttpException;
 use yii\web\Request;
 use yii\web\Response;
 
@@ -33,6 +32,20 @@ class AuthController extends YiiRestController
 {
 	public const GRANT_TYPE_PASSWORD = 'password';
 	public const GRANT_TYPE_REFRESH  = 'refresh_token';
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init(): void
+	{
+		parent::init();
+		$this->response->on(
+			Response::EVENT_BEFORE_SEND,
+			function () {
+				$this->response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+			}
+		);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -77,11 +90,9 @@ class AuthController extends YiiRestController
 
 	/**
 	 * Принудительная инвалидация токена доступа пользователя.
-	 * @return void
 	 * @throws BadRequestHttpException
-	 * @throws Throwable
 	 * @throws StaleObjectException
-	 * @throws ForbiddenHttpException
+	 * @throws Throwable
 	 */
 	public function actionLogout(): void
 	{
