@@ -19,6 +19,18 @@ class Partners extends ActiveRecordPartners
 {
 	use FileStorageTrait;
 
+	public $logo;
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return array_merge(parent::rules(), [
+			[['logo'], 'image', 'extensions' => 'png'],
+		]);
+	}
+
 	/**
 	 * @return FileStorage|null
 	 * @throws Throwable
@@ -27,5 +39,15 @@ class Partners extends ActiveRecordPartners
 	{
 		$files = $this->files(['logo']);
 		return ([] !== $files) ? ArrayHelper::getValue($files, 0) : null;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return array_merge(parent::attributeLabels(), [
+			'logo' => 'Логотип'
+		]);
 	}
 }
