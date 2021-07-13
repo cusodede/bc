@@ -90,9 +90,8 @@ trait ActiveRecordTrait {
 			}
 
 			if (false !== $result = $this->save()) {
-				if (in_array(FileStorageTrait::class, class_uses($this), true)) {
+				if (in_array(FileStorageTrait::class, class_uses($this), true) && method_exists($this, 'uploadAttributes')) {
 					try {
-						/** @noinspection PhpUndefinedMethodInspection видишь метод? А он есть */
 						$this->uploadAttributes();
 					} catch (Throwable $e) {
 						$transaction->rollBack();
