@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\components\db;
 
 use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
+use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\ArrayHelper;
 use pozitronik\traits\traits\ActiveRecordTrait as VendorActiveRecordTrait;
 use Throwable;
@@ -89,6 +90,16 @@ trait ActiveRecordTrait {
 			}
 
 			if (false !== $result = $this->save()) {
+				if (in_array(FileStorageTrait::class, class_uses($this), true)) {
+					try {
+						/** @noinspection PhpUndefinedMethodInspection видишь метод? А он есть */
+						$this->uploadAttributes();
+					} catch (Throwable $e) {
+						$transaction->rollBack();
+						return false;
+					}
+				}
+
 				$transaction->commit();
 			} else {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
