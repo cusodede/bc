@@ -5,20 +5,23 @@ namespace app\modules\api\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
-use app\modules\api\authenticators\HttpBasicCredentialsAuth;
+use app\modules\api\authenticators\HttpBasicPasswordAuth;
+use app\modules\api\authenticators\RefreshTokenAuth;
 use app\modules\api\tokenizers\grant_types\BaseGrantType;
 use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
 use app\modules\api\tokenizers\JwtTokenizer;
 use app\modules\api\use_cases\InvalidateUserByTokenCase;
+use cusodede\jwt\JwtHttpBearerAuth;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
+use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
 use yii\web\BadRequestHttpException;
-use yii\web\ForbiddenHttpException;
+use yii\web\Request;
 use yii\web\Response;
 
 /**
@@ -33,6 +36,20 @@ class AuthController extends YiiRestController
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init(): void
+	{
+		parent::init();
+		$this->response->on(
+			Response::EVENT_BEFORE_SEND,
+			function () {
+				$this->response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+			}
+		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors(): array
 	{
 		return [
@@ -42,8 +59,14 @@ class AuthController extends YiiRestController
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
-			'authenticator'     => [
-				'class' => HttpBasicCredentialsAuth::class
+			'authComposite'     => [
+				'class'       => CompositeAuth::class,
+				'authMethods' => [RefreshTokenAuth::class, HttpBasicPasswordAuth::class],
+				'only'        => ['token']
+			],
+			'authJwt'           => [
+				'class' => JwtHttpBearerAuth::class,
+				'only'  => ['logout']
 			],
 			'verbFilter'        => [
 				'class'   => VerbFilter::class,
@@ -62,23 +85,25 @@ class AuthController extends YiiRestController
 	 */
 	public function actionToken(): array
 	{
-		return (new JwtTokenizer($this->getGrantType()))->tokenData;
+		return (new JwtTokenizer(static::getRequestGrantType()))->tokenData;
 	}
 
 	/**
 	 * Принудительная инвалидация токена доступа пользователя.
-	 * @param string $token
-	 * @return void
 	 * @throws BadRequestHttpException
-	 * @throws Throwable
 	 * @throws StaleObjectException
-	 * @throws ForbiddenHttpException
+	 * @throws Throwable
 	 */
-	public function actionLogout(string $token): void
+	public function actionLogout(): void
 	{
-		$case = new InvalidateUserByTokenCase();
+		/**
+		 * @var Users $user
+		 * [[Users::current()]] не годится, т.к. мы уже имеем преднастроенный identity
+		 */
+		$user = Yii::$app->user->identity;
 
-		$case->execute(Users::Current(), $token, Yii::$app->request);
+		$case = new InvalidateUserByTokenCase();
+		$case->execute($user, $user->identifiedToken, Yii::$app->request);
 
 		Yii::$app->user->logout();
 	}
@@ -88,20 +113,23 @@ class AuthController extends YiiRestController
 	 */
 	protected function verbs(): array
 	{
-		return ['token' => ['GET', 'POST']];
+		return ['token' => ['GET', 'POST'], 'logout' => ['GET']];
 	}
 
 	/**
+	 * @param Request|null $request
 	 * @return BaseGrantType
 	 * @throws BadRequestHttpException
 	 */
-	private function getGrantType(): BaseGrantType
+	public static function getRequestGrantType(?Request $request = null): BaseGrantType
 	{
-		$grantType = Yii::$app->request->post('grant_type');
+		$request ??= Yii::$app->request;
+
+		$grantType = $request->post('grant_type');
 		if (self::GRANT_TYPE_REFRESH === $grantType) {
-			return new GrantTypeRefresh(Yii::$app->request);
+			return new GrantTypeRefresh($request);
 		}
 
-		return new GrantTypeIssue(Yii::$app->request);
+		return new GrantTypeIssue($request);
 	}
 }

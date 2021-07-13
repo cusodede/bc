@@ -36,6 +36,10 @@ class GrantTypeIssue extends BaseGrantType
 		parent::__construct($request);
 
 		$this->_maxTokensNumber = ArrayHelper::getValue(Yii::$app->params, 'maxTokensNumber', static::DEFAULT_MAX_NUMBER_OF_TOKENS);
+		//для конкретных приложений (а не для клиентов из веб-морды) ограничим выдачу токена одной штукой
+		if ($this->getUser()->isTechUser) {
+			$this->_maxTokensNumber = 1;
+		}
 	}
 
 	/**
@@ -57,11 +61,16 @@ class GrantTypeIssue extends BaseGrantType
 	 */
 	public function validate(UsersTokens $authToken, ?UsersTokens $refreshToken): void
 	{
+		$statusIsOk = true;
+
 		if ($authToken->isNewRecord) {
 			$this->checkLimitExceeded();
-			$statusIsOk = true;
-		} else {
+		} elseif ($this->getUser()->isTechUser) {
 			$statusIsOk = (null === $refreshToken) ? !$authToken->isValid() : !$refreshToken->isValid();
+			//TODO найти правильный способ валидации bad request'а.
+			//Пока стоит ограничение на кол-во выпускаемых токенов, но не хотелось бы, в принципе, разрешать перевыпуск при активном refresh-токене.
+			//Но такая схема не применима при авторизации через frontend, т.к пользователь может принудительно очистить историю в браузере и всё, возможности кинуть refresh токен не останется.
+			//Как вариант, отключать обработку для пользователей фронта, но оставить для приложений.
 		}
 
 		if (!$statusIsOk) {

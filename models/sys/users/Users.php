@@ -29,6 +29,8 @@ use yii\web\IdentityInterface;
  * @property-read null|FileStorage $fileAvatar запись об актуальном файле аватара в файловом хранилище.
  * @property-read string $currentAvatarUrl шорткат для получения ссылки на актуальный файл аватарки.
  *
+ * @property-read bool $isTechUser проверка на технический тип учетной записи (например, учетка для различных витрин).
+ *
  * @property-read UsersTokens[] $relatedUsersTokens связанные с моделью пользователя модели токенов.
  * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
  * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
@@ -43,6 +45,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/*файловые атрибуты*/
 	public $avatar;
+	/**
+	 * @var string|null параметр для локального хранения токена, по которому данный пользователь был опознан.
+	 * @see findIdentityByAccessToken()
+	 */
+	public ?string $identifiedToken = null;
 
 	private static ?self $_current = null;
 
@@ -127,10 +134,15 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws Exception
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::find()->joinWith('relatedUsersTokens rut')
+		$user = static::find()
+			->joinWith('relatedUsersTokens rut')
 			->where(['rut.auth_token' => $token])
 			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
 			->one();
+		if (null !== $user) {
+			$user->identifiedToken = $token;
+		}
+		return $user;
 	}
 
 	/**
@@ -249,5 +261,14 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getRelatedUsersTokens():ActiveQuery {
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return bool флаг, является ли учетка технической или нет (для приложений типа Мой Билайн и т.д.)
+	 */
+	public function getIsTechUser(): bool
+	{
+		//TODO добавить определение по типу пользователя в БД
+		return false;
 	}
 }
