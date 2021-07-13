@@ -94,7 +94,7 @@ trait ActiveRecordTrait {
 					try {
 						/** @see FileStorageTrait::uploadAttributes() */
 						$this->uploadAttributes();
-					} catch (Throwable $e) {
+					} /** @noinspection BadExceptionsProcessingInspection Это нормально */ catch (Throwable $e) {
 						$transaction->rollBack();
 						return false;
 					}
