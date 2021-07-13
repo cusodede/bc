@@ -12,7 +12,6 @@ use app\models\sys\permissions\Permissions;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use kartik\touchspin\TouchSpin;
-use pozitronik\helpers\ModuleHelper;
 use yii\web\View;
 
 ?>
@@ -29,7 +28,7 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= $form->field($model, 'controller')->widget(Select2::class, [
+		<?= $form->field($model, 'controllerPath')->widget(Select2::class, [
 			'data' => TemporaryHelper::GetControllersList(Permissions::ConfigurationParameter(Permissions::CONTROLLER_DIRS)),
 			'pluginOptions' => [
 				'multiple' => false,
@@ -49,19 +48,6 @@ use yii\web\View;
 	<div class="col-md-12">
 		<?= $form->field($model, 'verb')->widget(Select2::class, [
 			'data' => TemporaryHelper::VERBS,
-			'pluginOptions' => [
-				'multiple' => false,
-				'allowClear' => true,
-				'placeholder' => '',
-				'tags' => true
-			]
-		]) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'module')->widget(Select2::class, [
-			'data' => array_combine($keys = array_keys(ModuleHelper::ListModules(null, false)), $keys),
 			'pluginOptions' => [
 				'multiple' => false,
 				'allowClear' => true,
