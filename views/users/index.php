@@ -32,7 +32,7 @@ ModalHelperAsset::register($this);
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']).")":" (нет пользователей)"),
+			'heading' => '',
 		],
 		'summary' => null !== $searchModel?Html::a('Новый пользователь', UsersController::to('create'), [
 			'class' => 'btn btn-success summary-content',
