@@ -14,7 +14,7 @@ return [
 	 */
 	'controllerDirs' => [
 		'@app/controllers' => '',
-		'@app/controllers/api' => 'api',
+		'@app/controllers/api' => 'api'
 	],
 	'grantAll' => [1],/*User ids, that receive all permissions by default*/
 	'grant' => [/*перечисление прямых назначений*/
