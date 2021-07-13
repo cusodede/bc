@@ -19,6 +19,9 @@ class Partners extends ActiveRecordPartners
 {
 	use FileStorageTrait;
 
+	/**
+	 * @var mixed атрибут для загрузки логотипа партнера.
+	 */
 	public $logo;
 
 	/**
@@ -37,8 +40,7 @@ class Partners extends ActiveRecordPartners
 	 */
 	public function getFileLogo(): ?FileStorage
 	{
-		$files = $this->files(['logo']);
-		return ([] !== $files) ? ArrayHelper::getValue($files, 0) : null;
+		return ([] !== $files = $this->files(['logo'])) ? ArrayHelper::getValue($files, 0) : null;
 	}
 
 	/**

@@ -39,7 +39,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public ?ProductsJournal $actualStatus = null;
 	/**
-	 * @var mixed атрибут загрузки логотипа для отображения в сторис.
+	 * @var mixed атрибут для загрузки логотипа в сторис.
 	 */
 	public $storyLogo;
 
@@ -138,9 +138,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getFileStoryLogo(): ?FileStorage
 	{
-		$files = $this->files(['storyLogo']);
-
-		return ([] !== $files) ? ArrayHelper::getValue($files, 0) : null;
+		return ([] !== $files = $this->files(['storyLogo'])) ? ArrayHelper::getValue($files, 0) : null;
 	}
 
 	/**
