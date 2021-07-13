@@ -38,6 +38,20 @@ class Products extends ActiveRecordProducts
 	 * @var ProductsJournal|null актуальный статус продукта по абоненту.
 	 */
 	public ?ProductsJournal $actualStatus = null;
+	/**
+	 * @var mixed атрибут загрузки логотипа для отображения в сторис.
+	 */
+	public $storyLogo;
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return array_merge(parent::rules(), [
+			[['storyLogo'], 'image', 'extensions' => 'jpg, jpeg']
+		]);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -125,6 +139,17 @@ class Products extends ActiveRecordProducts
 	public function getFileStoryLogo(): ?FileStorage
 	{
 		$files = $this->files(['storyLogo']);
+
 		return ([] !== $files) ? ArrayHelper::getValue($files, 0) : null;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return array_merge(parent::attributeLabels(), [
+			'storyLogo' => 'Изображение для сторис'
+		]);
 	}
 }
