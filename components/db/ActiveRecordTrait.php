@@ -92,6 +92,7 @@ trait ActiveRecordTrait {
 			if (false !== $result = $this->save()) {
 				if (in_array(FileStorageTrait::class, class_uses($this), true) && method_exists($this, 'uploadAttributes')) {
 					try {
+						/** @see FileStorageTrait::uploadAttributes() */
 						$this->uploadAttributes();
 					} catch (Throwable $e) {
 						$transaction->rollBack();
