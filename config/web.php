@@ -99,6 +99,9 @@ $config = [
 		],
 		'api' => [
 			'class' => ApiModule::class
+		],
+		'markdown' => [
+			'class' => 'kartik\markdown\Module',
 		]
 	],
 	'components' => [
