@@ -15,7 +15,7 @@ return [
 	'controllerDirs' => [
 		'@app/controllers' => '',
 		'@app/controllers/api' => 'api',
-		'@app/modules/history/controllers' => '',
+		'@app/modules/history/controllers' => '@history',/*@ - указываем, что это модуль*/
 	],
 	'grantAll' => [1],/*User ids, that receive all permissions by default*/
 	'grant' => [/*перечисление прямых назначений*/
