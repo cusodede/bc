@@ -146,7 +146,7 @@ class DefaultController extends Controller {
 				$items[] = [
 					'label' => $model->id,
 					'url' => [$model::to($model->defaultAction)],
-					'visible' => $model::hasPermission($model->defaultAction)
+					'visible' => $model::hasPermission($model->defaultAction, null, $model->module->id)
 				];
 			}
 		}
