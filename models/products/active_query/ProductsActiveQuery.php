@@ -20,7 +20,7 @@ class ProductsActiveQuery extends ActiveQuery
 	 * @param bool $active
 	 * @return $this
 	 */
-	public function withActive(bool $active = true): self
+	public function whereActivePeriod(bool $active = true): self
 	{
 		$exp = new Expression(':now');
 
