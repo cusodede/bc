@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\mutations;
 
 use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
+use app\modules\graphql\schema\mutations\extended\ProductMutationType;
+use app\modules\graphql\schema\mutations\extended\SubscriptionMutationType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
@@ -19,7 +21,9 @@ class MutationType extends ObjectType
 	{
 		parent::__construct([
 			'fields' => [
-				'partner' => PartnerMutationType::mutationType(),
+				'partner' 		=> PartnerMutationType::mutationType(),
+				'product' 		=> ProductMutationType::mutationType(),
+				'subscription' 	=> SubscriptionMutationType::mutationType(),
 			]
 		]);
 	}

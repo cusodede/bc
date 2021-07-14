@@ -13,7 +13,6 @@ use app\assets\ModalHelperAsset;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\Utils;
 use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['подписка', 'подписки', 'подписок']). ')' : ' (нет подписок)'),
+			'heading' => '',
 		],
 		'summary' => null !== $searchModel ? Html::a('Создать подписку', $controller::to('create'), [
 			'class' => 'btn btn-success',

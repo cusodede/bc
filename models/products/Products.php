@@ -23,6 +23,7 @@ use yii\db\ActiveRecord;
  * @property-read string|null $paymentPeriodDesc
  * @property-read string $paymentDateModifier
  * @property-read ActiveRecord|null $relatedInstance
+ * @property-read ActiveQuery $relatedSubscription
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  */
 class Products extends ActiveRecordProducts

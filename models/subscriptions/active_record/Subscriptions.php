@@ -7,6 +7,7 @@ use app\components\db\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -47,6 +48,7 @@ class Subscriptions extends ActiveRecord
 			[['units'], 'integer', 'max' => 10],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 			['product', RelationValidator::class],
+			['units', 'in', 'range' => array_keys(EnumSubscriptionTrialUnits::mapData())],
 		];
 	}
 
