@@ -4,10 +4,8 @@ declare(strict_types = 1);
 namespace app\modules\graphql\base;
 
 use GraphQL\Type\Definition\ObjectType;
-use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use Exception;
-use ReflectionClass;
 
 /**
  * Class BaseQueryType
@@ -57,17 +55,5 @@ abstract class BaseQueryType extends ObjectType
 		$id = ArrayHelper::getValue($args, 'id', 0);
 		$name = ArrayHelper::getValue($enumData, $id, false);
 		return $name ? compact('id', 'name') : null;
-	}
-
-	/**
-	 * Трансформация параметров для ActiveDataProvider
-	 * @param Model $searchModel
-	 * @param $args
-	 * @return array
-	 * @throws Exception
-	 */
-	public static function transformToSearchModelParams(Model $searchModel, $args): array
-	{
-		return [(new ReflectionClass($searchModel))->getShortName() => $args];
 	}
 }

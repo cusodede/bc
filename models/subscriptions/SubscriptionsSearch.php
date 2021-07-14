@@ -5,7 +5,8 @@ namespace app\models\subscriptions;
 
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use ReflectionClass;
+use yii\base\InvalidConfigException;
+use Exception;
 
 /**
  * Class SubscriptionsSearch
@@ -26,12 +27,13 @@ class SubscriptionsSearch extends Subscriptions
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws InvalidConfigException
+	 * @throws Exception
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
 		// Сортировка и навигация для GraphQL
-		$shortName = (new ReflectionClass($this))->getShortName();
-		$pagination = ArrayHelper::getValue($params, $shortName . '.pagination');
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
 
 		$query = Subscriptions::find()->active();
 

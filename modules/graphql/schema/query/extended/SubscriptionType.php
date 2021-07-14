@@ -64,7 +64,7 @@ final class SubscriptionType extends BaseQueryType
 				$subscriptionSearch = new SubscriptionsSearch();
 				ArrayHelper::setValue($args, 'pagination', false);
 				return $subscriptionSearch
-					->search(self::transformToSearchModelParams($subscriptionSearch, $args))
+					->search([$subscriptionSearch->formName() => $args])
 					->getModels();
 			},
 		];

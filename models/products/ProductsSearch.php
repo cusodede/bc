@@ -8,7 +8,6 @@ use yii\data\Sort;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use Exception;
-use ReflectionClass;
 
 /**
  * Поисковая модель продуктов
@@ -41,9 +40,8 @@ class ProductsSearch extends Products
 	public function search(array $params): ActiveDataProvider
 	{
 		// Сортировка и навигация для GraphQL
-		$shortName = (new ReflectionClass($this))->getShortName();
-		$pagination = ArrayHelper::getValue($params, $shortName . '.pagination');
-		$sort = ArrayHelper::getValue($params, $shortName . '.sort');
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
 
 		$query = Products::find()->active();
 		$dataProvider = new ActiveDataProvider([

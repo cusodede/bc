@@ -29,11 +29,9 @@ final class PartnerMutationType extends BaseMutationType
 
 	/**
 	 * PartnerMutationType constructor.
-	 * @param Partners $model
 	 */
-	public function __construct(Partners $model)
+	public function __construct()
 	{
-		$this->model = $model;
 		parent::__construct($this->getConfig());
 	}
 
@@ -48,7 +46,8 @@ final class PartnerMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации партнёра',
-			'resolve' => fn(Partners $partner = null, array $args = []): ?array => $args,
+			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
+				=> Partners::findOne($args) ?? (empty($args) ? new Partners() : null),
 		];
 	}
 
@@ -96,13 +95,15 @@ final class PartnerMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
 					'description' => 'Обновление партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(array $rootArgs, array $args = []): array => $this->update($rootArgs, $args),
+					'resolve' => fn(Partners $partner, array $args = []): array
+						=> $this->save($partner, $args, self::MESSAGES),
 				],
 				'create' => [
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
 					'description' => 'Создание партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(array $rootArgs, array $args = []): array => $this->create($args),
+					'resolve' => fn(Partners $partner, array $args = []): array
+						=> $this->save($partner, $args, self::MESSAGES),
 				],
 			]
 		];

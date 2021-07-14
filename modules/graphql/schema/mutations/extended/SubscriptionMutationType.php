@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutations\extended;
 
+use app\models\products\Products;
 use app\models\subscriptions\Subscriptions;
 use app\modules\graphql\base\BaseMutationType;
 use app\modules\graphql\data\ErrorTypes;
@@ -17,7 +18,6 @@ use yii\db\ActiveRecord;
  */
 final class SubscriptionMutationType extends BaseMutationType
 {
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -30,11 +30,9 @@ final class SubscriptionMutationType extends BaseMutationType
 
 	/**
 	 * SubscriptionMutationType constructor.
-	 * @param Subscriptions $model
 	 */
-	public function __construct(Subscriptions $model)
+	public function __construct()
 	{
-		$this->model = $model;
 		parent::__construct($this->getConfig());
 	}
 
@@ -49,7 +47,8 @@ final class SubscriptionMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации подписок',
-			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?array => $args,
+			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?Subscriptions
+				=> Subscriptions::findOne($args) ?? (empty($args) ? new Subscriptions() : null),
 		];
 	}
 
@@ -81,13 +80,13 @@ final class SubscriptionMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::subscription()),
 					'description' => 'Обновление подписки',
 					'args' => $this->getArgs(),
-					'resolve' => fn(array $rootArgs, array $args = []): array => $this->update($rootArgs, $args),
+					'resolve' => fn(Subscriptions $subscriptions, array $args = []): array
+						=> $this->save($subscriptions, $args, self::MESSAGES),
 				],
 				'product' => [
-					'type' => MutationTypes::productMutation(), // Связанная схема продуктов
+					'type' => MutationTypes::productMutation(),
 					'description' => 'Обновление связанного продукта',
-					'resolve' => fn(array $rootArgs): array => ['id' => $this->model::findOne($rootArgs)->product_id],
-					// В resolve надо отдать связь продукта с подпиской
+					'resolve' => fn(Subscriptions $subscription): Products => $subscription->product,
 				],
 			]
 		];

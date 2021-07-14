@@ -29,11 +29,9 @@ final class ProductMutationType extends BaseMutationType
 
 	/**
 	 * ProductMutationType constructor.
-	 * @param Products $model
 	 */
-	public function __construct(Products $model)
+	public function __construct()
 	{
-		$this->model = $model;
 		parent::__construct($this->getConfig());
 	}
 
@@ -48,7 +46,8 @@ final class ProductMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации продуктов',
-			'resolve' => fn(Products $product = null, array $args = []): ?array => $args,
+			'resolve' => fn(Products $product = null, array $args = []): ?Products
+				=> Products::findOne($args) ?? (empty($args) ? new Products() : null),
 		];
 	}
 
@@ -100,7 +99,8 @@ final class ProductMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::product()),
 					'description' => 'Обновление продукта',
 					'args' => $this->getArgs(),
-					'resolve' => fn(array $rootArgs, array $args = []): array => $this->update($rootArgs, $args),
+					'resolve' => fn(Products $product, array $args = []): array
+						=> $this->save($product, $args, self::MESSAGES),
 				],
 			]
 		];
