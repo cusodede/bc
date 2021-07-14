@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
+use app\components\helpers\DateHelper;
+use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
 use app\models\subscriptions\Subscriptions;
 use app\models\partners\Partners;
@@ -11,6 +13,8 @@ use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use Throwable;
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -23,11 +27,12 @@ use yii\helpers\ArrayHelper;
  * @property Partners $relatedPartner
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
+ * @property-read ActiveRecord|null $relatedInstance
  * @property-read string|null $typeDesc именованное обозначение типа продукта.
  * @property-read string|null $paymentPeriodDesc
  * @property-read string $paymentDateModifier
- * @property-read ActiveRecord|null $relatedInstance
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
+ * @property-read bool $isActive
  * @property-read FileStorage|null $fileStoryLogo
  */
 class Products extends ActiveRecordProducts
@@ -146,8 +151,24 @@ class Products extends ActiveRecordProducts
 	 */
 	public function attributeLabels(): array
 	{
-		return array_merge(parent::attributeLabels(), [
-			'storyLogo' => 'Изображение для сторис'
-		]);
+		return array_merge(parent::attributeLabels(), ['storyLogo' => 'Изображение для сторис']);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsActive(): bool
+	{
+		$now = DateHelper::lcDate();
+		return ($this->start_date <= $now || null === $this->start_date) && ($this->end_date >= $now || null === $this->end_date);
+	}
+
+	/**
+	 * @return ProductsActiveQuery
+	 * @throws InvalidConfigException
+	 */
+	public static function find(): ProductsActiveQuery
+	{
+		return Yii::createObject(ProductsActiveQuery::class, [static::class]);
 	}
 }
