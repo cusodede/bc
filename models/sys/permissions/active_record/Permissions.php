@@ -18,9 +18,11 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string|null $name Название доступа
+
  * @property string|null $controller Контроллер, к которому устанавливается доступ, null для внутреннего доступа
  * @property string|null $action Действие, для которого устанавливается доступ, null для всех действий контроллера
  * @property string|null $verb REST-метод, для которого устанавливается доступ
+ * @property string|null $module Модуль, к которому устанавливается доступ, null, если проверяется контроллер приложения. Проверяется только вместе с контроллером.
  * @property string|null $comment Описание доступа
  * @property int $priority Приоритет использования (больше - выше) {unused}
  *
@@ -62,7 +64,7 @@ class Permissions extends ActiveRecord {
 			[['priority'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 128],
 			[['name'], 'required'],
-			[['controller', 'action', 'verb'], 'string', 'max' => 255],
+			[['controller', 'action', 'verb', 'module'], 'string', 'max' => 255],
 			[['name'], 'unique'],
 			[ParentPermissions::ALLOWED_EMPTY_PARAMS, 'default', 'value' => null]
 		];
@@ -78,6 +80,7 @@ class Permissions extends ActiveRecord {
 			'controller' => 'Контроллер',
 			'action' => 'Действие',
 			'verb' => 'Метод запроса',
+			'module' => 'Модуль контроллера',
 			'comment' => 'Комментарий',
 			'priority' => 'Приоритет',
 			'relatedUsersToPermissionsCollections' => 'Входит в наборы',
