@@ -19,12 +19,12 @@ use kartik\select2\Select2;
 <?= $form->field($model, 'name') ?>
 <?= $form->field($model, 'inn') ?>
 <?= $form->field($model, 'category_id')->widget(Select2::class, [
-	'data'          => RefPartnersCategories::mapData(),
+	'data' => RefPartnersCategories::mapData(),
 	'pluginOptions' => [
-		'multiple'    => false,
-		'allowClear'  => true,
+		'multiple' => false,
+		'allowClear' => true,
 		'placeholder' => 'Выберите категорию партнера',
-		'tags'        => true
+		'tags' => true
 	]
 ]) ?>
 <div class="row mb-3">
