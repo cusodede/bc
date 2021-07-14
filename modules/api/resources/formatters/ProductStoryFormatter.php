@@ -25,7 +25,7 @@ class ProductStoryFormatter implements ProductFormatterInterface
 				'description',
 				'storyLogoPath' => static function (Products $product) {
 					return (null !== $product->fileStoryLogo)
-						? ProductsController::to('get-story-logo', ['id' => $product->id])
+						? ProductsController::to('get-story-logo', ['id' => $product->id], true)
 						: null;
 				}
 			]

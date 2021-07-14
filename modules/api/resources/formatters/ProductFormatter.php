@@ -52,7 +52,7 @@ class ProductFormatter implements ProductFormatterInterface
 			Partners::class => [
 				'name',
 				'logoPath' => static function(Partners $partner) {
-					return PartnersController::to('get-logo', ['id' => $partner->id]);
+					return PartnersController::to('get-logo', ['id' => $partner->id], true);
 				},
 				'category' => 'relatedCategory'
 			],
