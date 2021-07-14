@@ -169,7 +169,9 @@ ModalHelperAsset::register($this);
 				'format' => 'text'
 			],
 			[
-				'class' => EditableColumn::class,
+				'attribute' => 'module'
+			],
+			['class' => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [

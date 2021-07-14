@@ -15,6 +15,10 @@ use yii\caching\TagDependency;
  * todo:
  * 3) Генератор разрешений (консольный)
  * 4) Флаг deleted
+ *
+ * @property string $controllerPath "Виртуальный" путь к контроллеру, учитывающий, при необходимости, модуль.
+ * @see Permissions::setControllerPath()
+ * @see Permissions::getControllerPath()
  */
 class Permissions extends ActiveRecordPermissions {
 	/*Любое из перечисленных прав*/
@@ -38,6 +42,22 @@ class Permissions extends ActiveRecordPermissions {
 	public const CONFIGURATION_PERMISSIONS = 'permissions';
 	/*Перечисление назначений конфигураций через конфиги, id => ['...', '...']*/
 	public const GRANT_PERMISSIONS = 'grant';
+
+	/**
+	 * @inheritDoc
+	 */
+	public function rules():array {
+		return array_merge(parent::rules(), [[['controllerPath'], 'string']]);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function attributeLabels():array {
+		return parent::attributeLabels() + [
+				'controllerPath' => 'Контроллер'
+			];
+	}
 
 	/**
 	 * Возвращает значение конфига для компонента
@@ -76,22 +96,43 @@ class Permissions extends ActiveRecordPermissions {
 	 * @return self[]
 	 */
 	public static function allUserPermissions(int $user_id, array $permissionFilters = [], bool $asArray = true):array {
-		$query = self::find()
-			->distinct()
-			->joinWith(['relatedUsersToPermissions directPermissions', 'relatedUsersToPermissionsCollections collectionPermissions'], false)
-			->where(['directPermissions.user_id' => $user_id])
-			->orWhere(['collectionPermissions.user_id' => $user_id])
-			->orderBy([
-				'priority' => SORT_DESC,
-				'id' => SORT_ASC
-			]);
+		$mainQuery = self::find()
+			->alias('perms')
+			->innerJoinWith('relatedPermissionsCollectionsToPermissions cols_to_perms')
+			->innerJoin('recursive_collections', 'recursive_collections.id = cols_to_perms.collection_id')
+			->withQuery(
+			//initial query
+				PermissionsCollections::find()
+					->alias('cols')
+					->innerJoinWith('relatedUsersToPermissionsCollections users_to_cols')
+					->where(['users_to_cols.user_id' => $user_id])
+					->union(
+					//recursive query
+						PermissionsCollections::find()
+							->alias('cols')
+							->innerJoinWith('relatedMasterPermissionsCollectionsToPermissionsCollections cols_to_cols')
+							->innerJoin('recursive_collections', 'recursive_collections.id = cols_to_cols.master_id')
+					),
+				'recursive_collections',
+				true
+			)
+			->union(
+			//direct permissions
+				self::find()
+					->alias('perms')
+					->joinWith('relatedUsersToPermissions users_to_perms')
+					->where(['users_to_perms.user_id' => $user_id])
+			);
+
+		$query = self::find()->from(['q' => $mainQuery])->orderBy(['priority' => SORT_DESC, 'id' => SORT_ASC]);
+
 		foreach ($permissionFilters as $paramName => $paramValue) {
 			$paramValues = [$paramValue];
 			/*для перечисленных параметров пустое значение приравнивается к любому*/
 			if (in_array($paramName, self::ALLOWED_EMPTY_PARAMS, true)) {
 				$paramValues[] = null;
 			}
-			$query->andWhere([self::tableName().".".$paramName => $paramValues]);
+			$query->andWhere(["q.$paramName" => $paramValues]);
 
 		}
 		return $query->asArray($asArray)->all();
@@ -128,5 +169,26 @@ class Permissions extends ActiveRecordPermissions {
 			}
 		}
 		parent::afterSave($insert, $changedAttributes);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getControllerPath():?string {
+		return (null === $this->module)?$this->controller:"@{$this->module}/{$this->controller}";
+	}
+
+	/**
+	 * @param null|string $controllerPath
+	 */
+	public function setControllerPath(?string $controllerPath):void {
+		$this->module = null;
+		$this->controller = $controllerPath;/*by default*/
+		/*Если контроллер пришёл в виде @foo/bar - foo указывает на модуль*/
+		if ((false !== $path = explode('/', $this->controller)) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
+			/** @var array $matches */
+			$this->module = substr($matches[0], 1);
+			$this->controller = substr($this->controller, strlen($this->module) + 2); //@foo/bar => bar
+		}
 	}
 }

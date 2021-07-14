@@ -125,19 +125,17 @@ abstract class OAuthTokenizer extends Component implements Tokenizer
 		//проверяем обоснованность запроса на выпуск токенов
 		$this->_grantType->validate($this->_authToken, $this->_refreshToken);
 
-		if ($this->_authToken->isNewRecord || !$this->_authToken->isValid()) {
+		$this->configureToken(
+			$this->_authToken,
+			$this->getTokenType(),
+			$this->getExpiresIn()
+		);
+		if ($this->_useRefreshToken) {
 			$this->configureToken(
-				$this->_authToken,
-				$this->getTokenType(),
-				$this->getExpiresIn()
+				$this->_refreshToken,
+				'refresh',
+				$this->getRefreshTokenExpiresIn()
 			);
-			if ($this->_useRefreshToken) {
-				$this->configureToken(
-					$this->_refreshToken,
-					'refresh',
-					$this->getRefreshTokenExpiresIn()
-				);
-			}
 		}
 
 		/** @var Transaction $transaction */

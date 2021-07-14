@@ -11,7 +11,7 @@ use yii\web\IdentityInterface;
  * Class HttpBasicCredentialsAuth
  * @package app\modules\api\authenticators
  */
-class HttpBasicCredentialsAuth extends HttpBasicAuth
+class HttpBasicPasswordAuth extends HttpBasicAuth
 {
 	/**
 	 * {@inheritdoc}

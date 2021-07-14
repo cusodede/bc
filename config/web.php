@@ -86,7 +86,6 @@ $config = [
 		],
 		'graphql' => [
 			'class' => GraphqlModule::class,
-			'defaultRoute' => 'graphql',
 		],
 		'statuses' => [
 			'class' => StatusModule::class,
@@ -158,7 +157,6 @@ $config = [
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
 			'rules' => [
-				['class' => UrlRule::class, 'controller' => 'api/users'],
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
 			]
