@@ -5,6 +5,7 @@ namespace app\models\products\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
+use app\models\products\EnumProductsPaymentPeriods;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -58,6 +59,8 @@ class Products extends ActiveRecord
 			[['description'], 'string', 'max' => 255],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+			['payment_period', 'in', 'range' => array_keys(EnumProductsPaymentPeriods::mapData())],
+			[['start_date', 'end_date'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
 		];
 	}
 

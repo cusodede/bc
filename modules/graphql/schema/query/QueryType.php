@@ -10,6 +10,7 @@ use app\modules\graphql\schema\query\extended\enum\ProductTypesType;
 use app\modules\graphql\schema\query\extended\enum\SubscriptionTrialUnitsType;
 use app\modules\graphql\schema\query\extended\PartnerType;
 use app\modules\graphql\schema\query\extended\ServerDateTimeType;
+use app\modules\graphql\schema\query\extended\SubscriptionType;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
@@ -35,6 +36,8 @@ class QueryType extends ObjectType
 				'productPaymentPeriod' 		=> ProductPaymentPeriodType::getOneOfType(),
 				'productTypes' 				=> ProductTypesType::getListOfType(),
 				'productType' 				=> ProductTypesType::getOneOfType(),
+				'subscriptions'				=> SubscriptionType::getListOfType(),
+				'subscription'				=> SubscriptionType::getOneOfType(),
 				'subscriptionTrialUnits' 	=> SubscriptionTrialUnitsType::getListOfType(),
 				'subscriptionTrialUnit' 	=> SubscriptionTrialUnitsType::getOneOfType(),
 				'serverDateTime' 			=> ServerDateTimeType::baseFormat(),
