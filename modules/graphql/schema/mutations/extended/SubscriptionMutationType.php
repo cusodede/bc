@@ -83,6 +83,12 @@ final class SubscriptionMutationType extends BaseMutationType
 					'args' => $this->getArgs(),
 					'resolve' => fn(array $rootArgs, array $args = []): array => $this->update($rootArgs, $args),
 				],
+				'product' => [
+					'type' => MutationTypes::productMutation(), // Связанная схема продуктов
+					'description' => 'Обновление связанного продукта',
+					'resolve' => fn(array $rootArgs): array => ['id' => $this->model::findOne($rootArgs)->product_id],
+					// В resolve надо отдать связь продукта с подпиской
+				],
 			]
 		];
 	}
