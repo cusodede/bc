@@ -33,6 +33,7 @@ class SubscriptionsSearch extends Subscriptions
 	{
 		// Сортировка и навигация для GraphQL
 		$shortName = (new ReflectionClass($this))->getShortName();
+		/*fixme: а разве $shortName это не $this->formName()?*/
 		$pagination = ArrayHelper::getValue($params, $shortName . '.pagination');
 
 		$query = Subscriptions::find()->active();
