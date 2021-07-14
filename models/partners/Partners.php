@@ -30,7 +30,7 @@ class Partners extends ActiveRecordPartners
 	public function rules(): array
 	{
 		return array_merge(parent::rules(), [
-			[['logo'], 'image', 'extensions' => 'png'],
+			[['logo'], 'image', 'extensions' => 'png', 'skipOnEmpty' => false],
 		]);
 	}
 
