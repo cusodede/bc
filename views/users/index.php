@@ -15,7 +15,6 @@ use app\models\sys\users\UsersSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\web\JsExpression;
