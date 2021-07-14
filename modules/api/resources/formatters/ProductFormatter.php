@@ -46,7 +46,7 @@ class ProductFormatter implements ProductFormatterInterface
 					if (null === $product->actualStatus) {
 						return ['units' => $subscription->unitName, 'number' => $subscription->trial_count];
 					}
-					return [];
+					return null;
 				}
 			],
 			Partners::class => [
