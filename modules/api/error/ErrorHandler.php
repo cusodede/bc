@@ -7,13 +7,14 @@ use app\modules\api\exceptions\ValidationException;
 use Error;
 use Exception;
 use yii\base\UserException;
+use yii\web\ErrorHandler as YiiErrorHandler;
 use yii\web\HttpException;
 
 /**
  * Class ErrorHandler
  * @package app\modules\api\error
  */
-class ErrorHandler extends \yii\web\ErrorHandler
+class ErrorHandler extends YiiErrorHandler
 {
 	/**
 	 * @param Error|Exception $exception
