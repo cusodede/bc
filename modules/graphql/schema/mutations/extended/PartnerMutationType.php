@@ -9,7 +9,6 @@ use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use GraphQL\Type\Definition\Type;
 use app\modules\graphql\data\QueryTypes;
-use yii\db\ActiveRecord;
 
 /**
  * Class PartnerMutationType
@@ -17,11 +16,6 @@ use yii\db\ActiveRecord;
  */
 final class PartnerMutationType extends BaseMutationType
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	protected ?ActiveRecord $model;
-
 	/**
 	 * {@inheritdoc}
 	 */

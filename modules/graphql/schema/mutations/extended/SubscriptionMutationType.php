@@ -10,7 +10,6 @@ use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use app\modules\graphql\data\QueryTypes;
 use GraphQL\Type\Definition\Type;
-use yii\db\ActiveRecord;
 
 /**
  * Class SubscriptionMutationType
@@ -18,11 +17,6 @@ use yii\db\ActiveRecord;
  */
 final class SubscriptionMutationType extends BaseMutationType
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	protected ?ActiveRecord $model;
-
 	/**
 	 * {@inheritdoc}
 	 */

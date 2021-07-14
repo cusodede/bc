@@ -9,7 +9,6 @@ use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use app\modules\graphql\data\QueryTypes;
 use GraphQL\Type\Definition\Type;
-use yii\db\ActiveRecord;
 
 /**
  * Class ProductMutationType
@@ -17,11 +16,6 @@ use yii\db\ActiveRecord;
  */
 final class ProductMutationType extends BaseMutationType
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	protected ?ActiveRecord $model;
-
 	/**
 	 * {@inheritdoc}
 	 */

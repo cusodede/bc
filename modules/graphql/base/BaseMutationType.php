@@ -16,11 +16,6 @@ use yii\base\InvalidArgumentException;
 abstract class BaseMutationType extends ObjectType
 {
 	/**
-	 * @var ActiveRecord|null
-	 */
-	protected ?ActiveRecord $model;
-
-	/**
 	 * Список сообщение для фронта
 	 */
 	public const MESSAGES = [];
@@ -45,7 +40,7 @@ abstract class BaseMutationType extends ObjectType
 
 	/**
 	 * Сохранение модели для GraphQL
-	 * @param ActiveRecord|null $model
+	 * @param ActiveRecord $model
 	 * @param array $attributes
 	 * @param array $messages
 	 * @return array
