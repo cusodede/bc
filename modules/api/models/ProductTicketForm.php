@@ -6,6 +6,7 @@ namespace app\modules\api\models;
 use app\models\phones\PhoneNumberValidator;
 use app\models\products\Products;
 use app\models\abonents\Abonents;
+use Exception;
 use yii\base\Model;
 
 /**
@@ -67,6 +68,7 @@ abstract class ProductTicketForm extends Model
 
 	/**
 	 * @return Products|null
+	 * @throws Exception
 	 */
 	public function getProduct(): ?Products
 	{

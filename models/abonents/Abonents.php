@@ -5,6 +5,7 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use app\models\products\Products;
+use Exception;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
@@ -70,6 +71,7 @@ class Abonents extends ActiveRecordAbonents
 	/**
 	 * @param int $productId
 	 * @return Products|null
+	 * @throws Exception
 	 */
 	public function findExistentProductById(int $productId): ?Products
 	{
