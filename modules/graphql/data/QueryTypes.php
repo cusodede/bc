@@ -6,6 +6,7 @@ namespace app\modules\graphql\data;
 use app\modules\graphql\schema\query\extended\PartnerCategoryType;
 use app\modules\graphql\schema\query\extended\PartnerType;
 use app\modules\graphql\schema\query\extended\ProductType;
+use app\modules\graphql\schema\query\extended\SubscriptionType;
 use app\modules\graphql\schema\query\QueryType;
 
 /**
@@ -21,6 +22,7 @@ class QueryTypes
 	private static ?PartnerType $partner = null;
 	private static ?PartnerCategoryType $partnerCategory = null;
 	private static ?ProductType $product = null;
+	private static ?SubscriptionType $subscription = null;
 
 	/**
 	 * @return QueryType
@@ -55,5 +57,14 @@ class QueryTypes
 	public static function product(): ProductType
 	{
 		return static::$product ?: static::$product = new ProductType();
+	}
+
+	/**
+	 * Подписки
+	 * @return SubscriptionType
+	 */
+	public static function subscription(): SubscriptionType
+	{
+		return static::$subscription ?: static::$subscription = new SubscriptionType();
 	}
 }

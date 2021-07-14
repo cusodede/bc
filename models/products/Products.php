@@ -28,6 +28,7 @@ use yii\helpers\ArrayHelper;
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read ActiveRecord|null $relatedInstance
+ * @property-read ActiveQuery $relatedSubscription
  * @property-read string|null $typeDesc именованное обозначение типа продукта.
  * @property-read string|null $paymentPeriodDesc
  * @property-read string $paymentDateModifier

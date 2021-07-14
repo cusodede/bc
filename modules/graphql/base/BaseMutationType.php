@@ -7,6 +7,7 @@ use GraphQL\Type\Definition\ObjectType;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use Exception;
+use yii\base\InvalidArgumentException;
 
 /**
  * Class BaseMutationType
@@ -67,14 +68,17 @@ abstract class BaseMutationType extends ObjectType
 
 	/**
 	 * Сохранение модели для GraphQL
-	 * @param ActiveRecord $model
+	 * @param ActiveRecord|null $model
 	 * @param array $attributes
 	 * @param array $messages
 	 * @return array
 	 * @throws Exception
 	 */
-	public function save(ActiveRecord $model, array $attributes, array $messages): array
+	public function save(?ActiveRecord $model, array $attributes, array $messages): array
 	{
+		if (null === $model) {
+			throw new InvalidArgumentException('Невозможно обнаружить соответствующую модель.');
+		}
 		$model->setAttributes($attributes);
 		return $this->getResult($model->save(), $model->getErrors(), $messages);
 	}

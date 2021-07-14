@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\subscriptions;
 
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use ReflectionClass;
 
 /**
  * Class SubscriptionsSearch
@@ -27,11 +29,19 @@ class SubscriptionsSearch extends Subscriptions
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
+		// Сортировка и навигация для GraphQL
+		$shortName = (new ReflectionClass($this))->getShortName();
+		$pagination = ArrayHelper::getValue($params, $shortName . '.pagination');
+
 		$query = Subscriptions::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
 		]);
+
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
 
 		$dataProvider->setSort([
 			'defaultOrder' => ['subscriptions.id' => SORT_ASC],
