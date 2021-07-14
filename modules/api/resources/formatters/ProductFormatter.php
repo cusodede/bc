@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\api\resources\formatters;
 
 use app\components\helpers\DateHelper;
-use app\components\helpers\FileHelper;
+use app\controllers\PartnersController;
 use app\models\partners\Partners;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
@@ -51,8 +51,8 @@ class ProductFormatter implements ProductFormatterInterface
 			],
 			Partners::class => [
 				'name',
-				'logo' => static function(Partners $partner) {
-					return FileHelper::mimedBase64($partner->fileLogo->path);
+				'logoPath' => static function(Partners $partner) {
+					return PartnersController::to('get-logo', ['id' => $partner->id]);
 				},
 				'category' => 'relatedCategory'
 			],

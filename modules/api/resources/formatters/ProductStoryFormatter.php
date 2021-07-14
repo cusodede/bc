@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\resources\formatters;
 
-use app\components\helpers\FileHelper;
+use app\controllers\ProductsController;
 use app\models\products\Products;
 use yii\helpers\ArrayHelper;
 
@@ -23,9 +23,9 @@ class ProductStoryFormatter implements ProductFormatterInterface
 				'id',
 				'name',
 				'description',
-				'storyLogo' => static function (Products $product) {
+				'storyLogoPath' => static function (Products $product) {
 					return (null !== $product->fileStoryLogo)
-						? FileHelper::mimedBase64($product->fileStoryLogo->path)
+						? ProductsController::to('get-story-logo', ['id' => $product->id])
 						: null;
 				}
 			]
