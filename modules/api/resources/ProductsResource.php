@@ -36,7 +36,7 @@ class ProductsResource
 	 */
 	public function getFullProductList(Abonents $abonent): array
 	{
-		return array_map([$this->_formatter, 'format'], $abonent->getFullProductList());
+		return array_map([$this->_formatter, 'format'], array_values($abonent->getFullProductList()));
 	}
 
 	/**

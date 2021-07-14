@@ -25,7 +25,7 @@ class ProductStoryFormatter implements ProductFormatterInterface
 				'description',
 				'storyLogo' => static function (Products $product) {
 					return (null !== $product->fileStoryLogo)
-						? FileHelper::mimeBase64($product->fileStoryLogo->path)
+						? FileHelper::mimedBase64($product->fileStoryLogo->path)
 						: null;
 				}
 			]

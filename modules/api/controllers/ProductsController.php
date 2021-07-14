@@ -121,7 +121,7 @@ class ProductsController extends YiiRestController
 		$form = new SubscribeProductTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
-			throw new ValidationException(current($form->errors));
+			throw new ValidationException($form->errors);
 		}
 
 		return ['ticketId' => (new ProductTicketsService())->subscribe($form->productId, $form->abonent->id)];
@@ -137,7 +137,7 @@ class ProductsController extends YiiRestController
 		$form = new UnsubscribeProductTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
-			throw new ValidationException(current($form->errors));
+			throw new ValidationException($form->errors);
 		}
 
 		return ['ticketId' => (new ProductTicketsService())->unsubscribe($form->productId, $form->abonent->id)];

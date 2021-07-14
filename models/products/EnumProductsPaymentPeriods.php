@@ -23,9 +23,9 @@ class EnumProductsPaymentPeriods
 	public static function mapData(): array
 	{
 		return [
-			self::TYPE_MONTHLY  => 'Ежемесячно',
-			self::TYPE_DAILY    => 'Ежедневно',
-			self::TYPE_ONE_TIME => 'Разовое списание',
+			self::TYPE_MONTHLY => 'Месяц',
+			self::TYPE_DAILY => 'День',
+			self::TYPE_ONE_TIME => 'Единоразово',
 		];
 	}
 }

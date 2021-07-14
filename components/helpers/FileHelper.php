@@ -17,7 +17,7 @@ class FileHelper extends YiiFileHelper
 	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	public static function mimeBase64(string $filename): string
+	public static function mimedBase64(string $filename): string
 	{
 		$content = base64_encode(file_get_contents($filename));
 		
