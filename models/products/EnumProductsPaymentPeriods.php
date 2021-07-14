@@ -13,9 +13,9 @@ class EnumProductsPaymentPeriods
 {
 	use EnumTrait;
 
-	public const TYPE_MONTHLY = 1;
+	public const TYPE_ONE_TIME = 1;
 	public const TYPE_DAILY = 2;
-	public const TYPE_ONE_TIME = 3;
+	public const TYPE_MONTHLY = 3;
 
 	/**
 	 * {@inheritdoc}
@@ -23,9 +23,9 @@ class EnumProductsPaymentPeriods
 	public static function mapData(): array
 	{
 		return [
-			self::TYPE_MONTHLY => 'Месяц',
+			self::TYPE_ONE_TIME => 'Разовое списание',
 			self::TYPE_DAILY => 'День',
-			self::TYPE_ONE_TIME => 'Единоразово',
+			self::TYPE_MONTHLY => 'Месяц'
 		];
 	}
 }
