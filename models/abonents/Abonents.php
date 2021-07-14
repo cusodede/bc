@@ -5,6 +5,7 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use app\models\products\Products;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
@@ -28,11 +29,13 @@ class Abonents extends ActiveRecordAbonents
 
 	/**
 	 * @return Products[]
+	 * @throws InvalidConfigException
 	 */
 	public function getUnrelatedProducts(): array
 	{
 		return Products::find()
 			->where(['NOT IN', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])
+			->whereActivePeriod()
 			->indexBy('id')
 			->all();
 	}
