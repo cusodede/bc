@@ -70,7 +70,7 @@ class Abonents extends ActiveRecordAbonents
 	 * @param int $productId
 	 * @return Products|null
 	 */
-	public function getExistentProductById(int $productId): ?Products
+	public function findExistentProductById(int $productId): ?Products
 	{
 		return ArrayHelper::getValue($this, "existentProducts.$productId");
 	}

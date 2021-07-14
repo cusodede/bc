@@ -71,7 +71,7 @@ abstract class ProductTicketForm extends Model
 	public function getProduct(): ?Products
 	{
 		if ((null === $this->_product) && null !== $this->abonent) {
-			$this->_product = $this->abonent->getExistentProductById($this->productId);
+			$this->_product = $this->abonent->findExistentProductById($this->productId);
 		}
 
 		return $this->_product;
