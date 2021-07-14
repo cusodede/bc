@@ -28,29 +28,42 @@ class ProductFormatter implements ProductFormatterInterface
 		return ArrayHelper::toArray($product, [
 			Products::class => [
 				'id',
+				'type' => 'typeDesc',
 				'name',
 				'description',
-				'ext_description'    => static fn(Products $product) => HtmlPurifier::process(Markdown::convert($product->ext_description)),
-				'type'               => 'typeName',
+				'ext_description' => static function(Products $p) {
+					return HtmlPurifier::process(Markdown::convert($p->ext_description));
+				},
 				'price',
-				'typeRelatedOptions' => 'relatedInstance',
-				'partner'            => 'relatedPartner',
-				'subscription'       => 'actualStatus'
+				'paymentPeriod' => 'paymentPeriodDesc',
+				'options' => 'relatedInstance',
+				'partner' => 'relatedPartner',
+				'subscription' => 'actualStatus'
 			],
 			Subscriptions::class => [
-				'trial_count'
+				'trial' => static function (Subscriptions $subscription) use ($product) {
+					//т.к. по продукту не производилось подключение, то доступен триальный период
+					if (null === $product->actualStatus) {
+						return ['units' => $subscription->unitName, 'number' => $subscription->trial_count];
+					}
+					return [];
+				}
 			],
 			Partners::class => [
 				'name',
-				'logo'     => static fn(Partners $partner) => FileHelper::mimeBase64($partner->fileLogo->path),
+				'logo' => static function(Partners $partner) {
+					return FileHelper::mimedBase64($partner->fileLogo->path);
+				},
 				'category' => 'relatedCategory'
 			],
 			RefPartnersCategories::class => [
 				'name'
 			],
 			ProductsJournal::class => [
-				'status'     => 'statusName',
-				'expireDate' => static fn(ProductsJournal $status) => DateHelper::toIso8601($status->expire_date)
+				'status' => 'statusDesc',
+				'expireDate' => static function(ProductsJournal $status) {
+					return DateHelper::toIso8601($status->expire_date);
+				}
 			]
 		]);
 	}
