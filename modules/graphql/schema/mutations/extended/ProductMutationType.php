@@ -77,7 +77,11 @@ final class ProductMutationType extends BaseMutationType
 			],
 			'description' => [
 				'type' => Type::string(),
-				'description' => 'Описание продукта',
+				'description' => 'Краткое описание продукта',
+			],
+			'ext_description' => [
+				'type' => Type::string(),
+				'description' => 'Полное описание продукта',
 			],
 		];
 	}
