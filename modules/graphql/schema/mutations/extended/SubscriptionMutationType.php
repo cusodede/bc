@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutations\extended;
 
+use app\models\products\EnumProductsTypes;
+use Yii;
 use app\models\products\Products;
 use app\models\subscriptions\Subscriptions;
 use app\modules\graphql\base\BaseMutationType;
@@ -10,6 +12,8 @@ use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use app\modules\graphql\data\QueryTypes;
 use GraphQL\Type\Definition\Type;
+use yii\db\Transaction;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class SubscriptionMutationType
@@ -82,7 +86,45 @@ final class SubscriptionMutationType extends BaseMutationType
 					'description' => 'Обновление связанного продукта',
 					'resolve' => fn(Subscriptions $subscription): Products => $subscription->product,
 				],
+				'create' => $this->create(),
 			]
+		];
+	}
+
+	private function create(): array
+	{
+		$productMutation = new ProductMutationType();
+		$allArgs = ArrayHelper::merge($productMutation->getArgs(), $this->getArgs());
+
+		$resolve = function(Subscriptions $subscription, array $args = []) use($productMutation): array {
+
+			/** @var Transaction $transaction */
+			$transaction  = Yii::$app->db->beginTransaction();
+
+			$productModel = new Products();
+			$productModel->type_id = EnumProductsTypes::TYPE_SUBSCRIPTION;
+			$saveProducts = $this->save($productModel, $args, $productMutation::MESSAGES);
+			if (false === ArrayHelper::getValue($saveProducts, 'result')) {
+				return $saveProducts;
+			}
+
+			$subscription->setProduct($productModel);
+			$saveSubscription = $this->save($subscription, $args, self::MESSAGES);
+
+			if (false === ArrayHelper::getValue($saveSubscription, 'result')) {
+				$transaction->rollBack();
+				return $saveSubscription;
+			}
+
+			$transaction->commit();
+			return $saveSubscription;
+		};
+
+		return [
+			'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::subscription()),
+			'description' => 'Создание подписки',
+			'args' => $allArgs,
+			'resolve' => $resolve,
 		];
 	}
 }
