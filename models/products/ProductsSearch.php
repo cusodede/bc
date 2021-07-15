@@ -55,7 +55,7 @@ class ProductsSearch extends Products
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 
-		if (null !== $pagination = $params["{$this->formName()}.pagination"] ?? null) {
+		if (null !== $pagination) {
 			$dataProvider->setPagination($pagination);
 		}
 
