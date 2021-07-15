@@ -77,11 +77,7 @@ final class ProductMutationType extends BaseMutationType
 			],
 			'description' => [
 				'type' => Type::string(),
-				'description' => 'Краткое описание продукта',
-			],
-			'ext_description' => [
-				'type' => Type::string(),
-				'description' => 'Полное описание продукта',
+				'description' => 'Описание продукта',
 			],
 		];
 	}
@@ -100,13 +96,6 @@ final class ProductMutationType extends BaseMutationType
 					'resolve' => fn(Products $product, array $args = []): array
 						=> $this->save($product, $args, self::MESSAGES),
 				],
-//				'create' => [
-//					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::product()),
-//					'description' => 'Создание продукта',
-//					'args' => $this->getArgs(),
-//					'resolve' => fn(Products $product, array $args = []): array
-//						=> $this->save($product, $args, self::MESSAGES),
-//				],
 			]
 		];
 	}
