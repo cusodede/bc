@@ -99,7 +99,7 @@ final class SubscriptionMutationType extends BaseMutationType
 		$resolve = function(Subscriptions $subscription, array $args = []) use($productMutation): array {
 
 			/** @var Transaction $transaction */
-			$transaction  = Yii::$app->db->beginTransaction();
+			$transaction = Yii::$app->db->beginTransaction();
 
 			$productModel = new Products();
 			$productModel->type_id = EnumProductsTypes::TYPE_SUBSCRIPTION;
