@@ -94,25 +94,4 @@ class ProductsSearch extends Products
 
 		return $dataProvider;
 	}
-
-	/**
-	 * У нас есть дата старта и дата окончания продукта, которые могут быть как даты в формате 'Y-m-d H:i:s',
-	 * так и null, если допустим продукт бессрочный. Нам надо фильтровать активные и не активные продукты,
-	 * если даты null считаем продукт активным бессрочно.
-	 * @param bool $isActive
-	 * @return array
-	 */
-	public function getActiveDateCondition(bool $isActive): array
-	{
-		$nowDateTime = new Expression('now()');
-		return $isActive ?
-			[
-				'or',
-				['and', ['<=', 'products.start_date', $nowDateTime], ['>=', 'products.end_date', $nowDateTime]],
-				['and', ['<=', 'products.start_date', $nowDateTime], ['products.end_date' => null]],
-				['and', ['>=', 'products.end_date', $nowDateTime], ['products.start_date' => null]],
-				['and', ['products.end_date' => null], ['products.start_date' => null]],
-			] :
-			['or', ['>', 'products.start_date', $nowDateTime], ['<', 'products.end_date', $nowDateTime]];
-	}
 }
