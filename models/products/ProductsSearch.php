@@ -5,9 +5,8 @@ namespace app\models\products;
 
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use yii\db\Expression;
-use yii\helpers\ArrayHelper;
 use Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * Поисковая модель продуктов
@@ -16,8 +15,17 @@ use Exception;
  */
 class ProductsSearch extends Products
 {
+	/**
+	 * @var string|null
+	 */
 	public ?string $category_id = null;
+	/**
+	 * @var bool|null
+	 */
 	public ?bool $trial = null;
+	/**
+	 * @var bool|null
+	 */
 	public ?bool $active = null;
 
 	/**
@@ -44,11 +52,10 @@ class ProductsSearch extends Products
 		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
 
 		$query = Products::find()->active();
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-		]);
 
-		if (null !== $pagination) {
+		$dataProvider = new ActiveDataProvider(['query' => $query]);
+
+		if (null !== $pagination = $params["{$this->formName()}.pagination"] ?? null) {
 			$dataProvider->setPagination($pagination);
 		}
 
@@ -57,7 +64,7 @@ class ProductsSearch extends Products
 		} else {
 			$dataProvider->setSort([
 				'defaultOrder' => ['id' => SORT_ASC],
-				'attributes' => ['id', 'name'],
+				'attributes'   => ['id', 'name'],
 			]);
 		}
 
@@ -67,21 +74,22 @@ class ProductsSearch extends Products
 			return $dataProvider;
 		}
 
-		$query->joinWith(['relatedPartner']);
-		$query->joinWith(['relatedSubscription']);
+		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
-		$query->andFilterWhere(['products.id' => $this->id])
-			->andFilterWhere(['products.type_id' => $this->type_id])
-			->andFilterWhere(['products.partner_id' => $this->partner_id])
-			->andFilterWhere(['partners.category_id' => $this->category_id])
-			->andFilterWhere(['like', 'products.name', $this->name]);
+		$query->andFilterWhere([
+			'products.id'          => $this->id,
+			'products.type_id'     => $this->type_id,
+			'products.partner_id'  => $this->partner_id,
+			'partners.category_id' => $this->category_id
+		]);
+		$query->andFilterWhere(['like', 'products.name', $this->name]);
 
 		if (null !== $this->trial) {
 			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);
 		}
 
 		if (null !== $this->active) {
-			$query->andWhere($this->getActiveDateCondition($this->active));
+			$query->whereActivePeriod($this->active);
 		}
 
 		return $dataProvider;

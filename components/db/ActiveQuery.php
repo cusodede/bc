@@ -12,4 +12,24 @@ use pozitronik\traits\models\ActiveQuery as VendorActiveQuery;
  */
 class ActiveQuery extends VendorActiveQuery {
 	use ActiveQueryPermissionsTrait;
+
+	protected ?string $_alias = null;
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init(): void
+	{
+		parent::init();
+		[, $this->_alias] = $this->getTableNameAndAlias();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function alias($alias): self
+	{
+		$this->_alias = $alias;
+		return parent::alias($alias);
+	}
 }

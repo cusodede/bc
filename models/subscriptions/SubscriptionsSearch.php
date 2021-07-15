@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions;
 
+use Exception;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
-use Exception;
+use ReflectionClass;
 
 /**
  * Class SubscriptionsSearch
@@ -27,7 +27,6 @@ class SubscriptionsSearch extends Subscriptions
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
-	 * @throws InvalidConfigException
 	 * @throws Exception
 	 */
 	public function search(array $params): ActiveDataProvider

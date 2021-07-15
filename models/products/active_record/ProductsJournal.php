@@ -11,7 +11,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "product_statuses".
+ * This is the model class for table "products_journal".
  *
  * @property string $id
  * @property int $rel_abonents_to_products_id

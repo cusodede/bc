@@ -6,6 +6,8 @@ namespace app\modules\api\resources;
 use app\models\abonents\Abonents;
 use app\modules\api\resources\formatters\ProductFormatter;
 use app\modules\api\resources\formatters\ProductFormatterInterface;
+use Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ProductsResource
@@ -32,10 +34,24 @@ class ProductsResource
 	 * @param Abonents $abonent
 	 * @return array
 	 */
-	public function getByAbonent(Abonents $abonent): array
+	public function getFullProductList(Abonents $abonent): array
 	{
-		$products = array_merge($abonent->existentProducts, $abonent->unrelatedProducts);
+		return array_map([$this->_formatter, 'format'], array_values($abonent->getFullProductList()));
+	}
 
-		return array_map([$this->_formatter, 'format'], $products);
+	/**
+	 * @param Abonents $abonent
+	 * @param int $productId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSingleProduct(Abonents $abonent, int $productId): array
+	{
+		$products = $abonent->getFullProductList();
+		if (null === $singleProduct = ArrayHelper::getValue($products, $productId)) {
+			return [];
+		}
+
+		return $this->_formatter->format($singleProduct);
 	}
 }

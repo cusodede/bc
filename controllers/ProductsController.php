@@ -8,6 +8,7 @@ use app\models\products\Products;
 use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class ProductsController
@@ -38,6 +39,21 @@ class ProductsController extends DefaultController
 			'searchModel'  => $searchModel,
 			'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
 		]);
+	}
+
+	/**
+	 * Скачивание изображения продукта для сторис.
+	 * @param int $id
+	 * @throws NotFoundHttpException
+	 */
+	public function actionGetStoryLogo(int $id): void
+	{
+		if (null === $product = Products::findOne($id)) {
+			throw new NotFoundHttpException();
+		}
+		if (null !== $product->fileStoryLogo) {
+			Yii::$app->response->sendFile($product->fileStoryLogo->path);
+		}
 	}
 
 	/**
