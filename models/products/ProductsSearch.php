@@ -6,6 +6,7 @@ namespace app\models\products;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * Поисковая модель продуктов
@@ -46,15 +47,19 @@ class ProductsSearch extends Products
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
+		// Сортировка и навигация для GraphQL
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+
 		$query = Products::find()->active();
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 
-		if (null !== $pagination = $params["{$this->formName()}.pagination"] ?? null) {
+		if (null !== $pagination) {
 			$dataProvider->setPagination($pagination);
 		}
 
-		if (null !== $sort = $params["{$this->formName()}.sort"] ?? null) {
+		if (null !== $sort) {
 			$dataProvider->setSort(new Sort(['params' => compact('sort')]));
 		} else {
 			$dataProvider->setSort([

@@ -16,11 +16,6 @@ use yii\base\InvalidArgumentException;
 abstract class BaseMutationType extends ObjectType
 {
 	/**
-	 * @var ActiveRecord|null
-	 */
-	protected ?ActiveRecord $model;
-
-	/**
 	 * Список сообщение для фронта
 	 */
 	public const MESSAGES = [];
@@ -44,37 +39,14 @@ abstract class BaseMutationType extends ObjectType
 	abstract public function getConfig(): array;
 
 	/**
-	 * Обновление сущностей
-	 * @param array $rootAttributes
-	 * @param array $attributes
-	 * @return array
-	 * @throws Exception
-	 */
-	public function update(array $rootAttributes, array $attributes): array
-	{
-		return $this->save($this->model::findOne($rootAttributes), $attributes, static::MESSAGES);
-	}
-
-	/**
-	 * Создание сущности
-	 * @param array $attributes
-	 * @return array
-	 * @throws Exception
-	 */
-	public function create(array $attributes): array
-	{
-		return $this->save(new $this->model(), $attributes, static::MESSAGES);
-	}
-
-	/**
 	 * Сохранение модели для GraphQL
-	 * @param ActiveRecord|null $model
+	 * @param ActiveRecord $model
 	 * @param array $attributes
 	 * @param array $messages
 	 * @return array
 	 * @throws Exception
 	 */
-	public function save(?ActiveRecord $model, array $attributes, array $messages): array
+	public function save(ActiveRecord $model, array $attributes, array $messages): array
 	{
 		if (null === $model) {
 			throw new InvalidArgumentException('Невозможно обнаружить соответствующую модель.');

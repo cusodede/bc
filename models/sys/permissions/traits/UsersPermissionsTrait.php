@@ -145,7 +145,7 @@ trait UsersPermissionsTrait {
 	 */
 	public function hasActionPermission(Action $action):bool {
 		if ($this->isAllPermissionsGranted()) return true;
-		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, $action->controller->module->id);
+		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, ($action->controller->module->id === Yii::$app->id)?null:$action->controller->module->id);
 	}
 
 	/**
@@ -158,6 +158,7 @@ trait UsersPermissionsTrait {
 	 * @throws Throwable
 	 */
 	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null, ?string $moduleId = null):bool {
+		if (null !== $moduleId && $moduleId === Yii::$app->id) $moduleId = null;//защита на случай, если забыли проверить выше
 		if ($this->isAllPermissionsGranted()) return true;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,

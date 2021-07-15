@@ -130,7 +130,7 @@ final class ProductType extends BaseQueryType
 				$productSearch = new ProductsSearch();
 				ArrayHelper::setValue($args, 'pagination', false);
 				return $productSearch
-					->search(self::transformToSearchModelParams($productSearch, $args))
+					->search([$productSearch->formName() => $args])
 					->getModels();
 			}
 		];
