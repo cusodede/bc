@@ -5,8 +5,10 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
 use app\models\products\Products;
-use pozitronik\helpers\ArrayHelper;
+use Exception;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Abonents
@@ -15,6 +17,7 @@ use yii\db\ActiveQuery;
  * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
  * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
  * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
+ * @property-read Products[] $fullProductList todo: что это?
  */
 class Abonents extends ActiveRecordAbonents
 {
@@ -28,10 +31,23 @@ class Abonents extends ActiveRecordAbonents
 
 	/**
 	 * @return Products[]
+	 * @throws InvalidConfigException
 	 */
 	public function getUnrelatedProducts(): array
 	{
-		return Products::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])->all();
+		return Products::find()
+			->where(['NOT IN', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])
+			->whereActivePeriod()
+			->indexBy('id')
+			->all();
+	}
+
+	/**
+	 * @return Products[]
+	 */
+	public function getFullProductList(): array
+	{
+		return $this->existentProducts + $this->unrelatedProducts;
 	}
 
 	/**
@@ -40,25 +56,26 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public function getExistentProducts(): array
 	{
-		return array_map(
-			static function (RelAbonentsToProducts $abonentsToProduct) {
-				$abonentsToProduct->relatedProduct->actualStatus = $abonentsToProduct->relatedLastProductsJournal;
-				return $abonentsToProduct->relatedProduct;
-			},
-			//принудительно запрашиваем все линки для соответствия потребностям метода
-			$this->getRelatedAbonentsToProducts()
-				->indexBy('product_id')
-				->all()
+		return ArrayHelper::index(
+			array_map(
+				static function (RelAbonentsToProducts $relation) {
+					$relation->relatedProduct->actualStatus = $relation->relatedLastProductsJournal;
+					return $relation->relatedProduct;
+				},
+				$this->relatedAbonentsToProducts
+			),
+			'id'
 		);
 	}
 
 	/**
 	 * @param int $productId
 	 * @return Products|null
+	 * @throws Exception
 	 */
-	public function getExistentProductById(int $productId): ?Products
+	public function findExistentProductById(int $productId): ?Products
 	{
-		return $this->existentProducts[$productId] ?? null;
+		return ArrayHelper::getValue($this, "existentProducts.$productId");
 	}
 
 	/**

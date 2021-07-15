@@ -4,12 +4,15 @@ declare(strict_types = 1);
 namespace app\modules\api\resources\formatters;
 
 use app\components\helpers\DateHelper;
+use app\controllers\PartnersController;
 use app\models\partners\Partners;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
 use app\models\common\RefPartnersCategories;
 use app\models\subscriptions\Subscriptions;
+use kartik\markdown\Markdown;
 use pozitronik\helpers\ArrayHelper;
+use yii\helpers\HtmlPurifier;
 
 /**
  * Class ProductFormatter
@@ -24,27 +27,41 @@ class ProductFormatter implements ProductFormatterInterface
 	{
 		return ArrayHelper::toArray($product, [
 			Products::class => [
+				'id',
+				'type' => 'typeDesc',
 				'name',
 				'description',
-				'type' => 'typeName',
+				'ext_description' => static function(Products $p) {
+					return HtmlPurifier::process(Markdown::convert($p->ext_description));
+				},
 				'price',
-				'typeRelatedOptions' => 'relatedInstance',
+				'paymentPeriod' => 'paymentPeriodDesc',
+				'options' => 'relatedInstance',
 				'partner' => 'relatedPartner',
 				'subscription' => 'actualStatus'
 			],
 			Subscriptions::class => [
-				'trial_count'
+				'trial' => static function (Subscriptions $subscription) use ($product) {
+					//т.к. по продукту не производилось подключение, то доступен триальный период
+					if (null === $product->actualStatus) {
+						return ['units' => $subscription->unitName, 'number' => $subscription->trial_count];
+					}
+					return null;
+				}
 			],
 			Partners::class => [
 				'name',
+				'logoPath' => static function(Partners $partner) {
+					return PartnersController::to('get-logo', ['id' => $partner->id], true);
+				},
 				'category' => 'relatedCategory'
 			],
 			RefPartnersCategories::class => [
 				'name'
 			],
 			ProductsJournal::class => [
-				'status'     => 'statusName',
-				'expireDate' => static function (ProductsJournal $status) {
+				'status' => 'statusDesc',
+				'expireDate' => static function(ProductsJournal $status) {
 					return DateHelper::toIso8601($status->expire_date);
 				}
 			]

@@ -17,7 +17,8 @@ use Yii;
  * @property int $id
  * @property string $name Название продукта
  * @property float $price
- * @property string|null $description Описание продукта
+ * @property string $description Описание продукта
+ * @property string $ext_description Полное описание продукта
  * @property int|null $type_id id типа (подписка, бандл и т.д)
  * @property int $user_id id пользователя, создателя
  * @property int $partner_id id партнера, к кому привязан
@@ -50,13 +51,14 @@ class Products extends ActiveRecord
 	{
 		return [
 			[['user_id'], 'default', 'value' => Yii::$app->user->id],
-			[['name', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
+			[['name', 'description', 'ext_description', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted', 'payment_period'], 'integer'],
 			[['start_date', 'end_date', 'created_at', 'updated_at'], 'safe'],
 			[['price'], 'number', 'min' => 0 , 'max' => 999999],
 			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
+			[['ext_description'], 'string'],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
 			['payment_period', 'in', 'range' => array_keys(EnumProductsPaymentPeriods::mapData())],
@@ -72,7 +74,8 @@ class Products extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'name' => 'Наименование',
-			'description' => 'Описание',
+			'description' => 'Краткое описание продукта',
+			'ext_description' => 'Полное описание продукта',
 			'type_id' => 'Тип продукта',
 			'user_id' => 'Пользователь',
 			'partner_id' => 'Партнер',

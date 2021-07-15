@@ -12,15 +12,31 @@ use yii\base\UserException;
  */
 class ValidationException extends UserException
 {
+	private array $_errors;
+
 	/**
 	 * ValidationException constructor.
-	 * @param string $message
+	 * @param array $errors
 	 * @param Throwable|null $previous
 	 */
-	public function __construct($message = "", Throwable $previous = null)
+	public function __construct(array $errors, Throwable $previous = null)
 	{
-		parent::__construct($message, 0, $previous);
+		parent::__construct('', 0, $previous);
 
-		$this->code = 'ERR_VALIDATION';
+		$this->_errors = $errors;
+		$this->code    = 'ERR_VALIDATION';
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getErrors(): array
+	{
+		$array = [];
+		foreach ($this->_errors as $attr => $error) {
+			$array[] = ['field' => $attr, 'error' => is_array($error) ? current($error) : $error];
+		}
+
+		return $array;
 	}
 }

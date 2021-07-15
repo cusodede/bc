@@ -6,6 +6,7 @@ namespace app\modules\api\models;
 use app\models\phones\PhoneNumberValidator;
 use app\models\products\Products;
 use app\models\abonents\Abonents;
+use Exception;
 use yii\base\Model;
 
 /**
@@ -67,11 +68,12 @@ abstract class ProductTicketForm extends Model
 
 	/**
 	 * @return Products|null
+	 * @throws Exception
 	 */
 	public function getProduct(): ?Products
 	{
 		if ((null === $this->_product) && null !== $this->abonent) {
-			$this->_product = $this->abonent->getExistentProductById($this->productId);
+			$this->_product = $this->abonent->findExistentProductById($this->productId);
 		}
 
 		return $this->_product;

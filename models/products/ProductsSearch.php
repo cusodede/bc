@@ -5,10 +5,7 @@ namespace app\models\products;
 
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use yii\db\Expression;
-use yii\helpers\ArrayHelper;
 use Exception;
-use ReflectionClass;
 
 /**
  * Поисковая модель продуктов
@@ -17,8 +14,17 @@ use ReflectionClass;
  */
 class ProductsSearch extends Products
 {
+	/**
+	 * @var string|null
+	 */
 	public ?string $category_id = null;
+	/**
+	 * @var bool|null
+	 */
 	public ?bool $trial = null;
+	/**
+	 * @var bool|null
+	 */
 	public ?bool $active = null;
 
 	/**
@@ -40,26 +46,20 @@ class ProductsSearch extends Products
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
-		// Сортировка и навигация для GraphQL
-		$shortName = (new ReflectionClass($this))->getShortName();
-		$pagination = ArrayHelper::getValue($params, $shortName . '.pagination');
-		$sort = ArrayHelper::getValue($params, $shortName . '.sort');
-
 		$query = Products::find()->active();
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-		]);
 
-		if (null !== $pagination) {
+		$dataProvider = new ActiveDataProvider(['query' => $query]);
+
+		if (null !== $pagination = $params["{$this->formName()}.pagination"] ?? null) {
 			$dataProvider->setPagination($pagination);
 		}
 
-		if (null !== $sort) {
+		if (null !== $sort = $params["{$this->formName()}.sort"] ?? null) {
 			$dataProvider->setSort(new Sort(['params' => compact('sort')]));
 		} else {
 			$dataProvider->setSort([
 				'defaultOrder' => ['id' => SORT_ASC],
-				'attributes' => ['id', 'name'],
+				'attributes'   => ['id', 'name'],
 			]);
 		}
 
@@ -69,44 +69,24 @@ class ProductsSearch extends Products
 			return $dataProvider;
 		}
 
-		$query->joinWith(['relatedPartner']);
-		$query->joinWith(['relatedSubscription']);
+		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
-		$query->andFilterWhere(['products.id' => $this->id])
-			->andFilterWhere(['products.type_id' => $this->type_id])
-			->andFilterWhere(['products.partner_id' => $this->partner_id])
-			->andFilterWhere(['partners.category_id' => $this->category_id])
-			->andFilterWhere(['like', 'products.name', $this->name]);
+		$query->andFilterWhere([
+			'products.id'          => $this->id,
+			'products.type_id'     => $this->type_id,
+			'products.partner_id'  => $this->partner_id,
+			'partners.category_id' => $this->category_id
+		]);
+		$query->andFilterWhere(['like', 'products.name', $this->name]);
 
 		if (null !== $this->trial) {
 			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);
 		}
 
 		if (null !== $this->active) {
-			$query->andWhere($this->getActiveDateCondition($this->active));
+			$query->whereActivePeriod($this->active);
 		}
 
 		return $dataProvider;
-	}
-
-	/**
-	 * У нас есть дата старта и дата окончания продукта, которые могут быть как даты в формате 'Y-m-d H:i:s',
-	 * так и null, если допустим продукт бессрочный. Нам надо фильтровать активные и не активные продукты,
-	 * если даты null считаем продукт активным бессрочно.
-	 * @param bool $isActive
-	 * @return array
-	 */
-	public function getActiveDateCondition(bool $isActive): array
-	{
-		$nowDateTime = new Expression('now()');
-		return $isActive ?
-			[
-				'or',
-				['and', ['<=', 'products.start_date', $nowDateTime], ['>=', 'products.end_date', $nowDateTime]],
-				['and', ['<=', 'products.start_date', $nowDateTime], ['products.end_date' => null]],
-				['and', ['>=', 'products.end_date', $nowDateTime], ['products.start_date' => null]],
-				['and', ['products.end_date' => null], ['products.start_date' => null]],
-			] :
-			['or', ['>', 'products.start_date', $nowDateTime], ['<', 'products.end_date', $nowDateTime]];
 	}
 }

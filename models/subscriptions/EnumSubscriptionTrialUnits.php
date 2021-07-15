@@ -13,8 +13,8 @@ class EnumSubscriptionTrialUnits
 {
 	use EnumTrait;
 
-	public const UNIT_DAYS 	= 1;
-	public const UNIT_WEEK 	= 2;
+	public const UNIT_DAYS = 1;
+	public const UNIT_WEEK = 2;
 	public const UNIT_MONTH = 3;
 
 	/**
@@ -23,9 +23,9 @@ class EnumSubscriptionTrialUnits
 	public static function mapData(): array
 	{
 		return [
-			self::UNIT_DAYS 	=> 'День',
-			self::UNIT_WEEK 	=> 'Неделя',
-			self::UNIT_MONTH 	=> 'Месяц',
+			self::UNIT_DAYS => 'День',
+			self::UNIT_WEEK => 'Неделя',
+			self::UNIT_MONTH => 'Месяц',
 		];
 	}
 }
