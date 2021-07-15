@@ -100,6 +100,13 @@ final class ProductMutationType extends BaseMutationType
 					'resolve' => fn(Products $product, array $args = []): array
 						=> $this->save($product, $args, self::MESSAGES),
 				],
+//				'create' => [
+//					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::product()),
+//					'description' => 'Создание продукта',
+//					'args' => $this->getArgs(),
+//					'resolve' => fn(Products $product, array $args = []): array
+//						=> $this->save($product, $args, self::MESSAGES),
+//				],
 			]
 		];
 	}
