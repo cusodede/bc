@@ -44,7 +44,7 @@ class Subscriptions extends ActiveRecord
 			[['product_id', 'trial_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['trial_count'], 'default', 'value' => 0],
-			[['units'], 'default', 'value' =>1],
+			[['units'], 'default', 'value' => 1],
 			[['units'], 'integer', 'max' => 10],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 			['product', RelationValidator::class],
