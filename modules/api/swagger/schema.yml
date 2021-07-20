@@ -1,0 +1,390 @@
+openapi: 3.0.0
+info:
+  title: Product Platform API
+  description: API модуль для витрин
+  version: '1.0'
+servers:
+  - url: /api
+paths:
+  /auth/token:
+    get:
+      tags:
+        - Auth
+      summary: Запрос на получение токенов
+      responses:
+        '200':
+          description: Токены успешно созданы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenData'
+          links: { }
+        '401':
+          description: Your request was made with invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          links: { }
+      security:
+        - Basic: [ ]
+    post:
+      tags:
+        - Auth
+      summary: Запрос на перевыпуск токенов
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - refresh_token
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                    - refresh_token
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Токены успешно обновлены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenData'
+          links: { }
+        '401':
+          description: Your request was made with invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          links: { }
+      security:
+        - Basic: [ ]
+  /products/list:
+    get:
+      tags:
+        - Products
+      summary: Запрос на получение списка продуктов
+      parameters:
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: '^7\d{10}$'
+      responses:
+        '200':
+          description: Массив продуктов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          links: { }
+        '404':
+          description: Ошибка определения абонента по номеру телефона
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          links: { }
+      security:
+        - Bearer: [ ]
+  /products/one:
+    get:
+      tags:
+        - Products
+      summary: Запрос на получение информации о конкретном продукте
+      parameters:
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: '^7\d{10}$'
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Информация о продукте
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          links: { }
+        '404':
+          description: Ошибка определения абонента по номеру телефона
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          links: { }
+      security:
+        - Bearer: [ ]
+  /products/stories:
+    get:
+      tags:
+        - Products
+      summary: Запрос на получение списка продуктов для отображения в сторис
+      parameters:
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: '^7\d{10}$'
+      responses:
+        '200':
+          description: Массив продуктов для отображения в сторис
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductStory'
+          links: { }
+        '404':
+          description: Ошибка определения абонента по номеру телефона
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          links: { }
+      security:
+        - Bearer: [ ]
+  /products/subscribe:
+    post:
+      tags:
+        - Products
+      summary: Подключение подписки
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - productId
+                - phone
+              properties:
+                productId:
+                  type: integer
+                phone:
+                  type: string
+                  pattern: '^7\d{10}$'
+      responses:
+        '200':
+          description: Возвращается номер тикета на подключение подписки
+          content:
+            application/json:
+              schema:
+                properties:
+                  ticketId:
+                    type: string
+                type: object
+          links: { }
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+          links: { }
+      security:
+        - Bearer: [ ]
+  /products/unsubscribe:
+    post:
+      tags:
+        - Products
+      summary: Отключение подписки
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - productId
+                - phone
+              properties:
+                productId:
+                  type: integer
+                phone:
+                  type: string
+                  pattern: '^7\d{10}$'
+              type: object
+      responses:
+        '200':
+          description: Возвращается номер тикета на отключение подписки
+          content:
+            application/json:
+              schema:
+                properties:
+                  ticketId:
+                    type: string
+                type: object
+          links: { }
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+          links: { }
+      security:
+        - Bearer: [ ]
+components:
+  schemas:
+    Category:
+      description: Class Category
+      properties:
+        name:
+          description: Наименование категории
+          type: string
+      type: object
+    Partner:
+      description: Class Partner
+      properties:
+        name:
+          description: Наименование партнера
+          type: string
+        logoPath:
+          description: Endpoint для скачивания логотипа партнера
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+      type: object
+    Product:
+      description: Class Product
+      properties:
+        id:
+          description: Идентификатор продукта
+          type: integer
+        type:
+          description: Тип продукта
+          type: string
+          enum:
+            - Подписка
+            - Бандл
+        name:
+          description: Название продукта
+          type: string
+        description:
+          description: Краткое описание продукта
+          type: string
+        ext_description:
+          description: Полное описание продукта в виде html
+          type: string
+        price:
+          description: Стоимость подписки
+          type: string
+        paymentPeriod:
+          description: Период списания
+          type: string
+        options:
+          $ref: '#/components/schemas/Subscription'
+        partner:
+          $ref: '#/components/schemas/Partner'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionStatus'
+      type: object
+    ProductStory:
+      description: Class ProductStory
+      properties:
+        id:
+          description: Идентификатор продукта
+          type: integer
+        name:
+          description: Название продукта
+          type: string
+        description:
+          description: Краткое описание продукта
+          type: string
+      type: object
+    Subscription:
+      description: Class Subscription
+      properties:
+        trial:
+          description: Описание триального периода
+          properties:
+            units:
+              type: string
+            number:
+              type: integer
+          type: object
+          nullable: true
+      type: object
+    SubscriptionStatus:
+      description: Class SubscriptionStatus
+      properties:
+        status:
+          description: Статус подписки
+          type: string
+        expireDate:
+          description: Дата истечения подписки в формате ISO8601
+          type: string
+          example: '2021-07-16T14:07:05+03:00'
+      type: object
+    TokenData:
+      description: Class TokenData
+      properties:
+        access_token:
+          description: Авторизационный токен доступа
+          type: string
+        refresh_token:
+          description: Рефреш токен
+          type: string
+        expires_in:
+          type: integer
+      type: object
+    ErrorMessage:
+      description: Описание ошибки
+      properties:
+        err:
+          description: Код ошибки
+          type: string
+        msg:
+          description: Описание ошибки
+          type: string
+      type: object
+    ValidationErrorMessage:
+      description: Описание ошибки
+      properties:
+        err:
+          description: Код ошибки
+          type: string
+          enum:
+            - ERR_VALIDATION
+        msg:
+          description: Массив ошибок по атрибутам
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                description: Атрибут валидации
+                type: string
+              error:
+                description: Описание ошибки
+                type: string
+      type: object
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+    Basic:
+      type: http
+      scheme: basic
+tags:
+  - name: Auth
+    description: Аутентификация и авторизация
+  - name: Products
+    description: Продуктовые представления
