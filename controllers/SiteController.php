@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
+use app\controllers\actions\swagger\SchemaAction;
+use app\controllers\actions\swagger\SwaggerUiAction;
 use app\models\core\Options;
 use app\models\site\LoginForm;
 use app\models\site\RegistrationForm;
@@ -14,21 +16,16 @@ use pozitronik\helpers\ArrayHelper;
 use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\ErrorAction;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
-use yii2mod\swagger\SwaggerUIRenderer;
-use yii2mod\swagger\OpenAPIRenderer;
 
 /**
- * @SWG\Swagger(
- *     basePath="/",
- *     produces={"application/json"},
- *     consumes={"application/x-www-form-urlencoded"},
- *     @SWG\Info(version="1.0", title="Simple API"),
- * )
+ * Class SiteController
+ * @package app\controllers
  */
 class SiteController extends Controller {
 	use ControllerTrait;
@@ -43,19 +40,13 @@ class SiteController extends Controller {
 			'error' => [
 				'class' => ErrorAction::class
 			],
-			'docs' => [
-				'class' => SwaggerUIRenderer::class,
-				'restUrl' => self::to('json-schema', [], true),
+			'swagger-doc' => [
+				'class'     => SwaggerUiAction::class,
+				'schemaUrl' => Url::to(['swagger-schema'])
 			],
-			'json-schema' => [
-				'class' => OpenAPIRenderer::class,
-				'cache' => null,
-				// Тhe list of directories that contains the swagger annotations.
-				'scanDir' => [
-					Yii::getAlias('@app/controllers/api'),
-					Yii::getAlias('@app/definitions'),
-				],
-			],
+			'swagger-schema' => [
+				'class' => SchemaAction::class
+			]
 		];
 	}
 
