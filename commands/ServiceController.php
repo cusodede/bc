@@ -28,7 +28,12 @@ class ServiceController extends Controller {
 	 * @return void
 	 */
 	public function actionInit():void {
-		Console::output(Console::renderColoredString(Service::ResetDB()?"%gУспешно%n":"%rСбой%n"));
+		if (YII_ENV_DEV) {
+			Console::output(Console::renderColoredString(Service::ResetDB()?"%gУспешно%n":"%rСбой%n"));
+		} else {
+			Console::output(Console::renderColoredString("%rЗапрещено выполнять вне тестового окружения%n"));
+		}
+
 	}
 
 	/**
