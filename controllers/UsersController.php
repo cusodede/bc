@@ -114,13 +114,14 @@ class UsersController extends DefaultController {
 	 * @param int|null $id
 	 * @throws NotFoundHttpException
 	 * @throws ForbiddenHttpException
+	 * @return Response
 	 */
-	public function actionLogoGet(?int $id = null):void {
+	public function actionLogoGet(?int $id = null):Response {
 		$user = null === $id?Users::Current():Users::findOne($id);
 		if (null === $user) {
 			throw new NotFoundHttpException();
 		}
-		Yii::$app->response->sendFile(null === $user->fileAvatar
+		return Yii::$app->response->sendFile(null === $user->fileAvatar
 			?Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH)
 			:$user->fileAvatar->path
 		);
