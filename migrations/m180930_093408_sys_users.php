@@ -21,7 +21,7 @@ class m180930_093408_sys_users extends Migration {
 			'comment' => $this->text()->null()->comment('Служебный комментарий пользователя'),
 			'create_date' => $this->dateTime()->notNull()->comment('Дата регистрации'),
 			'daddy' => $this->integer()->null()->comment('ID зарегистрировавшего/проверившего пользователя'),
-			'deleted' => $this->boolean()->defaultValue(0)->comment('Флаг удаления')
+			'deleted' => $this->boolean()->defaultValue(false)->comment('Флаг удаления')
 		]);
 
 		$this->createIndex('username', 'sys_users', 'username');
