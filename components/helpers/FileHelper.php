@@ -34,6 +34,14 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createTmpFromRaw(string $data): string
 	{
+		preg_match('/base64,(.+)/', $data, $matches);
+		if (isset($matches[1])) {
+			$data = base64_decode(trim($matches[1]));
+			if (false === $data) {
+				throw new RuntimeException('Unable to decode base64 string');
+			}
+		}
+
 		$ext = self::getExtensionsByMimeType(self::getRawMimeType($data));
 		if ([] !== $ext) {
 			//т.к. mime тип может иметь несколько соответствий с доступными расширениями,
