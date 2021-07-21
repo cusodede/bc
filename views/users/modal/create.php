@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 use app\models\sys\users\Users;
 use yii\bootstrap4\Modal;
+use yii\web\JsExpression;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
 
@@ -24,7 +25,14 @@ use yii\bootstrap4\ActiveForm;
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-create", 'enableAjaxValidation' => true]) ?>
+<?php $form = ActiveForm::begin(
+	[
+		'id' => "{$model->formName()}-modal-edit",
+		'enableAjaxValidation' => true,
+		'options' => [
+			"onsubmit" => new JsExpression("formSubmitAjax(event)")
+		]
+	]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>
