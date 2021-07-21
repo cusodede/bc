@@ -10,11 +10,12 @@ use yii\db\Migration;
  * Class m201103_064856_sys_notifications
  */
 class m201103_064856_sys_notifications extends Migration {
+	private const TABLE_NAME = 'sys_notifications';
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-		$this->createTable('sys_notifications', [
+		$this->createTable(self::TABLE_NAME, [
 			'id' => $this->primaryKey(),
 			'type' => $this->integer()->notNull()->defaultValue(Notifications::TYPE_DEFAULT)->comment('Тип уведомления'),
 			'initiator' => $this->integer()->null()->comment('автор уведомления, null - система'),
@@ -24,18 +25,18 @@ class m201103_064856_sys_notifications extends Migration {
 			'timestamp' => $this->dateTime()->defaultValue(new Expression('NOW()'))
 		]);
 
-		$this->createIndex('type', 'sys_notifications', 'type');
-		$this->createIndex('initiator', 'sys_notifications', 'initiator');
-		$this->createIndex('receiver', 'sys_notifications', 'receiver');
-		$this->createIndex('object_id', 'sys_notifications', 'object_id');
-		$this->createIndex('type_receiver_object_id', 'sys_notifications', ['type', 'receiver', 'object_id'], 'true');
+		$this->createIndex(self::TABLE_NAME.'_type', self::TABLE_NAME, 'type');
+		$this->createIndex(self::TABLE_NAME.'_initiator', self::TABLE_NAME, 'initiator');
+		$this->createIndex(self::TABLE_NAME.'_receiver', self::TABLE_NAME, 'receiver');
+		$this->createIndex(self::TABLE_NAME.'_object_id', self::TABLE_NAME, 'object_id');
+		$this->createIndex(self::TABLE_NAME.'_type_receiver_object_id', self::TABLE_NAME, ['type', 'receiver', 'object_id'], true);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeDown() {
-		$this->dropTable('sys_notifications');
+		$this->dropTable(self::TABLE_NAME);
 	}
 
 }
