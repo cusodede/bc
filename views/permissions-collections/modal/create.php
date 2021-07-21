@@ -31,7 +31,7 @@ use yii\bootstrap4\ActiveForm;
 ]); ?>
 <?php $form = ActiveForm::begin(
 	[
-		'id' => "{$model->formName()}-modal-edit",
+		'id' => "{$model->formName()}-modal-create",
 		'enableAjaxValidation' => true,
 		'options' => [
 			"onsubmit" => new JsExpression("formSubmitAjax(event)")

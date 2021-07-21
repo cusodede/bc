@@ -32,7 +32,7 @@ $modelName = $model->formName();
 ]); ?>
 <?php $form = ActiveForm::begin(
 	[
-		'id' => "{$modelName}-modal-edit",
+		'id' => "{$modelName}-modal-create",
 		'enableAjaxValidation' => true,
 		'options' => [
 			"onsubmit" => new JsExpression("formSubmitAjax(event)")
