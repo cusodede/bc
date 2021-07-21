@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\validators;
+namespace app\components\validators;
 
 use app\components\helpers\FileHelper;
 use yii\validators\ImageValidator as YiiImageValidator;
