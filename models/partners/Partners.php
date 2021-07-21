@@ -34,10 +34,10 @@ class Partners extends ActiveRecordPartners
 			[['logo'], ImageValidator::class, 'skipOnEmpty' => false,
 				'extensions' => 'png, svg, jpg, jpeg',
 				'maxSize' => 1024 * 1024,
-				'minHeight' => 200,
-				'maxHeight' => 200,
-				'minWidth' => 200,
-				'maxWidth' => 200
+				'minHeight' => 300,
+				'maxHeight' => 300,
+				'minWidth' => 300,
+				'maxWidth' => 300
 			],
 		]);
 	}
