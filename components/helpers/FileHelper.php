@@ -79,6 +79,7 @@ class FileHelper extends YiiFileHelper
 		return new UploadedFile([
 			'name'     => basename($path),
 			'type'     => self::getMimeType($path, null, false),
+			'size'     => filesize($path),
 			'tempName' => $path,
 			'error'    => UPLOAD_ERR_OK
 		]);
