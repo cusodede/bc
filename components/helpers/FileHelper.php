@@ -3,11 +3,12 @@ declare(strict_types = 1);
 
 namespace app\components\helpers;
 
-use finfo;
-use RuntimeException;
+use app\components\RawUploadedFile;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper as YiiFileHelper;
 use yii\web\UploadedFile;
+use RuntimeException;
+use finfo;
 
 /**
  * Class FileHelper
@@ -76,13 +77,7 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createUploadedFileInstance(string $path): UploadedFile
 	{
-		return new UploadedFile([
-			'name'     => basename($path),
-			'type'     => self::getMimeType($path, null, false),
-			'size'     => filesize($path),
-			'tempName' => $path,
-			'error'    => UPLOAD_ERR_OK
-		]);
+		return new RawUploadedFile($path);
 	}
 
 	/**
