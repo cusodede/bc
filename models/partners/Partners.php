@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\partners;
 
+use app\components\validators\ImageValidator;
 use app\models\partners\active_record\Partners as ActiveRecordPartners;
-use app\validators\ImageValidator;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use Throwable;
@@ -31,7 +31,14 @@ class Partners extends ActiveRecordPartners
 	public function rules(): array
 	{
 		return array_merge(parent::rules(), [
-			[['logo'], ImageValidator::class, 'extensions' => 'png, svg, jpg, jpeg', 'skipOnEmpty' => false, 'maxSize' => 1024 * 1024],
+			[['logo'], ImageValidator::class, 'skipOnEmpty' => false,
+				'extensions' => 'png, svg, jpg, jpeg',
+				'maxSize' => 1024 * 1024,
+				'minHeight' => 200,
+				'maxHeight' => 200,
+				'minWidth' => 200,
+				'maxWidth' => 200
+			],
 		]);
 	}
 
