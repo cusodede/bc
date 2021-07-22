@@ -93,7 +93,7 @@ class FileHelper extends YiiFileHelper
 	 */
 	private static function findPreferredExtension(array $extensions): ?string
 	{
-		$preferred = ['jpg', 'txt'];
+		$preferred = ['jpg', 'svg', 'txt'];
 		foreach ($preferred as $ext) {
 			if (in_array($ext, $extensions, true)) {
 				return $ext;
