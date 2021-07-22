@@ -37,7 +37,7 @@ class Service extends Model {
 				if ('mysql' === $connection->driverName) $connection->createCommand("ALTER TABLE $table AUTO_INCREMENT = 0")->execute();
 			}
 			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;");
-			$connection->createCommand("INSERT INTO sys_users (id, username, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', 'admin', NULL, 'admin@localhost', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
+			$connection->createCommand("INSERT INTO sys_users (id, username, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', 'admin', NULL, 'admin@localhost', 'Системный администратор', CURRENT_DATE, false)")->execute();
 		} /** @noinspection BadExceptionsProcessingInspection */ /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
 			$transaction->rollBack();
 			return false;
