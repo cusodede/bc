@@ -8,6 +8,7 @@ use app\models\partners\PartnersSearch;
 use app\models\partners\Partners;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class PartnersController
@@ -29,17 +30,29 @@ class PartnersController extends DefaultController
 	public string $modelClass = Partners::class;
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors(): array
+	{
+		$parent = parent::behaviors();
+		$parent['access']['except'] = ['get-logo'];
+
+		return $parent;
+	}
+
+	/**
 	 * Скачивание логотипа партнера.
 	 * @param int $id
+	 * @return Response
 	 * @throws NotFoundHttpException
 	 */
-	public function actionGetLogo(int $id): void
+	public function actionGetLogo(int $id): Response
 	{
 		if (null === $partner = Partners::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
 
-		Yii::$app->response->sendFile($partner->fileLogo->path);
+		return Yii::$app->response->sendFile($partner->fileLogo->path);
 	}
 
 	/**
