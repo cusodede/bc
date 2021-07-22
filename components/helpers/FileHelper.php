@@ -43,15 +43,13 @@ class FileHelper extends YiiFileHelper
 			}
 		}
 
-		$ext = self::getExtensionsByMimeType(self::getRawMimeType($data));
-		if ([] !== $ext) {
-			//т.к. mime тип может иметь несколько соответствий с доступными расширениями,
-			//имеет смысл предусмотреть приоритизацию расширений.
-			$ext = $ext[0];
-		}
+		$extension = self::getExtensionsByMimeType(self::getRawMimeType($data));
+		//т.к. mime тип может иметь несколько соответствий с доступными расширениями,
+		//имеет смысл предусмотреть приоритизацию расширений.
+		$extension = self::findPreferredExtension($extension);
 
 		$name = uniqid((string) mt_rand(), true);
-		$path = self::getTmpDir() . DIRECTORY_SEPARATOR . $name . ($ext ? ".$ext" : '');
+		$path = self::getTmpDir() . DIRECTORY_SEPARATOR . $name . ($extension ? ".$extension" : '');
 
 		if ($path && ($fp = fopen($path, 'wb+')) && fwrite($fp, $data) && fclose($fp)) {
 			return $path;
@@ -86,5 +84,22 @@ class FileHelper extends YiiFileHelper
 	public static function getTmpDir(): string
 	{
 		return sys_get_temp_dir();
+	}
+
+	/**
+	 * Выбираем предпочтительное расширение для файла на основании массива расширений для mime type.
+	 * @param array $extensions
+	 * @return string|null
+	 */
+	private static function findPreferredExtension(array $extensions): ?string
+	{
+		$preferred = ['jpg', 'txt'];
+		foreach ($preferred as $ext) {
+			if (in_array($ext, $extensions, true)) {
+				return $ext;
+			}
+		}
+
+		return array_shift($extensions);
 	}
 }
