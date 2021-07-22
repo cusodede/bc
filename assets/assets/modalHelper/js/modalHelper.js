@@ -46,7 +46,6 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 }
 
 function formSubmitAjax(event) {
-	event.preventDefault();
 	var form = jQuery(event.target);
 	var self = this;
 	if (form.attr('method') !== 'GET' && window.FormData !== undefined) {
@@ -99,7 +98,8 @@ function formSubmitAjax(event) {
 			}
 		});
 	}
-
+	event.preventDefault();
+	// event.stopImmediatePropagation();
 	return false;
 };
 

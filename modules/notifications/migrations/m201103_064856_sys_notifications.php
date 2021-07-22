@@ -28,7 +28,7 @@ class m201103_064856_sys_notifications extends Migration {
 		$this->createIndex('initiator', 'sys_notifications', 'initiator');
 		$this->createIndex('receiver', 'sys_notifications', 'receiver');
 		$this->createIndex('object_id', 'sys_notifications', 'object_id');
-		$this->createIndex('type_receiver_object_id', 'sys_notifications', ['type', 'receiver', 'object_id'], 'true');
+		$this->createIndex('type_receiver_object_id', 'sys_notifications', ['type', 'receiver', 'object_id'], true);
 	}
 
 	/**
