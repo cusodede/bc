@@ -182,7 +182,7 @@ trait ActiveRecordTrait {
 			if (($saveIsOk = $this->save()) && in_array(FileStorageTrait::class, class_uses($this), true) && method_exists($this, 'uploadAttribute')) {
 				//Ищем файловые атрибуты для их загрузки в хранилище.
 				foreach ($values as $name => $value) {
-					//Получем атрибуты непосредственно из модели, т.к. в процессе сохранения часть из них могла модифицироваться
+					//Получаем атрибуты непосредственно из модели, т.к. в процессе сохранения часть из них могла модифицироваться
 					//(например, при сеттинге атрибута через raw data).
 					if ($this->$name instanceof UploadedFile) {
 						/** @see FileStorageTrait::uploadAttribute() */
