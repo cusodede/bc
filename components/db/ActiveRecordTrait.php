@@ -14,6 +14,7 @@ use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
 use yii\bootstrap4\ActiveForm;
 use yii\db\Transaction;
+use yii\web\UploadedFile;
 
 /**
  * Trait ActiveRecordTrait
@@ -149,20 +150,58 @@ trait ActiveRecordTrait {
 	 * Отличается от updateAttribute тем, что триггерит onAfterSave
 	 * @param string $name
 	 * @param mixed $value
+	 * @return bool
 	 */
-	public function setAndSaveAttribute(string $name, $value):void {
-		$this->setAttribute($name, $value);
-		$this->save();
+	public function setAndSaveAttribute(string $name, $value):bool {
+		//для избежания дублирования логики функционала
+		return $this->setAndSaveAttributes([$name => $value]);
 	}
 
 	/**
 	 * Работает аналогично saveAttributes, но сразу сохраняет данные
 	 * Отличается от updateAttributes тем, что триггерит onAfterSave
 	 * @param null|array $values
+	 * @param bool $safeOnly
+	 * @return bool
 	 */
-	public function setAndSaveAttributes(?array $values):void {
-		$this->setAttributes($values, false);
-		$this->save();
+	public function setAndSaveAttributes(?array $values, bool $safeOnly = false):bool {
+		if ($safeOnly) {
+			$this->setAttributes($values);
+		} else {
+			//[[ActiveRecord::attributes()]] возвращает атрибуты, которые генерирует по схеме из БД,
+			//и, как следствие, не учитывает кастомные свойства в модели.
+			//Поэтому используем дефолтный сеттинг.
+			foreach ($values as $name => $value) {
+				$this->$name = $value;
+			}
+		}
+
+		try {
+			/** @var Transaction $transaction */
+			$transaction = Yii::$app->db->beginTransaction();
+			if (($saveIsOk = $this->save()) && in_array(FileStorageTrait::class, class_uses($this), true) && method_exists($this, 'uploadAttribute')) {
+				//Ищем файловые атрибуты для их загрузки в хранилище.
+				foreach ($values as $name => $value) {
+					//Получем атрибуты непосредственно из модели, т.к. в процессе сохранения часть из них могла модифицироваться
+					//(например, при сеттинге атрибута через raw data).
+					if ($this->$name instanceof UploadedFile) {
+						/** @see FileStorageTrait::uploadAttribute() */
+						$this->uploadAttribute($name);
+					}
+				}
+			}
+
+			if ($saveIsOk) {
+				$transaction->commit();
+			} else {
+				$transaction->rollBack();
+			}
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $e) {
+			$transaction->rollBack();
+			$saveIsOk = false;
+		}
+
+		return $saveIsOk;
 	}
 
 	/**
