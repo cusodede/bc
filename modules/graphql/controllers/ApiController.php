@@ -44,7 +44,7 @@ class ApiController extends ActiveController
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class' => JwtHttpBearerAuth::class,
+				'class'  => JwtHttpBearerAuth::class,
 				'except' => ['schema'],
 			],
 		]);
