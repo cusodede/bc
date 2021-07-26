@@ -3,10 +3,12 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\partners\PartnersSearch;
 use app\models\partners\Partners;
-use pozitronik\core\traits\ControllerTrait;
+use Yii;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class PartnersController
@@ -14,7 +16,6 @@ use pozitronik\core\traits\ControllerTrait;
  */
 class PartnersController extends DefaultController
 {
-	use ControllerTrait;
 
 	/**
 	 * Поисковая модель партнера
@@ -27,6 +28,32 @@ class PartnersController extends DefaultController
 	 * @var string
 	 */
 	public string $modelClass = Partners::class;
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors(): array
+	{
+		$parent = parent::behaviors();
+		$parent['access']['except'] = ['get-logo'];
+
+		return $parent;
+	}
+
+	/**
+	 * Скачивание логотипа партнера.
+	 * @param int $id
+	 * @return Response
+	 * @throws NotFoundHttpException
+	 */
+	public function actionGetLogo(int $id): Response
+	{
+		if (null === $partner = Partners::findOne($id)) {
+			throw new NotFoundHttpException();
+		}
+
+		return Yii::$app->response->sendFile($partner->fileLogo->path);
+	}
 
 	/**
 	 * Переопределим базовую директорию views

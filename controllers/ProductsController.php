@@ -3,9 +3,12 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\products\Products;
+use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
+use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class ProductsController
@@ -14,16 +17,44 @@ use app\models\products\ProductsSearch;
 class ProductsController extends DefaultController
 {
 	/**
+	 * Модель продуктов
+	 * @var string
+	 */
+	public string $modelClass = Products::class;
+
+	/**
 	 * Поисковая модель продуктов
 	 * @var string
 	 */
 	public string $modelSearchClass = ProductsSearch::class;
 
 	/**
-	 * Модель продуктов
-	 * @var string
+	 * @return string
 	 */
-	public string $modelClass = Products::class;
+	public function actionJournal(): string
+	{
+		$searchModel = new ProductsJournalSearch();
+
+		return $this->render('journal', [
+			'searchModel'  => $searchModel,
+			'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
+		]);
+	}
+
+	/**
+	 * Скачивание изображения продукта для сторис.
+	 * @param int $id
+	 * @throws NotFoundHttpException
+	 */
+	public function actionGetStoryLogo(int $id): void
+	{
+		if (null === $product = Products::findOne($id)) {
+			throw new NotFoundHttpException();
+		}
+		if (null !== $product->fileStoryLogo) {
+			Yii::$app->response->sendFile($product->fileStoryLogo->path);
+		}
+	}
 
 	/**
 	 * Переопределим базовую директорию views

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
@@ -13,6 +12,7 @@ use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\PathHelper;
 use Throwable;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
@@ -25,13 +25,18 @@ use yii\web\IdentityInterface;
  * @property-read string $authKey @see [[yii\web\IdentityInterface::getAuthKey()]]
  *
  * Файловые атрибуты
- * @property mixed $avatar Картинка аватара пользователя (атрибут для загрузки)
- * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
- * @property-read string $currentAvatarUrl Шорткат для получения ссылки на актуальный файл аватарки
+ * @property mixed $avatar картинка аватара пользователя (атрибут для загрузки).
+ * @property-read null|FileStorage $fileAvatar запись об актуальном файле аватара в файловом хранилище.
+ * @property-read string $currentAvatarUrl шорткат для получения ссылки на актуальный файл аватарки.
+ *
+ * @property-read bool $isTechUser проверка на технический тип учетной записи (например, учетка для различных витрин).
+ *
+ * @property-read UsersTokens[] $relatedUsersTokens связанные с моделью пользователя модели токенов.
+ * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
+ * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
-	use ActiveRecordTrait;
 	use FileStorageTrait;
 
 	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
@@ -40,6 +45,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/*файловые атрибуты*/
 	public $avatar;
+	/**
+	 * @var string|null параметр для локального хранения токена, по которому данный пользователь был опознан.
+	 * @see findIdentityByAccessToken()
+	 */
+	public ?string $identifiedToken = null;
 
 	public function rules():array {
 		return array_merge(parent::rules(), [
@@ -64,7 +74,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws ForbiddenHttpException
 	 */
 	public static function Current():self {
-		if (null === $user = self::findIdentity(Yii::$app->user->id)) {
+		if (null === $user = Yii::$app->user->identity) {
 			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
 		return $user;
@@ -121,10 +131,16 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws Exception
 	 */
 	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
-		return static::find()->joinWith('relatedUsersTokens rut')
+		/** @var static $user */
+		$user = static::find()
+			->joinWith('relatedUsersTokens rut')
 			->where(['rut.auth_token' => $token])
 			->andFilterWhere(['rut.type_id' => UsersTokens::getIdByType($type)])
 			->one();
+		if (null !== $user) {
+			$user->identifiedToken = $token;
+		}
+		return $user;
 	}
 
 	/**
@@ -221,4 +237,36 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
+	/**
+	 * @return UsersTokens|null
+	 */
+	public function getRelatedUnpopularUserToken():?UsersTokens {
+		$tokens = $this->relatedMainUsersTokens;
+		ArrayHelper::multisort($tokens, 'created');
+
+		return array_shift($tokens);
+	}
+
+	/**
+	 * @return UsersTokens[]
+	 */
+	public function getRelatedMainUsersTokens():array {
+		return array_filter($this->relatedUsersTokens, static fn(UsersTokens $token) => null === $token->relatedParentToken);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedUsersTokens():ActiveQuery {
+		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return bool флаг, является ли учетка технической или нет (для приложений типа Мой Билайн и т.д.)
+	 */
+	public function getIsTechUser(): bool
+	{
+		//TODO добавить определение по типу пользователя в БД
+		return false;
+	}
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql;
 
-use pozitronik\core\traits\ModuleExtended;
+use pozitronik\traits\traits\ModuleTrait;
 use yii\base\Module;
 
 /**
@@ -12,5 +12,5 @@ use yii\base\Module;
  */
 class GraphqlModule extends Module
 {
-	use ModuleExtended;
+	use ModuleTrait;
 }

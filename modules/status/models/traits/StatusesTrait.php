@@ -26,8 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property-read int[] $nextStatusesId Массив id статусов для следующего шага.
  * @property-read null|StatusModel $currentStatus Модель текущего статуса
  * @property null|int $currentStatusId id текущего статуса цели
- *
- * @property-read $className
+ * @property-read string $className
  *
  * @property-read null|Status $relStatus Релейшен к таблице статусов. Используем только для чтения, для записи обращаемся к Status::setCurrentStatus - там учитываются создатель и делегат. Если они не будут нужны, можно и через свойство.
  */
@@ -82,17 +81,21 @@ trait StatusesTrait {
 
 	/**
 	 * @param int $status
-	 * @return bool
-	 * @throws InvalidConfigException
-	 * @throws StaleObjectException
+	 * @return null|bool null если присвоение отложено
 	 * @throws Throwable
 	 *
 	 * Не совсем красиво, что присвоение статуса проксифицируется сюда (дублируются проверки), но пока не заморачиваюсь.
 	 */
-	public function setCurrentStatusId(int $status):bool {
+	public function setCurrentStatusId(int $status):?bool {
 		if (in_array($status, ArrayHelper::getColumn($this->availableStatuses, 'id'), true)) {
 			/** @var ActiveRecord $this */
-			return Status::setCurrentStatus($this, $status);
+			$this->on(ActiveRecord::EVENT_AFTER_UPDATE, function($event) {//отложим связывание после сохранения
+				return Status::setCurrentStatus($event->data[0], $event->data[1]);
+			}, [$this, $status]);
+			$this->on(ActiveRecord::EVENT_AFTER_INSERT, function($event) {//отложим связывание после сохранения
+				return Status::setCurrentStatus($event->data[0], $event->data[1]);
+			}, [$this, $status]);
+			return null;
 		}
 		/** @var ActiveRecord $this */
 		$this->addError('currentStatusId', 'Нет права на изменение статуса.');
@@ -151,9 +154,10 @@ trait StatusesTrait {
 	 * Status::getCurrentStatus работает альтернативно, но вариант с релейшеном корректнее архитектурно
 	 */
 	public function getRelStatus():ActiveQuery {
-		/** @var ActiveRecord $this */
+		/** @var ActiveRecord|self $this */
 		return $this->hasOne(Status::class, [
 			'model_key' => 'id'
 		])->andOnCondition(['model_name' => $this->className]);
 	}
+
 }

@@ -4,11 +4,13 @@ declare(strict_types = 1);
 /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
+use app\components\queue\DbQueue;
 use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
 use yii\gii\Module as GiiModule;
+use yii\mutex\MysqlMutex;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
@@ -16,7 +18,7 @@ $db = require __DIR__.'/db.php';
 $config = [
 	'id' => 'basic-console',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log'],
+	'bootstrap' => ['log', 'productTicketsQueue'],
 	'controllerNamespace' => 'app\commands',
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
@@ -47,7 +49,16 @@ $config = [
 				],
 			],
 		],
+		'permissions' => require __DIR__.'/permissions.php',
 		'db' => $db,
+		'productTicketsQueue' => [
+			'class' => DbQueue::class,
+			'db' => 'db', // DB connection component or its config
+			'tableName' => '{{%queue}}', // Table name
+			'channel' => 'product_ticket', // Queue channel key
+			'mutex' => MysqlMutex::class, // Mutex used to sync queries
+			'deleteReleased' => false
+		]
 	],
 	'controllerMap' => [
 		'migrate' => [
@@ -56,7 +67,9 @@ $config = [
 			'migrationNamespaces' => [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
 				'app\modules\status\migrations',
-				'app\modules\import\migrations'
+				'app\modules\import\migrations',
+				'app\modules\notifications\migrations',
+				'yii\queue\db\migrations'
 			],
 		],
 	],

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 use yii\db\Migration;
 use yii\db\Exception;
 use app\models\partners\Partners;
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\common\RefPartnersCategories;
 
 /**
 * Class m210616_143150_add_category_id_to_partners

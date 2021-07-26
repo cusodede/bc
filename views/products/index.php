@@ -12,9 +12,8 @@ declare(strict_types = 1);
 use app\assets\ModalHelperAsset;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\Utils;
+use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
@@ -35,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['продукт', 'продукты', 'продуктов']). ')' : ' (нет продуктов)'),
+			'heading' => '',
 		],
 		'showOnEmpty' => true,
 		'toolbar' => false,
@@ -50,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'type_id',
-					'data' => EnumProductsTypes::PRODUCTS_TYPES,
+					'data' => EnumProductsTypes::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
@@ -58,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'type_id',
 				'format' => 'text',
-				'value' => static fn(Products $product) => EnumProductsTypes::getType($product->type_id),
+				'value' => static fn(Products $product) => EnumProductsTypes::getScalar($product->type_id),
 			],
 			[
 				'filter' => Select2::widget([
@@ -72,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'partner_id',
 				'format' => 'text',
-				'value' => 'partner.name',
+				'value' => 'relatedPartner.name',
 			],
 			[
 				'class' => DataColumn::class,

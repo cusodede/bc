@@ -3,11 +3,10 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\ActiveRecordTrait;
-use app\models\core\prototypes\DefaultController;
+use app\components\db\ActiveRecordTrait;
+use app\components\web\DefaultController;
 use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\SubscriptionsSearch;
-use pozitronik\sys_exceptions\models\LoggedException;
 use Throwable;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -74,7 +73,7 @@ class SubscriptionsController extends DefaultController
 	public function actionEdit(int $id)
 	{
 		if (null === $model = $this->model::findOne($id)) {
-			throw new LoggedException(new NotFoundHttpException());
+			throw new NotFoundHttpException();
 		}
 
 		/** @var ActiveRecordTrait $model */

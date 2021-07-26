@@ -37,7 +37,7 @@ class IviConnector extends BaseHttpConnector
 	public function __construct(array $config = [])
 	{
 		/** @var array $params */
-		$params = ArrayHelper::getValue(Yii::$app->params, 'vet-expert.connector', new InvalidConfigException('Не заданы параметры коннектора для ivi'));
+		$params = ArrayHelper::getValue(Yii::$app->params, 'ivi.connector', new InvalidConfigException('Не заданы параметры коннектора для ivi'));
 
 		if (null === $this->_appID = ArrayHelper::remove($params, 'appID')) {
 			throw new InvalidConfigException('APP ID для ivi не задан');
@@ -58,7 +58,7 @@ class IviConnector extends BaseHttpConnector
 	public function getPurchaseOptions(ProductOptions $options): PurchaseOptionsHandler
 	{
 		$response = $this->getClient()
-			->get(['/billing/v1/purchase/options', 'app_version' => $options->getAppVersion(), 'access_token' => $this->getAccessTokenByPhone($options), 'with_subscription_renewals' => true])
+			->get(['/billing/v1/purchase/options', 'app_version' => $options->appVersion, 'access_token' => $this->getAccessTokenByPhone($options), 'with_subscription_renewals' => true])
 			->send();
 
 		if (!$response->isOk || (null === $result = ArrayHelper::getValue($response->data, 'result'))) {
@@ -71,7 +71,7 @@ class IviConnector extends BaseHttpConnector
 	}
 
 	/**
-	 * Создание/обновление подписки в ivi. Необходимо предварительно запросить актуальный список опций через.
+	 * Создание/обновление подписки в ivi. Необходимо предварительно запросить актуальный список опций.
 	 * @see getPurchaseOptions()
 	 * @param ProductOptions $options
 	 * @param PurchaseOptionsItem $purchaseOptions
@@ -82,10 +82,10 @@ class IviConnector extends BaseHttpConnector
 	public function makePurchase(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
 	{
 		$postData = [
-			'app_version'          => $options->getAppVersion(),
-			'partner_id'           => $options->getProduct(),
+			'app_version'          => $options->appVersion,
+			'partner_id'           => $options->productId,
 			'access_token'         => $this->getAccessTokenByPhone($options),
-			'ps_extra_signed_data' => "ps_transaction_id={$options->getTransactionId()}&sign={$purchaseOptions->getSignParam()}",
+			'ps_extra_signed_data' => "ps_transaction_id={$options->transactionId}&sign={$purchaseOptions->getSignParam()}",
 			'sign'                 => $purchaseOptions->getSignParam()
 		];
 		$postData = array_merge(
@@ -97,7 +97,7 @@ class IviConnector extends BaseHttpConnector
 		);
 
 		$response = $this->getClient()
-			->post(["/billing/v1/purchase/ext/{$this->_appID}", 'app_version' => $options->getAppVersion(), 'access_token' => $postData['access_token']], $postData)
+			->post(["/billing/v1/purchase/ext/{$this->_appID}", 'app_version' => $options->appVersion, 'access_token' => $postData['access_token']], $postData)
 			->send();
 
 		if (!$response->isOk || (null === $result = ArrayHelper::getValue($response->data, 'result'))) {
@@ -116,7 +116,7 @@ class IviConnector extends BaseHttpConnector
 	 */
 	private function getAccessTokenByPhone(ProductOptions $options): string
 	{
-		return $this->getAccessByParam('phone', $options->getAbonentPhone(), $options->getAppVersion());
+		return $this->getAccessByParam('phone', $options->phone, $options->appVersion);
 	}
 
 	/**
@@ -125,6 +125,7 @@ class IviConnector extends BaseHttpConnector
 	 * @param string $value значение поля для получения токена
 	 * @param string $appVersion
 	 * @return string
+	 * @noinspection PhpSameParameterValueInspection todo: если параметр всегда статичен, то заменить константой
 	 */
 	private function getAccessByParam(string $param, string $value, string $appVersion): string
 	{

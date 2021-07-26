@@ -27,7 +27,6 @@ ModalHelperAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="msapplication-tap-highlight" content="no">
 	<meta name="commit" content="<?= Utils::LastCommit() ?>">
 	<?= Html::csrfMetaTags() ?>
 	<title><?= $this->title ?> [<?= Utils::LastCommit() ?>]</title>
@@ -62,13 +61,16 @@ ModalHelperAsset::register($this);
 						</li>
 					</ul>
 				</div>
-				<div class="subheader fa-pull-left mb-0 mr-2">
-					<h1 class="subheader-title">
-						<?= $this->title ?>
-					</h1>
-				</div>
-				<div class="subheader fa-pull-left mb-0">
-					<?= $this->render('subviews/breadcrumbs') ?>
+
+				<div class="d-flex flex-column">
+					<div class="subheader mb-0">
+						<?= $this->render('subviews/breadcrumbs') ?>
+					</div>
+					<div class="subheader subheader-title-custom">
+						<h1 class="subheader-title">
+							<?= $this->title ?>
+						</h1>
+					</div>
 				</div>
 
 				<div class="ml-auto d-flex">

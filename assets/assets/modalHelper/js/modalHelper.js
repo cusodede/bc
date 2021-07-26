@@ -32,14 +32,20 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 	}
 	modalContainerDiv.addClass('preloading');
 	modalContainerDiv.load(dataUrl, function() {
-		$('#' + modalDivId).modal('show');
+		let modalDiv;
+		if (undefined === modalDivId) {
+			modalDiv = modalContainerDiv.find('.modal:first');
+		} else {
+			modalDiv = $('#' + modalDivId);
+		}
+
+		modalDiv.modal('show');
 		modalContainerDiv.removeClass('preloading');
 		document.dispatchEvent(new Event('modalIsReady'));
 	}).show();
 }
 
 function formSubmitAjax(event) {
-	event.preventDefault();
 	var form = jQuery(event.target);
 	var self = this;
 	if (form.attr('method') !== 'GET' && window.FormData !== undefined) {
@@ -92,7 +98,12 @@ function formSubmitAjax(event) {
 			}
 		});
 	}
-
+	event.preventDefault();
+	// event.stopImmediatePropagation();
 	return false;
-
 };
+
+$('.el-ajax-modal').on('click', function (e) {
+	e.preventDefault();
+	AjaxModal($(this).data('ajax-url'))
+});

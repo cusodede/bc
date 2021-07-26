@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace app\modules\api\connectors\vet_expert;
 
+use app\common\Arrayable;
+use app\models\abonents\Abonents;
 use app\models\phones\Phones;
 use app\modules\api\signatures\SignatureService;
 use app\modules\api\signatures\SignatureServiceFactory;
-use DateTime;
 use InvalidArgumentException;
-use Throwable;
-use yii\base\Arrayable;
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
 /**
@@ -18,8 +18,15 @@ use yii\base\InvalidConfigException;
  *
  * Class SubscriptionParams
  * @package app\modules\api\connectors\vetexpert
+ *
+ * @property string $phone
+ * @property string $email
+ * @property string $firstName
+ * @property string|null $middleName
+ * @property string $lastName
+ * @property string $subscriptionTo
  */
-class SubscriptionParams implements Arrayable
+class SubscriptionParams extends BaseObject implements Arrayable
 {
 	/**
 	 * @var string
@@ -52,12 +59,14 @@ class SubscriptionParams implements Arrayable
 
 	/**
 	 * SubscriptionParams constructor.
+	 * @param array $config
 	 * @throws InvalidConfigException
-	 * @throws Throwable
 	 */
-	public function __construct()
+	public function __construct($config = [])
 	{
-		$this->_signatureService = SignatureServiceFactory::build('ivi');
+		parent::__construct($config);
+
+		$this->_signatureService = SignatureServiceFactory::build('vet-expert');
 	}
 
 	/**
@@ -146,11 +155,11 @@ class SubscriptionParams implements Arrayable
 	}
 
 	/**
-	 * @param DateTime $date
+	 * @param string $date
 	 */
-	public function setSubscriptionTo(DateTime $date): void
+	public function setSubscriptionTo(string $date): void
 	{
-		$this->_subscriptionTo = $date->format('d.m.Y');
+		$this->_subscriptionTo = date_create($date)->format('d.m.Y');
 	}
 
 	/**
@@ -164,9 +173,9 @@ class SubscriptionParams implements Arrayable
 	/**
 	 * {@inheritdoc}
 	 */
-	public function fields(): array
+	public function toArray(): array
 	{
-		return [
+		$params = [
 			'phone' => $this->_phone,
 			'email' => $this->_email,
 			'first_name'  => $this->_firstName,
@@ -174,25 +183,25 @@ class SubscriptionParams implements Arrayable
 			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
+
+		$params['sign'] = $this->getParamsSignature($params);
+
+		return $params;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param Abonents $abonent
+	 * @return static
+	 * @throws InvalidConfigException
 	 */
-	public function extraFields(): array
+	public static function createInstance(Abonents $abonent): self
 	{
-		return ['sign' => $this->getParamsSignature($this->fields())];
-	}
-
-	/**
-	 * @param array $fields
-	 * @param array $expand
-	 * @param bool $recursive
-	 * @return array
-	 */
-	public function toArray(array $fields = [], array $expand = [], $recursive = true): array
-	{
-		return array_merge($this->fields(), $this->extraFields());
+		return new static([
+			'phone'      => $abonent->phone,
+			'lastName'   => $abonent->surname,
+			'middleName' => $abonent->patronymic,
+			'firstName'  => $abonent->name
+		]);
 	}
 
 	/**

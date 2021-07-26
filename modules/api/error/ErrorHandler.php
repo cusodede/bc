@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\modules\api\error;
 
+use app\modules\api\exceptions\ValidationException;
 use Error;
 use Exception;
-use Yii;
-use yii\base\ErrorHandler as YiiErrorHandler;
 use yii\base\UserException;
+use yii\web\ErrorHandler as YiiErrorHandler;
 use yii\web\HttpException;
 
 /**
@@ -18,17 +18,6 @@ class ErrorHandler extends YiiErrorHandler
 {
 	/**
 	 * @param Error|Exception $exception
-	 */
-	protected function renderException($exception): void
-	{
-		Yii::$app->response->setStatusCodeByException($exception);
-
-		Yii::$app->response->data = $this->convertExceptionToArray($exception);
-		Yii::$app->response->send();
-	}
-
-	/**
-	 * @param Error|Exception $exception
 	 * @return array
 	 */
 	protected function convertExceptionToArray($exception): array
@@ -37,9 +26,19 @@ class ErrorHandler extends YiiErrorHandler
 			$exception = new HttpException(500, 'An internal server error occurred.');
 		}
 
-		return [
-			'error'             => $exception instanceof HttpException ? $exception->statusCode : $exception->getCode(),
-			'error_description' => $exception->getMessage()
+		$result = [
+			'err' => $exception instanceof HttpException ? $exception->statusCode : $exception->getCode(),
+			'msg' => $exception->getMessage()
 		];
+
+		if ($exception instanceof ValidationException) {
+			$result['msg'] = $exception->getErrors();
+		}
+
+		if (YII_DEBUG) {
+			$result['debug']['trace'] = $exception->getTraceAsString();
+		}
+
+		return $result;
 	}
 }

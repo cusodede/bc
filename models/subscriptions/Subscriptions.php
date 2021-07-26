@@ -3,19 +3,19 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions;
 
-use app\models\core\prototypes\ActiveRecordTrait;
 use app\models\subscriptions\active_record\Subscriptions as ActiveRecordSubscriptions;
 use yii\helpers\ArrayHelper;
+use Exception;
 
 /**
  * Логика подписок, не относящиеся к ActiveRecord
  * Class Subscriptions
  * @package app\models\subscriptions
+ *
+ * @property-read string $unitName
  */
 class Subscriptions extends ActiveRecordSubscriptions
 {
-	use ActiveRecordTrait;
-
 	public const SCENARIO_CREATE_AJAX = 'create_ajax'; // Сценарий создания вместе с партнером
 
 	/**
@@ -25,7 +25,16 @@ class Subscriptions extends ActiveRecordSubscriptions
 	{
 		return ArrayHelper::merge(parent::scenarios(), [
 			// Валидация только нужных атрибутов, при создании/обновлении ajax
-			self::SCENARIO_CREATE_AJAX => ['trial_days_count'],
+			self::SCENARIO_CREATE_AJAX => ['trial_count', 'units'],
 		]);
+	}
+
+	/**
+	 * @return string
+	 * @throws Exception
+	 */
+	public function getUnitName(): string
+	{
+		return EnumSubscriptionTrialUnits::getScalar($this->units);
 	}
 }

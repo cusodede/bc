@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
@@ -19,6 +19,8 @@ use yii\web\Response;
  * Class UsersController
  */
 class UsersController extends DefaultController {
+
+	protected const DEFAULT_TITLE = "Пользователи";
 
 	/**
 	 * Поисковая модель пользователя
@@ -112,13 +114,14 @@ class UsersController extends DefaultController {
 	 * @param int|null $id
 	 * @throws NotFoundHttpException
 	 * @throws ForbiddenHttpException
+	 * @return Response
 	 */
-	public function actionLogoGet(?int $id = null):void {
+	public function actionLogoGet(?int $id = null):Response {
 		$user = null === $id?Users::Current():Users::findOne($id);
 		if (null === $user) {
 			throw new NotFoundHttpException();
 		}
-		Yii::$app->response->sendFile(null === $user->fileAvatar
+		return Yii::$app->response->sendFile((null === $user->fileAvatar || null === $user->fileAvatar->size)//есть аватар, и он есть на диске
 			?Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH)
 			:$user->fileAvatar->path
 		);

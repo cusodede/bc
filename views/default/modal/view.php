@@ -14,10 +14,10 @@ use yii\web\View;
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
-	'id' => "{$modelName}-modal-view-{$model->id}",
-	'size' => Modal::SIZE_LARGE,
-	'title' => BadgeWidget::widget([
-		'items' => $model,
+	'id'      => "{$modelName}-modal-view-{$model->id}",
+	'size'    => Modal::SIZE_LARGE,
+	'title'   => BadgeWidget::widget([
+		'items'   => $model,
 		'subItem' => 'id'
 	]),
 	'options' => [

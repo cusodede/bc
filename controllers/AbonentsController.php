@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\prototypes\DefaultController;
+use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
-use pozitronik\core\traits\ControllerTrait;
 
 /**
  * Class PartnersController
@@ -14,7 +13,6 @@ use pozitronik\core\traits\ControllerTrait;
  */
 class AbonentsController extends DefaultController
 {
-	use ControllerTrait;
 
 	/**
 	 * @var string

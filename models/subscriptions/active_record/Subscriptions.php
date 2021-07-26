@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\subscriptions\active_record;
 
-use app\models\core\prototypes\ActiveRecordTrait;
+use app\components\db\ActiveRecordTrait;
 use app\models\core\prototypes\RelationValidator;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -16,7 +17,8 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int $product_id id продукта
- * @property int $trial_days_count
+ * @property int $trial_count Количество триального периода
+ * @property int $units Единицы измерения триального периода
  *
  * @property Products $product
  */
@@ -39,11 +41,14 @@ class Subscriptions extends ActiveRecord
 	{
 		return [
 			[['product_id'], 'required', 'message' => 'Выберите {attribute}'],
-			[['product_id', 'trial_days_count'], 'integer'],
+			[['product_id', 'trial_count'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['trial_days_count'], 'default', 'value' => 0],
+			[['trial_count'], 'default', 'value' => 0],
+			[['units'], 'default', 'value' => 1],
+			[['units'], 'integer', 'max' => 10],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 			['product', RelationValidator::class],
+			['units', 'in', 'range' => array_keys(EnumSubscriptionTrialUnits::mapData())],
 		];
 	}
 
@@ -55,14 +60,15 @@ class Subscriptions extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'product_id' => 'Продукт',
-			'trial_days_count' => 'Количество пробных дней',
+			'trial_count' => 'Количество триального периода',
+			'units' => 'Единица измерения',
 		];
 	}
 
 	public function init(): void
 	{
 		parent::init();
-		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::ID_SUBSCRIPTION]));
+		$this->populateRelation('product', $this->product ?? new Products(['type_id' => EnumProductsTypes::TYPE_SUBSCRIPTION]));
 	}
 
 	/**

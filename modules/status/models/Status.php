@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\status\models;
 
+use app\components\db\ActiveRecordTrait;
 use app\models\sys\users\Users;
-use pozitronik\core\traits\ARExtended;
 use ReflectionClass;
 use Throwable;
 use yii\base\InvalidConfigException;
@@ -23,7 +23,7 @@ use yii\db\StaleObjectException;
  * @property string $delegate
  */
 class Status extends ActiveRecord {
-	use ARExtended;
+	use ActiveRecordTrait;
 
 	/**
 	 * {@inheritdoc}
@@ -90,16 +90,16 @@ class Status extends ActiveRecord {
 	/**
 	 * @param ActiveRecord $model
 	 * @param int $status
-	 * @throws InvalidConfigException
+	 * @return bool
 	 * @throws Throwable
 	 * @throws StaleObjectException
-	 * @return bool
+	 * @throws InvalidConfigException
 	 */
 	public static function setCurrentStatus(ActiveRecord $model, int $status):bool {
 		$attributes = self::ExtractModelIdentifiers($model);
 		$currentStatus = self::getInstance($attributes);
 		if ($currentStatus->isNewRecord) {
-			$currentStatus->loadArray($attributes);
+			$currentStatus->load($attributes, '');
 		}
 		$currentStatus->status = $status;
 		$currentStatus->daddy = Users::Current()->id;

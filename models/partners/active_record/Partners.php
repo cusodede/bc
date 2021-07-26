@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\partners\active_record;
 
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\components\db\ActiveRecordTrait;
+use app\models\common\RefPartnersCategories;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use app\models\products\active_record\Products;
@@ -22,11 +23,12 @@ use app\models\products\active_record\Products;
  * @property string $updated_at Дата обновления партнера
  * @property string $comment Комментарий
  *
- * @property ActiveQuery $category
- * @property Products[] $products
+ * @property-read RefPartnersCategories $relatedCategory
+ * @property Products[] $relatedProducts
  */
 class Partners extends ActiveRecord
 {
+	use ActiveRecordTrait;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -80,7 +82,7 @@ class Partners extends ActiveRecord
 	 *
 	 * @return ActiveQuery
 	 */
-	public function getProducts(): ActiveQuery
+	public function getRelatedProducts(): ActiveQuery
 	{
 		return $this->hasMany(Products::class, ['partner_id' => 'id']);
 	}
@@ -88,7 +90,7 @@ class Partners extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getCategory(): ActiveQuery
+	public function getRelatedCategory(): ActiveQuery
 	{
 		return $this->hasOne(RefPartnersCategories::class, ['id' => 'category_id']);
 	}

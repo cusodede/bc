@@ -24,13 +24,17 @@ use yii\widgets\DetailView;
 			'attribute' => 'product.price',
 			'label' => 'Стоимость',
 		],
-		'trial_days_count',
+		'trial_count',
 		[
-			'attribute' => 'product.partner.category.name',
+			'label' => 'Единица измерения триального периода',
+			'attribute' => 'unitName',
+		],
+		[
+			'attribute' => 'product.relatedPartner.relatedCategory.name',
 			'label' => 'Категория',
 		],
 		[
-			'attribute' => 'product.partner.name',
+			'attribute' => 'product.relatedPartner.name',
 			'label' => 'Партнер',
 		],
 		[

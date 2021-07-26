@@ -1,10 +1,13 @@
 <?php
+/** @noinspection EmptyClassInspection */
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 declare(strict_types = 1);
 
+use app\components\queue\DbQueue;
 use app\models\sys\users\WebUser;
 use cusodede\jwt\Jwt;
 use yii\BaseYii;
+use yii\queue\Queue;
 
 /**
  * Yii bootstrap file.
@@ -25,6 +28,7 @@ class Yii extends BaseYii {
  *
  * @property WebUser $user
  * @property-read Jwt $jwt
+ * @property-read DbQueue $productTicketsQueue
  */
 abstract class BaseApplication extends yii\base\Application {
 
@@ -33,6 +37,7 @@ abstract class BaseApplication extends yii\base\Application {
 /**
  * Class WebApplication
  * Include only Web application related components here
+ * @property Jwt $jwt
  */
 class WebApplication extends yii\web\Application {
 }

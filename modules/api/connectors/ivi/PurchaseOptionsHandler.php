@@ -30,34 +30,39 @@ class PurchaseOptionsHandler
 	{
 		$this->_data = $data;
 
-		$this->initPurchasesCollection();
-		$this->initPurchasesOptionsCollection();
+		$this->_purchasesCollection        = new PurchaseCollection();
+		$this->_purchasesOptionsCollection = new PurchaseOptionsCollection();
+
+		$this->configurePurchasesCollection();
+		$this->configurePurchasesOptionsCollection();
 	}
 
-	public function getPurchases(): PurchaseCollection
+	/**
+	 * @return PurchaseCollection
+	 */
+	public function getPurchasesCollection(): PurchaseCollection
 	{
 		return $this->_purchasesCollection;
 	}
 
-	public function getPurchasesOptions(): PurchaseOptionsCollection
+	/**
+	 * @return PurchaseOptionsCollection
+	 */
+	public function getPurchasesOptionsCollection(): PurchaseOptionsCollection
 	{
 		return $this->_purchasesOptionsCollection;
 	}
 
-	private function initPurchasesCollection(): void
+	private function configurePurchasesCollection(): void
 	{
-		$this->_purchasesCollection = new PurchaseCollection();
-
 		$data = ArrayHelper::remove($this->_data, 'purchases', []);
 		foreach ($data as $itemData) {
 			$this->_purchasesCollection->addPurchase(new PurchaseItem($itemData));
 		}
 	}
 
-	private function initPurchasesOptionsCollection(): void
+	private function configurePurchasesOptionsCollection(): void
 	{
-		$this->_purchasesOptionsCollection = new PurchaseOptionsCollection();
-
 		$data = ArrayHelper::remove($this->_data, 'purchase_options', []);
 		foreach ($data as $itemData) {
 			$this->_purchasesOptionsCollection->addPurchaseOptionsItem(new PurchaseOptionsItem($itemData));

@@ -5,18 +5,23 @@ namespace app\modules\api\controllers;
 
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
-use app\modules\api\authenticators\HttpBasicCredentialsAuth;
-use app\modules\api\tokenizers\grant_types\GrantTypeInterface;
+use app\modules\api\authenticators\HttpBasicPasswordAuth;
+use app\modules\api\authenticators\RefreshTokenAuth;
+use app\modules\api\tokenizers\grant_types\BaseGrantType;
 use app\modules\api\tokenizers\grant_types\GrantTypeIssue;
 use app\modules\api\tokenizers\grant_types\GrantTypeRefresh;
 use app\modules\api\tokenizers\JwtTokenizer;
-use pozitronik\sys_exceptions\models\LoggedException;
-use pozitronik\sys_exceptions\models\SysExceptions;
+use app\modules\api\use_cases\InvalidateUserByTokenCase;
+use cusodede\jwt\JwtHttpBearerAuth;
 use Throwable;
 use Yii;
+use yii\db\StaleObjectException;
+use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
+use yii\web\BadRequestHttpException;
+use yii\web\Request;
 use yii\web\Response;
 
 /**
@@ -25,8 +30,22 @@ use yii\web\Response;
  */
 class AuthController extends YiiRestController
 {
-	public const GRANT_TYPE_CREDENTIALS = 'client_credentials';
-	public const GRANT_TYPE_REFRESH     = 'refresh_token';
+	public const GRANT_TYPE_PASSWORD = 'password';
+	public const GRANT_TYPE_REFRESH  = 'refresh_token';
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init(): void
+	{
+		parent::init();
+		$this->response->on(
+			Response::EVENT_BEFORE_SEND,
+			function () {
+				$this->response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+			}
+		);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -38,41 +57,55 @@ class AuthController extends YiiRestController
 				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
-				],
+				]
 			],
-			'authenticator' => [
-				'class' => HttpBasicCredentialsAuth::class
+			'authComposite'     => [
+				'class'       => CompositeAuth::class,
+				'authMethods' => [RefreshTokenAuth::class, HttpBasicPasswordAuth::class],
+				'only'        => ['token']
 			],
-			'verbFilter' => [
+			'authJwt'           => [
+				'class' => JwtHttpBearerAuth::class,
+				'only'  => ['logout']
+			],
+			'verbFilter'        => [
 				'class'   => VerbFilter::class,
-				'actions' => $this->verbs(),
+				'actions' => $this->verbs()
 			],
-			'access' => [
+			'access'            => [
 				'class' => PermissionFilter::class
 			]
 		];
 	}
 
 	/**
+	 * Запрос на получение токена доступа к API.
 	 * @return array
-	 * @throws Throwable
-	 * @throws LoggedException
+	 * @throws BadRequestHttpException
 	 */
 	public function actionToken(): array
 	{
-		$user = Users::Current();
+		return (new JwtTokenizer(static::getRequestGrantType()))->tokenData;
+	}
 
-		$grantType = $this->getGrantType();
-		$grantType->loadRequest(Yii::$app->request);
-		try {
-			$tokenizer = new JwtTokenizer($user, $grantType);
+	/**
+	 * Принудительная инвалидация токена доступа пользователя.
+	 * @throws BadRequestHttpException
+	 * @throws StaleObjectException
+	 * @throws Throwable
+	 */
+	public function actionLogout(): void
+	{
+		/**
+		 * @var Users $user
+		 * [[Users::current()]] не годится, т.к. мы уже имеем преднастроенный identity
+		 */
+		$user = Yii::$app->user->identity;
 
-			return $tokenizer->getTokenData();
-		} catch (Throwable $e) {
-			SysExceptions::log($e, true);
-		}
+		$case = new InvalidateUserByTokenCase();
+		$case->execute($user, $user->identifiedToken, Yii::$app->request);
 
-		return [];
+		Yii::$app->user->logout();
 	}
 
 	/**
@@ -80,16 +113,23 @@ class AuthController extends YiiRestController
 	 */
 	protected function verbs(): array
 	{
-		return ['token' => ['GET', 'POST']];
+		return ['token' => ['GET', 'POST'], 'logout' => ['GET']];
 	}
 
-	private function getGrantType(): GrantTypeInterface
+	/**
+	 * @param Request|null $request
+	 * @return BaseGrantType
+	 * @throws BadRequestHttpException
+	 */
+	public static function getRequestGrantType(?Request $request = null): BaseGrantType
 	{
-		$grantType = Yii::$app->request->post('grant_type');
-		if ($grantType === self::GRANT_TYPE_REFRESH) {
-			return new GrantTypeRefresh();
+		$request ??= Yii::$app->request;
+
+		$grantType = $request->post('grant_type');
+		if (self::GRANT_TYPE_REFRESH === $grantType) {
+			return new GrantTypeRefresh($request);
 		}
 
-		return new GrantTypeIssue();
+		return new GrantTypeIssue($request);
 	}
 }

@@ -29,7 +29,7 @@ class MenuWidget extends YiiMenuWidget {
 	/**
 	 * @inheritdoc
 	 */
-	protected function isItemActive($item): bool {
+	protected function isItemActive($item):bool {
 		//если нашли активный элемент меню, к чему дальнейшие поиски?!
 		if ($this->_activeItemFound) {
 			return false;

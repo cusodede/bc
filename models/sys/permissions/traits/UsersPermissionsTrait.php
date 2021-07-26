@@ -77,7 +77,7 @@ trait UsersPermissionsTrait {
 		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]);
 		if ($force) Yii::$app->cache->delete($cacheKey);
 		return Yii::$app->cache->getOrSet($cacheKey, function() {
-			return Permissions::allUserPermissions($this->id);
+			return array_merge(Permissions::allUserPermissions($this->id), Permissions::allUserConfigurationPermissions($this->id));
 		}, null, new TagDependency(['tags' => $cacheKey]));
 	}
 
@@ -145,7 +145,7 @@ trait UsersPermissionsTrait {
 	 */
 	public function hasActionPermission(Action $action):bool {
 		if ($this->isAllPermissionsGranted()) return true;
-		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method);
+		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, ($action->controller->module->id === Yii::$app->id)?null:$action->controller->module->id);
 	}
 
 	/**
@@ -153,23 +153,27 @@ trait UsersPermissionsTrait {
 	 * @param string $controllerId
 	 * @param string|null $actionId
 	 * @param string|null $verb
+	 * @param string|null $moduleId
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null):bool {
+	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null, ?string $moduleId = null):bool {
+		if (null !== $moduleId && $moduleId === Yii::$app->id) $moduleId = null;//защита на случай, если забыли проверить выше
 		if ($this->isAllPermissionsGranted()) return true;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
 			'id' => $this->id,
+			'module' => $moduleId,
 			'controller' => $controllerId,
 			'action' => $actionId,
 			'verb' => $verb
 		]);
-		return Yii::$app->cache->getOrSet($cacheKey, function() use ($controllerId, $actionId, $verb) {
+		return Yii::$app->cache->getOrSet($cacheKey, function() use ($controllerId, $actionId, $verb, $moduleId) {
 			return [] !== Permissions::allUserPermissions($this->id, [
+					'module' => $moduleId,
 					'controller' => $controllerId,
 					'action' => $actionId,
 					'verb' => $verb
-				]);
+				]) || [] !== Permissions::allUserConfigurationPermissions($this->id);
 		}, null, new TagDependency([
 			'tags' => [
 				CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]),//сброс кеша при изменении прав пользователя
@@ -182,7 +186,7 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	private function isAllPermissionsGranted():bool {
+	public function isAllPermissionsGranted():bool {
 		return in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true);
 	}
 

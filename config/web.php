@@ -5,12 +5,14 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
-use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
+use app\modules\api\ApiModule;
 use app\modules\history\HistoryModule;
+use app\modules\notifications\NotificationsModule;
 use app\modules\status\StatusModule;
 use app\modules\graphql\GraphqlModule;
+use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
@@ -23,6 +25,7 @@ use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap4\BootstrapPluginAsset;
+use yii\caching\DummyCache;
 use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
@@ -83,7 +86,6 @@ $config = [
 		],
 		'graphql' => [
 			'class' => GraphqlModule::class,
-			'defaultRoute' => 'graphql',
 		],
 		'statuses' => [
 			'class' => StatusModule::class,
@@ -91,6 +93,15 @@ $config = [
 				'rules' => $statusRules
 			]
 		],
+		'notifications' => [
+			'class' => NotificationsModule::class
+		],
+		'api' => [
+			'class' => ApiModule::class
+		],
+		'markdown' => [
+			'class' => 'kartik\markdown\Module',
+		]
 	],
 	'components' => [
 		'request' => [
@@ -100,7 +111,7 @@ $config = [
 			]
 		],
 		'cache' => [
-			'class' => FileCache::class,
+			'class' => YII_ENV_DEV?DummyCache::class:FileCache::class,
 //			'class' => DummyCache::class//todo cache class autoselection
 		],
 		'user' => [
@@ -146,26 +157,11 @@ $config = [
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
 			'rules' => [
-				['class' => UrlRule::class, 'controller' => 'api/users'],
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
 //				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
 			]
 		],
-		'permissions' => [
-			'class' => Permissions::class,
-			/*
-			 * Пути к расположениям контроллеров, для подсказок в выбиралках.
-			 * Формат:
-			 * 	алиас каталога => префикс id
-			 * Так проще и быстрее, чем пытаться вычислять префикс из контроллера (в нём id появляется только в момент вызова,
-			 * и зависит от множества настроек), учитывая, что это нужно только в админке, и только в выбиралке.
-			 */
-			'controllerDirs' => [
-				'@app/controllers' => '',
-				'@app/controllers/api' => 'api'
-			],
-			'grantAll' => [1]/*User ids, that receive all permissions by default*/
-		],
+		'permissions' => require __DIR__.'/permissions.php',
 		'assetManager' => [
 			'bundles' => [
 				BootstrapPluginAsset::class => [
@@ -185,6 +181,11 @@ $config = [
 					]
 				]
 			]
+		],
+		'jwt' => [
+			'class' => Jwt::class,
+			'signer' => Jwt::HS256,
+			'signerKey' => 'testkey'
 		]
 	],
 	'params' => $params,

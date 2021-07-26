@@ -21,7 +21,7 @@ class ImportAction extends Action {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function run() {
+	public function run():string {
 
 		$importModel = new ImportModel([
 			'model' => $this->modelClass,

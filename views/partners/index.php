@@ -12,9 +12,9 @@ declare(strict_types = 1);
 use app\assets\ModalHelperAsset;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
-use pozitronik\core\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
@@ -22,7 +22,7 @@ use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\select2\Select2;
-use app\models\ref_partners_categories\active_record\RefPartnersCategories;
+use app\models\common\RefPartnersCategories;
 
 ModalHelperAsset::register($this);
 $this->title = 'Партнеры';
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'category_id',
 				'format' => 'text',
-				'value' => 'category.name',
+				'value' => 'relatedCategory.name',
 			],
 			'phone',
 			'email',

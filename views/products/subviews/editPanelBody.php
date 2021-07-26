@@ -8,54 +8,48 @@ declare(strict_types = 1);
  */
 
 use kartik\form\ActiveForm;
+use kartik\markdown\MarkdownEditor;
+use kartik\select2\Select2;
+use pozitronik\filestorage\widgets\file_input\FileInputWidget;
 use pozitronik\helpers\ArrayHelper;
 use yii\base\Model;
 use yii\web\View;
-use kartik\select2\Select2;
-use app\models\ref_products_types\active_record\RefProductsTypes;
 use app\models\partners\Partners;
 
 ?>
 
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'name')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'description')->textarea() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'type_id')->widget(Select2::class, [
-			'data' => RefProductsTypes::mapData(),
-			'pluginOptions' => [
-				'multiple' => false,
-				'allowClear' => true,
-				'placeholder' => 'Выберите тип продукта',
-				'tags' => true
+<?= $form->field($model, 'name') ?>
+<?= $form->field($model, 'description')->textarea() ?>
+<?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
+<?= $form->field($model, 'partner_id')->widget(Select2::class, [
+	'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+	'pluginOptions' => [
+		'placeholder' => 'Выберите партнера',
+		'multiple' => false,
+		'allowClear' => true,
+		'tags' => true
+	]
+]) ?>
+<?= $form->field($model, 'ext_description')->widget(MarkdownEditor::class, [
+	'showExport' => false,
+	'footerMessage' => false,
+	'toolbar' => [
+		[
+			'buttons' => [
+				MarkdownEditor::BTN_BOLD => ['icon' => 'bold', 'title' => 'Полужирный'],
+				MarkdownEditor::BTN_ITALIC => ['icon' => 'italic', 'title' => 'Курсив'],
+				MarkdownEditor::BTN_LINK => ['icon' => 'link', 'title' => 'Ссылка'],
+				MarkdownEditor::BTN_INDENT_L => ['icon' => 'indent', 'title' => 'Увеличить отступ'],
+				MarkdownEditor::BTN_INDENT_R => ['icon' => 'outdent', 'title' => 'Уменьшить отступ'],
+				MarkdownEditor::BTN_UL => ['icon' => 'list', 'title' => 'Маркированный список'],
+				MarkdownEditor::BTN_OL => ['icon' => 'list-alt', 'title' => 'Нумерованный список'],
+				MarkdownEditor::BTN_HR => ['icon' => 'minus', 'title' => 'Горизонтальная линия']
 			]
-		]) ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'partner_id')->widget(Select2::class, [
-			'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
-			'pluginOptions' => [
-				'multiple' => false,
-				'allowClear' => true,
-				'placeholder' => 'Выберите партнера',
-				'tags' => true
-			]
-		]) ?>
-	</div>
-</div>
+		]
+	]
+]) ?>
+<?= $form->field($model, 'storyLogo')->widget(FileInputWidget::class, [
+	'allowDownload' => false,
+	'allowVersions' => false
+]) ?>
 
