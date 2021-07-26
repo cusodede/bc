@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\error;
 
+use app\modules\api\exceptions\ApiExceptionInterface;
 use app\modules\api\exceptions\ValidationException;
 use Error;
 use Exception;
@@ -26,13 +27,19 @@ class ErrorHandler extends YiiErrorHandler
 			$exception = new HttpException(500, 'An internal server error occurred.');
 		}
 
-		$result = [
-			'err' => $exception instanceof HttpException ? $exception->statusCode : $exception->getCode(),
-			'msg' => $exception->getMessage()
-		];
-
 		if ($exception instanceof ValidationException) {
-			$result['msg'] = $exception->getErrors();
+			$result['error']['code'] = $exception->getErrorCode();
+			$result['error']['desc'] = $exception->getErrors();
+		} else {
+			if ($exception instanceof ApiExceptionInterface) {
+				$result['error']['code'] = $exception->getErrorCode();
+			} elseif ($exception instanceof HttpException) {
+				$result['error']['code'] = $exception->statusCode;
+			} else {
+				$result['error']['code'] = $exception->getCode();
+			}
+
+			$result['error']['desc'] = $exception->getMessage();
 		}
 
 		if (YII_DEBUG) {

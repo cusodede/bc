@@ -10,7 +10,7 @@ use yii\base\UserException;
  * Class InvalidGrantException
  * @package app\modules\api\exceptions
  */
-class InvalidGrantException extends UserException
+class InvalidGrantException extends UserException implements ApiExceptionInterface
 {
 	/**
 	 * InvalidGrantException constructor.
@@ -18,8 +18,14 @@ class InvalidGrantException extends UserException
 	 */
 	public function __construct(Throwable $previous = null)
 	{
-		parent::__construct('Invalid or expired refresh token.', 0, $previous);
+		parent::__construct('Invalid or expired refresh token.', 400, $previous);
+	}
 
-		$this->code = 'ERR_GRANT';
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getErrorCode(): string
+	{
+		return 'ERR_GRANT';
 	}
 }
