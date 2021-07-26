@@ -75,18 +75,33 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
-	 * Получение списка продуктов по номеру абонента.
+	 * Список продуктов.
 	 * @param string $phone
 	 * @return array
 	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
 	 * @see runAction()
 	 */
-	public function actionFullList(string $phone): array
+	public function actionList(string $phone): array
 	{
 		return (new ProductsResource())->getFullProductList($this->_abonent);
 	}
 
 	/**
+	 * Информация о продукте.
+	 * @param string $phone
+	 * @param int $id
+	 * @return array
+	 * @throws Exception
+	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
+	 * @see runAction()
+	 */
+	public function actionOne(string $phone, int $id): array
+	{
+		return (new ProductsResource())->getSingleProduct($this->_abonent, $id);
+	}
+
+	/**
+	 * Список продуктов для сторис.
 	 * @param string $phone
 	 * @return array
 	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
@@ -98,21 +113,7 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
-	 * Получение информации по конкретному продукту в привязке к абоненту.
-	 * @param string $phone
-	 * @param int $id
-	 * @return array
-	 * @throws Exception
-	 * @noinspection PhpUnusedParameterInspection обязательный параметр, его обработка происходит перед непосредственным вызовом action'а.
-	 * @see runAction()
-	 */
-	public function actionSingle(string $phone, int $id): array
-	{
-		return (new ProductsResource())->getSingleProduct($this->_abonent, $id);
-	}
-
-	/**
-	 * Запрос на подключение продукта абоненту.
+	 * Подключение подписки.
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
 	 */
@@ -128,7 +129,7 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
-	 * Запрос на отключение продукта по абоненту.
+	 * Отключение подписки.
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
 	 */
@@ -159,8 +160,8 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'fill-list'   => ['GET'],
-			'single'      => ['GET'],
+			'list'        => ['GET'],
+			'one'         => ['GET'],
 			'subscribe'   => ['POST'],
 			'unsubscribe' => ['POST']
 		];

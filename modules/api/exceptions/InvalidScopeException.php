@@ -10,7 +10,7 @@ use yii\base\UserException;
  * Class InvalidScopeException
  * @package app\modules\api\exceptions
  */
-class InvalidScopeException extends UserException
+class InvalidScopeException extends UserException implements ApiExceptionInterface
 {
 	/**
 	 * InvalidScopeException constructor.
@@ -18,8 +18,14 @@ class InvalidScopeException extends UserException
 	 */
 	public function __construct(Throwable $previous = null)
 	{
-		parent::__construct('The requested scope is invalid.', 0, $previous);
+		parent::__construct('The requested scope is invalid.', 400, $previous);
+	}
 
-		$this->code = 'ERR_SCOPE';
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getErrorCode(): string
+	{
+		return 'ERR_SCOPE';
 	}
 }
