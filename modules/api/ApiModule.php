@@ -38,7 +38,7 @@ class ApiModule extends YiiBaseModule
 		$errorHandler = Yii::createObject(ApiErrorHandler::class);
 		$errorHandler->register();
 
-		Yii::$app->set('errorHandler', $errorHandler);
+		$this->set('errorHandler', $errorHandler);
 
 		Yii::$container->set(JwtHttpBearerAuth::class, [
 			'jwtOptionsCallback' => static function(Users $user) {
