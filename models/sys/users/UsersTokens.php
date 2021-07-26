@@ -44,7 +44,7 @@ class UsersTokens extends ActiveRecordUsersTokens {
 			[
 				'class' => TimestampBehavior::class,
 				'createdAtAttribute' => 'created',
-				'updatedAtAttribute' => 'created',
+				'updatedAtAttribute' => false,
 				'value' => static function($event) {
 					return DateHelper::from_unix_timestamp(time());
 				}
