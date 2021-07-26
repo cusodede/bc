@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 
 /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
-if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR . basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
 use app\models\sys\users\Users;
@@ -17,7 +17,6 @@ use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
 use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\models\ErrorHandler;
-use simialbi\yii2\rest\Connection;
 use kartik\grid\Module as GridModule;
 use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
@@ -30,13 +29,12 @@ use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
 use yii\log\FileTarget;
-use yii\rest\UrlRule;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
 
-$params = require __DIR__.'/params.php';
-$db = require __DIR__.'/db.php';
-$statusRules = require __DIR__.'/status_rules.php';
+$params      = require __DIR__ . '/params.php';
+$db          = require __DIR__ . '/db.php';
+$statusRules = require __DIR__ . '/status_rules.php';
 
 $config = [
 	'id' => 'basic',
@@ -111,8 +109,7 @@ $config = [
 			]
 		],
 		'cache' => [
-			'class' => YII_ENV_DEV?DummyCache::class:FileCache::class,
-//			'class' => DummyCache::class//todo cache class autoselection
+			'class' => YII_ENV_DEV ? DummyCache::class : FileCache::class,
 		],
 		'user' => [
 			'class' => WebUser::class,
@@ -128,7 +125,7 @@ $config = [
 			'useFileTransport' => true,
 		],
 		'log' => [
-			'traceLevel' => YII_DEBUG?3:0,
+			'traceLevel' => YII_DEBUG ? 3 : 0,
 			'targets' => [
 				[
 					'class' => FileTarget::class,
@@ -139,29 +136,13 @@ $config = [
 		'sse' => [
 			'class' => LibSSE::class
 		],
-		'rest' => [
-			'class' => Connection::class,
-			'baseUrl' => 'http://bc/api',
-//			 'auth' => function (Connection $db) {
-//			      return 'admin: admin';
-//			 },
-			// 'auth' => 'Bearer: <mytoken>',
-			// 'usePluralisation' => false,
-			// 'useFilterKeyword' => false,
-			// 'enableExceptions' => true,
-			'itemsProperty' => 'items'
-		],
 		'db' => $db,
 		'urlManager' => [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
-			'rules' => [
-//				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
-//				'<_m:[\w\-]+>/<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_m>/<_c>/<_a>'
-			]
 		],
-		'permissions' => require __DIR__.'/permissions.php',
+		'permissions' => require __DIR__ . '/permissions.php',
 		'assetManager' => [
 			'bundles' => [
 				BootstrapPluginAsset::class => [

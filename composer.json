@@ -38,7 +38,6 @@
 		"odannyc/yii2-sse": "dev-master",
 		"cusodede/yii2-jwt" : "dev-master",
 		"cusodede/yii2-multi-select-widget": "dev-master",
-		"simialbi/yii2-rest-client": "dev-master",
 		"webonyx/graphql-php": "dev-master",
 		"kartik-v/yii2-widget-datetimepicker": "dev-master",
 		"kartik-v/yii2-widget-datepicker": "dev-master",
