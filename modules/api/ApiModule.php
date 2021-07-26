@@ -30,16 +30,14 @@ class ApiModule extends YiiBaseModule
 
 		//не применимо к REST API
 		Yii::$app->request->enableCsrfCookie = false;
+		//чтобы без сюрпризов в виде html разметки
+		Yii::$app->response->format = Response::FORMAT_JSON;
 		//просто как рекомендация
 		Yii::$app->user->enableSession = false;
-
-		//чтобы без сюрпризов в виде html разметки
-		$this->set('response', ['class' => Response::class, 'format' => Response::FORMAT_JSON]);
 
 		$errorHandler = Yii::createObject(ApiErrorHandler::class);
 		$errorHandler->register();
 		$this->set('errorHandler', $errorHandler);
-
 
 		Yii::$container->set(JwtHttpBearerAuth::class, [
 			'jwtOptionsCallback' => static function(Users $user) {
