@@ -3,11 +3,13 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\data;
 
+use app\modules\graphql\schema\query\extended\enum\FormPartnersType;
 use app\modules\graphql\schema\query\extended\PartnerCategoryType;
 use app\modules\graphql\schema\query\extended\PartnerType;
 use app\modules\graphql\schema\query\extended\ProductType;
 use app\modules\graphql\schema\query\extended\SubscriptionType;
 use app\modules\graphql\schema\query\QueryType;
+use Closure;
 
 /**
  * Class QueryTypes
@@ -66,5 +68,14 @@ class QueryTypes
 	public static function subscription(): SubscriptionType
 	{
 		return static::$subscription ?: static::$subscription = new SubscriptionType();
+	}
+
+	/**
+	 * Enum для генерации формы партнёров
+	 * @return Closure
+	 */
+	public static function formPartners(): Closure
+	{
+		return static fn(): FormPartnersType => new FormPartnersType();
 	}
 }
