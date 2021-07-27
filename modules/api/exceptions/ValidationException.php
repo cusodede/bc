@@ -10,7 +10,7 @@ use yii\base\UserException;
  * Class ValidationException
  * @package app\modules\api\exceptions
  */
-class ValidationException extends UserException
+class ValidationException extends UserException implements ApiExceptionInterface
 {
 	private array $_errors;
 
@@ -21,10 +21,17 @@ class ValidationException extends UserException
 	 */
 	public function __construct(array $errors, Throwable $previous = null)
 	{
-		parent::__construct('', 0, $previous);
+		parent::__construct('', 400, $previous);
 
 		$this->_errors = $errors;
-		$this->code    = 'ERR_VALIDATION';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getErrorCode(): string
+	{
+		return 'ERR_VALIDATION';
 	}
 
 	/**

@@ -16,7 +16,7 @@ use yii\base\Model;
  * @property Products|null $product
  * @property Abonents|null $abonent
  * @property int|null $productId
- * @property string|null $abonentPhone
+ * @property string|null $phone
  */
 abstract class ProductTicketForm extends Model
 {
@@ -27,7 +27,7 @@ abstract class ProductTicketForm extends Model
 	/**
 	 * @var string|null телефон абонента.
 	 */
-	public ?string $abonentPhone = null;
+	public ?string $phone = null;
 	/**
 	 * @var Products|null
 	 */
@@ -43,14 +43,14 @@ abstract class ProductTicketForm extends Model
 	public function rules(): array
 	{
 		return [
-			[['productId', 'abonentPhone'], 'required'],
+			[['productId', 'phone'], 'required'],
 			[['productId'], 'integer'],
 			[['productId'],
 				'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['productId' => 'id']
 			],
-			[['abonentPhone'], PhoneNumberValidator::class],
-			[['abonentPhone'],
-				'exist', 'skipOnError' => true, 'targetClass' => Abonents::class, 'targetAttribute' => ['abonentPhone' => 'phone']
+			[['phone'], PhoneNumberValidator::class],
+			[['phone'],
+				'exist', 'skipOnError' => true, 'targetClass' => Abonents::class, 'targetAttribute' => ['phone' => 'phone']
 			],
 			[['productId'], 'validateProductActivity', 'skipOnError' => true]
 		];
@@ -63,7 +63,7 @@ abstract class ProductTicketForm extends Model
 	 */
 	public function getAbonent(): ?Abonents
 	{
-		return $this->_abonent ?? $this->_abonent = Abonents::findByPhone($this->abonentPhone);
+		return $this->_abonent ?? $this->_abonent = Abonents::findByPhone($this->phone);
 	}
 
 	/**
