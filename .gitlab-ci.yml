@@ -1,6 +1,6 @@
 stages:
   - build
-  - deploy1
+  - stage
 build_base:
   stage: build
   image:
@@ -27,13 +27,28 @@ build_base:
   when: manual
   tags:
     - okd
+    
 build_stage:
-  stage: deploy1
+  stage: stage
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+   
+  variables:
+    dockerfile_path: docker/Dockerfile_stage
   script:
-    - echo "Stage Pre-deploy"
+    - cat ${CA_CERTIFICATE} >> /kaniko/ssl/certs/additional-ca-cert-bundle.crt
+    - mkdir -p /kaniko/.docker
+    - |-
+       KANIKOPROXYBUILDARGS=""
+       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
+         KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
+         KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
+       fi
+       KANIKOCFG="${KANIKOCFG} }"
+       echo "${KANIKOCFG}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination $CI_REGISTRY_IMAGE:latest
   only:
     - master
   when: manual

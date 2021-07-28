@@ -1,4 +1,5 @@
-FROM harbor.vimpelcom.ru/prpl/nginx-base:latest
-COPY . /var/www/ppl/.
-
+FROM harbor.vimpelcom.ru/prpl/prpl_base:latest
+WORKDIR /var/www/ppl/
+COPY . /var/www/ppl/
+RUN composer update
 
