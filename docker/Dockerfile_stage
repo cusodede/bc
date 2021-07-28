@@ -1,0 +1,4 @@
+FROM harbor.vimpelcom.ru/prpl/nginx-base:latest
+COPY . /var/www/ppl/.
+
+
