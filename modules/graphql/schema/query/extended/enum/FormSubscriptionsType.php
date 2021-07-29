@@ -6,19 +6,19 @@ namespace app\modules\graphql\schema\query\extended\enum;
 use GraphQL\Type\Definition\EnumType;
 
 /**
- * Class FormPartnersType
+ * Class FormSubscriptionsType
  * @package app\modules\graphql\schema\query\extended\enum
  */
-class FormPartnersType extends EnumType
+class FormSubscriptionsType extends EnumType
 {
 	/**
-	 * FormPartnersType constructor.
+	 * FormSubscriptionsType constructor.
 	 * @param array $fields
 	 */
 	public function __construct(array $fields)
 	{
 		parent::__construct([
-			'name' => 'FormPartnersField',
+			'name' => 'FormSubscriptionsField',
 			'values' => array_keys($fields),
 		]);
 	}

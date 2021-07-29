@@ -42,7 +42,8 @@ class QueryType extends ObjectType
 				'subscriptionTrialUnits' 	=> SubscriptionTrialUnitsType::getListOfType(),
 				'subscriptionTrialUnit' 	=> SubscriptionTrialUnitsType::getOneOfType(),
 				'serverDateTime' 			=> ServerDateTimeType::baseFormat(),
-				'formPartners' 				=> QueryTypes::formPartners(),
+				'formPartnersField' 		=> QueryTypes::formPartners(),
+				'formSubscriptionsField' 	=> QueryTypes::formSubscriptions(),
 			],
 		]);
 	}
