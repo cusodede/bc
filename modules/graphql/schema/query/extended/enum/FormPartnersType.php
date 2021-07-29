@@ -22,7 +22,7 @@ class FormPartnersType extends EnumType
 	public function __construct()
 	{
 		parent::__construct([
-			'name' => 'FormPartners',
+			'name' => 'FormPartnersField',
 			'values' => [
 				self::NAME,
 				self::INN,
