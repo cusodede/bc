@@ -11,26 +11,18 @@ use GraphQL\Type\Definition\EnumType;
  */
 class FormPartnersType extends EnumType
 {
-	public const NAME			= 'name';
-	public const INN			= 'inn';
-	public const PHONE 			= 'phone';
-	public const EMAIL			= 'email';
-	public const COMMENT		= 'comment';
-	public const CATEGORY_ID	= 'category_id';
-	public const LOGO			= 'logo';
-
 	public function __construct()
 	{
 		parent::__construct([
 			'name' => 'FormPartners',
 			'values' => [
-				self::NAME,
-				self::INN,
-				self::PHONE,
-				self::EMAIL,
-				self::COMMENT,
-				self::CATEGORY_ID,
-				self::LOGO,
+				'name',
+				'inn',
+				'phone',
+				'email',
+				'comment',
+				'category_id',
+				'logo',
 			],
 		]);
 	}
