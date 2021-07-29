@@ -17,6 +17,7 @@ class FormPartnersType extends EnumType
 	public const EMAIL			= 'email';
 	public const COMMENT		= 'comment';
 	public const CATEGORY_ID	= 'category_id';
+	public const LOGO			= 'logo';
 
 	public function __construct()
 	{
@@ -29,6 +30,7 @@ class FormPartnersType extends EnumType
 				self::EMAIL,
 				self::COMMENT,
 				self::CATEGORY_ID,
+				self::LOGO,
 			],
 		]);
 	}
