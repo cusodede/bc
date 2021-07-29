@@ -43,8 +43,7 @@ class DateTimeType extends ScalarType
 	{
 		if (!$value instanceof DateTimeInterface) {
 			throw new InvariantViolation(
-				'Входящие значение не соответствует DateTimeInterface: '
-				. Utils::printSafe($value)
+				'Входящие значение не соответствует DateTimeInterface: ' . Utils::printSafe($value)
 			);
 		}
 
