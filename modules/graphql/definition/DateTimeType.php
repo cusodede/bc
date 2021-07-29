@@ -27,6 +27,11 @@ class DateTimeType extends ScalarType
 	 */
 	public $description = 'Тип DateTime для GraphQL';
 
+	/**
+	 * @var ScalarType|null
+	 */
+	private static ?ScalarType $dateTimeType;
+
 	private const DEFAULT_FORMAT = 'Y-m-d H:i:s';
 
 	/**
@@ -62,5 +67,16 @@ class DateTimeType extends ScalarType
 	public function parseLiteral($valueNode, ?array $variables = null): ?string
 	{
 		return $valueNode instanceof StringValueNode ? $valueNode->value : null;
+	}
+
+	/**
+	 * @return ScalarType
+	 */
+	public static function dateTime(): ScalarType
+	{
+		if (null === static::$dateTimeType) {
+			static::$dateTimeType = new DateTimeType();
+		}
+		return static::$dateTimeType;
 	}
 }
