@@ -31,7 +31,9 @@ RUN apk --no-cache add \
   && ln -s /usr/bin/php8 /usr/bin/php
 
 COPY docker/base/etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY etc/php8/php-fpm.d/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 COPY etc/nginx/nginx.conf /etc/nginx/nginx.conf
+
 
 WORKDIR /var/www/ppl/
 COPY composer.json /var/www/ppl/
