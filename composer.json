@@ -61,6 +61,7 @@
 	},
 	"config": {
 		"process-timeout": 1800,
+		"github-protocols": ["https"],
 		"disable-tls": true,
 		"fxp-asset": {
 			"enabled": false
