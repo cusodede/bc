@@ -74,6 +74,10 @@ final class PartnerMutationType extends BaseMutationType
 				'type' => Type::int(),
 				'description' => 'Идентификатор категории',
 			],
+			'logo' => [
+				'type' => Type::string(),
+				'description' => 'Логотип партнёра',
+			],
 		];
 	}
 
