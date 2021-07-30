@@ -1,4 +1,4 @@
-FROM harbor.vimpelcom.ru/dockerhub/library/nginx:1.17.8-alp
+FROM harbor.vimpelcom.ru/dockerhub/library/nginx@sha256:ee412b0618d36b95403ceb83009439965e438f34e8e6b0cd32975edb0286cd18
 COPY --from=harbor.vimpelcom.ru/dockerhub/library/composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN apk --no-cache add \
   curl \
