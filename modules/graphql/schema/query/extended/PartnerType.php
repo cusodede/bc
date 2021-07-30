@@ -47,7 +47,7 @@ final class PartnerType extends BaseQueryType
 					'description' => 'Комментарий',
 				],
 				'category_id' => [
-					'type' => Type::string(),
+					'type' => Type::int(),
 					'description' => 'Идентификатор категории',
 				],
 				'category' => [

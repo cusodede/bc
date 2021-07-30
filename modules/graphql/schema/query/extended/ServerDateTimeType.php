@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\query\extended;
 
+use app\modules\graphql\definition\DateTimeType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use DateTimeImmutable;
 
 /**
  * Служебный класс для данных даты.
@@ -34,9 +36,11 @@ final class ServerDateTimeType extends ObjectType
 	public static function baseFormat(): array
 	{
 		return [
-			'type' => Type::string(),
+			'type' => DateTimeType::dateTime(),
 			'description' => 'Серверное время в формате Y-m-d H:i:s',
-			'resolve' => fn(?array $root, array $args): string => date('Y-m-d H:i:s'),
+			'resolve' => fn(?array $root, array $args): DateTimeImmutable => DateTimeType::parseString(
+				date('Y-m-d H:i:s')
+			),
 		];
 	}
 }

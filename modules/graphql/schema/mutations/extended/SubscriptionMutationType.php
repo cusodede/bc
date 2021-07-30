@@ -45,8 +45,7 @@ final class SubscriptionMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации подписок',
-			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?Subscriptions
-				=> Subscriptions::findOne($args) ?? (empty($args) ? new Subscriptions() : null),
+			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?Subscriptions => Subscriptions::findOne($args) ?? (empty($args) ? new Subscriptions() : null),
 		];
 	}
 

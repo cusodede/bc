@@ -8,6 +8,7 @@ use app\modules\graphql\base\BaseMutationType;
 use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use app\modules\graphql\data\QueryTypes;
+use app\modules\graphql\definition\DateTimeType;
 use GraphQL\Type\Definition\Type;
 
 /**
@@ -26,7 +27,9 @@ final class ProductMutationType extends BaseMutationType
 	 */
 	public function __construct()
 	{
-		parent::__construct($this->getConfig());
+		parent::__construct(
+			$this->getConfig()
+		);
 	}
 
 	/**
@@ -40,8 +43,7 @@ final class ProductMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации продуктов',
-			'resolve' => fn(Products $product = null, array $args = []): ?Products
-				=> Products::findOne($args) ?? (empty($args) ? new Products() : null),
+			'resolve' => fn(Products $product = null, array $args = []): ?Products => Products::findOne($args) ?? (empty($args) ? new Products() : null),
 		];
 	}
 
@@ -68,11 +70,11 @@ final class ProductMutationType extends BaseMutationType
 				'description' => 'Периодичность списания',
 			],
 			'start_date' => [
-				'type' => Type::string(),
+				'type' => DateTimeType::dateTime(),
 				'description' => 'Начало действия Y-m-d H:i:s',
 			],
 			'end_date' => [
-				'type' => Type::string(),
+				'type' => DateTimeType::dateTime(),
 				'description' => 'Конец действия Y-m-d H:i:s',
 			],
 			'description' => [
@@ -97,8 +99,7 @@ final class ProductMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::product()),
 					'description' => 'Обновление продукта',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Products $product, array $args = []): array
-						=> $this->save($product, $args, self::MESSAGES),
+					'resolve' => fn(Products $product, array $args = []): array => $this->save($product, $args, self::MESSAGES),
 				],
 			]
 		];
