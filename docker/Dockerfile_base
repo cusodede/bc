@@ -29,7 +29,6 @@ RUN apk --no-cache add \
   php8-zlib \
   supervisor \
   && ln -s /usr/bin/php8 /usr/bin/php \
-  && mkdir /var/lib/nginx/logs \
   && ln -s /var/lib/nginx/logs/error.log /dev/stderr \
   && ln -s /var/lib/nginx/logs/access.log /dev/stdout
   
