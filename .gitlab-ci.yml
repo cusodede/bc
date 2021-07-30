@@ -22,13 +22,13 @@ build_base:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest --build-arg 	CI_COMPOSER_TOKEN=${CI_COMPOSER_TOKEN}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest --build-arg CI_COMPOSER_TOKEN=${CI_COMPOSER_TOKEN}
   only:
     - master
   when: manual
   tags:
     - okd
-    
+
 build_back:
   stage: back
   image:
