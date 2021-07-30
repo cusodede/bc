@@ -61,6 +61,7 @@
 	},
 	"config": {
 		"process-timeout": 1800,
+		"disable-tls": true,
 		"fxp-asset": {
 			"enabled": false
 		}
