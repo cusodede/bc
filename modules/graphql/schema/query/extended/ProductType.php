@@ -31,7 +31,7 @@ final class ProductType extends BaseQueryType
 		parent::__construct([
 			'fields' => [
 				'id' => [
-					'type' => Type::nonNull(Type::int()),
+					'type' => Type::int(),
 					'description' => 'Идентификатор продукта',
 				],
 				'name' => [
