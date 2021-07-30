@@ -1,6 +1,7 @@
 stages:
   - build
   - back
+  - back_front
 build_base:
   stage: build
   image:
@@ -28,7 +29,7 @@ build_base:
   tags:
     - okd
     
-build_stage:
+build_back:
   stage: back
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -55,7 +56,7 @@ build_stage:
   tags:
     - okd
 
-build_stage:
+build_back_front:
   stage: back_front
   image:
     name: gcr.io/kaniko-project/executor:debug
