@@ -1,3 +1,3 @@
 FROM harbor.vimpelcom.ru/prpl/prpl_back:$CI_COMMIT_BRANCH
-FROM harbor.vimpelcom.ru/prpl/prpl_front:$CI_COMMIT_BRANCH
+#FROM harbor.vimpelcom.ru/prpl/prpl_front:$CI_COMMIT_BRANCH
 
