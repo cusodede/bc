@@ -33,10 +33,10 @@ RUN apk --no-cache add \
 COPY docker/base/etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/base/etc/php8/php-fpm.d/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 COPY docker/base/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-
+ARG COMPOSER_TOKEN
 WORKDIR /var/www/ppl/
 COPY composer.json /var/www/ppl/
-RUN composer config -g github-oauth.github.com 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
+RUN composer config -g github-oauth.github.com ${COMPOSER_TOKEN}
 RUN composer install --ignore-platform-reqs --no-dev
 
 EXPOSE 8080
