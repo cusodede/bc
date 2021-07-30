@@ -1,4 +1,4 @@
-FROM harbor.vimpelcom.ru/dockerhub/library/alpine:3.13
+FROM harbor.vimpelcom.ru/dockerhub/library/nignx:alpine
 COPY --from=harbor.vimpelcom.ru/dockerhub/library/composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN apk --no-cache add \
   curl \
