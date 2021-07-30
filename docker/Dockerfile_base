@@ -1,4 +1,4 @@
-FROM harbor.vimpelcom.ru/dockerhub/library/nginx@sha256:ee412b0618d36b95403ceb83009439965e438f34e8e6b0cd32975edb0286cd18
+FROM harbor.vimpelcom.ru/dockerhub/library/alpine:3.13
 COPY --from=harbor.vimpelcom.ru/dockerhub/library/composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN apk --no-cache add \
   curl \
@@ -28,7 +28,11 @@ RUN apk --no-cache add \
   php8-tokenizer \
   php8-zlib \
   supervisor \
-  && ln -s /usr/bin/php8 /usr/bin/php
+  && ln -s /usr/bin/php8 /usr/bin/php \
+  && mkdir /var/lib/nginx/logs \
+  && ln -s /var/lib/nginx/logs/error.log /dev/stderr \
+  && ln -s /var/lib/nginx/logs/access.log /dev/stdout
+  
 
 COPY docker/base/etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/base/etc/php8/php-fpm.d/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
