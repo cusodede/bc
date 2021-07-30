@@ -40,8 +40,10 @@ final class SubscriptionType extends BaseQueryType
 				'units' => [
 					'type' => EnumTypes::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
-					'resolve' => fn(Subscriptions $subscription): ?array
-						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $subscription->units]),
+					'resolve' => fn(Subscriptions $subscription): ?array => self::getOneFromEnum(
+						EnumSubscriptionTrialUnits::mapData(),
+						['id' => $subscription->units]
+					),
 				],
 				'product' => [
 					'type' => QueryTypes::product(),

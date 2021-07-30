@@ -40,8 +40,7 @@ final class PartnerMutationType extends BaseMutationType
 				'id' => Type::int(),
 			],
 			'description' => 'Мутации партнёра',
-			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
-				=> Partners::findOne($args) ?? (empty($args) ? new Partners() : null),
+			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners => Partners::findOne($args) ?? (empty($args) ? new Partners() : null),
 		];
 	}
 
@@ -93,15 +92,13 @@ final class PartnerMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
 					'description' => 'Обновление партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = []): array
-						=> $this->save($partner, $args, self::MESSAGES),
+					'resolve' => fn(Partners $partner, array $args = []): array => $this->save($partner, $args, self::MESSAGES),
 				],
 				'create' => [
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
 					'description' => 'Создание партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = []): array
-						=> $this->save($partner, $args, self::MESSAGES),
+					'resolve' => fn(Partners $partner, array $args = []): array => $this->save($partner, $args, self::MESSAGES),
 				],
 			]
 		];
