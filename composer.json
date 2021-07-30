@@ -61,6 +61,8 @@
 	},
 	"config": {
 		"process-timeout": 1800,
+		"github-protocols": ["https"],
+		"disable-tls": true,
 		"fxp-asset": {
 			"enabled": false
 		}
@@ -98,11 +100,11 @@
 			"url": "https://asset-packagist.org"
 		},
 		{
-			"type": "github",
+			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-multi-select-widget"
 		},
 		{
-			"type": "github",
+			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-jwt"
 		}
 	]
