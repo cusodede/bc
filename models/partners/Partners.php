@@ -9,6 +9,7 @@ use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use Throwable;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * Class Partners
@@ -31,15 +32,24 @@ class Partners extends ActiveRecordPartners
 	public function rules(): array
 	{
 		return array_merge(parent::rules(), [
-			[['logo'], ImageValidator::class, 'skipOnEmpty' => false,
-				'extensions' => 'png, svg, jpg, jpeg',
-				'maxSize' => 1024 * 1024,
-				'minHeight' => 300,
-				'maxHeight' => 300,
-				'minWidth' => 300,
-				'maxWidth' => 300
+			[['logo'], ImageValidator::class,
+				'skipOnEmpty' => false,
+				'extensions'  => 'png, svg, jpg, jpeg',
+				'maxSize'     => 1024 * 1024,
+				'minHeight'   => 300,
+				'maxHeight'   => 300,
+				'minWidth'    => 300,
+				'maxWidth'    => 300
 			],
 		]);
+	}
+
+	/**
+	 * @param UploadedFile|string $logo
+	 */
+	public function setLogo($logo): void
+	{
+		$this->logo = $logo;
 	}
 
 	/**

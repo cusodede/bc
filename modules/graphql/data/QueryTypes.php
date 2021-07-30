@@ -3,11 +3,18 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\data;
 
+use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
+use app\modules\graphql\schema\mutations\extended\ProductMutationType;
+use app\modules\graphql\schema\mutations\extended\SubscriptionMutationType;
+use app\modules\graphql\schema\query\extended\enum\FormPartnersType;
+use app\modules\graphql\schema\query\extended\enum\FormSubscriptionsType;
 use app\modules\graphql\schema\query\extended\PartnerCategoryType;
 use app\modules\graphql\schema\query\extended\PartnerType;
 use app\modules\graphql\schema\query\extended\ProductType;
 use app\modules\graphql\schema\query\extended\SubscriptionType;
 use app\modules\graphql\schema\query\QueryType;
+use Closure;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class QueryTypes
@@ -33,7 +40,7 @@ class QueryTypes
 	}
 
 	/**
-	 * Запросы партнера
+	 * Запросы партнера.
 	 * @return PartnerType
 	 */
 	public static function partner(): PartnerType
@@ -42,7 +49,7 @@ class QueryTypes
 	}
 
 	/**
-	 * Категории партнеров
+	 * Категории партнеров.
 	 * @return PartnerCategoryType
 	 */
 	public static function partnerCategory(): PartnerCategoryType
@@ -51,7 +58,7 @@ class QueryTypes
 	}
 
 	/**
-	 * Продукты
+	 * Продукты.
 	 * @return ProductType
 	 */
 	public static function product(): ProductType
@@ -60,11 +67,34 @@ class QueryTypes
 	}
 
 	/**
-	 * Подписки
+	 * Подписки.
 	 * @return SubscriptionType
 	 */
 	public static function subscription(): SubscriptionType
 	{
 		return static::$subscription ?: static::$subscription = new SubscriptionType();
+	}
+
+	/**
+	 * Enum для генерации формы партнёров.
+	 * @return Closure
+	 */
+	public static function formPartners(): Closure
+	{
+		return static fn(): FormPartnersType => new FormPartnersType((new PartnerMutationType())->getArgs());
+	}
+
+	/**
+	 * Enum для генерации формы подписок.
+	 * @return Closure
+	 */
+	public static function formSubscriptions(): Closure
+	{
+		return static fn(): FormSubscriptionsType => new FormSubscriptionsType(
+			ArrayHelper::merge(
+				(new ProductMutationType())->getArgs(),
+				(new SubscriptionMutationType())->getArgs(),
+			)
+		);
 	}
 }
