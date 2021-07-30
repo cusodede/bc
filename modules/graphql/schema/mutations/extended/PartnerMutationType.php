@@ -51,11 +51,11 @@ final class PartnerMutationType extends BaseMutationType
 	{
 		return [
 			'name' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Наименование юридического лица партнера',
 			],
 			'inn' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'ИНН партнера',
 			],
 			'phone' => [
@@ -71,11 +71,11 @@ final class PartnerMutationType extends BaseMutationType
 				'description' => 'Комментарий',
 			],
 			'category_id' => [
-				'type' => Type::int(),
+				'type' => Type::nonNull(Type::int()),
 				'description' => 'Идентификатор категории',
 			],
 			'logo' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Логотип партнёра',
 			],
 		];
