@@ -1,4 +1,0 @@
-FROM harbor.vimpelcom.ru/prpl/prpl_back:$CI_COMMIT_BRANCH
-WORKDIR /var/www/ppl/web
-COPY frontend-prpl/. /var/www/ppl/web/
-
