@@ -44,7 +44,11 @@ final class ProductType extends BaseQueryType
 				],
 				'description' => [
 					'type' => Type::string(),
-					'description' => 'Описание',
+					'description' => 'Краткое описание',
+				],
+				'ext_description' => [
+					'type' => Type::string(),
+					'description' => 'Полное описание',
 				],
 				'start_date' => [
 					'type' => DateTimeType::dateTime(),

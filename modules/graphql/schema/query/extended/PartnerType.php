@@ -50,6 +50,10 @@ final class PartnerType extends BaseQueryType
 					'type' => Type::int(),
 					'description' => 'Идентификатор категории',
 				],
+				'logo' => [
+					'type' => Type::string(),
+					'description' => 'Логотип партнёра',
+				],
 				'category' => [
 					'type' => QueryTypes::partnerCategory(),
 					'description' => 'Категория партнера',
@@ -70,8 +74,7 @@ final class PartnerType extends BaseQueryType
 				'search' => Type::string(),
 			],
 			'description' => 'Возвращаем список партнёров',
-			'resolve' => fn(Partners $partner = null, array $args = []): ?array
-				=> PartnersSearch::searchWithParams($args),
+			'resolve' => fn(Partners $partner = null, array $args = []): ?array => PartnersSearch::searchWithParams($args),
 		];
 	}
 
@@ -86,8 +89,7 @@ final class PartnerType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает партнёра по id',
-			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners
-				=> Partners::find()->where($args)->active()->one(),
+			'resolve' => fn(Partners $partner = null, array $args = []): ?Partners => Partners::find()->where($args)->active()->one(),
 		];
 	}
 }
