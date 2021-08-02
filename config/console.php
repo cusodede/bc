@@ -77,12 +77,12 @@ $config = [
 	'params' => $params,
 ];
 
-if (YII_ENV_DEV) {
+/*if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
 	$config['bootstrap'][] = 'gii';
 	$config['modules']['gii'] = [
 		'class' => GiiModule::class,
 	];
-}
+}*/
 
 return $config;
