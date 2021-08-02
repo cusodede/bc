@@ -54,11 +54,11 @@ final class ProductMutationType extends BaseMutationType
 	{
 		return [
 			'name' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Наименование продукта',
 			],
 			'partner_id' => [
-				'type' => Type::int(),
+				'type' => Type::nonNull(Type::int()),
 				'description' => 'Идентификатор партнёра',
 			],
 			'price' => [
@@ -78,11 +78,11 @@ final class ProductMutationType extends BaseMutationType
 				'description' => 'Конец действия Y-m-d H:i:s',
 			],
 			'description' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Краткое описание продукта',
 			],
 			'ext_description' => [
-				'type' => Type::string(),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Полное описание продукта',
 			],
 		];
