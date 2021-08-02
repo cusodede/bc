@@ -96,7 +96,7 @@ deploy_to_okd:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_SHA}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH} --build-arg CI_COMMIT_SHA=${CI_COMMIT_SHA}
   only:
     - master
   #when: manual
