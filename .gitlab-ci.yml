@@ -101,8 +101,12 @@ apply_config_to_okd:
     - oc apply -f docker/configMap/supervisor.configmap.yaml
     - oc apply -f docker/deployment.yaml
   only:
-    - master
-#  when: manual
+    refs:
+      - master
+    changes:
+      - docker/configMap/*.yaml
+      - docker/deployment.yaml
+    
   tags:
     - okd
    
