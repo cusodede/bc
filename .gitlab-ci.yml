@@ -52,7 +52,7 @@ build_back:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_BRANCH}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_SHA}
   only:
     - master
   when: manual
@@ -64,7 +64,7 @@ build_back:
 migrate_db:
   stage: migrate
   image:
-    name: harbor.vimpelcom.ru/prpl/prpl_back:${CI_COMMIT_BRANCH}
+    name: harbor.vimpelcom.ru/prpl/prpl_back:${CI_COMMIT_SHA}
     entrypoint: [""]
   script:
     - cd /var/www/ppl
@@ -97,7 +97,7 @@ deploy_to_okd:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_BRANCH} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_SHA}
   only:
     - master
   when: manual
