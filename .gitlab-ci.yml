@@ -16,7 +16,8 @@ build_base:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       #KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
@@ -45,7 +46,8 @@ build_back:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       #KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
@@ -88,7 +90,8 @@ deploy_to_okd:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       #KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
