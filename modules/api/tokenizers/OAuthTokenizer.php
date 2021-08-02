@@ -164,8 +164,9 @@ abstract class OAuthTokenizer extends Component implements Tokenizer
 		}
 
 		$config = [
-			'type_id' => UsersTokens::TOKEN_TYPES[$type],
-			'user_id' => $this->_grantType->getUser()->id
+			'type_id'	 => UsersTokens::TOKEN_TYPES[$type],
+			'user_id'	 => $this->_grantType->getUser()->id,
+			'user_agent' => $this->_grantType->getUserAgent()
 		];
 
 		return UsersTokens::findOne($config) ?? new UsersTokens($config);
@@ -179,7 +180,6 @@ abstract class OAuthTokenizer extends Component implements Tokenizer
 	private function configureToken(UsersTokens $token, string $prefix, int $expiresIn = 0): void
 	{
 		$token->auth_token = $this->generateRandomToken($prefix);
-		$token->user_agent = $this->_grantType->getUserAgent();
 		$token->valid      = ($expiresIn > 0) ? DateHelper::toFormat("+ $expiresIn seconds") : null;
 	}
 
