@@ -1,0 +1,21 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: prpl-deploy
+  namespace: prpl
+  labels:
+    app: prpl-deploy
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: master
+      from:
+        kind: DockerImage
+        name: >-
+          harbor.vimpelcom.ru/prpl/prpl_deploy:master
+#      generation: 18
+      importPolicy:
+        insecure: true
+      referencePolicy:
+        type: Local
