@@ -24,8 +24,10 @@ build_base:
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest --build-arg COMPOSER_TOKEN=${COMPOSER_TOKEN}
   only:
-    - master
-  when: manual
+    refs:
+      - master
+    changes:
+      - docker/Dockerfile_base
   tags:
     - okd
 
@@ -106,7 +108,6 @@ apply_config_to_okd:
     changes:
       - docker/configMap/*.yaml
       - docker/deployment.yaml
-    
   tags:
     - okd
    

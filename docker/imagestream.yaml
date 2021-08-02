@@ -14,8 +14,8 @@ spec:
         kind: DockerImage
         name: >-
           harbor.vimpelcom.ru/prpl/prpl_deploy:master
-#      generation: 18
       importPolicy:
         insecure: true
+        scheduled: true
       referencePolicy:
         type: Local
