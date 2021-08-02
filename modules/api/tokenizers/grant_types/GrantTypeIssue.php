@@ -88,7 +88,7 @@ class GrantTypeIssue extends BaseGrantType
 	{
 		$currTokens = $this->getUser()->relatedMainUsersTokens;
 
-		if (count($currTokens) === $this->_maxTokensNumber) {
+		if (count($currTokens) >= $this->_maxTokensNumber) {
 			//берем самый "неугодный" токен и удаляем из системы (по CASCADE в БД удалятся также все токены, привязанные к родительскому)
 			$this->getUser()->relatedUnpopularUserToken->delete();
 		}

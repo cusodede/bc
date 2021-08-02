@@ -38,6 +38,9 @@ class GrantTypeRefresh extends BaseGrantType
 
 	/**
 	 * {@inheritdoc}
+	 * @param UsersTokens $authToken
+	 * @param UsersTokens|null $refreshToken
+	 * @throws BadRequestHttpException
 	 * @throws InvalidGrantException
 	 */
 	public function validate(UsersTokens $authToken, ?UsersTokens $refreshToken): void
@@ -45,6 +48,10 @@ class GrantTypeRefresh extends BaseGrantType
 		if (null === $refreshToken || $refreshToken->isNewRecord) {
 			$statusIsOk = false;
 		} else {
+			if ($refreshToken->user_agent !== $this->getUserAgent()) {
+				throw new BadRequestHttpException();
+			}
+
 			$statusIsOk = $refreshToken->auth_token === $this->getRefreshToken() && $refreshToken->isValid();
 		}
 		if (!$statusIsOk) {
