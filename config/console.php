@@ -9,7 +9,7 @@ use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
-use yii\gii\Module as GiiModule;
+//use yii\gii\Module as GiiModule;
 use yii\mutex\MysqlMutex;
 
 $params = require __DIR__.'/params.php';
