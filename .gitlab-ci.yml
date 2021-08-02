@@ -89,6 +89,9 @@ apply_config_to_okd:
   image:
     name: openshift/origin-cli:v3.11.0
     entrypoint: [""]
+  variables:
+    KUBECONFIG: $CI_PROJECT_DIR/kube
+
   before_script:
     - oc login "$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
   script:
