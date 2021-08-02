@@ -91,7 +91,7 @@ apply_config_to_okd:
     entrypoint: [""]
   variables:
     KUBECONFIG: $CI_PROJECT_DIR/kube
-
+    NO_PROXY: api.k01.vimpelcom.ru
   before_script:
     - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
   script:
