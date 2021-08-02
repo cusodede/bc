@@ -99,7 +99,7 @@ apply_config_to_okd:
     - oc apply -f docker/configMap/nginx.configmap.yaml
     - oc apply -f docker/configMap/php8.configmap.yaml
     - oc apply -f docker/configMap/supervisor.configmap.yaml
-    - oc apply -f docker/deployment.yml
+    - oc apply -f docker/deployment.yaml
   only:
     - master
 #  when: manual
