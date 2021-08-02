@@ -1,0 +1,26 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: prpl-php-db
+  namespace: prpl
+
+data:
+  db.php: >-
+    <?php
+    declare(strict_types = 1);
+
+    /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
+    if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+
+    return [
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=172.16.35.35;dbname=ppl',
+        'username' => 'ppl',
+        'password' => '!F584d757',
+        'charset' => 'utf8',
+
+        // Schema cache options (for production environment)
+        'enableSchemaCache' => true,
+        'schemaCacheDuration' => 60,
+        'schemaCache' => 'cache',
+    ];

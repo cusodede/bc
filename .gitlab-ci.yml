@@ -82,3 +82,24 @@ deploy_to_okd:
   when: manual
   tags:
     - okd
+
+
+apply_config_to_okd:
+  stage: deploy
+  image:
+    name: openshift/origin-cli:v3.11.0
+    entrypoint: [""]
+  before_script:
+    - oc login "$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
+  script:
+    - oc apply -f docker/configMap/db.configmap.yaml
+    - oc apply -f docker/configMap/nginx.configmap.yaml
+    - oc apply -f docker/configMap/php8.configmap.yaml
+    - oc apply -f docker/configMap/supervisor.configmap.yaml
+    - oc apply -f docker/deployment.yml
+  only:
+    - master
+#  when: manual
+  tags:
+    - okd
+   
