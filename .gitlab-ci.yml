@@ -68,7 +68,7 @@ migrate_db:
     entrypoint: [""]
   script:
     - cd /var/www/ppl
-    - cat config/db.php
+    - cat /var/www/ppl/config/db.php
     - chmod +x yii
     - ./yii migrate --interactive=0
   only:
