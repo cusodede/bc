@@ -6,9 +6,9 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 
 return [
 	'class' => 'yii\db\Connection',
-	'dsn' => genenv(name: 'DB_DSN'),
-	'username' => genenv(name: 'DB_USERNAME'),
-	'password' => genenv(name: 'DB_PASSWORD'),
+	'dsn' => getenv(name: 'DB_DSN'),
+	'username' => getenv(name: 'DB_USERNAME'),
+	'password' => getenv(name: 'DB_PASSWORD'),
 	'charset' => 'utf8',
 
 	// Schema cache options (for production environment)
