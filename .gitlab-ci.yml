@@ -1,6 +1,7 @@
 stages:
   - build
   - back
+  - migrate
   - deploy
 build_base:
   stage: build
@@ -58,6 +59,22 @@ build_back:
   tags:
     - okd
 
+
+
+migrate_db:
+  stage: migrate
+  image:
+    name: harbor.vimpelcom.ru/dockerhub/library/php:8.0-cli
+    entrypoint: [""]
+  script:
+    - chmod +x yii
+    - ./yii migrate --interactive=0
+  only:
+    - master
+  when: manual
+  tags:
+    - okd
+
 deploy_to_okd:
   stage: deploy
   image:
@@ -84,6 +101,8 @@ deploy_to_okd:
   when: manual
   tags:
     - okd
+
+
 
 
 apply_config_to_okd:
