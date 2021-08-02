@@ -55,7 +55,7 @@ build_back:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_SHA}
   only:
     - master
-  when: manual
+  #when: manual
   tags:
     - okd
 
@@ -73,7 +73,7 @@ migrate_db:
     - ./yii migrate --interactive=0
   only:
     - master
-  when: manual
+  #when: manual
   tags:
     - okd
 
@@ -100,7 +100,7 @@ deploy_to_okd:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_SHA}
   only:
     - master
-  when: manual
+  #when: manual
   tags:
     - okd
 
