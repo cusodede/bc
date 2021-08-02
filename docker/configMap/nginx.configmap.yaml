@@ -66,7 +66,7 @@ data:
         	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         	fastcgi_param SCRIPT_NAME $fastcgi_script_name;
         	fastcgi_index index.php;
-        	include fastcgi_params;
+        	include /etc/nginx/fastcgi_params;
         }
 
         location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
@@ -85,7 +85,7 @@ data:
         	allow 127.0.0.1;
         	deny all;
         	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        	include fastcgi_params;
+        	include /etc/nginx/fastcgi_params;
         	fastcgi_pass 127.0.0.1:9000;
         }
     	}
