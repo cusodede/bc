@@ -32,14 +32,9 @@ spec:
           configMap:
             name: prpl-nginx
             defaultMode: 420		
-        - name: assets
+        - name: prpl
           persistentVolumeClaim:
             claimName: prpl
-            subPath: assets
-        - name: runtime
-          persistentVolumeClaim:
-            claimName: prpl
-            subPath: runtime
       containers:
         - name: prpl-deploy
           image: >-
@@ -69,10 +64,12 @@ spec:
               - name: prpl-nginx
                 mountPath: "/etc/nginx/conf.d/"
                 readOnly: true
-              - name: assets
+              - name: prpl
                 mountPath: "/var/www/ppl/web/assets"
-              - name: runtime
+                subPath: assets
+              - name: prpl
                 mountPath: "/var/www/ppl/runtime"
+                subPath: runtime
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
