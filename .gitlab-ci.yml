@@ -3,6 +3,7 @@ stages:
   - back
   - migrate
   - deploy
+  - deploy_to_okd
 build_base:
   stage: build
   image:
@@ -76,7 +77,7 @@ migrate_db:
   tags:
     - okd
 
-deploy_to_okd:
+deploy_image:
   stage: deploy
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -99,15 +100,31 @@ deploy_to_okd:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH} --build-arg CI_COMMIT_SHA=${CI_COMMIT_SHA}
   only:
     - master
-  #when: manual
+  tags:
+    - okd
+
+deploy_image_to_okd:
+  stage: deploy_to_okd
+  image:
+    name: openshift/origin-cli:v3.11.0
+    entrypoint: [""]
+  variables:
+    KUBECONFIG: $CI_PROJECT_DIR/kube
+    NO_PROXY: api.k01.vimpelcom.ru
+  before_script:
+    - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
+  script:
+    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
+  only:
+    refs:
+      - master
   tags:
     - okd
 
 
 
-
 apply_config_to_okd:
-  stage: deploy
+  stage: deploy_to_okd
   image:
     name: openshift/origin-cli:v3.11.0
     entrypoint: [""]

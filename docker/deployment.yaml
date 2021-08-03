@@ -34,10 +34,12 @@ spec:
             defaultMode: 420		
         - name: assets
           persistentVolumeClaim:
-            claimName: assets
+            claimName: prpl
+            subPath: assets
         - name: runtime
           persistentVolumeClaim:
-            claimName: runtime
+            claimName: prpl
+            subPath: runtime
       containers:
         - name: prpl-deploy
           image: >-
