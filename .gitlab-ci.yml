@@ -3,6 +3,7 @@ stages:
   - back
   - migrate
   - deploy
+  - apply_config_okd
   - deploy_to_okd
 build_base:
   stage: build
@@ -103,28 +104,9 @@ deploy_image:
   tags:
     - okd
 
-deploy_image_to_okd:
-  stage: deploy_to_okd
-  image:
-    name: openshift/origin-cli:v3.11.0
-    entrypoint: [""]
-  variables:
-    KUBECONFIG: $CI_PROJECT_DIR/kube
-    NO_PROXY: api.k01.vimpelcom.ru
-  before_script:
-    - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
-  script:
-    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
-  only:
-    refs:
-      - master
-  tags:
-    - okd
-
-
 
 apply_config_to_okd:
-  stage: deploy_to_okd
+  stage: apply_config_okd
   image:
     name: openshift/origin-cli:v3.11.0
     entrypoint: [""]
@@ -147,6 +129,28 @@ apply_config_to_okd:
       - docker/deployment.yaml
   tags:
     - okd
+
+deploy_image_to_okd:
+  stage: deploy_to_okd
+  image:
+    name: openshift/origin-cli:v3.11.0
+    entrypoint: [""]
+  variables:
+    KUBECONFIG: $CI_PROJECT_DIR/kube
+    NO_PROXY: api.k01.vimpelcom.ru
+  before_script:
+    - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
+  script:
+    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
+  only:
+    refs:
+      - master
+  tags:
+    - okd
+
+
+
+
    
    
    
