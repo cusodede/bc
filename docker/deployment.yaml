@@ -28,10 +28,6 @@ spec:
           configMap:
             name: prpl-supervisor
             defaultMode: 420
-        - name: prpl-php-db
-          configMap:
-            name: prpl-php-db
-            defaultMode: 420
         - name: prpl-nginx
           configMap:
             name: prpl-nginx
