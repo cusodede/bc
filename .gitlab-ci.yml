@@ -1,7 +1,10 @@
 stages:
   - build
   - back
+  - migrate
   - deploy
+  - apply_config_okd
+  - deploy_to_okd
 build_base:
   stage: build
   image:
@@ -15,7 +18,7 @@ build_base:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
@@ -24,8 +27,10 @@ build_base:
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest --build-arg COMPOSER_TOKEN=${COMPOSER_TOKEN}
   only:
-    - master
-  when: manual
+    refs:
+      - master
+    changes:
+      - docker/Dockerfile_base
   tags:
     - okd
 
@@ -42,21 +47,36 @@ build_back:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_BRANCH}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_SHA}
   only:
     - master
-  when: manual
   tags:
     - okd
 
-deploy_to_okd:
+
+
+migrate_db:
+  stage: migrate
+  image:
+    name: harbor.vimpelcom.ru/prpl/prpl_back:${CI_COMMIT_SHA}
+    entrypoint: [""]
+  script:
+    - cd /var/www/ppl
+    - chmod +x yii
+    - ./yii migrate --interactive=0
+  only:
+    - master
+  tags:
+    - okd
+
+deploy_image:
   stage: deploy
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -69,23 +89,22 @@ deploy_to_okd:
     - mkdir -p /kaniko/.docker
     - |-
        KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="{ \"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}"
+       KANIKOCFG=${DOCKER_AUTH_CONFIG}
        if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
          KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
          KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_BRANCH} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_deploy:${CI_COMMIT_SHA} --build-arg CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH} --build-arg CI_COMMIT_SHA=${CI_COMMIT_SHA}
   only:
     - master
-  when: manual
   tags:
     - okd
 
 
 apply_config_to_okd:
-  stage: deploy
+  stage: apply_config_okd
   image:
     name: openshift/origin-cli:v3.11.0
     entrypoint: [""]
@@ -95,20 +114,41 @@ apply_config_to_okd:
   before_script:
     - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
   script:
-    - oc apply -f docker/configMap/db.configmap.yaml
     - oc apply -f docker/configMap/nginx.configmap.yaml
     - oc apply -f docker/configMap/php8.configmap.yaml
     - oc apply -f docker/configMap/supervisor.configmap.yaml
     - oc apply -f docker/deployment.yaml
+    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
   only:
     refs:
       - master
     changes:
       - docker/configMap/*.yaml
       - docker/deployment.yaml
-    
   tags:
     - okd
+
+deploy_image_to_okd:
+  stage: deploy_to_okd
+  image:
+    name: openshift/origin-cli:v3.11.0
+    entrypoint: [""]
+  variables:
+    KUBECONFIG: $CI_PROJECT_DIR/kube
+    NO_PROXY: api.k01.vimpelcom.ru
+  before_script:
+    - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
+  script:
+    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
+  only:
+    refs:
+      - master
+  tags:
+    - okd
+
+
+
+
    
    
    

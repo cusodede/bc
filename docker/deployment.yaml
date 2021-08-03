@@ -28,14 +28,13 @@ spec:
           configMap:
             name: prpl-supervisor
             defaultMode: 420
-        - name: prpl-php-db
-          configMap:
-            name: prpl-php-db
-            defaultMode: 420
         - name: prpl-nginx
           configMap:
             name: prpl-nginx
             defaultMode: 420		
+        - name: prpl
+          persistentVolumeClaim:
+            claimName: prpl
       containers:
         - name: prpl-deploy
           image: >-
@@ -59,21 +58,21 @@ spec:
               - name: prpl-supervisor
                 mountPath: "/etc/supervisor/conf.d/"
                 readOnly: true
-              - name: prpl-php-db
-                mountPath: "/var/www/ppl/config/local"
-                readOnly: true
               - name: prpl-nginx
                 mountPath: "/etc/nginx/conf.d/"
                 readOnly: true
+              - name: prpl
+                mountPath: "/var/www/ppl/web/assets"
+                subPath: assets
+              - name: prpl
+                mountPath: "/var/www/ppl/runtime"
+                subPath: runtime
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
       securityContext: {}
       schedulerName: default-scheduler
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
+    type: Recreate
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
