@@ -58,9 +58,6 @@ spec:
               - name: prpl-supervisor
                 mountPath: "/etc/supervisor/conf.d/"
                 readOnly: true
-#              - name: prpl-php-db
-#                mountPath: "/var/www/ppl/config/local"
-#                readOnly: true
               - name: prpl-nginx
                 mountPath: "/etc/nginx/conf.d/"
                 readOnly: true
