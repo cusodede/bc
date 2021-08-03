@@ -164,8 +164,8 @@ abstract class OAuthTokenizer extends Component implements Tokenizer
 		}
 
 		$config = [
-			'type_id'    => UsersTokens::TOKEN_TYPES[$type],
-			'user_id'    => $this->_grantType->getUser()->id,
+			'type_id'	 => UsersTokens::TOKEN_TYPES[$type],
+			'user_id'	 => $this->_grantType->getUser()->id,
 			'user_agent' => $this->_grantType->getUserAgent()
 		];
 
