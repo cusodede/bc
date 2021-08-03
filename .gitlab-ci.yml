@@ -117,11 +117,11 @@ apply_config_to_okd:
   before_script:
     - oc login --server="$OPENSHIFT_K01_SERVER" --token="$OPENSHIFT_K01_GITLAB_TOKEN" --insecure-skip-tls-verify
   script:
-    - oc apply -f docker/configMap/db.configmap.yaml
     - oc apply -f docker/configMap/nginx.configmap.yaml
     - oc apply -f docker/configMap/php8.configmap.yaml
     - oc apply -f docker/configMap/supervisor.configmap.yaml
     - oc apply -f docker/deployment.yaml
+    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH}
   only:
     refs:
       - master
