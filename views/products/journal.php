@@ -73,18 +73,7 @@ $this->title = 'История подключений';
 			[
 				'attribute' => 'status_id',
 				'filter'    => EnumProductsStatuses::mapData(),
-				'content'   => static function(ProductsJournal $model) {
-					switch ($model->status_id) {
-						case EnumProductsStatuses::STATUS_ENABLED:
-							return Html::badgeSuccess($model->statusDesc);
-						case EnumProductsStatuses::STATUS_RENEWED:
-							return Html::badgeInfo($model->statusDesc);
-						case EnumProductsStatuses::STATUS_DISABLED:
-							return Html::badgeDanger($model->statusDesc);
-						default:
-							return $model->statusDesc;
-					}
-				}
+				'content'   => static fn(ProductsJournal $model) => EnumProductsStatuses::getBadge($model->status_id)
 			],
 			[
 				'attribute' => 'expire_date',
