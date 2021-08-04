@@ -12,8 +12,10 @@ use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\base\BaseQueryType;
 use app\modules\graphql\data\EnumTypes;
 use app\modules\graphql\data\QueryTypes;
+use app\modules\graphql\definition\DateTimeType;
 use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
+use DateTimeImmutable;
 
 /**
  * Class ProductType
@@ -42,21 +44,29 @@ final class ProductType extends BaseQueryType
 				],
 				'description' => [
 					'type' => Type::string(),
-					'description' => 'Описание',
+					'description' => 'Краткое описание',
+				],
+				'ext_description' => [
+					'type' => Type::string(),
+					'description' => 'Полное описание',
 				],
 				'start_date' => [
-					'type' => Type::string(),
+					'type' => DateTimeType::dateTime(),
 					'description' => 'Начало действия Y-m-d H:i:s',
+					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->start_date)
 				],
 				'end_date' => [
-					'type' => Type::string(),
+					'type' => DateTimeType::dateTime(),
 					'description' => 'Конец действия Y-m-d H:i:s',
+					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->end_date)
 				],
 				'payment_period' => [
 					'type' => EnumTypes::productPaymentPeriodType(),
 					'description' => 'Периодичность списания',
-					'resolve' => fn(Products $product): ?array
-						=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), ['id' => $product->payment_period]),
+					'resolve' => fn(Products $product): ?array => self::getOneFromEnum(
+						EnumProductsPaymentPeriods::mapData(),
+						['id' => $product->payment_period]
+					),
 				],
 				'type_id' => [
 					'type' => Type::int(),
@@ -65,8 +75,10 @@ final class ProductType extends BaseQueryType
 				'type' => [
 					'type' => EnumTypes::productTypesType(),
 					'description' => 'Тип продукта',
-					'resolve' => fn(Products $product): ?array
-						=> self::getOneFromEnum(EnumProductsTypes::mapData(), ['id' => $product->type_id]),
+					'resolve' => fn(Products $product): ?array => self::getOneFromEnum(
+						EnumProductsTypes::mapData(),
+						['id' => $product->type_id]
+					),
 				],
 				'partner_id' => [
 					'type' => Type::int(),
@@ -85,12 +97,15 @@ final class ProductType extends BaseQueryType
 				'trial_unit' => [
 					'type' => EnumTypes::subscriptionTrialUnitsType(),
 					'description' => 'Единица измерения триального периода',
-					'resolve' => fn(Products $product): ?array
-						=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), ['id' => $product->relatedInstance->units ?? 0]),
+					'resolve' => fn(Products $product): ?array => self::getOneFromEnum(
+						EnumSubscriptionTrialUnits::mapData(),
+						['id' => $product->relatedInstance->units ?? 0]
+					),
 				],
 				'created_at' => [
-					'type' => Type::string(),
+					'type' => DateTimeType::dateTime(),
 					'description' => 'Дата создания Y-m-d H:i:s',
+					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->created_at),
 				],
 			],
 		]);
@@ -147,8 +162,7 @@ final class ProductType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает продукт по id',
-			'resolve' => fn(Products $product = null, array $args = []): ?Products
-				=> Products::find()->where($args)->active()->one(),
+			'resolve' => fn(Products $product = null, array $args = []): ?Products => Products::find()->where($args)->active()->one(),
 		];
 	}
 }

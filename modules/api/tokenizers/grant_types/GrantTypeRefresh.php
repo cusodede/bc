@@ -38,6 +38,8 @@ class GrantTypeRefresh extends BaseGrantType
 
 	/**
 	 * {@inheritdoc}
+	 * @param UsersTokens $authToken
+	 * @param UsersTokens|null $refreshToken
 	 * @throws InvalidGrantException
 	 */
 	public function validate(UsersTokens $authToken, ?UsersTokens $refreshToken): void
