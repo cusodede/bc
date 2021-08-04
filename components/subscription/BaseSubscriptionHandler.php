@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\components\subscription;
 
 use app\models\products\Products;
-use app\components\subscription\use_cases\ProductJournalStatusCase;
 use app\models\ticket\TicketProductSubscription;
 use InvalidArgumentException;
 use yii\base\Component;
@@ -39,8 +38,7 @@ abstract class BaseSubscriptionHandler extends Component
 
 		$expireDate = $this->connectOnPartner();
 
-		$useCase = new ProductJournalStatusCase();
-		$useCase->enable($this->_ticket->relatedAbonent->id, $this->_ticket->relatedProduct->id, $expireDate);
+		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
 
 		return $expireDate;
 	}
@@ -56,8 +54,7 @@ abstract class BaseSubscriptionHandler extends Component
 
 		$this->disableOnPartner();
 
-		$useCase = new ProductJournalStatusCase();
-		$useCase->disable($this->_ticket->relatedAbonent->id, $this->_ticket->relatedProduct->id);
+		$this->_ticket->relatedAbonentsToProducts->disable();
 	}
 
 	/**
