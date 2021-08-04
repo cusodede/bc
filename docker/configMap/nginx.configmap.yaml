@@ -51,8 +51,8 @@ data:
         	# as directory, then fall back to index.php
         	try_files $uri $uri/ /index.php?q=$uri&$args;
         }
-        location /admin {
-            alias /var/www/ppl/web;
+        location /admin/ {
+            alias /var/www/ppl/web/;
         	# First attempt to serve request as file, then
         	# as directory, then fall back to index.php
         	try_files $uri $uri/ /admin/index.php?q=$uri&$args;
