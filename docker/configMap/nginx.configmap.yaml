@@ -7,7 +7,7 @@ metadata:
 data:
   nginx.conf: |-
     worker_processes auto;
-    error_log stderr warn;
+    error_log stdout warn;
     pid /dev/shm/nginx.pid;
     events {
     	worker_connections 1024;
@@ -24,7 +24,7 @@ data:
                   '$request_time $upstream_response_time $pipe $upstream_cache_status';
 
     	access_log /dev/stdout main_timed;
-    	error_log /dev/stderr notice;
+    	error_log /dev/stdout notice;
 
     	keepalive_timeout 65;
 
