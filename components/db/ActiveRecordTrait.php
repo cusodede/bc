@@ -166,9 +166,8 @@ trait ActiveRecordTrait {
 	 */
 	public function setAndSaveAttributes(?array $values, bool $safeOnly = false):bool {
 		if ($safeOnly) {
-			$safeAttributes = $this->safeAttributes();
 			//Уберем unsafe атрибуты, чтобы избежать возможных ошибок при доступе к этим свойствам.
-			$values = array_intersect_key($values, array_combine($safeAttributes, $safeAttributes));
+			$values = array_intersect_key($values, array_flip($this->safeAttributes()));
 
 			$this->setAttributes($values);
 		} else {
