@@ -52,7 +52,7 @@ data:
         	try_files $uri $uri/ /index.php?q=$uri&$args;
         }
         location /admin {
-            root /var/www/ppl/web;
+            alias /var/www/ppl/web;
         	# First attempt to serve request as file, then
         	# as directory, then fall back to index.php
         	try_files $uri $uri/ /index.php?q=$uri&$args;
