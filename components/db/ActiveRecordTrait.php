@@ -166,24 +166,35 @@ trait ActiveRecordTrait {
 	 */
 	public function setAndSaveAttributes(?array $values, bool $safeOnly = false):bool {
 		if ($safeOnly) {
+			$safeAttributes = $this->safeAttributes();
+			//Уберем unsafe атрибуты, чтобы избежать возможных ошибок при доступе к этим свойствам.
+			$values = array_intersect_key($values, array_combine($safeAttributes, $safeAttributes));
+
 			$this->setAttributes($values);
 		} else {
 			//[[ActiveRecord::attributes()]] возвращает атрибуты, которые генерирует по схеме из БД,
 			//и, как следствие, не учитывает кастомные свойства в модели.
-			//Поэтому используем дефолтный сеттинг.
+			//Поэтому используем нативный сеттинг.
 			foreach ($values as $name => $value) {
-				$this->$name = $value;
+				if ($this->canSetProperty($name)) {
+					$this->$name = $value;
+				} else {
+					unset($values[$name]);
+				}
 			}
 		}
 
 		try {
 			/** @var Transaction $transaction */
 			$transaction = Yii::$app->db->beginTransaction();
-			if (($saveIsOk = $this->save()) && in_array(FileStorageTrait::class, class_uses($this), true) && method_exists($this, 'uploadAttribute')) {
+
+			//При обновлении записи не будем лишний раз дергать проверку атрибутов, не заданных в `$values`.
+			$saveIsOk = $this->save(true, $this->isNewRecord ? null : array_keys($values));
+			if ($saveIsOk && method_exists($this, 'uploadAttribute')) {
 				//Ищем файловые атрибуты для их загрузки в хранилище.
 				foreach ($values as $name => $value) {
-					//Получаем атрибуты непосредственно из модели, т.к. в процессе сохранения часть из них могла модифицироваться
-					//(например, при сеттинге атрибута через raw data).
+					//Получаем атрибуты непосредственно из модели, т.к. в процессе сохранения часть из них могла модифицироваться,
+					//например, при сеттинге атрибута через raw data.
 					if ($this->$name instanceof UploadedFile) {
 						/** @see FileStorageTrait::uploadAttribute() */
 						$this->uploadAttribute($name);
@@ -198,6 +209,7 @@ trait ActiveRecordTrait {
 			}
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $e) {
 			$transaction->rollBack();
+
 			$saveIsOk = false;
 		}
 
