@@ -3,65 +3,44 @@ declare(strict_types = 1);
 
 namespace app\components\subscription;
 
-use app\models\abonents\Abonents;
-use app\models\billing_journal\BillingJournal;
 use app\models\products\Products;
-use app\components\subscription\use_cases\DeactivateProductCase;
-use app\components\subscription\use_cases\ActivateProductCase;
+use app\components\subscription\use_cases\ProductJournalStatusCase;
+use app\models\ticket\TicketProductSubscription;
 use InvalidArgumentException;
 use yii\base\Component;
-use yii\web\NotFoundHttpException;
 
 /**
- * Class SubscriptionHandler
+ * Class BaseSubscriptionHandler
  * @package app\components\subscription
  */
 abstract class BaseSubscriptionHandler extends Component
 {
 	/**
-	 * @var Products продукт, по которому будет обрабатываться подписка.
+	 * @var TicketProductSubscription|null тикет, в рамках которого выполняется подключение/отключение услуги.
 	 */
-	protected Products $_product;
-	/**
-	 * @var Abonents|null абонент, по которому будет обрабатываться подписка.
-	 */
-	protected ?Abonents $_abonent = null;
-	/**
-	 * @var BillingJournal|null
-	 */
-	protected ?BillingJournal $_billingJournalRecord = null;
-
-	/**
-	 * SubscriptionHandler constructor.
-	 * @param Products $product
-	 * @param array $config
-	 */
-	public function __construct(Products $product, array $config = [])
-	{
-		parent::__construct($config);
-
-		$this->_product = $product;
-	}
+	protected ?TicketProductSubscription $_ticket = null;
 
 	/**
 	 * Подключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param int $abonentId идентификатор абонента.
-	 * @param string $billingId идентификатор списания средств.
+	 * @param TicketProductSubscription $ticket
+	 * @param bool $healthcheck
 	 * @return string
-	 * @throws NotFoundHttpException
 	 */
-	final public function provide(int $abonentId, string $billingId): string
+	public function connect(TicketProductSubscription $ticket, bool $healthcheck = false): string
 	{
-		$this->initAbonent($abonentId);
-		$this->initBillingJournalRecord($billingId);
+		$this->_ticket = $ticket;
+		if ($healthcheck) {
+			$this->doHealthcheck();
+			return '';
+		}
 
 		$this->beforeSubscribe();
 
-		$expireDate = $this->subscribe();
+		$expireDate = $this->connectOnPartner();
 
-		$useCase = new ActivateProductCase();
-		$useCase->execute($abonentId, $this->_product->id, $expireDate);
+		$useCase = new ProductJournalStatusCase();
+		$useCase->enable($this->_ticket->relatedAbonent->id, $this->_ticket->relatedProduct->id, $expireDate);
 
 		return $expireDate;
 	}
@@ -69,61 +48,41 @@ abstract class BaseSubscriptionHandler extends Component
 	/**
 	 * Отключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param int $abonentId
-	 * @throws NotFoundHttpException
+	 * @param TicketProductSubscription $ticket
 	 */
-	final public function revoke(int $abonentId): void
+	public function disable(TicketProductSubscription $ticket): void
 	{
-		$this->initAbonent($abonentId);
+		$this->_ticket = $ticket;
 
-		$this->unsubscribe();
+		$this->disableOnPartner();
 
-		$useCase = new DeactivateProductCase();
-		$useCase->execute($abonentId, $this->_product->id);
-	}
-
-	/**
-	 * Для различных полезных штук перед непосредственным запросом на подписку
-	 * (инициализация переиспользуемых параметров, сброс состояния при изменении входных параметров, etc.).
-	 */
-	protected function beforeSubscribe(): void
-	{
+		$useCase = new ProductJournalStatusCase();
+		$useCase->disable($this->_ticket->relatedAbonent->id, $this->_ticket->relatedProduct->id);
 	}
 
 	/**
 	 * Реализация подключения подписки по продукту на стороне партнёра.
 	 * @return string новая дата окончания подписки.
 	 */
-	abstract protected function subscribe(): string;
+	abstract protected function connectOnPartner(): string;
+
+	/**
+	 * Данный метод будет вызываться в случае необходимости проверки возможности подключения подписки по абоненту.
+	 * Подразумевается, что в случае непрохождения проверок, кидается exception.
+	 */
+	abstract protected function doHealthcheck(): void;
+
+	/**
+	 * Для различных полезных штук перед непосредственным запросом на подписку
+	 * (инициализация переиспользуемых параметров, сброс состояния при изменении входных параметров, etc.).
+	 */
+	protected function beforeSubscribe(): void {}
 
 	/**
 	 * Реализация отключения подписки по продукту на стороне партнёра.
+	 * DEFAULT: ничего не отправляем партнеру, подписка просто протухнет, если мы ее принудительно не обновим.
 	 */
-	abstract protected function unsubscribe(): void;
-
-	/**
-	 * Инициализация абонента.
-	 * @param int $abonentId
-	 * @throws NotFoundHttpException
-	 */
-	private function initAbonent(int $abonentId): void
-	{
-		if (null === $this->_abonent = Abonents::findOne($abonentId)) {
-			throw new NotFoundHttpException("Не удалось определить абонента по ID $abonentId");
-		}
-	}
-
-	/**
-	 * Инициализация модели списания из журнала списаний.
-	 * @param string $billingId
-	 * @throws NotFoundHttpException
-	 */
-	private function initBillingJournalRecord(string $billingId): void
-	{
-		if (null === $this->_billingJournalRecord = BillingJournal::findOne($billingId)) {
-			throw new NotFoundHttpException("Не удалось установить факт списания по ID $billingId");
-		}
-	}
+	protected function disableOnPartner(): void {}
 
 	/**
 	 * Создание обработчика для управления подключением/отключением подписок на продукты.
@@ -135,9 +94,9 @@ abstract class BaseSubscriptionHandler extends Component
 	{
 		switch ($product->relatedPartner->name) {
 			case 'ivi':
-				return new IviSubscriptionHandler($product);
+				return new IviSubscriptionHandler();
 			case 'vet-expert':
-				return new VetExpertSubscriptionHandler($product);
+				return new VetExpertSubscriptionHandler();
 			default:
 				throw new InvalidArgumentException('Не удалось определить обработчик для продукта');
 		}

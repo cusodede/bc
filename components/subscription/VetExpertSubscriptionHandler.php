@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\components\subscription;
 
-use app\models\products\Products;
 use app\modules\api\connectors\vet_expert\SubscriptionParams;
 use app\modules\api\connectors\vet_expert\VetExpertConnector;
 
@@ -17,12 +16,11 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 
 	/**
 	 * VetExpertSubscriptionHandler constructor.
-	 * @param Products $product
 	 * @param array $config
 	 */
-	public function __construct(Products $product, array $config = [])
+	public function __construct(array $config = [])
 	{
-		parent::__construct($product, $config);
+		parent::__construct($config);
 
 		$this->_apiConnector = new VetExpertConnector();
 	}
@@ -30,11 +28,11 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function subscribe(): string
+	protected function connectOnPartner(): string
 	{
-		$subscriptionParams = SubscriptionParams::createInstance($this->_abonent);
+		$subscriptionParams = SubscriptionParams::createInstance($this->_ticket->relatedAbonent);
 
-		$expireDate = $this->_billingJournalRecord->calculateNewPaymentDate();
+		$expireDate = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
 		$subscriptionParams->subscriptionTo = $expireDate;
 
 		$this->_apiConnector->makeSubscribe($subscriptionParams);
@@ -45,8 +43,7 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function unsubscribe(): void
+	protected function doHealthcheck(): void
 	{
-		//ничего не отправляем партнеру, подписка просто протухнет, если мы ее принудительно не обновим
 	}
 }
