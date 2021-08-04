@@ -3,15 +3,14 @@ declare(strict_types = 1);
 
 namespace app\components\tickets;
 
-use app\components\tickets\statuses\TicketStatusDone;
-use app\components\tickets\statuses\TicketStatusInProgress;
-use app\components\tickets\statuses\TicketStatusInterface;
-use app\components\tickets\statuses\TicketStatusWaiting;
-use app\components\helpers\DateHelper;
 use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
+use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketProductSubscriptionParams;
+use app\modules\api\resources\formatters\TicketProductSubscriptionFormatter;
+use Throwable;
 use Yii;
-use yii\queue\Queue;
+use yii\web\NotFoundHttpException;
 
 /**
  * Компонент для создания отложенных задач для управления подписками.
@@ -21,51 +20,66 @@ use yii\queue\Queue;
 class ProductTicketsService
 {
 	/**
-	 * Создание тикета на подключение продукта абоненту.
+	 * Создание тикета на подключение подписки.
 	 * @param int $productId идентификатор продукта.
 	 * @param int $abonentId идентификатор абонента.
+	 * @param int|null $userId
 	 * @return string идентификатор созданного тикета (джобы).
+	 * @throws Throwable
 	 */
-	public function subscribe(int $productId, int $abonentId): string
+	public function createSubscribeTicket(int $productId, int $abonentId, ?int $userId = null): string
 	{
-		return Yii::$app->productTicketsQueue->push(new SubscribeJob($productId, $abonentId));
+		$params = new TicketProductSubscriptionParams([
+			'productId' => $productId,
+			'abonentId' => $abonentId,
+			'action'    => TicketProductSubscription::ACTION_CONNECT_SUBSCRIPTION,
+			'createdBy' => $userId ?? Yii::$app->user->id
+		]);
+
+		$ticket = TicketProductSubscription::createTicket($params);
+
+		Yii::$app->productTicketsQueue->push(new SubscribeJob($ticket->id));
+
+		return $ticket->id;
 	}
 
 	/**
-	 * Создание тикета на отключение продукта от абонента.
+	 * Создание тикета на отключение подписки.
 	 * @param int $productId идентификатор продукта.
 	 * @param int $abonentId идентификатор абонента.
+	 * @param int|null $userId
 	 * @return string идентификатор созданного тикета (джобы).
+	 * @throws Throwable
 	 */
-	public function unsubscribe(int $productId, int $abonentId): string
+	public function createUnsubscribeTicket(int $productId, int $abonentId, ?int $userId = null): string
 	{
-		return Yii::$app->productTicketsQueue->push(new UnsubscribeJob($productId, $abonentId));
+		$params = new TicketProductSubscriptionParams([
+			'productId' => $productId,
+			'abonentId' => $abonentId,
+			'action'    => TicketProductSubscription::ACTION_DISABLE_SUBSCRIPTION,
+			'createdBy' => $userId ?? Yii::$app->user->id
+		]);
+
+		$ticket = TicketProductSubscription::createTicket($params);
+
+		Yii::$app->productTicketsQueue->push(new UnsubscribeJob($ticket->id));
+
+		return $ticket->id;
 	}
 
 	/**
 	 * Получение статуса обработки тикета.
 	 * @param string $ticketId идентификатор тикета.
-	 * @return TicketStatusInterface
+	 * @return array
+	 * @throws NotFoundHttpException
 	 */
-	public function getTicketStatus(string $ticketId): TicketStatusInterface
+	public static function getTicketStatus(string $ticketId): array
 	{
-		$jobStatus = Yii::$app->productTicketsQueue->status($ticketId);
-		if ($jobStatus === Queue::STATUS_WAITING) {
-			$ticketStatus = new TicketStatusWaiting();
-		} elseif ($jobStatus === Queue::STATUS_RESERVED) {
-			$ticketStatus = new TicketStatusInProgress(
-				DateHelper::createImmutableFromTimestamp(
-					Yii::$app->productTicketsQueue->lastStatusPayload['reserved_at']
-				)
-			);
-		} else {
-			$ticketStatus = new TicketStatusDone(
-				DateHelper::createImmutableFromTimestamp(
-					Yii::$app->productTicketsQueue->lastStatusPayload['done_at']
-				)
-			);
+		$ticket = TicketProductSubscription::findOne($ticketId);
+		if (null === $ticket) {
+			throw new NotFoundHttpException("Can't find the ticket by id $ticketId");
 		}
 
-		return $ticketStatus;
+		return (new TicketProductSubscriptionFormatter())->format($ticket);
 	}
 }

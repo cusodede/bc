@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\components\subscription\job;
 
 use app\components\subscription\BaseSubscriptionHandler;
-use app\models\products\Products;
+use app\models\ticket\TicketProductSubscription;
 use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
 
@@ -14,18 +14,15 @@ use yii\web\NotFoundHttpException;
  */
 class SubscribeJob implements RetryableJobInterface
 {
-	private int $_productId;
-	private int $_abonentId;
+	private string $_ticketId;
 
 	/**
 	 * SubscribeJob constructor.
-	 * @param int $productId
-	 * @param int $abonentId
+	 * @param string $ticketId
 	 */
-	public function __construct(int $productId, int $abonentId)
+	public function __construct(string $ticketId)
 	{
-		$this->_productId = $productId;
-		$this->_abonentId = $abonentId;
+		$this->_ticketId = $ticketId;
 	}
 
 	/**
@@ -33,14 +30,15 @@ class SubscribeJob implements RetryableJobInterface
 	 */
 	public function execute($queue): void
 	{
-		$product = Products::findOne($this->_productId);
-		if (null === $product) {
-			throw new NotFoundHttpException();
+		$ticket = TicketProductSubscription::findOne($this->_ticketId);
+		if (null === $ticket) {
+			throw new NotFoundHttpException("Can't find the ticket by id $this->_ticketId");
 		}
 
-		$service = BaseSubscriptionHandler::createInstanceByProduct($product);
+		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
 
-		$service->provide($this->_abonentId, '');//TODO add billing operation stuff
+		$service->connect($ticket, true);
+		$service->connect($ticket);
 	}
 
 	/**
@@ -56,6 +54,6 @@ class SubscribeJob implements RetryableJobInterface
 	 */
 	public function canRetry($attempt, $error): bool
 	{
-		return true;
+		return false;
 	}
 }
