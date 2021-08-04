@@ -63,7 +63,7 @@ class BillingJournal extends ActiveRecordBillingJournal
 	{
 		$expireDate = ArrayHelper::getValue($this->relatedAbonentsToProducts, 'relatedLastProductsJournal.expire_date');
 
-		return date_create(($this->try_date < $expireDate) ? $expireDate : $this->try_date)
+		return date_create(($this->created_at < $expireDate) ? $expireDate : $this->created_at)
 			->modify($this->relatedProduct->paymentDateModifier)
 			->format('Y-m-d H:i:s');
 	}

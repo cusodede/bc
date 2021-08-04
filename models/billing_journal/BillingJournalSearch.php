@@ -42,7 +42,7 @@ class BillingJournalSearch extends BillingJournal
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 		$dataProvider->setSort([
 			'defaultOrder' => ['created_at' => SORT_DESC],
-			'attributes'   => ['created_at', 'status_id', 'try_date']
+			'attributes'   => ['created_at', 'status_id']
 		]);
 
 		$this->load($params);
