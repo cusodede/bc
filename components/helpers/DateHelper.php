@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\components\helpers;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use pozitronik\helpers\DateHelper as VendorDateHelper;
 
 /**
@@ -13,12 +14,19 @@ use pozitronik\helpers\DateHelper as VendorDateHelper;
 class DateHelper extends VendorDateHelper
 {
 	/**
-	 * @param string $date
+	 * @param string|int|DateTimeInterface $date
 	 * @return string дата в формате ISO8601.
 	 * @see https://www.php.net/manual/en/datetime.format.php
 	 */
-	public static function toIso8601(string $date): string
+	public static function toIso8601($date): string
 	{
+		if (is_numeric($date)) {
+			return date('c', $date);
+		}
+		if ($date instanceof DateTimeInterface) {
+			return $date->format('c');
+		}
+
 		return date_create($date)->format('c');
 	}
 
