@@ -29,4 +29,11 @@ class HttpBasicPasswordAuth extends HttpBasicAuth
 			return null;
 		};
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function challenge($response): void
+	{
+	}
 }

@@ -21,12 +21,12 @@ class DateTimeType extends ScalarType
 	/**
 	 * @var string
 	 */
-	public $name = 'DateTime';
+	public string $name = 'DateTime';
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $description = 'Скалярный тип DateTime представляет данные даты и времени, в виде строки в формате ' . self::DEFAULT_FORMAT;
+	public ?string $description = 'Скалярный тип DateTime представляет данные даты и времени, в виде строки в формате ' . self::DEFAULT_FORMAT;
 
 	/**
 	 * @var ScalarType|null
