@@ -31,7 +31,6 @@ build_base:
       - master
     changes:
       - "docker/Dockerfile_base"
-  when: manual
   tags:
     - okd
 
