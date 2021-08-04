@@ -5,6 +5,7 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
 
 use app\components\queue\DbQueue;
+use app\components\queue\JobIdHandlingBehavior;
 use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
@@ -57,7 +58,8 @@ $config = [
 			'tableName' => '{{%queue}}', // Table name
 			'channel' => 'product_ticket', // Queue channel key
 			'mutex' => MysqlMutex::class, // Mutex used to sync queries
-			'deleteReleased' => false
+			'deleteReleased' => false,
+			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
 		]
 	],
 	'controllerMap' => [
