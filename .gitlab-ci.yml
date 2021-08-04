@@ -30,7 +30,7 @@ build_base:
     refs:
       - master
     changes:
-      - docker/Dockerfile_base
+      - "docker/Dockerfile_base"
   tags:
     - okd
 
@@ -123,8 +123,8 @@ apply_config_to_okd:
     refs:
       - master
     changes:
-      - docker/configMap/*.yaml
-      - docker/deployment.yaml
+      - "docker/configMap/*.yaml"
+      - "docker/deployment.yaml"
   tags:
     - okd
 
