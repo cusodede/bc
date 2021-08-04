@@ -18,14 +18,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenData'
-          links: { }
         '401':
-          description: Your request was made with invalid credentials.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
-          links: { }
+          $ref: '#/components/responses/UnauthorizedError'
       security:
         - Basic: [ ]
     post:
@@ -50,19 +44,17 @@ paths:
                   type: string
       responses:
         '200':
-          description: Токены успешно обновлены
+          description: Токены обновлены
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenData'
-          links: { }
         '401':
           description: Your request was made with invalid credentials.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-          links: { }
       security:
         - Basic: [ ]
   /products/list:
@@ -86,14 +78,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-          links: { }
         '404':
           description: Ошибка определения абонента по номеру телефона
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-          links: { }
       security:
         - Bearer: [ ]
   /products/one:
@@ -120,14 +110,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-          links: { }
         '404':
           description: Ошибка определения абонента по номеру телефона
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-          links: { }
       security:
         - Bearer: [ ]
   /products/stories:
@@ -151,17 +139,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductStory'
-          links: { }
         '404':
           description: Ошибка определения абонента по номеру телефона
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
-          links: { }
       security:
         - Bearer: [ ]
-  /products/subscribe:
+  /products/connect:
     post:
       tags:
         - Products
@@ -183,7 +169,7 @@ paths:
                   pattern: '^7\d{10}$'
       responses:
         '200':
-          description: Возвращается номер тикета на подключение подписки
+          description: Номер тикета
           content:
             application/json:
               schema:
@@ -191,17 +177,11 @@ paths:
                   ticketId:
                     type: string
                 type: object
-          links: { }
         '400':
-          description: Ошибка валидации запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationErrorMessage'
-          links: { }
+          $ref: '#/components/responses/ValidationErrorMessage'
       security:
         - Bearer: [ ]
-  /products/unsubscribe:
+  /products/disable:
     post:
       tags:
         - Products
@@ -223,7 +203,7 @@ paths:
               type: object
       responses:
         '200':
-          description: Возвращается номер тикета на отключение подписки
+          description: Номер тикета
           content:
             application/json:
               schema:
@@ -231,17 +211,56 @@ paths:
                   ticketId:
                     type: string
                 type: object
-          links: { }
         '400':
-          description: Ошибка валидации запроса
+          $ref: '#/components/responses/ValidationErrorMessage'
+      security:
+        - Bearer: [ ]
+  /products/ticket-status:
+    get:
+      tags:
+        - Products
+      summary: Запрос на получение статуса выполнения тикета
+      parameters:
+        - name: ticketId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Описание статуса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorMessage'
-          links: { }
+                $ref: '#/components/schemas/SubscriptionTicketStatus'
       security:
         - Bearer: [ ]
 components:
+  responses:
+    ValidationErrorMessage:
+      description: Ошибка валидации
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorMessage'
+    ServerError:
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerError'
+    ForbiddenError:
+      description: Ошибка доступа
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
+    UnauthorizedError:
+      description: Ошибка авторизации
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
   schemas:
     Category:
       description: Class Category
@@ -257,7 +276,7 @@ components:
           description: Наименование партнера
           type: string
         logoPath:
-          description: Endpoint для скачивания логотипа партнера
+          description: Endpoint для получения логотипа партнера
           type: string
         category:
           $ref: '#/components/schemas/Category'
@@ -269,31 +288,42 @@ components:
           description: Идентификатор продукта
           type: integer
         type:
-          description: Тип продукта
-          type: string
+          description: >
+            Тип продукта:
+              * `1` - Подписка
+              * `2` - Бандл
+          type: integer
           enum:
-            - Подписка
-            - Бандл
+            - 1
+            - 2
         name:
           description: Название продукта
           type: string
         description:
           description: Краткое описание продукта
           type: string
-        ext_description:
-          description: Полное описание продукта в виде html
+        extDescription:
+          description: Полное описание продукта в формате html
           type: string
         price:
           description: Стоимость подписки
           type: string
         paymentPeriod:
-          description: Период списания
-          type: string
+          description: >
+            Период списания:
+              * `1` - Разовое списание
+              * `2` - Ежедневное
+              * `3` - Ежемесячное
+          enum:
+            - 1
+            - 2
+            - 3
+          type: integer
         options:
           $ref: '#/components/schemas/Subscription'
         partner:
           $ref: '#/components/schemas/Partner'
-        subscription:
+        subscriptionStatus:
           $ref: '#/components/schemas/SubscriptionStatus'
       type: object
     ProductStory:
@@ -316,8 +346,18 @@ components:
           description: Описание триального периода
           properties:
             units:
-              type: string
-            number:
+              description: >
+                Длительность:
+                  * `1` - День
+                  * `2` - Неделя
+                  * `3` - Месяц
+              enum:
+                - 1
+                - 2
+                - 3
+              type: integer
+            count:
+              description: Количество
               type: integer
           type: object
           nullable: true
@@ -326,12 +366,52 @@ components:
       description: Class SubscriptionStatus
       properties:
         status:
-          description: Статус подписки
-          type: string
+          description: >
+            Статус подписки:
+              * `1` - Подключение
+              * `2` - Продление
+              * `3` - Блокировка: недостаточно средств
+              * `4` - Блокировка: подписка отменена
+              * `5` - Отключение
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+          type: integer
         expireDate:
           description: Дата истечения подписки в формате ISO8601
           type: string
           example: '2021-07-16T14:07:05+03:00'
+      type: object
+    SubscriptionTicketStatus:
+      description: Class SubscriptionTicketStatus
+      properties:
+        action:
+          type: integer
+          enum:
+            - 1
+            - 2
+          description: >
+            Тип тикета:
+              * `1` - Подключение
+              * `2` - Отключение
+          required: true
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+                - in_progress
+                - success
+                - error
+              required: true
+            desc:
+              type: string
+              description: Описание для отображения на клиенте
+          required: true
       type: object
     TokenData:
       description: Class TokenData
@@ -343,39 +423,83 @@ components:
           description: Рефреш токен
           type: string
         expires_in:
+          description: Время жизни токена (в секундах)
           type: integer
       type: object
     ErrorMessage:
-      description: Описание ошибки
+      description: Error
       properties:
-        err:
-          description: Код ошибки
-          type: string
-        msg:
-          description: Описание ошибки
-          type: string
+        error:
+          type: object
+          properties:
+            code:
+              description: Код ошибки
+              type: string
+            desc:
+              description: Описание ошибки
+              type: string
       type: object
+    UnauthorizedError:
+      description: Unauthorized Error
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              description: Код ошибки
+              type: integer
+              example: 401
+            desc:
+              description: Описание ошибки
+              type: string
+              example: "Your request was made with invalid credentials."
+    ForbiddenError:
+      description: Forbidden Error
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              description: Код ошибки
+              type: integer
+              example: 403
+            desc:
+              description: Описание ошибки
+              type: string
+              example: "Вам не разрешено производить данное действие."
+    ServerError:
+      description: Server Error
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              description: Код ошибки
+              type: integer
+              example: 500
+            desc:
+              description: Описание ошибки
+              type: string
     ValidationErrorMessage:
-      description: Описание ошибки
+      description: Validation Error
       properties:
-        err:
-          description: Код ошибки
-          type: string
-          enum:
-            - ERR_VALIDATION
-        msg:
-          description: Массив ошибок по атрибутам
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                description: Атрибут валидации
-                type: string
-              error:
-                description: Описание ошибки
-                type: string
-      type: object
+        error:
+          type: object
+          properties:
+            code:
+              description: Код ошибки
+            desc:
+              description: Массив ошибок по атрибутам
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    description: Атрибут валидации
+                    type: string
+                  error:
+                    description: Описание ошибки
+                    type: string
   securitySchemes:
     Bearer:
       type: http
