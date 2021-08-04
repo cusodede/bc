@@ -183,10 +183,9 @@ trait ActiveRecordTrait {
 			}
 		}
 
+		/** @var Transaction $transaction */
+		$transaction = Yii::$app->db->beginTransaction();
 		try {
-			/** @var Transaction $transaction */
-			$transaction = Yii::$app->db->beginTransaction();
-
 			//При обновлении записи не будем лишний раз дергать проверку атрибутов, не заданных в `$values`.
 			$saveIsOk = $this->save(true, $this->isNewRecord ? null : array_keys($values));
 			if ($saveIsOk && method_exists($this, 'uploadAttribute')) {
