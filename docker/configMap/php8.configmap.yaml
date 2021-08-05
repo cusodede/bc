@@ -8,7 +8,7 @@ data:
    www.conf: |-
     [global]
     ; Log to stderr
-    error_log = /dev/stderr
+    error_log = /dev/stdout
 
     [www]
     ; The address on which to accept FastCGI requests.
