@@ -9,6 +9,7 @@ use app\modules\graphql\data\ErrorTypes;
 use app\modules\graphql\data\MutationTypes;
 use GraphQL\Type\Definition\Type;
 use app\modules\graphql\data\QueryTypes;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class PartnerMutationType
@@ -92,7 +93,14 @@ final class PartnerMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
 					'description' => 'Обновление партнера',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Partners $partner, array $args = []): array => $this->save($partner, $args, self::MESSAGES),
+					'resolve' => function(Partners $partner, array $args = []) {
+						$logo = ArrayHelper::getValue($args, 'logo');
+						if (null !== $logo && preg_match('/http(s)?:/', $logo)) {
+							unset($args['logo']);
+						}
+
+						return $this->save($partner, $args, self::MESSAGES);
+					},
 				],
 				'create' => [
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::partner()),
