@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\components\subscription;
 
+use app\components\helpers\Utils;
+use app\components\subscription\exceptions\ResourceUnavailableException;
 use app\modules\api\connectors\vet_expert\SubscriptionParams;
 use app\modules\api\connectors\vet_expert\VetExpertConnector;
 
@@ -43,7 +45,10 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doHealthcheck(): void
+	protected function serviceCheck(): void
 	{
+		if (!Utils::doUrlHealthCheck($this->_apiConnector->baseUrl)) {
+			throw new ResourceUnavailableException();
+		}
 	}
 }

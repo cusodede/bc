@@ -23,14 +23,14 @@ abstract class BaseSubscriptionHandler extends Component
 	 * Подключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
 	 * @param TicketProductSubscription $ticket
-	 * @param bool $healthcheck
+	 * @param bool $serviceCheck
 	 * @return string
 	 */
-	public function connect(TicketProductSubscription $ticket, bool $healthcheck = false): string
+	public function connect(TicketProductSubscription $ticket, bool $serviceCheck = false): string
 	{
 		$this->_ticket = $ticket;
-		if ($healthcheck) {
-			$this->doHealthcheck();
+		if ($serviceCheck) {
+			$this->serviceCheck();
 			return '';
 		}
 
@@ -67,7 +67,7 @@ abstract class BaseSubscriptionHandler extends Component
 	 * Данный метод будет вызываться в случае необходимости проверки возможности подключения подписки по абоненту.
 	 * Подразумевается, что в случае непрохождения проверок, кидается exception.
 	 */
-	abstract protected function doHealthcheck(): void;
+	abstract protected function serviceCheck(): void;
 
 	/**
 	 * Для различных полезных штук перед непосредственным запросом на подписку

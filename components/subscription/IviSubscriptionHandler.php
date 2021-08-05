@@ -57,12 +57,14 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	{
 		$purchaseId = $this->makePurchase();
 
+		$this->_ticket->logData(['purchaseId' => $purchaseId]);
+
 		//делаем повторный запрос на получение актуальной информации по подключенной подписке
 		$purchaseOptionsHandler = $this->callPurchaseOptions();
 
 		$purchaseData = $purchaseOptionsHandler->getPurchasesCollection()->extractById($purchaseId);
 		if (null === $purchaseData) {
-			throw new DomainException("Не удалось найти покупку с ID $purchaseId");
+			throw new DomainException("Не удалось определить подписку по ID $purchaseId");
 		}
 
 		return $purchaseData->getExpireDate();
@@ -109,16 +111,16 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doHealthcheck(): void
+	protected function serviceCheck(): void
 	{
-		$status = Utils::doUrlHealthcheck('http://box.ivi.ru:5000/sharing/Ab0QTzK4E');
-		if (true === $status) {
-			$this->initProductOptions();
-			if (null === $this->getProductPurchaseOptions()) {
-				throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
-			}
-		} else {
+		$status = Utils::doUrlHealthCheck($this->_apiConnector->baseUrl);
+		if (!$status) {
 			throw new ResourceUnavailableException();
+		}
+
+		$this->initProductOptions();
+		if (null === $this->getProductPurchaseOptions()) {
+			throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
 		}
 	}
 

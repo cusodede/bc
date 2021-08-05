@@ -16,6 +16,10 @@ class TicketProductSubscription extends TicketProductSubscriptionAR
 	public const ACTION_CONNECT_SUBSCRIPTION = 1;
 	public const ACTION_DISABLE_SUBSCRIPTION = 2;
 
+	public const OPERATION_SERVICE_CHECK = 1001;
+	public const OPERATION_BILLING_DEBIT = 1002;
+	public const OPERATION_CONNECT_ON_PARTNER = 1003;
+
 	/**
 	 * @param TicketProductSubscriptionParams $params
 	 * @return static
