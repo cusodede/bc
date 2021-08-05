@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 namespace app\components\helpers;
 
+use yii\bootstrap4\Html as Bs4Html;
+
 /**
  * Класс для генерации всяких стилистически преднастроенных элементов DOM.
  * Class Html
  * @package app\components\helpers
  */
-class Html extends \yii\bootstrap4\Html
+class Html extends Bs4Html
 {
 	/**
 	 * Генерация ссылки для подгрузки модалки через ModalHelperAsset.
@@ -34,7 +36,7 @@ class Html extends \yii\bootstrap4\Html
 	 * @param string $text
 	 * @return string
 	 */
-	public static function badgeDanger(string $text): string
+	public static function badgeError(string $text): string
 	{
 		return parent::tag('span', $text, ['class' => ['badge border border-danger text-danger']]);
 	}
