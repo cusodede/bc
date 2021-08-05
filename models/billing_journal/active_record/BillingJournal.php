@@ -9,7 +9,9 @@ use app\models\billing_journal\BillingJournalSearch;
 use app\models\products\active_record\Products;
 use app\components\db\ActiveRecordTrait;
 use Exception;
+use pozitronik\helpers\DateHelper;
 use pozitronik\helpers\Utils;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -20,7 +22,6 @@ use yii\db\ActiveRecord;
  * @property int $rel_abonents_to_products_id
  * @property string $price
  * @property int $status_id
- * @property string $try_date
  * @property string $created_at
  *
  * @property-read RelAbonentsToProducts $relatedAbonentsToProducts
@@ -45,13 +46,29 @@ class BillingJournal extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['!id', 'rel_abonents_to_products_id', 'status_id', 'try_date'], 'required'],
+			[['!id', 'rel_abonents_to_products_id', 'status_id'], 'required'],
 			[['rel_abonents_to_products_id', 'status_id'], 'integer'],
 			[['price'], 'number'],
-			[['try_date', 'created_at'], 'safe'],
+			[['created_at'], 'safe'],
 			[['!id'], 'string', 'max' => 36],
 			[['!id'], 'unique'],
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors():array {
+		return array_merge(parent::behaviors(), [
+			[
+				'class' => TimestampBehavior::class,
+				'createdAtAttribute' => 'created_at',
+				'updatedAtAttribute' => false,
+				'value' => static function($event) {
+					return DateHelper::lcDate();
+				}
+			]
+		]);
 	}
 
 	/**
@@ -65,21 +82,6 @@ class BillingJournal extends ActiveRecord
 		}
 
 		return parent::beforeValidate();
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function attributeLabels(): array
-	{
-		return [
-			'id'                          => 'ID',
-			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-			'price'                       => 'Величина списания',
-			'status_id'                   => 'Статус операции',
-			'try_date'                    => 'Дата операции',
-			'created_at'                  => 'Created At',
-		];
 	}
 
 	/**
@@ -104,5 +106,19 @@ class BillingJournal extends ActiveRecord
 	public function getRelatedProduct(): ActiveQuery
 	{
 		return $this->hasOne(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return [
+			'id'                          => 'ID',
+			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
+			'price'                       => 'Величина списания',
+			'status_id'                   => 'Статус операции',
+			'created_at'                  => 'Дата списания',
+		];
 	}
 }

@@ -266,7 +266,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getIsTechUser(): bool
 	{
-		//TODO добавить определение по типу пользователя в БД
-		return false;
+		return $this->hasPermission(['tech_rights']);
 	}
 }
