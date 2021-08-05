@@ -43,25 +43,13 @@ data:
 
             sendfile off;
 
-            root /var/www/ppl/web/dist;
+            root /var/www/ppl/web/;
             index index.php index.html;
             
             location / {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to index.php
                 try_files $uri $uri/ /index.php?q=$uri&$args;
-            }
-            location /web/ {
-                proxy_pass http://127.0.0.1:8081/;
-                # First attempt to serve request as file, then
-                # as directory, then fall back to index.php
-                #try_files $uri $uri/ /index.php?q=$uri&$args;
-            }
-            location /api {
-                proxy_pass http://127.0.0.1:8081;
-                # First attempt to serve request as file, then
-                # as directory, then fall back to index.php
-                #try_files $uri $uri/ /index.php?q=$uri&$args;
             }
             # Redirect server error pages to the static page /50x.html
             error_page 500 502 503 504 /50x.html;

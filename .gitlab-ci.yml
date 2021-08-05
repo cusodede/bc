@@ -118,7 +118,7 @@ apply_config_to_okd:
     - oc apply -f docker/configMap/php8.configmap.yaml
     - oc apply -f docker/configMap/supervisor.configmap.yaml
     - oc apply -f docker/deployment.yaml
-    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
+#    - oc tag harbor.vimpelcom.ru/prpl/prpl_deploy:${CI_COMMIT_SHA} prpl/prpl-deploy:${CI_COMMIT_BRANCH} --reference-policy=local
   only:
     refs:
       - master

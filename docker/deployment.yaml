@@ -38,7 +38,7 @@ spec:
       containers:
         - name: prpl-deploy
           image: >-
-            image-registry.openshift-image-registry.svc:5000/prpl/prpl-deploy@sha256:4260cb022fb34692b8ad9c8cee6582f462301a266776cd018338ed6b586df8c9
+            image-registry.openshift-image-registry.svc:5000/prpl/prpl-deploy:master
           ports:
             - containerPort: 8080
               protocol: TCP
