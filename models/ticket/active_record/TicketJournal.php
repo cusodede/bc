@@ -17,7 +17,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property string $id
  * @property string $ticket_id
- * @property int $procedure_code
+ * @property int $operation_code
  * @property int $status
  * @property array $user_data Специфические данные для конкретного статуса
  * @property string $created_at
@@ -29,9 +29,6 @@ class TicketJournal extends ActiveRecord
 	use ActiveRecordTrait;
 
 	public const CODE_CREATED = 1000;
-
-	public const CODE_SUBSCRIPTION_HEALTHCHECK = 1001;
-	public const CODE_SUBSCRIPTION_CONNECT_ON_PARTNER = 1002;
 
 	public const STATUS_OK    = 0;
 	public const STATUS_ERROR = 1;
@@ -50,8 +47,8 @@ class TicketJournal extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['!id', 'ticket_id', 'procedure_code', 'status'], 'required'],
-            [['procedure_code', 'status'], 'integer'],
+            [['!id', 'ticket_id', 'operation_code', 'status'], 'required'],
+            [['operation_code', 'status'], 'integer'],
             [['user_data', 'created_at'], 'safe'],
             [['!id', 'ticket_id'], 'string', 'max' => 36],
             [['!id'], 'unique'],
@@ -68,9 +65,7 @@ class TicketJournal extends ActiveRecord
 				'class' => TimestampBehavior::class,
 				'createdAtAttribute' => 'created_at',
 				'updatedAtAttribute' => false,
-				'value' => static function($event) {
-					return DateHelper::lcDate();
-				}
+				'value' => static fn($event) => DateHelper::lcDate()
 			]
 		]);
 	}
@@ -103,7 +98,7 @@ class TicketJournal extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'ticket_id' => 'Ticket ID',
-			'procedure_code' => 'Procedure Code',
+			'operation_code' => 'Operation Code',
 			'status' => 'Status',
 			'user_data' => 'User Data',
 			'created_at' => 'Created At',

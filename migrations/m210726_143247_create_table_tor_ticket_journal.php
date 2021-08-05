@@ -22,7 +22,7 @@ class m210726_143247_create_table_tor_ticket_journal extends Migration {
 		$this->createTable('ticket_journal', [
 			'id' => $this->char(36)->notNull(),
 			'ticket_id' => $this->char(36)->notNull(),
-			'procedure_code' => $this->integer()->notNull(),
+			'operation_code' => $this->integer()->notNull(),
 			'status' => $this->smallInteger()->notNull(),
 			'user_data' => $this->json()->comment('Специфические данные для конкретного статуса'),
 			'created_at' => $this->dateTime()->notNull()
