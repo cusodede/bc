@@ -26,7 +26,7 @@ abstract class BaseGrantType
 	{
 		$this->_request = $request;
 
-		if (null === $this->getUserAgent()) {
+		if ((null === $this->getUserAgent()) && !$this->getUser()->isTechUser) {
 			throw new BadRequestHttpException('User-agent is not provided.');
 		}
 	}

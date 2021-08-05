@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\base;
 
+use app\components\db\ActiveRecordTrait;
 use GraphQL\Type\Definition\ObjectType;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use Exception;
-use yii\base\InvalidArgumentException;
 
 /**
  * Class BaseMutationType
@@ -40,7 +40,7 @@ abstract class BaseMutationType extends ObjectType
 
 	/**
 	 * Сохранение модели для GraphQL
-	 * @param ActiveRecord $model
+	 * @param ActiveRecord|ActiveRecordTrait $model
 	 * @param array $attributes
 	 * @param array $messages
 	 * @return array
@@ -48,11 +48,7 @@ abstract class BaseMutationType extends ObjectType
 	 */
 	public function save(ActiveRecord $model, array $attributes, array $messages): array
 	{
-		if (null === $model) {
-			throw new InvalidArgumentException('Невозможно обнаружить соответствующую модель.');
-		}
-		$model->setAttributes($attributes);
-		return $this->getResult($model->save(), $model->getErrors(), $messages);
+		return $this->getResult($model->setAndSaveAttributes($attributes, true), $model->getErrors(), $messages);
 	}
 
 	/**

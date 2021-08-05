@@ -54,11 +54,11 @@ class DateTimeType extends ScalarType
 	/**
 	 * Преобразует входящее значение в формат по умолчанию.
 	 * @param mixed $value
-	 * @return DateTimeInterface|null
+	 * @return string|null
 	 */
-	public function parseValue($value): ?DateTimeInterface
+	public function parseValue($value): ?string
 	{
-		return DateTimeImmutable::createFromFormat(self::DEFAULT_FORMAT, $value) ?: null;
+		return DateTimeImmutable::createFromFormat(self::DEFAULT_FORMAT, $value)->format(self::DEFAULT_FORMAT) ?: null;
 	}
 
 	/**
