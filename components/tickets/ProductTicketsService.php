@@ -7,7 +7,7 @@ use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
 use app\models\ticket\TicketProductSubscription;
 use app\models\ticket\TicketProductSubscriptionParams;
-use app\modules\api\resources\formatters\TicketProductSubscriptionFormatter;
+use app\modules\api\resources\formatters\TicketSubscriptionFormatter;
 use Throwable;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -80,6 +80,6 @@ class ProductTicketsService
 			throw new NotFoundHttpException("Can't find the ticket by id $ticketId");
 		}
 
-		return (new TicketProductSubscriptionFormatter())->format($ticket);
+		return (new TicketSubscriptionFormatter())->format($ticket);
 	}
 }

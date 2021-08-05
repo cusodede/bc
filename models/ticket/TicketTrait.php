@@ -168,4 +168,9 @@ trait TicketTrait
 	{
 		return null !== $this->relatedTicket->completed_at;
 	}
+
+	public function extractErrorDescriptionFromJournal(): ?string
+	{
+		return ArrayHelper::getValue($this->relatedLastTicketJournal->user_data, 'error.userMessage');
+	}
 }

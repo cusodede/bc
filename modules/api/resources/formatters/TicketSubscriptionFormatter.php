@@ -8,10 +8,10 @@ use app\models\ticket\TicketProductSubscription;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class TicketProductSubscriptionFormatter
+ * Class TicketSubscriptionFormatter
  * @package app\modules\api\resources\formatters
  */
-class TicketProductSubscriptionFormatter
+class TicketSubscriptionFormatter
 {
 	/**
 	 * @param TicketProductSubscription $ticket
@@ -26,7 +26,7 @@ class TicketProductSubscriptionFormatter
 					if ($ticket->isCompleted) {
 						return TicketJournal::STATUS_OK === $ticket->relatedLastTicketJournal->status
 							? ['code' => 'success']
-							: ['code' => 'error', 'desc' => ''/** TODO add description*/ ];
+							: ['code' => 'error', 'desc' => $ticket->extractErrorDescriptionFromJournal()];
 					}
 
 					return ['code' => 'in_progress'];
