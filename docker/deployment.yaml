@@ -1,6 +1,9 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+     [{"from":{"kind":"ImageStreamTag","name":"prpl-deploy:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-deploy\")].image","pause":"false"}]
   name: prpl-deploy
   namespace: prpl
   labels:
