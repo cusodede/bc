@@ -37,13 +37,12 @@ data:
 
     	# Default server definition
     	server {
-            listen [::]:8080 default_server;
             listen 8080 default_server;
             server_name _;
 
             sendfile off;
 
-            root /var/www/ppl/web/;
+            root /var/www/ppl/web/dist;
             index index.php index.html;
             
             location / {
@@ -89,7 +88,7 @@ data:
     	}
 
     	server {
-            listen 8081;
+            listen 8081 default_server;
             server_name _;
 
             sendfile off;
