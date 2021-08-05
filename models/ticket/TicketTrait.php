@@ -3,9 +3,13 @@ declare(strict_types = 1);
 
 namespace app\models\ticket;
 
+use app\components\exceptions\ExtendedThrowable;
 use app\components\helpers\DateHelper;
 use app\models\ticket\active_record\TicketJournal;
+use Exception;
+use Throwable;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property-read bool $isConnectNeeded
@@ -14,19 +18,100 @@ use yii\db\ActiveQuery;
 trait TicketTrait
 {
 	/**
+	 * @var array массив шагов.
+	 */
+	private array $_journal = [];
+	/**
+	 * @var int индекс текущего шага в `$_journal`
+	 */
+	private int $_stageIndex = -1;
+
+	/**
+	 * @param int $operationCode
+	 */
+	public function startStage(int $operationCode): void
+	{
+		$this->_journal[] = ['operationCode' => $operationCode, 'created' => DateHelper::lcDate(), 'status' => TicketJournal::STATUS_OK];
+
+		$this->_stageIndex++;
+	}
+
+	/**
+	 * @param array $data
+	 * @throws Exception
+	 */
+	public function logData(array $data): void
+	{
+		$currData = ArrayHelper::getValue($this->_journal[$this->_stageIndex], 'userData', []);
+
+		$this->_journal[$this->_stageIndex]['userData'] = ArrayHelper::merge($currData, $data);
+	}
+
+	/**
+	 * @param ExtendedThrowable|null $e
+	 * @throws Exception
+	 */
+	public function markStageFailed(?Throwable $e = null): void
+	{
+		$this->_journal[$this->_stageIndex]['status'] = TicketJournal::STATUS_ERROR;
+		if (null !== $e) {
+			
+			$this->logData(['error' => $this->transformException($e)]);
+		}
+	}
+
+	/**
+	 * Преобразование исключения в массив для записи в лог.
+	 * @param Throwable $e
+	 * @return array
+	 */
+	public function transformException(Throwable $e): array
+	{
+		$errorData = [
+			'code'        => $e->getCode(),
+			'baseMessage' => $e->getMessage(),
+			'userMessage' => ''
+		];
+
+		if ($e instanceof ExtendedThrowable) {
+			$errorData['code']        = $e->getErrorCode();
+			$errorData['userMessage'] = $e->getUserFriendlyMessage();
+		}
+
+		return $errorData;
+	}
+
+	public function close(): void
+	{
+		foreach ($this->_journal as $statusInfo) {
+			$this->pushStatus(
+				$statusInfo['operationCode'],
+				$statusInfo['status'],
+				ArrayHelper::getValue($statusInfo, 'changedBy'),
+				ArrayHelper::getValue($statusInfo, 'userData', [])
+			);
+		}
+
+		$this->_journal    = [];
+		$this->_stageIndex = -1;
+
+		$this->makeComplete();
+	}
+
+	/**
 	 * @param int $code
 	 * @param int $status
 	 * @param int|null $changedBy
-	 * @param array|null $userData
+	 * @param array $userData
 	 */
-	public function pushStatus(int $code, int $status, ?int $changedBy = null, ?array $userData = null): void
+	public function pushStatus(int $code, int $status, ?int $changedBy = null, array $userData = []): void
 	{
 		if (null !== $changedBy) {
-			$userData['changed_by'] = $changedBy;
+			$userData['changedBy'] = $changedBy;
 		}
 
 		$ticketJournal = new TicketJournal([
-			'procedure_code' => $code,
+			'operation_code' => $code,
 			'status'         => $status,
 			'user_data'      => $userData
 		]);
