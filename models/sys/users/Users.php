@@ -263,6 +263,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @return bool флаг, является ли учетка технической или нет (для приложений типа Мой Билайн и т.д.)
+	 * @throws Throwable
 	 */
 	public function getIsTechUser(): bool
 	{
