@@ -54,7 +54,7 @@ final class PartnerType extends BaseQueryType
 				'logo' => [
 					'type' => Type::string(),
 					'description' => 'Логотип партнёра',
-					'resolve' => fn(Partners $partner) => PartnersController::to('get-logo', ['id' => $partner->id], true)
+					'resolve' => fn(Partners $partner) => PartnersController::to('get-logo', ['id' => $partner->id])
 				],
 				'category' => [
 					'type' => QueryTypes::partnerCategory(),
