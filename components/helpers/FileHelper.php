@@ -35,7 +35,7 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createTmpFromRaw(string $data): string
 	{
-		\pozitronik\helpers\Utils::fileLog($data);
+		\pozitronik\helpers\Utils::fileLog('Старт');
 		preg_match('/base64,(.+)/', $data, $matches);
 		if (isset($matches[1])) {
 			$data = base64_decode(trim($matches[1]));
@@ -43,6 +43,7 @@ class FileHelper extends YiiFileHelper
 				\pozitronik\helpers\Utils::fileLog('Хрень какая-то');
 				throw new RuntimeException('Unable to decode base64 string');
 			}
+			\pozitronik\helpers\Utils::fileLog('Дата успешно декодирована');
 		} else {
 			\pozitronik\helpers\Utils::fileLog('Base64 отсутствует');
 		}
