@@ -58,6 +58,10 @@ data:
                 proxy_pass http://localhost:8081;
                 proxy_redirect off;
             }
+            location /partners/get-logo {
+                proxy_pass http://localhost:8081;
+                proxy_redirect off;
+            }
             # Redirect server error pages to the static page /50x.html
             error_page 500 502 503 504 /50x.html;
             location = /50x.html {
