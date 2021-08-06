@@ -79,8 +79,8 @@ spec:
                 mountPath: "/tmp"
                 subPath: tmp
               - name: prpl
-                mountPath: "/var/www/ppl/web/upload"
-                subPath: upload               
+                mountPath: "/var/www/ppl/web/uploads"
+                subPath: uploads               
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
