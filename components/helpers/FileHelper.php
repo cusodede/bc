@@ -35,12 +35,16 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createTmpFromRaw(string $data): string
 	{
+		\pozitronik\helpers\Utils::log('Старт');
 		preg_match('/base64,(.+)/', $data, $matches);
 		if (isset($matches[1])) {
 			$data = base64_decode(trim($matches[1]));
 			if (false === $data) {
+				\pozitronik\helpers\Utils::log('Хрень какая-то');
 				throw new RuntimeException('Unable to decode base64 string');
 			}
+		} else {
+			\pozitronik\helpers\Utils::log('Base64 отсутствует');
 		}
 
 		$extension = self::getExtensionsByMimeType(self::getRawMimeType($data));
@@ -52,7 +56,10 @@ class FileHelper extends YiiFileHelper
 		$path = self::getTmpDir() . DIRECTORY_SEPARATOR . $name . ($extension ? ".$extension" : '');
 
 		if ($path && ($fp = fopen($path, 'wb+')) && fwrite($fp, $data) && fclose($fp)) {
+			\pozitronik\helpers\Utils::log("$path сохранился");
 			return $path;
+		} else {
+			\pozitronik\helpers\Utils::log('Файл не сохранился');
 		}
 
 		throw new RuntimeException("Can't access temp file $path!");
