@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\query\extended;
 
+use app\controllers\PartnersController;
 use app\models\partners\Partners;
 use app\models\partners\PartnersSearch;
 use app\modules\graphql\base\BaseQueryType;
@@ -53,6 +54,7 @@ final class PartnerType extends BaseQueryType
 				'logo' => [
 					'type' => Type::string(),
 					'description' => 'Логотип партнёра',
+					'resolve' => fn(Partners $partner) => PartnersController::to('get-logo', ['id' => $partner->id])
 				],
 				'category' => [
 					'type' => QueryTypes::partnerCategory(),
