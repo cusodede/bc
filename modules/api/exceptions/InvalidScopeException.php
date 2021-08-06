@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\exceptions;
 
+use app\components\exceptions\ExtendedThrowable;
 use Throwable;
 use yii\base\UserException;
 
@@ -10,7 +11,7 @@ use yii\base\UserException;
  * Class InvalidScopeException
  * @package app\modules\api\exceptions
  */
-class InvalidScopeException extends UserException implements ApiExceptionInterface
+class InvalidScopeException extends UserException implements ExtendedThrowable
 {
 	/**
 	 * InvalidScopeException constructor.
@@ -27,5 +28,13 @@ class InvalidScopeException extends UserException implements ApiExceptionInterfa
 	public function getErrorCode(): string
 	{
 		return 'ERR_SCOPE';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getUserFriendlyMessage(): string
+	{
+		return '';
 	}
 }

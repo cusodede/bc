@@ -7,12 +7,13 @@ use app\components\tickets\ProductTicketsService;
 use app\models\abonents\Abonents;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
-use app\modules\api\models\SubscribeProductTicketForm;
-use app\modules\api\models\UnsubscribeProductTicketForm;
+use app\modules\api\models\ConnectSubscriptionTicketForm;
+use app\modules\api\models\DisableSubscriptionTicketForm;
 use app\modules\api\resources\formatters\ProductStoryFormatter;
 use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
 use Exception;
+use Throwable;
 use Yii;
 use yii\base\InvalidRouteException;
 use yii\filters\ContentNegotiator;
@@ -116,42 +117,45 @@ class ProductsController extends YiiRestController
 	 * Подключение подписки.
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
+	 * @throws Throwable
 	 */
-	public function actionSubscribe(): array
+	public function actionConnect(): array
 	{
-		$form = new SubscribeProductTicketForm();
+		$form = new ConnectSubscriptionTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new ProductTicketsService())->subscribe($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new ProductTicketsService())->createSubscribeTicket($form->productId, $form->abonent->id)];
 	}
 
 	/**
 	 * Отключение подписки.
 	 * @return array идентификатор созданного тикета.
 	 * @throws ValidationException
+	 * @throws Throwable
 	 */
-	public function actionUnsubscribe(): array
+	public function actionDisable(): array
 	{
-		$form = new UnsubscribeProductTicketForm();
+		$form = new DisableSubscriptionTicketForm();
 		$form->load(Yii::$app->request->post(), '');
 		if (!$form->validate()) {
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new ProductTicketsService())->unsubscribe($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new ProductTicketsService())->createUnsubscribeTicket($form->productId, $form->abonent->id)];
 	}
 
 	/**
 	 * Получение статуса обработки тикета.
 	 * @param string $ticketId идентификатор тикета.
 	 * @return array
+	 * @throws NotFoundHttpException
 	 */
-	public function actionGetTicketStatus(string $ticketId): array
+	public function actionTicketStatus(string $ticketId): array
 	{
-		return (new ProductTicketsService())->getTicketStatus($ticketId)->toArray();
+		return ProductTicketsService::getTicketStatus($ticketId);
 	}
 
 	/**
@@ -160,10 +164,11 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'list'        => ['GET'],
-			'one'         => ['GET'],
-			'subscribe'   => ['POST'],
-			'unsubscribe' => ['POST']
+			'list'          => ['GET'],
+			'one'           => ['GET'],
+			'ticket-status' => ['GET'],
+			'subscribe'     => ['POST'],
+			'unsubscribe'   => ['POST']
 		];
 	}
 }
