@@ -31,11 +31,9 @@ data:
     startretries=0
 
     [program:yii-queue-worker]
-    process_name=%(program_name)s_%(process_num)02d
+    process_name=%(program_name)s
     command=/usr/bin/php /var/www/ppl/yii product-tickets-queue/listen --verbose=1 --color=0
     autostart=true
     autorestart=true
-    user=root
-    numprocs=1
     redirect_stderr=true
     stdout_logfile=/var/www/ppl/runtime/logs/yii-product-tickets-queue.log
