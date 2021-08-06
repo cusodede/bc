@@ -38,9 +38,9 @@ RUN apk --no-cache add \
 #COPY docker/base/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ARG COMPOSER_TOKEN
 WORKDIR /var/www/ppl/
-COPY composer.json /var/www/ppl/
-RUN composer config -g github-oauth.github.com ${COMPOSER_TOKEN}
-RUN composer install --ignore-platform-reqs --no-dev
+#COPY composer.json /var/www/ppl/
+#RUN composer config -g github-oauth.github.com ${COMPOSER_TOKEN}
+#RUN composer install --ignore-platform-reqs --no-dev
 
 EXPOSE 8080
 EXPOSE 8081
