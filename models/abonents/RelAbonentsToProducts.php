@@ -5,6 +5,7 @@ namespace app\models\abonents;
 
 use app\models\abonents\active_record\RelAbonentsToProducts as ActiveRecordRelAbonentsToProducts;
 use app\models\billing_journal\BillingJournal;
+use app\models\products\EnumProductsStatuses;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
 use yii\db\ActiveQuery;
@@ -65,5 +66,33 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	public function getRelatedBillingJournal(): ActiveQuery
 	{
 		return $this->hasMany(BillingJournal::class, ['rel_abonents_to_products_id' => 'id']);
+	}
+
+	/**
+	 * Запись в журнал информации о продлении подписки.
+	 * @param string $expireDate
+	 */
+	public function enable(string $expireDate): void
+	{
+		$config['expire_date'] = $expireDate;
+		if (null === $this->relatedLastProductsJournal) {
+			$config = ['status_id' => EnumProductsStatuses::STATUS_ENABLED];
+		} else {
+			$config = ['status_id' => EnumProductsStatuses::STATUS_RENEWED];
+		}
+
+		$this->relatedLastProductsJournal = new ProductsJournal($config);
+	}
+
+	/**
+	 * Запись в журнал информации о деактивации подписки.
+	 * Предусмотрено несколько вариантов блокировки подписки (недостаточно денег, запрос от клиента и т.д.).
+	 * @param int $statusId
+	 */
+	public function disable(int $statusId = EnumProductsStatuses::STATUS_DISABLED): void
+	{
+		$config = ['status_id' => $statusId, 'expire_date' => $this->relatedLastProductsJournal->expire_date];
+
+		$this->relatedLastProductsJournal = new ProductsJournal($config);
 	}
 }

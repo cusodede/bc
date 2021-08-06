@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\exceptions;
 
+use app\components\exceptions\ExtendedThrowable;
 use Throwable;
 use yii\base\UserException;
 
@@ -10,7 +11,7 @@ use yii\base\UserException;
  * Class ValidationException
  * @package app\modules\api\exceptions
  */
-class ValidationException extends UserException implements ApiExceptionInterface
+class ValidationException extends UserException implements ExtendedThrowable
 {
 	private array $_errors;
 
@@ -32,6 +33,14 @@ class ValidationException extends UserException implements ApiExceptionInterface
 	public function getErrorCode(): string
 	{
 		return 'ERR_VALIDATION';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getUserFriendlyMessage(): string
+	{
+		return '';
 	}
 
 	/**
