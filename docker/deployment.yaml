@@ -55,6 +55,9 @@ spec:
             - name:  YII_ENV
               value: 'prod'
           terminationMessagePolicy: File
+          envFrom:
+            - secretRef:
+                name: prpldb
           imagePullPolicy: IfNotPresent
           volumeMounts:
               - name: prpl-php8
@@ -72,6 +75,12 @@ spec:
               - name: prpl
                 mountPath: "/var/www/ppl/runtime"
                 subPath: runtime
+              - name: prpl
+                mountPath: "/tmp"
+                subPath: tmp
+              - name: prpl
+                mountPath: "/var/www/ppl/web/upload"
+                subPath: upload               
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
