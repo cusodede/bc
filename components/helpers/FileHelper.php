@@ -9,6 +9,7 @@ use yii\helpers\FileHelper as YiiFileHelper;
 use yii\web\UploadedFile;
 use RuntimeException;
 use finfo;
+use Throwable;
 
 /**
  * Class FileHelper
@@ -77,7 +78,7 @@ class FileHelper extends YiiFileHelper
 		try {
 			\pozitronik\helpers\Utils::fileLog($str, "getRawMimeType");
 			return (new finfo(FILEINFO_MIME_TYPE))->buffer($str);
-		} catch ($t) {
+		} catch (Throwable $t) {
 			\pozitronik\helpers\Utils::fileLog('ALARM!!!!!', "getRawMimeType");
 		}
 		
