@@ -7,7 +7,7 @@ metadata:
 data:
   supervisord.conf: |-
     [supervisord]
-    nodaemon=true
+    nodaemon=false
     logfile=/dev/null
     logfile_maxbytes=0
     pidfile=/run/supervisord.pid
