@@ -1,6 +1,9 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+     [{"from":{"kind":"ImageStreamTag","name":"prpl-deploy:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-deploy\")].image","pause":"false"}]
   name: prpl-deploy
   namespace: prpl
   labels:
@@ -41,6 +44,8 @@ spec:
             image-registry.openshift-image-registry.svc:5000/prpl/prpl-deploy:master
           ports:
             - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8081
               protocol: TCP
           resources: {}
           terminationMessagePath: /dev/termination-log

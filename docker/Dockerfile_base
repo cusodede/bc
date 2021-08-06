@@ -43,6 +43,7 @@ RUN composer config -g github-oauth.github.com ${COMPOSER_TOKEN}
 RUN composer install --ignore-platform-reqs --no-dev
 
 EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["/usr/bin/supervisord"]
 # Let supervisord start nginx & php-fpm
 CMD ["-c", "/etc/supervisor/conf.d/supervisord.conf"]
