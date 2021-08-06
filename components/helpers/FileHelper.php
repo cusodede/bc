@@ -47,7 +47,7 @@ class FileHelper extends YiiFileHelper
 		} else {
 			\pozitronik\helpers\Utils::fileLog('Base64 отсутствует');
 		}
-
+\pozitronik\helpers\Utils::fileLog("Перед self::getRawMimeType");
 		$extension = self::getExtensionsByMimeType(self::getRawMimeType($data));
 		\pozitronik\helpers\Utils::fileLog($extension);
 		//т.к. mime тип может иметь несколько соответствий с доступными расширениями,
@@ -74,7 +74,13 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function getRawMimeType(string $str): string
 	{
-		return (new finfo(FILEINFO_MIME_TYPE))->buffer($str);
+		try {
+			\pozitronik\helpers\Utils::fileLog($str, "getRawMimeType");
+			return (new finfo(FILEINFO_MIME_TYPE))->buffer($str);
+		} catch ($t) {
+			\pozitronik\helpers\Utils::fileLog('ALARM!!!!!', "getRawMimeType");
+		}
+		
 	}
 
 	/**
