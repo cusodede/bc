@@ -35,7 +35,7 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createTmpFromRaw(string $data): string
 	{
-		\pozitronik\helpers\Utils::fileLog('Старт');
+		\pozitronik\helpers\Utils::fileLog($data);
 		preg_match('/base64,(.+)/', $data, $matches);
 		if (isset($matches[1])) {
 			$data = base64_decode(trim($matches[1]));
