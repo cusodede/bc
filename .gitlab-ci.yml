@@ -25,7 +25,7 @@ build_base:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest --build-arg COMPOSER_TOKEN=${COMPOSER_TOKEN}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_base:latest
   only:
     refs:
       - master
@@ -54,7 +54,7 @@ build_back:
        fi
        KANIKOCFG="${KANIKOCFG} }"
        echo "${KANIKOCFG}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_SHA}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/$dockerfile_path $KANIKOPROXYBUILDARGS --destination ${CI_REGISTRY_IMAGE}_back:${CI_COMMIT_SHA} --build-arg COMPOSER_TOKEN=${COMPOSER_TOKEN}
   only:
     - master
   tags:
