@@ -38,4 +38,4 @@ data:
     user=root
     numprocs=1
     redirect_stderr=true
-    stdout_logfile=/dev/stdout/yii-product-tickets-queue.log
+    stdout_logfile=/var/www/ppl/runtime/logs/yii-product-tickets-queue.log
