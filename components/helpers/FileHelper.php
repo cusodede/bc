@@ -35,8 +35,8 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function createTmpFromRaw(string $data): string
 	{
-		\pozitronik\helpers\Utils::fileLog('Старт');
 		preg_match('/base64,(.+)/', $data, $matches);
+		
 		if (isset($matches[1])) {
 			$data = base64_decode(trim($matches[1]));
 			if (false === $data) {
@@ -47,22 +47,23 @@ class FileHelper extends YiiFileHelper
 		} else {
 			\pozitronik\helpers\Utils::fileLog('Base64 отсутствует');
 		}
-
+\pozitronik\helpers\Utils::fileLog("Перед self::getRawMimeType");
 		$extension = self::getExtensionsByMimeType(self::getRawMimeType($data));
+		\pozitronik\helpers\Utils::fileLog($extension);
 		//т.к. mime тип может иметь несколько соответствий с доступными расширениями,
 		//имеет смысл предусмотреть приоритизацию расширений.
 		$extension = self::findPreferredExtension($extension);
 
 		$name = uniqid((string) mt_rand(), true);
 		$path = self::getTmpDir() . DIRECTORY_SEPARATOR . $name . ($extension ? ".$extension" : '');
-
+		\pozitronik\helpers\Utils::fileLog($path);
 		if ($path && ($fp = fopen($path, 'wb+')) && fwrite($fp, $data) && fclose($fp)) {
 			\pozitronik\helpers\Utils::fileLog("$path сохранился");
 			return $path;
 		} else {
 			\pozitronik\helpers\Utils::fileLog('Файл не сохранился');
 		}
-
+		\pozitronik\helpers\Utils::fileLog('ALARM!!!!!');
 		throw new RuntimeException("Can't access temp file $path!");
 	}
 
@@ -73,7 +74,13 @@ class FileHelper extends YiiFileHelper
 	 */
 	public static function getRawMimeType(string $str): string
 	{
-		return (new finfo(FILEINFO_MIME_TYPE))->buffer($str);
+		try {
+			\pozitronik\helpers\Utils::fileLog($str, "getRawMimeType");
+			return (new finfo(FILEINFO_MIME_TYPE))->buffer($str);
+		} catch ($t) {
+			\pozitronik\helpers\Utils::fileLog('ALARM!!!!!', "getRawMimeType");
+		}
+		
 	}
 
 	/**
