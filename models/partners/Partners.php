@@ -32,15 +32,15 @@ class Partners extends ActiveRecordPartners
 	public function rules(): array
 	{
 		return array_merge(parent::rules(), [
-//			[['logo'], ImageValidator::class,
-//				'skipOnEmpty' => false,
-//				'extensions'  => 'png, svg, jpg, jpeg',
-//				'maxSize'     => 1024 * 1024,
-//				'minHeight'   => 300,
-//				'maxHeight'   => 300,
-//				'minWidth'    => 300,
-//				'maxWidth'    => 300
-//			],
+			[['logo'], ImageValidator::class,
+				'skipOnEmpty' => false,
+				'extensions'  => 'png, svg, jpg, jpeg',
+				'maxSize'     => 1024 * 1024,
+				'minHeight'   => 300,
+				'maxHeight'   => 300,
+				'minWidth'    => 300,
+				'maxWidth'    => 300
+			],
 		]);
 	}
 
