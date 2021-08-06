@@ -10,6 +10,8 @@ use yii\httpclient\CurlTransport;
 /**
  * Class BaseConnector
  * @package app\modules\api\connectors
+ *
+ * @property-read string $baseUrl
  */
 abstract class BaseHttpConnector extends Component
 {
@@ -32,5 +34,13 @@ abstract class BaseHttpConnector extends Component
 	protected function getClient(): Client
 	{
 		return $this->_httpClient;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBaseUrl(): string
+	{
+		return $this->_httpClient->baseUrl;
 	}
 }

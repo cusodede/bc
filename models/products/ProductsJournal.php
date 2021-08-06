@@ -78,7 +78,7 @@ class ProductsJournal extends ActiveRecordProductsJournal
 	 */
 	public function getIsDisabled(): bool
 	{
-		return EnumProductsStatuses::STATUS_DISABLED === $this->status_id;
+		return EnumProductsStatuses::isInactive($this->status_id);
 	}
 
 	/**

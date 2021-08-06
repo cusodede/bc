@@ -5,6 +5,8 @@ declare(strict_types = 1);
 if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR . basename(__FILE__))) return require $localConfig;
 
 use app\assets\SmartAdminThemeAssets;
+use app\components\queue\DbQueue;
+use app\components\queue\JobIdHandlingBehavior;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\api\ApiModule;
@@ -29,6 +31,7 @@ use yii\caching\FileCache;
 use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
 use yii\log\FileTarget;
+use yii\mutex\MysqlMutex;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
 
@@ -41,7 +44,7 @@ $config = [
 	'name' => 'Beeline Cabinet',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log', 'history'],
+	'bootstrap' => ['log', 'history', 'productTicketsQueue'],
 	'homeUrl' => '/users/profile',//<== строка, не массив
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
@@ -167,6 +170,15 @@ $config = [
 			'class' => Jwt::class,
 			'signer' => Jwt::HS256,
 			'signerKey' => 'testkey'
+		],
+		'productTicketsQueue' => [
+			'class' => DbQueue::class,
+			'db' => 'db', // DB connection component or its config
+			'tableName' => '{{%queue}}', // Table name
+			'channel' => 'product_ticket', // Queue channel key
+			'mutex' => MysqlMutex::class, // Mutex used to sync queries
+			'deleteReleased' => false,
+			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
 		]
 	],
 	'params' => $params,

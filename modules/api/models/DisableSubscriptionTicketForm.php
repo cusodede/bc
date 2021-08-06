@@ -4,14 +4,14 @@ declare(strict_types = 1);
 namespace app\modules\api\models;
 
 /**
- * Class UnsubscribeProductTicketForm
+ * Class DisableSubscriptionTicketForm
  * @package app\modules\api\models
  */
-class UnsubscribeProductTicketForm extends ProductTicketForm
+class DisableSubscriptionTicketForm extends ProductTicketForm
 {
 	public function validateProductActivity(): void
 	{
-		if ($this->product->actualStatus->isDisabled) {
+		if ((null === $this->product) || (null === $this->product->actualStatus) || $this->product->actualStatus->isDisabled) {
 			$this->addError('productId', 'Отключение продукта невозможно.');
 		}
 	}
