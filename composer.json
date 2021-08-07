@@ -57,7 +57,8 @@
 		"codeception/module-yii2": "^1.1",
 		"codeception/module-db": "^1.1",
 		"codeception/module-filesystem": "^1.0",
-		"vlucas/phpdotenv": "^4"
+		"vlucas/phpdotenv": "^4",
+		"phpmetrics/phpmetrics": "^2.7"
 	},
 	"config": {
 		"process-timeout": 1800,
@@ -74,7 +75,8 @@
 			"yii\\composer\\Installer::postInstall"
 		],
 		"test": "phpunit",
-		"codeception": "vendor/bin/codecept run"
+		"codeception": "vendor/bin/codecept run",
+		"metrics": "vendor/bin/phpmetrics --config=phpmetrics.json"
 	},
 	"extra": {
 		"yii\\composer\\Installer::postCreateProject": {
