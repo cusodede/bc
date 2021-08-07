@@ -23,8 +23,8 @@ use yii\web\JsExpression;
  * @property ActiveRecord $model Перекрываем описание атрибута модели
  * @property array $exclude Записи, исключаемые из выборки. Массив id, либо массив элементов
  * @property ActiveQuery $selectionQuery Переопределение запроса, если нужны какие-то модификации, но не нужно передавать данные в $data
- * @property string $mapAttribute Названия атрибута, который будет отображаться на выбиралку
- * @property string $searchAttribute Поле по, которому будет производиться поиск. Если не передан, то поиск будет
+ * @property string $mapAttribute Название атрибута, который будет отображаться на выбиралку
+ * @property string $searchAttribute Поле по которому будет производиться поиск. Если не передан, то поиск будет
  * производиться по $mapAttribute
  * @property string $concatFields Список полей для конкатенации ответа. Например, ФИО хранится в 3 полей, ищем по
  * фамилию. Поиск должен вернуть только фамилию, но передав тут 'surname, name, patronymic', получим полное ФИО
@@ -71,7 +71,7 @@ class SelectModelWidget extends Select2 {
 	private function initAjaxValueText() {
 		if (null !== $this->initValueText) return $this->initValueText;//параметр задан через конфигурацию, ничего вычислять не надо
 		/*Вычисляем весь скоуп данных с фильтрацией по текущему значению*/
-		$this->initData($this->value);
+		$this->initData($this->value??[]);
 		return $this->data;
 	}
 
@@ -148,7 +148,8 @@ class SelectModelWidget extends Select2 {
 			throw new InvalidConfigException("{$this->selectModel} must have primary key and it should not be composite");
 		}
 
-		$this->options['id'] = isset($this->options['id'])?$this->options['id'].$this->model->primaryKey:Html::getInputId($this->model, $this->attribute).$this->model->primaryKey;
+		$this->options['id'] = $this->options['id']??Html::getInputId($this->model, $this->attribute);
+		$this->options['id'] .= property_exists($this->model, 'primaryKey')?$this->model->primaryKey:random_int(0, 1000);
 
 		/*В зависимости от режима работы AJAX/LOAD настраиваем виджет и генерируем выводимый список*/
 		switch ($this->loadingMode) {

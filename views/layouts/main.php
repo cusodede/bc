@@ -13,7 +13,12 @@ use app\controllers\UsersController;
 use app\widgets\search\SearchWidget;
 use pozitronik\helpers\Utils;
 use yii\bootstrap4\Html;
+use yii\helpers\ArrayHelper;
 use yii\web\View;
+
+if (true === (bool)ArrayHelper::getValue(Yii::$app, 'user.identity.is_pwd_outdated')) {
+	Yii::$app->response->redirect(SiteController::to('update-password'));
+}
 
 AppAsset::register($this);
 ModalHelperAsset::register($this);

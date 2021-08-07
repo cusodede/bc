@@ -21,7 +21,8 @@ $modelName = $model->formName();
 		'subItem' => 'id'
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?= $this->render('../view', compact('model')) ?>

@@ -9,6 +9,7 @@ use pozitronik\helpers\ArrayHelper;
 use pozitronik\traits\traits\ActiveRecordTrait as VendorActiveRecordTrait;
 use Throwable;
 use Yii;
+use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
@@ -59,7 +60,7 @@ trait ActiveRecordTrait {
 	}
 
 	/**
-	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param array $errors Возвращаемый список ошибок.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
 	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
@@ -117,19 +118,20 @@ trait ActiveRecordTrait {
 
 	/**
 	 * Валидация для ajax-validation
+	 * todo: это не относится к ActiveRecord, метод будет работать для любой Model
 	 * @return null|array
 	 * @throws Throwable
 	 */
 	public function validateModelFromPost():?array {
 		if ($this->load(Yii::$app->request->post())) {
-			/** @var ActiveRecord $this */
+			/** @var Model $this */
 			return ActiveForm::validate($this);
 		}
 		return null;
 	}
 
 	/**
-	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param array $errors Возвращаемый список ошибок.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
 	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
@@ -207,6 +209,7 @@ trait ActiveRecordTrait {
 	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
 	 * @param array $attributes
 	 * @return static
+	 * TODO: нелогичное название. upsert подразумевает "если нет - создать, если есть - обновить"
 	 */
 	public static function Upsert(array $attributes):self {
 		if (null === $model = self::find()->where($attributes)->one()) {

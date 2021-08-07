@@ -112,9 +112,9 @@ class UsersController extends DefaultController {
 
 	/**
 	 * @param int|null $id
-	 * @throws NotFoundHttpException
-	 * @throws ForbiddenHttpException
 	 * @return Response
+	 * @throws ForbiddenHttpException
+	 * @throws NotFoundHttpException
 	 */
 	public function actionLogoGet(?int $id = null):Response {
 		$user = null === $id?Users::Current():Users::findOne($id);

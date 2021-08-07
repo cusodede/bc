@@ -99,14 +99,14 @@ class Notifications extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedReceiver():?ActiveQuery {
+	public function getRelatedReceiver():ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'receiver']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedInitiator():?ActiveQuery {
+	public function getRelatedInitiator():ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'initiator']);
 	}
 
@@ -217,6 +217,7 @@ class Notifications extends ActiveRecord {
 	 * @throws ForbiddenHttpException
 	 */
 	public static function UserNotifications(?int $receiver = null):array {
+		if (Yii::$app->user->isGuest) return [];
 		if (null === $receiver) $receiver = Users::Current()->id;
 		return self::find()->where(['receiver' => $receiver, 'type' => self::TYPE_DEFAULT])->all();
 	}

@@ -18,7 +18,6 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string|null $name Название доступа
-
  * @property string|null $controller Контроллер, к которому устанавливается доступ, null для внутреннего доступа
  * @property string|null $action Действие, для которого устанавливается доступ, null для всех действий контроллера
  * @property string|null $verb REST-метод, для которого устанавливается доступ

@@ -27,7 +27,8 @@ $modelName = $model->formName();
 		'form' => "{$modelName}-modal-create"
 	]),//post button outside the form
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(
