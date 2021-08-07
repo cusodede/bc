@@ -3,7 +3,7 @@
 		"."
 	],
 	"exclude": [
-		"tests", "vendor"
+		"tests", "vendor", "migrations"
 	],
 	"report": {
 		"html": "report/",
