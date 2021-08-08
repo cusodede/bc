@@ -10,26 +10,13 @@ declare(strict_types = 1);
 use kartik\form\ActiveForm;
 use yii\base\Model;
 use yii\web\View;
+use yii\widgets\MaskedInput;
 
 ?>
 
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'surname')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'name')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'patronymic')->textInput() ?>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<?= $form->field($model, 'phone')->textInput(['type' => 'number']) ?>
-	</div>
-</div>
+<?= $form->field($model, 'surname')->textInput() ?>
+<?= $form->field($model, 'name')->textInput() ?>
+<?= $form->field($model, 'patronymic')->textInput() ?>
+<?= $form->field($model, 'phone')->widget(MaskedInput::class, [
+	'mask' => '+7 (999) 999-99-99'
+]) ?>

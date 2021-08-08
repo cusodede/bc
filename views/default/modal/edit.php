@@ -25,7 +25,8 @@ Modal::begin([
 		'form'  => "{$modelName}-modal-edit"
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'class'    => 'modal-dialog-large',
+		'tabindex' => false
 	]
 ]); ?>
 <?php $form = ActiveForm::begin([

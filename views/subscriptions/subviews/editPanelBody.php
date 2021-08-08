@@ -8,7 +8,6 @@ declare(strict_types = 1);
  */
 
 use kartik\form\ActiveForm;
-use kartik\touchspin\TouchSpin;
 use app\models\subscriptions\Subscriptions;
 use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use yii\web\View;
@@ -19,7 +18,7 @@ use yii\web\View;
 
 <div class="row">
 	<div class="col-md-4">
-		<?= $form->field($model, 'trial_count')->widget(TouchSpin::class) ?>
+		<?= $form->field($model, 'trial_count')->textInput(['type' => 'number']) ?>
 	</div>
 	<div class="col-md-8">
 		<?= $form->field($model, 'units')->dropDownList(EnumSubscriptionTrialUnits::mapData()) ?>

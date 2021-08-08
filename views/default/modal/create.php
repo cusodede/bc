@@ -24,7 +24,8 @@ $modelName = $model->formName();
 		'form'  => "{$modelName}-modal-create"
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'class'    => 'modal-dialog-large',
+		'tabindex' => false
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(

@@ -115,7 +115,7 @@ use app\controllers\AbonentsController;
 		[
 			'label'     => 'История списаний',
 			'url'       => [BillingJournalController::to('index')],
-			'iconClass' => 'fa-money-bill-wave-alt',
+			'iconClass' => 'fa-ruble-sign',
 			'visible'   => BillingJournalController::hasPermission('index')
 		],
 		[

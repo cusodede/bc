@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
-use app\assets\ModalHelperAsset;
+use app\components\helpers\Html;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\UsersController;
@@ -22,46 +22,39 @@ use kartik\grid\DataColumn;
 use kartik\grid\EditableColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\Utils;
 use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 use kartik\select2\Select2;
 
-ModalHelperAsset::register($this);
 ?>
 <?= GridConfig::widget([
-	'id' => 'permissions-index-grid',
+	'id'   => 'permissions-index-grid',
 	'grid' => GridView::begin([
-		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
-		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']).")":" (нет разрешений)"),
+		'dataProvider'     => $dataProvider,
+		'filterModel'      => $searchModel,
+		'panel'            => [
+			'heading' => '',
 		],
-		'summary' => null !== $searchModel?Html::a('Новое разрешение', PermissionsController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
-		]):null,
-		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новое разрешение', PermissionsController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
-		]),
-		'toolbar' => [
+		'toolbar'          => [
 			[
-				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn float-left btn-info'])
+				'content' => Html::ajaxModalLink(
+						'Новое разрешение',
+						PermissionsController::to('create'),
+						['class' => ['btn btn-success mr-2']]
+					) .
+					Html::a('Редактор групп разрешений', PermissionsCollectionsController::to('index'), ['class' => 'btn btn-info'])
 			]
 		],
-		'export' => false,
+		'export'           => false,
 		'resizableColumns' => true,
-		'responsive' => true,
-		'columns' => [
+		'responsive'       => true,
+		'columns'          => [
 			[
-				'class' => ActionColumn::class,
+				'class'    => ActionColumn::class,
 				'template' => '{edit}{delete}',
-				'buttons' => [
+				'buttons'  => [
 					'edit' => static function(string $url, Permissions $model) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
@@ -71,27 +64,27 @@ ModalHelperAsset::register($this);
 			],
 			'id',
 			[
-				'class' => EditableColumn::class,
+				'class'           => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
 						],
-						'inputType' => Editable::INPUT_TEXT
+						'inputType'   => Editable::INPUT_TEXT
 					];
 				},
-				'attribute' => 'name',
-				'format' => 'text'
+				'attribute'       => 'name',
+				'format'          => 'text'
 			],
 			[
-				'class' => EditableColumn::class,
+				'class'           => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
 						],
-						'inputType' => Editable::INPUT_SPIN,
-						'options' => [
+						'inputType'   => Editable::INPUT_SPIN,
+						'options'     => [
 							'pluginOptions' => [
 								'min' => Permissions::PRIORITY_MIN,
 								'max' => Permissions::PRIORITY_MAX
@@ -99,99 +92,99 @@ ModalHelperAsset::register($this);
 						]
 					];
 				},
-				'attribute' => 'priority',
-				'format' => 'text'
+				'attribute'       => 'priority',
+				'format'          => 'text'
 			],
 			[
-				'class' => EditableColumn::class,
+				'class'           => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
 						],
-						'inputType' => Editable::INPUT_SELECT2,
-						'options' => [
-							'data' => TemporaryHelper::GetControllersList(Permissions::ConfigurationParameter(Permissions::CONTROLLER_DIRS)),
+						'inputType'   => Editable::INPUT_SELECT2,
+						'options'     => [
+							'data'          => TemporaryHelper::GetControllersList(Permissions::ConfigurationParameter(Permissions::CONTROLLER_DIRS)),
 							'pluginOptions' => [
-								'multiple' => false,
-								'allowClear' => true,
+								'multiple'    => false,
+								'allowClear'  => true,
 								'placeholder' => '',
-								'tags' => true
+								'tags'        => true
 							]
 						]
 					];
 				},
-				'attribute' => 'controller',
-				'format' => 'text'
+				'attribute'       => 'controller',
+				'format'          => 'text'
 			],
 			[
-				'class' => EditableColumn::class,
+				'class'           => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editAction'),
 						],
-						'inputType' => Editable::INPUT_TEXT
+						'inputType'   => Editable::INPUT_TEXT
 					];
 				},
-				'attribute' => 'action',
-				'format' => 'text'
+				'attribute'       => 'action',
+				'format'          => 'text'
 			],
 			[
-				'class' => EditableColumn::class,
+				'class'           => EditableColumn::class,
 				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
 					return [
 						'formOptions' => [
 							'action' => PermissionsController::to('editDefault')
 						],
-						'inputType' => Editable::INPUT_SELECT2,
-						'options' => [
-							'data' => TemporaryHelper::VERBS,
+						'inputType'   => Editable::INPUT_SELECT2,
+						'options'     => [
+							'data'          => TemporaryHelper::VERBS,
 							'pluginOptions' => [
-								'multiple' => false,
-								'allowClear' => true,
+								'multiple'    => false,
+								'allowClear'  => true,
 								'placeholder' => '',
-								'tags' => true
+								'tags'        => true
 							]
 						]
 					];
 				},
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'verb',
-					'data' => TemporaryHelper::VERBS,
+				'filter'          => Select2::widget([
+					'model'         => $searchModel,
+					'attribute'     => 'verb',
+					'data'          => TemporaryHelper::VERBS,
 					'pluginOptions' => [
-						'allowClear' => true,
+						'allowClear'  => true,
 						'placeholder' => ''
 					]
 				]),
-				'attribute' => 'verb',
-				'format' => 'text'
+				'attribute'       => 'verb',
+				'format'          => 'text'
 			],
 			[
 				'attribute' => 'module'
 			],
-			['class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_TEXTAREA,
-					];
-				},
-				'attribute' => 'comment',
-				'format' => 'text'
+			['class'           => EditableColumn::class,
+			 'editableOptions' => static function(Permissions $permission, int $key, int $index) {
+				 return [
+					 'formOptions' => [
+						 'action' => PermissionsController::to('editDefault')
+					 ],
+					 'inputType'   => Editable::INPUT_TEXTAREA,
+				 ];
+			 },
+			 'attribute'       => 'comment',
+			 'format'          => 'text'
 			],
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'collection',
-				'label' => 'Входит в группы',
-				'value' => static function(Permissions $permission) {
+				'label'     => 'Входит в группы',
+				'value'     => static function(Permissions $permission) {
 					return BadgeWidget::widget([
-						'items' => $permission->relatedPermissionsCollections,
-						'subItem' => 'name',
-						'options' => function($mapAttributeValue, PermissionsCollections $item) {
+						'items'     => $permission->relatedPermissionsCollections,
+						'subItem'   => 'name',
+						'options'   => function($mapAttributeValue, PermissionsCollections $item) {
 							$url = PermissionsCollectionsController::to('edit', ['id' => $item->id]);
 							return [//навешиваем модальный просмотр
 								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
@@ -200,17 +193,17 @@ ModalHelperAsset::register($this);
 						'urlScheme' => [PermissionsCollectionsController::to('edit'), 'id' => 'id']
 					]);
 				},
-				'format' => 'raw'
+				'format'    => 'raw'
 			],
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'user',
-				'label' => 'Назначено пользователям',
-				'value' => static function(Permissions $permission) {
+				'label'     => 'Назначено пользователям',
+				'value'     => static function(Permissions $permission) {
 					return BadgeWidget::widget([
-						'items' => $permission->relatedUsers,
-						'subItem' => 'username',
-						'options' => function($mapAttributeValue, Users $item) {
+						'items'     => $permission->relatedUsers,
+						'subItem'   => 'username',
+						'options'   => function($mapAttributeValue, Users $item) {
 							$url = UsersController::to('view', ['id' => $item->id]);
 							return [//навешиваем модальный просмотр
 								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-view-{$item->id}');event.preventDefault();")
@@ -219,7 +212,7 @@ ModalHelperAsset::register($this);
 						'urlScheme' => [UsersController::to('view'), 'id' => 'id']
 					]);
 				},
-				'format' => 'raw'
+				'format'    => 'raw'
 			]
 		]
 	])
