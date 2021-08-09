@@ -90,9 +90,9 @@ abstract class BaseSubscriptionHandler extends Component
 	public static function createInstanceByProduct(Products $product)
 	{
 		switch ($product->relatedPartner->name) {
-			case 'ivi':
+			case 'IVI':
 				return new IviSubscriptionHandler();
-			case 'vet-expert':
+			case 'VetExpert':
 				return new VetExpertSubscriptionHandler();
 			default:
 				throw new InvalidArgumentException('Не удалось определить обработчик для продукта');

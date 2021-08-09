@@ -5,7 +5,6 @@ namespace app\controllers;
 
 use app\components\tickets\ProductTicketsService;
 use app\models\abonents\Abonents;
-use app\models\products\Products;
 use app\models\sys\permissions\filters\PermissionFilter;
 use pozitronik\traits\traits\ControllerTrait;
 use Yii;
@@ -37,14 +36,14 @@ class MobileAppController extends Controller
 	/**
 	 * TODO: delete after MVP
 	 */
-	public function actionConnect($name)
+	public function actionConnect(int $id)
 	{
 		$abonent = Abonents::findOne(['phone' => '+79999897749']);
 		if (null === $abonent) {
 			$abonent = new Abonents(['phone' => '+79999897749', 'surname' => 'Лапин', 'name' => 'Алексей', 'patronymic' => 'Сергеевич']);
 			$abonent->save();
 		}
-		$ticket = (new ProductTicketsService())->createSubscribeTicket(Products::findOne(['name' => $name])->id, $abonent->id);
+		$ticket = (new ProductTicketsService())->createSubscribeTicket($id, $abonent->id);
 
 		Yii::$app->cache->set('mvp', [
 			'<i class="fas fa-fw fa-check text-success"></i> В систему заведен абонент с номером 79999897749',
@@ -55,10 +54,10 @@ class MobileAppController extends Controller
 	/**
 	 * TODO: delete after MVP
 	 */
-	public function actionDisconnect($name)
+	public function actionDisconnect(int $id)
 	{
 		$abonent = Abonents::findOne(['phone' => '+79999897749']);
-		$ticket = (new ProductTicketsService())->createUnsubscribeTicket(Products::findOne(['name' => $name])->id, $abonent->id);
+		$ticket = (new ProductTicketsService())->createUnsubscribeTicket($id, $abonent->id);
 
 		Yii::$app->cache->set('mvp', ['<i class="fas fa-fw fa-check text-success"></i> Создан тикет на отключение подписки: ' . $ticket]);
 	}
