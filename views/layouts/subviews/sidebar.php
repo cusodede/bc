@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 use app\controllers\BillingJournalController;
+use app\controllers\MobileAppController;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
@@ -115,7 +116,7 @@ use app\controllers\AbonentsController;
 		[
 			'label'     => 'История списаний',
 			'url'       => [BillingJournalController::to('index')],
-			'iconClass' => 'fa-money-bill-wave-alt',
+			'iconClass' => 'fa-ruble-sign',
 			'visible'   => BillingJournalController::hasPermission('index')
 		],
 		[
@@ -123,6 +124,12 @@ use app\controllers\AbonentsController;
 			'url'       => [ProductsController::to('journal')],
 			'iconClass' => 'fa-history',
 			'visible'   => ProductsController::hasPermission('journal')
+		],
+		[
+			'label'     => 'MVP',
+			'url'       => [MobileAppController::to('index')],
+			'iconClass' => 'fa-unicorn',
+			'visible'   => true
 		]
 	]
 ]) ?>

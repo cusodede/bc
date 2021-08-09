@@ -5,6 +5,7 @@ namespace app\components\subscription\job;
 
 use app\components\subscription\BaseSubscriptionHandler;
 use app\models\ticket\TicketProductSubscription;
+use Yii;
 use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
 
@@ -36,6 +37,12 @@ class UnsubscribeJob implements RetryableJobInterface
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
 		$service->disable($ticket);
+
+		$messages = [];
+		$messages[] = '<i class="fas fa-fw fa-check text-success"></i> Подписка успешно отключена';
+		$messages[] = 'stop';
+
+		Yii::$app->cache->set('mvp', array_merge(Yii::$app->cache->get('mvp'), $messages));
 	}
 
 	/**

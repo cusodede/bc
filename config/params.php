@@ -7,6 +7,8 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
+use cusodede\jwt\Jwt;
+use Lcobucci\JWT\Signer\Key\LocalFileReference;
 
 return [
 	'bsVersion' => '4',
@@ -44,6 +46,24 @@ return [
 				'name',
 			]
 		]
+	],
+	'ivi' => [
+		'connector' => [
+			'appID'   => 'partnertest',
+			'baseUrl' => 'https://api.ivi.ru/mobileapi'
+		],
+		'productMap' => [
+			1 => ['productId' => 101, 'appVersion' => 8424]
+		],
+		'signatureOptions' => [
+			'signer'    => Jwt::RS256,
+			'signerKey' => LocalFileReference::file('/var/www/ppl/partnertest20181204.private.pem')
+		]
+	],
+	'vet-expert' => [
+		'connector' => [
+			'baseUrl'   => 'https://vetexpert.ru/api',
+			'authToken' => 'testtoken'
+		]
 	]
-
 ];

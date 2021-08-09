@@ -107,6 +107,27 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
+	 * @return string|null
+	 * @throws Exception
+	 */
+	public function getPaymentShortView(): string
+	{
+		$price = (int) $this->price;
+		switch ($this->payment_period) {
+			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
+				$price .= ' ₽/ мес.';
+			break;
+			case EnumProductsPaymentPeriods::TYPE_DAILY:
+				$price .= ' ₽/ день';
+			break;
+			default:
+				$price .= ' ₽';
+		}
+
+		return $price;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function getIsSubscription(): bool
