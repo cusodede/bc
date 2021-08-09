@@ -21,7 +21,7 @@ $('.connect-checkbox').on('click', async function () {
     const divLog = document.getElementById('event-log');
     divLog.innerHTML = 'Обработка ...';
     
-    const data = {name: this.dataset.product};
+    const data = {id: this.dataset.product};
     if (this.checked) {
         await $.ajax({
 			type: "GET",
@@ -84,7 +84,7 @@ $this->registerJs($js);
 						</div>
 						<div id="customSwitch<?= $key ?>-label" class="custom-control custom-switch">
 							<input type="checkbox" class="custom-control-input connect-checkbox" id="customSwitch<?= $key ?>"
-								   data-product="<?= $product->name ?>">
+								   data-product="<?= $product->id ?>">
 							<label class="custom-control-label" for="customSwitch<?= $key ?>"></label>
 						</div>
 						<div id="customSwitch<?= $key ?>-gif" class="loading-gif" style="display: none">
