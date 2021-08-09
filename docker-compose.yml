@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8081:8080
+    volumes:
+      - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
+      - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
+      - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
+      - "${HOME_SERVER_FOLDER}/logs/nginx:/var/www/logs/nginx"
+      - "${HOME_SERVER_FOLDER}:/var/www:cached"
+    links:
+      - php-8
+    working_dir: "${WEB_WORKING_DIR}"
+
+  mariadb:
+    restart: always
+    image: mariadb:latest
+    command: [
+        '--character-set-server=utf8',
+        '--collation-server=utf8_general_ci',
+        '--default-authentication-plugin=mysql_native_password'
+    ]
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: 'db_ppl'
+    volumes:
+      - "${MYSQL_PATH}:/var/lib/mysql"
+      - "${HOME_SERVER_FOLDER}:/var/www"
+
+  php-8:
+    build: ./docker/
+    volumes:
+      - "${HOME_SERVER_FOLDER}:/var/www"
+    ports:
+      - "9000:9000"
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+    links:
+      - mariadb
+
