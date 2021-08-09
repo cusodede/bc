@@ -11,3 +11,5 @@
 /tests-c/
 /config/test.sample.php
 codeception.yml
+
+/.env
