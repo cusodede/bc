@@ -5,6 +5,7 @@ namespace app\modules\api\controllers;
 
 use app\components\tickets\ProductTicketsService;
 use app\models\abonents\Abonents;
+use app\models\site\sse\MessageEventHandler;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
 use app\modules\api\models\ConnectSubscriptionTicketForm;
@@ -44,16 +45,19 @@ class ProductsController extends YiiRestController
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
+				'except'  => ['sse']
 			],
 			'verbFilter' => [
 				'class'   => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class' => JwtHttpBearerAuth::class
+				'class'  => JwtHttpBearerAuth::class,
+				'except' => ['sse']
 			],
 			'access' => [
-				'class' => PermissionFilter::class
+				'class'  => PermissionFilter::class,
+				'except' => ['sse']
 			]
 		];
 	}
@@ -159,6 +163,17 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
+	 * TODO: delete after MVP
+	 */
+	public function actionSse()
+	{
+		/** @noinspection PhpUndefinedFieldInspection */
+		$sse = Yii::$app->sse;
+		$sse->addEventListener('message', new MessageEventHandler());
+		$sse->start();
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	protected function verbs(): array
@@ -167,6 +182,7 @@ class ProductsController extends YiiRestController
 			'list'          => ['GET'],
 			'one'           => ['GET'],
 			'ticket-status' => ['GET'],
+			'sse' => ['GET'],
 			'subscribe'     => ['POST'],
 			'unsubscribe'   => ['POST']
 		];

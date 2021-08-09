@@ -30,13 +30,13 @@ abstract class BaseSubscriptionHandler extends Component
 	{
 		$this->_ticket = $ticket;
 		if ($serviceCheck) {
-			$this->serviceCheck();
+//			$this->serviceCheck();TODO: delete after demo
 			return '';
 		}
 
-		$this->beforeSubscribe();
+//		$this->beforeSubscribe();TODO: delete after demo
 
-		$expireDate = $this->connectOnPartner();
+		$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');
 
 		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
 

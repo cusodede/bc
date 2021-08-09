@@ -91,6 +91,10 @@ trait ActiveRecordTrait {
 			}
 
 			if (false !== $result = $this->save()) {
+				if (method_exists($this, 'uploadAttributes')) {
+					$this->uploadAttributes();
+				}
+
 				$transaction->commit();
 			} else {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;

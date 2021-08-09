@@ -8,6 +8,7 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use cusodede\jwt\Jwt;
+use Lcobucci\JWT\Signer\Key\LocalFileReference;
 
 return [
 	'bsVersion' => '4',
@@ -56,7 +57,13 @@ return [
 		],
 		'signatureOptions' => [
 			'signer'    => Jwt::RS256,
-			'signerKey' => '@app/partnertest20181204.private.pem'
+			'signerKey' => LocalFileReference::file('/var/www/ppl/partnertest20181204.private.pem')
+		]
+	],
+	'vet-expert' => [
+		'connector' => [
+			'baseUrl'   => 'https://vetexpert.ru/api',
+			'authToken' => 'testtoken'
 		]
 	]
 ];

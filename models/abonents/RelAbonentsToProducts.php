@@ -48,6 +48,8 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 
 	public function setRelatedLastProductsJournal(ProductsJournal $status): void
 	{
+		$status->validate(['id']);
+
 		$this->link('relatedLastProductsJournal', $status);
 	}
 
@@ -74,12 +76,12 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	 */
 	public function enable(string $expireDate): void
 	{
-		$config['expire_date'] = $expireDate;
-		if (null === $this->relatedLastProductsJournal) {
-			$config = ['status_id' => EnumProductsStatuses::STATUS_ENABLED];
-		} else {
-			$config = ['status_id' => EnumProductsStatuses::STATUS_RENEWED];
-		}
+		$config = [
+			'expire_date' => $expireDate,
+			'status_id'   => (null === $this->relatedLastProductsJournal)
+				? EnumProductsStatuses::STATUS_ENABLED
+				: EnumProductsStatuses::STATUS_RENEWED
+		];
 
 		$this->relatedLastProductsJournal = new ProductsJournal($config);
 	}

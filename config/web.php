@@ -41,7 +41,7 @@ $statusRules = require __DIR__ . '/status_rules.php';
 
 $config = [
 	'id' => 'basic',
-	'name' => 'Beeline Cabinet',
+	'name' => 'Product Platform',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log', 'history', 'productTicketsQueue'],
