@@ -34,7 +34,11 @@ spec:
         - name: prpl-nginx
           configMap:
             name: prpl-nginx
-            defaultMode: 420		
+            defaultMode: 420
+        - name: prpl-php8-ini
+          configMap:
+            name: prpl-php8-ini
+            defaultMode: 420            
         - name: prpl
           persistentVolumeClaim:
             claimName: prpl
@@ -68,6 +72,9 @@ spec:
                 readOnly: true
               - name: prpl-nginx
                 mountPath: "/etc/nginx/conf.d/"
+                readOnly: true
+              - name: prpl-php8-ini
+                mountPath: "/usr/share/php8"
                 readOnly: true
               - name: prpl
                 mountPath: "/var/www/ppl/web/assets"
