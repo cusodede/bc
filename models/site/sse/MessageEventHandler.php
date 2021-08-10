@@ -27,13 +27,17 @@ class MessageEventHandler extends SSEBase {
 	 */
 	public function update():string {
 		$messages = Yii::$app->cache->get('mvp');
-		if (is_array($messages) && in_array('stop', $messages, true)) {
+		if (empty($this->messages) && is_array($messages) && in_array('stop', $messages, true)) {
 			$this->messages = $messages;
-			Yii::$app->cache->delete('mvp');
 		}
 
 		if (is_array($this->messages) && count($this->messages) > 0) {
-			return array_shift($this->messages);
+			$val = array_shift($this->messages);
+			if ([] === $this->messages) {
+				Yii::$app->cache->delete('mvp');
+			}
+
+			return $val;
 		}
 		return '';
 	}

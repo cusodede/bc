@@ -43,12 +43,7 @@ class MobileAppController extends Controller
 			$abonent = new Abonents(['phone' => '+79999897749', 'surname' => 'Лапин', 'name' => 'Алексей', 'patronymic' => 'Сергеевич']);
 			$abonent->save();
 		}
-		$ticket = (new ProductTicketsService())->createSubscribeTicket($id, $abonent->id);
-
-		Yii::$app->cache->set('mvp', [
-			'<i class="fas fa-fw fa-check text-success"></i> В систему заведен абонент с номером 79999897749',
-			'<i class="fas fa-fw fa-check text-success"></i> Создан тикет на подключение подписки: ' . $ticket
-		]);
+		(new ProductTicketsService())->createSubscribeTicket($id, $abonent->id);
 	}
 
 	/**
@@ -57,9 +52,7 @@ class MobileAppController extends Controller
 	public function actionDisconnect(int $id)
 	{
 		$abonent = Abonents::findOne(['phone' => '+79999897749']);
-		$ticket = (new ProductTicketsService())->createUnsubscribeTicket($id, $abonent->id);
-
-		Yii::$app->cache->set('mvp', ['<i class="fas fa-fw fa-check text-success"></i> Создан тикет на отключение подписки: ' . $ticket]);
+		(new ProductTicketsService())->createUnsubscribeTicket($id, $abonent->id);
 	}
 
 	/**

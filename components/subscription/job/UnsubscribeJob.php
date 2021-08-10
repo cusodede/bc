@@ -38,11 +38,13 @@ class UnsubscribeJob implements RetryableJobInterface
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
 		$service->disable($ticket);
 
-		$messages = [];
-		$messages[] = '<i class="fas fa-fw fa-check text-success"></i> Подписка успешно отключена';
-		$messages[] = 'stop';
+		$messages = [
+			'<i class="fas fa-fw fa-check text-success"></i> Создан тикет на отключение подписки: ' . $ticket->id,
+			'<i class="fas fa-fw fa-check text-success"></i> Подписка успешно отключена',
+			'stop'
+		];
 
-		Yii::$app->cache->set('mvp', array_merge(Yii::$app->cache->get('mvp'), $messages));
+		Yii::$app->cache->set('mvp', $messages);
 	}
 
 	/**

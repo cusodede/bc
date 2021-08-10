@@ -41,7 +41,10 @@ class SubscribeJob implements RetryableJobInterface
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
 
-		$messages = [];
+		$messages = [
+			'<i class="fas fa-fw fa-check text-success"></i> В систему заведен абонент с номером 79999897749',
+			'<i class="fas fa-fw fa-check text-success"></i> Создан тикет на подключение подписки: ' . $ticket->id
+		];
 		/** @noinspection BadExceptionsProcessingInspection not bad at all */
 		try {
 			$ticket->startStage(TicketProductSubscription::OPERATION_SERVICE_CHECK);
@@ -77,9 +80,10 @@ class SubscribeJob implements RetryableJobInterface
 			$ticket->close();
 			$messages[] = 'stop';
 
-			Yii::$app->cache->set('mvp', array_merge(Yii::$app->cache->get('mvp'), $messages));
+			Yii::$app->cache->set('mvp', $messages);
 		} catch (Throwable $e) {
-			Yii::$app->cache->set('mvp', array_merge(Yii::$app->cache->get('mvp'), ['stop']));
+			$messages[] = 'stop';
+			Yii::$app->cache->set('mvp', $messages);
 
 			$ticket->markStageFailed($e);
 			$ticket->close();
