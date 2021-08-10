@@ -95,7 +95,7 @@ abstract class BaseSubscriptionHandler extends Component
 			case 'VetExpert':
 				return new VetExpertSubscriptionHandler();
 			default:
-				throw new InvalidArgumentException('Не удалось определить обработчик для продукта');
+				return new IviSubscriptionHandler();//TODO in case of emergency
 		}
 	}
 }
