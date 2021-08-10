@@ -36,7 +36,7 @@ AppAsset::register($this);
 	</div>
 </main>
 
-<div id="event-log" style="position: absolute; width: 600px; min-height: 200px; top: 0; right: 0" class="p-4 card font-weight-bold">
+<div id="event-log" style="position: absolute; width: 30%; min-height: 200px; top: 0; right: 0" class="p-4 card font-weight-bold">
 	Лог операций ...
 </div>
 
