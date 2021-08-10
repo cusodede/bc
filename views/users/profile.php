@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div class="d-flex flex-column align-items-center justify-content-center p-4">
 						<?= Html::img(UsersController::to('logo-get'), [
 							'class' => "rounded-circle shadow-2 img-thumbnail user-logo",
-							'style' => "width: 160px; height: 160px",
+							'style' => "width: 160px",
 						]) ?>
 						<h5 class="mb-0 fw-700 text-center mt-3">
 							<?= Users::Current()->username ?>
