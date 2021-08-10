@@ -20,6 +20,9 @@ use yii\data\ActiveDataProvider;
 use yii\web\View;
 use kartik\grid\GridView;
 
+$this->title = 'Пользователи';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <?= GridConfig::widget([

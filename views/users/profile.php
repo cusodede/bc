@@ -13,6 +13,7 @@ use yii\web\View;
 use yii\bootstrap4\Html;
 
 $this->title = 'Профиль';
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 

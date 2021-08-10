@@ -22,6 +22,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\View;
 
 $this->title = 'История списаний';
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 

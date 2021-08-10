@@ -27,6 +27,9 @@ use app\assets\PermissionsCollectionsAsset;
 
 PermissionsCollectionsAsset::register($this);
 
+$this->title = 'Группы разрешений';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <?= GridConfig::widget([
 	'id'   => 'permissions-collections-index-grid',

@@ -28,6 +28,9 @@ use yii\web\JsExpression;
 use yii\web\View;
 use kartik\select2\Select2;
 
+$this->title = 'Разрешения';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <?= GridConfig::widget([
 	'id'   => 'permissions-index-grid',
