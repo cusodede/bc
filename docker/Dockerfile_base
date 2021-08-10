@@ -32,7 +32,10 @@ RUN apk --no-cache add \
   supervisor \
   && ln -s /usr/bin/php8 /usr/bin/php \
   && ln -s /dev/stderr /var/lib/nginx/logs/error.log \
-  && ln -s /dev/stdout /var/lib/nginx/logs/access.log
+  && ln -s /dev/stdout /var/lib/nginx/logs/access.log \
+  && mkdir -p /usr/share/php8 \
+  && mv /etc/php8/php.ini /usr/share/php8 \
+  && ln -sf /usr/share/php8/php.ini /etc/php8/php.ini
   
 EXPOSE 8080
 EXPOSE 8081

@@ -71,6 +71,8 @@ migrate_db:
     - cd /var/www/ppl
     - chmod +x yii
     - ./yii migrate --interactive=0
+    - ./yii service/init-config-permissions
+    - ./yii service/init-controllers-permissions
   only:
     - master
   tags:
@@ -116,6 +118,7 @@ apply_config_to_okd:
   script:
     - oc apply -f docker/configMap/nginx.configmap.yaml
     - oc apply -f docker/configMap/php8.configmap.yaml
+    - oc apply -f docker/configMap/php-ini.configmap.yaml
     - oc apply -f docker/configMap/supervisor.configmap.yaml
     - oc apply -f docker/deployment.yaml
   only:
