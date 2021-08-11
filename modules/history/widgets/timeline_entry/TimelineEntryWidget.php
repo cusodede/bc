@@ -13,7 +13,7 @@ use yii\base\Widget;
  * @property TimelineEntry $entry
  */
 class TimelineEntryWidget extends Widget {
-	public $entry;
+	public TimelineEntry $entry;
 
 	/**
 	 * Функция возврата результата рендеринга виджета

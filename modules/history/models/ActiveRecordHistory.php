@@ -49,10 +49,10 @@ class ActiveRecordHistory extends History {
 	 * a two-element array. The first element specifies the serialization function, and the second the deserialization
 	 * function.
 	 */
-	public $serializer;
+	public ?array $serializer = null;
 
-	private $_loadedModel;
-	public $storeShortClassNames = false;
+	private ?ActiveRecord $_loadedModel = null;
+	public bool $storeShortClassNames = false;
 
 	/**
 	 * Shorthand to get string identifier of stored class name (short/full class name)
@@ -84,7 +84,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => null,
 				'operation_identifier' => "Console operation"
@@ -97,7 +97,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => self::ensureDelegate(),
 				'operation_identifier' => Yii::$app->request->csrfToken
@@ -154,6 +154,7 @@ class ActiveRecordHistory extends History {
 	 * @throws ReflectionException
 	 * @throws Throwable
 	 * @throws UnknownClassException
+	 * @noinspection PhpIncompatibleReturnTypeInspection - мы можем конкретизировать тип
 	 */
 	public function getLoadedModel():?ActiveRecord {
 		return $this->_loadedModel??ReflectionHelper::LoadClassByName(self::ExpandClassName($this->model_class), null, false);

@@ -20,15 +20,15 @@ use yii\base\Model;
  * @property string $style {строка css, сгенерированная или заданная}
  */
 class StatusModel extends Model {
-	public $id;
-	public $name;
-	public $color;
-	public $textcolor;
-	public $initial = false;
-	public $finishing = false;
-	public $next = [];
+	public ?int $id = null;
+	public ?string $name = null;
+	public ?string $color = null;
+	public ?string $textcolor = null;
+	public bool $initial = false;
+	public bool $finishing = false;
+	public ?array $next = [];
 	public $allowed = true;
-	private $_style = [];
+	private array $_style = [];
 
 	/**
 	 * @inheritDoc
@@ -85,7 +85,7 @@ class StatusModel extends Model {
 	 * @param string $style
 	 */
 	public function setStyle(string $style):void {
-		if (false === $this->_style = explode(';', $style)) $this->_style = [];
+		if (empty($this->_style = explode(';', $style))) $this->_style = [];
 		array_walk($this->_style, 'trim');
 	}
 }

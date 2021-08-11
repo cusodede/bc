@@ -24,7 +24,7 @@ class Partners extends ActiveRecordPartners
 	/**
 	 * @var mixed атрибут для загрузки логотипа партнера.
 	 */
-	public $logo;
+	public mixed $logo = null;
 
 	/**
 	 * {@inheritdoc}

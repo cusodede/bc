@@ -172,7 +172,7 @@ class Permissions extends ActiveRecordPermissions {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getControllerPath():?string {
 		return (null === $this->module)?$this->controller:"@{$this->module}/{$this->controller}";
@@ -185,7 +185,7 @@ class Permissions extends ActiveRecordPermissions {
 		$this->module = null;
 		$this->controller = $controllerPath;/*by default*/
 		/*Если контроллер пришёл в виде @foo/bar - foo указывает на модуль*/
-		if ((false !== $path = explode('/', $this->controller)) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
+		if ((!empty($path = explode('/', $this->controller))) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
 			/** @var array $matches */
 			$this->module = substr($matches[0], 1);
 			$this->controller = substr($this->controller, strlen($this->module) + 2); //@foo/bar => bar

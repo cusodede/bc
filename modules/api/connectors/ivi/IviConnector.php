@@ -112,7 +112,7 @@ class IviConnector extends BaseHttpConnector
 	/**
 	 * Получение токена доступа по номеру абонента.
 	 * @param ProductOptions $options
-	 * @return string|null
+	 * @return string
 	 */
 	private function getAccessTokenByPhone(ProductOptions $options): string
 	{

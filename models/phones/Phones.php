@@ -24,7 +24,7 @@ class Phones extends PhonesAR {
 		try {
 			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
 			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException) {
 			return false;
 		}
 
@@ -39,7 +39,7 @@ class Phones extends PhonesAR {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
 			}
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException $exception) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException) {
 			return null;
 		}
 		return null;
@@ -55,7 +55,7 @@ class Phones extends PhonesAR {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->getNationalSignificantNumber($phoneNumber);
 			}
-		} catch (NumberParseException $exception) {
+		} catch (NumberParseException) {
 			return null;
 		}
 		return null;

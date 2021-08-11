@@ -29,8 +29,8 @@ class HistoryEventAction extends Model {
 		self::ATTRIBUTE_DELETED => 'Deleted'
 	];
 
-	public $type;
-	public $attributeName;
+	public ?int $type = null;
+	public ?string $attributeName = null;
 	public $attributeOldValue;
 	public $attributeNewValue;
 

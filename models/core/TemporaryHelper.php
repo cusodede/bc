@@ -137,7 +137,7 @@ class TemporaryHelper {
 	 * @param array|string $separator
 	 * @return string
 	 */
-	public static function Errors2String(array $errors, $separator = "\n"):string {
+	public static function Errors2String(array $errors, array|string $separator = "\n"):string {
 		$output = [];
 		foreach ($errors as $attribute => $attributeErrors) {
 			$error = implode($separator, $attributeErrors);
