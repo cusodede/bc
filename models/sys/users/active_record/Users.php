@@ -131,7 +131,7 @@ class Users extends ActiveRecord {
 	 * @param mixed $relatedPhones
 	 * @throws Throwable
 	 */
-	public function setRelatedPhones($relatedPhones):void {
+	public function setRelatedPhones(mixed $relatedPhones):void {
 		RelUsersToPhones::linkModels($this, $relatedPhones);
 	}
 
@@ -148,7 +148,7 @@ class Users extends ActiveRecord {
 	/**
 	 * @param mixed $phones
 	 */
-	public function setPhones($phones):void {
+	public function setPhones(mixed $phones):void {
 		$this->_phones = (array)$phones;
 	}
 
