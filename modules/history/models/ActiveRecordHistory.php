@@ -173,7 +173,7 @@ class ActiveRecordHistory extends History {
 	 * @return mixed
 	 * @throws Throwable
 	 */
-	private function getModelRules(?string $key = null, $default = null) {
+	private function getModelRules(?string $key = null, mixed $default = null) {
 		$behaviors = $this->loadedModel->behaviors();
 		$keys = ArrayHelper::array_find_deep($behaviors, HistoryBehavior::class);
 		array_pop($keys);
@@ -294,7 +294,7 @@ class ActiveRecordHistory extends History {
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	private function SubstituteAttributeValue(string $attributeName, $attributeValue) {
+	private function SubstituteAttributeValue(string $attributeName, mixed $attributeValue) {
 		if (null === $this->loadedModel) return $attributeValue;
 		if (null === $attributeConfig = $this->getModelRules("attributes.{$attributeName}")) return $attributeValue;
 		if (false === $attributeConfig) return false;//не показывать атрибут
@@ -589,7 +589,7 @@ class ActiveRecordHistory extends History {
 	/**
 	 * @param mixed $attributesOld
 	 */
-	public function setAttributesOld($attributesOld):void {
+	public function setAttributesOld(mixed $attributesOld):void {
 		$this->old_attributes = $this->serialize($attributesOld);
 	}
 
@@ -603,7 +603,7 @@ class ActiveRecordHistory extends History {
 	/**
 	 * @param mixed $attributesNew
 	 */
-	public function setAttributesNew($attributesNew):void {
+	public function setAttributesNew(mixed $attributesNew):void {
 		$this->new_attributes = $this->serialize($attributesNew);
 	}
 
