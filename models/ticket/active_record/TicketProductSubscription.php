@@ -75,7 +75,7 @@ class TicketProductSubscription extends ActiveRecord
 	 * @param mixed $related
 	 * @throws Throwable
 	 */
-	public function setRelatedBilling($related): void
+	public function setRelatedBilling(mixed $related): void
 	{
 		RelTicketToBilling::linkModel($this, $related);
 	}
