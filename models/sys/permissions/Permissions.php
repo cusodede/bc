@@ -62,12 +62,12 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * Возвращает значение конфига для компонента
 	 * @param string $parameter
-	 * @param mixed $default
+	 * @param mixed|null $default
 	 * @return mixed
 	 * @throws Throwable
 	 * @noinspection PhpReturnDocTypeMismatchInspection Проверено, в $default мы можем задать что угодно
 	 */
-	public static function ConfigurationParameter(string $parameter, $default = null) {
+	public static function ConfigurationParameter(string $parameter, mixed $default = null) {
 		return ArrayHelper::getValue(Yii::$app->components, self::COMPONENT_NAME.".".$parameter, $default);
 	}
 
