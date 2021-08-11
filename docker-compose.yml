@@ -8,12 +8,14 @@ services:
     volumes:
       - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
       - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
-      - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
-      - "${HOME_SERVER_FOLDER}/logs/nginx:/var/www/logs/nginx"
-      - "${HOME_SERVER_FOLDER}:/var/www:cached"
+      - "${WEB_ROOT_PATH}/logs:/var/www/logs"
+      - "${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx"
+      - "${WEB_ROOT_PATH}:/var/www:cached"
     links:
       - php-8
-    working_dir: "${WEB_WORKING_DIR}"
+    working_dir: ${WEB_WORKING_DIR}
+    networks:
+      - backend
 
   mariadb:
     restart: always
@@ -26,21 +28,37 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: 'password'
-      MYSQL_DATABASE: 'db_ppl'
+      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - "${MYSQL_PATH}:/var/lib/mysql"
-      - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${WEB_ROOT_PATH}:/var/www"
+    networks:
+      - backend
 
   php-8:
     build: ./docker/
     volumes:
-      - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${WEB_ROOT_PATH}:/var/www"
     ports:
       - "9000:9000"
     environment:
-      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
-      PHP_IDE_CONFIG: "serverName=Docker"
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
     links:
       - mariadb
+    networks:
+      - backend
 
+# Networks Setup
+networks:
+  backend:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: ${DOCKER_SUBNET}
