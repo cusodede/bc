@@ -33,7 +33,7 @@
 		"pozitronik/yii2-grid-config": "dev-master",
 		"pozitronik/yii2-relations": "dev-master",
 		"pozitronik/yii2-dbmon": "dev-master",
-		"cusodede/yii2-jwt" : "dev-master",
+		"cusodede/yii2-jwt": "dev-master",
 		"cusodede/yii2-multi-select-widget": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "dev-master",
 		"kartik-v/yii2-editable": "dev-master",
