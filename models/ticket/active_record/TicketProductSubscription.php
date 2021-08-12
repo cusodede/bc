@@ -64,11 +64,11 @@ class TicketProductSubscription extends ActiveRecord
 	public function setRelatedAbonentsToProducts($relation): void
 	{
 		if (is_array($relation)) {
-			/** @noinspection CallableParameterUseCaseInTypeContextInspection метод находится в скоупе трейта, поэтому и ругается */
-			$relation = RelAbonentsToProducts::Upsert($relation);
+			$this->link('relatedAbonentsToProducts', RelAbonentsToProducts::Upsert($relation));
+		} else {
+			$this->link('relatedAbonentsToProducts', $relation);
 		}
 
-		$this->link('relatedAbonentsToProducts', $relation);
 	}
 
 	/**
