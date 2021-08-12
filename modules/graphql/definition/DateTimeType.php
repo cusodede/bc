@@ -42,7 +42,7 @@ class DateTimeType extends ScalarType
 	 */
 	public function serialize($value): string
 	{
-		if (!$value instanceof DateTimeInterface) {
+		if (!($value instanceof DateTimeInterface)) {
 			throw new InvariantViolation(
 				'Входящие значение не соответствует DateTimeInterface: ' . Utils::printSafe($value)
 			);
