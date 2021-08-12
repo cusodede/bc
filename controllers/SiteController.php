@@ -13,7 +13,6 @@ use app\models\site\UpdatePasswordForm;
 use app\models\sys\users\Users;
 use pozitronik\traits\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
 use yii\helpers\Url;
@@ -188,8 +187,8 @@ class SiteController extends Controller {
 		$this->layout = 'main';
 		return $this->render('options', [
 			'boolOptions' => [
-				'ASSETS_PUBLISHOPTIONS_FORCECOPY' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', Options::ASSETS_PUBLISHOPTIONS_FORCECOPY),
-				'GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION' => SysOptions::getStatic('GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION', Options::GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION),
+				Options::ASSETS_PUBLISHOPTIONS_FORCECOPY => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY),
+				Options::GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION => Options::getValue(Options::GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION),
 			],
 			'optionsLabels' => Options::OPTIONS_LABELS
 		]);
