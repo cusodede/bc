@@ -154,7 +154,7 @@ class UcpConnector extends BaseHttpConnector
 	/**
 	 * Получение информации по абоненту.
 	 * @param string $service Сервис UCP, смотри константы.
-	 * @param string $uid Телефонный номер абонента или его uid, завист от сервиса.
+	 * @param string $uid Телефонный номер абонента или его uid, зависит от сервиса.
 	 * @return array
 	 * @throws HttpClientException
 	 * @throws InvalidConfigException
