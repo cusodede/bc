@@ -5,7 +5,6 @@ namespace app\modules\api\connectors\ucp;
 
 use Yii;
 use Throwable;
-
 use yii\helpers\ArrayHelper;
 use app\modules\api\connectors\BaseHttpConnector;
 use yii\base\InvalidConfigException;
