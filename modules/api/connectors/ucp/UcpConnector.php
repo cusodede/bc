@@ -16,7 +16,6 @@ use Exception;
  * Class UcpConnector
  * @package app\modules\api\connectors\ucp
  *
- * @property-read mixed $subscriberInfo
  * @property-read array $dataServices
  * @property-read string $token
  * @property-read array $authServices
@@ -41,16 +40,39 @@ class UcpConnector extends BaseHttpConnector
 	private string $authToken;
 
 	/**
+	 * getenv('UCP_LOGIN')
+	 * @var string
+	 */
+	private string $login;
+
+	/**
+	 * getenv('UCP_PASSWORD')
+	 * @var string
+	 */
+	private string $password;
+
+	/**
+	 * Сервисы UCP, никто не знает, как формируются эти URL, пока оставлю тут.
+	 */
+	public const SERVICE_SUBSCRIBER 			= '/0001/subscriber/subscriber_no/';
+	public const SERVICE_SUBSCRIBER_NUMBER		= '/0001/subscriber/services/subscriber_no/';
+	public const SERVICE_CUSTOMER_MANAGEMENT 	= '/0001/customer_management/customer_account/itype/msisdn/uid/';
+	public const SERVICE_CUSTOMER_T_BALANCES 	= '/0001/customer_management/customer_account_balances/itype/msisdn/uid/';
+
+	/**
 	 * UcpConnector constructor.
 	 * @param array $config
 	 * @throws HttpClientException
 	 * @throws InvalidConfigException
 	 * @throws Throwable
 	 */
-	public function __construct(array $config = [])
+	public function __construct(array $config)
 	{
 		$params = ArrayHelper::getValue(Yii::$app->params, 'ucp.dev');
-		if (null === $params) {
+		$this->login = ArrayHelper::getValue($config, 'login');
+		$this->password = ArrayHelper::getValue($config, 'password');
+
+		if (null === $params || null === $this->login || null === $this->password) {
 			throw new InvalidConfigException('Не заданы параметры коннектора');
 		}
 
@@ -94,7 +116,7 @@ class UcpConnector extends BaseHttpConnector
 					->setMethod('post')
 					->setUrl(
 						$this->authService . '/login?'
-						. http_build_query(['sys' => 'bauth', 'login' => 'XXX', 'password' => 'XXX'])
+						. http_build_query(['sys' => 'bauth', 'login' => $this->login, 'password' => $this->password])
 					)
 					->send();
 
@@ -131,18 +153,27 @@ class UcpConnector extends BaseHttpConnector
 
 	/**
 	 * Получение информации по абоненту.
+	 * @param string $service Сервис UCP, смотри константы.
+	 * @param string $uid Телефонный номер абонента или его uid, завист от сервиса.
 	 * @return array
 	 * @throws HttpClientException
 	 * @throws InvalidConfigException
+	 * @throws Exception
 	 */
-	public function getSubscriberInfo(): array
+	public function getSubscriberInfo(string $service, string $uid): array
 	{
 		$response = $this->getClient()
 			->createRequest()
 			->setMethod('get')
-			->setUrl($this->dataService . '/0001/subscriber/subscriber_no/9037935871')
+			->setUrl($this->dataService . $service . $uid)
 			->setHeaders(['bauth-token' => $this->authToken])
 			->send();
+
+		$data = $response->isOk ? ArrayHelper::getValue($response->data, 'data') : null;
+		if (null === $data) {
+			throw new RuntimeException('Ошибка получения информации от источников данных ' . $response->toString());
+		}
+
 		return $response->data;
 	}
 
