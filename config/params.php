@@ -44,6 +44,13 @@ return [
 				'name',
 			]
 		]
+	],
+	'ucp' => [
+		'dev' => [
+			'baseUrl' => 'http://tst-ucpsct001.vimpelcom.ru:1480'
+		],
+		'prod' => [
+			'baseUrl' => 'https://ucp-digest.vimpelcom.ru:1480'
+		]
 	]
-
 ];
