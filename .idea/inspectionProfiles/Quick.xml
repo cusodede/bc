@@ -537,6 +537,9 @@
     <inspection_tool class="PropertiesInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="PropertyCanBePrivateInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PropertyCanBeStaticInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PropertyInitializationFlawsInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="REPORT_DEFAULTS_FLAWS" value="false" />
+    </inspection_tool>
     <inspection_tool class="RedundantSuppression" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RedundantTypeConversion" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="CHECK_ANY" value="false" />
