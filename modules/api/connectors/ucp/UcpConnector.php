@@ -57,7 +57,7 @@ class UcpConnector extends BaseHttpConnector
 	public const SERVICE_SUBSCRIBER 			= '/0001/subscriber/subscriber_no/';
 	public const SERVICE_SUBSCRIBER_NUMBER		= '/0001/subscriber/services/subscriber_no/';
 	public const SERVICE_CUSTOMER_MANAGEMENT 	= '/0001/customer_management/customer_account/itype/msisdn/uid/';
-	public const SERVICE_CUSTOMER_T_BALANCES 	= '/0001/customer_management/customer_account_balances/itype/msisdn/uid/';
+	public const SERVICE_CUSTOMER_BALANCES 		= '/0001/customer_management/customer_account_balances/itype/msisdn/uid/';
 
 	/**
 	 * UcpConnector constructor.
