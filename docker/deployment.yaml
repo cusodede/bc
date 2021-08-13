@@ -3,7 +3,7 @@ apiVersion: apps/v1
 metadata:
   annotations:
     image.openshift.io/triggers: >-
-     [{"from":{"kind":"ImageStreamTag","name":"prpl-backend:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-backend\")].image","pause":"false"}]
+     [{"from":{"kind":"ImageStreamTag","name":"prpl-backend:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-back\")].image","pause":"false"}]
   name: prpl-back
   namespace: prpl
   labels:
