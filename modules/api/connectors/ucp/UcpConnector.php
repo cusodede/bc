@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PropertyAnnotationInspection - атрибуты инициализируются не в самом конструкторе, а в методах, дёргаемых конструктором. Странно, но ладно. */
 declare(strict_types = 1);
 
 namespace app\modules\api\connectors\ucp;
