@@ -8,7 +8,6 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use cusodede\jwt\Jwt;
-use Lcobucci\JWT\Signer\Key\LocalFileReference;
 
 return [
 	'bsVersion' => '4',
