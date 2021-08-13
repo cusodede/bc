@@ -97,14 +97,14 @@ class Notifications extends ActiveRecord {
 	}
 
 	/**
-	 * @return ActiveQuery
+	 * @return ActiveQuery|null
 	 */
 	public function getRelatedReceiver():?ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'receiver']);
 	}
 
 	/**
-	 * @return ActiveQuery
+	 * @return ActiveQuery|null
 	 */
 	public function getRelatedInitiator():?ActiveQuery {
 		return $this->hasOne(Users::class, ['id' => 'initiator']);
@@ -124,12 +124,12 @@ class Notifications extends ActiveRecord {
 	/**
 	 * Отправка дефолтного текстового сообщения
 	 * @param string $message
-	 * @param null|int|int[] $receivers
+	 * @param int|int[]|null $receivers
 	 * @param int|null $initiator
 	 * @throws Exception
 	 * @throws ForbiddenHttpException
 	 */
-	public static function message(string $message, $receivers = null, ?int $initiator = null):void {
+	public static function message(string $message, array|int $receivers = null, ?int $initiator = null):void {
 		if (null === $receivers) $receivers = Users::Current()->id;
 		$receivers = (array)$receivers;
 		$insertData = [];

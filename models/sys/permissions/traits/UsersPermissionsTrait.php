@@ -99,7 +99,7 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissions($relatedPermissions):void {
+	public function setRelatedPermissions(mixed $relatedPermissions):void {
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissions)) {
 			RelUsersToPermissions::clearLinks($this);
@@ -127,7 +127,7 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissionsCollections($relatedPermissionsCollections):void {
+	public function setRelatedPermissionsCollections(mixed $relatedPermissionsCollections):void {
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissionsCollections)) {
 			RelUsersToPermissionsCollections::clearLinks($this);

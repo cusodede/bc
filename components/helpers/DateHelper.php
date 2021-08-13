@@ -14,11 +14,11 @@ use pozitronik\helpers\DateHelper as VendorDateHelper;
 class DateHelper extends VendorDateHelper
 {
 	/**
-	 * @param string|int|DateTimeInterface $date
+	 * @param DateTimeInterface|int|string $date
 	 * @return string дата в формате ISO8601.
 	 * @see https://www.php.net/manual/en/datetime.format.php
 	 */
-	public static function toIso8601($date): string
+	public static function toIso8601(DateTimeInterface|int|string $date): string
 	{
 		if (is_numeric($date)) {
 			return date('c', $date);

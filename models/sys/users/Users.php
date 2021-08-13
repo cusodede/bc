@@ -44,7 +44,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public const DEFAULT_PASSWORD = 'Qq123456';
 
 	/*файловые атрибуты*/
-	public $avatar;
+	public mixed $avatar = null;
 	/**
 	 * @var string|null параметр для локального хранения токена, по которому данный пользователь был опознан.
 	 * @see findIdentityByAccessToken()
@@ -152,7 +152,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @param null|string $password
-	 * @return string
+	 * @return string|null
 	 */
 	private function doSalt(?string $password):?string {
 		return null === $password?null:sha1($password.$this->salt);

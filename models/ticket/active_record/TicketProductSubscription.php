@@ -35,28 +35,28 @@ class TicketProductSubscription extends ActiveRecord
 	use ActiveRecordTrait;
 	use TicketTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'ticket_product_subscription';
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'ticket_product_subscription';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['!id', 'action'], 'required'],
-            [['action', 'rel_abonents_to_products_id'], 'integer'],
-            [['!id'], 'string', 'max' => 36],
-            [['!id'], 'unique'],
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['!id', 'action'], 'required'],
+			[['action', 'rel_abonents_to_products_id'], 'integer'],
+			[['!id'], 'string', 'max' => 36],
+			[['!id'], 'unique'],
 			[['!id'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::class, 'targetAttribute' => ['id' => 'id']],
 			[['rel_abonents_to_products_id'], 'exist', 'skipOnError' => true, 'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']]
-        ];
-    }
+		];
+	}
 
 	/**
 	 * @param RelAbonentsToProducts|array $relation
@@ -75,7 +75,7 @@ class TicketProductSubscription extends ActiveRecord
 	 * @param mixed $related
 	 * @throws Throwable
 	 */
-	public function setRelatedBilling($related): void
+	public function setRelatedBilling(mixed $related): void
 	{
 		RelTicketToBilling::linkModel($this, $related);
 	}
@@ -83,7 +83,7 @@ class TicketProductSubscription extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-    public function getRelatedAbonent(): ActiveQuery
+	public function getRelatedAbonent(): ActiveQuery
 	{
 		return $this->hasOne(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
 	}

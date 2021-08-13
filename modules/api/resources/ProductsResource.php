@@ -15,9 +15,6 @@ use yii\helpers\ArrayHelper;
  */
 class ProductsResource
 {
-	/**
-	 * @var ProductFormatterInterface|null
-	 */
 	private ProductFormatterInterface $_formatter;
 
 	/**

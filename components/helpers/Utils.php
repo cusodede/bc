@@ -20,7 +20,7 @@ class Utils extends VendorUtils
 		try {
 			$headers = get_headers($url);
 			return in_array('HTTP/1.1 200 OK', $headers, true);
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $e) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable) {
 			return false;
 		}
 	}

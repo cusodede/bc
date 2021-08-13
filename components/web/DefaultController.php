@@ -161,7 +161,7 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @return ActiveRecord|ActiveRecordTrait
+	 * @return ActiveRecord
 	 */
 	public function getModel():ActiveRecord {
 		return (new $this->modelClass());

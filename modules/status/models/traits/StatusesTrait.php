@@ -31,7 +31,7 @@ use yii\helpers\ArrayHelper;
  * @property-read null|Status $relStatus Релейшен к таблице статусов. Используем только для чтения, для записи обращаемся к Status::setCurrentStatus - там учитываются создатель и делегат. Если они не будут нужны, можно и через свойство.
  */
 trait StatusesTrait {
-	private $_className;
+	private ?string $_className = null;
 
 	/**
 	 * @return string

@@ -13,8 +13,9 @@ interface Tokenizer
 	 * @return string ключ для доступа к интерфейсу АПИ.
 	 */
 	public function getAuthToken(): string;
+
 	/**
-	 * @return string ключ для обновления связки ключей.
+	 * @return string|null ключ для обновления связки ключей.
 	 */
 	public function getRefreshToken(): ?string;
 	/**

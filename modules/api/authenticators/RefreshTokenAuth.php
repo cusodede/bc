@@ -24,7 +24,7 @@ class RefreshTokenAuth extends AuthMethod
 	{
 		try {
 			$grant = AuthController::getRequestGrantType($request);
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $e) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable) {
 			return null;
 		}
 

@@ -47,7 +47,7 @@ class Products extends ActiveRecordProducts
 	/**
 	 * @var mixed атрибут для загрузки логотипа в сторис.
 	 */
-	public $storyLogo;
+	public mixed $storyLogo = null;
 
 	/**
 	 * {@inheritdoc}

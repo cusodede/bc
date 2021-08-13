@@ -42,26 +42,26 @@ class SelectModelWidget extends Select2 {
 	public const DATA_MODE_AJAX = 1;//данные прогружаются аяксовым поиском
 
 	//private $data = [];//calculated/evaluated/received data array
-	private $ajaxPluginOptions = [];//calculated select2 ajax parameters
-	/** @var ActiveRecordInterface $_selectModel */
-	protected $_selectModel;
+	private array $ajaxPluginOptions = [];//calculated select2 ajax parameters
+	/** @var ActiveRecord|null $_selectModel */
+	protected ?ActiveRecord $_selectModel = null;
 
-	public $pkName;//primary key name for selectModel
-	public $selectModelClass;
-	public $selectionQuery;
-	public $exclude = [];
-	public $mapAttribute = 'name';
-	public $searchAttribute;
-	public $concatFields;
-	public $ajaxMinimumInputLength = 1;
-	public $ajaxSearchUrl;
+	public ?string $pkName;//primary key name for selectModel
+	public ?string $selectModelClass = null;
+	public ?ActiveQuery $selectionQuery = null;
+	public array $exclude = [];
+	public string $mapAttribute = 'name';
+	public ?string $searchAttribute = null;
+	public ?string $concatFields = null;
+	public int $ajaxMinimumInputLength = 1;
+	public ?string $ajaxSearchUrl = null;
 
-	public $loadingMode = self::DATA_MODE_LOAD;
-	public $multiple = true;//alias of pluginOptions['multiple']
-	public $jsPrefix = '';
+	public int $loadingMode = self::DATA_MODE_LOAD;
+	public bool $multiple = true;//alias of pluginOptions['multiple']
+	public string $jsPrefix = '';
 	public $data = [];//required initialization
 	public $value = [];//required initialization
-	public $dataOptions = 'dataOptions';
+	public string $dataOptions = 'dataOptions';
 
 	/**
 	 * При AJAX-загрузке отображаемые данные будут отображаться согласно логике, вшитой в Select2 - из initValueText (см. Select2::$initValueText).
