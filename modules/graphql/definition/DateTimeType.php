@@ -33,7 +33,7 @@ class DateTimeType extends ScalarType
 	 */
 	private static ?ScalarType $dateTimeType;
 
-	private const DEFAULT_FORMAT = 'Y-m-d H:i:s';
+	public const DEFAULT_FORMAT = 'Y-m-d H:i:s';
 
 	/**
 	 * Сериализация входящих значений.
@@ -42,7 +42,7 @@ class DateTimeType extends ScalarType
 	 */
 	public function serialize($value): string
 	{
-		if (!$value instanceof DateTimeInterface) {
+		if (!($value instanceof DateTimeInterface)) {
 			throw new InvariantViolation(
 				'Входящие значение не соответствует DateTimeInterface: ' . Utils::printSafe($value)
 			);
