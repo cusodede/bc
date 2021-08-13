@@ -3,22 +3,22 @@ apiVersion: apps/v1
 metadata:
   annotations:
     image.openshift.io/triggers: >-
-     [{"from":{"kind":"ImageStreamTag","name":"prpl-deploy:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-deploy\")].image","pause":"false"}]
-  name: prpl-deploy
+     [{"from":{"kind":"ImageStreamTag","name":"prpl-backend:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-backend\")].image","pause":"false"}]
+  name: prpl-back
   namespace: prpl
   labels:
-    app: prpl-deploy
+    app: prpl-back
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: prpl-deploy
+      app: prpl-back
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: prpl-deploy
-        deploymentconfig: prpl-deploy
+        app: prpl-back
+        deploymentconfig: prpl-back
       annotations:
         openshift.io/generated-by: OpenShiftWebConsole
     spec:
@@ -43,9 +43,9 @@ spec:
           persistentVolumeClaim:
             claimName: prpl
       containers:
-        - name: prpl-deploy
+        - name: prpl-back
           image: >-
-            image-registry.openshift-image-registry.svc:5000/prpl/prpl-deploy:master
+            image-registry.openshift-image-registry.svc:5000/prpl/prpl-backend:master
           ports:
             - containerPort: 8080
               protocol: TCP
