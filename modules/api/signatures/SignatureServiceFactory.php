@@ -23,6 +23,7 @@ final class SignatureServiceFactory
 	 */
 	public static function build(string $app): SignatureService
 	{
+		/** @noinspection PhpParamsInspection неявное преобразование */
 		return new SignatureService(
 			Instance::ensure(ArrayHelper::getValue(Yii::$app->params, "$app.signatureOptions.signer",
 				new InvalidConfigException("$app signer not set")),

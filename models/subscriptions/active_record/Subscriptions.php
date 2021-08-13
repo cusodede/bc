@@ -85,7 +85,7 @@ class Subscriptions extends ActiveRecord
 	 * Универсальный сеттер: в $product может придти как модель, так и её ключ (строкой или цифрой).
 	 * @param mixed $product
 	 */
-	public function setProduct($product): void
+	public function setProduct(mixed $product): void
 	{
 		if (null === $product = static::ensureModel(Products::class, $product)) {
 			throw new InvalidArgumentException('Невозможно обнаружить соответствующую модель');

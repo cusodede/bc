@@ -28,15 +28,14 @@ use pozitronik\helpers\ArrayHelper;
  * @property TimelineEntry $timelineEntry
  */
 class HistoryEvent extends Model implements HistoryEventInterface {
-	public $eventType;
-	public $eventCaption;
-	public $eventIcon;
-	public $eventTime;
-	public $objectName;
-	public $subject;
-	public $subjectId;
-	public $actions;
+	public ?int $eventType = null;
+	public ?string $eventCaption = null;
+	public ?string $eventIcon = null;
+	public ?string $eventTime = null;
+	public ?string $objectName = null;
+	public ?int $subject = null;
 	public $actionsFormatter;
+	public ?array $actions = null;
 
 	/**
 	 * Converts log event to timeline entry

@@ -49,10 +49,10 @@ class ActiveRecordHistory extends History {
 	 * a two-element array. The first element specifies the serialization function, and the second the deserialization
 	 * function.
 	 */
-	public $serializer;
+	public ?array $serializer = null;
 
-	private $_loadedModel;
-	public $storeShortClassNames = false;
+	private ?ActiveRecord $_loadedModel = null;
+	public bool $storeShortClassNames = false;
 
 	/**
 	 * Shorthand to get string identifier of stored class name (short/full class name)
@@ -84,7 +84,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => null,
 				'operation_identifier' => "Console operation"
@@ -97,7 +97,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => self::ensureDelegate(),
 				'operation_identifier' => Yii::$app->request->csrfToken
@@ -154,6 +154,7 @@ class ActiveRecordHistory extends History {
 	 * @throws ReflectionException
 	 * @throws Throwable
 	 * @throws UnknownClassException
+	 * @noinspection PhpIncompatibleReturnTypeInspection - мы можем конкретизировать тип
 	 */
 	public function getLoadedModel():?ActiveRecord {
 		return $this->_loadedModel??ReflectionHelper::LoadClassByName(self::ExpandClassName($this->model_class), null, false);
@@ -172,7 +173,7 @@ class ActiveRecordHistory extends History {
 	 * @return mixed
 	 * @throws Throwable
 	 */
-	private function getModelRules(?string $key = null, $default = null) {
+	private function getModelRules(?string $key = null, mixed $default = null) {
 		$behaviors = $this->loadedModel->behaviors();
 		$keys = ArrayHelper::array_find_deep($behaviors, HistoryBehavior::class);
 		array_pop($keys);
@@ -293,7 +294,7 @@ class ActiveRecordHistory extends History {
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	private function SubstituteAttributeValue(string $attributeName, $attributeValue) {
+	private function SubstituteAttributeValue(string $attributeName, mixed $attributeValue) {
 		if (null === $this->loadedModel) return $attributeValue;
 		if (null === $attributeConfig = $this->getModelRules("attributes.{$attributeName}")) return $attributeValue;
 		if (false === $attributeConfig) return false;//не показывать атрибут
@@ -588,7 +589,7 @@ class ActiveRecordHistory extends History {
 	/**
 	 * @param mixed $attributesOld
 	 */
-	public function setAttributesOld($attributesOld):void {
+	public function setAttributesOld(mixed $attributesOld):void {
 		$this->old_attributes = $this->serialize($attributesOld);
 	}
 
@@ -602,7 +603,7 @@ class ActiveRecordHistory extends History {
 	/**
 	 * @param mixed $attributesNew
 	 */
-	public function setAttributesNew($attributesNew):void {
+	public function setAttributesNew(mixed $attributesNew):void {
 		$this->new_attributes = $this->serialize($attributesNew);
 	}
 

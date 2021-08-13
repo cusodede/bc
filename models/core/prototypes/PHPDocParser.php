@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 class PHPDocParser extends Model {
 	private const PROPERTY_REGEXP = '/(?m)@property\h*\K(?:(\S+)\h+)\$?(\S+)?(.*)$/';
 
-	public $name;
+	public ?string $name = null;
 	public ?string $type = null;
 	public ?string $comment = null;
 	public bool $required = false;

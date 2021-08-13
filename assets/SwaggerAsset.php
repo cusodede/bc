@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\models\core\Options;
 use yii\web\AssetBundle;
 
 /**
@@ -26,7 +26,7 @@ class SwaggerAsset extends AssetBundle
 			'js/swagger-onload.js',
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 
 		parent::init();

@@ -24,9 +24,9 @@ use yii\helpers\ArrayHelper;
 class HistoryBehavior extends Behavior {
 	private const DISABLE = false;
 
-	public $relations = [];
-	public $isRelation;
-	public $afterUpdate;
+	public array $relations = [];
+	public ?array $isRelation = null;
+	public $afterUpdate;//php 8.0 не умеет типизировать callable
 
 	/**
 	 *

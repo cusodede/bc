@@ -24,7 +24,7 @@ class EditableFieldAction extends Action {
 	/**
 	 * @var string the scenario to be assigned to the model before it is validated and updated.
 	 */
-	public $scenario = Model::SCENARIO_DEFAULT;
+	public string $scenario = Model::SCENARIO_DEFAULT;
 
 	/**
 	 * @param int $id

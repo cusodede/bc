@@ -24,7 +24,7 @@ class Partners extends ActiveRecordPartners
 	/**
 	 * @var mixed атрибут для загрузки логотипа партнера.
 	 */
-	public $logo;
+	public mixed $logo = null;
 
 	/**
 	 * {@inheritdoc}
@@ -47,7 +47,7 @@ class Partners extends ActiveRecordPartners
 	/**
 	 * @param UploadedFile|string $logo
 	 */
-	public function setLogo($logo): void
+	public function setLogo(mixed $logo): void
 	{
 		$this->logo = $logo;
 	}

@@ -38,7 +38,7 @@ trait ActiveRecordTrait {
 	 * @param int|string|ActiveRecordInterface $model
 	 * @return ActiveRecordInterface|null
 	 */
-	public static function ensureModel($className, $model):?ActiveRecordInterface {
+	public static function ensureModel(string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
 		if (is_string($model) && is_numeric($model)) {
 			$model = (int)$model;
 		}
@@ -61,7 +61,7 @@ trait ActiveRecordTrait {
 	}
 
 	/**
-	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
 	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
@@ -125,12 +125,11 @@ trait ActiveRecordTrait {
 	}
 
 	/**
-	 * @param null|array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
+	 * @param array $errors Возвращаемый список ошибок. null, чтобы не инициализировать на входе.
 	 * @param null|bool $AJAXErrorsFormat Формат возврата ошибок: true: для ajax-валидации, false - as is, null (default) - в зависимости от типа запроса
 	 * @param array $relationAttributes Массив с перечисление relational-моделей, приходящих отдельной формой
 	 * @return null|bool true: модель сохранена, false: модель не сохранена, null: постинга не было
 	 * @throws DbException
-	 * @throws Throwable
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
 	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []):?bool {
@@ -210,7 +209,7 @@ trait ActiveRecordTrait {
 			} else {
 				$transaction->rollBack();
 			}
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $e) {
+		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable) {
 			$transaction->rollBack();
 
 			SysExceptions::log($e);
@@ -251,12 +250,10 @@ trait ActiveRecordTrait {
 
 	/**
 	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
-	 * @param array $attributes
-	 * @return static
 	 * @noinspection PhpDocMissingThrowsInspection Это нормально, метод find может быть перекрыт, и возвращать
 	 * собственные исключения. Можно не включать в пробрасываемый скоуп.
 	 */
-	public static function Upsert(array $attributes):self {
+	public static function Upsert(array $attributes):static {
 		if (null === $model = self::find()->where($attributes)->one()) {
 			$model = new self();
 			$model->load($attributes, '');
@@ -267,10 +264,8 @@ trait ActiveRecordTrait {
 
 	/**
 	 * Возвращает существующую запись в ActiveRecord-модели, найденную по условию, если же такой записи нет - возвращает новую модель
-	 * @param array|string $searchCondition
-	 * @return ActiveRecord|self
 	 */
-	public static function getInstance($searchCondition):self {
+	public static function getInstance(array|string $searchCondition):static {
 		$instance = static::find()->where($searchCondition)->one();
 		return $instance??new static();
 	}

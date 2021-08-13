@@ -40,7 +40,7 @@ abstract class BaseMutationType extends ObjectType
 
 	/**
 	 * Сохранение модели для GraphQL
-	 * @param ActiveRecord|ActiveRecordTrait $model
+	 * @param ActiveRecord $model
 	 * @param array $attributes
 	 * @param array $messages
 	 * @return array
@@ -48,6 +48,7 @@ abstract class BaseMutationType extends ObjectType
 	 */
 	public function save(ActiveRecord $model, array $attributes, array $messages): array
 	{
+		/** @var ActiveRecord|ActiveRecordTrait $model */
 		return $this->getResult($model->setAndSaveAttributes($attributes, true), $model->getErrors(), $messages);
 	}
 

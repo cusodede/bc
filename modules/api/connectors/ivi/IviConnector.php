@@ -112,7 +112,7 @@ class IviConnector extends BaseHttpConnector
 	/**
 	 * Получение токена доступа по номеру абонента.
 	 * @param ProductOptions $options
-	 * @return string|null
+	 * @return string
 	 */
 	private function getAccessTokenByPhone(ProductOptions $options): string
 	{
@@ -151,10 +151,10 @@ class IviConnector extends BaseHttpConnector
 
 	/**
 	 * Генерация подписи для параметров передачи в API.
-	 * @param array|string $params
+	 * @param string|string[] $params
 	 * @return string
 	 */
-	private function getSignedParams($params): string
+	private function getSignedParams(array|string $params): string
 	{
 		if (is_array($params)) {
 			ksort($params);
