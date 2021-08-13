@@ -57,7 +57,7 @@ return [
 		],
 		'signatureOptions' => [
 			'signer'    => Jwt::RS256,
-			'signerKey' => LocalFileReference::file('partnertest20181204.private.pem')
+			'signerKey' => ''
 		]
 	],
 	'vet-expert' => [
