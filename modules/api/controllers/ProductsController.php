@@ -50,10 +50,10 @@ class ProductsController extends YiiRestController
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class'  => JwtHttpBearerAuth::class
+				'class' => JwtHttpBearerAuth::class
 			],
 			'access' => [
-				'class'  => PermissionFilter::class
+				'class' => PermissionFilter::class
 			]
 		];
 	}
