@@ -6,7 +6,6 @@ namespace app\components\db;
 use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_exceptions\models\SysExceptions;
 use pozitronik\traits\traits\ActiveRecordTrait as VendorActiveRecordTrait;
 use Throwable;
 use Yii;
@@ -209,10 +208,8 @@ trait ActiveRecordTrait {
 			} else {
 				$transaction->rollBack();
 			}
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable) {
+		} catch (Throwable) {
 			$transaction->rollBack();
-
-			SysExceptions::log($e);
 
 			$saveIsOk = false;
 		}
