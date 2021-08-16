@@ -18,7 +18,7 @@ trait EnumTrait
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public static function getScalar($case)
+	public static function getScalar($case): mixed
 	{
 		return ArrayHelper::getValue(static::mapData(), $case);
 	}
