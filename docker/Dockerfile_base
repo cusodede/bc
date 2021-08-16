@@ -1,0 +1,50 @@
+FROM harbor.vimpelcom.ru/dockerhub/library/alpine:3.13
+COPY --from=harbor.vimpelcom.ru/dockerhub/library/composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN apk --no-cache add \
+#  curl \
+#  git \
+#  net-tools \
+#  vim \
+#  openssh-client \
+  nginx \
+  php8 \
+  php8-ctype \
+  php8-curl \
+  php8-dom \
+  php8-fpm \
+  php8-gd \
+  php8-intl \
+  php8-json \
+  php8-mbstring \
+  php8-mysqli \
+  php8-pdo_mysql \
+  php8-opcache \
+  php8-openssl \
+  php8-phar \
+  php8-session \
+  php8-xml \
+  php8-xmlreader \
+  php8-xmlwriter \
+  php8-tokenizer \
+  php8-zlib \
+  php8-fileinfo \
+  php8-sodium \
+  supervisor \
+  && ln -s /usr/bin/php8 /usr/bin/php \
+  && ln -s /dev/stderr /var/lib/nginx/logs/error.log \
+  && ln -s /dev/stdout /var/lib/nginx/logs/access.log \
+  && mkdir -p /usr/share/php8 \
+  && mv /etc/php8/php.ini /usr/share/php8 \
+  && ln -sf /usr/share/php8/php.ini /etc/php8/php.ini
+  
+EXPOSE 8080
+EXPOSE 8081
+ENTRYPOINT ["/usr/bin/supervisord"]
+# Let supervisord start nginx & php-fpm
+CMD ["-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# Configure a healthcheck to validate that everything is up&running
+HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
+
+
+

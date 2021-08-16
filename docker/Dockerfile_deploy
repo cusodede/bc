@@ -1,0 +1,5 @@
+FROM harbor.vimpelcom.ru/prpl/prpl_front:$CI_COMMIT_BRANCH as front
+FROM harbor.vimpelcom.ru/prpl/prpl_back:$CI_COMMIT_SHA as back
+WORKDIR /var/www/ppl/web/dist
+COPY --from=front /var/www/ppl/web/dist .
+

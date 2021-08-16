@@ -6,7 +6,7 @@ use yii\bootstrap4\Html;
 
 <div class="page-logo">
 	<?= Html::a(
-		Html::img('/img/theme/logo-bee.png', [/*todo: вынести в стили*/
+		Html::img('/img/theme/prpllogo.svg', [/*todo: вынести в стили*/
 			'aria-roledescription' => 'logo',
 			'alt' => Yii::$app->name
 		]).

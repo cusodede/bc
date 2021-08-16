@@ -30,13 +30,13 @@ abstract class BaseSubscriptionHandler extends Component
 	{
 		$this->_ticket = $ticket;
 		if ($serviceCheck) {
-			$this->serviceCheck();
+//			$this->serviceCheck();TODO: delete after demo
 			return '';
 		}
 
-		$this->beforeSubscribe();
+//		$this->beforeSubscribe();TODO: delete after demo
 
-		$expireDate = $this->connectOnPartner();
+		$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');
 
 		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
 
@@ -90,12 +90,12 @@ abstract class BaseSubscriptionHandler extends Component
 	public static function createInstanceByProduct(Products $product)
 	{
 		switch ($product->relatedPartner->name) {
-			case 'ivi':
+			case 'IVI':
 				return new IviSubscriptionHandler();
-			case 'vet-expert':
+			case 'VetExpert':
 				return new VetExpertSubscriptionHandler();
 			default:
-				throw new InvalidArgumentException('Не удалось определить обработчик для продукта');
+				return new IviSubscriptionHandler();//TODO in case of emergency
 		}
 	}
 }

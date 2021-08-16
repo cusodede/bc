@@ -22,6 +22,7 @@ LoginAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="icon" type="image/svg" href="/img/theme/prpllogo.svg">
 	<?= Html::csrfMetaTags() ?>
 	<?php $this->head(); ?>
 </head>
@@ -36,7 +37,7 @@ LoginAsset::register($this);
 					<div
 						class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0">
 						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-							<img src="/img/theme/logo-bee.png" alt="<?= Yii::$app->name ?>" aria-roledescription="logo">
+							<img src="/img/theme/prpllogo.svg" alt="<?= Yii::$app->name ?>" aria-roledescription="logo">
 							<span class="page-logo-text mr-1"><?= Yii::$app->name ?></span>
 						</a>
 					</div>

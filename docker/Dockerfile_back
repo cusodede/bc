@@ -1,0 +1,7 @@
+FROM harbor.vimpelcom.ru/prpl/prpl_base:latest
+ARG COMPOSER_TOKEN
+WORKDIR /var/www/ppl/
+COPY . /var/www/ppl/
+RUN composer config -g github-oauth.github.com ${COMPOSER_TOKEN}
+RUN composer install --ignore-platform-reqs --no-dev
+

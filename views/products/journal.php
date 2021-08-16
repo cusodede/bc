@@ -23,6 +23,7 @@ use yii\web\View;
 use app\models\products\Products;
 
 $this->title = 'История подключений';
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 

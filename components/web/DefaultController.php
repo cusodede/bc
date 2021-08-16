@@ -73,23 +73,6 @@ class DefaultController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	public function beforeAction($action):bool {
-		$this->view->title = static::DEFAULT_TITLE??($this->view->title??$this->id);
-		if (!isset($this->view->params['breadcrumbs'])) {
-			if ($this->defaultAction === $action->id) {
-				$this->view->params['breadcrumbs'][] = $this->id;
-			} else {
-				$this->view->params['breadcrumbs'][] = ['label' => $this->defaultAction, 'url' => $this::to($this->defaultAction)];
-				$this->view->params['breadcrumbs'][] = $action->id;
-			}
-
-		}
-		return parent::beforeAction($action);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function behaviors():array {
 		return [
 			[

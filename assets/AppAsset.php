@@ -16,14 +16,16 @@ use yii\web\YiiAsset;
 /**
  * Main application asset bundle.
  */
-class AppAsset extends AssetBundle {
+class AppAsset extends AssetBundle
+{
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function init():void {
-		$this->sourcePath = __DIR__.'/assets/app/';
-		$this->css = [
+	public function init(): void
+	{
+		$this->sourcePath = __DIR__ . '/assets/app/';
+		$this->css        = [
 			'css/site.css',
 			'css/navigation.css'
 		];
@@ -37,7 +39,7 @@ class AppAsset extends AssetBundle {
 		$this->publishOptions = [
 			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
+
 		parent::init();
 	}
-
 }

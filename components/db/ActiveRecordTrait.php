@@ -6,6 +6,7 @@ namespace app\components\db;
 use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\ArrayHelper;
+use pozitronik\sys_exceptions\models\SysExceptions;
 use pozitronik\traits\traits\ActiveRecordTrait as VendorActiveRecordTrait;
 use Throwable;
 use Yii;
@@ -33,11 +34,11 @@ trait ActiveRecordTrait {
 
 	/**
 	 * По (int)$pk|(string)$pk пытается вернуть соответствующую ActiveRecord-модель
-	 * @param string|ActiveRecordInterface $className
+	 * @param null|string|ActiveRecordInterface $className
 	 * @param int|string|ActiveRecordInterface $model
 	 * @return ActiveRecordInterface|null
 	 */
-	public static function ensureModel(string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
+	public static function ensureModel(null|string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
 		if (is_string($model) && is_numeric($model)) {
 			$model = (int)$model;
 		}
@@ -91,6 +92,10 @@ trait ActiveRecordTrait {
 			}
 
 			if (false !== $result = $this->save()) {
+				if (method_exists($this, 'uploadAttributes')) {
+					$this->uploadAttributes();
+				}
+
 				$transaction->commit();
 			} else {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
@@ -206,6 +211,8 @@ trait ActiveRecordTrait {
 			}
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable) {
 			$transaction->rollBack();
+
+			SysExceptions::log($e);
 
 			$saveIsOk = false;
 		}

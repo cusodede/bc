@@ -27,9 +27,9 @@ ModalHelperAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="commit" content="<?= Utils::LastCommit() ?>">
+	<link rel="icon" type="image/svg" href="/img/theme/prpllogo.svg">
 	<?= Html::csrfMetaTags() ?>
-	<title><?= $this->title ?> [<?= Utils::LastCommit() ?>]</title>
+	<title><?= $this->title ?></title>
 	<?php $this->head(); ?>
 </head>
 

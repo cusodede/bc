@@ -9,7 +9,6 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
-use app\assets\ModalHelperAsset;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
@@ -23,65 +22,63 @@ use pozitronik\helpers\ArrayHelper;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
 
-ModalHelperAsset::register($this);
-$this->title = 'Продукты';
+$this->title                   = 'Продукты';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?= GridConfig::widget([
-	'id' => "{$modelName}-index-grid",
+	'id'   => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
-		'panel' => [
+		'dataProvider'     => $dataProvider,
+		'filterModel'      => $searchModel,
+		'panel'            => [
 			'heading' => '',
 		],
-		'showOnEmpty' => true,
-		'toolbar' => false,
-		'export' => false,
+		'toolbar'          => false,
+		'export'           => false,
 		'resizableColumns' => true,
-		'responsive' => true,
-		'columns' => [
+		'responsive'       => true,
+		'columns'          => [
 			'id',
 			'name',
 			'price',
 			[
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'type_id',
-					'data' => EnumProductsTypes::mapData(),
+				'filter'    => Select2::widget([
+					'model'         => $searchModel,
+					'attribute'     => 'type_id',
+					'data'          => EnumProductsTypes::mapData(),
 					'pluginOptions' => [
-						'allowClear' => true,
+						'allowClear'  => true,
 						'placeholder' => ''
 					]
 				]),
 				'attribute' => 'type_id',
-				'format' => 'text',
-				'value' => static fn(Products $product) => EnumProductsTypes::getScalar($product->type_id),
+				'format'    => 'text',
+				'value'     => static fn(Products $product) => EnumProductsTypes::getScalar($product->type_id),
 			],
 			[
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'partner_id',
-					'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+				'filter'    => Select2::widget([
+					'model'         => $searchModel,
+					'attribute'     => 'partner_id',
+					'data'          => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
 					'pluginOptions' => [
-						'allowClear' => true,
+						'allowClear'  => true,
 						'placeholder' => ''
 					]
 				]),
 				'attribute' => 'partner_id',
-				'format' => 'text',
-				'value' => 'relatedPartner.name',
+				'format'    => 'text',
+				'value'     => 'relatedPartner.name',
 			],
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'created_at',
-				'format' => ['date', 'php:d.m.Y H:i'],
+				'format'    => ['date', 'php:d.m.Y H:i'],
 			],
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'updated_at',
-				'format' => ['date', 'php:d.m.Y H:i'],
+				'format'    => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

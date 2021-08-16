@@ -21,7 +21,8 @@ $modelName = $model->formName();
 		'subItem' => 'id'
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'class'    => 'modal-dialog-large',
+		'tabindex' => false
 	]
 ]); ?>
 <?= $this->render('../view', compact('model')) ?>

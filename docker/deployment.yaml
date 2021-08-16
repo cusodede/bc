@@ -1,0 +1,99 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    image.openshift.io/triggers: >-
+     [{"from":{"kind":"ImageStreamTag","name":"prpl-backend:master","namespace":"prpl"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prpl-back\")].image","pause":"false"}]
+  name: prpl-back
+  namespace: prpl
+  labels:
+    app: prpl-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prpl-back
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prpl-back
+        deploymentconfig: prpl-back
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      volumes:
+        - name: prpl-php8
+          configMap:
+            name: prpl-php8
+            defaultMode: 420
+        - name: prpl-supervisor
+          configMap:
+            name: prpl-supervisor
+            defaultMode: 420
+        - name: prpl-nginx
+          configMap:
+            name: prpl-nginx
+            defaultMode: 420
+        - name: prpl-php8-ini
+          configMap:
+            name: prpl-php8-ini
+            defaultMode: 420            
+        - name: prpl
+          persistentVolumeClaim:
+            claimName: prpl
+      containers:
+        - name: prpl-back
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/prpl/prpl-backend:master
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8081
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          env:
+            - name: YII_ENV_DEV
+              value: 'false'
+            - name:  YII_ENV
+              value: 'prod'
+          terminationMessagePolicy: File
+          envFrom:
+            - secretRef:
+                name: prpldb
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+              - name: prpl-php8
+                mountPath: "/etc/php8/php-fpm.d/"
+                readOnly: true
+              - name: prpl-supervisor
+                mountPath: "/etc/supervisor/conf.d/"
+                readOnly: true
+              - name: prpl-nginx
+                mountPath: "/etc/nginx/conf.d/"
+                readOnly: true
+              - name: prpl-php8-ini
+                mountPath: "/usr/share/php8"
+                readOnly: true
+              - name: prpl
+                mountPath: "/var/www/ppl/web/assets"
+                subPath: assets
+              - name: prpl
+                mountPath: "/var/www/ppl/runtime"
+                subPath: runtime
+              - name: prpl
+                mountPath: "/tmp"
+                subPath: tmp
+              - name: prpl
+                mountPath: "/var/www/ppl/web/uploads"
+                subPath: uploads               
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

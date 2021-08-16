@@ -9,60 +9,48 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
-use app\assets\ModalHelperAsset;
+use app\components\helpers\Html;
+use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
-use pozitronik\helpers\Utils;
 use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\grid\ActionColumn;
-use yii\bootstrap4\Html;
-use yii\web\JsExpression;
 use yii\web\View;
 
-ModalHelperAsset::register($this);
-$this->title = 'Абоненты';
+$this->title                   = 'Абоненты';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <?= GridConfig::widget([
-	'id' => "{$modelName}-index-grid",
+	'id'   => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
-		'panel' => [
-			'heading' => $this->title. (($dataProvider->totalCount > 0) ? ' (' . Utils::pluralForm($dataProvider->totalCount, ['абонент', 'абонента', 'абонентов']). ')' : ' (нет абонентов)'),
+		'dataProvider'     => $dataProvider,
+		'filterModel'      => $searchModel,
+		'panel'            => [
+			'heading' => '',
 		],
-		'summary' => null !== $searchModel ? Html::a('Добавить абонента', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
-		'showOnEmpty' => true,
-		'emptyText' => Html::a('Добавить абонента', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]),
-		'toolbar' => false,
-		'export' => false,
+		'toolbar'          => [
+			['content' => Html::ajaxModalLink('Добавить абонента', $controller::to('create'), ['class' => ['btn btn-success']])]
+		],
+		'export'           => false,
 		'resizableColumns' => true,
-		'responsive' => true,
-		'columns' => [
+		'responsive'       => true,
+		'columns'          => [
 			[
-				'class' => ActionColumn::class,
-				'template' => '{edit}{view}',
-				'buttons' => [
-					'edit' => static function(string $url, Model $model)
-					{
-						return Html::a('<i class="fas fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
+				'class'    => ActionColumn::class,
+				'template' => '<div class="btn-group">{edit}{view}</div>',
+				'buttons'  => [
+					'edit' => static function(string $url, Model $model) {
+						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'view' => static function(string $url, Model $model)
-					{
-						return Html::a('<i class="fas fa-eye"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
+					'view' => static function(string $url, Model $model) {
+						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
 				],
@@ -73,14 +61,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			'patronymic',
 			'phone',
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'created_at',
-				'format' => ['date', 'php:d.m.Y H:i'],
+				'format'    => ['date', 'php:d.m.Y H:i'],
 			],
 			[
-				'class' => DataColumn::class,
+				'class'     => DataColumn::class,
 				'attribute' => 'updated_at',
-				'format' => ['date', 'php:d.m.Y H:i'],
+				'format'    => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

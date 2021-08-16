@@ -5,6 +5,8 @@ namespace app\models\abonents\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_query\AbonentsActiveQuery;
+use app\models\phones\PhoneNumberValidator;
+use app\models\phones\Phones;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
@@ -46,7 +48,8 @@ class Abonents extends ActiveRecord
 			[['deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['surname', 'name', 'patronymic'], 'string', 'max' => 64],
-			['phone', 'match', 'pattern' => '/^\d{11}$/', 'message' => 'Значение не верно, пример: 79050968533'],
+			[['phone'], PhoneNumberValidator::class],
+			[['phone'], 'filter', 'filter' => static fn($value) => Phones::defaultFormat($value)],
 			[['phone'], 'unique'],
 		];
 	}

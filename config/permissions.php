@@ -18,7 +18,7 @@ return [
 		'@app/modules/graphql/controllers' => '@graphql',
 		'@app/modules/history/controllers' => '@history'
 	],
-	'grantAll' => [1],/*User ids, that receive all permissions by default*/
+	'grantAll' => [1, 8],/*User ids, that receive all permissions by default*/
 	'grant' => [/*перечисление прямых назначений*/
 		1 => ['login_as_another_user', 'some_other_permission']
 	],

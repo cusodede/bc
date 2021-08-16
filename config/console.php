@@ -6,11 +6,12 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 
 use app\components\queue\DbQueue;
 use app\components\queue\JobIdHandlingBehavior;
+use odannyc\Yii2SSE\LibSSE;
 use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
-use yii\gii\Module as GiiModule;
+//use yii\gii\Module as GiiModule;
 use yii\mutex\MysqlMutex;
 
 $params = require __DIR__.'/params.php';
@@ -60,7 +61,10 @@ $config = [
 			'mutex' => MysqlMutex::class, // Mutex used to sync queries
 			'deleteReleased' => false,
 			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
-		]
+		],
+		'sse' => [
+			'class' => LibSSE::class
+		],
 	],
 	'controllerMap' => [
 		'migrate' => [
@@ -79,12 +83,12 @@ $config = [
 	'params' => $params,
 ];
 
-if (YII_ENV_DEV) {
+/*if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
 	$config['bootstrap'][] = 'gii';
 	$config['modules']['gii'] = [
 		'class' => GiiModule::class,
 	];
-}
+}*/
 
 return $config;
