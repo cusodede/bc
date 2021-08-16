@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\components\subscription;
 
 use app\models\products\Products;
-use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketSubscription;
 use InvalidArgumentException;
 use yii\base\Component;
 
@@ -15,18 +15,18 @@ use yii\base\Component;
 abstract class BaseSubscriptionHandler extends Component
 {
 	/**
-	 * @var TicketProductSubscription|null тикет, в рамках которого выполняется подключение/отключение услуги.
+	 * @var TicketSubscription|null тикет, в рамках которого выполняется подключение/отключение услуги.
 	 */
-	protected ?TicketProductSubscription $_ticket = null;
+	protected ?TicketSubscription $_ticket = null;
 
 	/**
 	 * Подключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param TicketProductSubscription $ticket
+	 * @param TicketSubscription $ticket
 	 * @param bool $serviceCheck
 	 * @return string
 	 */
-	public function connect(TicketProductSubscription $ticket, bool $serviceCheck = false): string
+	public function connect(TicketSubscription $ticket, bool $serviceCheck = false): string
 	{
 		$this->_ticket = $ticket;
 		if ($serviceCheck) {
@@ -46,9 +46,9 @@ abstract class BaseSubscriptionHandler extends Component
 	/**
 	 * Отключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param TicketProductSubscription $ticket
+	 * @param TicketSubscription $ticket
 	 */
-	public function disable(TicketProductSubscription $ticket): void
+	public function disable(TicketSubscription $ticket): void
 	{
 		$this->_ticket = $ticket;
 

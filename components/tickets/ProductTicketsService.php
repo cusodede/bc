@@ -5,7 +5,7 @@ namespace app\components\tickets;
 
 use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
-use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketSubscription;
 use app\models\ticket\TicketProductSubscriptionParams;
 use app\modules\api\resources\formatters\TicketSubscriptionFormatter;
 use Throwable;
@@ -32,11 +32,11 @@ class ProductTicketsService
 		$params = new TicketProductSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
-			'action'    => TicketProductSubscription::ACTION_CONNECT_SUBSCRIPTION,
+			'action'    => TicketSubscription::ACTION_CONNECT_SUBSCRIPTION,
 			'createdBy' => $userId ?? Yii::$app->user->id
 		]);
 
-		$ticket = TicketProductSubscription::createTicket($params);
+		$ticket = TicketSubscription::createTicket($params);
 
 		Yii::$app->productTicketsQueue->push(new SubscribeJob($ticket->id));
 
@@ -56,11 +56,11 @@ class ProductTicketsService
 		$params = new TicketProductSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
-			'action'    => TicketProductSubscription::ACTION_DISABLE_SUBSCRIPTION,
+			'action'    => TicketSubscription::ACTION_DISABLE_SUBSCRIPTION,
 			'createdBy' => $userId ?? Yii::$app->user->id
 		]);
 
-		$ticket = TicketProductSubscription::createTicket($params);
+		$ticket = TicketSubscription::createTicket($params);
 
 		Yii::$app->productTicketsQueue->push(new UnsubscribeJob($ticket->id));
 
@@ -75,7 +75,7 @@ class ProductTicketsService
 	 */
 	public static function getTicketStatus(string $ticketId): array
 	{
-		$ticket = TicketProductSubscription::findOne($ticketId);
+		$ticket = TicketSubscription::findOne($ticketId);
 		if (null === $ticket) {
 			throw new NotFoundHttpException("Can't find the ticket by id $ticketId");
 		}

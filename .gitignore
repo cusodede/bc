@@ -4,6 +4,7 @@
 /.phpunit.result.cache
 /config/local/
 /untracked
+/report
 
 #for tests
 /models/tests
