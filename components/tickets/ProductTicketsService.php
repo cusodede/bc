@@ -6,7 +6,7 @@ namespace app\components\tickets;
 use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
 use app\models\ticket\TicketSubscription;
-use app\models\ticket\TicketProductSubscriptionParams;
+use app\models\ticket\TicketSubscriptionParams;
 use app\modules\api\resources\formatters\TicketSubscriptionFormatter;
 use Throwable;
 use Yii;
@@ -29,7 +29,7 @@ class ProductTicketsService
 	 */
 	public function createSubscribeTicket(int $productId, int $abonentId, ?int $userId = null): string
 	{
-		$params = new TicketProductSubscriptionParams([
+		$params = new TicketSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
 			'action'    => TicketSubscription::ACTION_CONNECT_SUBSCRIPTION,
@@ -53,7 +53,7 @@ class ProductTicketsService
 	 */
 	public function createUnsubscribeTicket(int $productId, int $abonentId, ?int $userId = null): string
 	{
-		$params = new TicketProductSubscriptionParams([
+		$params = new TicketSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
 			'action'    => TicketSubscription::ACTION_DISABLE_SUBSCRIPTION,

@@ -8,7 +8,7 @@ use Throwable;
 use Yii;
 
 /**
- * Class TicketProductSubscription
+ * Class TicketSubscription
  * @package app\models\ticket
  */
 class TicketSubscription extends TicketSubscriptionActiveRecord
@@ -21,11 +21,11 @@ class TicketSubscription extends TicketSubscriptionActiveRecord
 	public const STAGE_CODE_CONNECT_ON_PARTNER = 1003;
 
 	/**
-	 * @param TicketProductSubscriptionParams $params
+	 * @param TicketSubscriptionParams $params
 	 * @return static
 	 * @throws Throwable
 	 */
-	public static function createTicket(TicketProductSubscriptionParams $params): static
+	public static function createTicket(TicketSubscriptionParams $params): static
 	{
 		if (null !== $params->id) {
 			$ticket = static::findOne($params->id);

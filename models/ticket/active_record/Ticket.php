@@ -24,7 +24,7 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string|null $completed_at
  *
- * @property TicketSubscription $relatedTicketProductSubscription
+ * @property TicketSubscription $relatedTicketSubscription
  */
 class Ticket extends ActiveRecord
 {
@@ -83,7 +83,7 @@ class Ticket extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getRelatedTicketProductSubscription(): ActiveQuery
+    public function getRelatedTicketSubscription(): ActiveQuery
     {
         return $this->hasOne(TicketSubscription::class, ['id' => 'id']);
     }
