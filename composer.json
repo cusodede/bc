@@ -76,7 +76,14 @@
 		],
 		"test": "phpunit",
 		"codeception": "vendor/bin/codecept run",
-		"metrics": "vendor/bin/phpmetrics --config=phpmetrics.json"
+		"metrics": "vendor/bin/phpmetrics --config=phpmetrics.json",
+		"migrations": [
+			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations --interactive=0",
+			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations --interactive=0",
+			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations --interactive=0",
+			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations --interactive=0",
+			"php yii migrate --interactive=0"
+		]
 	},
 	"extra": {
 		"yii\\composer\\Installer::postCreateProject": {
