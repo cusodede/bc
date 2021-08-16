@@ -11,7 +11,6 @@ use app\assets\ModalHelperAsset;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\widgets\search\SearchWidget;
-use pozitronik\helpers\Utils;
 use yii\bootstrap4\Html;
 use yii\web\View;
 
