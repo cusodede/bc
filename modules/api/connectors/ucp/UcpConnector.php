@@ -57,7 +57,7 @@ class UcpConnector extends BaseHttpConnector
 	public const SERVICE_SUBSCRIBER 			= '/0001/subscriber/subscriber_no/';
 	public const SERVICE_SUBSCRIBER_NUMBER		= '/0001/subscriber/services/subscriber_no/';
 	public const SERVICE_CUSTOMER_MANAGEMENT 	= '/0001/customer_management/customer_account/itype/msisdn/uid/';
-	public const SERVICE_CUSTOMER_T_BALANCES 	= '/0001/customer_management/customer_account_balances/itype/msisdn/uid/';
+	public const SERVICE_CUSTOMER_BALANCES 		= '/0001/customer_management/customer_account_balances/itype/msisdn/uid/';
 
 	/**
 	 * UcpConnector constructor.
@@ -201,5 +201,21 @@ class UcpConnector extends BaseHttpConnector
 	private function setDataService(array $dataServices): void
 	{
 		$this->dataService = ArrayHelper::getValue($dataServices, array_rand($dataServices));
+	}
+
+	/**
+	 * @param string $login
+	 */
+	public function setLogin(string $login): void
+	{
+		$this->login = $login;
+	}
+
+	/**
+	 * @param string $password
+	 */
+	public function setPassword(string $password): void
+	{
+		$this->password = $password;
 	}
 }

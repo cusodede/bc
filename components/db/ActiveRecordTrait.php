@@ -34,11 +34,11 @@ trait ActiveRecordTrait {
 
 	/**
 	 * По (int)$pk|(string)$pk пытается вернуть соответствующую ActiveRecord-модель
-	 * @param string|ActiveRecordInterface $className
+	 * @param null|string|ActiveRecordInterface $className
 	 * @param int|string|ActiveRecordInterface $model
 	 * @return ActiveRecordInterface|null
 	 */
-	public static function ensureModel(string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
+	public static function ensureModel(null|string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
 		if (is_string($model) && is_numeric($model)) {
 			$model = (int)$model;
 		}
