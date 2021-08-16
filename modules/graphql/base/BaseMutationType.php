@@ -48,6 +48,11 @@ abstract class BaseMutationType extends ObjectType
 	 */
 	public function save(ActiveRecord $model, array $attributes, array $messages): array
 	{
+		/**
+		 * Если в числовом атрибуте приходит -1, значит ребята с фронта, просят исключить
+		 * этот атрибут из массива на обновление. Не учитывает строковые значения.
+		 */
+		$attributes = array_filter($attributes, static fn($value) => (-1 !== $value));
 		/** @var ActiveRecord|ActiveRecordTrait $model */
 		return $this->getResult($model->setAndSaveAttributes($attributes, true), $model->getErrors(), $messages);
 	}
