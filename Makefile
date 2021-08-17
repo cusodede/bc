@@ -1,3 +1,5 @@
+CID = $(shell docker ps -aqf "name=base_php-8_1")
+
 build:
 	docker-compose up -d --build
 
@@ -18,3 +20,12 @@ stop:
 
 exec:
 	docker exec -ti $(or $(s), $(service)) bash
+
+composer:
+	@docker exec -i ${CID} bash -c "composer install"
+
+migrate:
+	@docker exec -i ${CID} bash -c "./yii migrate"
+
+setup:
+	./docker/scripts/setup
