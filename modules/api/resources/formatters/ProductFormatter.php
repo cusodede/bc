@@ -31,9 +31,7 @@ class ProductFormatter implements ProductFormatterInterface
 				'type' => 'type_id',
 				'name',
 				'description',
-				'extDescription' => static function(Products $p) {
-					return HtmlPurifier::process(Markdown::convert($p->ext_description));
-				},
+				'extDescription' => static fn(Products $p) => HtmlPurifier::process(Markdown::convert($p->ext_description)),
 				'price',
 				'paymentPeriod' => 'payment_period',
 				'options' => 'relatedInstance',
@@ -43,8 +41,14 @@ class ProductFormatter implements ProductFormatterInterface
 			Subscriptions::class => [
 				'trial' => static function (Subscriptions $subscription) use ($product) {
 					//т.к. по продукту не производилось подключение, то доступен триальный период
-					if ((0 !== $subscription->trial_count) && (null === $product->actualStatus)) {
-						return ['units' => $subscription->units, 'count' => $subscription->trial_count];
+					if (0 !== $subscription->trial_count) {
+						return [
+							'units' => $subscription->units,
+							'count' => $subscription->trial_count,
+							'expireDate' => (null !== $connectDate = $product->findFirstConnectDate())
+								? $subscription->calculatePromoPeriodEndDate($connectDate)
+								: null
+						];
 					}
 
 					return null;
@@ -52,16 +56,14 @@ class ProductFormatter implements ProductFormatterInterface
 			],
 			Partners::class => [
 				'name',
-				'logoPath' => static function(Partners $partner) {
-					return PartnersController::to('get-logo', ['id' => $partner->id], true);
-				},
+				'logoPath' => static fn(Partners $partner) => PartnersController::to('get-logo', ['id' => $partner->id], true),
 				'category' => 'relatedCategory'
 			],
 			RefPartnersCategories::class => [
 				'name'
 			],
 			ProductsJournal::class => [
-				'status'     => 'status_id',
+				'status'     => static fn(ProductsJournal $status) => $status->isDisabled ? 0 : 1,
 				'expireDate' => static fn(ProductsJournal $status) => DateHelper::toIso8601($status->expire_date)
 			]
 		]);
