@@ -5,7 +5,6 @@ namespace app\components\subscription\job;
 
 use app\components\subscription\BaseSubscriptionHandler;
 use app\models\ticket\TicketSubscription;
-use Yii;
 use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
 
