@@ -26,11 +26,11 @@ class EnumProductsStatuses
 	public static function mapData(): array
 	{
 		return [
-			self::STATUS_ENABLED           => 'Подключение',
-			self::STATUS_RENEWED           => 'Продление',
+			self::STATUS_ENABLED => 'Подключение',
+			self::STATUS_RENEWED => 'Продление',
 			self::STATUS_CANCELED_NO_MONEY => 'Блокировка: недостаточно средств',
-			self::STATUS_CANCELED          => 'Блокировка: подписка отменена',
-			self::STATUS_DISABLED          => 'Отключение',
+			self::STATUS_CANCELED => 'Блокировка: подписка отменена',
+			self::STATUS_DISABLED => 'Отключение',
 		];
 	}
 
