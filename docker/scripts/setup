@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+usage() {
+	local program=$1
+	cat <<-EOF
+		Program: install composer, apply migrations.
+		
+		Examples:
+			Run: ${program}
+EOF
+}
+
+cmd_line() {
+	local i
+	for i in "$@"; do
+		case "$i" in
+		--help)
+			usage "$PROGNAME" &&
+				exit 0
+			;;
+		esac
+	done
+}
+
+cmd_composer() {
+	echo ">> composer:install"
+	"./docker/scripts/composer" install
+
+	[[ $? -eq 0 ]]
+}
+
+cmd_migrate() {
+	echo ">> migrations:migrate"
+	"./docker/scripts/migrate" migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations --interactive=0 && \
+	"./docker/scripts/migrate" migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations --interactive=0 && \
+	"./docker/scripts/migrate" migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations --interactive=0 && \
+	"./docker/scripts/migrate" migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations --interactive=0 && \
+	"./docker/scripts/migrate" migrate --interactive=0
+
+	[[ $? -eq 0 ]]
+}
+
+die() {
+	echo "${1}"
+	exit "${2:-1}"
+}
+
+main() {
+	cmd_composer \
+	&& cmd_migrate
+
+	[[ $? -eq 0 ]]
+}
+
+declare PROGNAME="${BASH_SOURCE[0]}"
+
+cmd_line "$@"
+
+if ! main; then
+	die "$PROGNAME failed."
+fi
