@@ -8,18 +8,18 @@ services:
     volumes:
       - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
       - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
-      - "${WEB_ROOT_PATH}/logs:/var/www/logs"
-      - "${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx"
-      - "${WEB_ROOT_PATH}:/var/www:cached"
+      - "${WEB_ROOT_PATH}/logs:/var/www/html/logs"
+      - "${WEB_ROOT_PATH}/logs/nginx:/var/www/html/logs/nginx"
+      - "${WEB_ROOT_PATH}:/var/www/html:cached"
     links:
       - php-8
     working_dir: ${WEB_WORKING_DIR}
     networks:
       - backend
 
-  mariadb:
+  mysql:
     restart: always
-    image: mariadb:latest
+    image: mysql:latest
     command: [
         '--character-set-server=utf8',
         '--collation-server=utf8_general_ci',
@@ -32,14 +32,14 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - "${MYSQL_PATH}:/var/lib/mysql"
-      - "${WEB_ROOT_PATH}:/var/www"
+      - "${WEB_ROOT_PATH}:/var/www/html"
     networks:
       - backend
 
   php-8:
     build: ./docker/
     volumes:
-      - "${WEB_ROOT_PATH}:/var/www"
+      - "${WEB_ROOT_PATH}:/var/www/html"
     ports:
       - "9000:9000"
     environment:
@@ -50,7 +50,7 @@ services:
       XDEBUG_CONFIG: ${XDEBUG_CONFIG}
       PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
     links:
-      - mariadb
+      - mysql
     networks:
       - backend
 
