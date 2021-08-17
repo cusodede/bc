@@ -111,7 +111,7 @@ class SiteController extends Controller {
 		}
 		$restorePasswordForm = new RestorePasswordForm();
 		if ($restorePasswordForm->load(Yii::$app->request->post())) {/*это постинг формы с емейлом*/
-			$restorePasswordForm->doSendCode();//не возвращает результат
+			$restorePasswordForm->sendCode();//не возвращает результат
 			return $this->render('restore-password-sent');
 		}
 
