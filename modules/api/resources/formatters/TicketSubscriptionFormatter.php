@@ -3,8 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\resources\formatters;
 
-use app\models\ticket\active_record\TicketJournal;
-use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketSubscription;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -14,17 +13,17 @@ use yii\helpers\ArrayHelper;
 class TicketSubscriptionFormatter
 {
 	/**
-	 * @param TicketProductSubscription $ticket
+	 * @param TicketSubscription $ticket
 	 * @return array
 	 */
-	public function format(TicketProductSubscription $ticket): array
+	public function format(TicketSubscription $ticket): array
 	{
 		return ArrayHelper::toArray($ticket, [
-			TicketProductSubscription::class => [
+			TicketSubscription::class => [
 				'action',
-				'status' => static function (TicketProductSubscription $ticket) {
+				'status' => static function (TicketSubscription $ticket) {
 					if ($ticket->isCompleted) {
-						return TicketJournal::STATUS_OK === $ticket->relatedLastTicketJournal->status
+						return $ticket->getIsStatusOk()
 							? ['code' => 'success']
 							: ['code' => 'error', 'desc' => $ticket->extractErrorDescriptionFromJournal()];
 					}

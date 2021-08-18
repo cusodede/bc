@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\components\subscription\job;
 
 use app\components\subscription\BaseSubscriptionHandler;
-use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketSubscription;
 use Throwable;
 use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
@@ -31,7 +31,7 @@ class SubscribeJob implements RetryableJobInterface
 	 */
 	public function execute($queue): void
 	{
-		$ticket = TicketProductSubscription::findOne($this->_ticketId);
+		$ticket = TicketSubscription::findOne($this->_ticketId);
 		if (null === $ticket) {
 			throw new NotFoundHttpException("Can't find the ticket by id $this->_ticketId");
 		}
@@ -40,17 +40,16 @@ class SubscribeJob implements RetryableJobInterface
 
 		/** @noinspection BadExceptionsProcessingInspection not bad at all */
 		try {
-			$ticket->startStage(TicketProductSubscription::OPERATION_SERVICE_CHECK);
+			$ticket->updateStage(TicketSubscription::STAGE_CODE_BILLING_DEBIT);
+			//Делаем попытку списания средств.
+
+			$ticket->updateStage(TicketSubscription::STAGE_CODE_SERVICE_CHECK);
 			//Делаем проверку на доступность подключения подписки.
 			$service->connect($ticket, true);
 
-			$ticket->startStage(TicketProductSubscription::OPERATION_BILLING_DEBIT);
-
-			$ticket->startStage(TicketProductSubscription::OPERATION_CONNECT_ON_PARTNER);
+			$ticket->updateStage(TicketSubscription::STAGE_CODE_CONNECT_ON_PARTNER);
 			//Пытаемся непосредственно оформить подписку.
 			$service->connect($ticket);
-
-			$ticket->close();
 		} catch (Throwable $e) {
 			$ticket->markStageFailed($e);
 			$ticket->close();
