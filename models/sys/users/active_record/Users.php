@@ -77,7 +77,7 @@ class Users extends ActiveRecord {
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
 			}],
-			[['restore_code'], 'string', 'max' => 40],
+			[['restore_code'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
