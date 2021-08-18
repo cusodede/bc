@@ -77,6 +77,7 @@ class UserController extends Controller
 	public function actionCheckRestorePasswordCode(string $code): void
 	{
 		$user = Users::findByRestoreCode($code);
+
 		if ((null === $user) || $user->isExpiredRestoreCode()) {
 			throw new HttpException(500);
 		}
