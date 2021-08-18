@@ -41,8 +41,9 @@ class UserController extends Controller
 	/**
 	 * Формирование ссылки для восстановления пароля на почту пользователя. TODO: delete return value after test
 	 * @param string $email
+	 * @return array
 	 */
-	public function actionGetRestorePasswordLink(string $email)
+	public function actionGetRestorePasswordLink(string $email): array
 	{
 		$form = new FrontRestorePasswordForm(['email' => $email]);
 		$form->sendCode();
