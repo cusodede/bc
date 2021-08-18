@@ -267,6 +267,21 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getIsTechUser(): bool
 	{
-		return 8 !== $this->id && $this->hasPermission(['tech_rights']);
+		return $this->hasPermission(['tech_rights']);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isExpiredRestoreCode(): bool
+	{
+		if ($this->restore_code) {
+			preg_match('/_t(\d+)$/', $this->restore_code, $matches);
+			if (isset($matches[1])) {
+				return time() > $matches[1];
+			}
+		}
+
+		return false;
 	}
 }
