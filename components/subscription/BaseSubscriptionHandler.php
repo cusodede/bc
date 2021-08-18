@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace app\components\subscription;
 
 use app\models\products\Products;
-use app\models\ticket\TicketProductSubscription;
+use app\models\ticket\TicketSubscription;
 use InvalidArgumentException;
 use yii\base\Component;
 
@@ -15,28 +15,28 @@ use yii\base\Component;
 abstract class BaseSubscriptionHandler extends Component
 {
 	/**
-	 * @var TicketProductSubscription|null тикет, в рамках которого выполняется подключение/отключение услуги.
+	 * @var TicketSubscription|null тикет, в рамках которого выполняется подключение/отключение услуги.
 	 */
-	protected ?TicketProductSubscription $_ticket = null;
+	protected ?TicketSubscription $_ticket = null;
 
 	/**
 	 * Подключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param TicketProductSubscription $ticket
+	 * @param TicketSubscription $ticket
 	 * @param bool $serviceCheck
 	 * @return string
 	 */
-	public function connect(TicketProductSubscription $ticket, bool $serviceCheck = false): string
+	public function connect(TicketSubscription $ticket, bool $serviceCheck = false): string
 	{
 		$this->_ticket = $ticket;
 		if ($serviceCheck) {
-//			$this->serviceCheck();TODO: delete after demo
+			$this->serviceCheck();
 			return '';
 		}
 
-//		$this->beforeSubscribe();TODO: delete after demo
+		$this->beforeSubscribe();
 
-		$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');
+		$expireDate = $this->connectOnPartner();
 
 		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
 
@@ -46,9 +46,9 @@ abstract class BaseSubscriptionHandler extends Component
 	/**
 	 * Отключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
-	 * @param TicketProductSubscription $ticket
+	 * @param TicketSubscription $ticket
 	 */
-	public function disable(TicketProductSubscription $ticket): void
+	public function disable(TicketSubscription $ticket): void
 	{
 		$this->_ticket = $ticket;
 
@@ -84,10 +84,9 @@ abstract class BaseSubscriptionHandler extends Component
 	/**
 	 * Создание обработчика для управления подключением/отключением подписок на продукты.
 	 * @param Products $product
-	 * @return IviSubscriptionHandler|VetExpertSubscriptionHandler
-	 * @throws InvalidArgumentException
+	 * @return BaseSubscriptionHandler
 	 */
-	public static function createInstanceByProduct(Products $product)
+	public static function createInstanceByProduct(Products $product): BaseSubscriptionHandler
 	{
 		switch ($product->relatedPartner->name) {
 			case 'IVI':
@@ -95,7 +94,7 @@ abstract class BaseSubscriptionHandler extends Component
 			case 'VetExpert':
 				return new VetExpertSubscriptionHandler();
 			default:
-				return new IviSubscriptionHandler();//TODO in case of emergency
+				throw new InvalidArgumentException('Не удалось определить обработчик для продукта');
 		}
 	}
 }

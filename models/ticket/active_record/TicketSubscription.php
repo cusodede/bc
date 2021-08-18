@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "ticket_product_subscription".
  *
- * @property string $id
+ * @property string $id [char(36)]
  * @property int $action
  * @property int $rel_abonents_to_products_id
  *
@@ -27,41 +27,45 @@ use yii\db\ActiveRecord;
  * @property RelAbonentsToProducts $relatedAbonentsToProducts
  * @property Ticket $relatedTicket
  * @property RelTicketToBilling $relatedTicketToBilling
- * @property TicketJournal $relatedLastTicketJournal
- * @property TicketJournal[] $relatedTicketJournals
  */
-class TicketProductSubscription extends ActiveRecord
+class TicketSubscription extends ActiveRecord
 {
-	use ActiveRecordTrait;
 	use TicketTrait;
+	use ActiveRecordTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName(): string
+    {
+        return 'ticket_subscription';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules(): array
+    {
+        return [
+            [['!id', 'action'], 'required'],
+            [['action', 'rel_abonents_to_products_id'], 'integer'],
+            [['!id'], 'string', 'max' => 36],
+            [['!id'], 'unique'],
+			[['!id'],
+				'exist', 'skipOnError' => true,
+				'targetClass' => Ticket::class, 'targetAttribute' => ['id' => 'id']
+			],
+			[['rel_abonents_to_products_id'],
+				'exist', 'skipOnError' => true,
+				'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']
+			]
+        ];
+    }
 
 	/**
-	 * {@inheritdoc}
+	 * @param array|RelAbonentsToProducts $relation
 	 */
-	public static function tableName(): string
-	{
-		return 'ticket_product_subscription';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function rules(): array
-	{
-		return [
-			[['!id', 'action'], 'required'],
-			[['action', 'rel_abonents_to_products_id'], 'integer'],
-			[['!id'], 'string', 'max' => 36],
-			[['!id'], 'unique'],
-			[['!id'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::class, 'targetAttribute' => ['id' => 'id']],
-			[['rel_abonents_to_products_id'], 'exist', 'skipOnError' => true, 'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']]
-		];
-	}
-
-	/**
-	 * @param RelAbonentsToProducts|array $relation
-	 */
-	public function setRelatedAbonentsToProducts($relation): void
+	public function setRelatedAbonentsToProducts(RelAbonentsToProducts|array $relation): void
 	{
 		if (is_array($relation)) {
 			$this->link('relatedAbonentsToProducts', RelAbonentsToProducts::Upsert($relation));
@@ -83,7 +87,7 @@ class TicketProductSubscription extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedAbonent(): ActiveQuery
+    public function getRelatedAbonent(): ActiveQuery
 	{
 		return $this->hasOne(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
 	}
@@ -118,17 +122,5 @@ class TicketProductSubscription extends ActiveRecord
 	public function getRelatedTicketToBilling(): ActiveQuery
 	{
 		return $this->hasMany(RelTicketToBilling::class, ['ticket_id' => 'id']);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function attributeLabels(): array
-	{
-		return [
-			'id' => 'ID',
-			'action' => 'Action',
-			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-		];
 	}
 }

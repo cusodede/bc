@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\components\helpers;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use pozitronik\helpers\DateHelper as VendorDateHelper;
@@ -21,13 +22,13 @@ class DateHelper extends VendorDateHelper
 	public static function toIso8601(DateTimeInterface|int|string $date): string
 	{
 		if (is_numeric($date)) {
-			return date('c', $date);
+			return date(DateTime::ATOM, $date);
 		}
 		if ($date instanceof DateTimeInterface) {
-			return $date->format('c');
+			return $date->format(DateTime::ATOM);
 		}
 
-		return date_create($date)->format('c');
+		return date_create($date)->format(DateTime::ATOM);
 	}
 
 	/**

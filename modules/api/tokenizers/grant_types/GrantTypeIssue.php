@@ -66,11 +66,7 @@ class GrantTypeIssue extends BaseGrantType
 		if ($authToken->isNewRecord) {
 			$this->checkLimitExceeded();
 		} elseif ($this->getUser()->isTechUser) {
-			$statusIsOk = true;
-			//TODO найти правильный способ валидации bad request'а.
-			//Пока стоит ограничение на кол-во выпускаемых токенов, но не хотелось бы, в принципе, разрешать перевыпуск при активном refresh-токене.
-			//Но такая схема не применима при авторизации через frontend, т.к пользователь может принудительно очистить историю в браузере и всё, возможности кинуть refresh токен не останется.
-			//Как вариант, отключать обработку для пользователей фронта, но оставить для приложений.
+			$statusIsOk = (null === $refreshToken) || !$refreshToken->isValid();
 		}
 
 		if (!$statusIsOk) {

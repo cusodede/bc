@@ -98,7 +98,6 @@ final class PartnerMutationType extends BaseMutationType
 						if (null !== $logo && preg_match('/http(s)?:/', $logo)) {
 							unset($args['logo']);
 						}
-
 						return $this->save($partner, $args, self::MESSAGES);
 					},
 				],
