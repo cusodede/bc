@@ -6,6 +6,9 @@ namespace app\modules\api\models;
 use app\models\site\RestorePasswordForm;
 use Yii;
 
+/**
+ * Class FrontRestorePasswordForm
+ */
 class FrontRestorePasswordForm extends RestorePasswordForm
 {
 	/**
