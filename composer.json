@@ -85,6 +85,27 @@
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations --interactive=0",
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations --interactive=0",
 			"php yii migrate --interactive=0"
+		],
+		"build": [
+			"docker-compose up -d --build"
+		],
+		"up": [
+			"docker-compose up -d"
+		],
+		"stop": [
+			"docker-compose stop"
+		],
+		"restart": [
+			"docker-compose restart"
+		],
+		"down": [
+			"docker-compose down"
+		],
+		"execute": [
+			"docker exec -ti $(or $(s), $(service)) bash"
+		],
+		"setup": [
+			"./docker/scripts/setup"
 		]
 	},
 	"extra": {
