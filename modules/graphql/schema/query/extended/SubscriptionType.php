@@ -65,9 +65,7 @@ final class SubscriptionType extends BaseQueryType
 			'resolve' => function(Subscriptions $subscription = null, array $args = []): array {
 				$subscriptionSearch = new SubscriptionsSearch();
 				ArrayHelper::setValue($args, 'pagination', false);
-				return $subscriptionSearch
-					->search([$subscriptionSearch->formName() => $args])
-					->getModels();
+				return $subscriptionSearch->search([$subscriptionSearch->formName() => $args])->getModels();
 			},
 		];
 	}

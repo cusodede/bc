@@ -144,6 +144,7 @@ $config = [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
+			'hostInfo' => YII_ENV === 'prod' ? 'http://back-prpl.apps.k01.vimpelcom.ru' : null
 		],
 		'permissions' => require __DIR__ . '/permissions.php',
 		'assetManager' => [
