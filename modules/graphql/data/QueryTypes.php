@@ -31,7 +31,7 @@ class QueryTypes
 	private static ?PartnerCategoryType $partnerCategory = null;
 	private static ?ProductType $product = null;
 	private static ?SubscriptionType $subscription = null;
-	private static ?UserType $currentUser = null;
+	private static ?UserType $user = null;
 
 	/**
 	 * @return QueryType
@@ -83,7 +83,7 @@ class QueryTypes
 	 */
 	public static function user(): UserType
 	{
-		return static::$currentUser ?: static::$currentUser = new UserType();
+		return static::$user ?: static::$user = new UserType();
 	}
 
 	/**
