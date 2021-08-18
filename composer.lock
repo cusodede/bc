@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98e2a911307c6f9342d0ff8040b4ea38",
+    "content-hash": "50d4b0cf25bc099f32211cc3c754760c",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -32,7 +32,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -151,12 +151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cusodede/yii2-jwt.git",
-                "reference": "3efb5431088f5f13555d0c0ed3858314b05529b9"
+                "reference": "7de12b244d4f619550eefe79d36cce021a74463b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cusodede/yii2-jwt/zipball/3efb5431088f5f13555d0c0ed3858314b05529b9",
-                "reference": "3efb5431088f5f13555d0c0ed3858314b05529b9",
+                "url": "https://api.github.com/repos/cusodede/yii2-jwt/zipball/7de12b244d4f619550eefe79d36cce021a74463b",
+                "reference": "7de12b244d4f619550eefe79d36cce021a74463b",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
             "support": {
                 "source": "https://github.com/cusodede/yii2-jwt/tree/master"
             },
-            "time": "2021-07-26T07:53:09+00:00"
+            "time": "2021-08-12T19:13:59+00:00"
         },
         {
             "name": "cusodede/yii2-multi-select-widget",
@@ -461,16 +461,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.28",
+            "version": "8.12.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "f503d56d269e9b8572440820ef029e296dadaa1e"
+                "reference": "8b0986654eb5b16d5edb06a6e6533d2bef39a600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/f503d56d269e9b8572440820ef029e296dadaa1e",
-                "reference": "f503d56d269e9b8572440820ef029e296dadaa1e",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/8b0986654eb5b16d5edb06a6e6533d2bef39a600",
+                "reference": "8b0986654eb5b16d5edb06a6e6533d2bef39a600",
                 "shasum": ""
             },
             "require": {
@@ -530,7 +530,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2021-07-20T13:33:24+00:00"
+            "time": "2021-08-17T07:25:43+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -688,6 +688,57 @@
                 "source": "https://github.com/kartik-v/dependent-dropdown/tree/master"
             },
             "time": "2019-03-09T10:53:11+00:00"
+        },
+        {
+            "name": "kartik-v/strength-meter",
+            "version": "v1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/strength-meter.git",
+                "reference": "100147f588b12ff819014b445007a0decfd95fbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/strength-meter/zipball/100147f588b12ff819014b445007a0decfd95fbb",
+                "reference": "100147f588b12ff819014b445007a0decfd95fbb",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\plugins\\strengthmeter\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "A dynamic strength meter for password input validation with various configurable options.",
+            "homepage": "https://github.com/kartik-v/strength-meter",
+            "keywords": [
+                "bootstrap",
+                "jquery",
+                "meter",
+                "password",
+                "strength"
+            ],
+            "support": {
+                "issues": "https://github.com/kartik-v/strength-meter/issues",
+                "source": "https://github.com/kartik-v/strength-meter/tree/master"
+            },
+            "time": "2018-01-20T17:52:01+00:00"
         },
         {
             "name": "kartik-v/yii2-bootstrap4-dropdown",
@@ -1041,6 +1092,66 @@
                 "source": "https://github.com/kartik-v/yii2-markdown/tree/master"
             },
             "time": "2020-07-17T14:56:29+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-password",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-password.git",
+                "reference": "1ee57a3d6c02c8d2acab7da718f45463bc35d99b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-password/zipball/1ee57a3d6c02c8d2acab7da718f45463bc35d99b",
+                "reference": "1ee57a3d6c02c8d2acab7da718f45463bc35d99b",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/strength-meter": "~1.1",
+                "kartik-v/yii2-krajee-base": ">=2.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\password\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Useful password strength validation utilities for Yii Framework 2.0",
+            "homepage": "https://github.com/kartik-v/yii2-password",
+            "keywords": [
+                "auth",
+                "bootstrap",
+                "extension",
+                "form",
+                "input",
+                "jquery",
+                "password",
+                "strength",
+                "yii",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/kartik-v/yii2-password/issues",
+                "source": "https://github.com/kartik-v/yii2-password/tree/v1.5.6"
+            },
+            "time": "2020-06-15T13:45:48+00:00"
         },
         {
             "name": "kartik-v/yii2-popover-x",
@@ -2375,6 +2486,56 @@
             "time": "2016-07-28T18:10:36+00:00"
         },
         {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+            "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
             "name": "phpoffice/phpspreadsheet",
             "version": "dev-NumberFormatMask-Helpers",
             "source": {
@@ -2484,12 +2645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-badgewidget.git",
-                "reference": "f29100a2bf04a56fcd3f8cf3e297f5bf93c84f65"
+                "reference": "917ca74809179e9a4e3e8d0992b292ddd0ee5dac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-badgewidget/zipball/f29100a2bf04a56fcd3f8cf3e297f5bf93c84f65",
-                "reference": "f29100a2bf04a56fcd3f8cf3e297f5bf93c84f65",
+                "url": "https://api.github.com/repos/pozitronik/yii2-badgewidget/zipball/917ca74809179e9a4e3e8d0992b292ddd0ee5dac",
+                "reference": "917ca74809179e9a4e3e8d0992b292ddd0ee5dac",
                 "shasum": ""
             },
             "require": {
@@ -2528,7 +2689,7 @@
                 "issues": "https://github.com/pozitronik/yii2-badgewidget/issues",
                 "source": "https://github.com/pozitronik/yii2-badgewidget/tree/master"
             },
-            "time": "2021-05-16T13:32:10+00:00"
+            "time": "2021-08-14T14:34:54+00:00"
         },
         {
             "name": "pozitronik/yii2-cachedwidget",
@@ -2897,12 +3058,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-references.git",
-                "reference": "b987142efb7b072f2ad0537c242d98fb6bc801a3"
+                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/b987142efb7b072f2ad0537c242d98fb6bc801a3",
-                "reference": "b987142efb7b072f2ad0537c242d98fb6bc801a3",
+                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/a7114f52487bac43ba193fadd4cde97b94ef3865",
+                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865",
                 "shasum": ""
             },
             "require": {
@@ -2945,7 +3106,7 @@
                 "issues": "https://github.com/pozitronik/yii2-references/issues",
                 "source": "https://github.com/pozitronik/yii2-references/tree/master"
             },
-            "time": "2021-07-05T05:36:37+00:00"
+            "time": "2021-08-16T14:35:44+00:00"
         },
         {
             "name": "pozitronik/yii2-relations",
@@ -2953,12 +3114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-relations.git",
-                "reference": "fb90af78fe3eeda04c5c32c8d87e1c7988f4a79e"
+                "reference": "90a754dd46bdf3929af97ddb6b20ae7ef3b13971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-relations/zipball/fb90af78fe3eeda04c5c32c8d87e1c7988f4a79e",
-                "reference": "fb90af78fe3eeda04c5c32c8d87e1c7988f4a79e",
+                "url": "https://api.github.com/repos/pozitronik/yii2-relations/zipball/90a754dd46bdf3929af97ddb6b20ae7ef3b13971",
+                "reference": "90a754dd46bdf3929af97ddb6b20ae7ef3b13971",
                 "shasum": ""
             },
             "require": {
@@ -2996,7 +3157,7 @@
                 "issues": "https://github.com/pozitronik/yii2-relations/issues",
                 "source": "https://github.com/pozitronik/yii2-relations/tree/master"
             },
-            "time": "2021-06-25T20:21:53+00:00"
+            "time": "2021-08-16T14:51:07+00:00"
         },
         {
             "name": "pozitronik/yii2-traits",
@@ -4257,12 +4418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "61f4b0974f564a0ac9d934102894aef0176f7374"
+                "reference": "c36ff75ce6aec2d663d750a1cf4e82e6b64f4770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/61f4b0974f564a0ac9d934102894aef0176f7374",
-                "reference": "61f4b0974f564a0ac9d934102894aef0176f7374",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/c36ff75ce6aec2d663d750a1cf4e82e6b64f4770",
+                "reference": "c36ff75ce6aec2d663d750a1cf4e82e6b64f4770",
                 "shasum": ""
             },
             "require": {
@@ -4316,7 +4477,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-03T12:18:33+00:00"
+            "time": "2021-08-17T14:32:09+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -4324,12 +4485,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "e24f75a9ebbf5207806be5954cc003b35e0161b3"
+                "reference": "5f297e5a2573ec9cb15f104a852317bde2f66203"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/e24f75a9ebbf5207806be5954cc003b35e0161b3",
-                "reference": "e24f75a9ebbf5207806be5954cc003b35e0161b3",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/5f297e5a2573ec9cb15f104a852317bde2f66203",
+                "reference": "5f297e5a2573ec9cb15f104a852317bde2f66203",
                 "shasum": ""
             },
             "require": {
@@ -4342,6 +4503,7 @@
                 "ext-mbstring": "*",
                 "ezyang/htmlpurifier": "~4.6",
                 "lib-pcre": "*",
+                "paragonie/random_compat": ">=1",
                 "php": ">=5.4.0",
                 "yiisoft/yii2-composer": "~2.0.4"
             },
@@ -4438,7 +4600,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-04T18:00:58+00:00"
+            "time": "2021-08-17T21:16:57+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",
@@ -4618,19 +4780,20 @@
         },
         {
             "name": "yiisoft/yii2-httpclient",
-            "version": "2.0.13",
+            "version": "2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-httpclient.git",
-                "reference": "470e9066ae780f0ca20827d3f6f84eca6bbb0991"
+                "reference": "50d670d2e1a30a354c27aeebf806a2db16954836"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/470e9066ae780f0ca20827d3f6f84eca6bbb0991",
-                "reference": "470e9066ae780f0ca20827d3f6f84eca6bbb0991",
+                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/50d670d2e1a30a354c27aeebf806a2db16954836",
+                "reference": "50d670d2e1a30a354c27aeebf806a2db16954836",
                 "shasum": ""
             },
             "require": {
+                "paragonie/random_compat": ">=1",
                 "yiisoft/yii2": "~2.0.13"
             },
             "require-dev": {
@@ -4696,7 +4859,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-23T16:52:14+00:00"
+            "time": "2021-08-09T21:10:49+00:00"
         },
         {
             "name": "yiisoft/yii2-queue",
@@ -4997,16 +5160,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.21",
+            "version": "4.1.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "c25f20d842a7e3fa0a8e6abf0828f102c914d419"
+                "reference": "9777ec3690ceedc4bce2ed13af7af4ca4ee3088f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/c25f20d842a7e3fa0a8e6abf0828f102c914d419",
-                "reference": "c25f20d842a7e3fa0a8e6abf0828f102c914d419",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/9777ec3690ceedc4bce2ed13af7af4ca4ee3088f",
+                "reference": "9777ec3690ceedc4bce2ed13af7af4ca4ee3088f",
                 "shasum": ""
             },
             "require": {
@@ -5017,7 +5180,7 @@
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "guzzlehttp/psr7": "~1.4",
+                "guzzlehttp/psr7": "^1.4 | ^2.0",
                 "php": ">=5.6.0 <9.0",
                 "symfony/console": ">=2.7 <6.0",
                 "symfony/css-selector": ">=2.7 <6.0",
@@ -5080,7 +5243,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.21"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.22"
             },
             "funding": [
                 {
@@ -5088,7 +5251,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-05-28T17:43:39+00:00"
+            "time": "2021-08-06T17:15:34+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -5854,29 +6017,32 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.8.2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
+                "reference": "1dc8d9cba3897165e16d12bb13d813afb1eb3fe7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
-                "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/1dc8d9cba3897165e16d12bb13d813afb1eb3fe7",
+                "reference": "1dc8d9cba3897165e16d12bb13d813afb1eb3fe7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "psr/http-message": "~1.0",
-                "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "ralouphie/getallheaders": "^3.0"
             },
             "provide": {
+                "psr/http-factory-implementation": "1.0",
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
-                "ext-zlib": "*",
-                "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.8 || ^9.3.10"
+                "bamarni/composer-bin-plugin": "^1.4.1",
+                "http-interop/http-factory-tests": "^0.9",
+                "phpunit/phpunit": "^8.5.8 || ^9.3.10"
             },
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
@@ -5884,16 +6050,13 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "GuzzleHttp\\Psr7\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5908,6 +6071,11 @@
                 {
                     "name": "Tobias Schultze",
                     "homepage": "https://github.com/Tobion"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://sagikazarmark.hu"
                 }
             ],
             "description": "PSR-7 message implementation that also provides common utility methods",
@@ -5923,9 +6091,9 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.8.2"
+                "source": "https://github.com/guzzle/psr7/tree/2.0.0"
             },
-            "time": "2021-04-26T09:17:50+00:00"
+            "time": "2021-06-30T20:03:07+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -6309,6 +6477,73 @@
                 "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.4.0"
             },
             "time": "2020-09-17T18:55:26+00:00"
+        },
+        {
+            "name": "phpmetrics/phpmetrics",
+            "version": "v2.7.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpmetrics/PhpMetrics.git",
+                "reference": "e6a7aee0e0948e363eb78ce9d58573cd5af2cdec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/e6a7aee0e0948e363eb78ce9d58573cd5af2cdec",
+                "reference": "e6a7aee0e0948e363eb78ce9d58573cd5af2cdec",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-tokenizer": "*",
+                "nikic/php-parser": "^3|^4",
+                "php": ">=5.5"
+            },
+            "replace": {
+                "halleck45/php-metrics": "*",
+                "halleck45/phpmetrics": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36 || ^5.7.27 || ^6.5.14",
+                "sebastian/comparator": ">=1.2.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "bin": [
+                "bin/phpmetrics"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hal\\": "./src/"
+                },
+                "files": [
+                    "./src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jean-François Lépine",
+                    "email": "lepinejeanfrancois@yahoo.fr",
+                    "homepage": "http://www.lepine.pro",
+                    "role": "Copyright Holder"
+                }
+            ],
+            "description": "Static analyzer tool for PHP : Coupling, Cyclomatic complexity, Maintainability Index, Halstead's metrics... and more !",
+            "homepage": "http://www.phpmetrics.org",
+            "keywords": [
+                "analysis",
+                "qa",
+                "quality",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/PhpMetrics/PhpMetrics/issues",
+                "source": "https://github.com/phpmetrics/PhpMetrics/tree/master"
+            },
+            "time": "2020-06-30T20:33:55+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -9216,16 +9451,16 @@
         },
         {
             "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.10",
+            "version": "2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "073c9ab0a4eb71f2485d84c96a1967130300d8fc"
+                "reference": "83d144f4089adaa7064ad60dc4c1436daa2eb30e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/073c9ab0a4eb71f2485d84c96a1967130300d8fc",
-                "reference": "073c9ab0a4eb71f2485d84c96a1967130300d8fc",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/83d144f4089adaa7064ad60dc4c1436daa2eb30e",
+                "reference": "83d144f4089adaa7064ad60dc4c1436daa2eb30e",
                 "shasum": ""
             },
             "require": {
@@ -9233,12 +9468,22 @@
                 "yiisoft/yii2": "~2.0.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "<7"
+                "cweagans/composer-patches": "^1.7",
+                "phpunit/phpunit": "4.8.34"
             },
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.0.x-dev"
+                },
+                "patches": {
+                    "phpunit/phpunit-mock-objects": {
+                        "Fix PHP 7 and 8 compatibility": "https://yiisoft.github.io/phpunit-patches/phpunit_mock_objects.patch"
+                    },
+                    "phpunit/phpunit": {
+                        "Fix PHP 7 compatibility": "https://yiisoft.github.io/phpunit-patches/phpunit_php7.patch",
+                        "Fix PHP 8 compatibility": "https://yiisoft.github.io/phpunit-patches/phpunit_php8.patch"
+                    }
                 }
             },
             "autoload": {
@@ -9252,8 +9497,9 @@
             ],
             "authors": [
                 {
-                    "name": "Paul Klimov",
-                    "email": "klimov.paul@gmail.com"
+                    "name": "Qiang Xue",
+                    "email": "qiang.xue@gmail.com",
+                    "homepage": "http://www.yiiframework.com/"
                 },
                 {
                     "name": "Alexander Makarov",
@@ -9265,9 +9511,8 @@
                     "email": "amigo.cobos@gmail.com"
                 },
                 {
-                    "name": "Qiang Xue",
-                    "email": "qiang.xue@gmail.com",
-                    "homepage": "http://www.yiiframework.com/"
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
                 }
             ],
             "description": "The Twitter Bootstrap extension for the Yii framework",
@@ -9282,7 +9527,21 @@
                 "source": "https://github.com/yiisoft/yii2-bootstrap",
                 "wiki": "http://www.yiiframework.com/wiki/"
             },
-            "time": "2019-04-23T13:18:43+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/yiisoft/yii2-bootstrap",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-08-09T20:54:06+00:00"
         },
         {
             "name": "yiisoft/yii2-debug",
@@ -9481,6 +9740,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "yiisoft/yii2": 20,
+        "yiisoft/yii2-swiftmailer": 20,
         "pozitronik/yii2-users-options": 20,
         "pozitronik/yii2-options": 20,
         "pozitronik/yii2-references": 20,
@@ -9491,23 +9751,23 @@
         "pozitronik/yii2-grid-config": 20,
         "pozitronik/yii2-relations": 20,
         "pozitronik/yii2-dbmon": 20,
-        "yiisoft/yii2-swiftmailer": 20,
+        "cusodede/yii2-jwt": 20,
+        "cusodede/yii2-multi-select-widget": 20,
         "kartik-v/yii2-widget-typeahead": 20,
         "kartik-v/yii2-editable": 20,
         "kartik-v/yii2-widget-touchspin": 20,
-        "odannyc/yii2-sse": 20,
-        "cusodede/yii2-jwt": 20,
-        "cusodede/yii2-multi-select-widget": 20,
-        "webonyx/graphql-php": 20,
         "kartik-v/yii2-widget-datetimepicker": 20,
         "kartik-v/yii2-widget-datepicker": 20,
-        "moonlandsoft/yii2-phpexcel": 20,
-        "kartik-v/yii2-markdown": 20
+        "kartik-v/yii2-markdown": 20,
+        "kartik-v/yii2-password": 20,
+        "odannyc/yii2-sse": 20,
+        "webonyx/graphql-php": 20,
+        "moonlandsoft/yii2-phpexcel": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.4|~8.0"
+        "php": "~8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
