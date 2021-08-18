@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
+use app\components\validators\PasswordStrengthValidator;
 use app\models\sys\users\Users;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -43,6 +44,7 @@ class UpdatePasswordForm extends Model
 				}
 			}],
 			[['newPassword', 'newPasswordRepeat'], 'required'],
+			[['newPassword'], PasswordStrengthValidator::class],
 			[['newPasswordRepeat'], function() {
 				if ($this->newPassword !== $this->newPasswordRepeat) {
 					$this->addError('newPasswordRepeat', 'Введённые пароли должны совпадать');
