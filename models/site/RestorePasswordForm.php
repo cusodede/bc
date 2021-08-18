@@ -61,6 +61,7 @@ class RestorePasswordForm extends Model
 	}
 
 	/**
+	 * Генерация кода для вставки в ссылку восстановления пароля. Метка timestamp `_t` предназначена для валидации времени жизни кода.
 	 * @return string
 	 */
 	private function generateRestoreCode(): string
@@ -86,7 +87,6 @@ class RestorePasswordForm extends Model
 	{
 		Yii::$app->mailer
 			->compose($view, ['user' => $user, 'restoreUrl' => static::getRestoreUrl($user->restore_code)])
-			->setFrom('todo@config.param')/*todo*/
 			->setTo($user->email)
 			->setSubject('Запрос восстановления пароля')
 			->send();
