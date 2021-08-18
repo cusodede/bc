@@ -58,8 +58,7 @@ class DateTimeType extends ScalarType
 	 */
 	public function parseValue($value): ?string
 	{
-		$value = DateTimeImmutable::createFromFormat(self::DEFAULT_FORMAT, $value);
-		return $value ? $value->format(self::DEFAULT_FORMAT) : null;
+		return DateTimeImmutable::createFromFormat(self::DEFAULT_FORMAT, $value)?->format(self::DEFAULT_FORMAT);
 	}
 
 	/**

@@ -5,59 +5,57 @@ namespace app\models\ticket;
 
 use app\components\exceptions\ExtendedThrowable;
 use app\components\helpers\DateHelper;
-use app\models\ticket\active_record\TicketJournal;
 use Exception;
 use Throwable;
 use yii\db\ActiveQuery;
+use yii\db\StaleObjectException;
 use yii\helpers\ArrayHelper;
 
 /**
+ * @property Ticket $relatedTicket
  * @property-read bool $isConnectNeeded
  * @property-read bool $isCompleted
  */
 trait TicketTrait
 {
 	/**
-	 * @var array массив шагов.
+	 * @param int $id
 	 */
-	private array $_journal = [];
-	/**
-	 * @var int индекс текущего шага в `$_journal`
-	 */
-	private int $_stageIndex = -1;
-
-	/**
-	 * @param int $operationCode
-	 */
-	public function startStage(int $operationCode): void
+	public function updateStage(int $id): void
 	{
-		$this->_journal[] = ['operationCode' => $operationCode, 'created' => DateHelper::lcDate(), 'status' => TicketJournal::STATUS_OK];
+		$this->relatedTicket->stage_id     = $id;
+		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, [['stage_id' => $id, 'timestamp' => time()]]);
 
-		$this->_stageIndex++;
+		$this->relatedTicket->save();
 	}
 
 	/**
 	 * @param array $data
-	 * @throws Exception
+	 * @param bool $forceSave
+	 * @throws StaleObjectException
+	 * @throws Throwable
 	 */
-	public function logData(array $data): void
+	public function log(array $data, bool $forceSave = true): void
 	{
-		$currData = ArrayHelper::getValue($this->_journal[$this->_stageIndex], 'userData', []);
-
-		$this->_journal[$this->_stageIndex]['userData'] = ArrayHelper::merge($currData, $data);
+		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, $data);
+		if ($forceSave) {
+			$this->relatedTicket->update(true, ['journal_data']);
+		}
 	}
 
 	/**
 	 * @param ExtendedThrowable|null $e
-	 * @throws Exception
+	 * @throws Throwable
+	 * @throws StaleObjectException
 	 */
 	public function markStageFailed(?Throwable $e = null): void
 	{
-		$this->_journal[$this->_stageIndex]['status'] = TicketJournal::STATUS_ERROR;
+		$this->relatedTicket->status = Ticket::STATUS_ERROR;
 		if (null !== $e) {
-			
-			$this->logData(['error' => $this->transformException($e)]);
+			$this->log(['error' => $this->transformException($e)], false);
 		}
+
+		$this->relatedTicket->update();
 	}
 
 	/**
@@ -81,44 +79,13 @@ trait TicketTrait
 		return $errorData;
 	}
 
+	/**
+	 * Завершаем обработку тикета и фиксируем дату закрытия.
+	 */
 	public function close(): void
 	{
-		foreach ($this->_journal as $statusInfo) {
-			$this->pushStatus(
-				$statusInfo['operationCode'],
-				$statusInfo['status'],
-				ArrayHelper::getValue($statusInfo, 'changedBy'),
-				ArrayHelper::getValue($statusInfo, 'userData', [])
-			);
-		}
-
-		$this->_journal    = [];
-		$this->_stageIndex = -1;
-
-		$this->makeComplete();
-	}
-
-	/**
-	 * @param int $code
-	 * @param int $status
-	 * @param int|null $changedBy
-	 * @param array $userData
-	 */
-	public function pushStatus(int $code, int $status, ?int $changedBy = null, array $userData = []): void
-	{
-		if (null !== $changedBy) {
-			$userData['changedBy'] = $changedBy;
-		}
-
-		$ticketJournal = new TicketJournal([
-			'operation_code' => $code,
-			'status'         => $status,
-			'user_data'      => $userData
-		]);
-		/** @see beforeValidate() */
-		$ticketJournal->validate(['id']);
-
-		$this->link('relatedTicketJournals', $ticketJournal);
+		$this->relatedTicket->completed_at = DateHelper::lcDate();
+		$this->relatedTicket->update();
 	}
 
 	/**
@@ -138,30 +105,6 @@ trait TicketTrait
 	}
 
 	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedTicketJournals(): ActiveQuery
-	{
-		return $this->hasMany(TicketJournal::class, ['ticket_id' => 'id']);
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedLastTicketJournal(): ActiveQuery
-	{
-		return $this->hasOne(TicketJournal::class, ['ticket_id' => 'id'])->orderBy(['created_at' => SORT_DESC]);
-	}
-
-	/**
-	 * Финализируем выполнение тикета.
-	 */
-	public function makeComplete(): void
-	{
-		$this->relatedTicket->setAndSaveAttribute('completed_at', DateHelper::lcDate());
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function getIsCompleted(): bool
@@ -169,8 +112,20 @@ trait TicketTrait
 		return null !== $this->relatedTicket->completed_at;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function getIsStatusOk(): bool
+	{
+		return Ticket::STATUS_OK === $this->relatedTicket->status;
+	}
+
+	/**
+	 * @return string|null
+	 * @throws Exception
+	 */
 	public function extractErrorDescriptionFromJournal(): ?string
 	{
-		return ArrayHelper::getValue($this->relatedLastTicketJournal->user_data, 'error.userMessage');
+		return ArrayHelper::getValue($this->relatedTicket->journal_data, 'error.userMessage');
 	}
 }

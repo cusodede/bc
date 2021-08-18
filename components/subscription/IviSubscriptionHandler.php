@@ -57,7 +57,7 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	{
 		$purchaseId = $this->makePurchase();
 
-		$this->_ticket->logData(['purchaseId' => $purchaseId]);
+		$this->_ticket->log(['purchaseId' => $purchaseId]);
 
 		//делаем повторный запрос на получение актуальной информации по подключенной подписке
 		$purchaseOptionsHandler = $this->callPurchaseOptions();
