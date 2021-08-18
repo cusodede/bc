@@ -5,7 +5,6 @@ namespace app\modules\api\controllers;
 
 use app\components\tickets\ProductTicketsService;
 use app\models\abonents\Abonents;
-use app\models\site\sse\MessageEventHandler;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
 use app\modules\api\models\ConnectSubscriptionTicketForm;
@@ -44,20 +43,17 @@ class ProductsController extends YiiRestController
 				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
-				],
-				'except'  => ['sse']
+				]
 			],
 			'verbFilter' => [
 				'class'   => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class'  => JwtHttpBearerAuth::class,
-				'except' => ['sse']
+				'class'  => JwtHttpBearerAuth::class
 			],
 			'access' => [
-				'class'  => PermissionFilter::class,
-				'except' => ['sse']
+				'class'  => PermissionFilter::class
 			]
 		];
 	}
@@ -65,11 +61,11 @@ class ProductsController extends YiiRestController
 	/**
 	 * @param string $id
 	 * @param array $params
-	 * @return mixed|null
+	 * @return mixed
 	 * @throws InvalidRouteException
 	 * @throws NotFoundHttpException
 	 */
-	public function runAction($id, $params = [])
+	public function runAction($id, $params = []): mixed
 	{
 		$phone = $params['phone'] ?? null;
 		if ((null !== $phone) && null === $this->_abonent = Abonents::findByPhone($phone)) {
@@ -163,17 +159,6 @@ class ProductsController extends YiiRestController
 	}
 
 	/**
-	 * TODO: delete after MVP
-	 */
-	public function actionSse()
-	{
-		/** @noinspection PhpUndefinedFieldInspection */
-		$sse = Yii::$app->sse;
-		$sse->addEventListener('message', new MessageEventHandler());
-		$sse->start();
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	protected function verbs(): array
@@ -182,7 +167,6 @@ class ProductsController extends YiiRestController
 			'list'          => ['GET'],
 			'one'           => ['GET'],
 			'ticket-status' => ['GET'],
-			'sse' => ['GET'],
 			'subscribe'     => ['POST'],
 			'unsubscribe'   => ['POST']
 		];

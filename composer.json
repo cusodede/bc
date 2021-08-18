@@ -41,6 +41,7 @@
 		"kartik-v/yii2-widget-datetimepicker": "dev-master",
 		"kartik-v/yii2-widget-datepicker": "dev-master",
 		"kartik-v/yii2-markdown": "dev-master",
+		"kartik-v/yii2-password": "@dev",
 		"odannyc/yii2-sse": "dev-master",
 		"webonyx/graphql-php": "dev-master",
 		"moonlandsoft/yii2-phpexcel": "dev-master",

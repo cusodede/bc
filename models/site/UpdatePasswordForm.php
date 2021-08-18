@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
+use app\components\validators\PasswordStrengthValidator;
 use app\models\sys\users\Users;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -15,45 +16,48 @@ use yii\base\Model;
  * @property string|null $newPassword Новый пароль
  * @property string|null $newPasswordRepeat Повтор пароля для самопроверки
  */
-class UpdatePasswordForm extends Model {
+class UpdatePasswordForm extends Model
+{
 	public ?string $oldPassword = null;
 	public ?string $newPassword = null;
 	public ?string $newPasswordRepeat = null;
+
 	/**
 	 * @var bool Необходимость указания старого пароля при сбросе
 	 */
 	private bool $_requireOldPassword = true;
 
-	/** @var Users|null */
 	private ?Users $_user = null;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
-			[['oldPassword'], 'required', 'when' => function(UpdatePasswordForm $model, string $attribute) {
-				return $model->_requireOldPassword;
+			[['oldPassword'], 'required', 'when' => function() {
+				return $this->_requireOldPassword;
 			}],
-			[['newPassword', 'newPasswordRepeat'], 'required'],
-			[['newPasswordRepeat'], function(string $attribute):void {
-				if (!$this->hasErrors() && $this->newPassword !== $this->newPasswordRepeat) {
-					$this->addError('newPasswordRepeat', 'Введённые пароли должны совпадать');
-				}
-			}],
-			[['oldPassword'], function(string $attribute):void {
-				if ($this->_requireOldPassword && !$this->hasErrors() && !$this->user->validatePassword($this->oldPassword)) {
+			[['oldPassword'], function() {
+				if ($this->_requireOldPassword && !$this->user->validatePassword($this->oldPassword)) {
 					$this->addError('oldPassword', 'Текущий пароль введён неверно');
 				}
+			}],
+			[['newPassword', 'newPasswordRepeat'], 'required'],
+			[['newPassword'], PasswordStrengthValidator::class],
+			[['newPasswordRepeat'], function() {
+				if ($this->newPassword !== $this->newPasswordRepeat) {
+					$this->addError('newPasswordRepeat', 'Введённые пароли должны совпадать');
+				}
 			}]
-
 		];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'oldPassword' => 'Текущий пароль',
 			'newPassword' => 'Новый пароль',
@@ -66,11 +70,15 @@ class UpdatePasswordForm extends Model {
 	 * @param bool $requireOldPassword Проверять ли наличие старого пароля перед заменой
 	 * @return bool
 	 */
-	public function doUpdate(bool $requireOldPassword = true):bool {
+	public function doUpdate(bool $requireOldPassword = true): bool
+	{
 		$this->_requireOldPassword = $requireOldPassword;
 		if ($this->validate()) {
-			$this->user->password = $this->newPassword;
+			$this->user->password        = $this->newPassword;
 			$this->user->is_pwd_outdated = false;
+
+			$this->user->restore_code = null;
+
 			return $this->user->save();
 		}
 		return false;
@@ -80,7 +88,8 @@ class UpdatePasswordForm extends Model {
 	 * @return Users
 	 * @throws InvalidConfigException
 	 */
-	public function getUser():Users {
+	public function getUser(): Users
+	{
 		if (null === $this->_user) {
 			throw new InvalidConfigException('Не указан пользователь для смены пароля');
 		}
@@ -91,8 +100,8 @@ class UpdatePasswordForm extends Model {
 	 * @param Users $user
 	 * @return void
 	 */
-	public function setUser(Users $user):void {
+	public function setUser(Users $user): void
+	{
 		$this->_user = $user;
 	}
-
 }

@@ -59,20 +59,20 @@ class AuthController extends YiiRestController
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
-			'authComposite'     => [
-				'class'       => CompositeAuth::class,
+			'authComposite' => [
+				'class' => CompositeAuth::class,
+				'only'  => ['token'],
 				'authMethods' => [RefreshTokenAuth::class, HttpBasicPasswordAuth::class],
-				'only'        => ['token']
 			],
-			'authJwt'           => [
+			'authJsonToken' => [
 				'class' => JwtHttpBearerAuth::class,
 				'only'  => ['logout']
 			],
-			'verbFilter'        => [
+			'verbFilter' => [
 				'class'   => VerbFilter::class,
 				'actions' => $this->verbs()
 			],
-			'access'            => [
+			'access' => [
 				'class' => PermissionFilter::class
 			]
 		];

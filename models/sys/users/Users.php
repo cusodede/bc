@@ -41,7 +41,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	public const DEFAULT_AVATAR_ALIAS_PATH = '@webroot/img/theme/avatar-m.png';
 
-	public const DEFAULT_PASSWORD = 'Qq123456';
+	public const DEFAULT_PASSWORD = 'QQwq123456!_$';
 
 	/*файловые атрибуты*/
 	public mixed $avatar = null;
@@ -166,13 +166,27 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 			$this->password = $this->password??self::DEFAULT_PASSWORD;
 			/*Если пользователь был создан админом без пароля, то ставим флаг принудительной смены пароля*/
 			$this->is_pwd_outdated = $this->password === self::DEFAULT_PASSWORD;
+		}
 
-		}
-		if ($this->isAttributeUpdated('password')) {/*если пароль обновился, то пересолим*/
-			$this->salt = self::generateSalt();
-			$this->password = $this->doSalt($this->password);
-		}
 		return parent::beforeValidate();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function beforeSave($insert): bool
+	{
+		if (parent::beforeSave($insert)) {
+			//если пароль обновился, то пересолим
+			if ($this->isAttributeUpdated('password')) {
+				$this->salt     = self::generateSalt();
+				$this->password = $this->doSalt($this->password);
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -267,6 +281,21 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public function getIsTechUser(): bool
 	{
-		return 8 !== $this->id && $this->hasPermission(['tech_rights']);
+		return $this->hasPermission(['tech_rights']);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isExpiredRestoreCode(): bool
+	{
+		if ($this->restore_code) {
+			preg_match('/_t(\d+)$/', $this->restore_code, $matches);
+			if (isset($matches[1])) {
+				return time() > $matches[1];
+			}
+		}
+
+		return false;
 	}
 }

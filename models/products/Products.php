@@ -107,8 +107,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * @return string|null
-	 * @throws Exception
+	 * @return string
 	 */
 	public function getPaymentShortView(): string
 	{

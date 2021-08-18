@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\users\active_record;
 
 use app\components\db\ActiveRecordTrait;
+use app\components\validators\PasswordStrengthValidator;
 use app\models\phones\active_record\PhonesAR;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
@@ -72,7 +73,11 @@ class Users extends ActiveRecord {
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
 			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
-			[['restore_code'], 'string', 'max' => 40],
+			[['password'], PasswordStrengthValidator::class, 'when' => function (self $model) {
+				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
+				return $model->isAttributeUpdated('password');
+			}],
+			[['restore_code'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],

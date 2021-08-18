@@ -6,6 +6,7 @@ namespace app\modules\graphql\data;
 use app\modules\graphql\schema\mutations\extended\PartnerMutationType;
 use app\modules\graphql\schema\mutations\extended\ProductMutationType;
 use app\modules\graphql\schema\mutations\extended\SubscriptionMutationType;
+use app\modules\graphql\schema\query\extended\UserType;
 use app\modules\graphql\schema\query\extended\enum\FormPartnersType;
 use app\modules\graphql\schema\query\extended\enum\FormSubscriptionsType;
 use app\modules\graphql\schema\query\extended\PartnerCategoryType;
@@ -30,6 +31,7 @@ class QueryTypes
 	private static ?PartnerCategoryType $partnerCategory = null;
 	private static ?ProductType $product = null;
 	private static ?SubscriptionType $subscription = null;
+	private static ?UserType $user = null;
 
 	/**
 	 * @return QueryType
@@ -73,6 +75,15 @@ class QueryTypes
 	public static function subscription(): SubscriptionType
 	{
 		return static::$subscription ?: static::$subscription = new SubscriptionType();
+	}
+
+	/**
+	 * Текущий пользователь.
+	 * @return UserType
+	 */
+	public static function user(): UserType
+	{
+		return static::$user ?: static::$user = new UserType();
 	}
 
 	/**

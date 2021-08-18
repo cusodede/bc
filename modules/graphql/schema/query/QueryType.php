@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\query;
 
 use app\modules\graphql\data\QueryTypes;
+use app\modules\graphql\schema\query\extended\UserType;
 use app\modules\graphql\schema\query\extended\PartnerCategoryType;
 use app\modules\graphql\schema\query\extended\enum\ProductPaymentPeriodType;
 use app\modules\graphql\schema\query\extended\ProductType;
@@ -44,6 +45,8 @@ class QueryType extends ObjectType
 				'serverDateTime' 			=> ServerDateTimeType::baseFormat(),
 				'formPartnersField' 		=> QueryTypes::formPartners(),
 				'formSubscriptionsField' 	=> QueryTypes::formSubscriptions(),
+				'users'						=> UserType::getListOfType(),
+				'user'						=> UserType::getOneOfType(),
 			],
 		]);
 	}
