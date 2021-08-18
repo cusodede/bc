@@ -39,6 +39,7 @@ class UserController extends Controller
 	}
 
 	/**
+	 * Формирование ссылки для восстановления пароля на почту пользователя. TODO: delete return value after test
 	 * @param string $email
 	 */
 	public function actionGetRestorePasswordLink(string $email)
@@ -50,6 +51,7 @@ class UserController extends Controller
 	}
 
 	/**
+	 * Сброс пароля.
 	 * @return void
 	 * @throws HttpException
 	 */
@@ -70,6 +72,7 @@ class UserController extends Controller
 	}
 
 	/**
+	 * Проверка действительности кода восстановления пароль. HTTP 200 в случае прохождения валидации, 500 - если код невалидный.
 	 * @param string $code
 	 * @return void
 	 * @throws HttpException
@@ -88,10 +91,6 @@ class UserController extends Controller
 	 */
 	protected function verbs(): array
 	{
-		return [
-			'get-restore-password-link' => ['GET'],
-			'restore-password' => ['POST'],
-			'check-restore-password-code' => ['GET']
-		];
+		return ['get-restore-password-link' => ['GET'], 'restore-password' => ['POST'], 'check-restore-password-code' => ['GET']];
 	}
 }
