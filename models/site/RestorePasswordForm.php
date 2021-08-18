@@ -48,8 +48,7 @@ class RestorePasswordForm extends Model
 	public function sendCode(): void
 	{
 		if ($this->validate()) {
-			$user = Users::findByEmail($this->email);
-			if ($user) {
+			if (null !== $user = Users::findByEmail($this->email)) {
 				$user->restore_code = $this->generateRestoreCode();
 				if (!$user->save()) {
 					return;
