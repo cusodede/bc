@@ -15,11 +15,11 @@ class PasswordStrengthValidator extends StrengthValidator
 	 */
 	public function init(): void
 	{
-		$this->min      = 10;
-		$this->upper    = 2;
-		$this->lower    = 2;
-		$this->digit    = 2;
-		$this->special  = 2;
+		$this->min      = 8;
+		$this->upper    = 1;
+		$this->lower    = 1;
+		$this->digit    = 1;
+		$this->special  = 1;
 		$this->hasUser  = false;
 		$this->hasEmail = false;
 
