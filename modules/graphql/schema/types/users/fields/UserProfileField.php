@@ -1,0 +1,50 @@
+<?php
+declare(strict_types = 1);
+
+namespace app\modules\graphql\schema\types\users\fields;
+
+use app\models\sys\users\Users;
+use app\modules\graphql\components\AuthHelper;
+use app\modules\graphql\components\BaseField;
+use app\modules\graphql\schema\types\users\UserType;
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
+use yii\helpers\ArrayHelper;
+
+/**
+ * Class UserProfileField
+ */
+class UserProfileField extends BaseField
+{
+	/**
+	 * @inheritDoc
+	 */
+	protected function __construct()
+	{
+		parent::__construct([
+			'name' => 'userProfile',
+			'args' => [
+				'id' => Type::int(),
+			],
+			'description' => 'Возвращает текущего пользователя, а если указать id, вернёт конкретного пользователя.',
+			'type' => UserType::type(),
+			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
+				$root, $args, $context, $resolveInfo
+			)
+		]);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
+	{
+		$user = null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id);
+		return [
+			'id' => $user?->id,
+			'username' => $user?->username,
+			'login' => $user?->login,
+			'email' => $user?->email
+		];
+	}
+}

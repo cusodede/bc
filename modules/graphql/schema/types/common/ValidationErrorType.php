@@ -11,11 +11,13 @@ use GraphQL\Type\Definition\Type;
  * Class ValidationErrorType
  * @package app\modules\graphql\schema\types
  */
-class ValidationErrorType extends BaseObjectType {
+class ValidationErrorType extends BaseObjectType
+{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct([
 			'fields' => [
 				'field' => [
