@@ -39,9 +39,7 @@ abstract class BaseObjectType extends ObjectType
 	{
 		return [
 			'type' => static::type(),
-			'resolve' => function($root, $args) {
-				return $args;
-			}
+			'resolve' => fn($root, $args) => $args
 		];
 	}
 }

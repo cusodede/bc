@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types;
 
 use app\modules\graphql\components\BaseObjectType;
+use app\modules\graphql\schema\types\services\ServicesType;
 use app\modules\graphql\schema\types\users\UsersType;
 
 /**
@@ -18,7 +19,8 @@ class QueryType extends BaseObjectType
 	public function __construct()
 	{
 		$schema = [
-			'users' => UsersType::root(),
+			'services' 	=> ServicesType::root(),
+			'users' 	=> UsersType::root(),
 		];
 		ksort($schema, SORT_REGULAR);
 
