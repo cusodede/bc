@@ -29,6 +29,7 @@ use app\models\products\active_record\Products;
 class Partners extends ActiveRecord
 {
 	use ActiveRecordTrait;
+
 	/**
 	 * {@inheritdoc}
 	 */

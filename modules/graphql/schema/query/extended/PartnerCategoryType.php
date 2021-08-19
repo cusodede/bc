@@ -41,8 +41,7 @@ final class PartnerCategoryType extends BaseQueryType
 		return [
 			'type' => Type::listOf(QueryTypes::partnerCategory()),
 			'description' => 'Возвращает список партнёров',
-			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?array
-				=> RefPartnersCategories::find()->where($args)->active()->all(),
+			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?array => RefPartnersCategories::find()->where($args)->active()->all(),
 		];
 	}
 
@@ -57,8 +56,7 @@ final class PartnerCategoryType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает категорию партнёра по id',
-			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?RefPartnersCategories
-				=> RefPartnersCategories::find()->where($args)->active()->one(),
+			'resolve' => fn(RefPartnersCategories $partnersCategories = null, array $args = []): ?RefPartnersCategories => RefPartnersCategories::find()->where($args)->active()->one(),
 		];
 	}
 }

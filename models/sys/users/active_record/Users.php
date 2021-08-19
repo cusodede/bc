@@ -38,7 +38,8 @@ use yii\helpers\ArrayHelper;
  * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
  * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
  */
-class Users extends ActiveRecord {
+class Users extends ActiveRecord
+{
 	use ActiveRecordTrait;
 
 	private ?array $_phones = null;
@@ -46,7 +47,8 @@ class Users extends ActiveRecord {
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'history' => [
 				'class' => HistoryBehavior::class
@@ -57,14 +59,16 @@ class Users extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_users';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['username', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
@@ -73,7 +77,7 @@ class Users extends ActiveRecord {
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
 			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
-			[['password'], PasswordStrengthValidator::class, 'when' => function (self $model) {
+			[['password'], PasswordStrengthValidator::class, 'when' => function(self $model) {
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
 			}],
@@ -93,7 +97,8 @@ class Users extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'username' => 'Имя пользователя',
@@ -114,21 +119,24 @@ class Users extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersTokens():ActiveQuery {
+	public function getRelatedUsersTokens(): ActiveQuery
+	{
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersToPhones():ActiveQuery {
+	public function getRelatedUsersToPhones(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersToPhones::class, ['user_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPhones():ActiveQuery {
+	public function getRelatedPhones(): ActiveQuery
+	{
 		return $this->hasMany(PhonesAR::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
 	}
 
@@ -136,14 +144,16 @@ class Users extends ActiveRecord {
 	 * @param mixed $relatedPhones
 	 * @throws Throwable
 	 */
-	public function setRelatedPhones(mixed $relatedPhones):void {
+	public function setRelatedPhones(mixed $relatedPhones): void
+	{
 		RelUsersToPhones::linkModels($this, $relatedPhones);
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getPhones():array {
+	public function getPhones(): array
+	{
 		if (null === $this->_phones) {
 			$this->_phones = ArrayHelper::getColumn($this->relatedPhones, 'phone');
 		}
@@ -153,14 +163,16 @@ class Users extends ActiveRecord {
 	/**
 	 * @param mixed $phones
 	 */
-	public function setPhones(mixed $phones):void {
+	public function setPhones(mixed $phones): void
+	{
 		$this->_phones = (array)$phones;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function save($runValidation = true, $attributeNames = null):bool {
+	public function save($runValidation = true, $attributeNames = null): bool
+	{
 		if (true === $saved = parent::save($runValidation, $attributeNames)) {
 			/*
 			 * Это не очень красиво, и я предполагал сделать это через релейшен-атрибуты, проверяемые в

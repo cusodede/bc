@@ -12,7 +12,8 @@ use yii\helpers\ArrayHelper;
 /**
  * Class SearchHelper
  */
-class SearchHelper {
+class SearchHelper
+{
 
 	public const SEARCH_TYPE_EQUAL = '=';
 	public const SEARCH_TYPE_LIKE = 'like';
@@ -24,9 +25,10 @@ class SearchHelper {
 	 * @return array
 	 * @throws Exception
 	 */
-	private static function AssumeSearchAttributes(string $modelClass):array {
+	private static function AssumeSearchAttributes(string $modelClass): array
+	{
 		/** @var ActiveRecord $model */
-		$model = new $modelClass();
+		$model        = new $modelClass();
 		$searchFields = [[]];
 		foreach ($model->rules() as $rule) {
 			if ('string' === ArrayHelper::getValue($rule, '1')) {
@@ -50,7 +52,8 @@ class SearchHelper {
 	 * @return array
 	 * @throws UnknownPropertyException
 	 */
-	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null):array {
+	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null): array
+	{
 		/*В модели можно полностью переопределить поиск*/
 		if (method_exists($modelClass, 'search')) return $modelClass::search($term, $limit, $searchAttributes);
 
@@ -60,16 +63,16 @@ class SearchHelper {
 		if ((null === $pk = ArrayHelper::getValue($modelClass::primaryKey(), 0))) {
 			throw new UnknownPropertyException('Primary key not configured');
 		}
-		$tableName = $modelClass::tableName();
-		$swTermCyr = TemporaryHelper::SwitchKeyboard($term);
-		$swTermLat = TemporaryHelper::SwitchKeyboard($term, true);
+		$tableName   = $modelClass::tableName();
+		$swTermCyr   = TemporaryHelper::SwitchKeyboard($term);
+		$swTermLat   = TemporaryHelper::SwitchKeyboard($term, true);
 		$searchQuery = $modelClass::find()->select("{$tableName}.{$pk}");
 		foreach ($searchAttributes as $searchRule) {
 			if (is_array($searchRule) && isset($searchRule[0], $searchRule[1])) {//attribute, search type
 				[$searchAttribute, $searchType] = $searchRule;
 			} else {
 				$searchAttribute = $searchRule;
-				$searchType = "like";
+				$searchType      = "like";
 			}
 			$searchQuery->addSelect("{$tableName}.{$searchAttribute} as {$searchAttribute}");
 			switch ($searchType) {

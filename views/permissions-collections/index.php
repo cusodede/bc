@@ -27,19 +27,19 @@ use app\assets\PermissionsCollectionsAsset;
 
 PermissionsCollectionsAsset::register($this);
 
-$this->title = 'Группы разрешений';
+$this->title                   = 'Группы разрешений';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?= GridConfig::widget([
-	'id'   => 'permissions-collections-index-grid',
+	'id' => 'permissions-collections-index-grid',
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'toolbar'          => [
+		'toolbar' => [
 			[
 				'content' => Html::ajaxModalLink(
 						'Новая группа',
@@ -49,14 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
 					Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn float-left btn-info'])
 			]
 		],
-		'export'           => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			[
-				'class'    => ActionColumn::class,
+				'class' => ActionColumn::class,
 				'template' => '{edit}',
-				'buttons'  => [
+				'buttons' => [
 					'edit' => static function(string $url, PermissionsCollections $model) {
 						return Html::a('<i class="fa fa-edit"></i>', $url, [
 							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
@@ -68,14 +68,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			'name',
 			'comment',
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'permission',
-				'label'     => 'Включённые доступы',
-				'value'     => static function(PermissionsCollections $collections) {
+				'label' => 'Включённые доступы',
+				'value' => static function(PermissionsCollections $collections) {
 					return BadgeWidget::widget([//прямые
-							'items'     => $collections->relatedPermissions,
-							'subItem'   => 'name',
-							'options'   => function($mapAttributeValue, Permissions $item) {
+							'items' => $collections->relatedPermissions,
+							'subItem' => 'name',
+							'options' => function($mapAttributeValue, Permissions $item) {
 								$url = PermissionsController::to('edit', ['id' => $item->id]);
 								return [//навешиваем модальный редактор
 									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
@@ -83,9 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
 							},
 							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']//вдобавок к модалке оставляем ссылку для прямого перехода
 						]) . BadgeWidget::widget([//через группы
-							'items'     => $collections->relatedPermissionsViaSlaveGroups,
-							'subItem'   => 'name',
-							'options'   => function($mapAttributeValue, Permissions $item) {
+							'items' => $collections->relatedPermissionsViaSlaveGroups,
+							'subItem' => 'name',
+							'options' => function($mapAttributeValue, Permissions $item) {
 								$url = PermissionsController::to('edit', ['id' => $item->id]);
 								return [//навешиваем модальный редактор
 									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
@@ -94,17 +94,17 @@ $this->params['breadcrumbs'][] = $this->title;
 							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']
 						]);
 				},
-				'format'    => 'raw'
+				'format' => 'raw'
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'relatedUsers',
-				'format'    => 'raw',
-				'value'     => static function(PermissionsCollections $collections) {
+				'format' => 'raw',
+				'value' => static function(PermissionsCollections $collections) {
 					return BadgeWidget::widget([
-						'items'     => $collections->relatedUsersRecursively,
-						'subItem'   => 'username',
-						'options'   => function($mapAttributeValue, Users $item) {
+						'items' => $collections->relatedUsersRecursively,
+						'subItem' => 'username',
+						'options' => function($mapAttributeValue, Users $item) {
 							$url = UsersController::to('view', ['id' => $item->id]);
 							return [//навешиваем модальный просмотр
 								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-view-{$item->id}');event.preventDefault();")

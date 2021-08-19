@@ -8,13 +8,15 @@ use yii\db\Migration;
 /**
  * Class m000000_000001_history_module_fix_delegate_field
  */
-class m000000_000001_history_module_fix_delegate_field extends Migration {
+class m000000_000001_history_module_fix_delegate_field extends Migration
+{
 	private const TABLE_NAME = 'sys_history';
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->dropIndex('delegate', self::TABLE_NAME);
 		$this->dropColumn(self::TABLE_NAME, 'delegate');
 
@@ -25,7 +27,8 @@ class m000000_000001_history_module_fix_delegate_field extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropIndex('delegate', self::TABLE_NAME);
 		$this->dropColumn(self::TABLE_NAME, 'delegate');
 

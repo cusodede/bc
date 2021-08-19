@@ -77,8 +77,7 @@ final class SubscriptionMutationType extends BaseMutationType
 					'type' => ErrorTypes::validationErrorsUnionType(QueryTypes::subscription()),
 					'description' => 'Обновление подписки',
 					'args' => $this->getArgs(),
-					'resolve' => fn(Subscriptions $subscriptions, array $args = []): array
-						=> $this->save($subscriptions, $args, self::MESSAGES),
+					'resolve' => fn(Subscriptions $subscriptions, array $args = []): array => $this->save($subscriptions, $args, self::MESSAGES),
 				],
 				'product' => [
 					'type' => MutationTypes::productMutation(),
@@ -93,16 +92,16 @@ final class SubscriptionMutationType extends BaseMutationType
 	private function create(): array
 	{
 		$productMutation = new ProductMutationType();
-		$allArgs = ArrayHelper::merge($productMutation->getArgs(), $this->getArgs());
+		$allArgs         = ArrayHelper::merge($productMutation->getArgs(), $this->getArgs());
 
-		$resolve = function(Subscriptions $subscription, array $args = []) use($productMutation): array {
+		$resolve = function(Subscriptions $subscription, array $args = []) use ($productMutation): array {
 
 			/** @var Transaction $transaction */
 			$transaction = Yii::$app->db->beginTransaction();
 
-			$productModel = new Products();
+			$productModel          = new Products();
 			$productModel->type_id = EnumProductsTypes::TYPE_SUBSCRIPTION;
-			$saveProducts = $this->save($productModel, $args, $productMutation::MESSAGES);
+			$saveProducts          = $this->save($productModel, $args, $productMutation::MESSAGES);
 			if (false === ArrayHelper::getValue($saveProducts, 'result')) {
 				return $saveProducts;
 			}

@@ -16,12 +16,14 @@ use yii\web\NotFoundHttpException;
 /**
  * Class IndexController
  */
-class IndexController extends Controller {
+class IndexController extends Controller
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'access' => [
 				'class' => PermissionFilter::class
@@ -33,8 +35,9 @@ class IndexController extends Controller {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function actionIndex():string {
-		$params = Yii::$app->request->queryParams;
+	public function actionIndex(): string
+	{
+		$params      = Yii::$app->request->queryParams;
 		$searchModel = new HistorySearch();
 		return $this->render('index', [
 			'searchModel' => $searchModel,
@@ -49,7 +52,8 @@ class IndexController extends Controller {
 	 * @throws InvalidConfigException
 	 * @throws Throwable
 	 */
-	public function actionShow(string $for, int $id):string {
+	public function actionShow(string $for, int $id): string
+	{
 		$logger = new ActiveRecordHistory([
 			'model_class' => $for
 		]);
@@ -68,7 +72,8 @@ class IndexController extends Controller {
 	 * @throws NotFoundHttpException
 	 * @throws Throwable
 	 */
-	public function actionHistory(string $for, int $id, int $level = 0):string {
+	public function actionHistory(string $for, int $id, int $level = 0): string
+	{
 		$logger = new ActiveRecordHistory([
 			'model_class' => $for
 		]);

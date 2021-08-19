@@ -15,7 +15,8 @@ use yii\widgets\InputWidget;
  * @property string $cropperCropElementId id элемента, который будет триггерить кроппинг изображения и его отправку на сервак
  * @property null|string $modalId id модалки, на случай если кроппер завернут в неё.
  */
-class CropperWidget extends InputWidget {
+class CropperWidget extends InputWidget
+{
 	/**
 	 * @var array настройки, используемые для инициализации Cropper
 	 * @see https://github.com/fengyuanchen/cropperjs
@@ -39,16 +40,18 @@ class CropperWidget extends InputWidget {
 	 */
 	public ?string $modalId = null;
 
-	public function init():void {
+	public function init(): void
+	{
 		parent::init();
 		CropperWidgetAsset::register($this->view);
 	}
 
-	public function run():string {
+	public function run(): string
+	{
 		$options = json_encode([
 			'fileInputName' => Html::getInputName($this->model, $this->attribute),
 			'imageId' => "#{$this->imageId}",
-			'modalId' => $this->modalId?"#{$this->modalId}":null,
+			'modalId' => $this->modalId ? "#{$this->modalId}" : null,
 			'cropperUploadInputId' => "#{$this->cropperUploadInputId}",
 			'cropperCropElementId' => "#{$this->cropperCropElementId}",
 			'pluginOptions' => $this->pluginOptions

@@ -80,8 +80,7 @@ final class UserType extends BaseQueryType
 				'id' => Type::int(),
 			],
 			'description' => 'Возвращает текущего пользователя если обратиться без id',
-			'resolve' => fn(Users $user = null, array $args = []): ?Users
-				=> null === ($id = ArrayHelper::getValue($args, 'id')) ? Users::Current() : Users::findOne($id),
+			'resolve' => fn(Users $user = null, array $args = []): ?Users => null === ($id = ArrayHelper::getValue($args, 'id')) ? Users::Current() : Users::findOne($id),
 		];
 	}
 }

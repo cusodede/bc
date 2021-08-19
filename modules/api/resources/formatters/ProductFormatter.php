@@ -41,7 +41,7 @@ class ProductFormatter implements ProductFormatterInterface
 				'subscriptionStatus' => 'actualStatus'
 			],
 			Subscriptions::class => [
-				'trial' => static function (Subscriptions $subscription) use ($product) {
+				'trial' => static function(Subscriptions $subscription) use ($product) {
 					//т.к. по продукту не производилось подключение, то доступен триальный период
 					if ((0 !== $subscription->trial_count) && (null === $product->actualStatus)) {
 						return ['units' => $subscription->units, 'count' => $subscription->trial_count];
@@ -61,7 +61,7 @@ class ProductFormatter implements ProductFormatterInterface
 				'name'
 			],
 			ProductsJournal::class => [
-				'status'     => 'status_id',
+				'status' => 'status_id',
 				'expireDate' => static fn(ProductsJournal $status) => DateHelper::toIso8601($status->expire_date)
 			]
 		]);

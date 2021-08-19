@@ -11,12 +11,14 @@ use yii\web\ForbiddenHttpException;
 /**
  * Class UsersSearch
  */
-class UsersSearch extends ActiveRecordUsers {
+class UsersSearch extends ActiveRecordUsers
+{
 
 	/**
 	 * @inheritdoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['id'], 'integer'],
 			[['username', 'login', 'email'], 'safe'],
@@ -30,7 +32,8 @@ class UsersSearch extends ActiveRecordUsers {
 	 * @throws Throwable
 	 * @throws ForbiddenHttpException
 	 */
-	public function search(array $params, array $allowedGroups = []):ActiveDataProvider {
+	public function search(array $params, array $allowedGroups = []): ActiveDataProvider
+	{
 		$query = Users::find()->active()->scope();
 
 		$dataProvider = new ActiveDataProvider([

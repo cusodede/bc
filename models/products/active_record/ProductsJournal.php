@@ -66,11 +66,11 @@ class ProductsJournal extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id'                          => 'ID',
+			'id' => 'ID',
 			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-			'status_id'                   => 'Статус подключения',
-			'expire_date'                 => 'Срок действия',
-			'created_at'                  => 'Дата заведения',
+			'status_id' => 'Статус подключения',
+			'expire_date' => 'Срок действия',
+			'created_at' => 'Дата заведения',
 		];
 	}
 

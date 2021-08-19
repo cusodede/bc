@@ -16,23 +16,23 @@ use yii\bootstrap4\ActiveForm;
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
-	'id'      => "{$modelName}-modal-create-new",
-	'size'    => Modal::SIZE_LARGE,
-	'title'   => $title ?? '',
-	'footer'  => $this->render(Yii::$app->controller->viewPath . '/subviews/editPanelFooter', [
+	'id' => "{$modelName}-modal-create-new",
+	'size' => Modal::SIZE_LARGE,
+	'title' => $title ?? '',
+	'footer' => $this->render(Yii::$app->controller->viewPath . '/subviews/editPanelFooter', [
 		'model' => $model,
-		'form'  => "{$modelName}-modal-create"
+		'form' => "{$modelName}-modal-create"
 	]),
 	'options' => [
-		'class'    => 'modal-dialog-large',
+		'class' => 'modal-dialog-large',
 		'tabindex' => false
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(
 	[
-		'id'                   => "{$modelName}-modal-create",
+		'id' => "{$modelName}-modal-create",
 		'enableAjaxValidation' => true,
-		'options'              => [
+		'options' => [
 			"onsubmit" => new JsExpression("formSubmitAjax(event)")
 		]
 	])

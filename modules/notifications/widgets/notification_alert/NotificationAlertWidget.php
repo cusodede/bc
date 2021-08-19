@@ -23,7 +23,8 @@ use yii\web\JsExpression;
  * @property null|false|string $acknowledgeButton
  * @property null|false|string $dismissButton
  */
-class NotificationAlertWidget extends Alert {
+class NotificationAlertWidget extends Alert
+{
 
 	public const TYPE_PRIMARY = 0;
 	public const TYPE_SUCCESS = 1;
@@ -60,7 +61,8 @@ class NotificationAlertWidget extends Alert {
 	/**
 	 * @inheritDoc
 	 */
-	public function init():void {
+	public function init(): void
+	{
 		$this->body = $this->getBody();
 		NotificationsModuleAssets::register($this->view);
 		$this->options = [
@@ -70,11 +72,12 @@ class NotificationAlertWidget extends Alert {
 		$this->view->registerJs("$('#{$this->id}').show()");
 	}
 
-	private function getBody():string {
+	private function getBody(): string
+	{
 		return Html::tag('div',
-			$this->getIcon().
-			$this->getMessage().
-			$this->getAcknowledgeButton().
+			$this->getIcon() .
+			$this->getMessage() .
+			$this->getAcknowledgeButton() .
 			$this->getDismissButton(), [
 				"class" => "d-flex align-items-center"
 			]);
@@ -83,7 +86,8 @@ class NotificationAlertWidget extends Alert {
 	/**
 	 * @return string
 	 */
-	private function getMessage():string {
+	private function getMessage(): string
+	{
 		return Html::tag('div', Html::tag('span', $this->notification->message, [
 			'class' => 'h5 m-0 fw-700'
 		]), [
@@ -95,17 +99,19 @@ class NotificationAlertWidget extends Alert {
 	 * @return string
 	 * @throws Exception
 	 */
-	private function getIcon():string {
+	private function getIcon(): string
+	{
 		if (false === $this->icon) return '';
-		return $this->icon??ArrayHelper::getValue(self::TYPE_ICONS, $this->type, '');
+		return $this->icon ?? ArrayHelper::getValue(self::TYPE_ICONS, $this->type, '');
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getDismissButton():string {
+	private function getDismissButton(): string
+	{
 		if (false === $this->dismissButton) return '';
-		return $this->dismissButton??Html::button("Отложить", [
+		return $this->dismissButton ?? Html::button("Отложить", [
 				'class' => "btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed",
 				'data-dismiss' => "alert",
 				'aria-label' => "Отложить"
@@ -117,13 +123,14 @@ class NotificationAlertWidget extends Alert {
 	 * @throws Throwable
 	 * @throws InvalidConfigException
 	 */
-	private function getAcknowledgeButton():string {
+	private function getAcknowledgeButton(): string
+	{
 		if (false === $this->acknowledgeButton) return '';
-		return $this->acknowledgeButton??Html::a("Прочитано", '#', [
+		return $this->acknowledgeButton ?? Html::a("Прочитано", '#', [
 				'class' => "btn btn-info btn-pills btn-sm btn-w-m  mr-1 waves-effect waves-themed",
 				'data-dismiss' => "alert",
 				'aria-label' => "Прочитано",
-				'onclick' => new JsExpression("post('".NotificationsModule::to(['default/acknowledge'])."', ".Json::encode(['id' => $this->notification->id]).")")
+				'onclick' => new JsExpression("post('" . NotificationsModule::to(['default/acknowledge']) . "', " . Json::encode(['id' => $this->notification->id]) . ")")
 			]);
 	}
 }

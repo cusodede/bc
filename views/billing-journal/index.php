@@ -21,31 +21,31 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
-$this->title = 'История списаний';
+$this->title                   = 'История списаний';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <?= GridConfig::widget([
-	'id'   => "{$modelName}-index-grid",
+	'id' => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'showOnEmpty'      => true,
-		'striped'          => false,
-		'toolbar'          => false,
-		'export'           => false,
+		'showOnEmpty' => true,
+		'striped' => false,
+		'toolbar' => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			'id',
 			[
 				'attribute' => 'searchAbonentPhone',
-				'label'     => 'Телефон абонента',
-				'content'   => static function(BillingJournal $model) {
+				'label' => 'Телефон абонента',
+				'content' => static function(BillingJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedAbonent->phone,
 						AbonentsController::to('view', ['id' => $model->relatedAbonent->id])
@@ -54,9 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute' => 'searchProductId',
-				'label'     => 'Наименование продукта',
-				'filter'    => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
-				'content'   => static function(BillingJournal $model) {
+				'label' => 'Наименование продукта',
+				'filter' => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
+				'content' => static function(BillingJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedProduct->name,
 						ProductsController::to('view', ['id' => $model->relatedProduct->id])
@@ -66,12 +66,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			'price',
 			[
 				'attribute' => 'status_id',
-				'filter'    => EnumBillingJournalStatuses::mapData(),
-				'content'   => static fn(BillingJournal $model) => EnumBillingJournalStatuses::getBadge($model->status_id)
+				'filter' => EnumBillingJournalStatuses::mapData(),
+				'content' => static fn(BillingJournal $model) => EnumBillingJournalStatuses::getBadge($model->status_id)
 			],
 			[
 				'attribute' => 'created_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		]
 	])

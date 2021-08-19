@@ -16,6 +16,7 @@ interface ExtendedThrowable extends Throwable
 	 * @return string
 	 */
 	public function getErrorCode(): string;
+
 	/**
 	 * @return string
 	 */

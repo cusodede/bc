@@ -81,8 +81,7 @@ final class SubscriptionType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает подписку по id',
-			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?Subscriptions
-				=> Subscriptions::find()->where($args)->active()->one(),
+			'resolve' => fn(Subscriptions $subscription = null, array $args = []): ?Subscriptions => Subscriptions::find()->where($args)->active()->one(),
 		];
 	}
 }

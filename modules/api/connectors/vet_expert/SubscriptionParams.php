@@ -178,8 +178,8 @@ class SubscriptionParams extends BaseObject implements Arrayable
 		$params = [
 			'phone' => $this->_phone,
 			'email' => $this->_email,
-			'first_name'  => $this->_firstName,
-			'last_name'   => $this->_lastName,
+			'first_name' => $this->_firstName,
+			'last_name' => $this->_lastName,
 			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
@@ -197,10 +197,10 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	public static function createInstance(Abonents $abonent): self
 	{
 		return new static([
-			'phone'      => $abonent->phone,
-			'lastName'   => $abonent->surname,
+			'phone' => $abonent->phone,
+			'lastName' => $abonent->surname,
 			'middleName' => $abonent->patronymic,
-			'firstName'  => $abonent->name
+			'firstName' => $abonent->name
 		]);
 	}
 

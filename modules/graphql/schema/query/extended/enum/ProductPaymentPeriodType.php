@@ -38,8 +38,7 @@ final class ProductPaymentPeriodType extends BaseQueryType
 		return [
 			'type' => Type::listOf(EnumTypes::productPaymentPeriodType()),
 			'description' => 'Возвращает список периодов списания абонентской платы по продукту',
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> self::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
+			'resolve' => fn($paymentPeriod, array $args = []): ?array => self::getListFromEnum(EnumProductsPaymentPeriods::mapData()),
 		];
 	}
 
@@ -54,8 +53,7 @@ final class ProductPaymentPeriodType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает единицу измерения периода списания абонентской платы по продукту',
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
+			'resolve' => fn($paymentPeriod, array $args = []): ?array => self::getOneFromEnum(EnumProductsPaymentPeriods::mapData(), $args)
 		];
 	}
 }

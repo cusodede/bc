@@ -13,20 +13,23 @@ use yii\db\ActiveRecord;
  * @property int $user_id
  * @property int $phone_id
  */
-class RelUsersToPhones extends ActiveRecord {
+class RelUsersToPhones extends ActiveRecord
+{
 	use RelationsTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'relation_users_to_phones';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['user_id', 'phone_id'], 'required'],
 			[['user_id', 'phone_id'], 'integer'],
@@ -38,7 +41,8 @@ class RelUsersToPhones extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'user_id' => 'User ID',

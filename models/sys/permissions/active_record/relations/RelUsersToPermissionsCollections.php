@@ -19,20 +19,23 @@ use yii\db\ActiveRecord;
  * @property null|Users $relatedUsers Связанная модель пользователя
  * @property null|PermissionsCollections $relatedPermissionsCollections Связанная группа доступа
  */
-class RelUsersToPermissionsCollections extends ActiveRecord {
+class RelUsersToPermissionsCollections extends ActiveRecord
+{
 	use RelationsTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_relation_users_to_permissions_collections';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['user_id', 'collection_id'], 'required'],
 			[['user_id', 'collection_id'], 'integer'],
@@ -43,7 +46,8 @@ class RelUsersToPermissionsCollections extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'user_id' => 'User ID',
@@ -54,14 +58,16 @@ class RelUsersToPermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsers():ActiveQuery {
+	public function getRelatedUsers(): ActiveQuery
+	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsCollections():ActiveQuery {
+	public function getRelatedPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasOne(PermissionsCollections::class, ['id' => 'collection_id']);
 	}
 

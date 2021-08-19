@@ -12,7 +12,8 @@ use yii\base\Action;
  * @property int $skipRows количество пропускаемых строк от начала
  * @property bool $skipEmptyRows пропускать ли пустые строки
  */
-class ImportAction extends Action {
+class ImportAction extends Action
+{
 	public string $modelClass;
 	public int $skipRows = 1;
 	public bool $skipEmptyRows = true;
@@ -21,7 +22,8 @@ class ImportAction extends Action {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function run():string {
+	public function run(): string
+	{
 
 		$importModel = new ImportModel([
 			'model' => $this->modelClass,

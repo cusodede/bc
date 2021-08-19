@@ -78,7 +78,7 @@ class RelAbonentsToProducts extends ActiveRecordRelAbonentsToProducts
 	{
 		$config = [
 			'expire_date' => $expireDate,
-			'status_id'   => (null === $this->relatedLastProductsJournal)
+			'status_id' => (null === $this->relatedLastProductsJournal)
 				? EnumProductsStatuses::STATUS_ENABLED
 				: EnumProductsStatuses::STATUS_RENEWED
 		];

@@ -30,13 +30,15 @@ AppAsset::register($this);
 <body class="mod-bg-1 mod-nav-link mod-skin-light">
 <?php $this->beginBody(); ?>
 
-<main id="js-page-content" class="page-content" role="main" style="height: 100%; width: 770px; margin: auto; background-image: url('/img/back.png'); background-repeat: no-repeat; background-position: top center;">
+<main id="js-page-content" class="page-content" role="main"
+	  style="height: 100%; width: 770px; margin: auto; background-image: url('/img/back.png'); background-repeat: no-repeat; background-position: top center;">
 	<div style="width: 390px; margin-left: 95px; margin-top: 160px">
 		<?= $content ?>
 	</div>
 </main>
 
-<div id="event-log" style="position: absolute; width: 30%; min-height: 200px; top: 0; right: 0" class="p-4 card font-weight-bold">
+<div id="event-log" style="position: absolute; width: 30%; min-height: 200px; top: 0; right: 0"
+	 class="p-4 card font-weight-bold">
 	Лог операций ...
 </div>
 

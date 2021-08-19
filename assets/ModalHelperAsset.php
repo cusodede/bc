@@ -10,18 +10,20 @@ use yii\web\YiiAsset;
 /**
  * Class ModalHelperAsset
  */
-class ModalHelperAsset extends AssetBundle {
+class ModalHelperAsset extends AssetBundle
+{
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function init():void {
-		$this->depends = [YiiAsset::class];
-		$this->sourcePath = __DIR__.'/assets/modalHelper/';
-		$this->js = [
+	public function init(): void
+	{
+		$this->depends        = [YiiAsset::class];
+		$this->sourcePath     = __DIR__ . '/assets/modalHelper/';
+		$this->js             = [
 			'js/modalHelper.js'
 		];
-		$this->css = [
+		$this->css            = [
 			'css/modalHelper.css'
 		];
 		$this->publishOptions = [

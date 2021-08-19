@@ -32,7 +32,7 @@ class ProductTicketsService
 		$params = new TicketSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
-			'action'    => TicketSubscription::ACTION_CONNECT_SUBSCRIPTION,
+			'action' => TicketSubscription::ACTION_CONNECT_SUBSCRIPTION,
 			'createdBy' => $userId ?? Yii::$app->user->id
 		]);
 
@@ -56,7 +56,7 @@ class ProductTicketsService
 		$params = new TicketSubscriptionParams([
 			'productId' => $productId,
 			'abonentId' => $abonentId,
-			'action'    => TicketSubscription::ACTION_DISABLE_SUBSCRIPTION,
+			'action' => TicketSubscription::ACTION_DISABLE_SUBSCRIPTION,
 			'createdBy' => $userId ?? Yii::$app->user->id
 		]);
 

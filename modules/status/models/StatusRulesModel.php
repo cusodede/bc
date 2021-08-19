@@ -11,7 +11,8 @@ use yii\base\Model;
 /**
  * Прототипирование набора правил статусов для цели
  */
-class StatusRulesModel extends Model {
+class StatusRulesModel extends Model
+{
 	/**
 	 * Ищет в массиве подмассив (простую пару ключ-значение), возвращает путь до найденного результата
 	 * Не отлаживалось - функция нужна только в прототипе для поиска в self::RULES
@@ -21,7 +22,8 @@ class StatusRulesModel extends Model {
 	 * @return array
 	 * @throws Throwable
 	 */
-	private static function array_find_subarray(array $array, array $search, array $keys = []):array {
+	private static function array_find_subarray(array $array, array $search, array $keys = []): array
+	{
 		$searchKey = ArrayHelper::key($search);
 		/** @var string $searchKey */
 		$searchValue = $search[$searchKey];
@@ -45,7 +47,8 @@ class StatusRulesModel extends Model {
 	 * @return StatusModel|null
 	 * @throws Throwable
 	 */
-	public static function getInitialStatus(string $className):?StatusModel {
+	public static function getInitialStatus(string $className): ?StatusModel
+	{
 		$ruleId = ArrayHelper::getValue(self::array_find_subarray(StatusModule::getClassRules($className), ['initial' => true]), 0);
 		return self::getStatus($className, $ruleId);
 
@@ -57,7 +60,8 @@ class StatusRulesModel extends Model {
 	 * @return StatusModel|null
 	 * @throws Throwable
 	 */
-	public static function getStatus(string $className, ?int $currentStatusId):?StatusModel {
+	public static function getStatus(string $className, ?int $currentStatusId): ?StatusModel
+	{
 		if (null === $rule = ArrayHelper::getValue(StatusModule::getClassRules($className), $currentStatusId)) return null;
 		/** @var array $rule */
 		return new StatusModel($currentStatusId, $rule);
@@ -69,7 +73,8 @@ class StatusRulesModel extends Model {
 	 * @return null|array
 	 * @throws Throwable
 	 */
-	public static function getNextStatuses(string $className, ?StatusModel $currentStatus):?array {
+	public static function getNextStatuses(string $className, ?StatusModel $currentStatus): ?array
+	{
 		if (null === $currentStatus) return [];
 		if (null === $nextStatusesId = $currentStatus->next) return null;//может быть применён любой статус
 		$nextStatuses = [];
@@ -84,8 +89,9 @@ class StatusRulesModel extends Model {
 	 * @return StatusModel[]
 	 * @throws Throwable
 	 */
-	public static function getAllStatuses(string $className):array {
-		$rules = StatusModule::getClassRules($className);
+	public static function getAllStatuses(string $className): array
+	{
+		$rules       = StatusModule::getClassRules($className);
 		$allStatuses = [];
 		foreach ($rules as $id => $rule) {
 			$allStatuses[] = new StatusModel($id, $rule);

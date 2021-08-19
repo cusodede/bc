@@ -9,6 +9,7 @@ use yii\base\Module;
 /**
  * Class NotificationsModule
  */
-class NotificationsModule extends Module {
+class NotificationsModule extends Module
+{
 	use ModuleTrait;
 }

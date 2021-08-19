@@ -12,14 +12,16 @@ use yii\base\Widget;
  *
  * @property TimelineEntry $entry
  */
-class TimelineEntryWidget extends Widget {
+class TimelineEntryWidget extends Widget
+{
 	public TimelineEntry $entry;
 
 	/**
 	 * Функция возврата результата рендеринга виджета
 	 * @return string
 	 */
-	public function run():string {
+	public function run(): string
+	{
 		return $this->render('timeline_entry', [
 			'entry' => $this->entry
 		]);

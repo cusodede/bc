@@ -21,9 +21,9 @@ class MutationType extends ObjectType
 	{
 		parent::__construct([
 			'fields' => [
-				'partner' 		=> PartnerMutationType::mutationType(),
-				'product' 		=> ProductMutationType::mutationType(),
-				'subscription' 	=> SubscriptionMutationType::mutationType(),
+				'partner' => PartnerMutationType::mutationType(),
+				'product' => ProductMutationType::mutationType(),
+				'subscription' => SubscriptionMutationType::mutationType(),
 			]
 		]);
 	}

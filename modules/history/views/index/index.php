@@ -48,7 +48,7 @@ use yii\web\View;
 			'class' => DataColumn::class,
 			'attribute' => 'model_class',
 			'value' => static function(ActiveRecordHistory $model) {
-				return null === $model->model_key?$model->model_class:Html::a($model->model_class, ['show', 'for' => $model->model_class, 'id' => $model->model_key]);
+				return null === $model->model_key ? $model->model_class : Html::a($model->model_class, ['show', 'for' => $model->model_class, 'id' => $model->model_key]);
 			},
 			'format' => 'raw',
 			'filter' => $searchModel->model_class
@@ -63,7 +63,7 @@ use yii\web\View;
 		[
 			'attribute' => 'model_key',
 			'value' => static function(ActiveRecordHistory $model) {
-				return null === $model->model_key?$model->model_key:Html::a($model->model_key, ['history', 'for' => $model->model_class, 'id' => $model->model_key]);
+				return null === $model->model_key ? $model->model_key : Html::a($model->model_key, ['history', 'for' => $model->model_class, 'id' => $model->model_key]);
 			},
 			'format' => 'raw'
 

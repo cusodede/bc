@@ -30,7 +30,8 @@ use yii\helpers\ArrayHelper;
  *
  * @property-read null|Status $relStatus Релейшен к таблице статусов. Используем только для чтения, для записи обращаемся к Status::setCurrentStatus - там учитываются создатель и делегат. Если они не будут нужны, можно и через свойство.
  */
-trait StatusesTrait {
+trait StatusesTrait
+{
 	private ?string $_className = null;
 
 	/**
@@ -38,7 +39,8 @@ trait StatusesTrait {
 	 * @throws ReflectionException
 	 * @throws UnknownClassException
 	 */
-	public function getClassName():string {
+	public function getClassName(): string
+	{
 		if (null === $this->_className) {
 			$this->_className = ReflectionHelper::New($this)->name;
 		}
@@ -49,8 +51,9 @@ trait StatusesTrait {
 	 * @return StatusModel[]
 	 * @throws Throwable
 	 */
-	public function getNextStatuses():array {
-		$fwdStatuses = (null === $nextStatuses = StatusRulesModel::getNextStatuses($this->className, $this->currentStatus))?$this->allStatuses:$nextStatuses;
+	public function getNextStatuses(): array
+	{
+		$fwdStatuses = (null === $nextStatuses = StatusRulesModel::getNextStatuses($this->className, $this->currentStatus)) ? $this->allStatuses : $nextStatuses;
 
 		return array_filter($fwdStatuses, function(StatusModel $statusModel) {
 			/** @var ActiveRecord $this */
@@ -61,15 +64,17 @@ trait StatusesTrait {
 	/**
 	 * @return int[]
 	 */
-	public function getNextStatusesId():array {
-		return (null === $currentStatus = $this->currentStatus)?[]:$currentStatus->next;
+	public function getNextStatusesId(): array
+	{
+		return (null === $currentStatus = $this->currentStatus) ? [] : $currentStatus->next;
 	}
 
 	/**
 	 * @return null|int
 	 * @throws Throwable
 	 */
-	public function getCurrentStatusId():?int {
+	public function getCurrentStatusId(): ?int
+	{
 		if (null === $status = $this->relStatus) {
 			if (null === $currentStatus = StatusRulesModel::getInitialStatus($this->className)) {
 				return null;
@@ -86,7 +91,8 @@ trait StatusesTrait {
 	 *
 	 * Не совсем красиво, что присвоение статуса проксифицируется сюда (дублируются проверки), но пока не заморачиваюсь.
 	 */
-	public function setCurrentStatusId(int $status):?bool {
+	public function setCurrentStatusId(int $status): ?bool
+	{
 		if (in_array($status, ArrayHelper::getColumn($this->availableStatuses, 'id'), true)) {
 			/** @var ActiveRecord $this */
 			$this->on(ActiveRecord::EVENT_AFTER_UPDATE, function($event) {//отложим связывание после сохранения
@@ -106,7 +112,8 @@ trait StatusesTrait {
 	 * @return StatusModel|null
 	 * @throws Throwable
 	 */
-	public function getCurrentStatus():?StatusModel {
+	public function getCurrentStatus(): ?StatusModel
+	{
 		if (null === $status = $this->relStatus) {
 			if (null === $currentStatus = StatusRulesModel::getInitialStatus($this->className)) {
 				return null;
@@ -122,7 +129,8 @@ trait StatusesTrait {
 	 * @throws InvalidConfigException
 	 * @throws StaleObjectException
 	 */
-	public function setCurrentStatus(StatusModel $currentStatus):void {
+	public function setCurrentStatus(StatusModel $currentStatus): void
+	{
 		if (in_array($currentStatus, $this->availableStatuses)) {
 			$this->setCurrentStatusId($currentStatus->id);
 			return;
@@ -134,7 +142,8 @@ trait StatusesTrait {
 	/**
 	 * @return StatusModel[]
 	 */
-	public function getAvailableStatuses():array {
+	public function getAvailableStatuses(): array
+	{
 		$fwdStatuses = $this->nextStatuses;
 		array_unshift($fwdStatuses, $this->currentStatus);
 
@@ -145,7 +154,8 @@ trait StatusesTrait {
 	 * @return StatusModel[]
 	 * @throws Throwable
 	 */
-	public function getAllStatuses():array {
+	public function getAllStatuses(): array
+	{
 		return StatusRulesModel::getAllStatuses($this->className);
 	}
 
@@ -153,7 +163,8 @@ trait StatusesTrait {
 	 * @return ActiveQuery
 	 * Status::getCurrentStatus работает альтернативно, но вариант с релейшеном корректнее архитектурно
 	 */
-	public function getRelStatus():ActiveQuery {
+	public function getRelStatus(): ActiveQuery
+	{
 		/** @var ActiveRecord|self $this */
 		return $this->hasOne(Status::class, [
 			'model_key' => 'id'
