@@ -19,18 +19,16 @@ class GraphqlModule extends Module
 {
 	use ModuleTrait;
 
-	public function init():void {
+	public function init(): void
+	{
 		parent::init();
-
 		Yii::$container->set(JwtHttpBearerAuth::class, [
-			'jwtOptionsCallback' => static function(Users $user) {
-				return [
-					'validationConstraints' => [
-						new SignedWith(Yii::$app->jwt->signer, Yii::$app->jwt->signerKey),
-						LooseValidAt::class
-					]
-				];
-			}
+			'jwtOptionsCallback' => static fn(Users $user): array => [
+				'validationConstraints' => [
+					new SignedWith(Yii::$app->jwt->signer, Yii::$app->jwt->signerKey),
+					LooseValidAt::class
+				]
+			]
 		]);
 	}
 }
