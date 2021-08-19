@@ -18,19 +18,24 @@ final class SignatureServiceFactory
 {
 	/**
 	 * @param string $app
-	 * @return SignatureService
+	 * @return SignatureService|null
 	 * @throws InvalidConfigException
 	 */
-	public static function build(string $app): SignatureService
+	public static function build(string $app): ?SignatureService
 	{
+		$options = ArrayHelper::getValue(Yii::$app->params, "$app.signatureOptions");
+		if (null === $options) {
+			return null;
+		}
+
 		/** @noinspection PhpParamsInspection неявное преобразование */
 		return new SignatureService(
-			Instance::ensure(ArrayHelper::getValue(Yii::$app->params, "$app.signatureOptions.signer",
+			Instance::ensure(ArrayHelper::getValue($options, 'signer',
 				new InvalidConfigException("$app signer not set")),
 				Signer::class
 			),
-			Instance::ensure(ArrayHelper::getValue(Yii::$app->params, "$app.signatureOptions.signerKey",
-				new InvalidConfigException("$app signerKey not set")),
+			Instance::ensure(ArrayHelper::getValue($options, 'key',
+				new InvalidConfigException("$app signer key not set")),
 				Key::class
 			)
 		);
