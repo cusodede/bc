@@ -1,22 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\api\connectors\vet_expert;
+namespace app\modules\api\connectors\common;
 
 use app\common\Arrayable;
 use app\models\abonents\Abonents;
 use app\models\phones\Phones;
-use app\modules\api\signatures\SignatureService;
-use app\modules\api\signatures\SignatureServiceFactory;
 use InvalidArgumentException;
 use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
 
 /**
- * Источник данных для формирования подписки в VetExpert.
+ * Источник данных для формирования подписки.
  * Для удобства накручивания валидации при инициализации атрибутов, а также для формирования body-параметров для API.
  *
- * Class SubscriptionParams
+ * Class CommonSubscriptionParams
  * @package app\modules\api\connectors\vetexpert
  *
  * @property string $phone
@@ -26,7 +23,7 @@ use yii\base\InvalidConfigException;
  * @property string $lastName
  * @property string $subscriptionTo
  */
-class SubscriptionParams extends BaseObject implements Arrayable
+class CommonSubscriptionParams extends BaseObject implements Arrayable
 {
 	/**
 	 * @var string
@@ -52,22 +49,6 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	 * @var string
 	 */
 	private string $_subscriptionTo = '';
-	/**
-	 * @var SignatureService компонент для подписи body-параметров.
-	 */
-	private SignatureService $_signatureService;
-
-	/**
-	 * SubscriptionParams constructor.
-	 * @param array $config
-	 * @throws InvalidConfigException
-	 */
-	public function __construct($config = [])
-	{
-		parent::__construct($config);
-
-		$this->_signatureService = SignatureServiceFactory::build('vet-expert');
-	}
 
 	/**
 	 * @param string $phone
@@ -78,7 +59,6 @@ class SubscriptionParams extends BaseObject implements Arrayable
 			throw new InvalidArgumentException('Некорректное значение телефонного номера.');
 		}
 
-		/** @var string $formattedPhone */
 		$this->_phone = $formattedPhone;
 	}
 
@@ -175,7 +155,7 @@ class SubscriptionParams extends BaseObject implements Arrayable
 	 */
 	public function toArray(): array
 	{
-		$params = [
+		return [
 			'phone' => $this->_phone,
 			'email' => $this->_email,
 			'first_name'  => $this->_firstName,
@@ -183,16 +163,11 @@ class SubscriptionParams extends BaseObject implements Arrayable
 			'middle_name' => $this->_middleName,
 			'subscription_to' => $this->_subscriptionTo
 		];
-
-		$params['sign'] = $this->getParamsSignature($params);
-
-		return $params;
 	}
 
 	/**
 	 * @param Abonents $abonent
 	 * @return static
-	 * @throws InvalidConfigException
 	 */
 	public static function createInstance(Abonents $abonent): self
 	{
@@ -202,19 +177,5 @@ class SubscriptionParams extends BaseObject implements Arrayable
 			'middleName' => $abonent->patronymic,
 			'firstName'  => $abonent->name
 		]);
-	}
-
-	/**
-	 * @param array $params
-	 * @return string подпись всех параметров запроса.
-	 */
-	private function getParamsSignature(array $params): string
-	{
-		ksort($params);
-		array_walk($params, static function(&$item, $key) {
-			$item = "{$key}={$item}";
-		});
-
-		return $this->_signatureService->sign(implode('&', $params));
 	}
 }
