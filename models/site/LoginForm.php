@@ -96,7 +96,7 @@ class LoginForm extends Model {
 	 */
 	public function getUser():?Users {
 		if (null === $this->_user) {
-			$this->_user = Users::findByLogin($this->login);
+			$this->_user = Users::findByUnidentifiedLogin($this->login);
 		}
 		return $this->_user;
 	}
