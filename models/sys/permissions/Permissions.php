@@ -104,8 +104,9 @@ class Permissions extends ActiveRecordPermissions {
 			//initial query
 				PermissionsCollections::find()
 					->alias('cols')
-					->innerJoinWith('relatedUsersToPermissionsCollections users_to_cols')
+					->joinWith('relatedUsersToPermissionsCollections users_to_cols')
 					->where(['users_to_cols.user_id' => $user_id])
+					->orWhere(['cols.default' => true])/*всегда добавляем права из коллекций с галкой default*/
 					->union(
 					//recursive query
 						PermissionsCollections::find()
