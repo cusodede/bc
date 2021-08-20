@@ -81,7 +81,7 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 			throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
 		}
 
-		$result = $this->_apiConnector->makePurchase($this->_productOptions, $productPurchaseOptions);
+		$result = $this->_apiConnector->makeSubscribe($this->_productOptions, $productPurchaseOptions);
 
 		return $result->getPurchaseId();
 	}
