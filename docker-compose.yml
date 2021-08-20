@@ -4,16 +4,15 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - 8081:8080
+      - 8080:8080
     volumes:
-      - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
-      - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
-      - "${WEB_ROOT_PATH}/logs:/var/www/html/logs"
-      - "${WEB_ROOT_PATH}/logs/nginx:/var/www/html/logs/nginx"
-      - "${WEB_ROOT_PATH}:/var/www/html:cached"
+      - ${WEB_ROOT_PATH}:/var/www
+      - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
+      - ${DOCKER_FOLDER}/nginx/include:/etc/nginx/include
+      - ${WEB_ROOT_PATH}/logs:/var/www/logs
+      - ${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx
     links:
       - php-8
-    working_dir: ${WEB_WORKING_DIR}
     networks:
       - backend
 
@@ -28,26 +27,28 @@ services:
     ports:
       - 3306:3306
     environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - "${MYSQL_PATH}:/var/lib/mysql"
-      - "${WEB_ROOT_PATH}:/var/www/html"
+      - ${MYSQL_PATH}:/var/lib/mysql
+      - ${WEB_ROOT_PATH}:/var/www
     networks:
       - backend
 
   php-8:
     build: ./docker/
     volumes:
-      - "${WEB_ROOT_PATH}:/var/www/html"
-    ports:
-      - "9000:9000"
+      - ${WEB_ROOT_PATH}:/var/www
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
     environment:
+      YII_DEBUG: ${YII_DEBUG}
+      YII_ENV_DEV: ${YII_ENV_DEV}
+      YII_ENV: ${YII_ENV}
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
       PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
     links:
       - mysql
@@ -57,7 +58,7 @@ services:
 # Networks Setup
 networks:
   backend:
-    driver: "bridge"
+    driver: bridge
     ipam:
       driver: default
       config:
