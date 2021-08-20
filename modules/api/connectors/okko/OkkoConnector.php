@@ -65,18 +65,18 @@ class OkkoConnector extends BaseHttpConnector
 	}
 
 	/**
-	 * @return string
-	 */
-	private function generateTrackingId(): string
-	{
-		return Utils::gen_uuid();
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	protected function getResponseIsOk(): bool
 	{
 		return parent::getResponseIsOk() && '0' === $this->extractResponseData('resultCode');
+	}
+
+	/**
+	 * @return string
+	 */
+	private function generateTrackingId(): string
+	{
+		return Utils::gen_uuid();
 	}
 }
