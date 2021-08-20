@@ -65,6 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			'id',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'default',
+				'format' => 'boolean'
+			],
 			'name',
 			'comment',
 			[

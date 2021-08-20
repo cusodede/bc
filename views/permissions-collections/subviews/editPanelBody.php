@@ -13,6 +13,7 @@ use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use cusodede\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
+use kartik\switchinput\SwitchInput;
 use pozitronik\helpers\ArrayHelper;
 use yii\bootstrap4\Html;
 use yii\web\View;
@@ -27,6 +28,18 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= $form->field($model, 'comment')->textarea() ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<?= $form->field($model, 'default')->widget(SwitchInput::class, [
+			'tristate' => false,
+			'pluginOptions' => [
+				'size' => 'mini',
+				'onText' => '<i class="fa fa-toggle-on"></i>',
+				'offText' => '<i class="fa fa-toggle-off"</i>'
+			],
+		]) ?>
 	</div>
 </div>
 <div class="row">
