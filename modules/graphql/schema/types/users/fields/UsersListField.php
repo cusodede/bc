@@ -45,7 +45,7 @@ class UsersListField extends BaseField
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ResolveInfo $resolveInfo = null): array
 	{
 		$userSearch = new UsersSearch();
-		$filters = ArrayHelper::getValue($args, 'filters');
+		$filters = ArrayHelper::getValue($args, 'filters', []);
 		ArrayHelper::setValue($args, 'pagination', false);
 		return $userSearch->search([$userSearch->formName() => ArrayHelper::merge($args, $filters)])->getModels();
 	}

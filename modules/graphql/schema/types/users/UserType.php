@@ -16,7 +16,8 @@ class UserType extends BaseObjectType
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		$user = new Users();
 		parent::__construct([
 			'description' => 'Пользователь',

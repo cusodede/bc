@@ -14,20 +14,26 @@ use Exception;
  */
 class PartnersSearch extends Partners
 {
+	public ?int $limit = null;
+	public ?int $offset = null;
+	public ?string $search = null;
+
 	/**
 	 * @return array[]
 	 */
 	public function rules(): array
 	{
 		return [
-			[['id', 'category_id'], 'integer'],
+			[['id', 'category_id', 'limit', 'offset'], 'integer'],
 			[['name', 'inn'], 'safe'],
+			[['search'], 'string'],
 		];
 	}
 
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws Exception
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
@@ -36,6 +42,11 @@ class PartnersSearch extends Partners
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
 		]);
+
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
 
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
@@ -52,6 +63,22 @@ class PartnersSearch extends Partners
 			->andFilterWhere(['category_id' => $this->category_id])
 			->andFilterWhere(['like', 'inn', $this->inn])
 			->andFilterWhere(['like', 'name', $this->name]);
+
+		if (null !== $this->search) {
+			$query->andFilterWhere([
+				'or',
+				['like', 'inn', $this->search],
+				['like', 'name', $this->search],
+			]);
+		}
+
+		if (null !== $this->limit) {
+			$query->limit = $this->limit;
+		}
+
+		if (null !== $this->offset) {
+			$query->offset = $this->offset;
+		}
 
 		return $dataProvider;
 	}
