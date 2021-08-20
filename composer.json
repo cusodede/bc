@@ -90,7 +90,7 @@
 		"build": [
 			"docker-compose up -d --build"
 		],
-		"up": [
+		"start": [
 			"docker-compose up -d"
 		],
 		"stop": [
