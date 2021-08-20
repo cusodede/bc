@@ -3,7 +3,7 @@ CID = $(shell docker ps -aqf "name=base_php-8_1")
 build:
 	docker-compose up -d --build
 
-up:
+start:
 	docker-compose up -d
 
 force up:
