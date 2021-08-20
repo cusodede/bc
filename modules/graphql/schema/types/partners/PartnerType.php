@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\partners;
 
 use app\controllers\PartnersController;
+use app\models\common\RefPartnersCategories;
 use app\models\partners\Partners;
 use app\modules\graphql\components\BaseObjectType;
 use GraphQL\Type\Definition\Type;
@@ -58,7 +59,7 @@ class PartnerType extends BaseObjectType
 				'category' => [
 					'type' => PartnerCategoryType::type(),
 					'description' => 'Категория партнера',
-					'resolve' => fn(Partners $partner) => $partner->relatedCategory,
+					'resolve' => fn(Partners $partner):RefPartnersCategories => $partner->relatedCategory,
 				],
 			],
 		]);
