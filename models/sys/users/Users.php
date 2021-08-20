@@ -82,6 +82,19 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @param string $login
+	 * @return static|null
+	 */
+	public static function findByUnidentifiedLogin(string $login): ?static
+	{
+		if (null === $user = static::findByPhoneNumber($login)) {
+			$user = static::find()->where(['OR', ['login' => $login], ['email' => $login]])->one();
+		}
+
+		return $user;
+	}
+
+	/**
+	 * @param string $login
 	 * @return Users|null
 	 */
 	public static function findByLogin(string $login):?Users {
