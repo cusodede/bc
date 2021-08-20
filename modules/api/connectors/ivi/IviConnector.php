@@ -77,7 +77,7 @@ class IviConnector extends BaseHttpConnector
 	 * @throws Throwable
 	 * @throws Exception
 	 */
-	public function makePurchase(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
+	public function makeSubscribe(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
 	{
 		$postData = [
 			'app_version'          => $options->appVersion,
