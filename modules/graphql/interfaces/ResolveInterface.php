@@ -5,6 +5,7 @@ namespace app\modules\graphql\interfaces;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use yii\db\ActiveRecord;
 
 /**
  * Interface ResolveInterface
@@ -16,7 +17,7 @@ interface ResolveInterface
 	 * @param Type[] $args Массив аргументов запроса
 	 * @param mixed $context
 	 * @param null|ResolveInfo $resolveInfo (параметр всегда передаётся, но он не обязателен, и можно сделать его nullable)
-	 * @return array
+	 * @return array|ActiveRecord|null
 	 */
-	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array;
+	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array|ActiveRecord|null;
 }
