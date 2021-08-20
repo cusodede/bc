@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 class PartnersListField extends BaseField
 {
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 */
 	protected function __construct()
 	{
@@ -39,6 +39,9 @@ class PartnersListField extends BaseField
 		]);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
 	{
 		$partnerSearch = new PartnersSearch();

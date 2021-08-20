@@ -15,7 +15,7 @@ use DateTimeImmutable;
 class ServerDateTimeField extends BaseField
 {
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 */
 	protected function __construct()
 	{

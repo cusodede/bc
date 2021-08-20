@@ -13,7 +13,7 @@ use app\modules\graphql\schema\types\services\fields\ServerDateTimeField;
 class ServicesType extends BaseObjectType
 {
 	/**
-	 * {@inheritdoc}
+	 * @inheritdoc
 	 */
 	public function __construct()
 	{
