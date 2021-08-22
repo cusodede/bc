@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'columns'          => [
 			[
 				'class'    => ActionColumn::class,
-				'template' => '<div class="btn-group">{edit}{view}</div>',
+				'template' => '<div class="btn-group">{edit}{view}{view-products}</div>',
 				'buttons'  => [
 					'edit' => static function(string $url, Model $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
@@ -50,6 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					},
 					'view' => static function(string $url, Model $model) {
 						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
+						]);
+					},
+					'view-products' => static function(string $url, Model $model) {
+						return Html::ajaxModalLink('<i class="fas fa-arrow-circle-up"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
