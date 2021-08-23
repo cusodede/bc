@@ -28,8 +28,8 @@ abstract class BaseQueryType extends ObjectType
 	/**
 	 * Преобразовывает наши Enum списки в массив вида:
 	 * [
-	 * 		['id' => 1, 'name' => 'value1']
-	 * 		['id' => 2, 'name' => 'value2']
+	 *        ['id' => 1, 'name' => 'value1']
+	 *        ['id' => 2, 'name' => 'value2']
 	 * ]
 	 * @param array $enumData
 	 * @return array
@@ -52,7 +52,7 @@ abstract class BaseQueryType extends ObjectType
 	 */
 	public static function getOneFromEnum(array $enumData, $args): ?array
 	{
-		$id = ArrayHelper::getValue($args, 'id', 0);
+		$id   = ArrayHelper::getValue($args, 'id', 0);
 		$name = ArrayHelper::getValue($enumData, $id, false);
 		return $name ? compact('id', 'name') : null;
 	}

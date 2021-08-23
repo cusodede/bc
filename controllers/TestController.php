@@ -19,13 +19,15 @@ use yii\web\Controller;
  * Class TestController
  * Контроллер на потестировать какие-то штуки.
  */
-class TestController extends Controller {
+class TestController extends Controller
+{
 	use ControllerTrait;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'access' => [
 				'class' => PermissionFilter::class
@@ -39,7 +41,8 @@ class TestController extends Controller {
 	 * @throws ReflectionException
 	 * @throws UnknownClassException
 	 */
-	public function actionIndex():string {
+	public function actionIndex(): string
+	{
 		$actions = self::GetControllerActions();
 		return $this->render('index', [
 			'actions' => $actions
@@ -49,7 +52,8 @@ class TestController extends Controller {
 	/**
 	 * Тестирование добавления отладочной информации в запросы
 	 */
-	public function actionSqlDebug():void {
+	public function actionSqlDebug(): void
+	{
 		$query = Users::find();
 
 		SqlDebugInfo::addDebugInfo($query, 'debug-process');
@@ -61,7 +65,8 @@ class TestController extends Controller {
 	/**
 	 *
 	 */
-	public function actionSse():void {
+	public function actionSse(): void
+	{
 		/** @noinspection PhpUndefinedFieldInspection */
 		$sse = Yii::$app->sse;
 		$sse->addEventListener('message', new MessageEventHandler());
@@ -71,14 +76,16 @@ class TestController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionSseClient():string {
+	public function actionSseClient(): string
+	{
 		return $this->render('sse-client');
 	}
 
 	/**
 	 * Тесты доступов
 	 */
-	public function actionPermissions():void {
+	public function actionPermissions(): void
+	{
 		Utils::log(Users::Current()->allPermissions());
 	}
 
@@ -86,25 +93,29 @@ class TestController extends Controller {
 	 * Проверка доступа
 	 * @return string
 	 */
-	public function actionPermissionTest():string {
+	public function actionPermissionTest(): string
+	{
 		return $this->render('permission-test');
 	}
 
 	/**
 	 * @return string
 	 */
-	public function actionBadges():string {
+	public function actionBadges(): string
+	{
 		return $this->render('badges');
 	}
 
-	public function actionTestNotification():string {
+	public function actionTestNotification(): string
+	{
 		Notifications::message('Вы получили уведомление');
 		return $this->render('notification', [
 			'notifications' => Notifications::UserNotifications()
 		]);
 	}
 
-	public function actionTestNotificationAlert():string {
+	public function actionTestNotificationAlert(): string
+	{
 		Notifications::message('Вы получили уведомление');
 		return $this->render('alert', [
 			'notifications' => Notifications::UserNotifications()

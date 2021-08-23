@@ -42,7 +42,7 @@ class BillingJournalSearch extends BillingJournal
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 		$dataProvider->setSort([
 			'defaultOrder' => ['created_at' => SORT_DESC],
-			'attributes'   => ['created_at', 'status_id']
+			'attributes' => ['created_at', 'status_id']
 		]);
 
 		$this->load($params);
@@ -51,10 +51,10 @@ class BillingJournalSearch extends BillingJournal
 		}
 
 		$query->andFilterWhere([
-			'b.id'        => $this->id,
+			'b.id' => $this->id,
 			'b.status_id' => $this->status_id,
-			'ra.phone'    => $this->searchAbonentPhone,
-			'rp.id'       => $this->searchProductId,
+			'ra.phone' => $this->searchAbonentPhone,
+			'rp.id' => $this->searchProductId,
 		]);
 
 		return $dataProvider;

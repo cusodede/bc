@@ -36,9 +36,9 @@ final class ServerDateTimeType extends ObjectType
 	public static function baseFormat(): array
 	{
 		return [
-			'type' 			=> DateTimeType::dateTime(),
-			'description' 	=> 'Серверное время в формате ' . DateTimeType::DEFAULT_FORMAT,
-			'resolve' 		=> fn(?array $root, array $args): DateTimeImmutable => DateTimeType::parseString(
+			'type' => DateTimeType::dateTime(),
+			'description' => 'Серверное время в формате ' . DateTimeType::DEFAULT_FORMAT,
+			'resolve' => fn(?array $root, array $args): DateTimeImmutable => DateTimeType::parseString(
 				date(DateTimeType::DEFAULT_FORMAT)
 			),
 		];

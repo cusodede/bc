@@ -18,6 +18,7 @@ interface Tokenizer
 	 * @return string|null ключ для обновления связки ключей.
 	 */
 	public function getRefreshToken(): ?string;
+
 	/**
 	 * @return int время жизни ключа доступа (в секундах).
 	 */

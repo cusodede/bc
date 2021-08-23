@@ -10,7 +10,8 @@ use pozitronik\traits\models\ActiveQuery as VendorActiveQuery;
  * Trait ActiveQueryTrait
  * Каст расширения запросов
  */
-class ActiveQuery extends VendorActiveQuery {
+class ActiveQuery extends VendorActiveQuery
+{
 	use ActiveQueryPermissionsTrait;
 
 	protected ?string $_alias = null;

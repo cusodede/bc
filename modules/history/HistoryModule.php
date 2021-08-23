@@ -10,6 +10,7 @@ use yii\base\Module;
  * Class HistoryModule
  * @package app\modules\history
  */
-class HistoryModule extends Module {
+class HistoryModule extends Module
+{
 	use ModuleTrait;
 }

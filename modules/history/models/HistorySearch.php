@@ -10,14 +10,16 @@ use yii\data\ActiveDataProvider;
 /**
  * Class HistorySearch
  */
-class HistorySearch extends History {
+class HistorySearch extends History
+{
 	public $actions;
 	public $username;
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['actions', 'user', 'at', 'model_class'], 'safe']
 		];
@@ -29,7 +31,8 @@ class HistorySearch extends History {
 	 * @return ActiveDataProvider
 	 * @throws Throwable
 	 */
-	public function search(array $params, bool $pagination = true):ActiveDataProvider {
+	public function search(array $params, bool $pagination = true): ActiveDataProvider
+	{
 		$query = ActiveRecordHistory::find();
 
 		$dataProvider = new ActiveDataProvider([

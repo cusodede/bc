@@ -34,17 +34,17 @@ class ApiController extends ActiveController
 	{
 		return ArrayHelper::merge(parent::behaviors(), [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class'  => JwtHttpBearerAuth::class,
+				'class' => JwtHttpBearerAuth::class,
 				'except' => ['schema'],
 			],
 		]);
@@ -65,14 +65,14 @@ class ApiController extends ActiveController
 	 */
 	public function actionIndex(): array
 	{
-		$query = Yii::$app->request->get('query', Yii::$app->request->post('query'));
+		$query     = Yii::$app->request->get('query', Yii::$app->request->post('query'));
 		$variables = Yii::$app->request->get('variables', Yii::$app->request->post('variables'));
 		$operation = Yii::$app->request->get('operation', Yii::$app->request->post('operation'));
 
 		if (null === $query) {
-			$rawInput = file_get_contents('php://input');
-			$input = Json::decode($rawInput);
-			$query = ArrayHelper::getValue($input, 'query');
+			$rawInput  = file_get_contents('php://input');
+			$input     = Json::decode($rawInput);
+			$query     = ArrayHelper::getValue($input, 'query');
 			$variables = ArrayHelper::getValue($input, 'variables', []);
 			$operation = ArrayHelper::getValue($input, 'operation');
 		}

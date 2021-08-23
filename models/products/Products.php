@@ -111,7 +111,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getPaymentShortView(): string
 	{
-		$price = (int) $this->price;
+		$price = (int)$this->price;
 		switch ($this->payment_period) {
 			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
 				$price .= ' ₽/ мес.';

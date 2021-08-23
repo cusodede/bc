@@ -23,7 +23,7 @@ class EnumProductsTypes
 	{
 		return [
 			self::TYPE_SUBSCRIPTION => 'Подписка',
-			self::TYPE_BUNDLE       => 'Бандл',
+			self::TYPE_BUNDLE => 'Бандл',
 		];
 	}
 }

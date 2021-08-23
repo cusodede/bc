@@ -29,13 +29,13 @@ class DbQueue extends Queue
 
 		$this->db->createCommand()
 			->insert($this->tableName, [
-				'id'        => $id,
-				'channel'   => $this->channel,
-				'job'       => $message,
+				'id' => $id,
+				'channel' => $this->channel,
+				'job' => $message,
 				'pushed_at' => time(),
-				'ttr'       => $ttr,
-				'delay'     => $delay,
-				'priority'  => $priority ?: 1024
+				'ttr' => $ttr,
+				'delay' => $delay,
+				'priority' => $priority ?: 1024
 			])
 			->execute();
 

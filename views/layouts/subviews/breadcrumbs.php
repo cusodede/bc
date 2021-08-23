@@ -9,7 +9,7 @@ use yii\widgets\Breadcrumbs;
 	'options' => [
 		'class' => 'breadcrumb page-breadcrumb'
 	],
-	'links' => $this->params['breadcrumbs']??[],
+	'links' => $this->params['breadcrumbs'] ?? [],
 	'itemTemplate' => "<li class='breadcrumb-item'>{link}</li>\n",
 	'activeItemTemplate' => "<li class='breadcrumb-item active'>{link}</li>\n"
 ]) ?>

@@ -8,13 +8,15 @@ use yii\db\Migration;
 /**
  * Class m000000_000000_init_import_module
  */
-class m000000_000000_init_import_module extends Migration {
+class m000000_000000_init_import_module extends Migration
+{
 	private const TABLE_NAME = 'sys_import';
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->createTable(self::TABLE_NAME, [
 			'id' => $this->primaryKey(),
 			'model' => $this->string()->notNull(),
@@ -32,7 +34,8 @@ class m000000_000000_init_import_module extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropTable(self::TABLE_NAME);
 
 	}

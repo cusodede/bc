@@ -14,7 +14,8 @@ use yii\base\Module;
  * Class StatusModule
  * @package status
  */
-class StatusModule extends Module {
+class StatusModule extends Module
+{
 	use ModuleTrait;
 
 	/**
@@ -22,7 +23,8 @@ class StatusModule extends Module {
 	 * @return array
 	 * @throws Throwable
 	 */
-	public static function getClassRules(string $className):array {
+	public static function getClassRules(string $className): array
+	{
 		$rules = ArrayHelper::getValue(Yii::$app->modules, "statuses.params.rules.$className", []);
 		if (is_string($rules)) return $rules();
 

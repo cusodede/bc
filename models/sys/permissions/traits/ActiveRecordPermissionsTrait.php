@@ -12,7 +12,8 @@ use yii\web\IdentityInterface;
  * Trait ActiveRecordPermissionsTrait
  * Управление областями видимости в ActiveRecord
  */
-trait ActiveRecordPermissionsTrait {
+trait ActiveRecordPermissionsTrait
+{
 
 	/**
 	 * Интерфейс функции установки области доступа пользователя в этой таблице
@@ -22,11 +23,12 @@ trait ActiveRecordPermissionsTrait {
 	 * @throws Throwable
 	 * @see ActiveQueryPermissionsTrait::scope()
 	 */
-	public static function scope(ActiveQueryInterface $query, IdentityInterface $user):ActiveQueryInterface {
+	public static function scope(ActiveQueryInterface $query, IdentityInterface $user): ActiveQueryInterface
+	{
 		/** @var Users $user */
 		return ($user->isAllPermissionsGranted())
-			?$query
-			:$query->where([self::tableName().'.id' => '0']);
+			? $query
+			: $query->where([self::tableName() . '.id' => '0']);
 	}
 
 }

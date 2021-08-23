@@ -12,7 +12,8 @@ use yii\db\ActiveRecord;
  * @property resource $data
  * @property int $processed
  */
-class Import extends ActiveRecord {
+class Import extends ActiveRecord
+{
 	public const NOT_PROCESSED = 0;
 	public const PROCESSED = 1;
 	public const PROCESSED_ERROR = 2;
@@ -20,14 +21,16 @@ class Import extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_import';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['model', 'domain'], 'required'],
 			[['domain'], 'integer'],
@@ -40,7 +43,8 @@ class Import extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'model' => 'Model',

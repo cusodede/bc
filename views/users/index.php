@@ -20,47 +20,47 @@ use yii\data\ActiveDataProvider;
 use yii\web\View;
 use kartik\grid\GridView;
 
-$this->title = 'Пользователи';
+$this->title                   = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <?= GridConfig::widget([
-	'id'   => 'users-index-grid',
+	'id' => 'users-index-grid',
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'toolbar'          => [
+		'toolbar' => [
 			[
 				'content' => Html::ajaxModalLink(
-						'Новый пользователь',
-						UsersController::to('create'),
-						['class' => ['btn btn-success mr-2']]
-					)
+					'Новый пользователь',
+					UsersController::to('create'),
+					['class' => ['btn btn-success mr-2']]
+				)
 			]
 		],
-		'export'           => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			[
-				'class'    => ActionColumn::class,
+				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{edit}{view}{update-password}{login-as-another-user}</div>',
-				'buttons'  => [
-					'edit'                  => static function(string $url, Users $model) {
+				'buttons' => [
+					'edit' => static function(string $url, Users $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'view'                  => static function(string $url, Users $model) {
+					'view' => static function(string $url, Users $model) {
 						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'update-password'       => static function(string $url, Users $model) {
+					'update-password' => static function(string $url, Users $model) {
 						return Html::ajaxModalLink('<i class="fas fa-lock"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
@@ -76,30 +76,30 @@ $this->params['breadcrumbs'][] = $this->title;
 			'username',
 			'login',
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'create_date',
-				'format'    => 'datetime'
+				'format' => 'datetime'
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'relatedPhones',
-				'label'     => 'Телефоны',
-				'format'    => 'raw',
-				'value'     => static function(Users $user) {
+				'label' => 'Телефоны',
+				'format' => 'raw',
+				'value' => static function(Users $user) {
 					return BadgeWidget::widget([
-						'items'   => $user->relatedPhones,
+						'items' => $user->relatedPhones,
 						'subItem' => 'phone'
 					]);
 				}
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'allUserPermission',
-				'label'     => 'Доступы',
-				'format'    => 'raw',
-				'value'     => static function(Users $user) {
+				'label' => 'Доступы',
+				'format' => 'raw',
+				'value' => static function(Users $user) {
 					return BadgeWidget::widget([
-						'items'   => $user->allPermissions(),
+						'items' => $user->allPermissions(),
 						'subItem' => 'name'
 					]);
 				}

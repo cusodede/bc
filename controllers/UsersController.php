@@ -18,7 +18,8 @@ use yii\web\Response;
 /**
  * Class UsersController
  */
-class UsersController extends DefaultController {
+class UsersController extends DefaultController
+{
 
 	protected const DEFAULT_TITLE = "Пользователи";
 
@@ -40,11 +41,13 @@ class UsersController extends DefaultController {
 	 * Переопределим базовую директорию views
 	 * @return string
 	 */
-	public function getViewPath():string {
+	public function getViewPath(): string
+	{
 		return '@app/views/users';
 	}
 
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return ArrayHelper::merge(parent::behaviors(), [
 			[
 				'class' => ContentNegotiator::class,
@@ -62,8 +65,9 @@ class UsersController extends DefaultController {
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public function actionProfile(?int $id = null):?string {
-		$user = (null === $id)?Users::Current():Users::findOne($id);
+	public function actionProfile(?int $id = null): ?string
+	{
+		$user = (null === $id) ? Users::Current() : Users::findOne($id);
 		if (null === $user) {
 			throw new NotFoundHttpException();
 		}
@@ -83,7 +87,8 @@ class UsersController extends DefaultController {
 	 * @throws Throwable
 	 * @throws Exception
 	 */
-	public function actionUpdatePassword(int $id) {
+	public function actionUpdatePassword(int $id)
+	{
 		if (null === $user = Users::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
@@ -105,25 +110,27 @@ class UsersController extends DefaultController {
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function actionLogoUpload():array {
+	public function actionLogoUpload(): array
+	{
 		Users::Current()->uploadAttribute('avatar');
 		return [];
 	}
 
 	/**
 	 * @param int|null $id
-	 * @throws NotFoundHttpException
-	 * @throws ForbiddenHttpException
 	 * @return Response
+	 * @throws ForbiddenHttpException
+	 * @throws NotFoundHttpException
 	 */
-	public function actionLogoGet(?int $id = null):Response {
-		$user = null === $id?Users::Current():Users::findOne($id);
+	public function actionLogoGet(?int $id = null): Response
+	{
+		$user = null === $id ? Users::Current() : Users::findOne($id);
 		if (null === $user) {
 			throw new NotFoundHttpException();
 		}
 		return Yii::$app->response->sendFile((null === $user->fileAvatar || null === $user->fileAvatar->size)//есть аватар, и он есть на диске
-			?Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH)
-			:$user->fileAvatar->path
+			? Yii::getAlias(Users::DEFAULT_AVATAR_ALIAS_PATH)
+			: $user->fileAvatar->path
 		);
 	}
 
@@ -134,7 +141,8 @@ class UsersController extends DefaultController {
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionLoginAsAnotherUser(int $userId):Response {
+	public function actionLoginAsAnotherUser(int $userId): Response
+	{
 		Yii::$app->user->loginAsAnotherUser($userId);
 		return $this->redirect(Yii::$app->homeUrl);
 	}
@@ -144,7 +152,8 @@ class UsersController extends DefaultController {
 	 *
 	 * @return Response
 	 */
-	public function actionLoginBack():Response {
+	public function actionLoginBack(): Response
+	{
 		Yii::$app->user->loginBackToOriginUser();
 		return $this->redirect(Yii::$app->homeUrl);
 	}

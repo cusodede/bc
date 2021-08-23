@@ -36,7 +36,7 @@ class ProductsController extends DefaultController
 		$searchModel = new ProductsJournalSearch();
 
 		return $this->render('journal', [
-			'searchModel'  => $searchModel,
+			'searchModel' => $searchModel,
 			'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
 		]);
 	}

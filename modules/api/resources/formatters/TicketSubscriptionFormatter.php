@@ -21,7 +21,7 @@ class TicketSubscriptionFormatter
 		return ArrayHelper::toArray($ticket, [
 			TicketSubscription::class => [
 				'action',
-				'status' => static function (TicketSubscription $ticket) {
+				'status' => static function(TicketSubscription $ticket) {
 					if ($ticket->isCompleted) {
 						return $ticket->getIsStatusOk()
 							? ['code' => 'success']

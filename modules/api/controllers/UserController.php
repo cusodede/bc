@@ -26,13 +26,13 @@ class UserController extends Controller
 	{
 		return [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs()
 			]
 		];

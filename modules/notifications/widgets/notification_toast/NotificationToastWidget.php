@@ -10,17 +10,19 @@ use yii\bootstrap4\Toast;
  * Class NotificationToastWidget
  * @property Notifications $notification
  */
-class NotificationToastWidget extends Toast {
+class NotificationToastWidget extends Toast
+{
 
 	public Notifications $notification;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function init():void {
+	public function init(): void
+	{
 		$this->dateTime = $this->notification->timestamp;
-		$this->body = $this->notification->message;
-		$this->options = [
+		$this->body     = $this->notification->message;
+		$this->options  = [
 			'class' => 'fade show'
 		];
 		parent::init();

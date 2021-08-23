@@ -34,7 +34,8 @@ use yii\web\ForbiddenHttpException;
  * @property null|Users $relInitiator Пользователь, создавший оповещение
  * @property string $message Сообщение события
  */
-class Notifications extends ActiveRecord {
+class Notifications extends ActiveRecord
+{
 	use ActiveRecordTrait;
 
 	/*Константы типов*/
@@ -47,14 +48,16 @@ class Notifications extends ActiveRecord {
 	/**
 	 * @inheritdoc
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_notifications';
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['type', 'initiator', 'receiver', 'object_id'], 'integer'],
 			[['type'], 'required'],
@@ -67,7 +70,8 @@ class Notifications extends ActiveRecord {
 	/**
 	 * @inheritdoc
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'type' => 'Тип',
@@ -84,14 +88,15 @@ class Notifications extends ActiveRecord {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function getMessage():string {
+	public function getMessage(): string
+	{
 		if (self::TYPE_DEFAULT === $this->type) return $this->comment;
 
 		$message = ArrayHelper::getValue(self::NOTIFICATIONS_TYPES, $this->type, '');
 		if ('' !== $this->message) {
 			$message .= (null === $this->initiator)
-				?" (система)"
-				:" пользователем {$this->getInitiatorName($this->initiator)}";
+				? " (система)"
+				: " пользователем {$this->getInitiatorName($this->initiator)}";
 		}
 		return $message;
 	}
@@ -99,14 +104,16 @@ class Notifications extends ActiveRecord {
 	/**
 	 * @return ActiveQuery|null
 	 */
-	public function getRelatedReceiver():?ActiveQuery {
+	public function getRelatedReceiver(): ?ActiveQuery
+	{
 		return $this->hasOne(Users::class, ['id' => 'receiver']);
 	}
 
 	/**
 	 * @return ActiveQuery|null
 	 */
-	public function getRelatedInitiator():?ActiveQuery {
+	public function getRelatedInitiator(): ?ActiveQuery
+	{
 		return $this->hasOne(Users::class, ['id' => 'initiator']);
 	}
 
@@ -114,7 +121,8 @@ class Notifications extends ActiveRecord {
 	 * @param int|null $id
 	 * @return string
 	 */
-	private function getInitiatorName(?int $id):string {
+	private function getInitiatorName(?int $id): string
+	{
 		if (null === $id) return '';
 		return Yii::$app->cache->getOrSet("Notifications::InitiatorName($id)", static function() use ($id) {
 			return Users::findOne($id)->username;
@@ -129,9 +137,10 @@ class Notifications extends ActiveRecord {
 	 * @throws Exception
 	 * @throws ForbiddenHttpException
 	 */
-	public static function message(string $message, array|int $receivers = null, ?int $initiator = null):void {
+	public static function message(string $message, array|int $receivers = null, ?int $initiator = null): void
+	{
 		if (null === $receivers) $receivers = Users::Current()->id;
-		$receivers = (array)$receivers;
+		$receivers  = (array)$receivers;
 		$insertData = [];
 		foreach ($receivers as $receiver) {
 			$insertData[] = [
@@ -144,7 +153,7 @@ class Notifications extends ActiveRecord {
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
 					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
-					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
+					->rawSql . " ON DUPLICATE KEY UPDATE `id` = `id`")
 				->execute();
 		}
 	}
@@ -158,9 +167,10 @@ class Notifications extends ActiveRecord {
 	 * @param null|string $comment
 	 * @throws Exception
 	 */
-	public static function push(?int $object, array $receivers, ?int $initiator = null, int $type = Notifications::TYPE_DEFAULT, ?string $comment = null):void {
+	public static function push(?int $object, array $receivers, ?int $initiator = null, int $type = Notifications::TYPE_DEFAULT, ?string $comment = null): void
+	{
 		$insertData = [];
-		$receivers = array_filter(array_unique($receivers), static function($value, $key) use ($initiator) {//инициатора уведомлять не нужно
+		$receivers  = array_filter(array_unique($receivers), static function($value, $key) use ($initiator) {//инициатора уведомлять не нужно
 			return (!empty($value) && $initiator !== (int)$value);
 		}, ARRAY_FILTER_USE_BOTH);
 		foreach ($receivers as $receiver) {
@@ -175,7 +185,7 @@ class Notifications extends ActiveRecord {
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
 					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'object_id', 'comment'], $insertData)
-					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
+					->rawSql . " ON DUPLICATE KEY UPDATE `id` = `id`")
 				->execute();//угу, официальный upsert работает так
 		}
 	}
@@ -187,10 +197,11 @@ class Notifications extends ActiveRecord {
 	 * @param int[]|null $type null - очищает все уведомления, связанные с целью у пользователя
 	 * @throws ForbiddenHttpException
 	 */
-	public static function Acknowledge(?int $object, ?int $receiver = null, ?array $type = null):void {
+	public static function Acknowledge(?int $object, ?int $receiver = null, ?array $type = null): void
+	{
 		$dropCondition = [
-			'receiver' => $receiver??Users::Current()->id,
-			'type' => $type??self::TYPE_DEFAULT
+			'receiver' => $receiver ?? Users::Current()->id,
+			'type' => $type ?? self::TYPE_DEFAULT
 		];
 
 		if (null !== $object) $dropCondition['object_id'] = $object;
@@ -205,7 +216,8 @@ class Notifications extends ActiveRecord {
 	 * @return self[]
 	 * @throws ForbiddenHttpException
 	 */
-	public static function Notifications(int $object, ?int $receiver = null):array {
+	public static function Notifications(int $object, ?int $receiver = null): array
+	{
 		if (null === $receiver) $receiver = Users::Current()->id;
 		return self::find()->where(['object_id' => $object, 'receiver' => $receiver, 'type' => self::TYPE_DEFAULT])->all();
 	}
@@ -216,7 +228,8 @@ class Notifications extends ActiveRecord {
 	 * @return self[]
 	 * @throws ForbiddenHttpException
 	 */
-	public static function UserNotifications(?int $receiver = null):array {
+	public static function UserNotifications(?int $receiver = null): array
+	{
 		if (null === $receiver) $receiver = Users::Current()->id;
 		return self::find()->where(['receiver' => $receiver, 'type' => self::TYPE_DEFAULT])->all();
 	}

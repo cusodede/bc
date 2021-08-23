@@ -12,7 +12,8 @@ use yii\validators\Validator;
 /**
  * Class RelationValidator
  */
-class RelationValidator extends Validator {
+class RelationValidator extends Validator
+{
 	/**
 	 * @inheritDoc
 	 * @param ActiveRecord $model
@@ -20,20 +21,21 @@ class RelationValidator extends Validator {
 	 * @throws InvalidConfigException
 	 * @throws Throwable
 	 */
-	public function validateAttribute($model, $attribute):void {
+	public function validateAttribute($model, $attribute): void
+	{
 		if (isset($model->relatedRecords[$attribute]) && null !== $relation = $model->getRelation($attribute)) {
 			if ($relation->multiple) {
 				throw new InvalidConfigException("Sorry, that kind of relations is not supported yet");
 			} else {
-				$relation_fk = ArrayHelper::key($relation->link);
-				$model_fk = $relation->link[$relation_fk];
+				$relation_fk      = ArrayHelper::key($relation->link);
+				$model_fk         = $relation->link[$relation_fk];
 				$model->$model_fk = $model->$attribute->$relation_fk;
 
 				$model->clearErrors($model_fk);
 				$model->validate($model_fk, false);
 			}
 		} else {
-			$model->addError($attribute, get_class($this).' has no relation named '.$attribute);
+			$model->addError($attribute, get_class($this) . ' has no relation named ' . $attribute);
 		}
 	}
 }

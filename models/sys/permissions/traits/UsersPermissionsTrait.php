@@ -26,7 +26,8 @@ use yii\db\ActiveRecord;
  * @property Permissions[] $relatedPermissions Назначенные напрямую доступы
  * @property PermissionsCollections[] $relatedPermissionsCollections Назначенные группы разрешений
  */
-trait UsersPermissionsTrait {
+trait UsersPermissionsTrait
+{
 
 	/**
 	 * Проверяет, имеет ли пользователь указанный набор прав с указанной логикой проверки.
@@ -39,10 +40,11 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function hasPermission(array $permissions, int $logic = Permissions::LOGIC_OR):bool {
+	public function hasPermission(array $permissions, int $logic = Permissions::LOGIC_OR): bool
+	{
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, func_get_args(), ['id' => $this->id]);
 		return Yii::$app->cache->getOrSet($cacheKey, function() use ($permissions, $logic) {
-			$result = false;
+			$result                  = false;
 			$allUserPermissionsNames = ArrayHelper::getColumn(self::allPermissions(), 'name');
 			foreach ($permissions as $current_permission_name) {
 				if (false === $result = $this->isAllPermissionsGranted()) {
@@ -61,7 +63,7 @@ trait UsersPermissionsTrait {
 					break;
 				}
 			}
-			return ($logic === Permissions::LOGIC_NOT)?true:$result;
+			return ($logic === Permissions::LOGIC_NOT) ? true : $result;
 		}, null, new TagDependency(['tags' => CacheHelper::MethodSignature('Users::hasPermission', ['id' => $this->id])]));//тег ставится на все варианты запроса ролей пользователя для сброса скопом
 
 	}
@@ -73,7 +75,8 @@ trait UsersPermissionsTrait {
 	 * @return self[]
 	 * @throws Throwable
 	 */
-	public function allPermissions(bool $force = false):array {
+	public function allPermissions(bool $force = false): array
+	{
 		$cacheKey = CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]);
 		if ($force) Yii::$app->cache->delete($cacheKey);
 		return Yii::$app->cache->getOrSet($cacheKey, function() {
@@ -84,14 +87,16 @@ trait UsersPermissionsTrait {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersToPermissions():ActiveQuery {
+	public function getRelatedUsersToPermissions(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersToPermissions::class, ['user_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissions():ActiveQuery {
+	public function getRelatedPermissions(): ActiveQuery
+	{
 		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedUsersToPermissions');
 	}
 
@@ -99,7 +104,8 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissions(mixed $relatedPermissions):void {
+	public function setRelatedPermissions(mixed $relatedPermissions): void
+	{
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissions)) {
 			RelUsersToPermissions::clearLinks($this);
@@ -112,14 +118,16 @@ trait UsersPermissionsTrait {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersToPermissionsCollections():ActiveQuery {
+	public function getRelatedUsersToPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersToPermissionsCollections::class, ['user_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsCollections():ActiveQuery {
+	public function getRelatedPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasMany(PermissionsCollections::class, ['id' => 'collection_id'])->via('relatedUsersToPermissionsCollections');
 	}
 
@@ -127,7 +135,8 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissionsCollections(mixed $relatedPermissionsCollections):void {
+	public function setRelatedPermissionsCollections(mixed $relatedPermissionsCollections): void
+	{
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissionsCollections)) {
 			RelUsersToPermissionsCollections::clearLinks($this);
@@ -143,9 +152,10 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function hasActionPermission(Action $action):bool {
+	public function hasActionPermission(Action $action): bool
+	{
 		if ($this->isAllPermissionsGranted()) return true;
-		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, ($action->controller->module->id === Yii::$app->id)?null:$action->controller->module->id);
+		return $this->hasControllerPermission($action->controller->id, $action->id, Yii::$app->request->method, ($action->controller->module->id === Yii::$app->id) ? null : $action->controller->module->id);
 	}
 
 	/**
@@ -157,7 +167,8 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null, ?string $moduleId = null):bool {
+	public function hasControllerPermission(string $controllerId, ?string $actionId = null, ?string $verb = null, ?string $moduleId = null): bool
+	{
 		if (null !== $moduleId && $moduleId === Yii::$app->id) $moduleId = null;//защита на случай, если забыли проверить выше
 		if ($this->isAllPermissionsGranted()) return true;
 		$cacheKey = CacheHelper::MethodSignature(__METHOD__, [
@@ -186,7 +197,8 @@ trait UsersPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function isAllPermissionsGranted():bool {
+	public function isAllPermissionsGranted(): bool
+	{
 		return in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true);
 	}
 

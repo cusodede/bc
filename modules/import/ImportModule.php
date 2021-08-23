@@ -9,6 +9,7 @@ use yii\base\Module;
 /**
  * Class ImportModule
  */
-class ImportModule extends Module {
+class ImportModule extends Module
+{
 	use ModuleTrait;
 }

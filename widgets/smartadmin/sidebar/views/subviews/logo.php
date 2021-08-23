@@ -9,8 +9,8 @@ use yii\bootstrap4\Html;
 		Html::img('/img/theme/prpllogo.svg', [/*todo: вынести в стили*/
 			'aria-roledescription' => 'logo',
 			'alt' => Yii::$app->name
-		]).
-		Html::tag('span', Yii::$app->name, ['class' => 'page-logo-text mr-1']).
+		]) .
+		Html::tag('span', Yii::$app->name, ['class' => 'page-logo-text mr-1']) .
 		Html::tag('span', '', ['class' => 'position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2']),
 		'/',
 		[

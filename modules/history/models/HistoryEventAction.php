@@ -18,7 +18,8 @@ use pozitronik\helpers\ArrayHelper;
  * @property string $typeName
  *
  */
-class HistoryEventAction extends Model {
+class HistoryEventAction extends Model
+{
 	public const ATTRIBUTE_CREATED = 0;
 	public const ATTRIBUTE_CHANGED = 1;
 	public const ATTRIBUTE_DELETED = 2;
@@ -37,7 +38,8 @@ class HistoryEventAction extends Model {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'type' => 'Change',
 			'typeName' => 'Action',
@@ -51,7 +53,8 @@ class HistoryEventAction extends Model {
 	 * @return null|string
 	 * @throws Throwable
 	 */
-	public function getTypeName():?string {
+	public function getTypeName(): ?string
+	{
 		return ArrayHelper::getValue(self::ATTRIBUTE_TYPE_NAMES, $this->type);
 	}
 }

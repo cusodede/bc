@@ -19,20 +19,23 @@ use yii\db\ActiveRecord;
  * @property null|Users $relatedUsers Связанная модель пользователя
  * @property null|Permissions $relatedPermissions Связанное право доступа
  */
-class RelUsersToPermissions extends ActiveRecord {
+class RelUsersToPermissions extends ActiveRecord
+{
 	use RelationsTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_relation_users_to_permissions';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['user_id', 'permission_id'], 'required'],
 			[['user_id', 'permission_id'], 'integer'],
@@ -43,7 +46,8 @@ class RelUsersToPermissions extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'user_id' => 'User ID',
@@ -54,14 +58,16 @@ class RelUsersToPermissions extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsers():ActiveQuery {
+	public function getRelatedUsers(): ActiveQuery
+	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissions():ActiveQuery {
+	public function getRelatedPermissions(): ActiveQuery
+	{
 		return $this->hasOne(Permissions::class, ['id' => 'permission_id']);
 	}
 }

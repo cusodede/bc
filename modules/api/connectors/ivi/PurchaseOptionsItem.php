@@ -26,7 +26,7 @@ class PurchaseOptionsItem
 	public function getPurchaseParams(): array
 	{
 		$params = ArrayHelper::getValue($this->_data, 'payment_options.0.purchase_params', []);
-		return array_filter($params, static function (string $name) {
+		return array_filter($params, static function(string $name) {
 			return '_' === $name[0];
 		}, ARRAY_FILTER_USE_KEY);
 	}

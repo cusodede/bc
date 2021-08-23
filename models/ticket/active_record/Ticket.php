@@ -30,34 +30,35 @@ class Ticket extends ActiveRecord
 {
 	use ActiveRecordTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'ticket';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-			[['status'], 'default', 'value' => TicketExtended::STATUS_OK],
-            [['type', 'stage_id', 'status', '!id'], 'required'],
-            [['type', 'stage_id', 'status', 'created_by'], 'integer'],
-			[['journal_data'], 'default', 'value' => []],
-            [['journal_data', 'created_at', 'completed_at'], 'safe'],
-            [['!id'], 'string', 'max' => 36],
-            [['!id'], 'unique'],
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'ticket';
+	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function behaviors():array {
+	public function rules(): array
+	{
+		return [
+			[['status'], 'default', 'value' => TicketExtended::STATUS_OK],
+			[['type', 'stage_id', 'status', '!id'], 'required'],
+			[['type', 'stage_id', 'status', 'created_by'], 'integer'],
+			[['journal_data'], 'default', 'value' => []],
+			[['journal_data', 'created_at', 'completed_at'], 'safe'],
+			[['!id'], 'string', 'max' => 36],
+			[['!id'], 'unique'],
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors(): array
+	{
 		return array_merge(parent::behaviors(), [
 			[
 				'class' => TimestampBehavior::class,
@@ -71,7 +72,7 @@ class Ticket extends ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-    public function beforeValidate(): bool
+	public function beforeValidate(): bool
 	{
 		if ($this->isNewRecord && empty($this->id)) {
 			$this->id = Utils::gen_uuid();
@@ -80,11 +81,11 @@ class Ticket extends ActiveRecord
 		return parent::beforeValidate();
 	}
 
-    /**
-     * @return ActiveQuery
-     */
-    public function getRelatedTicketSubscription(): ActiveQuery
-    {
-        return $this->hasOne(TicketSubscription::class, ['id' => 'id']);
-    }
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedTicketSubscription(): ActiveQuery
+	{
+		return $this->hasOne(TicketSubscription::class, ['id' => 'id']);
+	}
 }

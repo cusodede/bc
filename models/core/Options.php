@@ -11,7 +11,8 @@ use Throwable;
  * Class Options
  * Перечисление системных опций, вынесенных в SysOptions
  */
-class Options {
+class Options
+{
 	/*значения по умолчанию*/
 	public const ASSETS_PUBLISHOPTIONS_FORCECOPY = 'ASSETS_PUBLISHOPTIONS_FORCECOPY';
 	public const GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION = 'GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION';
@@ -38,7 +39,8 @@ class Options {
 	 * @return mixed
 	 * @throws Throwable
 	 */
-	public static function getValue(string $key) {
+	public static function getValue(string $key)
+	{
 		return SysOptions::getStatic($key, ArrayHelper::getValue(self::DEFAULT_VALUES, $key));
 	}
 }
