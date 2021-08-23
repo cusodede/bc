@@ -15,18 +15,11 @@ use yii\helpers\ArrayHelper;
  */
 class ProductsSearch extends Products
 {
-	/**
-	 * @var string|null
-	 */
 	public ?string $category_id = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $trial = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $active = null;
+	public ?int $limit = null;
+	public ?int $offset = null;
 
 	/**
 	 * @return array[]
@@ -34,7 +27,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -90,6 +83,14 @@ class ProductsSearch extends Products
 
 		if (null !== $this->active) {
 			$query->whereActivePeriod($this->active);
+		}
+
+		if (null !== $this->limit) {
+			$query->limit = $this->limit;
+		}
+
+		if (null !== $this->offset) {
+			$query->offset = $this->offset;
 		}
 
 		return $dataProvider;
