@@ -12,7 +12,7 @@ use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
 //use yii\gii\Module as GiiModule;
-use yii\mutex\MysqlMutex;
+use yii\mutex\PgsqlMutex;
 
 $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
@@ -58,7 +58,7 @@ $config = [
 			'db' => 'db', // DB connection component or its config
 			'tableName' => '{{%queue}}', // Table name
 			'channel' => 'product_ticket', // Queue channel key
-			'mutex' => MysqlMutex::class, // Mutex used to sync queries
+			'mutex' => PgsqlMutex::class, // Mutex used to sync queries
 			'deleteReleased' => false,
 			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
 		],

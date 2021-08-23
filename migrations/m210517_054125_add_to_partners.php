@@ -6,16 +6,39 @@ use app\models\partners\Partners;
 /**
 * Class m210517_054125_add_to_partners
 */
-class m210517_054125_add_to_partners extends Migration
+class m210517_054125_add_to_partners extends \app\components\db\Migration
 {
 	/**
 	 * {@inheritdoc}
 	 */
 	public function safeUp()
 	{
+		$function = <<< SQL
+CREATE FUNCTION update_updated_at_column()
+    RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+SQL;
+		$this->execute($function);
+
 		$this->addColumn(Partners::tableName(), 'inn', $this->string(12)->notNull()->after('name')->comment('ИНН партнера'));
 		$this->createIndex('idx-partners-inn', Partners::tableName(), 'inn', true);
-		$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
+
+		switch ($this->db->driverName) {
+			case 'mysql':
+				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
+			break;
+			case 'pgsql':
+				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->notNull()->comment('Дата обновления партнера'));
+				if (!$this->createOnUpdateTrigger(Partners::tableName())) {
+					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
+				}
+			break;
+		}
+
 		$this->createIndex('idx-partners-name', Partners::tableName(), 'name');
 	}
 

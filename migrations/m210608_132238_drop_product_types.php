@@ -26,7 +26,7 @@ class m210608_132238_drop_product_types extends Migration
 		$this->createTable('ref_products_types', [
 			'id' => $this->primaryKey(),
 			'name' => $this->string(64)->notNull()->comment('Название типа ародукта'),
-			'deleted' => $this->boolean()->notNull()->defaultValue(0)->comment('Флаг активности'),
+			'deleted' => $this->boolean()->notNull()->defaultValue(false)->comment('Флаг активности'),
 		]);
 	}
 
