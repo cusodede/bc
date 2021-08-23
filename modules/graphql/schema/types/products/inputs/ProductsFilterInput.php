@@ -20,6 +20,22 @@ class ProductsFilterInput extends InputObjectType
 					'type' => Type::int(),
 					'description' => 'Идентификатор продукта',
 				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id партнёра',
+				],
+				'category_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр id категории партнёра',
+				],
+				'trial' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр, триальный период (true|false)',
+				],
+				'active' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр, по активности (true|false)',
+				],
 			]
 		]);
 	}

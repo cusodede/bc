@@ -30,6 +30,10 @@ class ProductsListField extends BaseField
 				'filters' => [
 					'type' => new ProductsFilterInput(),
 				],
+				'sort' => [
+					'type' => Type::string(),
+					'description' => 'Сортировка: name, -name, created_at, -created_at',
+				],
 				'limit' => Type::nonNull(Type::int()),
 				'offset' => Type::nonNull(Type::int())
 			],
