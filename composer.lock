@@ -4418,12 +4418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88"
+                "reference": "a596c74adc9b4ef8b3258377ccdc0a27a03f8489"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f7c99d24fe6f65d287e007b5284e8e71e973fc88",
-                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/a596c74adc9b4ef8b3258377ccdc0a27a03f8489",
+                "reference": "a596c74adc9b4ef8b3258377ccdc0a27a03f8489",
                 "shasum": ""
             },
             "require": {
@@ -4477,7 +4477,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-20T10:54:30+00:00"
+            "time": "2021-08-23T09:39:27+00:00"
         },
         {
             "name": "yiisoft/yii2",
