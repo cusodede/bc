@@ -22,20 +22,23 @@ use yii\db\StaleObjectException;
  * @property int $daddy
  * @property string $delegate
  */
-class Status extends ActiveRecord {
+class Status extends ActiveRecord
+{
 	use ActiveRecordTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_status';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['model_key', 'status', 'daddy', 'delegate'], 'integer'],
 			[['status'], 'required'],
@@ -48,7 +51,8 @@ class Status extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'model_name' => 'Model Name',
@@ -66,7 +70,8 @@ class Status extends ActiveRecord {
 	 * @return array
 	 * @throws InvalidConfigException
 	 */
-	private static function ExtractModelIdentifiers(ActiveRecord $model):array {
+	private static function ExtractModelIdentifiers(ActiveRecord $model): array
+	{
 		$reflector = new ReflectionClass($model);
 		if (is_array($pk = $model->primaryKey)) throw new InvalidConfigException('Составные ключи не поддерживаются');
 		if (null === $pk) throw new InvalidConfigException('У связанной модели должен быть указан первичный ключ');
@@ -81,7 +86,8 @@ class Status extends ActiveRecord {
 	 * @return int|null
 	 * @throws InvalidConfigException
 	 */
-	public static function getCurrentStatus(ActiveRecord $model):?int {
+	public static function getCurrentStatus(ActiveRecord $model): ?int
+	{
 		if (null === $currentStatus = self::find()->where(self::ExtractModelIdentifiers($model))->one()) return null;/*запись не найдена*/
 		/** @var self $currentStatus */
 		return $currentStatus->status;
@@ -95,16 +101,17 @@ class Status extends ActiveRecord {
 	 * @throws StaleObjectException
 	 * @throws InvalidConfigException
 	 */
-	public static function setCurrentStatus(ActiveRecord $model, int $status):bool {
-		$attributes = self::ExtractModelIdentifiers($model);
+	public static function setCurrentStatus(ActiveRecord $model, int $status): bool
+	{
+		$attributes    = self::ExtractModelIdentifiers($model);
 		$currentStatus = self::getInstance($attributes);
 		if ($currentStatus->isNewRecord) {
 			$currentStatus->load($attributes, '');
 		}
 		$currentStatus->status = $status;
-		$currentStatus->daddy = Users::Current()->id;
+		$currentStatus->daddy  = Users::Current()->id;
 		/* не используется, осталось из TWS, может быть появится и у нас такой
 		 * $currentStatus->delegate = (false === $delegateId = Yii::$app->cache->get(Delegation::RELOGIN_PREFIX.Yii::$app->user->id))?null:$delegateId;*/
-		return ($currentStatus->isNewRecord)?$currentStatus->save():(1 === $currentStatus->update());
+		return ($currentStatus->isNewRecord) ? $currentStatus->save() : (1 === $currentStatus->update());
 	}
 }

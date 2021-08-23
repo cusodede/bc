@@ -44,8 +44,8 @@ class SubscriptionsSearch extends Subscriptions
 		}
 
 		$dataProvider->setSort([
-			'defaultOrder' 	=> ['subscriptions.id' => SORT_ASC],
-			'attributes' 	=> ['subscriptions.id'],
+			'defaultOrder' => ['subscriptions.id' => SORT_ASC],
+			'attributes' => ['subscriptions.id'],
 		]);
 
 		$this->load($params);

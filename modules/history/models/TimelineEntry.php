@@ -13,7 +13,8 @@ use yii\base\Model;
  * @property string $content
  * @property int $user
  */
-class TimelineEntry extends Model {
+class TimelineEntry extends Model
+{
 	public string $time;
 	public string $caption;
 	public string $content;

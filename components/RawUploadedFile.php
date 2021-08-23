@@ -23,11 +23,11 @@ class RawUploadedFile extends UploadedFile
 	public function __construct(string $path)
 	{
 		parent::__construct([
-			'name'     => basename($path),
-			'type'     => FileHelper::getMimeType($path, null, false),
-			'size'     => filesize($path),
+			'name' => basename($path),
+			'type' => FileHelper::getMimeType($path, null, false),
+			'size' => filesize($path),
 			'tempName' => $path,
-			'error'    => UPLOAD_ERR_OK
+			'error' => UPLOAD_ERR_OK
 		]);
 	}
 

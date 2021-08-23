@@ -23,13 +23,13 @@ use yii\web\View;
 <?= $form->field($model, 'email') ?>
 <?= $form->field($model, 'phones')->widget(Select2::class, [
 	'showToggleAll' => false,
-	'options'       => [
+	'options' => [
 		'placeholder' => 'Введите один или несколько телефонных номеров',
-		'multiple'    => true
+		'multiple' => true
 	],
 	'pluginOptions' => [
-		'tags'               => true,
-		'tokenSeparators'    => [',', ' '],
+		'tags' => true,
+		'tokenSeparators' => [',', ' '],
 		'maximumInputLength' => 12
 	]
 ]) ?>

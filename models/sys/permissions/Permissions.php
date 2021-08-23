@@ -20,7 +20,8 @@ use yii\caching\TagDependency;
  * @see Permissions::setControllerPath()
  * @see Permissions::getControllerPath()
  */
-class Permissions extends ActiveRecordPermissions {
+class Permissions extends ActiveRecordPermissions
+{
 	/*Любое из перечисленных прав*/
 	public const LOGIC_OR = 0;
 	/*Все перечисленные права*/
@@ -46,14 +47,16 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return array_merge(parent::rules(), [[['controllerPath'], 'string']]);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return parent::attributeLabels() + [
 				'controllerPath' => 'Контроллер'
 			];
@@ -67,8 +70,9 @@ class Permissions extends ActiveRecordPermissions {
 	 * @throws Throwable
 	 * @noinspection PhpReturnDocTypeMismatchInspection Проверено, в $default мы можем задать что угодно
 	 */
-	public static function ConfigurationParameter(string $parameter, mixed $default = null) {
-		return ArrayHelper::getValue(Yii::$app->components, self::COMPONENT_NAME.".".$parameter, $default);
+	public static function ConfigurationParameter(string $parameter, mixed $default = null)
+	{
+		return ArrayHelper::getValue(Yii::$app->components, self::COMPONENT_NAME . "." . $parameter, $default);
 	}
 
 	/**
@@ -76,14 +80,15 @@ class Permissions extends ActiveRecordPermissions {
 	 * @return self[]
 	 * @throws Throwable
 	 */
-	public static function GetConfigurationPermissions(?array $filter = null):array {
+	public static function GetConfigurationPermissions(?array $filter = null): array
+	{
 		$permissionsConfig = self::ConfigurationParameter(self::CONFIGURATION_PERMISSIONS, []);
 		if (null !== $filter) $permissionsConfig = ArrayHelper::filter($permissionsConfig, $filter);
 		$result = [];
 		/*convert to models*/
 		foreach ($permissionsConfig as $name => $permissionConfig) {
 			$permissionConfig['name'] = $name;
-			$result[] = (new self($permissionConfig))->attributes;
+			$result[]                 = (new self($permissionConfig))->attributes;
 		}
 		return $result;
 	}
@@ -95,7 +100,8 @@ class Permissions extends ActiveRecordPermissions {
 	 * @param bool $asArray
 	 * @return self[]
 	 */
-	public static function allUserPermissions(int $user_id, array $permissionFilters = [], bool $asArray = true):array {
+	public static function allUserPermissions(int $user_id, array $permissionFilters = [], bool $asArray = true): array
+	{
 		$mainQuery = self::find()
 			->alias('perms')
 			->innerJoinWith('relatedPermissionsCollectionsToPermissions cols_to_perms')
@@ -145,7 +151,8 @@ class Permissions extends ActiveRecordPermissions {
 	 * @throws Throwable
 	 * @throws Throwable
 	 */
-	public static function allUserConfigurationPermissions(int $user_id /*, array $permissionFilters = [], bool $asArray = true*/ /*todo*/):array {
+	public static function allUserConfigurationPermissions(int $user_id /*, array $permissionFilters = [], bool $asArray = true*/ /*todo*/): array
+	{
 		/** @var array $userConfigurationGrantedPermissions */
 		$userConfigurationGrantedPermissions = ArrayHelper::getValue(self::ConfigurationParameter(self::GRANT_PERMISSIONS, []), $user_id, []);
 		return self::GetConfigurationPermissions($userConfigurationGrantedPermissions);
@@ -157,7 +164,8 @@ class Permissions extends ActiveRecordPermissions {
 	 *    - право есть в  группе прав, назначенной пользователю
 	 * @inheritDoc
 	 */
-	public function afterSave($insert, $changedAttributes):void {
+	public function afterSave($insert, $changedAttributes): void
+	{
 		if (false === $insert && [] !== $changedAttributes) {
 			$usersIds = array_unique(array_merge(
 				ArrayHelper::getColumn($this->relatedUsers, 'id'),
@@ -174,20 +182,22 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * @return string|null
 	 */
-	public function getControllerPath():?string {
-		return (null === $this->module)?$this->controller:"@{$this->module}/{$this->controller}";
+	public function getControllerPath(): ?string
+	{
+		return (null === $this->module) ? $this->controller : "@{$this->module}/{$this->controller}";
 	}
 
 	/**
 	 * @param null|string $controllerPath
 	 */
-	public function setControllerPath(?string $controllerPath):void {
-		$this->module = null;
+	public function setControllerPath(?string $controllerPath): void
+	{
+		$this->module     = null;
 		$this->controller = $controllerPath;/*by default*/
 		/*Если контроллер пришёл в виде @foo/bar - foo указывает на модуль*/
 		if ((!empty($path = explode('/', $this->controller))) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
 			/** @var array $matches */
-			$this->module = substr($matches[0], 1);
+			$this->module     = substr($matches[0], 1);
 			$this->controller = substr($this->controller, strlen($this->module) + 2); //@foo/bar => bar
 		}
 	}

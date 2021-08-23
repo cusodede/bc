@@ -13,7 +13,8 @@ use yii\db\Transaction;
  * Class Service
  * @package app\models\core
  */
-class Service extends Model {
+class Service extends Model
+{
 
 	/**
 	 * Сброс к заводским настройкам.
@@ -22,8 +23,9 @@ class Service extends Model {
 	 * Всё в ноль.
 	 * После очистки создаётся чистый административный аккаунт.
 	 */
-	public static function ResetDB():bool {
-		$connection = Yii::$app->db;
+	public static function ResetDB(): bool
+	{
+		$connection  = Yii::$app->db;
 		$transaction = new Transaction([
 			'db' => $connection
 		]);

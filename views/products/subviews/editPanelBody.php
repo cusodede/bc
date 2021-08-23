@@ -30,28 +30,28 @@ use app\models\products\EnumProductsPaymentPeriods;
 	</div>
 </div>
 <?= $form->field($model, 'partner_id')->widget(Select2::class, [
-	'data'          => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+	'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
 	'pluginOptions' => [
 		'placeholder' => 'Выберите партнера',
-		'multiple'    => false,
-		'allowClear'  => true,
-		'tags'        => true
+		'multiple' => false,
+		'allowClear' => true,
+		'tags' => true
 	]
 ]) ?>
 <?= $form->field($model, 'ext_description')->widget(MarkdownEditor::class, [
-	'showExport'    => false,
+	'showExport' => false,
 	'footerMessage' => false,
-	'toolbar'       => [
+	'toolbar' => [
 		[
 			'buttons' => [
-				MarkdownEditor::BTN_BOLD     => ['icon' => 'bold', 'title' => 'Полужирный'],
-				MarkdownEditor::BTN_ITALIC   => ['icon' => 'italic', 'title' => 'Курсив'],
-				MarkdownEditor::BTN_LINK     => ['icon' => 'link', 'title' => 'Ссылка'],
+				MarkdownEditor::BTN_BOLD => ['icon' => 'bold', 'title' => 'Полужирный'],
+				MarkdownEditor::BTN_ITALIC => ['icon' => 'italic', 'title' => 'Курсив'],
+				MarkdownEditor::BTN_LINK => ['icon' => 'link', 'title' => 'Ссылка'],
 				MarkdownEditor::BTN_INDENT_L => ['icon' => 'indent', 'title' => 'Увеличить отступ'],
 				MarkdownEditor::BTN_INDENT_R => ['icon' => 'outdent', 'title' => 'Уменьшить отступ'],
-				MarkdownEditor::BTN_UL       => ['icon' => 'list', 'title' => 'Маркированный список'],
-				MarkdownEditor::BTN_OL       => ['icon' => 'list-alt', 'title' => 'Нумерованный список'],
-				MarkdownEditor::BTN_HR       => ['icon' => 'minus', 'title' => 'Горизонтальная линия']
+				MarkdownEditor::BTN_UL => ['icon' => 'list', 'title' => 'Маркированный список'],
+				MarkdownEditor::BTN_OL => ['icon' => 'list-alt', 'title' => 'Нумерованный список'],
+				MarkdownEditor::BTN_HR => ['icon' => 'minus', 'title' => 'Горизонтальная линия']
 			]
 		]
 	]

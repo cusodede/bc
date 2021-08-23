@@ -20,7 +20,8 @@ class UsersSearch extends ActiveRecordUsers
 	/**
 	 * @inheritdoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['id', 'limit', 'offset'], 'integer'],
 			[['username', 'login', 'email'], 'safe'],

@@ -34,13 +34,15 @@ use yii\db\ActiveRecord;
  * @property RelPermissionsCollectionsToPermissions[] $relatedSlavePermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа для всех ВКЛЮЧЁННЫХ групп
  * @property-read Permissions[] $relatedPermissionsViaSlaveGroups Права доступа, попавшие в группу из дочерних групп
  */
-class PermissionsCollections extends ActiveRecord {
+class PermissionsCollections extends ActiveRecord
+{
 	use ActiveRecordTrait;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'history' => [
 				'class' => HistoryBehavior::class
@@ -51,14 +53,16 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_permissions_collections';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['comment'], 'string'],
 			[['name'], 'string', 'max' => 128],
@@ -71,7 +75,8 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'name' => 'Название',
@@ -86,21 +91,24 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersToPermissionsCollections():ActiveQuery {
+	public function getRelatedUsersToPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersToPermissionsCollections::class, ['collection_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsCollectionsToPermissions():ActiveQuery {
+	public function getRelatedPermissionsCollectionsToPermissions(): ActiveQuery
+	{
 		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['collection_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissions():ActiveQuery {
+	public function getRelatedPermissions(): ActiveQuery
+	{
 		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedPermissionsCollectionsToPermissions');
 	}
 
@@ -108,7 +116,8 @@ class PermissionsCollections extends ActiveRecord {
 	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissions(mixed $relatedPermissions):void {
+	public function setRelatedPermissions(mixed $relatedPermissions): void
+	{
 		if (empty($relatedPermissions)) {
 			RelPermissionsCollectionsToPermissions::clearLinks($this);
 		} else {
@@ -119,14 +128,16 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return Permissions[]
 	 */
-	public function getUnrelatedPermissions():array {
+	public function getUnrelatedPermissions(): array
+	{
 		return Permissions::find()->where(['not in', 'id', ArrayHelper::getColumn($this->relatedPermissions, 'id')])->all();
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsers():ActiveQuery {
+	public function getRelatedUsers(): ActiveQuery
+	{
 		return $this->hasMany(Users::class, ['id' => 'user_id'])->via('relatedUsersToPermissionsCollections');
 	}
 
@@ -136,17 +147,18 @@ class PermissionsCollections extends ActiveRecord {
 	 * Выборка не проверялась в поисковых моделях, но должно будет работать.
 	 * @return Users[]
 	 */
-	public function getRelatedUsersRecursively():array {
+	public function getRelatedUsersRecursively(): array
+	{
 		return Users::find()
 			->alias('users')
 			->innerJoin('t', 't.user_id = users.id')
 			->withQuery(
-				//initial query
+			//initial query
 				RelUsersToPermissionsCollections::find()
 					->alias('users_to_cols')
 					->select(['users_to_cols.collection_id', 'users_to_cols.user_id'])
 					->union(
-						//recursive query
+					//recursive query
 						RelPermissionsCollectionsToPermissionsCollections::find()
 							->alias('cols_to_cols')
 							->select(['cols_to_cols.slave_id', 't.user_id'])
@@ -162,21 +174,24 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsCollectionsToPermissionsCollections():ActiveQuery {
+	public function getRelatedPermissionsCollectionsToPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasMany(RelPermissionsCollectionsToPermissionsCollections::class, ['master_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedMasterPermissionsCollectionsToPermissionsCollections():ActiveQuery {
+	public function getRelatedMasterPermissionsCollectionsToPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasOne(RelPermissionsCollectionsToPermissionsCollections::class, ['slave_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedSlavePermissionsCollections():ActiveQuery {
+	public function getRelatedSlavePermissionsCollections(): ActiveQuery
+	{
 		return $this->hasMany(self::class, ['id' => 'slave_id'])->via('relatedPermissionsCollectionsToPermissionsCollections');
 	}
 
@@ -184,7 +199,8 @@ class PermissionsCollections extends ActiveRecord {
 	 * @param mixed $relatedSlavePermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedSlavePermissionsCollections(mixed $relatedSlavePermissionsCollections):void {
+	public function setRelatedSlavePermissionsCollections(mixed $relatedSlavePermissionsCollections): void
+	{
 		if (empty($relatedSlavePermissionsCollections)) {
 			RelPermissionsCollectionsToPermissionsCollections::clearLinks($this);
 		} else {
@@ -195,14 +211,16 @@ class PermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedSlavePermissionsCollectionsToPermissions():ActiveQuery {
+	public function getRelatedSlavePermissionsCollectionsToPermissions(): ActiveQuery
+	{
 		return $this->hasMany(RelPermissionsCollectionsToPermissions::class, ['collection_id' => 'id'])->via('relatedSlavePermissionsCollections');
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsViaSlaveGroups():ActiveQuery {
+	public function getRelatedPermissionsViaSlaveGroups(): ActiveQuery
+	{
 		return $this->hasMany(Permissions::class, ['id' => 'permission_id'])->via('relatedSlavePermissionsCollectionsToPermissions');
 	}
 

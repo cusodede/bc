@@ -19,7 +19,8 @@ use yii\base\Model;
  * @property ?string $textcolor {цвет шрифта элементов, ассоциированных со статусом (кнопок, бейджей), null - дефолтный)
  * @property string $style {строка css, сгенерированная или заданная}
  */
-class StatusModel extends Model {
+class StatusModel extends Model
+{
 	public ?int $id = null;
 	public ?string $name = null;
 	public ?string $color = null;
@@ -33,7 +34,8 @@ class StatusModel extends Model {
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['id'], 'integer'],
 			[['name', 'color', 'textcolor'], 'string'],
@@ -48,7 +50,8 @@ class StatusModel extends Model {
 	 * @param null|int $id
 	 * @param array $config
 	 */
-	public function __construct(?int $id = null, array $config = []) {
+	public function __construct(?int $id = null, array $config = [])
+	{
 		parent::__construct($config);
 		if (null !== $id) $this->id = $id;
 	}
@@ -59,7 +62,8 @@ class StatusModel extends Model {
 	 * @param Users $user
 	 * @return bool
 	 */
-	public function isAllowed(Model $model, Users $user):bool {
+	public function isAllowed(Model $model, Users $user): bool
+	{
 		if (is_callable($this->allowed)) {
 			return call_user_func($this->allowed, $model, $user);
 		}
@@ -69,7 +73,8 @@ class StatusModel extends Model {
 	/**
 	 * @return string
 	 */
-	public function getStyle():string {
+	public function getStyle(): string
+	{
 		if (null !== $this->color) {
 			$this->_style[] = "background-color: {$this->color}";
 		}
@@ -84,7 +89,8 @@ class StatusModel extends Model {
 	/**
 	 * @param string $style
 	 */
-	public function setStyle(string $style):void {
+	public function setStyle(string $style): void
+	{
 		if (empty($this->_style = explode(';', $style))) $this->_style = [];
 		array_walk($this->_style, 'trim');
 	}

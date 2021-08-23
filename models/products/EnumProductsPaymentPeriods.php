@@ -24,8 +24,8 @@ class EnumProductsPaymentPeriods
 	{
 		return [
 			self::TYPE_ONE_TIME => 'Разовое списание',
-			self::TYPE_DAILY    => 'Ежедневное',
-			self::TYPE_MONTHLY  => 'Ежемесячное'
+			self::TYPE_DAILY => 'Ежедневное',
+			self::TYPE_MONTHLY => 'Ежемесячное'
 		];
 	}
 }

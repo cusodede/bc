@@ -49,7 +49,7 @@ class ProductsSearch extends Products
 	{
 		// Сортировка и навигация для GraphQL
 		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+		$sort       = ArrayHelper::getValue($params, $this->formName() . '.sort');
 
 		$query = Products::find()->active();
 
@@ -64,7 +64,7 @@ class ProductsSearch extends Products
 		} else {
 			$dataProvider->setSort([
 				'defaultOrder' => ['id' => SORT_ASC],
-				'attributes'   => ['id', 'name'],
+				'attributes' => ['id', 'name'],
 			]);
 		}
 
@@ -77,9 +77,9 @@ class ProductsSearch extends Products
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
 		$query->andFilterWhere([
-			'products.id'          => $this->id,
-			'products.type_id'     => $this->type_id,
-			'products.partner_id'  => $this->partner_id,
+			'products.id' => $this->id,
+			'products.type_id' => $this->type_id,
+			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
 		$query->andFilterWhere(['like', 'products.name', $this->name]);

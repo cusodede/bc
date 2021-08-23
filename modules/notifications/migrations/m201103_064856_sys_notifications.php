@@ -9,11 +9,13 @@ use yii\db\Migration;
 /**
  * Class m201103_064856_sys_notifications
  */
-class m201103_064856_sys_notifications extends Migration {
+class m201103_064856_sys_notifications extends Migration
+{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->createTable('sys_notifications', [
 			'id' => $this->primaryKey(),
 			'type' => $this->integer()->notNull()->defaultValue(Notifications::TYPE_DEFAULT)->comment('Тип уведомления'),
@@ -34,7 +36,8 @@ class m201103_064856_sys_notifications extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropTable('sys_notifications');
 	}
 

@@ -11,7 +11,8 @@ use yii\web\Response;
 /**
  * Class ProcessImportAction
  */
-class ProcessImportAction extends Action {
+class ProcessImportAction extends Action
+{
 	public array $mappingRules = [];
 	public bool $ignoreErrors = true;
 
@@ -19,19 +20,20 @@ class ProcessImportAction extends Action {
 	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function run(int $domain, string $modelClass) {
-		$importModel = new ImportModel([
+	public function run(int $domain, string $modelClass)
+	{
+		$importModel  = new ImportModel([
 			'model' => $modelClass,
 			'domain' => $domain,
 			'mappingRules' => $this->mappingRules
 		]);
-		$messages = [];
+		$messages     = [];
 		$isImportDone = $importModel->import($messages);
 
 		if (Yii::$app->request->isAjax) {
 			return $this->controller->asJson([
 				'done' => $isImportDone,
-				'percent' => $isImportDone?100:$importModel->percent,
+				'percent' => $isImportDone ? 100 : $importModel->percent,
 				'messages' => $messages
 			]);
 		}

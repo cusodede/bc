@@ -47,7 +47,7 @@ class ProductsJournalSearch extends ProductsJournal
 
 		$dataProvider->setSort([
 			'defaultOrder' => ['created_at' => SORT_DESC],
-			'attributes'   => ['id', 'created_at']
+			'attributes' => ['id', 'created_at']
 		]);
 
 		$this->load($params);
@@ -57,11 +57,11 @@ class ProductsJournalSearch extends ProductsJournal
 		}
 
 		$query->andFilterWhere([
-			'pj.id'        => $this->id,
+			'pj.id' => $this->id,
 			'pj.status_id' => $this->status_id,
-			'ra.phone'     => $this->searchAbonentPhone,
-			'rp.id'        => $this->searchProductId,
-			'rp.type_id'   => $this->searchProductTypeId
+			'ra.phone' => $this->searchAbonentPhone,
+			'rp.id' => $this->searchProductId,
+			'rp.type_id' => $this->searchProductTypeId
 		]);
 
 		return $dataProvider;

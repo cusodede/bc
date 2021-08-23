@@ -19,20 +19,23 @@ use yii\db\ActiveRecord;
  * @property null|PermissionsCollections $relatedPermissionsCollections Связанная группа доступов
  * @property null|Permissions $relatedPermissions Связанный доступ
  */
-class RelPermissionsCollectionsToPermissions extends ActiveRecord {
+class RelPermissionsCollectionsToPermissions extends ActiveRecord
+{
 	use RelationsTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_relation_permissions_collections_to_permissions';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['collection_id', 'permission_id'], 'required'],
 			[['collection_id', 'permission_id'], 'integer'],
@@ -43,7 +46,8 @@ class RelPermissionsCollectionsToPermissions extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'collection_id' => 'Collection ID',
@@ -54,14 +58,16 @@ class RelPermissionsCollectionsToPermissions extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissionsCollections():ActiveQuery {
+	public function getRelatedPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasOne(PermissionsCollections::class, ['id' => 'collection_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedPermissions():ActiveQuery {
+	public function getRelatedPermissions(): ActiveQuery
+	{
 		return $this->hasOne(Permissions::class, ['id' => 'permission_id']);
 	}
 }

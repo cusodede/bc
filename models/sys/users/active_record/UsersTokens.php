@@ -24,32 +24,37 @@ use yii\db\ActiveRecord;
  * @property UsersTokens|null $relatedParentToken
  * @property UsersTokens[] $relatedChildTokens
  */
-class UsersTokens extends ActiveRecord {
+class UsersTokens extends ActiveRecord
+{
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_users_tokens';
 	}
 
 	/**
 	 * @return string
 	 */
-	private static function GenerateToken():string {
+	private static function GenerateToken(): string
+	{
 		return sha1(uniqid((string)mt_rand(), true));
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function beforeValidate():bool {
+	public function beforeValidate(): bool
+	{
 		if ($this->isNewRecord && (null === $this->auth_token)) {
 			$this->auth_token = self::GenerateToken();
 		}
 		return parent::beforeValidate();
 	}
 
-	public function beforeDelete():bool {
+	public function beforeDelete(): bool
+	{
 		if (!parent::beforeDelete()) {
 			return false;
 		}
@@ -65,7 +70,8 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['user_id', 'auth_token', 'type_id'], 'required'],
 			[['user_id', 'type_id'], 'integer'],
@@ -79,7 +85,8 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'user_id' => 'user id foreign key',
@@ -95,14 +102,16 @@ class UsersTokens extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsers():ActiveQuery {
+	public function getRelatedUsers(): ActiveQuery
+	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedParentToken():ActiveQuery {
+	public function getRelatedParentToken(): ActiveQuery
+	{
 		return $this->hasOne(static::class, ['id' => 'parent_id'])->via('relatedUsersTokensToParentTokens');
 	}
 
@@ -110,14 +119,16 @@ class UsersTokens extends ActiveRecord {
 	 * @param array $tokens
 	 * @throws Throwable
 	 */
-	public function setRelatedParentTokens(array $tokens):void {
+	public function setRelatedParentTokens(array $tokens): void
+	{
 		RelUsersTokensToTokens::linkModels($tokens, $this);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedChildTokens():ActiveQuery {
+	public function getRelatedChildTokens(): ActiveQuery
+	{
 		return $this->hasMany(static::class, ['id' => 'child_id'])->via('relatedUsersTokensToChildTokens');
 	}
 
@@ -125,21 +136,24 @@ class UsersTokens extends ActiveRecord {
 	 * @param array $tokens
 	 * @throws Throwable
 	 */
-	public function setRelatedChildTokens(array $tokens):void {
+	public function setRelatedChildTokens(array $tokens): void
+	{
 		RelUsersTokensToTokens::linkModels($this, $tokens);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersTokensToParentTokens():ActiveQuery {
+	public function getRelatedUsersTokensToParentTokens(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersTokensToTokens::class, ['child_id' => 'id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedUsersTokensToChildTokens():ActiveQuery {
+	public function getRelatedUsersTokensToChildTokens(): ActiveQuery
+	{
 		return $this->hasMany(RelUsersTokensToTokens::class, ['parent_id' => 'id']);
 	}
 }

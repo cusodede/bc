@@ -21,7 +21,8 @@ use yii\helpers\ArrayHelper;
  *        'modelRelatedAttributeName'//имя атрибута базовой модели, значение которого хранится в этой модели (опционально, если не задано, используется имя текущего класса)
  *    ]
  */
-class HistoryBehavior extends Behavior {
+class HistoryBehavior extends Behavior
+{
 	private const DISABLE = false;
 
 	public array $relations = [];
@@ -33,7 +34,8 @@ class HistoryBehavior extends Behavior {
 	 * @return array
 	 * @throws InvalidConfigException
 	 */
-	private function getModelData():array {
+	private function getModelData(): array
+	{
 		if (null !== $this->isRelation) {
 			if (is_array($this->isRelation)) {
 				/** @var ActiveRecord $class */
@@ -52,8 +54,9 @@ class HistoryBehavior extends Behavior {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function events():array {
-		return self::DISABLE?[]:[
+	public function events(): array
+	{
+		return self::DISABLE ? [] : [
 			ActiveRecord::EVENT_AFTER_INSERT => function(Event $event) {
 				/** @var ActiveRecord $model */
 				[$model, $attributes, $relation] = $this->getModelData();

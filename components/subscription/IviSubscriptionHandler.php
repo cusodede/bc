@@ -127,8 +127,8 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	private function initProductOptions(): void
 	{
 		$this->_productOptions = new ProductOptions([
-			'productId'     => $this->_ticket->relatedProduct->id,
-			'phone'         => $this->_ticket->relatedAbonent->phone,
+			'productId' => $this->_ticket->relatedProduct->id,
+			'phone' => $this->_ticket->relatedAbonent->phone,
 			'transactionId' => $this->_ticket->id
 		]);
 	}

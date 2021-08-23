@@ -60,12 +60,12 @@ class Abonents extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id'         => 'ID',
-			'surname'    => 'Фамилия',
-			'name'       => 'Имя',
+			'id' => 'ID',
+			'surname' => 'Фамилия',
+			'name' => 'Имя',
 			'patronymic' => 'Отчество',
-			'phone'      => 'Телефон',
-			'deleted'    => 'Флаг удаления',
+			'phone' => 'Телефон',
+			'deleted' => 'Флаг удаления',
 			'created_at' => 'Дата создания',
 			'updated_at' => 'Дата обновления',
 		];

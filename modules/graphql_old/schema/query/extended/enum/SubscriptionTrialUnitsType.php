@@ -41,8 +41,7 @@ final class SubscriptionTrialUnitsType extends BaseQueryType
 		return [
 			'type' => Type::listOf(EnumTypes::subscriptionTrialUnitsType()),
 			'description' => 'Возвращает список единиц триальных периодов',
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> self::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
+			'resolve' => fn($paymentPeriod, array $args = []): ?array => self::getListFromEnum(EnumSubscriptionTrialUnits::mapData()),
 		];
 	}
 
@@ -57,8 +56,7 @@ final class SubscriptionTrialUnitsType extends BaseQueryType
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает единицу триального периода по ключу',
-			'resolve' => fn($paymentPeriod, array $args = []): ?array
-				=> self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
+			'resolve' => fn($paymentPeriod, array $args = []): ?array => self::getOneFromEnum(EnumSubscriptionTrialUnits::mapData(), $args)
 		];
 	}
 }

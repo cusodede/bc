@@ -2537,22 +2537,23 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "dev-NumberFormatMask-Helpers",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "2430e916d674d423da19211f3597e3a53845d129"
+                "reference": "418cd304e8e6b417ea79c3b29126a25dc4b1170c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2430e916d674d423da19211f3597e3a53845d129",
-                "reference": "2430e916d674d423da19211f3597e3a53845d129",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/418cd304e8e6b417ea79c3b29126a25dc4b1170c",
+                "reference": "418cd304e8e6b417ea79c3b29126a25dc4b1170c",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
                 "ext-dom": "*",
                 "ext-fileinfo": "*",
+                "ext-gd": "*",
                 "ext-iconv": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
@@ -2564,29 +2565,28 @@
                 "ext-zlib": "*",
                 "ezyang/htmlpurifier": "^4.13",
                 "maennchen/zipstream-php": "^2.1",
-                "markbaker/complex": "^1.5||^2.0",
-                "markbaker/matrix": "^1.2||^2.0",
-                "php": "^7.2||^8.0",
+                "markbaker/complex": "^2.0",
+                "markbaker/matrix": "^2.0",
+                "php": "^7.2 || ^8.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
                 "psr/simple-cache": "^1.0"
             },
             "require-dev": {
-                "dompdf/dompdf": "^0.8.5",
-                "ext-gd": "*",
-                "ext-intl": "*",
+                "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
+                "dompdf/dompdf": "^1.0",
                 "friendsofphp/php-cs-fixer": "^2.18",
                 "jpgraph/jpgraph": "^4.0",
                 "mpdf/mpdf": "^8.0",
                 "phpcompatibility/php-compatibility": "^9.3",
-                "phpunit/phpunit": "^8.5||^9.3",
+                "phpstan/phpstan": "^0.12.82",
+                "phpstan/phpstan-phpunit": "^0.12.18",
+                "phpunit/phpunit": "^8.5",
                 "squizlabs/php_codesniffer": "^3.5",
                 "tecnickcom/tcpdf": "^6.3"
             },
             "suggest": {
                 "dompdf/dompdf": "Option for rendering PDF with PDF Writer (doesn't yet support PHP8)",
-                "ext-gd": "Used for render charts for HTML/PDF Writers, or exact auto-column sizing",
-                "ext-intl": "For locale-specific number masks using the NumberFormat helper classes",
                 "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
                 "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
                 "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer (doesn't yet support PHP8)"
@@ -2635,9 +2635,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/NumberFormatMask-Helpers"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.18.0"
             },
-            "time": "2021-02-16T17:26:56+00:00"
+            "time": "2021-05-31T18:21:15+00:00"
         },
         {
             "name": "pozitronik/yii2-badgewidget",
@@ -3114,12 +3114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-relations.git",
-                "reference": "90a754dd46bdf3929af97ddb6b20ae7ef3b13971"
+                "reference": "b3f207d2ee45706a19f179b0eae5b41f3ca3b6aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-relations/zipball/90a754dd46bdf3929af97ddb6b20ae7ef3b13971",
-                "reference": "90a754dd46bdf3929af97ddb6b20ae7ef3b13971",
+                "url": "https://api.github.com/repos/pozitronik/yii2-relations/zipball/b3f207d2ee45706a19f179b0eae5b41f3ca3b6aa",
+                "reference": "b3f207d2ee45706a19f179b0eae5b41f3ca3b6aa",
                 "shasum": ""
             },
             "require": {
@@ -3157,7 +3157,7 @@
                 "issues": "https://github.com/pozitronik/yii2-relations/issues",
                 "source": "https://github.com/pozitronik/yii2-relations/tree/master"
             },
-            "time": "2021-08-16T14:51:07+00:00"
+            "time": "2021-08-20T14:00:26+00:00"
         },
         {
             "name": "pozitronik/yii2-traits",
@@ -4418,12 +4418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "c36ff75ce6aec2d663d750a1cf4e82e6b64f4770"
+                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/c36ff75ce6aec2d663d750a1cf4e82e6b64f4770",
-                "reference": "c36ff75ce6aec2d663d750a1cf4e82e6b64f4770",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f7c99d24fe6f65d287e007b5284e8e71e973fc88",
+                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88",
                 "shasum": ""
             },
             "require": {
@@ -4477,7 +4477,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-17T14:32:09+00:00"
+            "time": "2021-08-20T10:54:30+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -4485,12 +4485,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "5f297e5a2573ec9cb15f104a852317bde2f66203"
+                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/5f297e5a2573ec9cb15f104a852317bde2f66203",
-                "reference": "5f297e5a2573ec9cb15f104a852317bde2f66203",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4f235c4f976dc4b92450e168f0d5ac873834aa0b",
+                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b",
                 "shasum": ""
             },
             "require": {
@@ -4581,7 +4581,7 @@
             ],
             "support": {
                 "forum": "http://www.yiiframework.com/forum/",
-                "irc": "irc://irc.libera.chat:6697/yii",
+                "irc": "ircs://irc.libera.chat:6697/yii",
                 "issues": "https://github.com/yiisoft/yii2/issues?state=open",
                 "source": "https://github.com/yiisoft/yii2",
                 "wiki": "http://www.yiiframework.com/wiki/"
@@ -4600,7 +4600,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-17T21:16:57+00:00"
+            "time": "2021-08-19T20:17:05+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",

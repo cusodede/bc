@@ -14,13 +14,15 @@ use yii\web\Response;
 /**
  * Class UserController
  */
-class UsersController extends ActiveController {
+class UsersController extends ActiveController
+{
 	public $modelClass = Users::class;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'contentNegotiator' => [
 				'class' => ContentNegotiator::class,

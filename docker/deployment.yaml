@@ -51,7 +51,11 @@ spec:
               protocol: TCP
             - containerPort: 8081
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 250m
           terminationMessagePath: /dev/termination-log
           env:
             - name: YII_ENV_DEV

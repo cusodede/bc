@@ -58,7 +58,8 @@ class BillingJournal extends ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return array_merge(parent::behaviors(), [
 			[
 				'class' => TimestampBehavior::class,
@@ -114,11 +115,11 @@ class BillingJournal extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id'                          => 'ID',
+			'id' => 'ID',
 			'rel_abonents_to_products_id' => 'Rel Abonents To Products ID',
-			'price'                       => 'Величина списания',
-			'status_id'                   => 'Статус операции',
-			'created_at'                  => 'Дата списания',
+			'price' => 'Величина списания',
+			'status_id' => 'Статус операции',
+			'created_at' => 'Дата списания',
 		];
 	}
 }

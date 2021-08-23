@@ -15,12 +15,14 @@ use yii\widgets\InputWidget;
  * Генерирует соответствия ActiveField-виджетов по типам данных для создания дефолтных редакторов
  * @property ActiveRecord $model
  */
-class ActiveFieldMap extends InputWidget {
+class ActiveFieldMap extends InputWidget
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function run():string {
+	public function run(): string
+	{
 		if (ReflectionHelper::IsInSubclassOf(ReflectionHelper::New($this->model), [ActiveRecord::class])) {
 
 			$type = ArrayHelper::getValue($this->model::getTableSchema(), "columns.{$this->attribute}.type", 'string');
@@ -37,7 +39,7 @@ class ActiveFieldMap extends InputWidget {
 			}
 
 		}
-		throw new InvalidConfigException("Expected ActiveRecord, got ".(new ReflectionClass($this->model))->name);
+		throw new InvalidConfigException("Expected ActiveRecord, got " . (new ReflectionClass($this->model))->name);
 	}
 
 }

@@ -10,15 +10,17 @@ use yii\web\YiiAsset;
 /**
  * Class ImportModuleAssets
  */
-class ImportModuleAssets extends AssetBundle {
+class ImportModuleAssets extends AssetBundle
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function init():void {
-		$this->depends = [YiiAsset::class];
-		$this->sourcePath = __DIR__.'/assets';
-		$this->js = [
+	public function init(): void
+	{
+		$this->depends        = [YiiAsset::class];
+		$this->sourcePath     = __DIR__ . '/assets';
+		$this->js             = [
 			'js/import.js',
 		];
 		$this->publishOptions = [

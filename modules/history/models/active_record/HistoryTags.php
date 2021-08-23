@@ -16,7 +16,8 @@ use yii\db\ActiveRecord;
  * @property int $history
  * @property string $tag
  */
-class HistoryTags extends ActiveRecord {
+class HistoryTags extends ActiveRecord
+{
 	use ActiveRecordTrait;
 
 	public const TAG_CREATED = 'created';
@@ -24,14 +25,16 @@ class HistoryTags extends ActiveRecord {
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), 'tableNameTags', 'sys_history_tags');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['history', 'tag'], 'required'],
 			[['tag'], 'string'],
@@ -43,7 +46,8 @@ class HistoryTags extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'history' => 'Идентификатор операции',
