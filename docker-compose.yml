@@ -10,8 +10,8 @@ services:
       - ${WEB_ROOT_PATH}:/var/www
       - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
       - ${DOCKER_FOLDER}/nginx/include:/etc/nginx/include
-      - ${WEB_ROOT_PATH}/logs:/var/www/logs
-      - ${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx
+      - ${WEB_ROOT_PATH}/docker/logs:/var/www/logs
+      - ${WEB_ROOT_PATH}/docker/logs/nginx:/var/www/logs/nginx
     links:
       - php-8
     networks:
@@ -57,6 +57,7 @@ services:
     volumes:
       - ${WEB_ROOT_PATH}:/var/www
       - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ${WEB_ROOT_PATH}/docker/logs/php:/var/logs/php
     environment:
       YII_DEBUG: ${YII_DEBUG}
       YII_ENV_DEV: ${YII_ENV_DEV}

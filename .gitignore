@@ -14,3 +14,4 @@ codeception.yml
 
 /.env
 /docker/databases/
+/docker/logs/
