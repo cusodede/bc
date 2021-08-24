@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
 
+use app\components\db\Migration;
 use app\models\subscriptions\Subscriptions;
 
 /**
 * Class m210521_060350_add_subscription
 */
-class m210521_060350_add_subscription extends \app\components\db\Migration
+class m210521_060350_add_subscription extends Migration
 {
 	/**
 	 * {@inheritdoc}
@@ -29,9 +30,7 @@ class m210521_060350_add_subscription extends \app\components\db\Migration
 			break;
 			case 'pgsql':
 				$this->alterColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
-				if (!$this->createOnUpdateTrigger(Subscriptions::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
-				}
+				$this->createOnUpdateTrigger(Subscriptions::tableName());
 			break;
 		}
 

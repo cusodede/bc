@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
+use app\components\db\Migration;
 use app\models\abonents\Abonents;
 
 /**
 * Class m210526_093435_add_abonents
 */
-class m210526_093435_add_abonents extends \app\components\db\Migration
+class m210526_093435_add_abonents extends Migration
 {
 	/**
 	 * {@inheritdoc}
@@ -28,9 +29,7 @@ class m210526_093435_add_abonents extends \app\components\db\Migration
 				$this->alterColumn(Abonents::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления абонента'));
 			break;
 			case 'pgsql':
-				if (!$this->createOnUpdateTrigger(Abonents::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Abonents::tableName());
-				}
+				$this->createOnUpdateTrigger(Abonents::tableName());
 			break;
 		}
 

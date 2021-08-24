@@ -12,6 +12,17 @@ class m210406_063557_sys_permissions extends Migration {
 	private const SYS_PERMISSIONS_COLLECTIONS_TABLE_NAME = 'sys_permissions_collections';
 	private const SYS_RELATION_PERMISSIONS_COLLECTIONS_TO_PERMISSIONS_TABLE_NAME = 'sys_relation_permissions_collections_to_permissions';
 	private const SYS_RELATION_USERS_TO_PERMISSIONS_COLLECTIONS_TABLE_NAME = 'sys_relation_users_to_permissions_collections';
+
+	/**
+	 * @inheritDoc
+	 */
+	public function createIndex($name, $table, $columns, $unique = false):void {
+		if (strlen($name) > 64 /*max index name length*/) {
+			$name = substr($name, -64, 64);
+		}
+		parent::createIndex($name, $table, $columns, $unique);
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */

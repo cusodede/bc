@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
 
+use app\components\db\Migration;
 use app\models\products\Products;
 
 /**
 * Class m210519_143011_add_created_at_to_products
 */
-class m210519_143011_add_created_at_to_products extends \app\components\db\Migration
+class m210519_143011_add_created_at_to_products extends Migration
 {
 	/**
 	 * {@inheritdoc}
@@ -19,9 +20,7 @@ class m210519_143011_add_created_at_to_products extends \app\components\db\Migra
 			break;
 			case 'pgsql':
 				$this->addColumn(Products::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления продукта'));
-				if (!$this->createOnUpdateTrigger(Products::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Products::tableName());
-				}
+				$this->createOnUpdateTrigger(Products::tableName());
 			break;
 		}
 	}

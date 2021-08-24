@@ -37,9 +37,7 @@ class m210603_212051_drop_colums_subscription extends Migration
 			break;
 			case 'pgsql':
 				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
-				if (!$this->createOnUpdateTrigger(Subscriptions::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Subscriptions::tableName());
-				}
+				$this->createOnUpdateTrigger(Subscriptions::tableName());
 			break;
 		}
 
