@@ -13,10 +13,6 @@ class m210517_054125_add_to_partners extends Migration
 	 */
 	public function safeUp()
 	{
-
-
-		$this->update_updated_at_column();
-
 		$this->addColumn(Partners::tableName(), 'inn', $this->string(12)->notNull()->after('name')->comment('ИНН партнера'));
 		$this->createIndex('idx-partners-inn', Partners::tableName(), 'inn', true);
 
