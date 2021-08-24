@@ -7,9 +7,11 @@ use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\EnumProductsTypes;
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\definition\DateTimeType;
 use app\modules\graphql\schema\types\partners\PartnerType;
+use app\modules\graphql\schema\types\subscriptions\SubscriptionTrialUnitsType;
 use GraphQL\Type\Definition\Type;
 use DateTimeImmutable;
 
@@ -87,6 +89,13 @@ class ProductType extends BaseObjectType
 					'type' => Type::int(),
 					'description' => 'Триальный период',
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
+				],
+				'trial_unit' => [
+					'type' => SubscriptionTrialUnitsType::type(),
+					'description' => 'Единица измерения триального периода',
+					'resolve' => fn(Products $product): ?array => static::enumResolve(
+						EnumSubscriptionTrialUnits::mapData(), $product->relatedInstance->units ?? 0
+					),
 				],
 				'created_at' => [
 					'type' => DateTimeType::type(),

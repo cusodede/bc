@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\subscriptions;
 
 use app\models\products\Products;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
 use app\models\subscriptions\Subscriptions;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\products\ProductType;
@@ -33,6 +34,13 @@ class SubscriptionType extends BaseObjectType
 				'trial_count' => [
 					'type' => Type::int(),
 					'description' => 'Количество триального периода',
+				],
+				'units' => [
+					'type' => SubscriptionTrialUnitsType::type(),
+					'description' => 'Единица измерения триального периода',
+					'resolve' => fn(Subscriptions $subscriptions): ?array => static::enumResolve(
+						EnumSubscriptionTrialUnits::mapData(), $subscriptions->units
+					),
 				],
 				'product' => [
 					'type' => ProductType::type(),
