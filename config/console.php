@@ -7,11 +7,13 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 use app\components\queue\DbQueue;
 use app\components\queue\JobIdHandlingBehavior;
 use odannyc\Yii2SSE\LibSSE;
+use pozitronik\helpers\ArrayHelper;
 use yii\console\controllers\MigrateController;
 use pozitronik\filestorage\FSModule;
 use yii\caching\FileCache;
 use yii\log\FileTarget;
 //use yii\gii\Module as GiiModule;
+use yii\mutex\MysqlMutex;
 use yii\mutex\PgsqlMutex;
 
 $params = require __DIR__.'/params.php';
@@ -58,7 +60,11 @@ $config = [
 			'db' => 'db', // DB connection component or its config
 			'tableName' => '{{%queue}}', // Table name
 			'channel' => 'product_ticket', // Queue channel key
-			'mutex' => PgsqlMutex::class, // Mutex used to sync queries
+			'mutex' => match (ArrayHelper::getValue(explode(':', $db['dsn']), '0')) {// Mutex used to sync queries
+				default => MysqlMutex::class,
+				'mysql' => MysqlMutex::class,
+				'pgsql' => PgsqlMutex::class
+			},
 			'deleteReleased' => false,
 			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
 		],
