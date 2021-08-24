@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\components\db;
 
+use yii\db\Exception;
+
 /**
  * Расширение функционала \yii\db\Migration
  */
@@ -12,6 +14,7 @@ class Migration extends  \yii\db\Migration
 	 * Создать триггер для обновления поля updated_at при обновлении строки
 	 * @param string $tableName
 	 * @return bool
+	 * @throws Exception
 	 */
 	public function createOnUpdateTrigger(string $tableName): bool
 	{
