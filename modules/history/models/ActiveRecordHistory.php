@@ -605,9 +605,15 @@ class ActiveRecordHistory extends History
 	 * @param string $value
 	 * @return mixed
 	 */
-	protected function unserialize(string $value)
+	protected function unserialize(mixed $value)
 	{
-		return (null === $this->serializer) ? unserialize($value, ['allowed_classes' => true]) : call_user_func($this->serializer[1], $value);
+		if (is_resource($value) && 'stream' === get_resource_type($value)) {
+			$serialized = stream_get_contents($value);
+			fseek($value, 0);
+		} else {
+			$serialized = $value;
+		}
+		return (null === $this->serializer) ? unserialize($serialized, ['allowed_classes' => true]) : call_user_func($this->serializer[1], $serialized);
 	}
 
 	/**
