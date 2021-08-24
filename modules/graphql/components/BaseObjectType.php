@@ -42,4 +42,17 @@ abstract class BaseObjectType extends ObjectType
 			'resolve' => fn($root, $args) => $args
 		];
 	}
+
+	/**
+	 * Унификация resolve для справочников.
+	 * @param array $enumData
+	 * @param int|null $attributeId
+	 * @return array|null
+	 * @throws Throwable
+	 */
+	public static function enumResolve(array $enumData, ?int $attributeId): ?array
+	{
+		$condition = null === ($name = ArrayHelper::getValue($enumData, $attributeId));
+		return $condition ? null : ['id' => $attributeId, 'name' => $name];
+	}
 }

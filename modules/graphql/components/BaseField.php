@@ -65,8 +65,8 @@ abstract class BaseField extends FieldDefinition implements ResolveInterface
 
 	/**
 	 * Унификация resolve для справочников.
-	 * @param int $attributeId
 	 * @param array $enumData
+	 * @param int|null $attributeId
 	 * @return array[]|null
 	 * @throws Throwable
 	 */
