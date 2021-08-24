@@ -62,4 +62,24 @@ abstract class BaseField extends FieldDefinition implements ResolveInterface
 	{
 		return AuthHelper::authenticate()->id;
 	}
+
+	/**
+	 * Унификация resolve для справочников.
+	 * @param int $attributeId
+	 * @param array $enumData
+	 * @return array[]|null
+	 * @throws Throwable
+	 */
+	public static function enumResolve(array $enumData, ?int $attributeId): ?array
+	{
+		if (null === $attributeId) {
+			return array_map(
+				static fn(string $name, int $id): array => compact('id', 'name'),
+				$enumData,
+				array_keys($enumData)
+			);
+		}
+		$attributeName = ArrayHelper::getValue($enumData, $attributeId);
+		return null !== $attributeName ? [['id' => $attributeId, 'name' => $attributeName]] : null;
+	}
 }

@@ -7,10 +7,10 @@ use app\modules\graphql\components\BaseObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Class ProductPaymentPeriodType
+ * Class ProductTypesType
  * @package app\modules\graphql\schema\types\products
  */
-class ProductPaymentPeriodType extends BaseObjectType
+class ProductTypesType extends BaseObjectType
 {
 	/**
 	 * @inheritdoc
@@ -21,11 +21,11 @@ class ProductPaymentPeriodType extends BaseObjectType
 			'fields' => [
 				'id' => [
 					'type' => Type::int(),
-					'description' => 'Идентификатор списания',
+					'description' => 'Идентификатор типа продукта',
 				],
 				'name' => [
 					'type' => Type::string(),
-					'description' => 'Наименование списания',
+					'description' => 'Наименование типа продукта',
 				],
 			],
 		]);

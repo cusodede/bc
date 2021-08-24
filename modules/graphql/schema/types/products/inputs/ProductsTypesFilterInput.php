@@ -7,10 +7,10 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Class ProductsPaymentPeriodsFilterInput
+ * Class ProductsTypesFilterInput
  * @package app\modules\graphql\schema\types\products\inputs
  */
-class ProductsPaymentPeriodsFilterInput extends InputObjectType
+class ProductsTypesFilterInput extends InputObjectType
 {
 	/**
 	 * @inheritdoc
@@ -21,7 +21,7 @@ class ProductsPaymentPeriodsFilterInput extends InputObjectType
 			'fields' => [
 				'id' => [
 					'type' => Type::int(),
-					'description' => 'Идентификатор периода',
+					'description' => 'Идентификатор типа',
 				],
 			]
 		]);
