@@ -58,6 +58,7 @@ services:
       - ${WEB_ROOT_PATH}:/var/www
       - ./docker/php.ini:/usr/local/etc/php/php.ini
       - ${WEB_ROOT_PATH}/docker/logs/php:/var/logs/php
+      - ${WEB_ROOT_PATH}/docker/home/.composesr:/root/.composer
     environment:
       YII_DEBUG: ${YII_DEBUG}
       YII_ENV_DEV: ${YII_ENV_DEV}
