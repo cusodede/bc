@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 use yii\db\Migration;
 use app\models\partners\Partners;
+use yii\db\Exception;
 
 /**
 * Class m210517_054125_add_to_partners
@@ -34,7 +35,7 @@ SQL;
 			case 'pgsql':
 				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления партнера'));
 				if (!$this->createOnUpdateTrigger(Partners::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
+					throw new Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
 				}
 			break;
 		}

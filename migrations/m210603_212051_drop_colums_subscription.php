@@ -2,11 +2,12 @@
 declare(strict_types = 1);
 
 use app\models\subscriptions\Subscriptions;
+use app\components\db\Migration;
 
 /**
 * Class m210603_212051_drop_colums_subscription
 */
-class m210603_212051_drop_colums_subscription extends \app\components\db\Migration
+class m210603_212051_drop_colums_subscription extends Migration
 {
 	/**
 	 * {@inheritdoc}
