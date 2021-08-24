@@ -22,7 +22,7 @@ class ServerDateTimeField extends BaseField
 		parent::__construct([
 			'name' => 'serverDateTime',
 			'description' 	=> 'Серверное время в формате ' . DateTimeType::DEFAULT_FORMAT,
-			'type' => DateTimeType::dateTime(),
+			'type' => DateTimeType::type(),
 			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): DateTimeImmutable
 				=> DateTimeType::parseString(date(DateTimeType::DEFAULT_FORMAT))
 		]);

@@ -73,7 +73,7 @@ class DateTimeType extends ScalarType
 	/**
 	 * @return ScalarType
 	 */
-	public static function dateTime(): ScalarType
+	public static function type(): ScalarType
 	{
 		return static::$dateTimeType ?? (static::$dateTimeType = new DateTimeType());
 	}

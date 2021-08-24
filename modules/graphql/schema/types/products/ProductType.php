@@ -47,12 +47,12 @@ class ProductType extends BaseObjectType
 					'description' => 'Полное описание',
 				],
 				'start_date' => [
-					'type' => DateTimeType::dateTime(),
+					'type' => DateTimeType::type(),
 					'description' => 'Начало действия Y-m-d H:i:s',
 					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->start_date)
 				],
 				'end_date' => [
-					'type' => DateTimeType::dateTime(),
+					'type' => DateTimeType::type(),
 					'description' => 'Конец действия Y-m-d H:i:s',
 					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->end_date)
 				],
@@ -89,7 +89,7 @@ class ProductType extends BaseObjectType
 					'resolve' => fn(Products $product): int => $product->relatedInstance->trial_count ?? 0,
 				],
 				'created_at' => [
-					'type' => DateTimeType::dateTime(),
+					'type' => DateTimeType::type(),
 					'description' => 'Дата создания Y-m-d H:i:s',
 					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->created_at),
 				],
