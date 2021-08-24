@@ -6,6 +6,7 @@ namespace app\modules\graphql\components;
 use app\components\helpers\ArrayHelper;
 use app\modules\graphql\interfaces\ResolveInterface;
 use GraphQL\Type\Definition\FieldDefinition;
+use GraphQL\Type\Definition\ResolveInfo;
 use Throwable;
 use yii\base\InvalidConfigException;
 use yii\di\NotInstantiableException;
@@ -21,6 +22,17 @@ abstract class BaseField extends FieldDefinition implements ResolveInterface
 	 * @var string[] Массив подгруженных классов.
 	 */
 	private static array $_fieldsMap = [];
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function __construct(array $config) {
+		if (!isset($config['resolve'])) {/*проверять существование метода не нужно, он явно обозначен интерфейсом*/
+			$config['resolve'] = static fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve($root, $args, $context, $resolveInfo);
+		}
+
+		parent::__construct($config);
+	}
 
 	/**
 	 * Мы не можем инстанцировать классы полей вне скоупа FieldDefinition, поскольку FieldDefinition::__construct()
