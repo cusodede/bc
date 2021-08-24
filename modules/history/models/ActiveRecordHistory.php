@@ -42,6 +42,15 @@ use yii\db\ActiveRecord;
  */
 class ActiveRecordHistory extends History
 {
+	/**
+	 * @var array|null Хранилка десериализованных старых атрибутов
+	 */
+	protected ?array $_oldAttributes = null;
+
+	/**
+	 * @var array|null Хранилка десериализованных новых атрибутов
+	 */
+	protected ?array $_newAttributes = null;
 
 	/**
 	 * @var null|array the functions used to serialize and unserialize values. Defaults to null, meaning
@@ -602,7 +611,7 @@ class ActiveRecordHistory extends History
 	}
 
 	/**
-	 * @param string $value
+	 * @param string|resource $value
 	 * @return mixed
 	 */
 	protected function unserialize(mixed $value)
@@ -621,7 +630,8 @@ class ActiveRecordHistory extends History
 	 */
 	public function getAttributesOld()
 	{
-		return $this->unserialize($this->old_attributes);
+		if (null === $this->_oldAttributes) $this->_oldAttributes = $this->unserialize($this->old_attributes);
+		return $this->_oldAttributes;
 	}
 
 	/**
@@ -630,6 +640,7 @@ class ActiveRecordHistory extends History
 	public function setAttributesOld(mixed $attributesOld): void
 	{
 		$this->old_attributes = $this->serialize($attributesOld);
+		$this->_oldAttributes = null;
 	}
 
 	/**
@@ -637,7 +648,8 @@ class ActiveRecordHistory extends History
 	 */
 	public function getAttributesNew()
 	{
-		return $this->unserialize($this->new_attributes);
+		if (null === $this->_newAttributes) $this->_newAttributes = $this->unserialize($this->new_attributes);
+		return $this->_newAttributes;
 	}
 
 	/**
@@ -646,6 +658,7 @@ class ActiveRecordHistory extends History
 	public function setAttributesNew(mixed $attributesNew): void
 	{
 		$this->new_attributes = $this->serialize($attributesNew);
+		$this->_newAttributes = null;
 	}
 
 }
