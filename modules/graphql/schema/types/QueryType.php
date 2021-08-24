@@ -7,6 +7,7 @@ use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\partners\PartnersType;
 use app\modules\graphql\schema\types\products\ProductsType;
 use app\modules\graphql\schema\types\services\ServicesType;
+use app\modules\graphql\schema\types\subscriptions\SubscriptionsType;
 use app\modules\graphql\schema\types\users\UsersType;
 
 /**
@@ -21,10 +22,11 @@ class QueryType extends BaseObjectType
 	public function __construct()
 	{
 		$schema = [
-			'services' 	=> ServicesType::root(),
-			'users' 	=> UsersType::root(),
-			'partners' 	=> PartnersType::root(),
-			'products' 	=> ProductsType::root(),
+			'services' 			=> ServicesType::root(),
+			'users' 			=> UsersType::root(),
+			'partners' 			=> PartnersType::root(),
+			'products' 			=> ProductsType::root(),
+			'subscriptions' 	=> SubscriptionsType::root(),
 		];
 
 		ksort($schema, SORT_REGULAR);

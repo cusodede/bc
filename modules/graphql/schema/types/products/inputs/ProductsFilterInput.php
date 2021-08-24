@@ -12,6 +12,9 @@ use GraphQL\Type\Definition\Type;
  */
 class ProductsFilterInput extends InputObjectType
 {
+	/**
+	 * @inheritdoc
+	 */
 	public function __construct()
 	{
 		parent::__construct([
