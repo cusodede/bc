@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -28,7 +28,7 @@ $this->title = 'Продукты абонента';
 		[
 			'attribute' => 'name',
 			'format' => 'raw',
-			'value' => function($model) {
+			'value' => static function($model) {
 				return Html::a($model->name, ['products/journal']);
 			},
 		],
@@ -39,5 +39,5 @@ $this->title = 'Продукты абонента';
 			'format' => ['date', 'php:d.m.Y H:i'],
 		],
 	]
-]); ?>
+]) ?>
 <?php Modal::end(); ?>

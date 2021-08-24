@@ -7,6 +7,7 @@ use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
 use app\models\products\Products;
+use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
@@ -17,17 +18,12 @@ use yii\web\NotFoundHttpException;
  */
 class AbonentsController extends DefaultController
 {
-
-	/**
-	 * @var string
-	 */
 	public string $modelSearchClass = AbonentsSearch::class;
-
-	/**
-	 * @var string
-	 */
 	public string $modelClass = Abonents::class;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getViewPath(): string
 	{
 		return '@app/views/abonents';
@@ -35,17 +31,18 @@ class AbonentsController extends DefaultController
 
 	/**
 	 * Показать все продукты абонента.
-	 * @param int $id
-	 * @return string
-	 * @throws NotFoundHttpException
+	 * @throws NotFoundHttpException|InvalidConfigException
 	 */
-	public function actionViewProducts($id): string
+	public function actionViewProducts(int $id): string
 	{
-		if (null === $model = $this->model::findOne($id)) {
+		$model = $this->model::findOne($id);
+		if ($model === null) {
 			throw new NotFoundHttpException();
 		}
 		$query = Products::find()
-			->where(['IN', 'id', ArrayHelper::getColumn($model->relatedAbonentsToProducts, 'product_id')]);
+			->where(['IN', 'id', ArrayHelper::getColumn(
+				$model->relatedAbonentsToProducts, 'product_id'
+			)]);
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 		$dataProvider->setSort([
