@@ -6,9 +6,7 @@ namespace app\components\db;
 use yii\db\Migration as VendorMigration;
 
 /**
- * Расширение функционала \yii\db\Migration для поддер
- *
- *
+ * Расширение функционала \yii\db\Migration для поддержки pgsql
  */
 class Migration extends VendorMigration
 {
@@ -21,9 +19,6 @@ class Migration extends VendorMigration
 	{
 		if ('pgsql' === $this->db->driverName) {
 			$this->execute("CREATE TRIGGER update_updated_at  BEFORE UPDATE ON {$tableName} FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column()");
-//			if (false === (bool)$this->db->createCommand("select trigger_name from information_schema.triggers where event_object_table='{$tableName}' and trigger_name = 'update_updated_at'")->queryScalar()) {
-//				throw new Exception("Не удалось создать триггер для таблицы {$tableName}");
-//			}
 		}
 	}
 }
