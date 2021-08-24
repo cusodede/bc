@@ -6,6 +6,7 @@ namespace app\modules\graphql\schema\types\subscriptions;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\subscriptions\fields\SubscriptionProfileField;
 use app\modules\graphql\schema\types\subscriptions\fields\SubscriptionsListFieldListField;
+use app\modules\graphql\schema\types\subscriptions\fields\SubscriptionsTrialUnitsListField;
 
 /**
  * Class SubscriptionsType
@@ -21,8 +22,9 @@ class SubscriptionsType extends BaseObjectType
 		parent::__construct([
 			'description' => 'Подписки',
 			'fields' => [
-				'subscriptionList' 		=> SubscriptionsListFieldListField::field(),
-			 	'subscriptionProfile' 	=> SubscriptionProfileField::field(),
+				'subscriptionList' 				=> SubscriptionsListFieldListField::field(),
+			 	'subscriptionProfile' 			=> SubscriptionProfileField::field(),
+				'subscriptionTrialUnitsList'	=> SubscriptionsTrialUnitsListField::field(),
 			]
 		]);
 	}
