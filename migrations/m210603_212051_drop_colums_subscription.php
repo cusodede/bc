@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\models\subscriptions\Subscriptions;
 use app\components\db\Migration;
+use \yii\db\Exception;
 
 /**
 * Class m210603_212051_drop_colums_subscription
@@ -38,7 +39,7 @@ class m210603_212051_drop_colums_subscription extends Migration
 			case 'pgsql':
 				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
 				if (!$this->createOnUpdateTrigger(Subscriptions::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Subscriptions::tableName());
+					throw new Exception('Не удалось создать триггер для таблицы ' . Subscriptions::tableName());
 				}
 			break;
 		}

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
-use yii\db\Migration;
 use app\models\partners\Partners;
 use yii\db\Exception;
+use \app\components\db\Migration;
 
 /**
 * Class m210517_054125_add_to_partners
 */
-class m210517_054125_add_to_partners extends \app\components\db\Migration
+class m210517_054125_add_to_partners extends Migration
 {
 	/**
 	 * {@inheritdoc}

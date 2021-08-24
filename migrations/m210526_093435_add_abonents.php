@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
 use app\models\abonents\Abonents;
-
+use \yii\db\Exception;
+use \app\components\db\Migration;
 /**
 * Class m210526_093435_add_abonents
 */
-class m210526_093435_add_abonents extends \app\components\db\Migration
+class m210526_093435_add_abonents extends Migration
 {
 	/**
 	 * {@inheritdoc}
@@ -29,7 +30,7 @@ class m210526_093435_add_abonents extends \app\components\db\Migration
 			break;
 			case 'pgsql':
 				if (!$this->createOnUpdateTrigger(Abonents::tableName())) {
-					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Abonents::tableName());
+					throw new Exception('Не удалось создать триггер для таблицы ' . Abonents::tableName());
 				}
 			break;
 		}
