@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\types\products;
 
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\products\fields\ProductsListField;
+use app\modules\graphql\schema\types\products\fields\ProductsPaymentPeriodsListField;
 
 /**
  * Class ProductsType
@@ -20,7 +21,8 @@ class ProductsType extends BaseObjectType
 		parent::__construct([
 			'description' => 'Продукты',
 			'fields' => [
-				'productsList' => ProductsListField::field(),
+				'productsList' 				=> ProductsListField::field(),
+				'productPaymentPeriodsList' => ProductsPaymentPeriodsListField::field(),
 			]
 		]);
 	}

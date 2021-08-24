@@ -1,0 +1,61 @@
+<?php
+declare(strict_types = 1);
+
+namespace app\modules\graphql\schema\types\products\fields;
+
+use app\components\helpers\ArrayHelper;
+use app\models\products\EnumProductsPaymentPeriods;
+use app\modules\graphql\components\BaseField;
+use app\modules\graphql\schema\types\products\inputs\ProductsPaymentPeriodsFilterInput;
+use app\modules\graphql\schema\types\products\ProductPaymentPeriodType;
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
+use Throwable;
+
+/**
+ * Class ProductsPaymentPeriodsListField
+ * @package app\modules\graphql\schema\types\products\fields
+ */
+class ProductsPaymentPeriodsListField extends BaseField
+{
+	/**
+	 * @inheritdoc
+	 */
+	protected function __construct()
+	{
+		parent::__construct([
+			'name' => 'productPaymentPeriodsList',
+			'type' => Type::listOf(ProductPaymentPeriodType::type()),
+			'description' => 'Список периодов списания, у продуктов',
+			'args' => [
+				'filters' => [
+					'type' => new ProductsPaymentPeriodsFilterInput(),
+				],
+			],
+			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): ?array => static::resolve(
+				$root, $args, $context, $resolveInfo
+			)
+		]);
+	}
+
+	/**
+	 * @inheritdoc
+	 * @throws Throwable
+	 */
+	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): ?array
+	{
+		$attributeId = static::filterValue($args, 'id');
+		$enumData = EnumProductsPaymentPeriods::mapData();
+
+		if (null === $attributeId) {
+			return array_map(
+				static fn(string $name, int $id): array => compact('id', 'name'),
+				$enumData,
+				array_keys($enumData)
+			);
+		}
+
+		$attributeName = ArrayHelper::getValue($enumData, $attributeId);
+		return null !== $attributeName ? [['id' => $attributeId, 'name' => $attributeName]] : null;
+	}
+}

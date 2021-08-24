@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\products;
 
+use app\components\helpers\ArrayHelper;
 use app\models\partners\Partners;
+use app\models\products\EnumProductsPaymentPeriods;
 use app\models\products\Products;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\definition\DateTimeType;
@@ -53,6 +55,14 @@ class ProductType extends BaseObjectType
 					'type' => DateTimeType::dateTime(),
 					'description' => 'Конец действия Y-m-d H:i:s',
 					'resolve' => fn(Products $products): ?DateTimeImmutable => DateTimeType::parseString($products->end_date)
+				],
+				'payment_period' => [
+					'type' => ProductPaymentPeriodType::type(),
+					'description' => 'Периодичность списания',
+					'resolve' => function(Products $products): ?array {
+						$condition = null === ($name = ArrayHelper::getValue(EnumProductsPaymentPeriods::mapData(), $products->payment_period));
+						return $condition ? null : ['id' => $products->payment_period, 'name' => $name];
+					},
 				],
 				'type_id' => [
 					'type' => Type::int(),
