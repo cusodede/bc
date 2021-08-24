@@ -28,6 +28,7 @@ class m210521_060350_add_subscription extends \app\components\db\Migration
 				$this->alterColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления подписки'));
 			break;
 			case 'pgsql':
+				$this->alterColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
 				if (!$this->createOnUpdateTrigger(Subscriptions::tableName())) {
 					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
 				}

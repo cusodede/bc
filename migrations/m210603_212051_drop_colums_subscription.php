@@ -35,7 +35,7 @@ class m210603_212051_drop_colums_subscription extends \app\components\db\Migrati
 				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления подписки'));
 			break;
 			case 'pgsql':
-				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->notNull()->comment('Дата обновления подписки'));
+				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
 				if (!$this->createOnUpdateTrigger(Subscriptions::tableName())) {
 					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Subscriptions::tableName());
 				}

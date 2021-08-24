@@ -32,7 +32,7 @@ SQL;
 				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
 			break;
 			case 'pgsql':
-				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->notNull()->comment('Дата обновления партнера'));
+				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления партнера'));
 				if (!$this->createOnUpdateTrigger(Partners::tableName())) {
 					throw new \yii\db\Exception('Не удалось создать триггер для таблицы ' . Partners::tableName());
 				}
