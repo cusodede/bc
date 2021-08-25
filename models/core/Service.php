@@ -21,6 +21,7 @@ class Service extends Model {
 	 * Очистка всех справочников.
 	 * Всё в ноль.
 	 * После очистки создаётся чистый административный аккаунт.
+	 * @noinspection BadExceptionsProcessingInspection
 	 */
 	public static function ResetDB():bool {
 		$connection = Yii::$app->db;
@@ -39,7 +40,7 @@ class Service extends Model {
 			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;");
 			$connection->createCommand("INSERT INTO sys_users (id, username, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', 'admin', NULL, 'admin@localhost.ru', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
 			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;")->execute();
-		} /** @noinspection BadExceptionsProcessingInspection */ /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
+		} /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
 			$transaction->rollBack();
 			return false;
 		}
