@@ -6,6 +6,9 @@ query IntrospectionQuery {
 		mutationType {
 			name
 		}
+		subscriptionType {
+			name
+		}
 		types {
 			...FullType
 		}
