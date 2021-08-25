@@ -63,7 +63,7 @@ class AbonentsSearch extends Abonents
 	public function searchProductsToAbonent(array $params): ActiveDataProvider
 	{
 		$model = Abonents::findOne($params['id']);
-		if ($model === null) {
+		if (null === $model) {
 			throw new NotFoundHttpException();
 		}
 
