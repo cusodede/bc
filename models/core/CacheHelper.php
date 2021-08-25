@@ -8,7 +8,8 @@ use Throwable;
 /**
  * Trait CacheHelper
  */
-trait CacheHelper {
+trait CacheHelper
+{
 
 	/**
 	 * По атрибутам функции вычисляет её "подпись" для ключа кеша.
@@ -16,7 +17,8 @@ trait CacheHelper {
 	 * @param array $attributes Массив дополнительных аргументов, для включения в подпись
 	 * @return string
 	 */
-	public static function MethodParametersSignature(array $parameters, array $attributes = []):string {
+	public static function MethodParametersSignature(array $parameters, array $attributes = []): string
+	{
 		return serialize($parameters + $attributes);
 	}
 
@@ -41,7 +43,8 @@ trait CacheHelper {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public static function MethodSignature(string $method = __METHOD__, array $parameters = [], array $attributes = []):string {
+	public static function MethodSignature(string $method = __METHOD__, array $parameters = [], array $attributes = []): string
+	{
 		$parametersSignature = self::MethodParametersSignature($parameters, $attributes);
 		return "{$method}({$parametersSignature})";
 	}

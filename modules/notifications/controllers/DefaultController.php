@@ -14,12 +14,14 @@ use yii\web\Response;
 /**
  * Class DefaultController
  */
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			[
 				'class' => ContentNegotiator::class,
@@ -38,7 +40,8 @@ class DefaultController extends Controller {
 	 * @return string[]
 	 * @throws Throwable
 	 */
-	public function actionAcknowledge():array {
+	public function actionAcknowledge(): array
+	{
 		if (null !== $notification = Notifications::findOne(Yii::$app->request->post('id'))) {
 			Notifications::Acknowledge($notification->object_id);
 			return ['output' => 'ok', 'message' => ''];

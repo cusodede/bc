@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\data\MutationTypes;
-use app\modules\graphql\data\QueryTypes;
+use app\modules\graphql\schema\types\MutationType;
+use app\modules\graphql\schema\types\QueryType;
 use cusodede\jwt\JwtHttpBearerAuth;
 use Exception;
 use GraphQL\Error\DebugFlag;
@@ -34,17 +34,17 @@ class ApiController extends ActiveController
 	{
 		return ArrayHelper::merge(parent::behaviors(), [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class'  => JwtHttpBearerAuth::class,
+				'class' => JwtHttpBearerAuth::class,
 				'except' => ['schema'],
 			],
 		]);
@@ -65,14 +65,14 @@ class ApiController extends ActiveController
 	 */
 	public function actionIndex(): array
 	{
-		$query = Yii::$app->request->get('query', Yii::$app->request->post('query'));
+		$query     = Yii::$app->request->get('query', Yii::$app->request->post('query'));
 		$variables = Yii::$app->request->get('variables', Yii::$app->request->post('variables'));
 		$operation = Yii::$app->request->get('operation', Yii::$app->request->post('operation'));
 
 		if (null === $query) {
-			$rawInput = file_get_contents('php://input');
-			$input = Json::decode($rawInput);
-			$query = ArrayHelper::getValue($input, 'query');
+			$rawInput  = file_get_contents('php://input');
+			$input     = Json::decode($rawInput);
+			$query     = ArrayHelper::getValue($input, 'query');
 			$variables = ArrayHelper::getValue($input, 'variables', []);
 			$operation = ArrayHelper::getValue($input, 'operation');
 		}
@@ -87,8 +87,8 @@ class ApiController extends ActiveController
 
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => QueryTypes::query(),
-				'mutation' => MutationTypes::mutation(),
+				'query' => QueryType::type(),
+				'mutation' => MutationType::type(),
 			]),
 			$query,
 			null,
@@ -105,15 +105,17 @@ class ApiController extends ActiveController
 	 * Отрубаем авторизацию и не даём выполнять никаких действий, просто отдаём схему.
 	 * В schemaQuery, hardcode на получение схемы.
 	 * Можно сделать лучше, но пока я не знаю как решить эту проблему.
+	 *
 	 * @return array
+	 * @throws Throwable
 	 */
 	public function actionSchema(): array
 	{
 		$query = file_get_contents(__DIR__ . '/../schemaQuery');
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => QueryTypes::query(),
-				'mutation' => MutationTypes::mutation(),
+				'query' => QueryType::type(),
+				'mutation' => MutationType::type(),
 			]),
 			$query,
 		)->toArray();

@@ -22,18 +22,21 @@ use yii\db\ActiveRecord;
  * @property string|null $operation_identifier Уникальный идентификатор (обычно клиентский csrf), связывающий несколько последовательных изменений, происходящих в одном событии
  * @property int|null $delegate Опционально: идентификатор "перекрывающего" пользователя, если поддерживается приложением
  */
-class History extends ActiveRecord {
+class History extends ActiveRecord
+{
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return ArrayHelper::getValue(ModuleHelper::params(HistoryModule::class), 'tableName', 'sys_history');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['user', 'model_key', 'delegate'], 'integer'],
 			[['old_attributes', 'new_attributes'], 'string'],
@@ -44,7 +47,8 @@ class History extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'at' => 'Время события',

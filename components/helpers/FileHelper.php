@@ -48,7 +48,7 @@ class FileHelper extends YiiFileHelper
 		//имеет смысл предусмотреть приоритизацию расширений.
 		$extension = self::findPreferredExtension($extension);
 
-		$name = uniqid((string) mt_rand(), true);
+		$name = uniqid((string)mt_rand(), true);
 		$path = self::getTmpDir() . DIRECTORY_SEPARATOR . $name . ($extension ? ".$extension" : '');
 
 		if ($path && ($fp = fopen($path, 'wb+')) && fwrite($fp, $data) && fclose($fp)) {

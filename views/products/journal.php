@@ -22,28 +22,28 @@ use yii\data\ActiveDataProvider;
 use yii\web\View;
 use app\models\products\Products;
 
-$this->title = 'История подключений';
+$this->title                   = 'История подключений';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <?= GridConfig::widget([
-	'id'   => 'products-journal__index-grid',
+	'id' => 'products-journal__index-grid',
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => ['heading' => '',],
-		'showOnEmpty'      => true,
-		'toolbar'          => false,
-		'export'           => false,
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => ['heading' => '',],
+		'showOnEmpty' => true,
+		'toolbar' => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			'id',
 			[
 				'attribute' => 'searchAbonentPhone',
-				'label'     => 'Телефон абонента',
-				'content'   => static function(ProductsJournal $model) {
+				'label' => 'Телефон абонента',
+				'content' => static function(ProductsJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedAbonent->phone,
 						AbonentsController::to('view', ['id' => $model->relatedAbonent->id])
@@ -52,9 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute' => 'searchProductId',
-				'label'     => 'Наименование продукта',
-				'filter'    => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
-				'content'   => static function(ProductsJournal $model) {
+				'label' => 'Наименование продукта',
+				'filter' => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),
+				'content' => static function(ProductsJournal $model) {
 					return Html::ajaxModalLink(
 						$model->relatedProduct->name,
 						ProductsController::to('view', ['id' => $model->relatedProduct->id])
@@ -63,26 +63,26 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute' => 'searchProductTypeId',
-				'label'     => 'Тип продукта',
-				'filter'    => EnumProductsTypes::mapData(),
-				'value'   	=> 'relatedProduct.typeDesc'
+				'label' => 'Тип продукта',
+				'filter' => EnumProductsTypes::mapData(),
+				'value' => 'relatedProduct.typeDesc'
 			],
 			[
 				'attribute' => 'relatedProduct.paymentPeriodDesc',
-				'label'     => 'Тип списания'
+				'label' => 'Тип списания'
 			],
 			[
 				'attribute' => 'status_id',
-				'filter'    => EnumProductsStatuses::mapData(),
-				'content'   => static fn(ProductsJournal $model) => EnumProductsStatuses::getBadge($model->status_id)
+				'filter' => EnumProductsStatuses::mapData(),
+				'content' => static fn(ProductsJournal $model) => EnumProductsStatuses::getBadge($model->status_id)
 			],
 			[
 				'attribute' => 'expire_date',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
 				'attribute' => 'created_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

@@ -13,6 +13,7 @@ use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use cusodede\multiselect\MultiSelectListBox;
 use kartik\form\ActiveForm;
+use kartik\switchinput\SwitchInput;
 use pozitronik\helpers\ArrayHelper;
 use yii\bootstrap4\Html;
 use yii\web\View;
@@ -31,6 +32,18 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
+		<?= $form->field($model, 'default')->widget(SwitchInput::class, [
+			'tristate' => false,
+			'pluginOptions' => [
+				'size' => 'mini',
+				'onText' => '<i class="fa fa-toggle-on"></i>',
+				'offText' => '<i class="fa fa-toggle-off"</i>'
+			],
+		]) ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<div class="form-group">
 			<label class="control-label" for="search-permission">Поиск</label>
 			<?= Html::input(
@@ -45,8 +58,8 @@ use yii\web\View;
 <div class="row">
 	<div class="col-md-12">
 		<?= ([] === $permissions = Permissions::find()->all())/*Можно назначить только права из БД*/
-			?Html::a('Сначала создайте доступы', PermissionsController::to('index'), ['class' => 'btn btn-warning'])
-			:$form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
+			? Html::a('Сначала создайте доступы', PermissionsController::to('index'), ['class' => 'btn btn-warning'])
+			: $form->field($model, 'relatedPermissions')->widget(MultiSelectListBox::class, [
 				'options' => [
 					'multiple' => true,
 				],
@@ -56,9 +69,9 @@ use yii\web\View;
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<?= ([] === $permissionsCollections = PermissionsCollections::find()->where(null === $model->id?'1 = 1':['<>', 'id', $model->id])->all())/*Проверяем, есть ли другие коллекции, кроме этой*/
-			?Html::a('Сначала создайте другие группы доступов', PermissionsCollectionsController::to('index'), ['class' => 'btn btn-warning'])
-			:$form->field($model, 'relatedSlavePermissionsCollections')->widget(MultiSelectListBox::class, [
+		<?= ([] === $permissionsCollections = PermissionsCollections::find()->where(null === $model->id ? '1 = 1' : ['<>', 'id', $model->id])->all())/*Проверяем, есть ли другие коллекции, кроме этой*/
+			? Html::a('Сначала создайте другие группы доступов', PermissionsCollectionsController::to('index'), ['class' => 'btn btn-warning'])
+			: $form->field($model, 'relatedSlavePermissionsCollections')->widget(MultiSelectListBox::class, [
 				'options' => [
 					'multiple' => true,
 				],

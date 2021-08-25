@@ -17,7 +17,8 @@ namespace app\modules\history\models;
  *
  * @property TimelineEntry $timelineEntry
  */
-interface HistoryEventInterface {
+interface HistoryEventInterface
+{
 	public const EVENT_CREATED = 0;
 	public const EVENT_CHANGED = 1;
 	public const EVENT_DELETED = 2;

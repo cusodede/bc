@@ -73,13 +73,17 @@ abstract class BaseSubscriptionHandler extends Component
 	 * Для различных полезных штук перед непосредственным запросом на подписку
 	 * (инициализация переиспользуемых параметров, сброс состояния при изменении входных параметров, etc.).
 	 */
-	protected function beforeSubscribe(): void {}
+	protected function beforeSubscribe(): void
+	{
+	}
 
 	/**
 	 * Реализация отключения подписки по продукту на стороне партнёра.
 	 * DEFAULT: ничего не отправляем партнеру, подписка просто протухнет, если мы ее принудительно не обновим.
 	 */
-	protected function disableOnPartner(): void {}
+	protected function disableOnPartner(): void
+	{
+	}
 
 	/**
 	 * Создание обработчика для управления подключением/отключением подписок на продукты.

@@ -11,14 +11,16 @@ use yii\web\YiiAsset;
  * Class LoginAssetAsset
  * @package app\assets
  */
-class LoginAsset extends AssetBundle {
+class LoginAsset extends AssetBundle
+{
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function init():void {
-		$this->sourcePath = __DIR__.'/assets/login/';
-		$this->css = [
+	public function init(): void
+	{
+		$this->sourcePath = __DIR__ . '/assets/login/';
+		$this->css        = [
 			'css/login.css'
 		];
 

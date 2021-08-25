@@ -30,16 +30,16 @@ ModalHelperAsset::register($this);
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['запись', 'записи', 'записей']).")":" (нет записей)"),
+			'heading' => $this->title . (($dataProvider->totalCount > 0) ? " (" . Utils::pluralForm($dataProvider->totalCount, ['запись', 'записи', 'записей']) . ")" : " (нет записей)"),
 		],
-		'summary' => null !== $searchModel?Html::a('Новая запись', $controller::to('create'), [
+		'summary' => null !== $searchModel ? Html::a('Новая запись', $controller::to('create'), [
 			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
+			'onclick' => new JsExpression("AjaxModal('" . $controller::to('create') . "', '{$modelName}-modal-create-new');event.preventDefault();")
+		]) : null,
 		'showOnEmpty' => true,
 		'emptyText' => Html::a('Новая запись', $controller::to('create'), [
 			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
+			'onclick' => new JsExpression("AjaxModal('" . $controller::to('create') . "', '{$modelName}-modal-create-new');event.preventDefault();")
 		]),
 		'export' => false,
 		'resizableColumns' => true,

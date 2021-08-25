@@ -18,20 +18,23 @@ use yii\db\ActiveRecord;
  * @property null|PermissionsCollections $relatedMasterPermissionsCollections Связанная базовая группа доступов
  * @property null|PermissionsCollections $relatedSlavePermissionsCollections Связанная включённая группа доступов
  */
-class RelPermissionsCollectionsToPermissionsCollections extends ActiveRecord {
+class RelPermissionsCollectionsToPermissionsCollections extends ActiveRecord
+{
 	use RelationsTrait;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'sys_relation_permissions_collections_to_permissions_collections';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['master_id', 'slave_id'], 'required'],
 			[['master_id', 'slave_id'], 'integer'],
@@ -42,7 +45,8 @@ class RelPermissionsCollectionsToPermissionsCollections extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'master_id' => 'Master collection ID',
@@ -53,14 +57,16 @@ class RelPermissionsCollectionsToPermissionsCollections extends ActiveRecord {
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedMasterPermissionsCollections():ActiveQuery {
+	public function getRelatedMasterPermissionsCollections(): ActiveQuery
+	{
 		return $this->hasOne(PermissionsCollections::class, ['id' => 'master_id']);
 	}
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedSlavePermissionsCollections():ActiveQuery {
+	public function getRelatedSlavePermissionsCollections(): ActiveQuery
+	{
 		return $this->hasOne(PermissionsCollections::class, ['id' => 'slave_id']);
 	}
 

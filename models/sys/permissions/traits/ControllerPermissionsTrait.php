@@ -13,7 +13,8 @@ use yii\web\NotFoundHttpException;
  * Управление правами доступа для контроллера
  * Trait ControllerPermissionsTrait
  */
-trait ControllerPermissionsTrait {
+trait ControllerPermissionsTrait
+{
 	use ControllerTrait;
 
 	/**
@@ -24,8 +25,9 @@ trait ControllerPermissionsTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public static function hasPermission(?string $actionId = null, ?int $userId = null, ?string $moduleId = null):bool {
-		if (null === ($user = null === $userId?Users::Current():Users::findOne($userId))) {
+	public static function hasPermission(?string $actionId = null, ?int $userId = null, ?string $moduleId = null): bool
+	{
+		if (null === ($user = null === $userId ? Users::Current() : Users::findOne($userId))) {
 			throw new NotFoundHttpException();
 		}
 

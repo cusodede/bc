@@ -14,7 +14,8 @@ use yii\web\ForbiddenHttpException;
  * Class PermissionFilter
  * @property callable $denyCallback;
  */
-class PermissionFilter extends ActionFilter {
+class PermissionFilter extends ActionFilter
+{
 	/**
 	 * @var callable a callback that will be called if the access should be denied
 	 * to the current user. This is the case when either no rule matches, or a rule with
@@ -36,7 +37,8 @@ class PermissionFilter extends ActionFilter {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function beforeAction($action):bool {
+	public function beforeAction($action): bool
+	{
 		$user = Users::Current();
 		if (true === $user->hasActionPermission($action)) return true;
 
@@ -51,7 +53,8 @@ class PermissionFilter extends ActionFilter {
 	/**
 	 * @throws ForbiddenHttpException if the user is already logged in or in case of detached User component.
 	 */
-	protected function denyAccess():void {
+	protected function denyAccess(): void
+	{
 		throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
 	}
 

@@ -11,14 +11,16 @@ use app\assets\AppAsset;
  * Class SearchWidgetAssets
  * @package app\components\search
  */
-class SearchWidgetAssets extends AssetBundle {
+class SearchWidgetAssets extends AssetBundle
+{
 	/**
 	 * @inheritdoc
 	 */
-	public function init():void {
-		$this->depends = [AppAsset::class];
-		$this->sourcePath = __DIR__.'/assets';
-		$this->css = ['css/search.css'];
+	public function init(): void
+	{
+		$this->depends    = [AppAsset::class];
+		$this->sourcePath = __DIR__ . '/assets';
+		$this->css        = ['css/search.css'];
 //		$this->js = ['js/search.js'];
 		$this->publishOptions = [
 			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)

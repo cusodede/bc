@@ -15,19 +15,22 @@ use yii\db\ActiveRecord;
  * @property int $status Статус
  * @property int $deleted
  */
-class PhonesAR extends ActiveRecord {
+class PhonesAR extends ActiveRecord
+{
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function tableName():string {
+	public static function tableName(): string
+	{
 		return 'phones';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['phone'], 'required'],
 			[['create_date'], 'safe'],
@@ -40,7 +43,8 @@ class PhonesAR extends ActiveRecord {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'id' => 'ID',
 			'phone' => 'Телефон',

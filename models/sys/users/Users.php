@@ -35,7 +35,8 @@ use yii\web\IdentityInterface;
  * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
  * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
  */
-class Users extends ActiveRecordUsers implements IdentityInterface {
+class Users extends ActiveRecordUsers implements IdentityInterface
+{
 	use UsersPermissionsTrait;
 	use FileStorageTrait;
 
@@ -51,7 +52,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public ?string $identifiedToken = null;
 
-	public function rules():array {
+	public function rules(): array
+	{
 		return array_merge(parent::rules(), [
 			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
 			[['email'], 'email'],
@@ -62,7 +64,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return array_merge(parent::attributeLabels(), [
 			'relatedPermissions' => 'Прямые разрешения',
 			'relatedPermissionsCollections' => 'Группы разрешений',
@@ -73,7 +76,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @return static
 	 * @throws ForbiddenHttpException
 	 */
-	public static function Current():self {
+	public static function Current(): self
+	{
 		if (null === $user = Yii::$app->user->identity) {
 			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
@@ -97,7 +101,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $login
 	 * @return Users|null
 	 */
-	public static function findByLogin(string $login):?Users {
+	public static function findByLogin(string $login): ?Users
+	{
 		return self::findOne(['login' => $login]);
 	}
 
@@ -105,7 +110,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $email
 	 * @return Users|null
 	 */
-	public static function findByEmail(string $email):?Users {
+	public static function findByEmail(string $email): ?Users
+	{
 		return self::findOne(['email' => $email]);
 	}
 
@@ -113,7 +119,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $restoreCode
 	 * @return Users|null
 	 */
-	public static function findByRestoreCode(string $restoreCode):?Users {
+	public static function findByRestoreCode(string $restoreCode): ?Users
+	{
 		return self::findOne(['restore_code' => $restoreCode]);
 	}
 
@@ -121,7 +128,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $phoneNumber
 	 * @return Users|null
 	 */
-	public static function findByPhoneNumber(string $phoneNumber):?Users {
+	public static function findByPhoneNumber(string $phoneNumber): ?Users
+	{
 		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) return null;
 		return self::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
 	}
@@ -129,7 +137,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public static function findIdentity($id) {
+	public static function findIdentity($id)
+	{
 		return static::findOne($id);
 	}
 
@@ -143,7 +152,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * or the identity is not in an active state (disabled, deleted, etc.)
 	 * @throws Exception
 	 */
-	public static function findIdentityByAccessToken($token, $type = null):?IdentityInterface {
+	public static function findIdentityByAccessToken($token, $type = null): ?IdentityInterface
+	{
 		/** @var static $user */
 		$user = static::find()
 			->joinWith('relatedUsersTokens rut')
@@ -159,7 +169,8 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @return string
 	 */
-	public static function generateSalt():string {
+	public static function generateSalt(): string
+	{
 		return sha1(uniqid((string)mt_rand(), true));
 	}
 
@@ -167,16 +178,18 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param null|string $password
 	 * @return string|null
 	 */
-	private function doSalt(?string $password):?string {
-		return null === $password?null:sha1($password.$this->salt);
+	private function doSalt(?string $password): ?string
+	{
+		return null === $password ? null : sha1($password . $this->salt);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function beforeValidate():bool {
+	public function beforeValidate(): bool
+	{
 		if ($this->isNewRecord) {
-			$this->password = $this->password??self::DEFAULT_PASSWORD;
+			$this->password = $this->password ?? self::DEFAULT_PASSWORD;
 			/*Если пользователь был создан админом без пароля, то ставим флаг принудительной смены пароля*/
 			$this->is_pwd_outdated = $this->password === self::DEFAULT_PASSWORD;
 		}
@@ -206,15 +219,17 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @return string
 	 * todo: unused
 	 */
-	public function getAuthKey():string {
-		return md5($this->id.md5($this->login));
+	public function getAuthKey(): string
+	{
+		return md5($this->id . md5($this->login));
 	}
 
 	/**
 	 * Returns an ID that can uniquely identify a user identity.
 	 * @return int an ID that uniquely identifies a user identity.
 	 */
-	public function getId():int {
+	public function getId(): int
+	{
 		return $this->id;
 	}
 
@@ -225,14 +240,16 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @return bool whether the given auth key is valid.
 	 * @see getAuthKey()
 	 */
-	public function validateAuthKey($authKey):bool {
+	public function validateAuthKey($authKey): bool
+	{
 		return $this->authKey === $authKey;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function getIsSaltedPassword():bool {
+	public function getIsSaltedPassword(): bool
+	{
 		return null !== $this->salt;
 	}
 
@@ -242,32 +259,36 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @param string $password password to validate
 	 * @return bool if password provided is valid for current user
 	 */
-	public function validatePassword(string $password):bool {
-		return $this->isSaltedPassword?$this->doSalt($password) === $this->password:$this->password === $password;
+	public function validatePassword(string $password): bool
+	{
+		return $this->isSaltedPassword ? $this->doSalt($password) === $this->password : $this->password === $password;
 	}
 
 	/**
 	 * @return FileStorage|null
 	 * @throws Throwable
 	 */
-	public function getFileAvatar():?FileStorage {
-		return ([] === $files = $this->files(['avatar']))?null:ArrayHelper::getValue($files, 0);
+	public function getFileAvatar(): ?FileStorage
+	{
+		return ([] === $files = $this->files(['avatar'])) ? null : ArrayHelper::getValue($files, 0);
 	}
 
 	/**
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function getCurrentAvatarUrl():string {
+	public function getCurrentAvatarUrl(): string
+	{
 		return (null === $fileAvatar = $this->fileAvatar)
-			?PathHelper::PathToUrl(PathHelper::RelativePath(Yii::getAlias(self::DEFAULT_AVATAR_ALIAS_PATH), "@webroot"))
-			:PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
+			? PathHelper::PathToUrl(PathHelper::RelativePath(Yii::getAlias(self::DEFAULT_AVATAR_ALIAS_PATH), "@webroot"))
+			: PathHelper::PathToUrl(PathHelper::RelativePath($fileAvatar->path, "@webroot"));
 	}
 
 	/**
 	 * @return UsersTokens|null
 	 */
-	public function getRelatedUnpopularUserToken():?UsersTokens {
+	public function getRelatedUnpopularUserToken(): ?UsersTokens
+	{
 		$tokens = $this->relatedMainUsersTokens;
 		ArrayHelper::multisort($tokens, 'created');
 
@@ -277,14 +298,16 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	/**
 	 * @return UsersTokens[]
 	 */
-	public function getRelatedMainUsersTokens():array {
+	public function getRelatedMainUsersTokens(): array
+	{
 		return array_filter($this->relatedUsersTokens, static fn(UsersTokens $token) => null === $token->relatedParentToken);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRelatedUsersTokens():ActiveQuery {
+	public function getRelatedUsersTokens(): ActiveQuery
+	{
 		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
 	}
 

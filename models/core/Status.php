@@ -6,7 +6,8 @@ namespace app\models\core;
 /**
  * Class Status
  */
-class Status {
+class Status
+{
 	public const STATUS_SUCCESS = 'success';
 	public const STATUS_ERROR = 'error';
 	public const STATUS_OK = 200;

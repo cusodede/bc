@@ -31,7 +31,7 @@ use yii\web\Response;
 class AuthController extends YiiRestController
 {
 	public const GRANT_TYPE_PASSWORD = 'password';
-	public const GRANT_TYPE_REFRESH  = 'refresh_token';
+	public const GRANT_TYPE_REFRESH = 'refresh_token';
 
 	/**
 	 * {@inheritdoc}
@@ -41,7 +41,7 @@ class AuthController extends YiiRestController
 		parent::init();
 		$this->response->on(
 			Response::EVENT_BEFORE_SEND,
-			function () {
+			function() {
 				$this->response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
 			}
 		);
@@ -54,22 +54,22 @@ class AuthController extends YiiRestController
 	{
 		return [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON
 				]
 			],
 			'authComposite' => [
 				'class' => CompositeAuth::class,
-				'only'  => ['token'],
+				'only' => ['token'],
 				'authMethods' => [RefreshTokenAuth::class, HttpBasicPasswordAuth::class],
 			],
 			'authJsonToken' => [
 				'class' => JwtHttpBearerAuth::class,
-				'only'  => ['logout']
+				'only' => ['logout']
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs()
 			],
 			'access' => [

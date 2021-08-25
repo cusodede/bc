@@ -26,24 +26,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?= GridConfig::widget([
-	'id'   => "{$modelName}-index-grid",
+	'id' => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'toolbar'          => [
+		'toolbar' => [
 			['content' => Html::ajaxModalLink('Добавить партнера', $controller::to('create'), ['class' => ['btn btn-success']])]
 		],
-		'export'           => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			[
-				'class'    => ActionColumn::class,
+				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{edit}{view}</div>',
-				'buttons'  => [
+				'buttons' => [
 					'edit' => static function(string $url, Model $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
@@ -60,30 +60,30 @@ $this->params['breadcrumbs'][] = $this->title;
 			'name',
 			'inn',
 			[
-				'filter'    => Select2::widget([
-					'model'         => $searchModel,
-					'attribute'     => 'category_id',
-					'data'          => RefPartnersCategories::mapData(),
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'category_id',
+					'data' => RefPartnersCategories::mapData(),
 					'pluginOptions' => [
-						'allowClear'  => true,
+						'allowClear' => true,
 						'placeholder' => ''
 					]
 				]),
 				'attribute' => 'category_id',
-				'format'    => 'text',
-				'value'     => 'relatedCategory.name',
+				'format' => 'text',
+				'value' => 'relatedCategory.name',
 			],
 			'phone',
 			'email',
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'created_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'updated_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

@@ -15,14 +15,16 @@ use yii\web\JsExpression;
  * Class SearchWidget
  * @package app\widgets\search
  */
-class SearchWidget extends Widget {
+class SearchWidget extends Widget
+{
 	public const DEFAULT_LIMIT = 5;
 	public const DEFAULT_TEMPLATE_VIEW = 'template';
 
 	/**
 	 * Функция инициализации и нормализации свойств виджета
 	 */
-	public function init():void {
+	public function init(): void
+	{
 		parent::init();
 		SearchWidgetAssets::register($this->getView());
 	}
@@ -32,7 +34,8 @@ class SearchWidget extends Widget {
 	 * @return string
 	 * @throws Exception
 	 */
-	public function run():string {
+	public function run(): string
+	{
 		if ([] === $dataset = $this->prepareDataset()) {
 			return '';
 		}
@@ -45,8 +48,9 @@ class SearchWidget extends Widget {
 	 * @return array
 	 * @throws Exception
 	 */
-	private function prepareDataset():array {
-		$dataset = [];
+	private function prepareDataset(): array
+	{
+		$dataset      = [];
 		$searchConfig = ArrayHelper::getValue(Yii::$app, 'params.searchConfig', []);
 		foreach ($searchConfig as $alias => $config) {
 			if (null === $templateString = ArrayHelper::getValue($config, 'template')) {
@@ -64,7 +68,7 @@ class SearchWidget extends Widget {
 					'header' => Html::tag('h3', ArrayHelper::getValue($config, 'header', $alias), ['class' => 'suggestion-header'])
 				],
 				'remote' => [
-					'url' => AjaxController::to('search')."?term=QUERY&alias={$alias}",
+					'url' => AjaxController::to('search') . "?term=QUERY&alias={$alias}",
 					'wildcard' => 'QUERY'
 				]
 			];
