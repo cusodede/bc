@@ -10,6 +10,7 @@ use app\modules\graphql\schema\types\partners\fields\PartnersListField;
 
 /**
  * Class PartnersType
+ * @package app\modules\graphql\schema\types\partners
  */
 class PartnersType extends BaseObjectType
 {

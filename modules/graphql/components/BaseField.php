@@ -5,6 +5,7 @@ namespace app\modules\graphql\components;
 
 use app\components\helpers\ArrayHelper;
 use app\modules\graphql\interfaces\ResolveInterface;
+use app\modules\graphql\traits\BaseObjectTrait;
 use GraphQL\Type\Definition\FieldDefinition;
 use Throwable;
 use yii\base\InvalidConfigException;
@@ -17,25 +18,7 @@ use yii\web\UnauthorizedHttpException;
  */
 abstract class BaseField extends FieldDefinition implements ResolveInterface
 {
-	/**
-	 * @var string[] Массив подгруженных классов.
-	 */
-	private static array $_fieldsMap = [];
-
-	/**
-	 * Мы не можем инстанцировать классы полей вне скоупа FieldDefinition, поскольку FieldDefinition::__construct()
-	 * является protected. Этот метод позволяет элегантно справиться с задачей.
-	 *
-	 * @return static
-	 * @throws Throwable
-	 */
-	public static function field(): static
-	{
-		if (null === ArrayHelper::getValue(self::$_fieldsMap, static::class)) {
-			self::$_fieldsMap[static::class] = new static();
-		}
-		return self::$_fieldsMap[static::class];
-	}
+	use BaseObjectTrait;
 
 	/**
 	 * Вытаскивает из аргументов значение фильтра.
