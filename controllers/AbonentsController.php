@@ -6,11 +6,7 @@ namespace app\controllers;
 use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
-use app\models\products\Products;
-use yii\base\InvalidConfigException;
-use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
+use Yii;
 
 /**
  * Class PartnersController
@@ -31,25 +27,15 @@ class AbonentsController extends DefaultController
 
 	/**
 	 * Показать все продукты абонента.
-	 * @throws NotFoundHttpException|InvalidConfigException
+	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
-	public function actionViewProducts(int $id): string
+	public function actionViewProducts(): string
 	{
-		$model = $this->model::findOne($id);
-		if ($model === null) {
-			throw new NotFoundHttpException();
-		}
-		$query = Products::find()
-			->where(['IN', 'id', ArrayHelper::getColumn(
-				$model->relatedAbonentsToProducts, 'product_id'
-			)]);
+		$params      = Yii::$app->request->queryParams;
+		$searchModel = $this->searchModel;
 
-		$dataProvider = new ActiveDataProvider(['query' => $query]);
-		$dataProvider->setSort([
-			'attributes' => ['created_at', 'status_id']
-		]);
 		return $this->renderAjax('modal/view-products', [
-			'dataProvider' => $dataProvider
+			'dataProvider' => $searchModel->searchProductsToAbonent($params)
 		]);
 	}
 }
