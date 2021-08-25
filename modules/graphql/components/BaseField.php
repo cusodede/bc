@@ -7,6 +7,7 @@ use app\components\helpers\ArrayHelper;
 use app\modules\graphql\interfaces\ResolveInterface;
 use app\modules\graphql\traits\BaseObjectTrait;
 use GraphQL\Type\Definition\FieldDefinition;
+use GraphQL\Type\Definition\ResolveInfo;
 use Throwable;
 use yii\base\InvalidConfigException;
 use yii\di\NotInstantiableException;
@@ -19,6 +20,17 @@ use yii\web\UnauthorizedHttpException;
 abstract class BaseField extends FieldDefinition implements ResolveInterface
 {
 	use BaseObjectTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function __construct(array $config) {
+		if (!isset($config['resolve'])) {/*проверять существование метода не нужно, он явно обозначен интерфейсом*/
+			$config['resolve'] = static fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve($root, $args, $context, $resolveInfo);
+		}
+
+		parent::__construct($config);
+	}
 
 	/**
 	 * Вытаскивает из аргументов значение фильтра.
