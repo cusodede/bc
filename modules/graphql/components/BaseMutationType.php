@@ -4,16 +4,20 @@ declare(strict_types = 1);
 namespace app\modules\graphql\components;
 
 use app\components\db\ActiveRecordTrait;
-use app\modules\graphql\interfaces\MutationInterface;
+use app\modules\graphql\interfaces\ResolveInterface;
+use app\modules\graphql\traits\BaseObjectTrait;
 use Exception;
+use GraphQL\Type\Definition\FieldDefinition;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
  * Class BaseMutationType
  */
-abstract class BaseMutationType extends BaseObjectType implements MutationInterface
+abstract class BaseMutationType extends FieldDefinition implements ResolveInterface
 {
+	use BaseObjectTrait;
+
 	/**
 	 * Сохранение модели для GraphQL
 	 * @param ActiveRecord $model
@@ -22,7 +26,7 @@ abstract class BaseMutationType extends BaseObjectType implements MutationInterf
 	 * @return array
 	 * @throws Exception
 	 */
-	public function save(ActiveRecord $model, array $attributes, array $messages): array
+	public static function save(ActiveRecord $model, array $attributes, array $messages): array
 	{
 		/**
 		 * Если в числовом атрибуте приходит -1, значит ребята с фронта, просят исключить
@@ -30,7 +34,7 @@ abstract class BaseMutationType extends BaseObjectType implements MutationInterf
 		 */
 		$attributes = array_filter($attributes, static fn($value) => (-1 !== $value));
 		/** @var ActiveRecord|ActiveRecordTrait $model */
-		return $this->getResult($model->setAndSaveAttributes($attributes, true), $model->getErrors(), $messages);
+		return static::getResult($model->setAndSaveAttributes($attributes, true), $model->getErrors(), $messages);
 	}
 
 	/**
@@ -41,11 +45,11 @@ abstract class BaseMutationType extends BaseObjectType implements MutationInterf
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getResult(bool $result, array $modelErrors, array $messages):array {
+	public static function getResult(bool $result, array $modelErrors, array $messages):array {
 		return [
 			'result' => $result,
-			'message' => $this->getMessage($result, $messages),
-			'errors' => $this->getErrors($modelErrors),
+			'message' => static::getMessage($result, $messages),
+			'errors' => static::getErrors($modelErrors),
 		];
 	}
 
@@ -55,7 +59,7 @@ abstract class BaseMutationType extends BaseObjectType implements MutationInterf
 	 * @param array $modelErrors
 	 * @return array
 	 */
-	public function getErrors(array $modelErrors):array {
+	public static function getErrors(array $modelErrors):array {
 		$errors = [];
 		foreach ($modelErrors as $field => $messages) {
 			$errors[] = compact('field', 'messages');
@@ -70,7 +74,8 @@ abstract class BaseMutationType extends BaseObjectType implements MutationInterf
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getMessage(bool $result, array $messages):string {
+	public static function getMessage(bool $result, array $messages): string
+	{
 		return ArrayHelper::getValue($messages, $result, '');
 	}
 }
