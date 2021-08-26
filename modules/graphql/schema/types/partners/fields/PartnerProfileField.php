@@ -29,9 +29,6 @@ class PartnerProfileField extends BaseField
 				'id' => Type::nonNull(Type::int()),
 			],
 			'description' => 'Возвращает партнёра по идентификатору.',
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 
