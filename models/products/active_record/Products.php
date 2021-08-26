@@ -6,6 +6,7 @@ namespace app\models\products\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
+use app\models\refsharing_rates\RefsharingRates;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -22,6 +23,7 @@ use Yii;
  * @property int|null $type_id id типа (подписка, бандл и т.д)
  * @property int $user_id id пользователя, создателя
  * @property int $partner_id id партнера, к кому привязан
+ * @property int $refsharing_rates_id id ставки рефшеринга
  * @property string $start_date Дата начала действия продукта
  * @property string $end_date Дата окончания действия продукта
  * @property int $payment_period Периодичность списания
@@ -61,6 +63,7 @@ class Products extends ActiveRecord
 			[['ext_description'], 'string'],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+			[['refsharing_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefsharingRates::class, 'targetAttribute' => ['refsharing_id' => 'id']],
 			[['name'], 'unique', 'targetAttribute' => ['name', 'partner_id', 'type_id'], 'message' => 'Такой продукт уже существует.'],
 			['payment_period', 'in', 'range' => array_keys(EnumProductsPaymentPeriods::mapData())],
 			[['start_date', 'end_date'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
@@ -80,6 +83,7 @@ class Products extends ActiveRecord
 			'type_id' => 'Тип продукта',
 			'user_id' => 'Пользователь',
 			'partner_id' => 'Партнер',
+			'refsharing_id' => 'Ставка рефшеринга',
 			'start_date' => 'Начало действия',
 			'end_date' => 'Окончания действия',
 			'payment_period' => 'Периодичность списания',
@@ -92,8 +96,6 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[Partner]].
-	 *
-	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
 	{
@@ -102,11 +104,17 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[User]].
-	 *
-	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery
 	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedRefsharingRates(): ActiveQuery
+	{
+		return $this->hasOne(RefsharingRates::class, ['id' => 'refsharing_rates_id']);
 	}
 }
