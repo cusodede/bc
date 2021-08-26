@@ -33,9 +33,6 @@ class PartnerCreate extends BaseMutationType
 					'type' => Type::nonNull(new PartnersInput('Create')),
 				]
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 
