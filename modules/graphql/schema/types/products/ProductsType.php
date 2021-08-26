@@ -7,6 +7,7 @@ use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\products\fields\ProductFilterField;
 use app\modules\graphql\schema\types\products\fields\ProductProfileField;
 use app\modules\graphql\schema\types\products\fields\ProductsListField;
+use app\modules\graphql\schema\types\products\fields\ProductSortField;
 use app\modules\graphql\schema\types\products\fields\ProductsPaymentPeriodsListField;
 use app\modules\graphql\schema\types\products\fields\ProductsTypesListField;
 
@@ -29,6 +30,7 @@ class ProductsType extends BaseObjectType
 				'productPaymentPeriodsList' => ProductsPaymentPeriodsListField::field(),
 				'productTypesList' 			=> ProductsTypesListField::field(),
 				'productFilter' 			=> new ProductFilterField(),
+				'productSort' 				=> new ProductSortField(),
 			]
 		]);
 	}
