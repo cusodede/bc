@@ -37,10 +37,11 @@ class Contracts extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['contract_number', 'contract_number_nfs'], 'required'],
+            [['contract_number', 'contract_number_nfs', 'signing_date'], 'required'],
             [['deleted'], 'integer'],
             [['signing_date', 'created_at', 'updated_at'], 'safe'],
-            [['contract_number', 'contract_number_nfs'], 'string', 'max' => 64],
+            [['contract_number', 'contract_number_nfs'], 'string', 'max' => 11],
+			[['signing_date'], 'date', 'format' => 'yyyy-mm-dd']
         ];
     }
 
@@ -51,12 +52,12 @@ class Contracts extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'contract_number' => 'Contract Number',
-            'contract_number_nfs' => 'Contract Number Nfs',
-            'signing_date' => 'Signing Date',
-            'deleted' => 'Deleted',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'contract_number' => '№ договора',
+            'contract_number_nfs' => '№ контракта',
+            'signing_date' => 'Дата подписания договора',
+            'deleted' => 'Флаг удаления',
+            'created_at' => 'Дата создания',
+            'updated_at' => 'Дата обновления',
         ];
     }
 
