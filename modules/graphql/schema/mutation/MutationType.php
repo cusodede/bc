@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\mutation;
 
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\mutation\partners\PartnersMutationType;
+use app\modules\graphql\schema\mutation\products\ProductsMutationType;
 
 /**
  * Class MutationType
@@ -18,7 +19,8 @@ class MutationType extends BaseObjectType
 	public function __construct()
 	{
 		$schema = [
-			'partners' => PartnersMutationType::root(),
+			'partners' => 	PartnersMutationType::root(),
+			'product' =>	ProductsMutationType::root(),
 		];
 
 		ksort($schema, SORT_REGULAR);

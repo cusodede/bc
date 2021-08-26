@@ -8,6 +8,7 @@ use app\modules\graphql\interfaces\ResolveInterface;
 use app\modules\graphql\traits\BaseObjectTrait;
 use Exception;
 use GraphQL\Type\Definition\FieldDefinition;
+use GraphQL\Type\Definition\ResolveInfo;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -17,6 +18,16 @@ use yii\helpers\ArrayHelper;
 abstract class BaseMutationType extends FieldDefinition implements ResolveInterface
 {
 	use BaseObjectTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function __construct(array $config) {
+		if (!isset($config['resolve'])) {
+			$config['resolve'] = static fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve($root, $args, $context, $resolveInfo);
+		}
+		parent::__construct($config);
+	}
 
 	/**
 	 * Сохранение модели для GraphQL

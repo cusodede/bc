@@ -25,10 +25,9 @@ abstract class BaseField extends FieldDefinition implements ResolveInterface
 	 * @inheritDoc
 	 */
 	protected function __construct(array $config) {
-		if (!isset($config['resolve'])) {/*проверять существование метода не нужно, он явно обозначен интерфейсом*/
+		if (!isset($config['resolve'])) {
 			$config['resolve'] = static fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve($root, $args, $context, $resolveInfo);
 		}
-
 		parent::__construct($config);
 	}
 
