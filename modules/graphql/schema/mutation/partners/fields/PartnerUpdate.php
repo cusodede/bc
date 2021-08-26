@@ -55,7 +55,7 @@ class PartnerUpdate extends BaseMutationType
 		$data = ArrayHelper::getValue($args, 'data', []);
 		$logo = ArrayHelper::getValue($data, 'logo');
 		if (null !== $logo && preg_match('/http(s)?:/', $logo)) {
-			unset($args['logo']);
+			unset($data['logo']);
 		}
 		return static::save($partner, $data, self::MESSAGES);
 	}
