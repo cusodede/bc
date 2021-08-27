@@ -102,8 +102,8 @@ class Users extends ActiveRecord
 	{
 		return [
 			'id' => 'ID',
-			'username' => 'Имя пользователя',
-			'surname' => 'Фамилия пользователя',
+			'username' => 'Имя',
+			'surname' => 'Фамилия',
 			'login' => 'Логин',
 			'password' => 'Пароль',
 			'restore_code' => 'Код восстановления',

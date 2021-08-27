@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			'id',
 			'username',
+			'surname',
 			'login',
 			[
 				'class' => DataColumn::class,
