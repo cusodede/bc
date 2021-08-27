@@ -140,6 +140,21 @@ class ImportModel extends Model
 	}
 
 	/**
+	 * @param string|resource $value
+	 * @return mixed
+	 */
+	private function unserialize(mixed $value): mixed
+	{
+		if (is_resource($value) && 'stream' === get_resource_type($value)) {
+			$result = stream_get_contents($value);
+			fseek($value, 0);//не забываем перемотать кассету
+		} else {
+			$result = $value;
+		}
+		return unserialize($result, ['allowed_classes' => false]);
+	}
+
+	/**
 	 * @param-out array $messages
 	 * @param array $messages
 	 * @return bool
@@ -153,7 +168,7 @@ class ImportModel extends Model
 			return true;
 		}
 		foreach ($data as $importRecord) {
-			$importRow        = unserialize($importRecord->data, ['allowed_classes' => false]);
+			$importRow        = $this->unserialize($importRecord->data);
 			$mappedColumnData = [];
 			foreach ($importRow as $columnIndex => $value) {
 				/** @var array $currentRule */
