@@ -2745,17 +2745,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-dbmon.git",
-                "reference": "aac514bd48daef930cc953876d02416cc6baa066"
+                "reference": "a688ac01de537ef16c759ab9a931392f93300029"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-dbmon/zipball/aac514bd48daef930cc953876d02416cc6baa066",
-                "reference": "aac514bd48daef930cc953876d02416cc6baa066",
+                "url": "https://api.github.com/repos/pozitronik/yii2-dbmon/zipball/a688ac01de537ef16c759ab9a931392f93300029",
+                "reference": "a688ac01de537ef16c759ab9a931392f93300029",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
-                "pozitronik/yii2-helpers": "dev-master"
+                "pozitronik/yii2-helpers": "dev-master",
+                "pozitronik/yii2-traits": "dev-master"
             },
             "require-dev": {
                 "yiisoft/yii2": "dev-master"
@@ -2788,7 +2789,7 @@
                 "issues": "https://github.com/pozitronik/yii2-dbmon/issues",
                 "source": "https://github.com/pozitronik/yii2-dbmon/tree/master"
             },
-            "time": "2021-06-25T20:20:14+00:00"
+            "time": "2021-08-25T09:18:10+00:00"
         },
         {
             "name": "pozitronik/yii2-exceptionslogger",
@@ -3011,12 +3012,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-options.git",
-                "reference": "de501cb29d9e496105a09c1a3159f1e1a108cb35"
+                "reference": "e626663f758e03af2a9dc7b13e40039f1e3fe5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-options/zipball/de501cb29d9e496105a09c1a3159f1e1a108cb35",
-                "reference": "de501cb29d9e496105a09c1a3159f1e1a108cb35",
+                "url": "https://api.github.com/repos/pozitronik/yii2-options/zipball/e626663f758e03af2a9dc7b13e40039f1e3fe5a6",
+                "reference": "e626663f758e03af2a9dc7b13e40039f1e3fe5a6",
                 "shasum": ""
             },
             "require": {
@@ -3051,7 +3052,7 @@
                 "issues": "https://github.com/pozitronik/yii2-options/issues",
                 "source": "https://github.com/pozitronik/yii2-options/tree/master"
             },
-            "time": "2021-07-21T20:06:00+00:00"
+            "time": "2021-08-25T18:16:11+00:00"
         },
         {
             "name": "pozitronik/yii2-references",
@@ -3059,12 +3060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-references.git",
-                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865"
+                "reference": "d3336c8149377b7934d981fbda92f35fc06de56d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/a7114f52487bac43ba193fadd4cde97b94ef3865",
-                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865",
+                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/d3336c8149377b7934d981fbda92f35fc06de56d",
+                "reference": "d3336c8149377b7934d981fbda92f35fc06de56d",
                 "shasum": ""
             },
             "require": {
@@ -3107,7 +3108,7 @@
                 "issues": "https://github.com/pozitronik/yii2-references/issues",
                 "source": "https://github.com/pozitronik/yii2-references/tree/master"
             },
-            "time": "2021-08-16T14:35:44+00:00"
+            "time": "2021-08-25T16:41:01+00:00"
         },
         {
             "name": "pozitronik/yii2-relations",
@@ -3215,12 +3216,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-users-options.git",
-                "reference": "8d5ef225ee3db9d7577d3d7e3eb5737735853a95"
+                "reference": "cd20c7e086d0bbc9740d2f52a9c31c029027f63d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-users-options/zipball/8d5ef225ee3db9d7577d3d7e3eb5737735853a95",
-                "reference": "8d5ef225ee3db9d7577d3d7e3eb5737735853a95",
+                "url": "https://api.github.com/repos/pozitronik/yii2-users-options/zipball/cd20c7e086d0bbc9740d2f52a9c31c029027f63d",
+                "reference": "cd20c7e086d0bbc9740d2f52a9c31c029027f63d",
                 "shasum": ""
             },
             "require-dev": {
@@ -3252,7 +3253,7 @@
                 "issues": "https://github.com/pozitronik/yii2-users-options/issues",
                 "source": "https://github.com/pozitronik/yii2-users-options/tree/master"
             },
-            "time": "2021-07-21T20:06:56+00:00"
+            "time": "2021-08-25T18:17:45+00:00"
         },
         {
             "name": "psr/http-client",
@@ -4419,12 +4420,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "a596c74adc9b4ef8b3258377ccdc0a27a03f8489"
+                "reference": "451834341593bef6b82d080e2428e19edd59c4f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/a596c74adc9b4ef8b3258377ccdc0a27a03f8489",
-                "reference": "a596c74adc9b4ef8b3258377ccdc0a27a03f8489",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/451834341593bef6b82d080e2428e19edd59c4f5",
+                "reference": "451834341593bef6b82d080e2428e19edd59c4f5",
                 "shasum": ""
             },
             "require": {
@@ -4435,17 +4436,18 @@
             "require-dev": {
                 "amphp/amp": "^2.3",
                 "dms/phpunit-arraysubset-asserts": "^0.2.1",
-                "doctrine/coding-standard": "^8.2",
+                "doctrine/coding-standard": "^9.0",
                 "ergebnis/composer-normalize": "^2.13",
                 "nyholm/psr7": "^1.2",
                 "phpbench/phpbench": "^1",
                 "phpstan/extension-installer": "^1",
-                "phpstan/phpstan": "0.12.93",
-                "phpstan/phpstan-phpunit": "0.12.21",
-                "phpstan/phpstan-strict-rules": "0.12.10",
+                "phpstan/phpstan": "0.12.96",
+                "phpstan/phpstan-phpunit": "0.12.22",
+                "phpstan/phpstan-strict-rules": "0.12.11",
                 "phpunit/phpunit": "^9.5",
                 "psr/http-message": "^1",
-                "react/promise": "^2"
+                "react/promise": "^2",
+                "symfony/polyfill-php81": "^1.23"
             },
             "suggest": {
                 "psr/http-message": "To use standard GraphQL server",
@@ -4478,7 +4480,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-23T09:39:27+00:00"
+            "time": "2021-08-27T13:28:37+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -4486,12 +4488,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b"
+                "reference": "829d8f43d96204e046bdf950c2d6246af0ae881b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4f235c4f976dc4b92450e168f0d5ac873834aa0b",
-                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/829d8f43d96204e046bdf950c2d6246af0ae881b",
+                "reference": "829d8f43d96204e046bdf950c2d6246af0ae881b",
                 "shasum": ""
             },
             "require": {
@@ -4601,7 +4603,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-19T20:17:05+00:00"
+            "time": "2021-08-24T19:30:33+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",
@@ -9771,5 +9773,5 @@
         "php": "~8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }
