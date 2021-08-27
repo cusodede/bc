@@ -22,6 +22,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $username Отображаемое имя пользователя
+ * @property string $surname Фамилия пользователя
  * @property string $login Логин
  * @property string $password Хеш пароля либо сам пароль (если $salt пустой)
  * @property null|string $restore_code Код восстановления пароля, если запрошен
@@ -70,13 +71,13 @@ class Users extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['username', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
+			[['username', 'surname', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
 			[['daddy'], 'integer'],
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
-			[['username', 'password', 'salt', 'email'], 'string', 'max' => 255],
+			[['username', 'surname', 'password', 'salt', 'email'], 'string', 'max' => 255],
 			[['password'], PasswordStrengthValidator::class, 'when' => function(self $model) {
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
@@ -102,6 +103,7 @@ class Users extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'username' => 'Имя пользователя',
+			'surname' => 'Фамилия пользователя',
 			'login' => 'Логин',
 			'password' => 'Пароль',
 			'restore_code' => 'Код восстановления',
