@@ -27,6 +27,7 @@ use yii\db\ActiveRecord;
  * @property-read int $done количество импортированных строк
  * @property-read int $percent процент импортированных строк
  * @property-read int $errorCount количество строк с ошибкой импорта
+ * @property array $errorMessages Массив ошибок, собранных при импорте
  */
 class ImportModel extends Model
 {
@@ -39,7 +40,7 @@ class ImportModel extends Model
 	/**
 	 * @var mixed $importFile атрибут загрузки файла
 	 */
-	public $importFile;
+	public mixed $importFile = null;
 	/**
 	 * правила соответствия полей
 	 * @var array $mappingRules
@@ -65,6 +66,11 @@ class ImportModel extends Model
 	 * @var int $importChunkSize количество импортируемых записей, обрабатываемых за раз
 	 */
 	public int $importChunkSize = 100;
+
+	/**
+	 * @var array Массив ошибок, собранных при импорте
+	 */
+	public array $errorMessages = [];
 
 	/**
 	 * @var string|null $_filename Имя загруженного файла в локальной ФС
@@ -161,7 +167,7 @@ class ImportModel extends Model
 	 * @throws Throwable
 	 * todo: добавить правило, разрешающее скипать существующие данные
 	 */
-	public function import(array &$messages = []): bool
+	public function import(): bool
 	{
 		/** @var Import $data */
 		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => Import::NOT_PROCESSED])->limit($this->importChunkSize)->all()) {
@@ -194,7 +200,7 @@ class ImportModel extends Model
 			} else {
 				$importRecord->processed = Import::PROCESSED_ERROR;
 				$importRecord->save();
-				$messages[] = $errors;
+				$this->errorMessages[] = $errors;
 			}
 
 		}
