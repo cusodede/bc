@@ -30,6 +30,10 @@ class UserType extends BaseObjectType
 					'type' => Type::string(),
 					'description' => $user->getAttributeLabel('username'),
 				],
+				'surname' => [
+					'type' => Type::string(),
+					'description' => $user->getAttributeLabel('surname'),
+				],
 				'login' => [
 					'type' => Type::string(),
 					'description' => 'Логин',

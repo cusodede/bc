@@ -7,7 +7,6 @@ use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class UsersSearch
@@ -16,6 +15,7 @@ class UsersSearch extends ActiveRecordUsers
 {
 	public ?int $limit = null;
 	public ?int $offset = null;
+	public ?string $search = null;
 
 	/**
 	 * @inheritdoc
@@ -25,6 +25,7 @@ class UsersSearch extends ActiveRecordUsers
 		return [
 			[['id', 'limit', 'offset'], 'integer'],
 			[['username', 'login', 'email'], 'safe'],
+			[['search'], 'string', 'min' => 3],
 		];
 	}
 
@@ -65,6 +66,15 @@ class UsersSearch extends ActiveRecordUsers
 			->andFilterWhere(['like', 'sys_users.username', $this->username])
 			->andFilterWhere(['like', 'login', $this->login])
 			->andFilterWhere(['like', 'email', $this->email]);
+
+		if (null !== $this->search) {
+			$query->andFilterWhere([
+				'or',
+				['like', 'username', $this->search],
+				['like', 'surname', $this->search],
+				['like', 'email', $this->search],
+			]);
+		}
 
 		if (null !== $this->limit) {
 			$query->limit = $this->limit;
