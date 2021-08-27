@@ -88,7 +88,7 @@ class Permissions extends ActiveRecordPermissions
 		/*convert to models*/
 		foreach ($permissionsConfig as $name => $permissionConfig) {
 			$permissionConfig['name'] = $name;
-			$result[]                 = (new self($permissionConfig))->attributes;
+			$result[]                 = array_filter((new self($permissionConfig))->attributes);
 		}
 		return $result;
 	}
