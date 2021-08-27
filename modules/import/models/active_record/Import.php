@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $model
  * @property int $domain
- * @property resource $data
+ * @property resource|string $data
  * @property int $processed
  */
 class Import extends ActiveRecord
@@ -35,7 +35,7 @@ class Import extends ActiveRecord
 			[['model', 'domain'], 'required'],
 			[['domain'], 'integer'],
 			[['processed'], 'integer'],
-			[['data'], 'string'],
+			[['data'], 'default'],
 			[['model'], 'string', 'max' => 255],
 		];
 	}
