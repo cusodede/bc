@@ -153,7 +153,10 @@ class Notifications extends ActiveRecord
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
 					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
-					->rawSql . " ON DUPLICATE KEY UPDATE `id` = `id`")
+					->rawSql . match (Yii::$app->db->driverName) {
+					'mysql' => " ON DUPLICATE KEY UPDATE `id` = `id`",
+					'pgsql' => " ON CONFLICT (id) DO UPDATE SET id = " . static::tableName() . ".id"
+				})
 				->execute();
 		}
 	}
