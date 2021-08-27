@@ -34,7 +34,8 @@ class PhonesAR extends ActiveRecord
 		return [
 			[['phone'], 'required'],
 			[['create_date'], 'safe'],
-			[['status', 'deleted'], 'integer'],
+			[['status'], 'integer'],
+			[['deleted'], 'boolean'],
 			[['phone'], 'string', 'max' => 255],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()]
 		];
