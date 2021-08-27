@@ -33,11 +33,10 @@ class UsersSearch extends ActiveRecordUsers
 	 * @param int[] $allowedGroups
 	 * @return ActiveDataProvider
 	 * @throws Throwable
-	 * @throws ForbiddenHttpException
 	 */
 	public function search(array $params, array $allowedGroups = []): ActiveDataProvider
 	{
-		$query = Users::find()->active()->scope();
+		$query = Users::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
