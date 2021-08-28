@@ -24,6 +24,9 @@ class m210825_120221_create_contracts_table extends Migration
 			'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания договора'),
 			'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления договора'),
 		]);
+
+		$this->createIndex('idx-contracts-numbers', 'contracts', ['contract_number', 'contract_number_nfs']);
+		$this->createIndex('idx-contracts-deleted', 'contracts', 'deleted');
 	}
 
 	/**
