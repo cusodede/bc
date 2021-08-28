@@ -58,6 +58,13 @@ services:
     networks:
       - backend
 
+#Selenium chrome server for acceptance testing
+  chrome:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - 4444
+      - 5900
+
 # Networks Setup
 networks:
   backend:
