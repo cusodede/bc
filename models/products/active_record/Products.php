@@ -63,7 +63,7 @@ class Products extends ActiveRecord
 			[['ext_description'], 'string'],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
-			[['refsharing_rates_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefsharingRates::class, 'targetAttribute' => ['refsharing_rates_id' => 'id']],
+			[['refsharing_rates_id'], 'exist', 'skipOnError' => false, 'targetClass' => RefsharingRates::class, 'targetAttribute' => ['refsharing_rates_id' => 'id']],
 			[['name'], 'unique', 'targetAttribute' => ['name', 'partner_id', 'type_id'], 'message' => 'Такой продукт уже существует.'],
 			['payment_period', 'in', 'range' => array_keys(EnumProductsPaymentPeriods::mapData())],
 			[['start_date', 'end_date'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
