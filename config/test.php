@@ -14,9 +14,9 @@ return ArrayHelper::merge(
 		'components' => [
 			'db' => [
 				'class' => 'yii\db\Connection',
-				'dsn' => getenv('TEST_DB_DSN'),
-				'username' => getenv('TEST_DB_USER'),
-				'password' => getenv('TEST_DB_PASS'),
+				'dsn' => 'mysql:host=mysql;dbname=test',
+				'username' => 'root',
+				'password' => 'password',
 				'charset' => 'utf8',
 
 				// Schema cache options (for production environment)
@@ -26,10 +26,10 @@ return ArrayHelper::merge(
 			'cache' => [
 				'class' => DummyCache::class
 			],
-			'assetManager' => [
-				'class' => AssetManager::class,
-				'basePath' => '@webroot/web/assets',
-			]
+//			'assetManager' => [
+//				'class' => AssetManager::class,
+//				'basePath' => '@webroot/web/assets',
+//			]
 		]
 	]
 );

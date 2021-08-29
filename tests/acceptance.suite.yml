@@ -3,8 +3,9 @@ modules:
   enabled:
     # selenium webdriver
     - WebDriver:
-        url: 'http://localhost/'
+        url: 'http://nginx:8081/'
         browser: chrome
         host: chrome
-
+        port: 4444
     - \Helper\Acceptance
+    - Db

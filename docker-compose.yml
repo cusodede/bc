@@ -2,9 +2,11 @@ version: '3.7'
 
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
+    container_name: prpl_nginx
     ports:
       - 8080:8080
+      - 8081:8081
     volumes:
       - ${WEB_ROOT_PATH}:/var/www
       - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
@@ -19,6 +21,7 @@ services:
   mysql:
     restart: always
     image: mysql:latest
+    container_name: prpl_mysql
     command: [
         '--character-set-server=utf8',
         '--collation-server=utf8_general_ci',
@@ -38,9 +41,11 @@ services:
 
   php-8:
     build: ./docker/
+    container_name: prpl_php
     volumes:
       - ${WEB_ROOT_PATH}:/var/www
       - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/tests/_output:/var/www/tests/_output
     environment:
       YII_DEBUG: ${YII_DEBUG}
       YII_ENV_DEV: ${YII_ENV_DEV}
@@ -61,9 +66,12 @@ services:
 #Selenium chrome server for acceptance testing
   chrome:
     image: selenium/standalone-chrome-debug
+    container_name: prpl_selenium
     ports:
-      - 4444
+      - 4444:4444
       - 5900
+    networks:
+      - backend
 
 # Networks Setup
 networks:

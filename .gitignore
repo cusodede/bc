@@ -11,6 +11,8 @@
 /tests-c/
 /config/test.sample.php
 codeception.yml
+/docker/tests
 
 /.env
 /docker/databases/
+.idea/php-docker-settings.xml
