@@ -24,9 +24,9 @@ class UsersFilterInput extends InputObjectType
 					'type' => Type::int(),
 					'description' => $user->getAttributeLabel('id'),
 				],
-				'username' => [
+				'name' => [
 					'type' => Type::string(),
-					'description' => $user->getAttributeLabel('username'),
+					'description' => $user->getAttributeLabel('name'),
 				],
 				'surname' => [
 					'type' => Type::string(),

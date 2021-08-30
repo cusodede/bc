@@ -39,7 +39,8 @@ class UserProfileField extends BaseField
 		$user = null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id);
 		return [
 			'id' => $user?->id,
-			'username' => $user?->username,
+			'name' => $user?->name,
+			'surname' => $user?->surname,
 			'login' => $user?->login,
 			'email' => $user?->email
 		];

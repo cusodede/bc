@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 
 /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
-if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) {
+	return require $localConfig;
+}
 
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
@@ -24,7 +26,6 @@ return [
 			//'limit' => 5,// <== лимит поиска,
 			//'url' => AjaxController::to('search') // <== Url входящего поискового экшена
 			'attributes' => [// <== поисковые атрибуты, см. SearchHelper::Search $searchAttributes
-				'username',
 				'comment',
 				'email'
 			]

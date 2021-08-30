@@ -35,9 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div class="col-8">
 						<div class="d-flex flex-column align-items-start p-4">
 							<div class="d-flex flex-column mb-2">
+
 								<?= $this->render('subviews/editable-input', [
 									'model' => $model,
-									'attribute' => 'username',
+									'attribute' => 'name',
 									'url' => UsersController::to('editAction', ['id' => $model->id])
 								]) ?>
 							</div>

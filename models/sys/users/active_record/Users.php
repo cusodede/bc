@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "sys_users".
  *
  * @property int $id
- * @property string $username Отображаемое имя пользователя
+ * @property string $name Имя пользователя
  * @property string $surname Фамилия пользователя
  * @property string $login Логин
  * @property string $password Хеш пароля либо сам пароль (если $salt пустой)
@@ -44,6 +44,7 @@ class Users extends ActiveRecord
 	use ActiveRecordTrait;
 
 	private ?array $_phones = null;
+	public ?string $username = null;
 
 	/**
 	 * @inheritDoc
@@ -71,13 +72,13 @@ class Users extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['username', 'surname', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
+			[['surname', 'name', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
 			[['daddy'], 'integer'],
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
-			[['username', 'surname', 'password', 'salt', 'email'], 'string', 'max' => 255],
+			[['name', 'surname', 'password', 'salt', 'email'], 'string', 'max' => 255],
 			[['password'], PasswordStrengthValidator::class, 'when' => function(self $model) {
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
@@ -88,9 +89,7 @@ class Users extends ActiveRecord
 			[['email'], 'unique'],
 			[['daddy'], 'default', 'value' => Yii::$app->user->id],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
-			['phones', PhoneNumberValidator::class, 'when' => function() {
-				[] !== array_filter($this->phones);
-			}],
+			['phones', PhoneNumberValidator::class, 'when' => fn(): bool => [] !== array_filter($this->phones)],
 			['relatedPhones', 'safe']
 		];
 	}
@@ -102,7 +101,7 @@ class Users extends ActiveRecord
 	{
 		return [
 			'id' => 'ID',
-			'username' => 'Имя',
+			'name' => 'Имя',
 			'surname' => 'Фамилия',
 			'login' => 'Логин',
 			'password' => 'Пароль',
@@ -168,6 +167,14 @@ class Users extends ActiveRecord
 	public function setPhones(mixed $phones): void
 	{
 		$this->_phones = (array)$phones;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsername(): string
+	{
+		return "{$this->surname} {$this->name}";
 	}
 
 	/**

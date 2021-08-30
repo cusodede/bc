@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions;
 
 use yii\data\ActiveDataProvider;
-use app\models\sys\users\active_record\Users;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 
 /**
@@ -45,7 +44,9 @@ final class PermissionsSearch extends Permissions
 		$this->setSort($dataProvider);
 		$this->load($params);
 
-		if (!$this->validate()) return $dataProvider;
+		if (!$this->validate()) {
+			return $dataProvider;
+		}
 
 		$query->joinWith(['relatedUsers', 'relatedPermissionsCollections']);
 		$this->filterData($query);
@@ -65,7 +66,6 @@ final class PermissionsSearch extends Permissions
 			->andFilterWhere(['like', self::tableName() . '.controller', $this->controller])
 			->andFilterWhere(['like', self::tableName() . '.action', $this->action])
 			->andFilterWhere([self::tableName() . '.verb' => $this->verb])
-			->andFilterWhere(['like', Users::tableName() . '.username', $this->user])
 			->andFilterWhere(['like', PermissionsCollections::tableName() . '.name', $this->collection]);
 	}
 

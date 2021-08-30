@@ -19,7 +19,6 @@ return [
 			//'limit' => 5,// <== лимит поиска,
 			//'url' => AjaxController::to('search') // <== Url входящего поискового экшена
 			'attributes' => [// <== поисковые атрибуты, см. SearchHelper::Search $searchAttributes
-				'username',
 				'comment',
 				'email'
 			]

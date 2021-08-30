@@ -18,7 +18,7 @@ use yii\web\View;
 
 ?>
 
-<?= $form->field($model, 'username') ?>
+<?= $form->field($model, 'name') ?>
 <?= $form->field($model, 'surname') ?>
 <?= $form->field($model, 'login') ?>
 <?= $form->field($model, 'email') ?>

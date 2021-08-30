@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			'id',
-			'username',
+			'name',
 			'surname',
 			'login',
 			[

@@ -24,7 +24,7 @@ class UsersSearch extends ActiveRecordUsers
 	{
 		return [
 			[['id', 'limit', 'offset'], 'integer'],
-			[['username', 'login', 'email'], 'safe'],
+			[['login', 'email'], 'safe'],
 			[['search'], 'string', 'min' => 3],
 		];
 	}
@@ -50,7 +50,7 @@ class UsersSearch extends ActiveRecordUsers
 
 		$dataProvider->setSort([
 			'defaultOrder' 	=> ['id' => SORT_ASC],
-			'attributes' 	=> ['id', 'username', 'login', 'email',]
+			'attributes' 	=> ['id', 'login', 'email',]
 		]);
 
 		$this->load($params);
@@ -63,14 +63,13 @@ class UsersSearch extends ActiveRecordUsers
 
 		$query->andFilterWhere(['sys_users.id' => $this->id])
 			->andFilterWhere(['group_id' => $allowedGroups])
-			->andFilterWhere(['like', 'sys_users.username', $this->username])
 			->andFilterWhere(['like', 'login', $this->login])
 			->andFilterWhere(['like', 'email', $this->email]);
 
 		if (null !== $this->search) {
 			$query->andFilterWhere([
 				'or',
-				['like', 'username', $this->search],
+				['like', 'name', $this->search],
 				['like', 'surname', $this->search],
 				['like', 'email', $this->search],
 			]);
