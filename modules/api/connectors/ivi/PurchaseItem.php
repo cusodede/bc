@@ -14,6 +14,9 @@ class PurchaseItem
 {
 	private array $_data;
 
+	/**
+	 * @param array $data
+	 */
 	public function __construct(array $data)
 	{
 		$this->_data = $data;
@@ -29,6 +32,7 @@ class PurchaseItem
 	}
 
 	/**
+	 * Получение даты истечения услуги.
 	 * @return string|null
 	 * @throws Exception
 	 */
