@@ -64,4 +64,18 @@ class ProductsController extends DefaultController
 	{
 		return '@app/views/products';
 	}
+
+	/**
+	 * Показать всех абонентов выбранного продукта.
+	 * @noinspection PhpPossiblePolymorphicInvocationInspection
+	 */
+	public function actionViewAbonents(): string
+	{
+		$params      = Yii::$app->request->queryParams;
+		$searchModel = $this->searchModel;
+
+		return $this->renderAjax('modal/view-abonents', [
+			'dataProvider' => $searchModel->searchAbonentsToProduct($params)
+		]);
+	}
 }
