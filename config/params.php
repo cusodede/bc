@@ -62,8 +62,9 @@ return [
 	],
 	'vet-expert' => [
 		'connector' => [
-			'baseUrl'   => 'https://vetexpert.ru/api',
-			'authToken' => 'testtoken'
+			'baseUrl'  => 'https://erp.vetexpert.ru/beeline',
+			'login'    => 'beeline',
+			'password' => 'cY_LCw6-puS86CSgWZ22MV2dhNt'
 		]
 	],
 	'ucp' => [

@@ -59,7 +59,7 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 			throw new InvalidArgumentException('Некорректное значение телефонного номера.');
 		}
 
-		$this->_phone = $formattedPhone;
+		$this->_phone = '7' . $formattedPhone;
 	}
 
 	/**

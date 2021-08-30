@@ -22,7 +22,8 @@ abstract class CommonConnector extends BaseHttpConnector
 	public const APP_VET_EXPERT = 'vet-expert';
 	public const APP_OKKO = 'okko';
 
-	private ?string $_authToken;
+	private ?string $_login;
+	private ?string $_password;
 
 	/**
 	 * VetExpertConnector constructor.
@@ -35,8 +36,11 @@ abstract class CommonConnector extends BaseHttpConnector
 		/** @var array $params */
 		$params = ArrayHelper::getValue(Yii::$app->params, "{$this->app}.connector", new InvalidConfigException('Не заданы параметры коннектора'));
 
-		if (null === $this->_authToken = ArrayHelper::remove($params, 'authToken')) {
-			throw new InvalidConfigException('Токен не задан');
+		$this->_login    = ArrayHelper::remove($params, 'login');
+		$this->_password = ArrayHelper::remove($params, 'password');
+
+		if (null === $this->_login || null === $this->_password) {
+			throw new InvalidConfigException('Не заданы доступы для авторизации.');
 		}
 
 		parent::__construct($params, $config);
@@ -74,7 +78,7 @@ abstract class CommonConnector extends BaseHttpConnector
 		return Yii::$app->cache->getOrSet(
 			$cacheKey,
 			function() {
-				$this->get('/get_token', null, ['Authorization' => 'Basic ' . $this->_authToken]);
+				$this->get('/get_token', null, [], [CURLOPT_USERPWD => "{$this->_login}:{$this->_password}"]);
 
 				$token = $this->extractResponseData('token');
 				if (null === $token) {
