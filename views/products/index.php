@@ -9,6 +9,8 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\components\helpers\Html;
+use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
@@ -39,6 +41,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
+			[
+				'class' => ActionColumn::class,
+				'template' => '<div class="btn-group">{view-abonents}</div>',
+				'buttons' => [
+					'view-abonents' => static function(string $url, Model $model) {
+						return Html::ajaxModalLink('<i class="fas fa-arrow-circle-up"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
+						]);
+					},
+				],
+			],
 			'id',
 			'name',
 			'price',
