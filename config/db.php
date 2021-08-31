@@ -8,9 +8,9 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 
 return [
 	'class' => Connection::class,
-	'dsn' => 'mysql:host=localhost;dbname=bc',
-	'username' => 'root',
-	'password' => 'root',
+	'dsn' => getenv('MYSQL_DSN'),
+	'username' => getenv('MYSQL_USERNAME'),
+	'password' => getenv('MYSQL_PASSWORD'),
 	'charset' => 'utf8',
 
 	// Schema cache options (for production environment)
