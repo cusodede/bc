@@ -6,7 +6,7 @@ namespace app\models\products\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
-use app\models\refsharing_rates\RefsharingRates;
+use app\models\refsharing_rates\RevShare;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -63,7 +63,7 @@ class Products extends ActiveRecord
 			[['ext_description'], 'string'],
 			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
-			[['refsharing_rates_id'], 'exist', 'skipOnError' => false, 'targetClass' => RefsharingRates::class, 'targetAttribute' => ['refsharing_rates_id' => 'id']],
+			[['refsharing_rates_id'], 'exist', 'skipOnError' => false, 'targetClass' => RevShare::class, 'targetAttribute' => ['refsharing_rates_id' => 'id']],
 			[['name'], 'unique', 'targetAttribute' => ['name', 'partner_id', 'type_id'], 'message' => 'Такой продукт уже существует.'],
 			['payment_period', 'in', 'range' => array_keys(EnumProductsPaymentPeriods::mapData())],
 			[['start_date', 'end_date'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
@@ -113,8 +113,8 @@ class Products extends ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRelatedRefsharingRates(): ActiveQuery
+	public function getRelatedRevShare(): ActiveQuery
 	{
-		return $this->hasOne(RefsharingRates::class, ['id' => 'refsharing_rates_id']);
+		return $this->hasOne(RevShare::class, ['id' => 'refsharing_rates_id']);
 	}
 }

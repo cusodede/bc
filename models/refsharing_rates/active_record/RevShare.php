@@ -19,7 +19,7 @@ use yii\db\ActiveRecord;
  * @property string $created_at Дата создания договора
  * @property string $updated_at Дата обновления договора
  */
-class RefsharingRates extends ActiveRecord
+class RevShare extends ActiveRecord
 {
 	use ActiveRecordTrait;
     /**

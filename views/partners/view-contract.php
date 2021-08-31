@@ -17,7 +17,7 @@ use yii\web\View;
 	<?php
 	$contractsToProducts = RelContractsToProducts::findModel($products->id);
 	$contract            = Contracts::findOne(ArrayHelper::getValue($contractsToProducts, 'contract_id'));
-	$refsharingRate      = $products->relatedRefsharingRates;
+	$refsharingRate      = $products->relatedRevShare;
 	?>
 	<div class="card">
 		<div class="card-body">

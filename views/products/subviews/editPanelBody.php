@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\refsharing_rates\RefsharingRates;
+use app\models\refsharing_rates\RevShare;
 use kartik\form\ActiveForm;
 use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;
@@ -40,7 +40,7 @@ use app\models\products\EnumProductsPaymentPeriods;
 	]
 ]) ?>
 <?= $form->field($model, 'refsharing_rates_id')->widget(Select2::class, [
-	'data' => ArrayHelper::map(RefsharingRates::find()->active()->all(), 'id', 'description'),
+	'data' => ArrayHelper::map(RevShare::find()->active()->all(), 'id', 'description'),
 	'pluginOptions' => [
 		'placeholder' => 'Выберите Ставку',
 		'multiple' => false,
