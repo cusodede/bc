@@ -11,6 +11,7 @@ use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\web\View;
+use yii\widgets\Pjax;
 
 $this->title = 'Абоненты у продукта';
 
@@ -25,6 +26,7 @@ $this->title = 'Абоненты у продукта';
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
+<?php Pjax::begin(); ?>
 <?= GridView::widget([
 	'dataProvider' => $dataProvider,
 	'columns' => [
@@ -42,4 +44,5 @@ $this->title = 'Абоненты у продукта';
 		],
 	]
 ]) ?>
+<?php Pjax::end(); ?>
 <?php Modal::end(); ?>

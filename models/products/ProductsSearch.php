@@ -115,7 +115,18 @@ class ProductsSearch extends Products
 				$model->relatedProductsToAbonents, 'abonent_id'
 			)])->active();
 
-		$dataProvider = new ActiveDataProvider(['query' => $query]);
+		$dataProvider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => 5,
+			],
+		]);
+
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
+
 		$dataProvider->setSort([
 			'attributes' => ['created_at', 'status_id']
 		]);
