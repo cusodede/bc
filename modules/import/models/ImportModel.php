@@ -162,7 +162,6 @@ class ImportModel extends Model
 
 	/**
 	 * @param-out array $messages
-	 * @param array $messages
 	 * @return bool
 	 * @throws Throwable
 	 * todo: добавить правило, разрешающее скипать существующие данные
