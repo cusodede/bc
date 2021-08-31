@@ -35,7 +35,7 @@ $this->title = 'Продукты абонента';
 			'attribute' => 'name',
 			'format' => 'raw',
 			'value' => static function($item) use ($phone) {
-				return Html::a($item->name, ["products/journal?ProductsJournalSearch%5Bid%5D=&ProductsJournalSearch%5BsearchAbonentPhone%5D=%2B{$phone}"]);
+				return Html::a($item->name, ['products/journal', 'ProductsJournalSearch' => ['searchAbonentPhone' => $phone]]);
 			},
 		],
 		'price',

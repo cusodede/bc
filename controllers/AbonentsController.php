@@ -36,7 +36,7 @@ class AbonentsController extends DefaultController
 		['dataProvider' => $dataProvider, 'model' => $model] = $searchModel->searchProductsToAbonent($params);
 		return $this->renderAjax('modal/view-products', [
 			'dataProvider' => $dataProvider,
-			'phone' => substr($model['phone'], 1),
+			'phone' => $model['phone'],
 		]);
 	}
 }
