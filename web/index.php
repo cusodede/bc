@@ -7,7 +7,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 #load env
-Dotenv::createImmutable(__DIR__ . '/../')->load();
+Dotenv::createImmutable(__DIR__ . '/../')->safeLoad();
 
 require __DIR__ . '/../config/env.php';
 $config = require __DIR__ . '/../config/web.php';
