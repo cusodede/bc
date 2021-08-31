@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string|null $name Название группы доступа
  * @property string|null $comment Описание группы доступа
+ * @property bool $default Флаг использования группы по умолчанию
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelPermissionsCollectionsToPermissionsCollections[] $relatedPermissionsCollectionsToPermissionsCollections Связь к промежуточной таблице к ВКЛЮЧЁННЫМ группам доступа
@@ -68,6 +69,7 @@ class PermissionsCollections extends ActiveRecord
 			[['name'], 'string', 'max' => 128],
 			[['name'], 'unique'],
 			[['name'], 'required'],
+			[['default'], 'boolean'],
 			[['relatedPermissions', 'relatedUsers', 'relatedSlavePermissionsCollections'], 'safe']
 		];
 	}
@@ -81,6 +83,7 @@ class PermissionsCollections extends ActiveRecord
 			'id' => 'ID',
 			'name' => 'Название',
 			'comment' => 'Комментарий',
+			'default' => 'По умолчанию',
 			'relatedUsers' => 'Присвоено пользователям',
 			'relatedPermissions' => 'Доступы',
 			'relatedSlavePermissionsCollections' => 'Включённые группы доступов',

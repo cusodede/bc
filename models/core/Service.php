@@ -22,6 +22,7 @@ class Service extends Model
 	 * Очистка всех справочников.
 	 * Всё в ноль.
 	 * После очистки создаётся чистый административный аккаунт.
+	 * @noinspection BadExceptionsProcessingInspection
 	 */
 	public static function ResetDB(): bool
 	{

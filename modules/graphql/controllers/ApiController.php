@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\data\MutationTypes;
-use app\modules\graphql\data\QueryTypes;
+use app\modules\graphql\schema\mutation\MutationType;
+use app\modules\graphql\schema\types\QueryType;
 use cusodede\jwt\JwtHttpBearerAuth;
-use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -61,7 +60,7 @@ class ApiController extends ActiveController
 	/**
 	 * Основная точка входа для GraphQL клиентов
 	 * @return array
-	 * @throws Exception
+	 * @throws Throwable
 	 */
 	public function actionIndex(): array
 	{
@@ -87,8 +86,8 @@ class ApiController extends ActiveController
 
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => QueryTypes::query(),
-				'mutation' => MutationTypes::mutation(),
+				'query' => QueryType::type(),
+				'mutation' => MutationType::type(),
 			]),
 			$query,
 			null,
@@ -105,15 +104,17 @@ class ApiController extends ActiveController
 	 * Отрубаем авторизацию и не даём выполнять никаких действий, просто отдаём схему.
 	 * В schemaQuery, hardcode на получение схемы.
 	 * Можно сделать лучше, но пока я не знаю как решить эту проблему.
+	 *
 	 * @return array
+	 * @throws Throwable
 	 */
 	public function actionSchema(): array
 	{
 		$query = file_get_contents(__DIR__ . '/../schemaQuery');
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => QueryTypes::query(),
-				'mutation' => MutationTypes::mutation(),
+				'query' => QueryType::type(),
+				'mutation' => MutationType::type(),
 			]),
 			$query,
 		)->toArray();
