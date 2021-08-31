@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   nginx:
-    container_name: prpl_docker_nginx
+    container_name: prpl_nginx
     image: nginx:latest
     ports:
       - "8080:8080"
@@ -18,7 +18,7 @@ services:
       - backend
 
   mysql:
-    container_name: prpl_docker_mysql
+    container_name: prpl_mysql
     restart: always
     image: mysql:latest
     command: [
@@ -36,7 +36,7 @@ services:
       - backend
 
   php-8:
-    container_name: prpl_docker_php_8
+    container_name: prpl_php_8
     build: ./docker/
     volumes:
       - ${PROJECT_PATH}:/var/www
