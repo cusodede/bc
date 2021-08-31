@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 
 use yii\caching\DummyCache;
+use yii\db\Connection;
 use yii\helpers\ArrayHelper;
-use yii\web\AssetManager;
 
 /** @noinspection UsingInclusionReturnValueInspection */
 $web = require __DIR__.'/web.php';
@@ -13,10 +13,10 @@ return ArrayHelper::merge(
 	[
 		'components' => [
 			'db' => [
-				'class' => 'yii\db\Connection',
-				'dsn' => 'mysql:host=mysql;dbname=test',
-				'username' => 'root',
-				'password' => 'password',
+				'class' => Connection::class,
+				'dsn' => getenv('TEST_DB_DSN'),
+				'username' => getenv('TEST_DB_USER'),
+				'password' => getenv('TEST_DB_PASS'),
 				'charset' => 'utf8',
 
 				// Schema cache options (for production environment)
@@ -26,10 +26,6 @@ return ArrayHelper::merge(
 			'cache' => [
 				'class' => DummyCache::class
 			],
-//			'assetManager' => [
-//				'class' => AssetManager::class,
-//				'basePath' => '@webroot/web/assets',
-//			]
 		]
 	]
 );
