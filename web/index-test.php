@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use Dotenv\Dotenv;
 // NOTE: Make sure this file is not accessible when deployed to production
 if (!in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
     die('You are not allowed to access this file.');
@@ -11,6 +12,9 @@ defined('YII_ENV') or define('YII_ENV', 'test');
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+
+#load env
+Dotenv::createImmutable(__DIR__)->load();
 
 $config = require __DIR__ . '/../config/test.php';
 
