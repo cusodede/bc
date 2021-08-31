@@ -6,6 +6,7 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -16,6 +17,10 @@ $this->title = 'Абоненты у продукта';
 ?>
 <?php Modal::begin([
 	'size' => Modal::SIZE_LARGE,
+	'title' => BadgeWidget::widget([
+		'items' => 'Все пользователи продукта',
+		'subItem' => 'name'
+	]),
 	'options' => [
 		'class' => 'modal-dialog-large',
 	]

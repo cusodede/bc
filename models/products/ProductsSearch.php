@@ -113,7 +113,7 @@ class ProductsSearch extends Products
 		$query = Abonents::find()
 			->where(['IN', 'id', ArrayHelper::getColumn(
 				$model->relatedProductsToAbonents, 'abonent_id'
-			)]);
+			)])->active();
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 		$dataProvider->setSort([
