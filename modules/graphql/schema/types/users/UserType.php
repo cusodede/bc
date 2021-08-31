@@ -36,11 +36,19 @@ class UserType extends BaseObjectType
 				],
 				'login' => [
 					'type' => Type::string(),
-					'description' => 'Логин',
+					'description' => $user->getAttributeLabel('login'),
 				],
 				'email' => [
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
+				],
+				'phones' => [
+					'type' => Type::string(),
+					'description' => 'Телефон',
+					'resolve' => function(Users $user): ?string { // Фронт не готов принимать тут массив.
+						$phones = $user->getPhones();
+						return array_pop($phones);
+					},
 				],
 			],
 		]);

@@ -85,6 +85,7 @@ class Users extends ActiveRecord
 			}],
 			[['restore_code'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
+			[['name', 'surname'], 'string', 'min' => 3],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
 			[['daddy'], 'default', 'value' => Yii::$app->user->id],
