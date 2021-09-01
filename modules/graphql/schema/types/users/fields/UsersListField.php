@@ -16,7 +16,6 @@ use yii\helpers\ArrayHelper;
  */
 class UsersListField extends BaseField
 {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -33,9 +32,6 @@ class UsersListField extends BaseField
 				'limit' => Type::nonNull(Type::int()),
 				'offset' => Type::nonNull(Type::int())
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 

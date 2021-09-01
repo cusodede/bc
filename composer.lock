@@ -461,20 +461,20 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.30",
+            "version": "8.12.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "8b0986654eb5b16d5edb06a6e6533d2bef39a600"
+                "reference": "2d79a2443df5a693286510a24a308a0625a8132c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/8b0986654eb5b16d5edb06a6e6533d2bef39a600",
-                "reference": "8b0986654eb5b16d5edb06a6e6533d2bef39a600",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/2d79a2443df5a693286510a24a308a0625a8132c",
+                "reference": "2d79a2443df5a693286510a24a308a0625a8132c",
                 "shasum": ""
             },
             "require": {
-                "giggsey/locale": "^1.7",
+                "giggsey/locale": "^1.7|^2.0",
                 "php": ">=5.3.2",
                 "symfony/polyfill-mbstring": "^1.17"
             },
@@ -530,36 +530,37 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2021-08-17T07:25:43+00:00"
+            "time": "2021-08-24T07:02:46+00:00"
         },
         {
             "name": "giggsey/locale",
-            "version": "1.9",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/Locale.git",
-                "reference": "b07f1eace8072ccc61445ad8fbd493ff9d783043"
+                "reference": "f28e0fa55e842afe034a7671df79757731467031"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/Locale/zipball/b07f1eace8072ccc61445ad8fbd493ff9d783043",
-                "reference": "b07f1eace8072ccc61445ad8fbd493ff9d783043",
+                "url": "https://api.github.com/repos/giggsey/Locale/zipball/f28e0fa55e842afe034a7671df79757731467031",
+                "reference": "f28e0fa55e842afe034a7671df79757731467031",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": ">=7.2"
             },
             "require-dev": {
+                "ext-json": "*",
                 "pear/pear-core-minimal": "^1.9",
                 "pear/pear_exception": "^1.0",
                 "pear/versioncontrol_git": "^0.5",
-                "phing/phing": "~2.7",
-                "php-coveralls/php-coveralls": "^1.0|^2.0",
-                "phpunit/phpunit": "^4.8|^5.0",
-                "symfony/console": "^2.8|^3.0|^4.0",
-                "symfony/filesystem": "^2.8|^3.0|^4.0",
-                "symfony/finder": "^2.8|^3.0|^4.0",
-                "symfony/process": "^2.8|^3.0|^4.0"
+                "phing/phing": "^2.7",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8.5|^9.5",
+                "symfony/console": "^5.0",
+                "symfony/filesystem": "^5.0",
+                "symfony/finder": "^5.0",
+                "symfony/process": "^5.0"
             },
             "type": "library",
             "autoload": {
@@ -575,15 +576,15 @@
                 {
                     "name": "Joshua Gigg",
                     "email": "giggsey@gmail.com",
-                    "homepage": "http://giggsey.com/"
+                    "homepage": "https://giggsey.com/"
                 }
             ],
             "description": "Locale functions required by libphonenumber-for-php",
             "support": {
                 "issues": "https://github.com/giggsey/Locale/issues",
-                "source": "https://github.com/giggsey/Locale/tree/master"
+                "source": "https://github.com/giggsey/Locale/tree/2.0"
             },
-            "time": "2020-07-07T11:16:24+00:00"
+            "time": "2021-08-23T09:01:14+00:00"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -2744,17 +2745,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-dbmon.git",
-                "reference": "aac514bd48daef930cc953876d02416cc6baa066"
+                "reference": "a688ac01de537ef16c759ab9a931392f93300029"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-dbmon/zipball/aac514bd48daef930cc953876d02416cc6baa066",
-                "reference": "aac514bd48daef930cc953876d02416cc6baa066",
+                "url": "https://api.github.com/repos/pozitronik/yii2-dbmon/zipball/a688ac01de537ef16c759ab9a931392f93300029",
+                "reference": "a688ac01de537ef16c759ab9a931392f93300029",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
-                "pozitronik/yii2-helpers": "dev-master"
+                "pozitronik/yii2-helpers": "dev-master",
+                "pozitronik/yii2-traits": "dev-master"
             },
             "require-dev": {
                 "yiisoft/yii2": "dev-master"
@@ -2787,7 +2789,7 @@
                 "issues": "https://github.com/pozitronik/yii2-dbmon/issues",
                 "source": "https://github.com/pozitronik/yii2-dbmon/tree/master"
             },
-            "time": "2021-06-25T20:20:14+00:00"
+            "time": "2021-08-25T09:18:10+00:00"
         },
         {
             "name": "pozitronik/yii2-exceptionslogger",
@@ -3010,12 +3012,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-options.git",
-                "reference": "de501cb29d9e496105a09c1a3159f1e1a108cb35"
+                "reference": "e626663f758e03af2a9dc7b13e40039f1e3fe5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-options/zipball/de501cb29d9e496105a09c1a3159f1e1a108cb35",
-                "reference": "de501cb29d9e496105a09c1a3159f1e1a108cb35",
+                "url": "https://api.github.com/repos/pozitronik/yii2-options/zipball/e626663f758e03af2a9dc7b13e40039f1e3fe5a6",
+                "reference": "e626663f758e03af2a9dc7b13e40039f1e3fe5a6",
                 "shasum": ""
             },
             "require": {
@@ -3050,7 +3052,7 @@
                 "issues": "https://github.com/pozitronik/yii2-options/issues",
                 "source": "https://github.com/pozitronik/yii2-options/tree/master"
             },
-            "time": "2021-07-21T20:06:00+00:00"
+            "time": "2021-08-25T18:16:11+00:00"
         },
         {
             "name": "pozitronik/yii2-references",
@@ -3058,12 +3060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-references.git",
-                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865"
+                "reference": "d3336c8149377b7934d981fbda92f35fc06de56d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/a7114f52487bac43ba193fadd4cde97b94ef3865",
-                "reference": "a7114f52487bac43ba193fadd4cde97b94ef3865",
+                "url": "https://api.github.com/repos/pozitronik/yii2-references/zipball/d3336c8149377b7934d981fbda92f35fc06de56d",
+                "reference": "d3336c8149377b7934d981fbda92f35fc06de56d",
                 "shasum": ""
             },
             "require": {
@@ -3106,7 +3108,7 @@
                 "issues": "https://github.com/pozitronik/yii2-references/issues",
                 "source": "https://github.com/pozitronik/yii2-references/tree/master"
             },
-            "time": "2021-08-16T14:35:44+00:00"
+            "time": "2021-08-25T16:41:01+00:00"
         },
         {
             "name": "pozitronik/yii2-relations",
@@ -3214,12 +3216,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-users-options.git",
-                "reference": "8d5ef225ee3db9d7577d3d7e3eb5737735853a95"
+                "reference": "cd20c7e086d0bbc9740d2f52a9c31c029027f63d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-users-options/zipball/8d5ef225ee3db9d7577d3d7e3eb5737735853a95",
-                "reference": "8d5ef225ee3db9d7577d3d7e3eb5737735853a95",
+                "url": "https://api.github.com/repos/pozitronik/yii2-users-options/zipball/cd20c7e086d0bbc9740d2f52a9c31c029027f63d",
+                "reference": "cd20c7e086d0bbc9740d2f52a9c31c029027f63d",
                 "shasum": ""
             },
             "require-dev": {
@@ -3251,7 +3253,7 @@
                 "issues": "https://github.com/pozitronik/yii2-users-options/issues",
                 "source": "https://github.com/pozitronik/yii2-users-options/tree/master"
             },
-            "time": "2021-07-21T20:06:56+00:00"
+            "time": "2021-08-25T18:17:45+00:00"
         },
         {
             "name": "psr/http-client",
@@ -4418,12 +4420,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88"
+                "reference": "451834341593bef6b82d080e2428e19edd59c4f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f7c99d24fe6f65d287e007b5284e8e71e973fc88",
-                "reference": "f7c99d24fe6f65d287e007b5284e8e71e973fc88",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/451834341593bef6b82d080e2428e19edd59c4f5",
+                "reference": "451834341593bef6b82d080e2428e19edd59c4f5",
                 "shasum": ""
             },
             "require": {
@@ -4434,17 +4436,18 @@
             "require-dev": {
                 "amphp/amp": "^2.3",
                 "dms/phpunit-arraysubset-asserts": "^0.2.1",
-                "doctrine/coding-standard": "^8.2",
+                "doctrine/coding-standard": "^9.0",
                 "ergebnis/composer-normalize": "^2.13",
                 "nyholm/psr7": "^1.2",
                 "phpbench/phpbench": "^1",
                 "phpstan/extension-installer": "^1",
-                "phpstan/phpstan": "0.12.93",
-                "phpstan/phpstan-phpunit": "0.12.21",
-                "phpstan/phpstan-strict-rules": "0.12.10",
+                "phpstan/phpstan": "0.12.96",
+                "phpstan/phpstan-phpunit": "0.12.22",
+                "phpstan/phpstan-strict-rules": "0.12.11",
                 "phpunit/phpunit": "^9.5",
                 "psr/http-message": "^1",
-                "react/promise": "^2"
+                "react/promise": "^2",
+                "symfony/polyfill-php81": "^1.23"
             },
             "suggest": {
                 "psr/http-message": "To use standard GraphQL server",
@@ -4477,7 +4480,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-20T10:54:30+00:00"
+            "time": "2021-08-27T13:28:37+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -4485,12 +4488,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b"
+                "reference": "829d8f43d96204e046bdf950c2d6246af0ae881b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4f235c4f976dc4b92450e168f0d5ac873834aa0b",
-                "reference": "4f235c4f976dc4b92450e168f0d5ac873834aa0b",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/829d8f43d96204e046bdf950c2d6246af0ae881b",
+                "reference": "829d8f43d96204e046bdf950c2d6246af0ae881b",
                 "shasum": ""
             },
             "require": {
@@ -4600,7 +4603,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-19T20:17:05+00:00"
+            "time": "2021-08-24T19:30:33+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",

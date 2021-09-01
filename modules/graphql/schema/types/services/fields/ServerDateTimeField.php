@@ -23,16 +23,14 @@ class ServerDateTimeField extends BaseField
 			'name' => 'serverDateTime',
 			'description' 	=> 'Серверное время в формате ' . DateTimeType::DEFAULT_FORMAT,
 			'type' => DateTimeType::type(),
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): DateTimeImmutable
-				=> DateTimeType::parseString(date(DateTimeType::DEFAULT_FORMAT))
 		]);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
+	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): DateTimeImmutable
 	{
-		return [];
+		return DateTimeType::parseString(date(DateTimeType::DEFAULT_FORMAT));
 	}
 }

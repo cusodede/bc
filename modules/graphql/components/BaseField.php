@@ -5,6 +5,7 @@ namespace app\modules\graphql\components;
 
 use app\components\helpers\ArrayHelper;
 use app\modules\graphql\interfaces\ResolveInterface;
+use app\modules\graphql\traits\BaseObjectTrait;
 use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\ResolveInfo;
 use Throwable;
@@ -18,35 +19,16 @@ use yii\web\UnauthorizedHttpException;
  */
 abstract class BaseField extends FieldDefinition implements ResolveInterface
 {
-	/**
-	 * @var string[] Массив подгруженных классов.
-	 */
-	private static array $_fieldsMap = [];
+	use BaseObjectTrait;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function __construct(array $config) {
-		if (!isset($config['resolve'])) {/*проверять существование метода не нужно, он явно обозначен интерфейсом*/
+		if (!isset($config['resolve'])) {
 			$config['resolve'] = static fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo) => static::resolve($root, $args, $context, $resolveInfo);
 		}
-
 		parent::__construct($config);
-	}
-
-	/**
-	 * Мы не можем инстанцировать классы полей вне скоупа FieldDefinition, поскольку FieldDefinition::__construct()
-	 * является protected. Этот метод позволяет элегантно справиться с задачей.
-	 *
-	 * @return static
-	 * @throws Throwable
-	 */
-	public static function field(): static
-	{
-		if (null === ArrayHelper::getValue(self::$_fieldsMap, static::class)) {
-			self::$_fieldsMap[static::class] = new static();
-		}
-		return self::$_fieldsMap[static::class];
 	}
 
 	/**

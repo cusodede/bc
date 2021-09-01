@@ -27,18 +27,17 @@ class ProcessImportAction extends Action
 			'domain' => $domain,
 			'mappingRules' => $this->mappingRules
 		]);
-		$messages     = [];
-		$isImportDone = $importModel->import($messages);
+		$isImportDone = $importModel->import();
 
 		if (Yii::$app->request->isAjax) {
 			return $this->controller->asJson([
 				'done' => $isImportDone,
 				'percent' => $isImportDone ? 100 : $importModel->percent,
-				'messages' => $messages
+				'messages' => $importModel->errorMessages
 			]);
 		}
-		if (!$this->ignoreErrors && [] !== $messages) { //на итерации найдены ошибки
-			return $this->controller->render('@app/modules/import/views/import-errors', compact('messages', 'domain'));
+		if (!$this->ignoreErrors && [] !== $importModel->errorMessages) { //на итерации найдены ошибки
+			return $this->controller->render('@app/modules/import/views/import-errors', ['messages' => $importModel->errorMessages, 'domain' => $domain]);
 		}
 		if ($isImportDone) {
 //			$count = $importModel->count;

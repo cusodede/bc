@@ -31,9 +31,6 @@ class ProductsTypesListField extends BaseField
 					'type' => new ProductsTypesFilterInput(),
 				],
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): ?array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 

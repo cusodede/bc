@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
+use Yii;
 
 /**
  * Class PartnersController
@@ -13,19 +14,28 @@ use app\models\abonents\Abonents;
  */
 class AbonentsController extends DefaultController
 {
-
-	/**
-	 * @var string
-	 */
 	public string $modelSearchClass = AbonentsSearch::class;
-
-	/**
-	 * @var string
-	 */
 	public string $modelClass = Abonents::class;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getViewPath(): string
 	{
 		return '@app/views/abonents';
+	}
+
+	/**
+	 * Показать все продукты абонента.
+	 * @noinspection PhpPossiblePolymorphicInvocationInspection
+	 */
+	public function actionViewProducts(): string
+	{
+		$params      = Yii::$app->request->queryParams;
+		$searchModel = $this->searchModel;
+
+		return $this->renderAjax('modal/view-products', [
+			'dataProvider' => $searchModel->searchProductsToAbonent($params)
+		]);
 	}
 }

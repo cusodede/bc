@@ -31,9 +31,6 @@ class SubscriptionsTrialUnitsListField extends BaseField
 					'type' => new SubscriptionsTrialUnitsFilterInput(),
 				],
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): ?array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 

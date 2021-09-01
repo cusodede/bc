@@ -30,9 +30,6 @@ class PartnersCategoriesListField extends BaseField
 					'type' => new PartnersCategoriesFilterInput(),
 				],
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 
