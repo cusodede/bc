@@ -19,7 +19,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
-$this->title = 'Договоры';
+$this->title                   = 'Договоры';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

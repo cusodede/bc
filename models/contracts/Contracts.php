@@ -5,7 +5,6 @@ namespace app\models\contracts;
 
 use app\models\contracts\active_record\Contracts as ActiveRecordContracts;
 
-
 /**
  * Class Contracts
  * @package app\models\contracts

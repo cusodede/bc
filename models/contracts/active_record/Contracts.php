@@ -9,7 +9,6 @@ use Throwable;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
-
 /**
  * This is the model class for table "contracts".
  *
@@ -26,45 +25,45 @@ class Contracts extends ActiveRecord
 {
 	use ActiveRecordTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'contracts';
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'contracts';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['contract_number', 'contract_number_nfs', 'signing_date'], 'required'],
-            [['deleted'], 'integer'],
-            [['signing_date', 'created_at', 'updated_at'], 'safe'],
-            [['contract_number', 'contract_number_nfs'], 'string', 'max' => 11],
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['contract_number', 'contract_number_nfs', 'signing_date'], 'required'],
+			[['deleted'], 'integer'],
+			[['signing_date', 'created_at', 'updated_at'], 'safe'],
+			[['contract_number', 'contract_number_nfs'], 'string', 'max' => 11],
 			[['signing_date'], 'date', 'format' => 'yyyy-mm-dd'],
 			[['relatedProducts'], 'safe']
-        ];
-    }
+		];
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels(): array
-    {
-        return [
-            'id' => 'ID',
-            'contract_number' => '№ договора',
-            'contract_number_nfs' => '№ контракта',
-            'signing_date' => 'Дата подписания договора',
-            'relatedProducts' => 'Продукты',
-            'deleted' => 'Флаг удаления',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата обновления',
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return [
+			'id' => 'ID',
+			'contract_number' => '№ договора',
+			'contract_number_nfs' => '№ контракта',
+			'signing_date' => 'Дата подписания договора',
+			'relatedProducts' => 'Продукты',
+			'deleted' => 'Флаг удаления',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата обновления',
+		];
+	}
 
 	/**
 	 * {@inheritdoc}

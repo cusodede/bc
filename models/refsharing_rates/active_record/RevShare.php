@@ -22,42 +22,43 @@ use yii\db\ActiveRecord;
 class RevShare extends ActiveRecord
 {
 	use ActiveRecordTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'refsharing_rates';
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['description', 'calc_formula', 'value'], 'required'],
-            [['value', 'deleted'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['description', 'calc_formula'], 'string', 'max' => 255],
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'refsharing_rates';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels(): array
-    {
-        return [
-            'id' => 'ID',
-            'description' => 'Description',
-            'calc_formula' => 'Calc Formula',
-            'value' => 'Value',
-            'deleted' => 'Deleted',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['description', 'calc_formula', 'value'], 'required'],
+			[['value', 'deleted'], 'integer'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['description', 'calc_formula'], 'string', 'max' => 255],
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return [
+			'id' => 'ID',
+			'description' => 'Description',
+			'calc_formula' => 'Calc Formula',
+			'value' => 'Value',
+			'deleted' => 'Deleted',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
+		];
+	}
 
 	/**
 	 * {@inheritdoc}
