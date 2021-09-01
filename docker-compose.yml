@@ -5,37 +5,34 @@ services:
     image: nginx:alpine
     container_name: prpl_nginx
     ports:
-      - 8080:8080
-      - 8081:8081
+      - "8080:8080"
+      - "8081:8081"
     volumes:
-      - ${WEB_ROOT_PATH}:/var/www
+      - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
       - ${DOCKER_FOLDER}/nginx/include:/etc/nginx/include
-      - ${WEB_ROOT_PATH}/logs:/var/www/logs
-      - ${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx
+      - ${DOCKER_FOLDER}/logs:/var/www/logs
+      - ${DOCKER_FOLDER}/logs/nginx:/var/www/logs/nginx
     links:
       - php-8
     networks:
       - backend
 
   mysql:
+    container_name: prpl_mysql
     restart: always
     image: mysql:latest
-    container_name: prpl_mysql
     command: [
-        '--character-set-server=utf8',
-        '--collation-server=utf8_general_ci',
         '--default-authentication-plugin=mysql_native_password'
     ]
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - ${MYSQL_PATH}:/var/lib/mysql
-      - ${WEB_ROOT_PATH}:/var/www
     networks:
       - backend
 
@@ -43,21 +40,9 @@ services:
     build: ./docker/
     container_name: prpl_php
     volumes:
-      - ${WEB_ROOT_PATH}:/var/www
-      - ./docker/php.ini:/usr/local/etc/php/php.ini
-      - ./docker/tests/_output:/var/www/tests/_output
-    environment:
-      YII_DEBUG: ${YII_DEBUG}
-      YII_ENV_DEV: ${YII_ENV_DEV}
-      YII_ENV: ${YII_ENV}
-      MYSQL_DSN: ${MYSQL_DSN}
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+      - ${PROJECT_PATH}:/var/www
+      - ${DOCKER_FOLDER}/php.ini:/usr/local/etc/php/php.ini
+      - ${DOCKER_FOLDER}/tests/_output:/var/www/tests/_output
     links:
       - mysql
     networks:
@@ -76,6 +61,7 @@ services:
 # Networks Setup
 networks:
   backend:
+    name: prpl_network_backend
     driver: bridge
     ipam:
       driver: default
