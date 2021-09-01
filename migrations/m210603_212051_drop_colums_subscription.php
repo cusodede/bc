@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
 
-use yii\db\Migration;
 use app\models\subscriptions\Subscriptions;
+use app\components\db\Migration;
 
 /**
 * Class m210603_212051_drop_colums_subscription
@@ -28,9 +28,18 @@ class m210603_212051_drop_colums_subscription extends Migration
 	public function safeDown()
 	{
 		$this->addColumn(Subscriptions::tableName(), 'user_id', $this->integer()->notNull()->comment('id пользователя, создателя')->defaultValue(1));
-		$this->addColumn(Subscriptions::tableName(), 'deleted', $this->boolean()->notNull()->defaultValue(0)->comment('Флаг активности'));
-		$this->addColumn(Subscriptions::tableName(), 'created_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания партнера'));
-		$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
+		$this->addColumn(Subscriptions::tableName(), 'deleted', $this->boolean()->notNull()->defaultValue(false)->comment('Флаг активности'));
+		$this->addColumn(Subscriptions::tableName(), 'created_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания подписки'));
+
+		switch ($this->db->driverName) {
+			case 'mysql':
+				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления подписки'));
+			break;
+			case 'pgsql':
+				$this->addColumn(Subscriptions::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления подписки'));
+				$this->createOnUpdateTrigger(Subscriptions::tableName());
+			break;
+		}
 
 		$this->addForeignKey('fk-subscriptions-user_id', Subscriptions::tableName(), 'user_id', 'sys_users', 'id', 'CASCADE');
 		$this->createIndex('idx-subscriptions-deleted', Subscriptions::tableName(), 'deleted');

@@ -27,6 +27,7 @@ use yii\db\ActiveRecord;
  * @property-read int $done количество импортированных строк
  * @property-read int $percent процент импортированных строк
  * @property-read int $errorCount количество строк с ошибкой импорта
+ * @property array $errorMessages Массив ошибок, собранных при импорте
  */
 class ImportModel extends Model
 {
@@ -39,7 +40,7 @@ class ImportModel extends Model
 	/**
 	 * @var mixed $importFile атрибут загрузки файла
 	 */
-	public $importFile;
+	public mixed $importFile = null;
 	/**
 	 * правила соответствия полей
 	 * @var array $mappingRules
@@ -65,6 +66,11 @@ class ImportModel extends Model
 	 * @var int $importChunkSize количество импортируемых записей, обрабатываемых за раз
 	 */
 	public int $importChunkSize = 100;
+
+	/**
+	 * @var array Массив ошибок, собранных при импорте
+	 */
+	public array $errorMessages = [];
 
 	/**
 	 * @var string|null $_filename Имя загруженного файла в локальной ФС
@@ -140,20 +146,34 @@ class ImportModel extends Model
 	}
 
 	/**
+	 * @param string|resource $value
+	 * @return mixed
+	 */
+	private function unserialize(mixed $value): mixed
+	{
+		if (is_resource($value) && 'stream' === get_resource_type($value)) {
+			$result = stream_get_contents($value);
+			fseek($value, 0);//не забываем перемотать кассету
+		} else {
+			$result = $value;
+		}
+		return unserialize($result, ['allowed_classes' => false]);
+	}
+
+	/**
 	 * @param-out array $messages
-	 * @param array $messages
 	 * @return bool
 	 * @throws Throwable
 	 * todo: добавить правило, разрешающее скипать существующие данные
 	 */
-	public function import(array &$messages = []): bool
+	public function import(): bool
 	{
 		/** @var Import $data */
 		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => Import::NOT_PROCESSED])->limit($this->importChunkSize)->all()) {
 			return true;
 		}
 		foreach ($data as $importRecord) {
-			$importRow        = unserialize($importRecord->data, ['allowed_classes' => false]);
+			$importRow        = $this->unserialize($importRecord->data);
 			$mappedColumnData = [];
 			foreach ($importRow as $columnIndex => $value) {
 				/** @var array $currentRule */
@@ -179,7 +199,7 @@ class ImportModel extends Model
 			} else {
 				$importRecord->processed = Import::PROCESSED_ERROR;
 				$importRecord->save();
-				$messages[] = $errors;
+				$this->errorMessages[] = $errors;
 			}
 
 		}
