@@ -5,13 +5,11 @@ RUN apt-get update && apt-get install -y nano vim wget git unzip zlib1g-dev libp
 
 RUN docker-php-ext-install pdo pdo_mysql bcmath zip gd pdo_pgsql
 
-ADD ./php.ini /usr/local/etc/php/php.ini
+ADD ./php/php.ini /usr/local/etc/php/php.ini
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
 
 WORKDIR /var/www
