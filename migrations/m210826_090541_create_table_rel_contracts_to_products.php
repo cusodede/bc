@@ -18,7 +18,5 @@ class m210826_090541_create_table_rel_contracts_to_products extends RelationMigr
 	public function safeUp()
 	{
 		parent::safeUp();
-		$this->addForeignKey('fk_rel_tab_to_contracts', 'relation_contracts_to_products', 'contract_id', 'contracts', 'id');
-		$this->addForeignKey('fk_rel_tab_to_products', 'relation_contracts_to_products', 'product_id', 'products', 'id');
 	}
 }
