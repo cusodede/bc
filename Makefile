@@ -28,4 +28,4 @@ migrate:
 	@docker exec -i ${CID} bash -c "./yii migrate"
 
 setup:
-	./docker/scripts/setup
+	./docker/local/scripts/setup

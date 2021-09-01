@@ -5,6 +5,6 @@ if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEP
 	return require $localConfig;
 }
 
-defined('YII_DEBUG') or define('YII_DEBUG', getenv('YII_DEBUG'));
-defined('YII_ENV_DEV') or define('YII_ENV_DEV', getenv('YII_ENV_DEV'));
-defined('YII_ENV') or define('YII_ENV', getenv('YII_ENV_DEV') ?:'prod');
+defined('YII_DEBUG') or define('YII_DEBUG', getenv('YII_DEBUG') === 'true');
+defined('YII_ENV_DEV') or define('YII_ENV_DEV', getenv('YII_ENV_DEV') === 'true');
+defined('YII_ENV') or define('YII_ENV', getenv('YII_ENV_DEV'));

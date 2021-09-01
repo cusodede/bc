@@ -11,12 +11,13 @@ use Dotenv\Dotenv;
  * @license http://www.yiiframework.com/license/
  */
 
-require __DIR__ . '/config/env.php';
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 #load env
 Dotenv::createImmutable(__DIR__ )->safeLoad();
+require __DIR__ . '/config/env.php';
+
+require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/console.php';
 
