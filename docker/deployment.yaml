@@ -39,9 +39,9 @@ spec:
           configMap:
             name: prpl-php8-ini
             defaultMode: 420            
-        - name: prpl
+        - name: prpl-back
           persistentVolumeClaim:
-            claimName: prpl
+            claimName: prpl-back
       containers:
         - name: prpl-back
           image: >-
@@ -80,16 +80,19 @@ spec:
               - name: prpl-php8-ini
                 mountPath: "/usr/share/php8"
                 readOnly: true
-              - name: prpl
+              - name: prpl-back
                 mountPath: "/var/www/ppl/web/assets"
                 subPath: assets
-              - name: prpl
+              - name: prpl-back
                 mountPath: "/var/www/ppl/runtime"
                 subPath: runtime
-              - name: prpl
+              - name: prpl-back
+                mountPath: "/var/www/ppl/runtime/logs"
+                subPath: logs
+              - name: prpl-back
                 mountPath: "/tmp"
                 subPath: tmp
-              - name: prpl
+              - name: prpl-back
                 mountPath: "/var/www/ppl/web/uploads"
                 subPath: uploads               
       restartPolicy: Always
