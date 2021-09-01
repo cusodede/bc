@@ -19,65 +19,48 @@ services:
 
   mysql:
     container_name: prpl_mysql
-    restart: always
     image: mysql:latest
     command: [
         '--default-authentication-plugin=mysql_native_password'
     ]
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: always
     volumes:
       - ${MYSQL_PATH}:/var/lib/mysql
     networks:
       - backend
 
   postgres:
-    image: postgres:alpine
     container_name: prpl_postgres
+    image: postgres:alpine
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_DATABASE: ${DB_NAME}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ${POSTGRES_PATH}:/var/lib/postgresql/data
     networks:
       - backend
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secrect
 
   php-8:
     container_name: prpl_php_8
     build: ./docker/
-    container_name: prpl_php
     volumes:
-      - ${WEB_ROOT_PATH}:/var/www
-      - ./docker/php.ini:/usr/local/etc/php/php.ini
-      - ${WEB_ROOT_PATH}/docker/logs/php:/var/logs/php
-      - ${WEB_ROOT_PATH}/docker/home/.composesr:/root/.composer
-    environment:
-      YII_DEBUG: ${YII_DEBUG}
-      YII_ENV_DEV: ${YII_ENV_DEV}
-      YII_ENV: ${YII_ENV}
-      MYSQL_DSN: ${MYSQL_DSN}
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      POSTGRES_PATH: ${POSTGRES_PATH}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
-      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+      - ${PROJECT_PATH}:/var/www
+      - ${DOCKER_FOLDER}/logs/php:/var/logs/php
+      - ${DOCKER_FOLDER}/home/.composer:/root/.composer
     links:
       - mysql
     networks:
       - backend
 
-# Networks Setup
 networks:
   backend:
     name: prpl_network_backend
