@@ -82,6 +82,7 @@ class Contracts extends ActiveRecord
 	}
 
 	/**
+	 * @param mixed $relatedProducts
 	 * @throws Throwable
 	 */
 	public function setRelatedProducts(mixed $relatedProducts): void
