@@ -44,27 +44,19 @@ class RevShare extends ActiveRecord
 		];
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function attributeLabels(): array
-	{
-		return [
-			'id' => 'ID',
-			'description' => 'Description',
-			'calc_formula' => 'Calc Formula',
-			'value' => 'Value',
-			'deleted' => 'Deleted',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-		];
-	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedProducts(): ActiveQuery
-	{
-		return $this->hasMany(Products::class, ['refsharing_rates_id' => 'id']);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'id' => 'ID',
+            'description' => 'Description',
+            'calc_formula' => 'Calc Formula',
+            'value' => 'Value',
+            'deleted' => 'Deleted',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 }
