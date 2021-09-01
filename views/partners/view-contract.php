@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Partners $model
  */
 
 use app\models\contracts\active_record\RelContractsToProducts;
 use app\models\contracts\Contracts;
+use app\models\partners\Partners;
 use pozitronik\helpers\ArrayHelper;
-use yii\base\Model;
 use yii\web\View;
 
 ?>
