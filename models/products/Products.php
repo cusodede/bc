@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use app\components\helpers\DateHelper;
+use app\models\abonents\Abonents;
 use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
@@ -66,7 +67,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getRelatedProductsToAbonents(): ActiveQuery
 	{
-		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->viaTable('relation_abonents_to_products', ['product_id' => 'id']);
 	}
 
 	/**

@@ -110,10 +110,7 @@ class ProductsSearch extends Products
 			throw new NotFoundHttpException();
 		}
 
-		$query = Abonents::find()
-			->where(['IN', 'id', ArrayHelper::getColumn(
-				$model->relatedProductsToAbonents, 'abonent_id'
-			)])->active();
+		$query = $model->getRelatedProductsToAbonents();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,

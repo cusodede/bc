@@ -86,4 +86,12 @@ class Abonents extends ActiveRecordAbonents
 	{
 		return static::findOne(['phone' => $phone]);
 	}
+
+	/**
+	 * Получение ФИО пользователя
+	 */
+	public function getFullName(): string
+	{
+		return "{$this->surname} {$this->name} {$this->patronymic}";
+	}
 }

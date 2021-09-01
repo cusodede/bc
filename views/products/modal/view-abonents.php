@@ -35,7 +35,7 @@ $this->title = 'Абоненты у продукта';
 			'attribute' => 'name',
 			'label' => 'ФИО',
 			'format' => 'text',
-			'value' => static fn($item) => $item->surname . ' ' . $item->name . ' ' . $item->patronymic,
+			'value' => static fn($model) => $model->getFullName(),
 		],
 		'phone',
 		[
