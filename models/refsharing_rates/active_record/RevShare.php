@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property int $deleted Флаг активности
  * @property string $created_at Дата создания договора
  * @property string $updated_at Дата обновления договора
+ * @property int $product_id ID продукта
  */
 class RevShare extends ActiveRecord
 {
@@ -41,22 +42,32 @@ class RevShare extends ActiveRecord
 			[['value', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['description', 'calc_formula'], 'string', 'max' => 255],
+			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 		];
 	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels(): array
-    {
-        return [
-            'id' => 'ID',
-            'description' => 'Description',
-            'calc_formula' => 'Calc Formula',
-            'value' => 'Value',
-            'deleted' => 'Deleted',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function attributeLabels(): array
+	{
+		return [
+			'id' => 'ID',
+			'product_id' => 'ID product',
+			'description' => 'Описание условий ставки',
+			'calc_formula' => 'Формула расчета',
+			'value' => 'Значение',
+			'deleted' => 'Deleted',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedProduct(): ActiveQuery
+	{
+		return $this->hasOne(Products::class, ['id' => 'product_id']);
+	}
 }
