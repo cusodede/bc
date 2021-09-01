@@ -12,11 +12,4 @@ class m210826_090541_create_table_rel_contracts_to_products extends RelationMigr
 	public string $first_key = 'contract_id';
 	public string $second_key = 'product_id';
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function safeUp()
-	{
-		parent::safeUp();
-	}
 }
