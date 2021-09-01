@@ -61,7 +61,7 @@ class RevShare extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProducts(): ActiveQuery
 	{

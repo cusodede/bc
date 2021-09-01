@@ -58,7 +58,7 @@ class RelContractsToProducts extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedContract(): ActiveQuery
 	{
@@ -66,7 +66,7 @@ class RelContractsToProducts extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProduct(): ActiveQuery
 	{

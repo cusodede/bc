@@ -66,7 +66,7 @@ class Contracts extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedContractsToProducts(): ActiveQuery
 	{
@@ -74,7 +74,7 @@ class Contracts extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProducts(): ActiveQuery
 	{
