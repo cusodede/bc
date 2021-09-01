@@ -58,12 +58,4 @@ class RevShare extends ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedProducts(): ActiveQuery
-	{
-		return $this->hasMany(Products::class, ['refsharing_rates_id' => 'id']);
-	}
 }

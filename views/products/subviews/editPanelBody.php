@@ -39,15 +39,6 @@ use app\models\products\EnumProductsPaymentPeriods;
 		'tags' => true
 	]
 ]) ?>
-<?= $form->field($model, 'refsharing_rates_id')->widget(Select2::class, [
-	'data' => ArrayHelper::map(RevShare::find()->active()->all(), 'id', 'description'),
-	'pluginOptions' => [
-		'placeholder' => 'Выберите Ставку',
-		'multiple' => false,
-		'allowClear' => true,
-		'tags' => true
-	]
-]) ?>
 <?= $form->field($model, 'ext_description')->widget(MarkdownEditor::class, [
 	'showExport' => false,
 	'footerMessage' => false,
