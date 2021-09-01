@@ -73,9 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			'id',
-			'name',
-			'surname',
-			'login',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'username',
+				'label' => 'Фамилия, имя'
+			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'create_date',

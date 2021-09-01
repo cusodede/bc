@@ -35,6 +35,7 @@ use yii\helpers\ArrayHelper;
  * @property bool $deleted Флаг удаления
  *
  * @property-read UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
+ * @property-read string $username ФИО пользователя
  * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
  * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
  * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
@@ -44,7 +45,6 @@ class Users extends ActiveRecord
 	use ActiveRecordTrait;
 
 	private ?array $_phones = null;
-	public ?string $username = null;
 
 	/**
 	 * @inheritDoc

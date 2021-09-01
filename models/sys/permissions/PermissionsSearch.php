@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\sys\users\Users;
 use yii\data\ActiveDataProvider;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 
@@ -66,6 +67,7 @@ final class PermissionsSearch extends Permissions
 			->andFilterWhere(['like', self::tableName() . '.controller', $this->controller])
 			->andFilterWhere(['like', self::tableName() . '.action', $this->action])
 			->andFilterWhere([self::tableName() . '.verb' => $this->verb])
+			->andFilterWhere(['or', ['like', Users::tableName() . '.name', $this->user], ['like', Users::tableName() . '.surname', $this->user]])
 			->andFilterWhere(['like', PermissionsCollections::tableName() . '.name', $this->collection]);
 	}
 
