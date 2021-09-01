@@ -22,26 +22,27 @@ use yii\db\ActiveRecord;
 class RevShare extends ActiveRecord
 {
 	use ActiveRecordTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'refsharing_rates';
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['description', 'calc_formula', 'value'], 'required'],
-            [['value', 'deleted'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['description', 'calc_formula'], 'string', 'max' => 255],
-        ];
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'refsharing_rates';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['description', 'calc_formula', 'value'], 'required'],
+			[['value', 'deleted'], 'integer'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['description', 'calc_formula'], 'string', 'max' => 255],
+		];
+	}
 
     /**
      * {@inheritdoc}

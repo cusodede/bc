@@ -28,9 +28,6 @@ class UserProfileField extends BaseField
 			],
 			'description' => 'Возвращает текущего пользователя, а если указать id, вернёт конкретного пользователя.',
 			'type' => UserType::type(),
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 
@@ -42,7 +39,8 @@ class UserProfileField extends BaseField
 		$user = null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id);
 		return [
 			'id' => $user?->id,
-			'username' => $user?->username,
+			'name' => $user?->name,
+			'surname' => $user?->surname,
 			'login' => $user?->login,
 			'email' => $user?->email
 		];

@@ -1,3 +1,0 @@
-include:
-  - project: products/dol/k8s/CI.CD
-    file: prpl/prpl-back-ci.yml

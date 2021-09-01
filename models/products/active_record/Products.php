@@ -93,6 +93,7 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[Partner]].
+	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
 	{
@@ -101,6 +102,7 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[User]].
+	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery
 	{

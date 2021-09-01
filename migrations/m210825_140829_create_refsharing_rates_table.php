@@ -24,7 +24,7 @@ class m210825_140829_create_refsharing_rates_table extends Migration
 			'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания договора'),
 			'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления договора'),
 		]);
-		
+
 		$this->createIndex('idx-refsharing-deleted', 'refsharing_rates', 'deleted');
 	}
 

@@ -12,7 +12,6 @@ use Throwable;
  */
 abstract class BaseObjectType extends ObjectType
 {
-
 	/**
 	 * @var string[] Массив подгруженных типов
 	 */

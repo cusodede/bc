@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\schema\types\MutationType;
+use app\modules\graphql\schema\mutation\MutationType;
 use app\modules\graphql\schema\types\QueryType;
 use cusodede\jwt\JwtHttpBearerAuth;
-use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -61,7 +60,7 @@ class ApiController extends ActiveController
 	/**
 	 * Основная точка входа для GraphQL клиентов
 	 * @return array
-	 * @throws Exception
+	 * @throws Throwable
 	 */
 	public function actionIndex(): array
 	{

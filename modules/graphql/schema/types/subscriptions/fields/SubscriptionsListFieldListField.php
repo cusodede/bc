@@ -33,9 +33,6 @@ class SubscriptionsListFieldListField extends BaseField
 				'limit' => Type::nonNull(Type::int()),
 				'offset' => Type::nonNull(Type::int())
 			],
-			'resolve' => fn(mixed $root, array $args, mixed $context, ResolveInfo $resolveInfo): array => static::resolve(
-				$root, $args, $context, $resolveInfo
-			)
 		]);
 	}
 

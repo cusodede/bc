@@ -20,7 +20,7 @@ class m210513_113311_products extends Migration
 			'type_id' => $this->integer()->comment('id типа (подписка, бандл и т.д)'),
 			'user_id' => $this->integer()->notNull()->comment('id пользователя, создателя'),
 			'partner_id' => $this->integer()->notNull()->comment('id партнера, к кому привязан'),
-			'deleted' => $this->boolean()->notNull()->defaultValue(0)->comment('Флаг активности'),
+			'deleted' => $this->boolean()->notNull()->defaultValue(false)->comment('Флаг активности'),
 			'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания партнера'),
 		]);
 
