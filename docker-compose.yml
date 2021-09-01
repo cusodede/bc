@@ -51,7 +51,7 @@ services:
 
   php-8:
     container_name: prpl_php_8
-    build: ./docker/
+    build: ${DOCKER_FOLDER}
     volumes:
       - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/logs/php:/var/logs/php
