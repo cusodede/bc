@@ -39,9 +39,10 @@ class Service extends Model
 				$connection->createCommand("TRUNCATE TABLE $table")->execute();
 				$connection->createCommand("ALTER TABLE $table AUTO_INCREMENT = 0")->execute();
 			}
+			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;");
+			$connection->createCommand(/** @lang MySQL */ "INSERT INTO sys_users (id, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', NULL, 'admin@localhost.ru', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
 			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;")->execute();
-			$connection->createCommand("INSERT INTO sys_users (id, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', NULL, 'admin@localhost.ru', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
-		} /** @noinspection BadExceptionsProcessingInspection */ /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
+		} /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
 			$transaction->rollBack();
 			return false;
 		}
