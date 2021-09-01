@@ -24,7 +24,7 @@ class m210616_135643_drop_ref_subscription_categories extends Migration {
 		$this->createTable('ref_subscription_categories', [
 			'id' => $this->primaryKey(),
 			'name' => $this->string(64)->comment('Наименование категории'),
-			'deleted' => $this->boolean()->notNull()->defaultValue(0)->comment('Флаг активности'),
+			'deleted' => $this->boolean()->notNull()->defaultValue(false)->comment('Флаг активности'),
 		]);
 		$this->addColumn('subscriptions', 'category_id', $this->integer()->notNull()->comment('id категории подписки'));
 	}

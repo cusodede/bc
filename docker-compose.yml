@@ -35,12 +35,43 @@ services:
     networks:
       - backend
 
+  postgres:
+    image: postgres:alpine
+    container_name: prpl_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${POSTGRES_PATH}:/var/lib/postgresql/data
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secrect
+
   php-8:
     container_name: prpl_php_8
     build: ./docker/
+    container_name: prpl_php
     volumes:
-      - ${PROJECT_PATH}:/var/www
-      - ${DOCKER_FOLDER}/php.ini:/usr/local/etc/php/php.ini
+      - ${WEB_ROOT_PATH}:/var/www
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ${WEB_ROOT_PATH}/docker/logs/php:/var/logs/php
+      - ${WEB_ROOT_PATH}/docker/home/.composesr:/root/.composer
+    environment:
+      YII_DEBUG: ${YII_DEBUG}
+      YII_ENV_DEV: ${YII_ENV_DEV}
+      YII_ENV: ${YII_ENV}
+      MYSQL_DSN: ${MYSQL_DSN}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_PATH: ${POSTGRES_PATH}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
     links:
       - mysql
     networks:
