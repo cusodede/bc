@@ -32,6 +32,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: always
     volumes:
+      - ${PROJECT_PATH}/tests/_data:/var/www/tests/_data
       - ${MYSQL_PATH}:/var/lib/mysql
     networks:
       - backend
