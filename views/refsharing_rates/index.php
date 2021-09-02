@@ -10,9 +10,12 @@ declare(strict_types = 1);
  */
 
 use app\components\helpers\Html;
+use app\models\refsharing_rates\RevShare;
+use app\models\refsharing_rates\EnumRevShareType;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
@@ -56,8 +59,21 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			'id',
-			'description',
-			'calc_formula',
+			[
+				'filter' => Select2::widget([
+					'model' => $searchModel,
+					'attribute' => 'type',
+					'data' => EnumRevShareType::mapData(),
+					'pluginOptions' => [
+						'allowClear' => true,
+						'placeholder' => ''
+					]
+				]),
+				'attribute' => 'type',
+				'format' => 'text',
+				'value' => static fn(RevShare $item) => EnumRevShareType::getScalar($item->type),
+			],
+			'ref_share',
 			'value',
 			[
 				'class' => DataColumn::class,

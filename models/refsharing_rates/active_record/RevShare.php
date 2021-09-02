@@ -12,8 +12,8 @@ use yii\db\ActiveRecord;
  * This is the model class for table "refsharing_rates".
  *
  * @property int $id
- * @property string $description Описание процентной ставки
- * @property string $calc_formula Формула расчета
+ * @property int $type Тип ставки
+ * @property float $ref_share Ставка рефшеринга
  * @property int $value Значение процентной ставки
  * @property int $deleted Флаг активности
  * @property string $created_at Дата создания договора
@@ -39,10 +39,10 @@ class RevShare extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['description', 'calc_formula', 'value'], 'required'],
-			[['value', 'deleted'], 'integer'],
+			[['type', 'ref_share', 'value'], 'required'],
+			[['type', 'value', 'deleted'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['description', 'calc_formula'], 'string', 'max' => 255],
+			[['ref_share'], 'number'],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 		];
 	}
@@ -55,8 +55,8 @@ class RevShare extends ActiveRecord
 		return [
 			'id' => 'ID',
 			'product_id' => 'ID product',
-			'description' => 'Описание условий ставки',
-			'calc_formula' => 'Формула расчета',
+			'type' => 'Тип ставки',
+			'ref_share' => 'Ставка рефшеринга',
 			'value' => 'Значение',
 			'deleted' => 'Deleted',
 			'created_at' => 'Created At',

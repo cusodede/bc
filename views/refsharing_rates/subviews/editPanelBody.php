@@ -8,6 +8,7 @@ declare(strict_types = 1);
  */
 
 use app\models\products\Products;
+use app\models\refsharing_rates\EnumRevShareType;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use pozitronik\helpers\ArrayHelper;
@@ -16,8 +17,14 @@ use yii\web\View;
 
 ?>
 
-<?= $form->field($model, 'description')->textInput() ?>
-<?= $form->field($model, 'calc_formula')->textInput() ?>
+<div class="row mb-4">
+	<div class="col-sm-6">
+		<?= $form->field($model, 'type')->dropDownList(EnumRevShareType::mapData()) ?>
+	</div>
+	<div class="col-sm-6">
+		<?= $form->field($model, 'ref_share')->textInput(['type' => 'number', 'min' => 0, 'max' => 1, 'step' => 0.1]) ?>
+	</div>
+</div>
 <?= $form->field($model, 'value')->textInput() ?>
 <?= $form->field($model, 'product_id')->widget(Select2::class, [
 	'data' => ArrayHelper::map(Products::find()->active()->all(), 'id', 'name'),

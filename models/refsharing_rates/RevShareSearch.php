@@ -20,7 +20,7 @@ class RevShareSearch extends RevShare
     {
         return [
             [['id', 'product_id', 'value', 'deleted'], 'integer'],
-            [['description', 'calc_formula', 'created_at', 'updated_at'], 'safe'],
+            [['type', 'ref_share', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -44,14 +44,13 @@ class RevShareSearch extends RevShare
         $query->andFilterWhere([
             'id' => $this->id,
             'product_id' => $this->product_id,
+            'type' => $this->type,
+            'ref_share' => $this->ref_share,
             'value' => $this->value,
             'deleted' => $this->deleted,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
-
-        $query->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'calc_formula', $this->calc_formula]);
 
         return $dataProvider;
     }
