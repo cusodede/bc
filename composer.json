@@ -108,7 +108,7 @@
 			"docker exec -ti $(or $(s), $(service)) bash"
 		],
 		"setup": [
-			"./docker/scripts/setup"
+			"./docker/local/scripts/setup"
 		]
 	},
 	"extra": {

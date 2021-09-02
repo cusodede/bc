@@ -24,9 +24,13 @@ class UsersFilterInput extends InputObjectType
 					'type' => Type::int(),
 					'description' => $user->getAttributeLabel('id'),
 				],
-				'username' => [
+				'name' => [
 					'type' => Type::string(),
-					'description' => $user->getAttributeLabel('username'),
+					'description' => $user->getAttributeLabel('name'),
+				],
+				'surname' => [
+					'type' => Type::string(),
+					'description' => $user->getAttributeLabel('surname'),
 				],
 				'login' => [
 					'type' => Type::string(),
@@ -35,6 +39,10 @@ class UsersFilterInput extends InputObjectType
 				'email' => [
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
+				],
+				'search' => [
+					'type' => Type::string(),
+					'description' => 'Поиск по имени, фамилии, почте, минимум 3 символа'
 				],
 			]
 		]);

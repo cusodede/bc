@@ -9,6 +9,7 @@ declare(strict_types = 1);
 use pozitronik\widgets\BadgeWidget;
 use yii\base\Model;
 use yii\bootstrap4\Modal;
+use yii\bootstrap4\Tabs;
 use yii\web\View;
 
 $modelName = $model->formName();
@@ -24,5 +25,17 @@ $modelName = $model->formName();
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?= $this->render('../view', compact('model')) ?>
+<?= Tabs::widget([
+	'items' => [
+		[
+			'label' => 'Инфо',
+			'content' => $this->render('../view', compact('model')),
+			'active' => true
+		],
+		[
+			'label' => 'Договор',
+			'content' => $this->render('../view-contract', compact('model'))
+		]
+	]
+]) ?>
 <?php Modal::end(); ?>

@@ -17,7 +17,7 @@ class m210513_112805_partners extends Migration
 			'id' => $this->primaryKey(),
 			'name' => $this->string(64)->notNull()->comment('Название партнера'),
 			'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->comment('Дата создания партнера'),
-			'deleted' => $this->boolean()->notNull()->defaultValue(0)->comment('Флаг активности'),
+			'deleted' => $this->boolean()->notNull()->defaultValue(false)->comment('Флаг активности'),
 		]);
 
 		$this->createIndex('idx-partners-deleted', 'partners', 'deleted');

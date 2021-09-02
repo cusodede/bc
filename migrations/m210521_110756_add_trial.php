@@ -13,7 +13,7 @@ class m210521_110756_add_trial extends Migration {
 	 */
 	public function safeUp()
 	{
-		$this->addColumn(Subscriptions::tableName(), 'trial', $this->boolean()->notNull()->defaultValue(0)->comment('Триальный период'));
+		$this->addColumn(Subscriptions::tableName(), 'trial', $this->boolean()->notNull()->defaultValue(false)->comment('Триальный период'));
 		$this->createIndex('idx-subscriptions-trial', Subscriptions::tableName(), 'trial');
 	}
 

@@ -14,5 +14,7 @@ codeception.yml
 /docker/tests
 
 /.env
-/docker/databases/
 .idea/php-docker-settings.xml
+/docker/databases/
+/docker/logs/
+/docker/home/
