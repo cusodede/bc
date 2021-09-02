@@ -190,13 +190,13 @@ if (YII_ENV_DEV) {
 	$config['bootstrap'][] = 'debug';
 	$config['modules']['debug'] = [
 		'class' => DebugModule::class,
-		//'allowedIPs' => ['127.0.0.1', '::1'],
-	];
+		'allowedIPs' => ['127.0.0.1', '::1', '*'],
+		];
 
 	$config['bootstrap'][] = 'gii';
 	$config['modules']['gii'] = [
-		'class' => GiiModule::class
-		//'allowedIPs' => ['127.0.0.1', '::1'],
+		'class' => GiiModule::class,
+		'allowedIPs' => ['127.0.0.1', '::1', '*'],
 	];
 }
 
