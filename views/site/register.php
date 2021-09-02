@@ -20,7 +20,10 @@ $this->title = 'Вход';
 		<div class="panel-content">
 			<?php $form = ActiveForm::begin(); ?>
 			<div class="form-group">
-				<?= $form->field($model, 'username')->textInput(['placeholder' => 'Себастьян Перейра']) ?>
+				<?= $form->field($model, 'name')->textInput(['placeholder' => 'Ваше имя']) ?>
+			</div>
+			<div class="form-group">
+				<?= $form->field($model, 'surname')->textInput(['placeholder' => 'Ваша фамилия']) ?>
 			</div>
 			<div class="form-group">
 				<?= $form->field($model, 'login')->textInput(['placeholder' => 'Логин для входа']) ?>

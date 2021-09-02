@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
+use Dotenv\Dotenv;
 /**
  * Yii console bootstrap file.
  *
@@ -9,8 +11,12 @@ declare(strict_types=1);
  * @license http://www.yiiframework.com/license/
  */
 
-require __DIR__ . '/config/env.php';
 require __DIR__ . '/vendor/autoload.php';
+
+#load env
+Dotenv::createImmutable(__DIR__ )->safeLoad();
+require __DIR__ . '/config/env.php';
+
 require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/console.php';

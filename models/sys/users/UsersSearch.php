@@ -7,7 +7,6 @@ use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class UsersSearch
@@ -16,6 +15,8 @@ class UsersSearch extends ActiveRecordUsers
 {
 	public ?int $limit = null;
 	public ?int $offset = null;
+	public ?string $search = null;
+	public ?string $username = null;
 
 	/**
 	 * @inheritdoc
@@ -24,7 +25,8 @@ class UsersSearch extends ActiveRecordUsers
 	{
 		return [
 			[['id', 'limit', 'offset'], 'integer'],
-			[['username', 'login', 'email'], 'safe'],
+			[['login', 'email', 'username'], 'safe'],
+			[['search'], 'string', 'min' => 3],
 		];
 	}
 
@@ -33,11 +35,10 @@ class UsersSearch extends ActiveRecordUsers
 	 * @param int[] $allowedGroups
 	 * @return ActiveDataProvider
 	 * @throws Throwable
-	 * @throws ForbiddenHttpException
 	 */
 	public function search(array $params, array $allowedGroups = []): ActiveDataProvider
 	{
-		$query = Users::find()->active()->scope();
+		$query = Users::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
@@ -50,7 +51,7 @@ class UsersSearch extends ActiveRecordUsers
 
 		$dataProvider->setSort([
 			'defaultOrder' 	=> ['id' => SORT_ASC],
-			'attributes' 	=> ['id', 'username', 'login', 'email',]
+			'attributes' 	=> ['id', 'login', 'email',]
 		]);
 
 		$this->load($params);
@@ -63,9 +64,19 @@ class UsersSearch extends ActiveRecordUsers
 
 		$query->andFilterWhere(['sys_users.id' => $this->id])
 			->andFilterWhere(['group_id' => $allowedGroups])
-			->andFilterWhere(['like', 'sys_users.username', $this->username])
 			->andFilterWhere(['like', 'login', $this->login])
+			->andFilterWhere(['or', ['like', 'name', $this->username], ['like', 'surname', $this->username]])
 			->andFilterWhere(['like', 'email', $this->email]);
+
+		// Поиск из GraphQL
+		if (null !== $this->search) {
+			$query->andFilterWhere([
+				'or',
+				['like', 'name', $this->search],
+				['like', 'surname', $this->search],
+				['like', 'email', $this->search],
+			]);
+		}
 
 		if (null !== $this->limit) {
 			$query->limit = $this->limit;

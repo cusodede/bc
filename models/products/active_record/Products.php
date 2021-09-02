@@ -6,6 +6,7 @@ namespace app\models\products\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
+use app\models\refsharing_rates\RevShare;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -92,7 +93,6 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[Partner]].
-	 *
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
@@ -102,7 +102,6 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[User]].
-	 *
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery

@@ -7,6 +7,7 @@ use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\mutation\partners\PartnersMutationType;
 use app\modules\graphql\schema\mutation\products\ProductsMutationType;
 use app\modules\graphql\schema\mutation\subscriptions\SubscriptionsMutationType;
+use app\modules\graphql\schema\mutation\users\UsersMutationType;
 
 /**
  * Class MutationType
@@ -23,6 +24,7 @@ class MutationType extends BaseObjectType
 			'partners' 			=> PartnersMutationType::root(),
 			'products' 			=> ProductsMutationType::root(),
 			'subscriptions' 	=> SubscriptionsMutationType::root(),
+			'users' 			=> UsersMutationType::root(),
 		];
 
 		ksort($schema, SORT_REGULAR);

@@ -45,7 +45,8 @@
 		"odannyc/yii2-sse": "dev-master",
 		"webonyx/graphql-php": "dev-master",
 		"moonlandsoft/yii2-phpexcel": "dev-master",
-		"giggsey/libphonenumber-for-php": "^8.12"
+		"giggsey/libphonenumber-for-php": "^8.12",
+		"vlucas/phpdotenv": "^4"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
@@ -58,7 +59,6 @@
 		"codeception/module-yii2": "^1.1",
 		"codeception/module-db": "^1.1",
 		"codeception/module-filesystem": "^1.0",
-		"vlucas/phpdotenv": "^4",
 		"phpmetrics/phpmetrics": "^2.7"
 	},
 	"config": {
@@ -106,7 +106,7 @@
 			"docker exec -ti $(or $(s), $(service)) bash"
 		],
 		"setup": [
-			"./docker/scripts/setup"
+			"./docker/local/scripts/setup"
 		]
 	},
 	"extra": {
