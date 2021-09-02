@@ -33,7 +33,7 @@ $modelName = $model->formName();
 		'id' => "{$modelName}-modal-create",
 		'enableAjaxValidation' => true,
 		'options' => [
-			"onsubmit" => new JsExpression("formSubmitAjax(event)")
+			'class' => 'form-ajax-submit'
 		]
 	])
 ?>
