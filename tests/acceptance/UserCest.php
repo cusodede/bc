@@ -20,7 +20,8 @@ class UserCest
 	{
 		$I->amOnPage('/site/login');
 		$I->click('Регистрация');
-		$I->fillField('RegistrationForm[username]', 'admin');
+		$I->fillField('RegistrationForm[name]', 'admin');
+		$I->fillField('RegistrationForm[surname]', 'admin');
 		$I->fillField('RegistrationForm[login]', 'admin');
 		$I->fillField('RegistrationForm[email]', 'admin@admin.ru');
 		$I->fillField('RegistrationForm[password]', 'Admin1@3');
