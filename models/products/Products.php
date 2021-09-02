@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @package app\models\product
  *
  * @property Partners $relatedPartner
+ * @property RevShare $relatedRevShare
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read ActiveRecord|null $relatedInstance
@@ -199,6 +200,6 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getRelatedRevShare(): ActiveQuery
 	{
-		return $this->hasOne(RevShare::class, ['product_id' => 'id']);
+		return $this->hasMany(RevShare::class, ['product_id' => 'id']);
 	}
 }

@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property string $created_at Дата создания договора
  * @property string $updated_at Дата обновления договора
  * @property int $product_id ID продукта
+ * @property Products $relatedProduct
  */
 class RevShare extends ActiveRecord
 {
