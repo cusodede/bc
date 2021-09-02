@@ -66,11 +66,7 @@ class AbonentsSearch extends Abonents
 		if (null === $model) {
 			throw new NotFoundHttpException();
 		}
-
-		$query = Products::find()
-			->where(['IN', 'id', ArrayHelper::getColumn(
-				$model->relatedAbonentsToProducts, 'product_id'
-			)])->active();
+		$query = $model->getAbonentToProducts();
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
 		$dataProvider->setSort([

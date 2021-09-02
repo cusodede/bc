@@ -94,4 +94,12 @@ class Abonents extends ActiveRecordAbonents
 	{
 		return "{$this->surname} {$this->name} {$this->patronymic}";
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAbonentToProducts(): ActiveQuery
+	{
+		return $this->hasMany(Products::class, ['id' => 'product_id'])->viaTable('relation_abonents_to_products', ['abonent_id' => 'id']);
+	}
 }
