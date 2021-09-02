@@ -56,6 +56,27 @@ CREATE TABLE `billing_journal` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `contracts`
+--
+
+DROP TABLE IF EXISTS `contracts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `contracts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `contract_number` varchar(64) NOT NULL COMMENT '№ договора',
+  `contract_number_nfs` varchar(64) NOT NULL COMMENT '№ контракта',
+  `signing_date` datetime DEFAULT NULL COMMENT 'Дата подписания договора',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг активности',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания договора',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата обновления договора',
+  PRIMARY KEY (`id`),
+  KEY `idx-contracts-numbers` (`contract_number`,`contract_number_nfs`),
+  KEY `idx-contracts-deleted` (`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `migration`
 --
 
@@ -212,6 +233,26 @@ CREATE TABLE `ref_partners_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `refsharing_rates`
+--
+
+DROP TABLE IF EXISTS `refsharing_rates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `refsharing_rates` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) NOT NULL COMMENT 'Описание процентной ставки',
+  `calc_formula` varchar(255) NOT NULL COMMENT 'Формула расчета',
+  `value` int NOT NULL COMMENT 'Значение процентной ставки',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг активности',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания договора',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата обновления договора',
+  PRIMARY KEY (`id`),
+  KEY `idx-refsharing-deleted` (`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `relation_abonents_to_products`
 --
 
@@ -227,6 +268,22 @@ CREATE TABLE `relation_abonents_to_products` (
   KEY `fk_ratp_to_products` (`product_id`),
   CONSTRAINT `fk_ratp_to_abonents` FOREIGN KEY (`abonent_id`) REFERENCES `abonents` (`id`),
   CONSTRAINT `fk_ratp_to_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `relation_contracts_to_products`
+--
+
+DROP TABLE IF EXISTS `relation_contracts_to_products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `relation_contracts_to_products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `contract_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `relation_contracts_to_products_contract_id_product_id` (`contract_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -304,7 +361,7 @@ CREATE TABLE `sys_exceptions` (
   `post` text COMMENT 'POST',
   `known` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Known error',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -377,7 +434,7 @@ CREATE TABLE `sys_history` (
   KEY `operation_identifier` (`operation_identifier`),
   KEY `model_class_model_key` (`model_class`,`model_key`),
   KEY `delegate` (`delegate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -408,11 +465,11 @@ CREATE TABLE `sys_import` (
   `model` varchar(255) NOT NULL,
   `domain` int NOT NULL,
   `data` blob,
-  `processed` tinyint(1) DEFAULT '0',
+  `processed` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `processed` (`processed`),
   KEY `domain` (`domain`),
-  KEY `model` (`model`)
+  KEY `model` (`model`),
+  KEY `processed` (`processed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -612,7 +669,8 @@ DROP TABLE IF EXISTS `sys_users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sys_users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL COMMENT 'Отображаемое имя пользователя',
+  `name` varchar(255) DEFAULT NULL COMMENT 'Имя пользователя',
+  `surname` varchar(255) DEFAULT NULL COMMENT 'Фамилия пользователя',
   `login` varchar(64) NOT NULL COMMENT 'Логин',
   `password` varchar(255) NOT NULL COMMENT 'Хеш пароля',
   `salt` varchar(255) DEFAULT NULL COMMENT 'Unique random salt hash',
@@ -626,11 +684,10 @@ CREATE TABLE `sys_users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
-  KEY `username` (`username`),
   KEY `daddy` (`daddy`),
   KEY `deleted` (`deleted`),
   KEY `is_pwd_outdated` (`is_pwd_outdated`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -719,4 +776,4 @@ CREATE TABLE `users_options` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-26 14:51:38
+-- Dump completed on 2021-09-02 12:28:54
