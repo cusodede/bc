@@ -11,5 +11,8 @@ use app\models\refsharing_rates\active_record\RevShare as ActiveRecordRevShare;
  */
 class RevShare extends ActiveRecordRevShare
 {
-
+	public function dummy_stub(): void
+	{
+		//todo: add some code
+	}
 }

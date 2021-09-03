@@ -64,7 +64,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedAbonents(): ActiveQuery
 	{
@@ -72,7 +72,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
 	{
@@ -80,7 +80,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery
 	{
@@ -197,7 +197,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProductsToAbonents(): ActiveQuery
 	{

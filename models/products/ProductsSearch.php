@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
-use app\models\abonents\Abonents;
-use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
