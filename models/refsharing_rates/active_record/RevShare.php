@@ -4,8 +4,6 @@ declare(strict_types = 1);
 namespace app\models\refsharing_rates\active_record;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\products\active_record\Products;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
