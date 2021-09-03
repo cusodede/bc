@@ -67,7 +67,6 @@ class ProductsController extends DefaultController
 
 	/**
 	 * Показать всех абонентов выбранного продукта.
-	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
 	public function actionViewAbonents(): string
 	{
@@ -75,7 +74,7 @@ class ProductsController extends DefaultController
 		$searchModel = $this->searchModel;
 
 		return $this->renderAjax('modal/view-abonents', [
-			'dataProvider' => $searchModel->searchAbonentsToProduct($params)
+			'dataProvider' => $searchModel->searchAbonents($params)
 		]);
 	}
 }

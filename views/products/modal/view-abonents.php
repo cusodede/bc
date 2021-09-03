@@ -6,6 +6,7 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\models\abonents\Abonents;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
@@ -35,7 +36,7 @@ $this->title = 'Абоненты у продукта';
 			'attribute' => 'name',
 			'label' => 'ФИО',
 			'format' => 'text',
-			'value' => static fn($model) => $model->getFullName(),
+			'value' => static fn(Abonents $model) => $model->getFullName(),
 		],
 		'phone',
 		[

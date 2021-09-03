@@ -7,6 +7,7 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\models\products\Products;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
@@ -34,7 +35,7 @@ $this->title = 'Продукты абонента';
 		[
 			'attribute' => 'name',
 			'format' => 'raw',
-			'value' => static function($item) use ($phone) {
+			'value' => static function(Products $item) use ($phone) {
 				return Html::a($item->name, ['products/journal', 'ProductsJournalSearch' => ['searchAbonentPhone' => $phone]]);
 			},
 		],

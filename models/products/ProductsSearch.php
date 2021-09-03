@@ -100,17 +100,16 @@ class ProductsSearch extends Products
 	}
 
 	/**
-	 * @throws InvalidConfigException
 	 * @throws NotFoundHttpException
 	 */
-	public function searchAbonentsToProduct(array $params): ActiveDataProvider
+	public function searchAbonents(array $params): ActiveDataProvider
 	{
 		$model = Products::findOne($params['id']);
 		if (null === $model) {
 			throw new NotFoundHttpException();
 		}
 
-		$query = $model->getRelatedProductsToAbonents();
+		$query = $model->getRelatedAbonents();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,

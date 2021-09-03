@@ -65,7 +65,7 @@ class Products extends ActiveRecordProducts
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRelatedProductsToAbonents(): ActiveQuery
+	public function getRelatedAbonents(): ActiveQuery
 	{
 		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->viaTable('relation_abonents_to_products', ['product_id' => 'id']);
 	}
