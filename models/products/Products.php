@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use app\components\helpers\DateHelper;
+use app\models\abonents\Abonents;
+use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
 use app\models\subscriptions\Subscriptions;
@@ -27,6 +29,7 @@ use yii\helpers\ArrayHelper;
  * @property Partners $relatedPartner
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
+ * @property-read RelAbonentsToProducts[] $relatedProductsToAbonents
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read ActiveQuery $relatedSubscription
  * @property-read string|null $typeDesc именованное обозначение типа продукта.
@@ -35,6 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  * @property-read bool $isActive
  * @property-read FileStorage|null $fileStoryLogo
+ * @property-read Abonents[] $relatedAbonents Список связанных абонентов с продуктом.
  */
 class Products extends ActiveRecordProducts
 {
@@ -57,6 +61,14 @@ class Products extends ActiveRecordProducts
 		return array_merge(parent::rules(), [
 			[['storyLogo'], 'image', 'extensions' => 'jpg, jpeg']
 		]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedAbonents(): ActiveQuery
+	{
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->via('relatedProductsToAbonents');
 	}
 
 	/**
@@ -191,5 +203,13 @@ class Products extends ActiveRecordProducts
 	public static function find(): ProductsActiveQuery
 	{
 		return Yii::createObject(ProductsActiveQuery::class, [static::class]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedProductsToAbonents(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
 	}
 }
