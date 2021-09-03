@@ -6,7 +6,7 @@ namespace app\models\products;
 use app\components\helpers\DateHelper;
 use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
-use app\models\refsharing_rates\RevShare;
+use app\models\revshare_rates\RevShareRates;
 use app\models\subscriptions\Subscriptions;
 use app\models\partners\Partners;
 use app\models\sys\users\Users;
@@ -26,7 +26,7 @@ use yii\helpers\ArrayHelper;
  * @package app\models\product
  *
  * @property Partners $relatedPartner
- * @property RevShare $relatedRevShare
+ * @property RevShareRates $relatedRevShare
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read ActiveRecord|null $relatedInstance
@@ -200,6 +200,6 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getRelatedRevShare(): ActiveQuery
 	{
-		return $this->hasMany(RevShare::class, ['product_id' => 'id']);
+		return $this->hasMany(RevShareRates::class, ['product_id' => 'id']);
 	}
 }

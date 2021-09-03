@@ -10,8 +10,8 @@ declare(strict_types = 1);
  */
 
 use app\components\helpers\Html;
-use app\models\refsharing_rates\RevShare;
-use app\models\refsharing_rates\EnumRevShareType;
+use app\models\revshare_rates\RevShareRates;
+use app\models\revshare_rates\EnumRevShareType;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
@@ -71,10 +71,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				]),
 				'attribute' => 'type',
 				'format' => 'text',
-				'value' => static fn(RevShare $item) => EnumRevShareType::getScalar($item->type),
+				'value' => static fn(RevShareRates $item) => EnumRevShareType::getScalar($item->type),
 			],
-			'ref_share',
-			'value',
+			'rate',
+			'condition_value',
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',

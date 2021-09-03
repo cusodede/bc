@@ -17,7 +17,6 @@ use yii\web\View;
 	<?php
 	$contractsToProducts = RelContractsToProducts::findModel($products->id);
 	$contract            = Contracts::findOne(ArrayHelper::getValue($contractsToProducts, 'contract_id'));
-	$refsharingRate      = $products->relatedRevShare;
 	?>
 	<div class="card">
 		<div class="card-body">
@@ -40,8 +39,6 @@ use yii\web\View;
 					<div class="w-100"></div>
 					<div class="col"><?= $products->name ?></div>
 					<div class="col"><?= Yii::$app->formatter->asDecimal($products->price) ?> &#8381;</div>
-					<div class="col"><?= $refsharingRate->calc_formula ?></div>
-					<div class="col"><?= $refsharingRate->value ?>%</div>
 				</div>
 			</blockquote>
 		</div>

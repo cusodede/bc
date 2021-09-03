@@ -7,7 +7,7 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\refsharing_rates\RevShare;
+use app\models\revshare_rates\RevShareRates;
 use kartik\form\ActiveForm;
 use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\components\web\DefaultController;
-use app\models\refsharing_rates\RevShare;
-use app\models\refsharing_rates\RevShareSearch;
+use app\models\revshare_rates\RevShareRates;
+use app\models\revshare_rates\RevShareRatesSearch;
 
 /**
  * Class RevShareController
@@ -13,11 +13,11 @@ use app\models\refsharing_rates\RevShareSearch;
  */
 class RevShareController extends DefaultController
 {
-	public string $modelSearchClass = RevShareSearch::class;
-	public string $modelClass = RevShare::class;
+	public string $modelSearchClass = RevShareRatesSearch::class;
+	public string $modelClass = RevShareRates::class;
 
 	public function getViewPath(): string
 	{
-		return '@app/views/refsharing_rates';
+		return '@app/views/revshare_rates';
 	}
 }

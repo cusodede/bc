@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\models\refsharing_rates;
+namespace app\models\revshare_rates;
 
 use app\models\common\EnumTrait;
 
 /**
  * Class EnumRevShareType
- * @package app\models\refsharing_rates
+ * @package app\models\revshare_rates
  */
 class EnumRevShareType
 {
