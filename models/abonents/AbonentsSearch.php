@@ -70,6 +70,6 @@ class AbonentsSearch extends Abonents
 			'attributes' => ['created_at', 'status_id']
 		]);
 
-		return ['dataProvider' => $dataProvider, 'model' => $model];
+		return compact('dataProvider', 'model');
 	}
 }
