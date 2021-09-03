@@ -38,6 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  * @property-read bool $isActive
  * @property-read FileStorage|null $fileStoryLogo
+ * @property-read Abonents[] $relatedAbonents Список связанных абонентов с продуктом.
  */
 class Products extends ActiveRecordProducts
 {

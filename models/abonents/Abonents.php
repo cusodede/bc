@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
  * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
  * @property-read Products[] $fullProductList todo: что это?
+ * @property-read Products[] $relatedProducts Список связанных продуктов с абонентом.
  */
 class Abonents extends ActiveRecordAbonents
 {
