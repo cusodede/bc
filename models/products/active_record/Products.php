@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\products\active_record;
 
 use app\components\db\ActiveRecordTrait;
+use app\models\abonents\Abonents;
+use app\models\abonents\RelAbonentsToProducts;
 use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\revshare_rates\RevShareRates;
@@ -30,8 +32,10 @@ use Yii;
  * @property string $created_at Дата создания продукта
  * @property string $updated_at Дата обновления партнера
  *
- * @property Partners $relatedPartner
- * @property Users $relatedUser
+ * @property-read Partners $relatedPartner
+ * @property-read Users $relatedUser
+ * @property-read Abonents[] $relatedAbonents Список связанных абонентов с продуктом.
+ * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
  */
 class Products extends ActiveRecord
 {
@@ -115,5 +119,21 @@ class Products extends ActiveRecord
 	public function getRelatedRevShare(): ActiveQuery
 	{
 		return $this->hasMany(RevShareRates::class, ['product_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonents(): ActiveQuery
+	{
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonentsToProducts(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
 	}
 }
