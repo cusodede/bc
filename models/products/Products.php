@@ -67,7 +67,7 @@ class Products extends ActiveRecordProducts
 	 */
 	public function getRelatedAbonents(): ActiveQuery
 	{
-		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->viaTable('relation_abonents_to_products', ['product_id' => 'id']);
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->via('relatedProductsToAbonents');
 	}
 
 	/**
@@ -202,5 +202,13 @@ class Products extends ActiveRecordProducts
 	public static function find(): ProductsActiveQuery
 	{
 		return Yii::createObject(ProductsActiveQuery::class, [static::class]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedProductsToAbonents(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
 	}
 }

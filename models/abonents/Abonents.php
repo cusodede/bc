@@ -100,6 +100,6 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public function getRelatedProducts(): ActiveQuery
 	{
-		return $this->hasMany(Products::class, ['id' => 'product_id'])->viaTable('relation_abonents_to_products', ['abonent_id' => 'id']);
+		return $this->hasMany(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
 	}
 }
