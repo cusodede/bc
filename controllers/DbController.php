@@ -15,13 +15,15 @@ use yii\web\Response;
 /**
  * Class DbController
  */
-class DbController extends Controller {
+class DbController extends Controller
+{
 	use ControllerTrait;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'access' => [
 				'class' => PermissionFilter::class
@@ -34,7 +36,8 @@ class DbController extends Controller {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function actionProcessList():string {
+	public function actionProcessList(): string
+	{
 		$provider = new ArrayDataProvider([
 			'allModels' => DbMonitor::ProcessList(),
 			'sort' => [
@@ -52,8 +55,9 @@ class DbController extends Controller {
 	 * @param int $process_id
 	 * @return Response
 	 */
-	public function actionKill(int $process_id):Response {
-		Yii::$app->session->setFlash('DbMonitorMessage', (null === $affected = DbMonitor::kill($process_id))?"None killed":"{$affected} row(s) $affected");
+	public function actionKill(int $process_id): Response
+	{
+		Yii::$app->session->setFlash('DbMonitorMessage', (null === $affected = DbMonitor::kill($process_id)) ? "None killed" : "{$affected} row(s) $affected");
 		return $this->redirect(['process-list']);
 	}
 }

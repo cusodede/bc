@@ -78,7 +78,7 @@ let cropperInitConfig = {
 
 					_this.getImgCropper().reset();
 				}).fail(function(data) {
-					toastr.error(data.responseJSON.error);
+					toastr.error(data.responseJSON.message, 'Произошла ошибка');
 				})
 			});
 		});

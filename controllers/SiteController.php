@@ -26,7 +26,8 @@ use yii\web\UnauthorizedHttpException;
  * Class SiteController
  * @package app\controllers
  */
-class SiteController extends Controller {
+class SiteController extends Controller
+{
 	use ControllerTrait;
 
 	public $layout = 'login';
@@ -34,13 +35,14 @@ class SiteController extends Controller {
 	/**
 	 * @inheritdoc
 	 */
-	public function actions():array {
+	public function actions(): array
+	{
 		return [
 			'error' => [
 				'class' => ErrorAction::class
 			],
 			'swagger-doc' => [
-				'class'     => SwaggerUiAction::class,
+				'class' => SwaggerUiAction::class,
 				'schemaUrl' => Url::to(['swagger-schema'])
 			],
 			'swagger-schema' => [
@@ -54,7 +56,8 @@ class SiteController extends Controller {
 	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function actionLogin(?string $from = null) {
+	public function actionLogin(?string $from = null)
+	{
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->doLogin()) {
 			if ($model->user->is_pwd_outdated) {
@@ -71,7 +74,8 @@ class SiteController extends Controller {
 	/**
 	 * logout
 	 */
-	public function actionLogout():void {
+	public function actionLogout(): void
+	{
 		Yii::$app->user->logout();
 		$this->redirect('index');
 	}
@@ -86,7 +90,8 @@ class SiteController extends Controller {
 	 * @return string|Response
 	 * @throws UnauthorizedHttpException
 	 */
-	public function actionUpdatePassword() {
+	public function actionUpdatePassword()
+	{
 		/** @var Users|null $loggedUser */
 		if (null === $loggedUser = Yii::$app->user->identity) {
 			throw new UnauthorizedHttpException('Пользователь не авторизован');
@@ -105,13 +110,14 @@ class SiteController extends Controller {
 	 * Запрос на восстановление пароля, доступно только неавторизованному пользователю или пользюку,
 	 * у которого протух пароль. Протухшим разрешаем потому, что они тоже могут забыть пароль.
 	 */
-	public function actionRestorePassword():string {
+	public function actionRestorePassword(): string
+	{
 		if (!(Yii::$app->user->isGuest || true === ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated'))) {
 			throw new ForbiddenHttpException('Восстановление пароля недоступно после авторизации');
 		}
 		$restorePasswordForm = new RestorePasswordForm();
 		if ($restorePasswordForm->load(Yii::$app->request->post())) {/*это постинг формы с емейлом*/
-			$restorePasswordForm->doSendCode();//не возвращает результат
+			$restorePasswordForm->sendCode();//не возвращает результат
 			return $this->render('restore-password-sent');
 		}
 
@@ -125,7 +131,8 @@ class SiteController extends Controller {
 	 * @param string|null $code
 	 * @return string|Response
 	 */
-	public function actionResetPassword(?string $code = null) {
+	public function actionResetPassword(?string $code = null)
+	{
 		if (null === $code) return $this->redirect('restore-password');
 
 		/*Проверка наличия пользователя с указанным кодом восстановления*/
@@ -148,14 +155,16 @@ class SiteController extends Controller {
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionIndex():Response {
-		return (Yii::$app->user->isGuest || ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false))?$this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])):$this->redirect(Yii::$app->homeUrl);
+	public function actionIndex(): Response
+	{
+		return (Yii::$app->user->isGuest || ArrayHelper::getValue(Yii::$app->user->identity, 'is_pwd_outdated', false)) ? $this->redirect(ArrayHelper::getValue(Yii::$app->params, 'user.loginpage', ['site/login'])) : $this->redirect(Yii::$app->homeUrl);
 	}
 
 	/**
 	 * @return string
 	 */
-	public function actionError():string {
+	public function actionError(): string
+	{
 		$exception = Yii::$app->errorHandler->exception;
 
 		if (null !== $exception) {
@@ -169,7 +178,8 @@ class SiteController extends Controller {
 	/**
 	 * @return string|Response
 	 */
-	public function actionRegister() {
+	public function actionRegister()
+	{
 		$registrationForm = new RegistrationForm();
 		if ($registrationForm->load(Yii::$app->request->post()) && $registrationForm->doRegister()) {
 			return $this->redirect(['site/login', 'from' => 'register']);
@@ -183,7 +193,8 @@ class SiteController extends Controller {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function actionOptions():string {
+	public function actionOptions(): string
+	{
 		$this->layout = 'main';
 		return $this->render('options', [
 			'boolOptions' => [

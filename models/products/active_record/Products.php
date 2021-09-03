@@ -6,6 +6,7 @@ namespace app\models\products\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\partners\active_record\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
+use app\models\refsharing_rates\RevShare;
 use app\models\sys\users\active_record\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -54,7 +55,7 @@ class Products extends ActiveRecord
 			[['name', 'description', 'ext_description', 'user_id', 'partner_id', 'type_id'], 'required', 'message' => 'Заполните {attribute}.'],
 			[['type_id', 'user_id', 'partner_id', 'deleted', 'payment_period'], 'integer'],
 			[['start_date', 'end_date', 'created_at', 'updated_at'], 'safe'],
-			[['price'], 'number', 'min' => 0 , 'max' => 999999],
+			[['price'], 'number', 'min' => 0, 'max' => 999999],
 			[['price'], 'default', 'value' => 0],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['description'], 'string', 'max' => 255],
@@ -92,7 +93,6 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[Partner]].
-	 *
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
@@ -102,7 +102,6 @@ class Products extends ActiveRecord
 
 	/**
 	 * Gets query for [[User]].
-	 *
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery

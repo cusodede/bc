@@ -48,7 +48,7 @@ LoginAsset::register($this);
 				<div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
 					<?= $content ?>
 					<div class="position-absolute pos-bottom pos-left pos-right p-3 text-center">
-						<?= date('Y').' © '.Yii::$app->name ?>
+						<?= date('Y') . ' © ' . Yii::$app->name ?>
 					</div>
 				</div>
 			</div>

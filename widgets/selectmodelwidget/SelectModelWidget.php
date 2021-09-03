@@ -37,7 +37,8 @@ use yii\web\JsExpression;
  * @property string $jsPrefix костыль для призыва нужных JS-функций в ассетах потомков
  * @property false|string $dataOptions название метода используемого класса, возвращающего дополнительные опции для выбиралки. Если false -- то игнорируется
  */
-class SelectModelWidget extends Select2 {
+class SelectModelWidget extends Select2
+{
 	public const DATA_MODE_LOAD = 0;//данные прогружаются сразу
 	public const DATA_MODE_AJAX = 1;//данные прогружаются аяксовым поиском
 
@@ -68,7 +69,8 @@ class SelectModelWidget extends Select2 {
 	 * Виджет попытается сгенерировать нужный набор данных прямо из модели/из $data, в случае необходимости
 	 * @return string|array
 	 */
-	private function initAjaxValueText() {
+	private function initAjaxValueText()
+	{
 		if (null !== $this->initValueText) return $this->initValueText;//параметр задан через конфигурацию, ничего вычислять не надо
 		/*Вычисляем весь скоуп данных с фильтрацией по текущему значению*/
 		$this->initData($this->value);
@@ -78,21 +80,22 @@ class SelectModelWidget extends Select2 {
 	/**
 	 * AJAX parameters generator
 	 */
-	private function initAjax():void {
+	private function initAjax(): void
+	{
 		if ($this->searchAttribute) {
 			$column = "column: '{$this->searchAttribute}', ";
 		} else {
-			$column = 'name' === $this->mapAttribute?null:"column: '{$this->mapAttribute}', ";
+			$column = 'name' === $this->mapAttribute ? null : "column: '{$this->mapAttribute}', ";
 		}
-		$concat = $this->concatFields?"concatFields: '{$this->concatFields}', ":null;
+		$concat                  = $this->concatFields ? "concatFields: '{$this->concatFields}', " : null;
 		$this->ajaxPluginOptions = [
 			'minimumInputLength' => $this->ajaxMinimumInputLength,
 			'initValueText' => $this->initAjaxValueText(),
 			'ajax' => [
 				'url' => $this->ajaxSearchUrl,
 				'dataType' => 'json',
-				'data' => new JsExpression("function(params) { return {term:params.term, ".
-					$column.$concat."page: params.page}; }"),
+				'data' => new JsExpression("function(params) { return {term:params.term, " .
+					$column . $concat . "page: params.page}; }"),
 				'cache' => true
 			]
 		];
@@ -102,7 +105,8 @@ class SelectModelWidget extends Select2 {
 	 * Генерирует набор данных для подстановки в выбиралку без загрузки. При self::DATA_MODE_AJAX используется для подстановки данных в уже имеющиеся значения (см. self::initAjaxValueText())
 	 * @param $filterValue - если указано, то выборка скукожится только до переданного значения
 	 */
-	private function initData($filterValue = null):void {
+	private function initData($filterValue = null): void
+	{
 		if ([] === $this->data) {
 			if (null === $this->selectionQuery) $this->selectionQuery = $this->_selectModel::find();
 			if (is_array($this->exclude) && [] !== $this->exclude) {
@@ -127,7 +131,8 @@ class SelectModelWidget extends Select2 {
 	 * @return ActiveRecordInterface
 	 * @throws InvalidConfigException
 	 */
-	public function getSelectModel():ActiveRecordInterface {
+	public function getSelectModel(): ActiveRecordInterface
+	{
 		if (null !== $this->_selectModel) return $this->_selectModel;
 		$this->_selectModel = Yii::createObject($this->selectModelClass);
 		if (!($this->_selectModel instanceof ActiveRecordInterface)) {
@@ -139,16 +144,17 @@ class SelectModelWidget extends Select2 {
 	/**
 	 * Функция инициализации и нормализации свойств виджета
 	 */
-	public function init():void {
+	public function init(): void
+	{
 		parent::init();
 		SelectModelWidgetAssets::register($this->getView());
 
-		$this->pkName = $this->pkName??$this->selectModel::primaryKey()[0];
+		$this->pkName = $this->pkName ?? $this->selectModel::primaryKey()[0];
 		if (null === $this->pkName) {
 			throw new InvalidConfigException("{$this->selectModel} must have primary key and it should not be composite");
 		}
 
-		$this->options['id'] = isset($this->options['id'])?$this->options['id'].$this->model->primaryKey:Html::getInputId($this->model, $this->attribute).$this->model->primaryKey;
+		$this->options['id'] = isset($this->options['id']) ? $this->options['id'] . $this->model->primaryKey : Html::getInputId($this->model, $this->attribute) . $this->model->primaryKey;
 
 		/*В зависимости от режима работы AJAX/LOAD настраиваем виджет и генерируем выводимый список*/
 		switch ($this->loadingMode) {
@@ -162,7 +168,7 @@ class SelectModelWidget extends Select2 {
 		}
 
 		if ($this->dataOptions && method_exists($this->selectModel, $this->dataOptions)) {//если у модели есть опции для выбиралки, присунем их к стандартным опциям
-			$pKeys = array_keys($this->data);
+			$pKeys   = array_keys($this->data);
 			$options = ArrayHelper::getValue($this->options, 'options', []);
 			if (!is_array($options)) throw new InvalidConfigException("Options must be an array");
 			/** @var array $options */
@@ -173,8 +179,8 @@ class SelectModelWidget extends Select2 {
 				'allowClear' => true,
 				'multiple' => $this->multiple,
 				'language' => 'ru',
-				'templateResult' => new JsExpression('function(item) {return '.$this->jsPrefix.'TemplateResult(item)}'),
-				'escapeMarkup' => new JsExpression('function(markup) {return '.$this->jsPrefix.'EscapeMarkup(markup);}'),
+				'templateResult' => new JsExpression('function(item) {return ' . $this->jsPrefix . 'TemplateResult(item)}'),
+				'escapeMarkup' => new JsExpression('function(markup) {return ' . $this->jsPrefix . 'EscapeMarkup(markup);}'),
 //				'matcher' => new JsExpression('function(params, data) {return '.$this->jsPrefix.'MatchCustom(params, data)}')
 			] + $this->ajaxPluginOptions + $this->pluginOptions;
 	}

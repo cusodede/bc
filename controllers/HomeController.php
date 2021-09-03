@@ -10,13 +10,15 @@ use yii\web\Controller;
  * Class HomeController
  * @package app\controllers
  */
-class HomeController extends Controller {
+class HomeController extends Controller
+{
 	use ControllerTrait;
 
 	/**
 	 * @return string
 	 */
-	public function actionHome():string {
+	public function actionHome(): string
+	{
 		return $this->render('home');
 	}
 

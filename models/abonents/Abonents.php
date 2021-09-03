@@ -59,7 +59,7 @@ class Abonents extends ActiveRecordAbonents
 	{
 		return ArrayHelper::index(
 			array_map(
-				static function (RelAbonentsToProducts $relation) {
+				static function(RelAbonentsToProducts $relation) {
 					$relation->relatedProduct->actualStatus = $relation->relatedLastProductsJournal;
 					return $relation->relatedProduct;
 				},

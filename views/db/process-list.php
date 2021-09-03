@@ -13,7 +13,7 @@ use yii\grid\GridView;
 use yii\bootstrap4\Html;
 use yii\web\View;
 
-$this->title = 'Мониторинг процессов БД';
+$this->title                   = 'Мониторинг процессов БД';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

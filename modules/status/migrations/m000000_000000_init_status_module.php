@@ -9,14 +9,16 @@ use yii\db\Migration;
  * Class m000000_000000_init_status_module
  * @package app\modules\targets\migrations
  */
-class m000000_000000_init_status_module extends Migration {
+class m000000_000000_init_status_module extends Migration
+{
 
 	private const MAIN_TABLE_NAME = 'sys_status';
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->createTable(self::MAIN_TABLE_NAME, [
 			'id' => $this->primaryKey(),
 			'model_name' => $this->string(255)->null(),
@@ -36,7 +38,8 @@ class m000000_000000_init_status_module extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropTable(self::MAIN_TABLE_NAME);
 	}
 

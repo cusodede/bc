@@ -12,13 +12,15 @@ use yii\caching\TagDependency;
 /**
  * Class PermissionsCollections
  */
-class PermissionsCollections extends ActiveRecordPermissionsCollections {
+class PermissionsCollections extends ActiveRecordPermissionsCollections
+{
 	/**
 	 * При изменении группы, нужно удалить кеши прав всем пользователям, у которых:
 	 *    - право есть в группе прав, назначенной пользователю
 	 * @inheritDoc
 	 */
-	public function afterSave($insert, $changedAttributes):void {
+	public function afterSave($insert, $changedAttributes): void
+	{
 		if (false === $insert) {
 			$usersInGroup = ArrayHelper::getColumn($this->relatedUsersRecursively, 'id');
 			foreach ($usersInGroup as $userId) {

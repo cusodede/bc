@@ -66,7 +66,7 @@ trait TicketTrait
 	public function transformException(Throwable $e): array
 	{
 		$errorData = [
-			'code'        => $e->getCode(),
+			'code' => $e->getCode(),
 			'baseMessage' => $e->getMessage(),
 			'userMessage' => ''
 		];

@@ -13,7 +13,8 @@ use yii\db\Transaction;
  * Class Service
  * @package app\models\core
  */
-class Service extends Model {
+class Service extends Model
+{
 
 	/**
 	 * Сброс к заводским настройкам.
@@ -21,24 +22,27 @@ class Service extends Model {
 	 * Очистка всех справочников.
 	 * Всё в ноль.
 	 * После очистки создаётся чистый административный аккаунт.
+	 * @noinspection BadExceptionsProcessingInspection
 	 */
-	public static function ResetDB():bool {
-		$connection = Yii::$app->db;
+	public static function ResetDB(): bool
+	{
+		$connection  = Yii::$app->db;
 		$transaction = new Transaction([
 			'db' => $connection
 		]);
 		$transaction->begin();
 		$tables = $connection->schema->tableNames;
 		ArrayHelper::removeValue($tables, 'migration');
-		$connection->createCommand("SET FOREIGN_KEY_CHECKS = 0;");
+		$connection->createCommand("SET FOREIGN_KEY_CHECKS = 0;")->execute();
 		try {
 			foreach ($tables as $table) {
 				$connection->createCommand("TRUNCATE TABLE $table")->execute();
 				$connection->createCommand("ALTER TABLE $table AUTO_INCREMENT = 0")->execute();
 			}
 			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;");
-			$connection->createCommand("INSERT INTO sys_users (id, username, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', 'admin', NULL, 'admin@localhost', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
-		} /** @noinspection BadExceptionsProcessingInspection */ /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
+			$connection->createCommand(/** @lang MySQL */ "INSERT INTO sys_users (id, login, password, salt, email, comment, create_date, deleted) VALUES (1, 'admin', 'admin', NULL, 'admin@localhost.ru', 'Системный администратор', CURRENT_DATE(), 0)")->execute();
+			$connection->createCommand("SET FOREIGN_KEY_CHECKS = 1;")->execute();
+		} /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $t) {
 			$transaction->rollBack();
 			return false;
 		}

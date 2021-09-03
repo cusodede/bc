@@ -11,17 +11,19 @@ use yii\web\AssetBundle as YiiAssetBundle;
  * Class CropperWidgetAsset
  * @package app\widgets\smartadmin\cropper\assets
  */
-class CropperWidgetAsset extends YiiAssetBundle {
-	public function init():void {
-		$this->depends = [
+class CropperWidgetAsset extends YiiAssetBundle
+{
+	public function init(): void
+	{
+		$this->depends        = [
 			SmartAdminThemeAssets::class
 		];
-		$this->sourcePath = __DIR__.'/assets';
-		$this->css = [
+		$this->sourcePath     = __DIR__ . '/assets';
+		$this->css            = [
 			'css/cropper.css',
 			'css/cropper-custom.css',
 		];
-		$this->js = [
+		$this->js             = [
 			'js/cropper.js',
 			'js/cropper-actions.js',
 		];

@@ -15,18 +15,11 @@ use yii\helpers\ArrayHelper;
  */
 class ProductsSearch extends Products
 {
-	/**
-	 * @var string|null
-	 */
 	public ?string $category_id = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $trial = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $active = null;
+	public ?int $limit = null;
+	public ?int $offset = null;
 
 	/**
 	 * @return array[]
@@ -34,7 +27,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -49,7 +42,7 @@ class ProductsSearch extends Products
 	{
 		// Сортировка и навигация для GraphQL
 		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+		$sort       = ArrayHelper::getValue($params, $this->formName() . '.sort');
 
 		$query = Products::find()->active();
 
@@ -64,7 +57,7 @@ class ProductsSearch extends Products
 		} else {
 			$dataProvider->setSort([
 				'defaultOrder' => ['id' => SORT_ASC],
-				'attributes'   => ['id', 'name'],
+				'attributes' => ['id', 'name'],
 			]);
 		}
 
@@ -77,9 +70,9 @@ class ProductsSearch extends Products
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
 		$query->andFilterWhere([
-			'products.id'          => $this->id,
-			'products.type_id'     => $this->type_id,
-			'products.partner_id'  => $this->partner_id,
+			'products.id' => $this->id,
+			'products.type_id' => $this->type_id,
+			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
 		$query->andFilterWhere(['like', 'products.name', $this->name]);
@@ -90,6 +83,14 @@ class ProductsSearch extends Products
 
 		if (null !== $this->active) {
 			$query->whereActivePeriod($this->active);
+		}
+
+		if (null !== $this->limit) {
+			$query->limit = $this->limit;
+		}
+
+		if (null !== $this->offset) {
+			$query->offset = $this->offset;
 		}
 
 		return $dataProvider;

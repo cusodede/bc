@@ -13,3 +13,6 @@
 codeception.yml
 
 /.env
+/docker/local/databases/
+/docker/local/logs/
+/docker/local/home/

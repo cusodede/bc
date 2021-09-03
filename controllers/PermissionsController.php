@@ -12,7 +12,8 @@ use pozitronik\helpers\ArrayHelper;
 /**
  * Class PermissionsController
  */
-class PermissionsController extends DefaultController {
+class PermissionsController extends DefaultController
+{
 
 	public string $modelClass = Permissions::class;
 	public string $modelSearchClass = PermissionsSearch::class;
@@ -21,14 +22,16 @@ class PermissionsController extends DefaultController {
 	/**
 	 * @inheritDoc
 	 */
-	public function getViewPath():string {
+	public function getViewPath(): string
+	{
 		return '@app/views/permissions';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function actions():array {
+	public function actions(): array
+	{
 		$defaultEditableActionConfig = [
 			'class' => EditableColumnAction::class,
 			'modelClass' => Permissions::class,

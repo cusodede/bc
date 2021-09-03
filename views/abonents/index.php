@@ -25,23 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?= GridConfig::widget([
-	'id'   => "{$modelName}-index-grid",
+	'id' => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'toolbar'          => [
+		'toolbar' => [
 			['content' => Html::ajaxModalLink('Добавить абонента', $controller::to('create'), ['class' => ['btn btn-success']])]
 		],
-		'export'           => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			[
 				'class'    => ActionColumn::class,
-				'template' => '<div class="btn-group">{edit}{view}</div>',
+				'template' => '<div class="btn-group">{edit}{view}{view-products}</div>',
 				'buttons'  => [
 					'edit' => static function(string $url, Model $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
@@ -53,6 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
+					'view-products' => static function(string $url, Model $model) {
+						return Html::ajaxModalLink('<i class="fas fa-arrow-circle-up"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
+						]);
+					},
 				],
 			],
 			'id',
@@ -61,14 +66,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			'patronymic',
 			'phone',
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'created_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'updated_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

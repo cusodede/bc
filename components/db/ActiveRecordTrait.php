@@ -20,14 +20,16 @@ use yii\web\UploadedFile;
  * Trait ActiveRecordTrait
  * Попытка переделать правильно трейт с вспомогательными функциями ActiveRecord-классов
  */
-trait ActiveRecordTrait {
+trait ActiveRecordTrait
+{
 	use VendorActiveRecordTrait;
 	use ActiveRecordPermissionsTrait;
 
 	/**
 	 * @return ActiveQuery
 	 */
-	public static function find():ActiveQuery {
+	public static function find(): ActiveQuery
+	{
 		return new ActiveQuery(static::class);
 	}
 
@@ -37,7 +39,8 @@ trait ActiveRecordTrait {
 	 * @param int|string|ActiveRecordInterface $model
 	 * @return ActiveRecordInterface|null
 	 */
-	public static function ensureModel(null|string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
+	public static function ensureModel(null|string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model): ?ActiveRecordInterface
+	{
 		if (is_string($model) && is_numeric($model)) {
 			$model = (int)$model;
 		}
@@ -45,14 +48,15 @@ trait ActiveRecordTrait {
 			/** @var ActiveRecordInterface $className */
 			$model = $className::findOne($model);
 		}
-		return is_a($model, ActiveRecordInterface::class, false)?$model:null;
+		return is_a($model, ActiveRecordInterface::class, false) ? $model : null;
 	}
 
 	/**
 	 * @inheritDoc
 	 * @param ActiveRecordInterface|int|string $model the model to be linked with the current one.
 	 */
-	public function link($name, $model, $extraColumns = []):void {
+	public function link($name, $model, $extraColumns = []): void
+	{
 		/** @noinspection PhpMultipleClassDeclarationsInspection
 		 * parent всегда будет ссылаться на BaseActiveRecord, но у нас нет способа это пометить
 		 */
@@ -67,7 +71,8 @@ trait ActiveRecordTrait {
 	 * @throws DbException
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function createModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []):?bool {
+	public function createModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []): ?bool
+	{
 		$errors = [];
 		if ($this->load(Yii::$app->request->post())) {
 			/**
@@ -100,8 +105,8 @@ trait ActiveRecordTrait {
 				if (null === $AJAXErrorsFormat) $AJAXErrorsFormat = Yii::$app->request->isAjax;
 				/** @var ActiveRecord $this */
 				$errors = $AJAXErrorsFormat
-					?ActiveForm::validate($this)
-					:$this->errors;
+					? ActiveForm::validate($this)
+					: $this->errors;
 				$transaction->rollBack();
 			}
 
@@ -115,7 +120,8 @@ trait ActiveRecordTrait {
 	 * @return null|array
 	 * @throws Throwable
 	 */
-	public function validateModelFromPost():?array {
+	public function validateModelFromPost(): ?array
+	{
 		if ($this->load(Yii::$app->request->post())) {
 			/** @var ActiveRecord $this */
 			return ActiveForm::validate($this);
@@ -131,7 +137,8 @@ trait ActiveRecordTrait {
 	 * @throws DbException
 	 * @param-out array $errors На выходе всегда будет массив
 	 */
-	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []):?bool {
+	public function updateModelFromPost(array &$errors = [], ?bool $AJAXErrorsFormat = null, array $relationAttributes = []): ?bool
+	{
 		/* Методы совпадают, но оставлено на будущее */
 		return $this->createModelFromPost($errors, $AJAXErrorsFormat, $relationAttributes);
 	}
@@ -139,7 +146,8 @@ trait ActiveRecordTrait {
 	/**
 	 * Универсальная функция удаления любой модели
 	 */
-	public function safeDelete():void {
+	public function safeDelete(): void
+	{
 		if ($this->hasAttribute('deleted')) {
 			$this->setAndSaveAttribute('deleted', !$this->deleted);
 			$this->afterDelete();
@@ -155,7 +163,8 @@ trait ActiveRecordTrait {
 	 * @param mixed $value
 	 * @return bool
 	 */
-	public function setAndSaveAttribute(string $name, $value):bool {
+	public function setAndSaveAttribute(string $name, $value): bool
+	{
 		//для избежания дублирования логики функционала
 		return $this->setAndSaveAttributes([$name => $value]);
 	}
@@ -167,7 +176,8 @@ trait ActiveRecordTrait {
 	 * @param bool $safeOnly
 	 * @return bool
 	 */
-	public function setAndSaveAttributes(?array $values, bool $safeOnly = false):bool {
+	public function setAndSaveAttributes(?array $values, bool $safeOnly = false): bool
+	{
 		if ($safeOnly) {
 			//Уберем unsafe атрибуты, чтобы избежать возможных ошибок при доступе к этим свойствам.
 			$values = array_intersect_key($values, array_flip($this->safeAttributes()));
@@ -223,11 +233,12 @@ trait ActiveRecordTrait {
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function identifyUpdatedAttributes(bool $strict = true):array {
+	public function identifyUpdatedAttributes(bool $strict = true): array
+	{
 		$changedAttributes = [];
 		foreach ($this->attributes as $name => $value) {
 			/** @noinspection TypeUnsafeComparisonInspection */
-			$changed = $strict?(ArrayHelper::getValue($this, "oldAttributes.$name") !== $value):(ArrayHelper::getValue($this, "oldAttributes.$name") != $value);
+			$changed = $strict ? (ArrayHelper::getValue($this, "oldAttributes.$name") !== $value) : (ArrayHelper::getValue($this, "oldAttributes.$name") != $value);
 			if ($changed) $changedAttributes[$name] = $value;//Нельзя использовать строгое сравнение из-за преобразований БД
 		}
 		return $changedAttributes;
@@ -240,9 +251,10 @@ trait ActiveRecordTrait {
 	 * @return bool
 	 * @throws Throwable
 	 */
-	public function isAttributeUpdated(string $attribute, bool $strict = true):bool {
+	public function isAttributeUpdated(string $attribute, bool $strict = true): bool
+	{
 		/** @noinspection TypeUnsafeComparisonInspection */
-		return $strict?(ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute):(ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
+		return $strict ? (ArrayHelper::getValue($this, "oldAttributes.$attribute") !== $this->$attribute) : (ArrayHelper::getValue($this, "oldAttributes.$attribute") != $this->$attribute);
 	}
 
 	/**
@@ -250,7 +262,8 @@ trait ActiveRecordTrait {
 	 * @noinspection PhpDocMissingThrowsInspection Это нормально, метод find может быть перекрыт, и возвращать
 	 * собственные исключения. Можно не включать в пробрасываемый скоуп.
 	 */
-	public static function Upsert(array $attributes):static {
+	public static function Upsert(array $attributes): static
+	{
 		if (null === $model = self::find()->where($attributes)->one()) {
 			$model = new self();
 			$model->load($attributes, '');
@@ -262,9 +275,10 @@ trait ActiveRecordTrait {
 	/**
 	 * Возвращает существующую запись в ActiveRecord-модели, найденную по условию, если же такой записи нет - возвращает новую модель
 	 */
-	public static function getInstance(array|string $searchCondition):static {
+	public static function getInstance(array|string $searchCondition): static
+	{
 		$instance = static::find()->where($searchCondition)->one();
-		return $instance??new static();
+		return $instance ?? new static();
 	}
 
 }

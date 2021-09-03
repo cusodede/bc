@@ -10,14 +10,15 @@ use yii\base\Model;
  * Модель регистрации нового пользователя
  * Пока без проверок почты, без модерации, и прочей обвязки
  *
- * @property string $username
  * @property string $login
+ * @property string $name
+ * @property string $surname
  * @property string $password
  * @property string $passwordRepeat
  * @property string $email
  */
-class RegistrationForm extends Model {
-	public ?string $username = null;
+class RegistrationForm extends Model
+{
 	public ?string $login = null;
 	public ?string $password = null;
 	public ?string $passwordRepeat = null;
@@ -26,21 +27,22 @@ class RegistrationForm extends Model {
 	/**
 	 * @return array the validation rules.
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
-			[['username', 'login', 'password', 'passwordRepeat', 'email'], 'required'],
+			[['name', 'surname', 'login', 'password', 'passwordRepeat', 'email'], 'required'],
 			[['email'], 'email'],
-			[['email'], function(string $attribute):void {
+			[['email'], function(string $attribute): void {
 				if (!$this->hasErrors() && null !== Users::findByEmail($this->email)) {
 					$this->addError('email', 'Пользователь с таким почтовым адресом уже зарегистрирован');
 				}
 			}],
-			[['login'], function(string $attribute):void {
+			[['login'], function(string $attribute): void {
 				if (!$this->hasErrors() && null !== Users::findByLogin($this->login)) {
 					$this->addError('login', 'Такой логин уже занят');
 				}
 			}],
-			[['passwordRepeat'], function(string $attribute):void {
+			[['passwordRepeat'], function(string $attribute): void {
 				if (!$this->hasErrors() && $this->password !== $this->passwordRepeat) {
 					$this->addError('passwordRepeat', 'Введённые пароли должны совпадать');
 				}
@@ -51,9 +53,11 @@ class RegistrationForm extends Model {
 	/**
 	 * @return array
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
-			'username' => 'Представьтесь, пожалуйста:',
+			'name' => 'Имя',
+			'surname' => 'Фамилия',
 			'login' => 'Логин',
 			'password' => 'Пароль',
 			'passwordRepeat' => 'Пароль ещё раз',
@@ -64,11 +68,13 @@ class RegistrationForm extends Model {
 	/**
 	 * @return bool
 	 */
-	public function doRegister():bool {
+	public function doRegister(): bool
+	{
 		if ($this->validate()) {
 			$newUser = new Users([
 				'login' => $this->login,
-				'username' => $this->username,
+				'name' => $this->name,
+				'surname' => $this->surname,
 				'password' => $this->password,
 				'email' => $this->email
 			]);

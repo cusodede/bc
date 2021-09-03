@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 
 /*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
-if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR . basename(__FILE__))) return require $localConfig;
+if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR . basename(__FILE__))) {
+	return require $localConfig;
+}
 
 use app\assets\SmartAdminThemeAssets;
 use app\components\queue\DbQueue;
@@ -17,6 +19,7 @@ use app\modules\graphql\GraphqlModule;
 use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
+use pozitronik\helpers\ArrayHelper;
 use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\models\ErrorHandler;
 use kartik\grid\Module as GridModule;
@@ -32,6 +35,7 @@ use yii\debug\Module as DebugModule;
 use yii\gii\Module as GiiModule;
 use yii\log\FileTarget;
 use yii\mutex\MysqlMutex;
+use yii\mutex\PgsqlMutex;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
 
@@ -144,6 +148,7 @@ $config = [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
 			'enableStrictParsing' => false,
+			'hostInfo' => YII_ENV === 'prod' ? 'http://back-prpl.apps.k01.vimpelcom.ru' : null
 		],
 		'permissions' => require __DIR__ . '/permissions.php',
 		'assetManager' => [
@@ -176,7 +181,11 @@ $config = [
 			'db' => 'db', // DB connection component or its config
 			'tableName' => '{{%queue}}', // Table name
 			'channel' => 'product_ticket', // Queue channel key
-			'mutex' => MysqlMutex::class, // Mutex used to sync queries
+			'mutex' => match (ArrayHelper::getValue(explode(':', $db['dsn']), '0')) {// Mutex used to sync queries
+				default => MysqlMutex::class,
+				'mysql' => MysqlMutex::class,
+				'pgsql' => PgsqlMutex::class
+			},
 			'deleteReleased' => false,
 			'as jobIdHandlingBehavior' => JobIdHandlingBehavior::class
 		]
@@ -186,13 +195,13 @@ $config = [
 
 if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
-	$config['bootstrap'][] = 'debug';
+	$config['bootstrap'][]      = 'debug';
 	$config['modules']['debug'] = [
 		'class' => DebugModule::class,
 		//'allowedIPs' => ['127.0.0.1', '::1'],
 	];
 
-	$config['bootstrap'][] = 'gii';
+	$config['bootstrap'][]    = 'gii';
 	$config['modules']['gii'] = [
 		'class' => GiiModule::class
 		//'allowedIPs' => ['127.0.0.1', '::1'],

@@ -14,7 +14,8 @@ use yii\widgets\Menu;
  *
  * Виджет для отрисовки панели навигации
  */
-class SideBarWidget extends YiiBaseWidget {
+class SideBarWidget extends YiiBaseWidget
+{
 	/**
 	 * @var array список элементов Меню
 	 * @see Menu::$items
@@ -24,7 +25,8 @@ class SideBarWidget extends YiiBaseWidget {
 	/**
 	 * @inheritDoc
 	 */
-	public function run():string {
+	public function run(): string
+	{
 		$this->items = self::prepareItems($this->items);
 		$this->items = self::clearItems($this->items);
 		return $this->render('main', ['items' => $this->items]);
@@ -36,12 +38,13 @@ class SideBarWidget extends YiiBaseWidget {
 	 * @return array
 	 * @throws Exception
 	 */
-	private static function prepareItems(array $items):array {
+	private static function prepareItems(array $items): array
+	{
 		foreach ($items as &$item) {
 			if ((null !== $subItems = ArrayHelper::getValue($item, 'items')) && is_array($subItems)) {
 				$item['items'] = self::prepareItems($item['items']);
 			}
-			$item = ArrayHelper::getValue($item, 'visible', true)?$item:[];
+			$item = ArrayHelper::getValue($item, 'visible', true) ? $item : [];
 		}
 
 		return $items;
@@ -53,7 +56,8 @@ class SideBarWidget extends YiiBaseWidget {
 	 * @return array
 	 * @throws Exception
 	 */
-	private static function clearItems(array $items):array {
+	private static function clearItems(array $items): array
+	{
 		$items = array_filter($items);
 		foreach ($items as $key => $item) {
 			if ((null !== $subItems = ArrayHelper::getValue($item, 'items')) && is_array($subItems) && [] !== $subItems) {

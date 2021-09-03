@@ -33,24 +33,24 @@ class TicketSubscription extends ActiveRecord
 	use TicketTrait;
 	use ActiveRecordTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName(): string
-    {
-        return 'ticket_subscription';
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function tableName(): string
+	{
+		return 'ticket_subscription';
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules(): array
-    {
-        return [
-            [['!id', 'action'], 'required'],
-            [['action', 'rel_abonents_to_products_id'], 'integer'],
-            [['!id'], 'string', 'max' => 36],
-            [['!id'], 'unique'],
+	/**
+	 * {@inheritdoc}
+	 */
+	public function rules(): array
+	{
+		return [
+			[['!id', 'action'], 'required'],
+			[['action', 'rel_abonents_to_products_id'], 'integer'],
+			[['!id'], 'string', 'max' => 36],
+			[['!id'], 'unique'],
 			[['!id'],
 				'exist', 'skipOnError' => true,
 				'targetClass' => Ticket::class, 'targetAttribute' => ['id' => 'id']
@@ -59,8 +59,8 @@ class TicketSubscription extends ActiveRecord
 				'exist', 'skipOnError' => true,
 				'targetClass' => RelAbonentsToProducts::class, 'targetAttribute' => ['rel_abonents_to_products_id' => 'id']
 			]
-        ];
-    }
+		];
+	}
 
 	/**
 	 * @param array|RelAbonentsToProducts $relation
@@ -87,7 +87,7 @@ class TicketSubscription extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-    public function getRelatedAbonent(): ActiveQuery
+	public function getRelatedAbonent(): ActiveQuery
 	{
 		return $this->hasOne(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
 	}

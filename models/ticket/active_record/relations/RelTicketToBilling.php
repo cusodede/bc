@@ -43,8 +43,8 @@ class RelTicketToBilling extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id'         => 'ID',
-			'ticket_id'  => 'Ticket ID',
+			'id' => 'ID',
+			'ticket_id' => 'Ticket ID',
 			'billing_id' => 'Billing ID',
 		];
 	}

@@ -8,21 +8,24 @@ use odannyc\Yii2SSE\SSEBase;
 /**
  * Class MessageEventHandler
  */
-class MessageEventHandler extends SSEBase {
+class MessageEventHandler extends SSEBase
+{
 
 	public static int $i = 0;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function check():bool {
+	public function check(): bool
+	{
 		return true;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function update():string {
-		return "Update ".self::$i++;
+	public function update(): string
+	{
+		return "Update " . self::$i++;
 	}
 }

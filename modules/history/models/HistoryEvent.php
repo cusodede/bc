@@ -27,7 +27,8 @@ use pozitronik\helpers\ArrayHelper;
  * @property null|string|callable|array|false $actionsFormatter
  * @property TimelineEntry $timelineEntry
  */
-class HistoryEvent extends Model implements HistoryEventInterface {
+class HistoryEvent extends Model implements HistoryEventInterface
+{
 	public ?int $eventType = null;
 	public ?string $eventCaption = null;
 	public ?string $eventIcon = null;
@@ -42,7 +43,8 @@ class HistoryEvent extends Model implements HistoryEventInterface {
 	 * @return TimelineEntry
 	 * @throws Throwable
 	 */
-	public function getTimelineEntry():TimelineEntry {
+	public function getTimelineEntry(): TimelineEntry
+	{
 		if (null === $this->actionsFormatter) {
 			$content = self::ActionsFormatterDefault($this->actions);//default formatter
 		} elseif (is_string($this->actionsFormatter)) {
@@ -50,16 +52,16 @@ class HistoryEvent extends Model implements HistoryEventInterface {
 		} elseif (ReflectionHelper::is_closure($this->actionsFormatter)) {
 			$content = call_user_func($this->actionsFormatter, $this->actions);
 		} elseif (is_array($this->actionsFormatter)) {//['view', parameters]
-			$view = ArrayHelper::getValue($this->actionsFormatter, 0, new InvalidConfigException('actionsFormatter array config must contain view path as first item'));
-			$parameters = (array)ArrayHelper::getValue($this->actionsFormatter, 1, []);
+			$view                  = ArrayHelper::getValue($this->actionsFormatter, 0, new InvalidConfigException('actionsFormatter array config must contain view path as first item'));
+			$parameters            = (array)ArrayHelper::getValue($this->actionsFormatter, 1, []);
 			$parameters['actions'] = $this->actions;
-			$content = Yii::$app->view->render($view, $parameters);
+			$content               = Yii::$app->view->render($view, $parameters);
 
 		} else $content = null;
 
 		return new TimelineEntry([
 			'time' => $this->eventTime,
-			'caption' => $this->eventCaption??$this->eventTypeName,
+			'caption' => $this->eventCaption ?? $this->eventTypeName,
 			'user' => $this->subject,
 			'content' => $content
 		]);
@@ -71,7 +73,8 @@ class HistoryEvent extends Model implements HistoryEventInterface {
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function ActionsFormatterDefault(array $actions):string {
+	public static function ActionsFormatterDefault(array $actions): string
+	{
 		return Yii::$app->view->render('actions', ['actions' => $actions]);
 	}
 
@@ -79,7 +82,8 @@ class HistoryEvent extends Model implements HistoryEventInterface {
 	 * @return null|string
 	 * @throws Throwable
 	 */
-	public function getEventTypeName():?string {
+	public function getEventTypeName(): ?string
+	{
 		return ArrayHelper::getValue(self::EVENT_TYPE_NAMES, $this->eventType);
 	}
 }

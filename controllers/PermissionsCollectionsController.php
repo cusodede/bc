@@ -10,7 +10,8 @@ use app\models\sys\permissions\PermissionsCollectionsSearch;
 /**
  * Class PermissionsCollectionsController
  */
-class PermissionsCollectionsController extends DefaultController {
+class PermissionsCollectionsController extends DefaultController
+{
 
 	public string $modelClass = PermissionsCollections::class;
 	public string $modelSearchClass = PermissionsCollectionsSearch::class;
@@ -19,7 +20,8 @@ class PermissionsCollectionsController extends DefaultController {
 	/**
 	 * @inheritDoc
 	 */
-	public function getViewPath():string {
+	public function getViewPath(): string
+	{
 		return '@app/views/permissions-collections';
 	}
 

@@ -17,23 +17,23 @@ $modelName = $model->formName();
 ?>
 <?php
 Modal::begin([
-	'id'      => "{$modelName}-modal-edit-{$model->id}",
-	'size'    => Modal::SIZE_LARGE,
-	'title'   => $title ?? '',
-	'footer'  => $this->render(Yii::$app->controller->viewPath . '/subviews/editPanelFooter', [
+	'id' => "{$modelName}-modal-edit-{$model->id}",
+	'size' => Modal::SIZE_LARGE,
+	'title' => $title ?? '',
+	'footer' => $this->render(Yii::$app->controller->viewPath . '/subviews/editPanelFooter', [
 		'model' => $model,
-		'form'  => "{$modelName}-modal-edit"
+		'form' => "{$modelName}-modal-edit"
 	]),
 	'options' => [
-		'class'    => 'modal-dialog-large',
+		'class' => 'modal-dialog-large',
 		'tabindex' => false
 	]
 ]); ?>
 <?php $form = ActiveForm::begin([
-	'id'                   => "{$modelName}-modal-edit",
+	'id' => "{$modelName}-modal-edit",
 	'enableAjaxValidation' => true,
-	'options'              => [
-		"onsubmit" => new JsExpression("formSubmitAjax(event)")
+	'options' => [
+		'class' => 'form-ajax-submit'
 	]
 ])
 ?>

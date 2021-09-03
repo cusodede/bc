@@ -13,14 +13,16 @@ use libphonenumber\PhoneNumberUtil;
  * Class Phones
  * Вся логика работы с телефонными номерами
  */
-class Phones extends PhonesAR {
+class Phones extends PhonesAR
+{
 	use ActiveRecordTrait;
 
 	/**
 	 * @param string $phoneNum
 	 * @return bool
 	 */
-	public static function isValidNumber(string $phoneNum):bool {
+	public static function isValidNumber(string $phoneNum): bool
+	{
 		try {
 			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
 			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
@@ -34,7 +36,8 @@ class Phones extends PhonesAR {
 	 * @param string $phone
 	 * @return string|null
 	 */
-	public static function defaultFormat(string $phone):?string {
+	public static function defaultFormat(string $phone): ?string
+	{
 		try {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
@@ -50,7 +53,8 @@ class Phones extends PhonesAR {
 	 * @return string|null
 	 * @noinspection BadExceptionsProcessingInspection
 	 */
-	public static function nationalFormat(string $phone):?string {
+	public static function nationalFormat(string $phone): ?string
+	{
 		try {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				return PhoneNumberUtil::getInstance()->getNationalSignificantNumber($phoneNumber);
@@ -67,7 +71,8 @@ class Phones extends PhonesAR {
 	 * @param array $phones
 	 * @return array
 	 */
-	public static function add(array $phones):array {
+	public static function add(array $phones): array
+	{
 		$results = [];
 		foreach (array_filter($phones) as $phone) {
 			if (null !== $formattedNumber = self::defaultFormat($phone)) {

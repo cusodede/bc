@@ -36,7 +36,7 @@ OptionsAsset::register($this);
 								'offText' => 'Off'
 							],
 							'pluginEvents' => [
-								"switchChange.bootstrapSwitch" => new JsExpression('function (event, state) {SetSystemOptionBool("'.$name.'", state, "'.$id.'", "'.AjaxController::to('set-system-option').'")}')
+								"switchChange.bootstrapSwitch" => new JsExpression('function (event, state) {SetSystemOptionBool("' . $name . '", state, "' . $id . '", "' . AjaxController::to('set-system-option') . '")}')
 							],
 						]) ?>
 					</div>

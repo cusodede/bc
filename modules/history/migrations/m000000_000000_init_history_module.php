@@ -8,14 +8,16 @@ use yii\db\Migration;
 /**
  * Class m000000_000000_init_history_module
  */
-class m000000_000000_init_history_module extends Migration {
+class m000000_000000_init_history_module extends Migration
+{
 	private const TABLE_NAME = 'sys_history';
 	private const TAGS_TABLE_NAME = 'sys_history_tags';
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->createTable(self::TABLE_NAME, [
 			'id' => $this->primaryKey(),
 			'at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -53,7 +55,8 @@ class m000000_000000_init_history_module extends Migration {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropTable(self::TAGS_TABLE_NAME);
 		$this->dropTable(self::TABLE_NAME);
 

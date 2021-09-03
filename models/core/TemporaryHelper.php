@@ -16,7 +16,8 @@ use yii\web\Controller;
  * Class TemporaryHelper
  * Если понадобилось быстро сделать хелперную функцию, которую пока непонятно куда - пихаем сюда, потом рефакторим
  */
-class TemporaryHelper {
+class TemporaryHelper
+{
 
 	public const VERBS = [
 		'GET' => 'GET',
@@ -31,14 +32,15 @@ class TemporaryHelper {
 	 * @return string[]
 	 * @throws Throwable
 	 */
-	public static function GetControllersList(array $controllerDirs = ['@app/controllers']):array {
+	public static function GetControllersList(array $controllerDirs = ['@app/controllers']): array
+	{
 		$result = [];
 		foreach ($controllerDirs as $controllerDir => $idPrefix) {
-			$controllers = ControllerHelper::GetControllersList((string)$controllerDir, null, [Controller::class]);
+			$controllers            = ControllerHelper::GetControllersList((string)$controllerDir, null, [Controller::class]);
 			$result[$controllerDir] = ArrayHelper::map($controllers, function(Controller $model) use ($idPrefix) {
-				return ('' === $idPrefix)?$model->id:$idPrefix.'/'.$model->id;
+				return ('' === $idPrefix) ? $model->id : $idPrefix . '/' . $model->id;
 			}, function(Controller $model) use ($idPrefix) {
-				return ('' === $idPrefix)?$model->id:$idPrefix.'/'.$model->id;
+				return ('' === $idPrefix) ? $model->id : $idPrefix . '/' . $model->id;
 			});
 		}
 		return $result;
@@ -53,7 +55,8 @@ class TemporaryHelper {
 	 * @throws ReflectionException
 	 * @throws UnknownClassException
 	 */
-	public static function GetControllerActions(string $controller_class, bool $asRequestName = true):array {
+	public static function GetControllerActions(string $controller_class, bool $asRequestName = true): array
+	{
 		$names = ArrayHelper::getColumn(ReflectionHelper::GetMethods($controller_class), 'name');
 		$names = preg_filter('/^action([A-Z])(\w+?)/', '$1$2', $names);
 		if ($asRequestName) {
@@ -70,7 +73,8 @@ class TemporaryHelper {
 	 * @example actionSomeActionName => some-action-name
 	 * @example OtherActionName => other-action-name
 	 */
-	public static function GetActionRequestName(string $action):string {
+	public static function GetActionRequestName(string $action): string
+	{
 		/** @var array $lines */
 		$lines = preg_split('/(?=[A-Z])/', $action, -1, PREG_SPLIT_NO_EMPTY);
 		if ('action' === $lines[0]) unset($lines[0]);
@@ -82,9 +86,10 @@ class TemporaryHelper {
 	 * @param bool $fromQWERTY
 	 * @return string
 	 */
-	public static function SwitchKeyboard(string $term, bool $fromQWERTY = false):string {
+	public static function SwitchKeyboard(string $term, bool $fromQWERTY = false): string
+	{
 		$converter = $fromQWERTY
-			?[
+			? [
 				'f' => 'а', ',' => 'б', 'd' => 'в', 'u' => 'г', 'l' => 'д', 't' => 'е', '`' => 'ё',
 				';' => 'ж', 'p' => 'з', 'b' => 'и', 'q' => 'й', 'r' => 'к', 'k' => 'л', 'v' => 'м',
 				'y' => 'н', 'j' => 'о', 'g' => 'п', 'h' => 'р', 'c' => 'с', 'n' => 'т', 'e' => 'у',
@@ -96,7 +101,7 @@ class TemporaryHelper {
 				'A' => 'Ф', '{' => 'Х', 'W' => 'Ц', 'X' => 'Ч', 'I' => 'Ш', 'O' => 'Щ', 'M' => 'Ь',
 				'S' => 'Ы', '}' => 'Ъ', '"' => 'Э', '>' => 'Ю', 'Z' => 'Я',
 				'@' => '"', '#' => '№', '$' => ';', '^' => ':', '&' => '?', '/' => '.', '?' => ',']
-			:[
+			: [
 				'а' => 'f', 'б' => ',', 'в' => 'd', 'г' => 'u', 'д' => 'l', 'е' => 't', 'ё' => '`',
 				'ж' => ';', 'з' => 'p', 'и' => 'b', 'й' => 'q', 'к' => 'r', 'л' => 'k', 'м' => 'v',
 				'н' => 'y', 'о' => 'j', 'п' => 'g', 'р' => 'h', 'с' => 'c', 'т' => 'n', 'у' => 'e',
@@ -118,10 +123,11 @@ class TemporaryHelper {
 	 * @return string[]
 	 * @see GridView::guessColumns
 	 */
-	public static function GuessDataProviderColumns(BaseDataProvider $dataProvider):array {
+	public static function GuessDataProviderColumns(BaseDataProvider $dataProvider): array
+	{
 		$columns = [];
-		$models = $dataProvider->getModels();
-		$model = reset($models);
+		$models  = $dataProvider->getModels();
+		$model   = reset($models);
 		if (is_array($model) || is_object($model)) {
 			foreach ($model as $name => $value) {
 				if (null === $value || is_scalar($value) || is_callable([$value, '__toString'])) {
@@ -137,10 +143,11 @@ class TemporaryHelper {
 	 * @param array|string $separator
 	 * @return string
 	 */
-	public static function Errors2String(array $errors, array|string $separator = "\n"):string {
+	public static function Errors2String(array $errors, array|string $separator = "\n"): string
+	{
 		$output = [];
 		foreach ($errors as $attribute => $attributeErrors) {
-			$error = implode($separator, $attributeErrors);
+			$error    = implode($separator, $attributeErrors);
 			$output[] = "{$attribute}: {$error}";
 		}
 

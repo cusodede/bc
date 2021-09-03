@@ -72,21 +72,21 @@ class IviConnector extends BaseHttpConnector
 
 	/**
 	 * Создание/обновление подписки в ivi. Необходимо предварительно запросить актуальный список опций.
-	 * @see getPurchaseOptions()
 	 * @param ProductOptions $options
 	 * @param PurchaseOptionsItem $purchaseOptions
 	 * @return PurchaseResultHandler
 	 * @throws Throwable
 	 * @throws Exception
+	 * @see getPurchaseOptions()
 	 */
 	public function makePurchase(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
 	{
 		$postData = [
-			'app_version'          => $options->appVersion,
-			'partner_id'           => $options->productId,
-			'access_token'         => $this->getAccessTokenByPhone($options),
+			'app_version' => $options->appVersion,
+			'partner_id' => $options->productId,
+			'access_token' => $this->getAccessTokenByPhone($options),
 			'ps_extra_signed_data' => "ps_transaction_id={$options->transactionId}&sign={$purchaseOptions->getSignParam()}",
-			'sign'                 => $purchaseOptions->getSignParam()
+			'sign' => $purchaseOptions->getSignParam()
 		];
 		$postData = array_merge(
 			$postData,

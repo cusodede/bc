@@ -40,13 +40,13 @@ class ProductsController extends YiiRestController
 	{
 		return [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				]
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
@@ -164,11 +164,11 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'list'          => ['GET'],
-			'one'           => ['GET'],
+			'list' => ['GET'],
+			'one' => ['GET'],
 			'ticket-status' => ['GET'],
-			'subscribe'     => ['POST'],
-			'unsubscribe'   => ['POST']
+			'subscribe' => ['POST'],
+			'unsubscribe' => ['POST']
 		];
 	}
 }

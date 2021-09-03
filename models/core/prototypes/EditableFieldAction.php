@@ -19,7 +19,8 @@ use yii\web\Response;
  * Class EditableFieldAction
  * Экшен для инлайн-редакторов атрибутов, a-la Editable
  */
-class EditableFieldAction extends Action {
+class EditableFieldAction extends Action
+{
 
 	/**
 	 * @var string the scenario to be assigned to the model before it is validated and updated.
@@ -34,7 +35,8 @@ class EditableFieldAction extends Action {
 	 * @throws Exception
 	 * @throws NotFoundHttpException
 	 */
-	public function run(int $id) {
+	public function run(int $id)
+	{
 		$result = ['output' => '', 'message' => ''];
 
 		/* @var ActiveRecordTrait|ActiveRecord $model */
@@ -45,7 +47,7 @@ class EditableFieldAction extends Action {
 		}
 
 		$model->scenario = $this->scenario;
-		$errors = [];
+		$errors          = [];
 		if (!$model->updateModelFromPost($errors, false)) {
 			$result = ['output' => '', 'message' => TemporaryHelper::Errors2String($errors)];
 		}

@@ -20,8 +20,8 @@ class HttpBasicPasswordAuth extends HttpBasicAuth
 	{
 		parent::init();
 
-		$this->auth = static function(?string $username, ?string $password): ?IdentityInterface {
-			$user = Users::findByLogin($username);
+		$this->auth = static function(?string $login, ?string $password): ?IdentityInterface {
+			$user = Users::findByUnidentifiedLogin($login);
 			if (null !== $user && $user->validatePassword($password)) {
 				return $user;
 			}

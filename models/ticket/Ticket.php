@@ -27,10 +27,10 @@ class Ticket extends TicketActiveRecord
 	public static function createTicket(TicketParams $params): static
 	{
 		$ticket = new static([
-			'id'         => $params->id,
-			'type'       => $params->type,
+			'id' => $params->id,
+			'type' => $params->type,
 			'created_by' => $params->createdBy,
-			'stage_id'   => self::STAGE_CODE_INIT
+			'stage_id' => self::STAGE_CODE_INIT
 		]);
 		$ticket->save();
 
