@@ -4,13 +4,15 @@ declare(strict_types = 1);
 use app\components\db\Migration;
 
 /**
-* Class m210902_144812_rename_table_refsharing
-*/
-class m210902_144812_rename_table_refsharing extends Migration {
+ * Class m210902_144812_rename_table_refsharing
+ */
+class m210902_144812_rename_table_refsharing extends Migration
+{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeUp() {
+	public function safeUp()
+	{
 		$this->dropTable('refsharing_rates');
 
 		$this->createTable('revshare_rates', [
@@ -27,15 +29,14 @@ class m210902_144812_rename_table_refsharing extends Migration {
 		$this->addForeignKey('fk_revshare_$product_id', 'revshare_rates', 'product_id', 'products', 'id', 'CASCADE', 'CASCADE');
 
 		$this->createIndex('in_revshare_$deleted', 'revshare_rates', 'deleted');
-
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function safeDown() {
+	public function safeDown()
+	{
 		$this->dropTable('revshare_rates');
-
 
 		$this->createTable('refsharing_rates', [
 			'id' => $this->primaryKey(),
@@ -52,5 +53,4 @@ class m210902_144812_rename_table_refsharing extends Migration {
 
 		$this->createIndex('idx-refsharing-deleted', 'refsharing_rates', 'deleted');
 	}
-
 }
