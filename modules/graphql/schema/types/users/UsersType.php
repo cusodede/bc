@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\types\users;
 
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\users\fields\UserProfileField;
+use app\modules\graphql\schema\types\users\fields\UserRolesField;
 use app\modules\graphql\schema\types\users\fields\UsersListField;
 
 /**
@@ -21,7 +22,8 @@ class UsersType extends BaseObjectType
 			'description' => 'Пользователи',
 			'fields' => [
 				'usersList' => UsersListField::field(),
-				'userProfile' => UserProfileField::field()
+				'userProfile' => UserProfileField::field(),
+				'userRoles' => new UserRolesField()
 			]
 		]);
 	}
