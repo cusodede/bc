@@ -11,5 +11,8 @@ use app\models\contracts\active_record\Contracts as ActiveRecordContracts;
  */
 class Contracts extends ActiveRecordContracts
 {
-
+	public function dummy_stub(): void
+	{
+		//todo: add some code
+	}
 }
