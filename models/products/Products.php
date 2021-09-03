@@ -25,9 +25,6 @@ use yii\helpers\ArrayHelper;
  * Class Products
  * @package app\models\product
  *
- * @property Partners $relatedPartner
- * @property RevShareRates $relatedRevShare
- * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read ActiveQuery $relatedSubscription
@@ -59,22 +56,6 @@ class Products extends ActiveRecordProducts
 		return array_merge(parent::rules(), [
 			[['storyLogo'], 'image', 'extensions' => 'jpg, jpeg']
 		]);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedPartner(): ActiveQuery
-	{
-		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedUser(): ActiveQuery
-	{
-		return $this->hasOne(Users::class, ['id' => 'user_id']);
 	}
 
 	/**
@@ -193,13 +174,5 @@ class Products extends ActiveRecordProducts
 	public static function find(): ProductsActiveQuery
 	{
 		return Yii::createObject(ProductsActiveQuery::class, [static::class]);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedRevShare(): ActiveQuery
-	{
-		return $this->hasMany(RevShareRates::class, ['product_id' => 'id']);
 	}
 }

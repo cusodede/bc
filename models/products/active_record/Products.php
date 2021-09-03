@@ -4,10 +4,10 @@ declare(strict_types = 1);
 namespace app\models\products\active_record;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\partners\active_record\Partners;
+use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\revshare_rates\RevShareRates;
-use app\models\sys\users\active_record\Users;
+use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use Yii;
@@ -107,5 +107,13 @@ class Products extends ActiveRecord
 	public function getRelatedUser(): ActiveQuery
 	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedRevShare(): ActiveQuery
+	{
+		return $this->hasMany(RevShareRates::class, ['product_id' => 'id']);
 	}
 }
