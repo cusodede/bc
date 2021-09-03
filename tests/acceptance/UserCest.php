@@ -21,26 +21,33 @@ class UserCest
     /*
      * auth
      */
-    public function authTest(AcceptanceTester $I)
+    public function authTest(AcceptanceTester $I, $params)
     {
+    	$selectors = [
+    		'loginButton' => 'button[name=login-button]',
+			'passwordError' => 'input#loginform-password.is-invalid',
+			'login' => 'LoginForm[login]',
+			'password' => 'LoginForm[password]',
+		];
+
 		#без пароля
     	$I->amOnPage('/site/login');
     	$I->canSee('Логин');
-		$I->fillField('LoginForm[login]', 'admin');
-		$I->click("button[name=login-button]");
+		$I->fillField($selectors['login'], 'admin');
+		$I->click($selectors['loginButton']);
 		$I->wait(1);
-		$I->seeElement('input#loginform-password.is-invalid');
+		$I->seeElement($selectors['passwordError']);
 
 		#кривой пароль
-		$I->fillField('LoginForm[password]', 'admin');
-		$I->click("button[name=login-button]");
+		$I->fillField($selectors['password'], 'admin');
+		$I->click($selectors['loginButton']);
 		$I->wait(1);
-		$I->seeElement('input#loginform-password.is-invalid');
+		$I->seeElement($selectors['passwordError']);
 
 		#успех
-		$I->fillField('LoginForm[login]', 'admin');
-		$I->fillField('LoginForm[password]', 'Admin1@3');
-		$I->click("button[name=login-button]");
+		$I->fillField($selectors['login'], 'admin');
+		$I->fillField($selectors['password'], 'Admin1@3');
+		$I->click($selectors['loginButton']);
 		$I->wait(2);
 		$I->see('admin@admin.ru');
 		$I->amOnPage('/site/logout');
