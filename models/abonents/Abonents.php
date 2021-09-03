@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
  * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
  * @property-read Products[] $fullProductList todo: что это?
+ * @property-read Products[] $relatedProducts Список связанных продуктов с абонентом.
  */
 class Abonents extends ActiveRecordAbonents
 {
@@ -85,5 +86,21 @@ class Abonents extends ActiveRecordAbonents
 	public static function findByPhone(string $phone): ?self
 	{
 		return static::findOne(['phone' => $phone]);
+	}
+
+	/**
+	 * Получение ФИО пользователя
+	 */
+	public function getFullName(): string
+	{
+		return "{$this->surname} {$this->name} {$this->patronymic}";
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRelatedProducts(): ActiveQuery
+	{
+		return $this->hasMany(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
 	}
 }

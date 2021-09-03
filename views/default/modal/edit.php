@@ -33,7 +33,7 @@ Modal::begin([
 	'id' => "{$modelName}-modal-edit",
 	'enableAjaxValidation' => true,
 	'options' => [
-		"onsubmit" => new JsExpression("formSubmitAjax(event)")
+		'class' => 'form-ajax-submit'
 	]
 ])
 ?>
