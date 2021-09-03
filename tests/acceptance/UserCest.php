@@ -10,8 +10,7 @@ class UserCest
     	$user->login = 'admin';
     	$user->name = 'admin';
     	$user->surname = 'admin';
-//    	$user->password = 'fc1fffdb3e0bbb71a6ad2fd0439a824490bd75b1';//Admin1@3
-    	$user->password = 'Admin1@3';//Admin1@3
+    	$user->password = 'Admin1@3';
     	$user->salt = '14bac29074ae3aa2f987ac59432af20b85687f54';
     	$user->email = 'admin@admin.ru';
     	if (!$user->save()) {
@@ -28,20 +27,20 @@ class UserCest
     	$I->amOnPage('/site/login');
     	$I->canSee('Логин');
 		$I->fillField('LoginForm[login]', 'admin');
-		$I->click('Войти');
+		$I->click("button[name=login-button]");
 		$I->wait(1);
-		$I->see('Необходимо заполнить «Пароль».');
+		$I->seeElement('input#loginform-password.is-invalid');
 
 		#кривой пароль
 		$I->fillField('LoginForm[password]', 'admin');
-		$I->click('Войти');
+		$I->click("button[name=login-button]");
 		$I->wait(1);
-		$I->see('Неправильные логин или пароль.');
+		$I->seeElement('input#loginform-password.is-invalid');
 
 		#успех
 		$I->fillField('LoginForm[login]', 'admin');
 		$I->fillField('LoginForm[password]', 'Admin1@3');
-		$I->click('Войти');
+		$I->click("button[name=login-button]");
 		$I->wait(2);
 		$I->see('admin@admin.ru');
 		$I->amOnPage('/site/logout');
