@@ -90,6 +90,7 @@ class Abonents extends ActiveRecordAbonents
 
 	/**
 	 * Получение ФИО пользователя
+	 * @return string
 	 */
 	public function getFullName(): string
 	{
@@ -97,7 +98,7 @@ class Abonents extends ActiveRecordAbonents
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProducts(): ActiveQuery
 	{

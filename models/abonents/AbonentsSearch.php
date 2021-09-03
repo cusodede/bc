@@ -3,10 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
-use app\models\products\Products;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 /**
