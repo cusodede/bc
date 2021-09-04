@@ -71,6 +71,7 @@ class ProductsController extends DefaultController
 	public function actionViewAbonents(): string
 	{
 		$params      = Yii::$app->request->queryParams;
+		/** @var ProductsSearch $searchModel */
 		$searchModel = $this->searchModel;
 
 		return $this->renderAjax('modal/view-abonents', [
