@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
+use app\models\phones\Phones;
 use app\models\products\Products;
 use Exception;
 use yii\base\InvalidConfigException;
@@ -85,7 +86,7 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public static function findByPhone(string $phone): ?self
 	{
-		return static::findOne(['phone' => $phone]);
+		return static::findOne(['phone' => Phones::defaultFormat($phone)]);
 	}
 
 	/**
