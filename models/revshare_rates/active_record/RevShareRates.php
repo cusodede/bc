@@ -66,7 +66,7 @@ class RevShareRates extends ActiveRecord
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProduct(): ActiveQuery
 	{
