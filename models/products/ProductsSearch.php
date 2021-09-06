@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
+use app\components\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use Exception;
-use yii\helpers\ArrayHelper;
+use Throwable;
+use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -37,7 +38,8 @@ class ProductsSearch extends Products
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
-	 * @throws Exception
+	 * @throws Throwable
+	 * @throws InvalidConfigException
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
@@ -98,12 +100,15 @@ class ProductsSearch extends Products
 	}
 
 	/**
+	 * @param array $params
+	 * @return ActiveDataProvider
 	 * @throws NotFoundHttpException
+	 * @throws Throwable
 	 */
 	public function searchAbonents(array $params): ActiveDataProvider
 	{
-		$model = Products::findOne($params['id']);
-		if (null === $model) {
+		$id = ArrayHelper::getValue($params, 'id');
+		if (null === $id || null === $model = Products::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
 
