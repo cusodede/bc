@@ -30,7 +30,7 @@ class AbonentsController extends DefaultController
 	 * Показать все продукты абонента.
 	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
-	public function actionViewProducts($id): string
+	public function actionViewProducts(int $id): string
 	{
 		$model = Abonents::findOne($id);
 

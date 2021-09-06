@@ -70,7 +70,7 @@ class ProductsSearch extends Products
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
 		if (null !== ($abonent_id = ArrayHelper::getValue($params, 'abonent_id'))) {
-			$query->joinWith(['relatedPartner', 'relatedSubscription', 'relatedAbonents']);
+			$query->joinWith(['relatedAbonents']);
 			$query->andFilterWhere(
 				['relation_abonents_to_products.abonent_id' => $abonent_id]
 			);
