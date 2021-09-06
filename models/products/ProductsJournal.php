@@ -88,4 +88,18 @@ class ProductsJournal extends ActiveRecordProductsJournal
 	{
 		return time() > strtotime($this->expire_date);
 	}
+
+	/**
+	 * @return string|null
+	 */
+	public function findFirstConnectionDate(): ?string
+	{
+		$record = self::find()
+			->where(['rel_abonents_to_products_id' => $this->rel_abonents_to_products_id])
+			->orderBy(['created_at' => SORT_ASC])
+			->limit(1)
+			->one();
+
+		return $record->created_at;
+	}
 }

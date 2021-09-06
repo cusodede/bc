@@ -58,6 +58,8 @@ services:
       - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/logs/php:/var/logs/php
       - ${DOCKER_FOLDER}/home/.composer:/root/.composer
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
     links:
       - mysql
     networks:

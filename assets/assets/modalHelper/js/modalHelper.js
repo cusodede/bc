@@ -45,8 +45,7 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 	}).show();
 }
 
-function formSubmitAjax(event) {
-	var form = jQuery(event.target);
+function formSubmitAjax(form) {
 	var self = this;
 	if (form.attr('method') !== 'GET' && window.FormData !== undefined) {
 
@@ -98,10 +97,12 @@ function formSubmitAjax(event) {
 			}
 		});
 	}
-	event.preventDefault();
-	// event.stopImmediatePropagation();
-	return false;
 };
+
+$('.form-ajax-submit').on('beforeSubmit', function () {
+	formSubmitAjax($(this));
+	return false;
+});
 
 $('.el-ajax-modal').on('click', function (e) {
 	e.preventDefault();

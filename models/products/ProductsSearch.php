@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 /**
  * Поисковая модель продуктов
@@ -92,6 +93,37 @@ class ProductsSearch extends Products
 		if (null !== $this->offset) {
 			$query->offset = $this->offset;
 		}
+
+		return $dataProvider;
+	}
+
+	/**
+	 * @throws NotFoundHttpException
+	 */
+	public function searchAbonents(array $params): ActiveDataProvider
+	{
+		$model = Products::findOne($params['id']);
+		if (null === $model) {
+			throw new NotFoundHttpException();
+		}
+
+		$query = $model->getRelatedAbonents();
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => 5,
+			],
+		]);
+
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
+
+		$dataProvider->setSort([
+			'attributes' => ['created_at', 'status_id']
+		]);
 
 		return $dataProvider;
 	}
