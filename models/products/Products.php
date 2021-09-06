@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use app\components\helpers\DateHelper;
+use app\models\abonents\Abonents;
+use app\models\abonents\RelAbonentsToProducts;
 use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
 use app\models\subscriptions\Subscriptions;
@@ -27,6 +29,7 @@ use yii\helpers\ArrayHelper;
  * @property Partners $relatedPartner
  * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
+ * @property-read RelAbonentsToProducts[] $relatedProductsToAbonents
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read ActiveQuery $relatedSubscription
  * @property-read string|null $typeDesc именованное обозначение типа продукта.
@@ -35,6 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property-read bool $isSubscription флаг определения типа "Подписка" для продукта.
  * @property-read bool $isActive
  * @property-read FileStorage|null $fileStoryLogo
+ * @property-read Abonents[] $relatedAbonents Список связанных абонентов с продуктом.
  */
 class Products extends ActiveRecordProducts
 {
@@ -60,7 +64,15 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonents(): ActiveQuery
+	{
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->via('relatedProductsToAbonents');
+	}
+
+	/**
+	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
 	{
@@ -68,7 +80,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery
 	{
@@ -107,26 +119,6 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getPaymentShortView(): string
-	{
-		$price = (int)$this->price;
-		switch ($this->payment_period) {
-			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
-				$price .= ' ₽/ мес.';
-			break;
-			case EnumProductsPaymentPeriods::TYPE_DAILY:
-				$price .= ' ₽/ день';
-			break;
-			default:
-				$price .= ' ₽';
-		}
-
-		return $price;
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function getIsSubscription(): bool
@@ -134,6 +126,9 @@ class Products extends ActiveRecordProducts
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}
 
+	/**
+	 * @return ActiveQuery
+	 */
 	public function getRelatedSubscription(): ActiveQuery
 	{
 		return $this->hasOne(Subscriptions::class, ['product_id' => 'id']);
@@ -185,11 +180,27 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
+	 * @return string|null
+	 */
+	public function findFirstConnectDate(): ?string
+	{
+		return $this->actualStatus?->findFirstConnectionDate();
+	}
+
+	/**
 	 * @return ProductsActiveQuery
 	 * @throws InvalidConfigException
 	 */
 	public static function find(): ProductsActiveQuery
 	{
 		return Yii::createObject(ProductsActiveQuery::class, [static::class]);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedProductsToAbonents(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
 	}
 }

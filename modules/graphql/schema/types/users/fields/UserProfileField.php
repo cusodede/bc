@@ -34,15 +34,8 @@ class UserProfileField extends BaseField
 	/**
 	 * @inheritdoc
 	 */
-	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
+	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): Users
 	{
-		$user = null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id);
-		return [
-			'id' => $user?->id,
-			'name' => $user?->name,
-			'surname' => $user?->surname,
-			'login' => $user?->login,
-			'email' => $user?->email
-		];
+		return null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id);
 	}
 }

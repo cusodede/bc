@@ -42,6 +42,11 @@ class UserType extends BaseObjectType
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
 				],
+				'role' => [
+					'type' => Type::string(),
+					'description' => 'Роль пользователя',
+					'resolve' => fn(Users $user): ?string => $user->mainPermission
+				],
 				'phones' => [
 					'type' => Type::string(),
 					'description' => 'Телефон',
