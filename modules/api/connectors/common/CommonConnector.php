@@ -98,12 +98,9 @@ abstract class CommonConnector extends BaseHttpConnector
 	{
 		$signatureService = SignatureServiceFactory::build($this->app);
 		if (null !== $signatureService) {
-			ksort($params);
-			array_walk($params, static function(&$item, $key) {
-				$item = "{$key}={$item}";
-			});
+			$array = array_map(static fn($key, $value) => "$key:\"$value\"", array_keys($params), array_values($params));
 
-			$params['sign'] = $signatureService->sign(implode('&', $params));
+			$params['sign'] = strtoupper(bin2hex($signatureService->sign(implode(',', $array))));
 		}
 
 		return $params;
