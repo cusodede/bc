@@ -6,7 +6,8 @@ namespace app\controllers;
 use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
-use Yii;
+use app\models\products\ProductsSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class PartnersController
@@ -29,12 +30,14 @@ class AbonentsController extends DefaultController
 	 * Показать все продукты абонента.
 	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
-	public function actionViewProducts(): string
+	public function actionViewProducts($id): string
 	{
-		$params      = Yii::$app->request->queryParams;
-		$searchModel = $this->searchModel;
+		$model = Abonents::findOne($id);
 
-		['dataProvider' => $dataProvider, 'model' => $model] = $searchModel->searchProducts($params);
+		if (null === $model) {
+			throw new NotFoundHttpException();
+		}
+		$dataProvider = (new ProductsSearch())->search(['abonent_id' => $id]);
 
 		return $this->renderAjax('modal/view-products', [
 			'dataProvider' => $dataProvider,

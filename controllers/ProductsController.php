@@ -7,8 +7,8 @@ use app\components\web\DefaultController;
 use app\models\products\Products;
 use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
-use Yii;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 /**
  * Class ProductsController
@@ -63,18 +63,5 @@ class ProductsController extends DefaultController
 	public function getViewPath(): string
 	{
 		return '@app/views/products';
-	}
-
-	/**
-	 * Показать всех абонентов выбранного продукта.
-	 */
-	public function actionViewAbonents(): string
-	{
-		$params      = Yii::$app->request->queryParams;
-		$searchModel = $this->searchModel;
-
-		return $this->renderAjax('modal/view-abonents', [
-			'dataProvider' => $searchModel->searchAbonents($params)
-		]);
 	}
 }

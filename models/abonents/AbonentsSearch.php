@@ -3,11 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
-use app\models\products\Products;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 
 /**
  * Class AbonentsSearch
@@ -54,24 +51,5 @@ class AbonentsSearch extends Abonents
 			->andFilterWhere(['like', 'patronymic', $this->patronymic]);
 
 		return $dataProvider;
-	}
-
-	/**
-	 * @throws NotFoundHttpException
-	 */
-	public function searchProducts(array $params): array
-	{
-		$model = Abonents::findOne($params['id']);
-		if (null === $model) {
-			throw new NotFoundHttpException();
-		}
-		$query = $model->getRelatedProducts();
-
-		$dataProvider = new ActiveDataProvider(['query' => $query]);
-		$dataProvider->setSort([
-			'attributes' => ['created_at', 'status_id']
-		]);
-
-		return ['dataProvider' => $dataProvider, 'model' => $model];
 	}
 }

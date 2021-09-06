@@ -3,13 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
-use app\models\abonents\Abonents;
-use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 
 /**
  * Поисковая модель продуктов
@@ -72,6 +69,13 @@ class ProductsSearch extends Products
 
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
+		if (null !== ($abonent_id = ArrayHelper::getValue($params, 'abonent_id'))) {
+			$query->joinWith(['relatedPartner', 'relatedSubscription', 'relatedAbonents']);
+			$query->andFilterWhere(
+				['relation_abonents_to_products.abonent_id' => $abonent_id]
+			);
+		}
+
 		$query->andFilterWhere([
 			'products.id' => $this->id,
 			'products.type_id' => $this->type_id,
@@ -95,37 +99,6 @@ class ProductsSearch extends Products
 		if (null !== $this->offset) {
 			$query->offset = $this->offset;
 		}
-
-		return $dataProvider;
-	}
-
-	/**
-	 * @throws NotFoundHttpException
-	 */
-	public function searchAbonents(array $params): ActiveDataProvider
-	{
-		$model = Products::findOne($params['id']);
-		if (null === $model) {
-			throw new NotFoundHttpException();
-		}
-
-		$query = $model->getRelatedAbonents();
-
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-			'pagination' => [
-				'pageSize' => 5,
-			],
-		]);
-
-		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		if (null !== $pagination) {
-			$dataProvider->setPagination($pagination);
-		}
-
-		$dataProvider->setSort([
-			'attributes' => ['created_at', 'status_id']
-		]);
 
 		return $dataProvider;
 	}
