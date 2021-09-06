@@ -9,6 +9,7 @@ if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTO
 use app\assets\SmartAdminThemeAssets;
 use app\components\queue\DbQueue;
 use app\components\queue\JobIdHandlingBehavior;
+use app\controllers\SiteController;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\api\ApiModule;
@@ -19,6 +20,7 @@ use app\modules\graphql\GraphqlModule;
 use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
+use kartik\markdown\Module as Markdown;
 use pozitronik\helpers\ArrayHelper;
 use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\models\ErrorHandler;
@@ -27,6 +29,7 @@ use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
 use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
+use yii\base\Event;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap4\BootstrapPluginAsset;
 use yii\caching\DummyCache;
@@ -38,6 +41,7 @@ use yii\mutex\MysqlMutex;
 use yii\mutex\PgsqlMutex;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
+use yii\web\Response;
 
 $params      = require __DIR__ . '/params.php';
 $db          = require __DIR__ . '/db.php';
@@ -105,7 +109,7 @@ $config = [
 			'class' => ApiModule::class
 		],
 		'markdown' => [
-			'class' => 'kartik\markdown\Module',
+			'class' => Markdown::class
 		]
 	],
 	'components' => [
@@ -114,6 +118,17 @@ $config = [
 			'parsers' => [
 				'application/json' => JsonParser::class
 			]
+		],
+		'response' => [
+			'on beforeSend' => static function (Event $event) {
+				/** @var Response $response */
+				$response = $event->sender;
+
+				$user = Users::Current();
+				if ($user->is_pwd_outdated && 'site/update-password' !== Yii::$app->request->pathInfo) {
+					$response->redirect(SiteController::to('update-password'));
+				}
+			}
 		],
 		'cache' => [
 			'class' => YII_ENV_DEV ? DummyCache::class : FileCache::class,
