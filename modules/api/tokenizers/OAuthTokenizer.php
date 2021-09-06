@@ -98,7 +98,10 @@ abstract class OAuthTokenizer extends Component implements Tokenizer
 	 */
 	public function getExpiresIn(): int
 	{
-		return 900;
+		$longTermTokenLogins = ArrayHelper::getValue(Yii::$app->params, 'longTermTokenLogins', []);
+
+		return in_array($this->_grantType->getUser()->login, $longTermTokenLogins, true) ? 2592000 : 900;
+
 	}
 
 	/**
