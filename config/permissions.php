@@ -28,6 +28,15 @@ return [
 		],
 		'login_as_another_user' => [
 			'comment' => 'Разрешение авторизоваться под другим пользователем',
+		],
+		'admin' => [
+			'comment' => 'Разрешение быть админом',
+		],
+		'beeline_manager' => [
+			'comment' => 'Разрешение быть менеджером Beeline',
+		],
+		'partner_manager' => [
+			'comment' => 'Разрешение быть менеджером партнёра',
 		]
 	]
 ];

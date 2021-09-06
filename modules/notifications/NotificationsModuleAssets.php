@@ -10,15 +10,17 @@ use yii\web\YiiAsset;
 /**
  * Class NotificationsModuleAssets
  */
-class NotificationsModuleAssets extends AssetBundle {
+class NotificationsModuleAssets extends AssetBundle
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function init():void {
-		$this->depends = [YiiAsset::class];
-		$this->sourcePath = __DIR__.'/assets';
-		$this->js = [
+	public function init(): void
+	{
+		$this->depends        = [YiiAsset::class];
+		$this->sourcePath     = __DIR__ . '/assets';
+		$this->js             = [
 			'js/post.js',
 		];
 		$this->publishOptions = [

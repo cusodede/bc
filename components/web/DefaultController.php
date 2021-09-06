@@ -37,7 +37,8 @@ use yii\web\Response;
  * @property-read ActiveRecord $searchModel
  * @property-read ActiveRecord|ActiveRecordTrait $model
  */
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
 	use ControllerPermissionsTrait;
 
 	protected const DEFAULT_TITLE = null;
@@ -59,21 +60,24 @@ class DefaultController extends Controller {
 	/**
 	 * @return array
 	 */
-	public function getMappingRules():array {
+	public function getMappingRules(): array
+	{
 		return [];
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function Title():string {
-		return static::DEFAULT_TITLE??ControllerHelper::ExtractControllerId(static::class);
+	public static function Title(): string
+	{
+		return static::DEFAULT_TITLE ?? ControllerHelper::ExtractControllerId(static::class);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			[
 				'class' => ContentNegotiator::class,
@@ -95,7 +99,8 @@ class DefaultController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	public function actions():array {
+	public function actions(): array
+	{
 		return ArrayHelper::merge(parent::actions(), [
 			'editAction' => [
 				'class' => EditableFieldAction::class,
@@ -119,7 +124,8 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	public static function MenuItems(string $alias = "@app/controllers"):array {
+	public static function MenuItems(string $alias = "@app/controllers"): array
+	{
 		$items = [];
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Yii::getAlias($alias)), RecursiveIteratorIterator::SELF_FIRST);
 		/** @var RecursiveDirectoryIterator $file */
@@ -139,21 +145,24 @@ class DefaultController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	public function getViewPath():string {
+	public function getViewPath(): string
+	{
 		return '@app/views/default';
 	}
 
 	/**
 	 * @return ActiveRecord
 	 */
-	public function getModel():ActiveRecord {
+	public function getModel(): ActiveRecord
+	{
 		return (new $this->modelClass());
 	}
 
 	/**
 	 * @return ActiveRecord
 	 */
-	public function getSearchModel():ActiveRecord {
+	public function getSearchModel(): ActiveRecord
+	{
 		return (new $this->modelSearchClass());
 	}
 
@@ -162,8 +171,9 @@ class DefaultController extends Controller {
 	 * @throws InvalidConfigException
 	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
-	public function actionIndex():string {
-		$params = Yii::$app->request->queryParams;
+	public function actionIndex(): string
+	{
+		$params      = Yii::$app->request->queryParams;
 		$searchModel = $this->searchModel;
 
 		return $this->render('index', [
@@ -180,7 +190,8 @@ class DefaultController extends Controller {
 	 * @return string
 	 * @throws Throwable
 	 */
-	public function actionView(int $id):string {
+	public function actionView(int $id): string
+	{
 		if (null === $model = $this->model::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
@@ -199,7 +210,8 @@ class DefaultController extends Controller {
 	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function actionEdit(int $id) {
+	public function actionEdit(int $id)
+	{
 		if (null === $model = $this->model::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
@@ -208,7 +220,7 @@ class DefaultController extends Controller {
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$errors = [];
+		$errors  = [];
 		$posting = $model->updateModelFromPost($errors);
 
 		if (true === $posting) {/* Модель была успешно прогружена */
@@ -220,20 +232,21 @@ class DefaultController extends Controller {
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
-			?$this->renderAjax('modal/edit', ['model' => $model])
-			:$this->render('edit', ['model' => $model]);
+			? $this->renderAjax('modal/edit', ['model' => $model])
+			: $this->render('edit', ['model' => $model]);
 	}
 
 	/**
 	 * @return string|Response
 	 * @throws Throwable
 	 */
-	public function actionCreate() {
+	public function actionCreate()
+	{
 		$model = $this->model;
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$errors = [];
+		$errors  = [];
 		$posting = $model->createModelFromPost($errors);/* switch тут нельзя использовать из-за его нестрогости */
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
@@ -244,8 +257,8 @@ class DefaultController extends Controller {
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
-			?$this->renderAjax('modal/create', ['model' => $model])
-			:$this->render('create', ['model' => $model]);
+			? $this->renderAjax('modal/create', ['model' => $model])
+			: $this->render('create', ['model' => $model]);
 	}
 
 	/**
@@ -253,7 +266,8 @@ class DefaultController extends Controller {
 	 * @return Response
 	 * @throws Throwable
 	 */
-	public function actionDelete(int $id):Response {
+	public function actionDelete(int $id): Response
+	{
 		if (null === $model = $this->model::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
@@ -272,7 +286,8 @@ class DefaultController extends Controller {
 	 * @throws ForbiddenHttpException
 	 * @throws Throwable
 	 */
-	public function actionAjaxSearch(?string $term, string $column = 'name', string $concatFields = null):array {
+	public function actionAjaxSearch(?string $term, string $column = 'name', string $concatFields = null): array
+	{
 		$out = [
 			'results' => [
 				'id' => '',
@@ -285,11 +300,11 @@ class DefaultController extends Controller {
 				// добавляем название таблицы перед каждым полем
 				$concatFieldsArray = preg_filter('/^/', "{$tableName}.", explode(',', $concatFields));
 				// создаем CONCAT() функцию. Формат: CONCAT(tableName.surname,' ',tableName. name)
-				$textFields = 'CONCAT('.implode(",' ',", $concatFieldsArray).')';
+				$textFields = 'CONCAT(' . implode(",' ',", $concatFieldsArray) . ')';
 			} else {
 				$textFields = "{$tableName}.{$column}";
 			}
-			$data = $this->model::find()
+			$data           = $this->model::find()
 				->select(["{$tableName}.id", "{$textFields} as text"])
 				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()

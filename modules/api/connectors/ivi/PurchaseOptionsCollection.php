@@ -36,7 +36,7 @@ class PurchaseOptionsCollection implements CollectionInterface
 	{
 		$items = array_filter(
 			$this->_items,
-			static function (PurchaseOptionsItem $item) use ($productId) {
+			static function(PurchaseOptionsItem $item) use ($productId) {
 				return $productId === $item->getProductId();
 			});
 

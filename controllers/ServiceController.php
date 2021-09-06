@@ -10,13 +10,15 @@ use yii\web\Controller;
 /**
  * Class ServiceController
  */
-class ServiceController extends Controller {
+class ServiceController extends Controller
+{
 	use ControllerTrait;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'access' => [
 				'class' => PermissionFilter::class
@@ -27,7 +29,8 @@ class ServiceController extends Controller {
 	/**
 	 * @return string
 	 */
-	public function actionIndex():string {
+	public function actionIndex(): string
+	{
 		return $this->render('index');
 	}
 

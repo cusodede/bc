@@ -24,24 +24,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?= GridConfig::widget([
-	'id'   => "{$modelName}-index-grid",
+	'id' => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
-		'dataProvider'     => $dataProvider,
-		'filterModel'      => $searchModel,
-		'panel'            => [
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'panel' => [
 			'heading' => '',
 		],
-		'toolbar'          => [
+		'toolbar' => [
 			['content' => Html::ajaxModalLink('Создать подписку', $controller::to('create'), ['class' => ['btn btn-success']])]
 		],
-		'export'           => false,
+		'export' => false,
 		'resizableColumns' => true,
-		'responsive'       => true,
-		'columns'          => [
+		'responsive' => true,
+		'columns' => [
 			[
-				'class'    => ActionColumn::class,
+				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{edit}{view}</div>',
-				'buttons'  => [
+				'buttons' => [
 					'edit' => static function(string $url, Model $model): string {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
@@ -57,29 +57,29 @@ $this->params['breadcrumbs'][] = $this->title;
 			'id',
 			[
 				'attribute' => 'partner_id',
-				'value'     => 'product.name',
-				'label'     => 'Наименование продукта'
+				'value' => 'product.name',
+				'label' => 'Наименование продукта'
 			],
 			[
 				'attribute' => 'partner_id',
-				'value'     => 'product.relatedPartner.name',
-				'label'     => 'Партнер'
+				'value' => 'product.relatedPartner.name',
+				'label' => 'Партнер'
 			],
 			[
 				'attribute' => 'price',
-				'value'     => 'product.price',
-				'label'     => 'Стоимость'
+				'value' => 'product.price',
+				'label' => 'Стоимость'
 			],
 			'trial_count',
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'product.created_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 			[
-				'class'     => DataColumn::class,
+				'class' => DataColumn::class,
 				'attribute' => 'product.updated_at',
-				'format'    => ['date', 'php:d.m.Y H:i'],
+				'format' => ['date', 'php:d.m.Y H:i'],
 			],
 		],
 	])

@@ -10,7 +10,8 @@ use yii\base\Model;
  * @property-write PHPDocParser[] $parsers
  * @property bool $asCommentBlock Выводить генерацию в виде блока комментария
  */
-class SwaggerConverter extends Model {
+class SwaggerConverter extends Model
+{
 	public array $parsers = [];
 	public bool $asCommentBlock = true;
 
@@ -18,15 +19,16 @@ class SwaggerConverter extends Model {
 	/**
 	 * @return string[]
 	 */
-	private function getDefinitions():array {
-		$result = [];
+	private function getDefinitions(): array
+	{
+		$result   = [];
 		$required = [];
 		foreach ($this->parsers as $docParser) {
 			if ($docParser->required) $required[] = "\"{$docParser->name}\"";
 		}
 		if ([] !== $required) {
 			$requiredNames = implode(", ", $required);
-			$result[] = "@SWG\Definition(required={{$requiredNames}})";
+			$result[]      = "@SWG\Definition(required={{$requiredNames}})";
 		}
 		return $result;
 	}
@@ -34,7 +36,8 @@ class SwaggerConverter extends Model {
 	/**
 	 * @return string[]
 	 */
-	private function getProperties():array {
+	private function getProperties(): array
+	{
 		$result = [];
 		foreach ($this->parsers as $docParser) {
 			$result[] = "@SWG\Property(property=\"{$docParser->name}\", type=\"{$docParser->type}\")";
@@ -45,9 +48,10 @@ class SwaggerConverter extends Model {
 	/**
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		if ($this->asCommentBlock) {
-			$output = [];
+			$output   = [];
 			$output[] = "/**\n * ";
 			if ([] !== $definitions = $this->getDefinitions()) {
 				$output[] = implode("\n * ", $definitions);
@@ -59,7 +63,7 @@ class SwaggerConverter extends Model {
 			return implode('', $output);
 		}
 
-		return implode("\n", $this->getDefinitions())."\n\n".implode("\n", $this->getProperties());
+		return implode("\n", $this->getDefinitions()) . "\n\n" . implode("\n", $this->getProperties());
 	}
 
 }

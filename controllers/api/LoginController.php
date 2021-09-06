@@ -15,12 +15,14 @@ use yii\web\Response;
 /**
  * Class LoginController
  */
-class LoginController extends Controller {
+class LoginController extends Controller
+{
 
 	/**
 	 * @inheritDoc
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return [
 			'contentNegotiator' => [
 				'class' => ContentNegotiator::class,
@@ -36,7 +38,8 @@ class LoginController extends Controller {
 	/**
 	 * @inheritDoc
 	 */
-	protected function verbs():array {
+	protected function verbs(): array
+	{
 		return [
 			'index' => ['POST'],
 		];
@@ -46,8 +49,9 @@ class LoginController extends Controller {
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function actionIndex():array {
-		$model = new LoginForm();
+	public function actionIndex(): array
+	{
+		$model       = new LoginForm();
 		$headersAuth = [
 			'login' => ArrayHelper::getValue(Yii::$app->request->headers, 'login'),
 			'password' => ArrayHelper::getValue(Yii::$app->request->headers, 'password')

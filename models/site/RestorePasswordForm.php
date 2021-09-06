@@ -25,7 +25,8 @@ class RestorePasswordForm extends Model
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['email'], 'required'],
 			[['email'], 'email']
@@ -35,7 +36,8 @@ class RestorePasswordForm extends Model
 	/**
 	 * @inheritDoc
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'email' => 'Почтовый адрес, указанный при регистрации'
 		];

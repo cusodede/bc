@@ -13,13 +13,16 @@ use yii\helpers\ArrayHelper;
  */
 class SubscriptionsSearch extends Subscriptions
 {
+	public ?int $limit = null;
+	public ?int $offset = null;
+
 	/**
 	 * @return array[]
 	 */
 	public function rules(): array
 	{
 		return [
-			[['id', 'product_id'], 'integer'],
+			[['id', 'product_id', 'limit', 'offset'], 'integer'],
 		];
 	}
 
@@ -44,8 +47,8 @@ class SubscriptionsSearch extends Subscriptions
 		}
 
 		$dataProvider->setSort([
-			'defaultOrder' 	=> ['subscriptions.id' => SORT_ASC],
-			'attributes' 	=> ['subscriptions.id'],
+			'defaultOrder' => ['subscriptions.id' => SORT_ASC],
+			'attributes' => ['subscriptions.id'],
 		]);
 
 		$this->load($params);
@@ -57,6 +60,14 @@ class SubscriptionsSearch extends Subscriptions
 		$query->joinWith(['product']);
 
 		$query->andFilterWhere(['subscriptions.id' => $this->id]);
+
+		if (null !== $this->limit) {
+			$query->limit = $this->limit;
+		}
+
+		if (null !== $this->offset) {
+			$query->offset = $this->offset;
+		}
 
 		return $dataProvider;
 	}

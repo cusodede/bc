@@ -40,20 +40,20 @@ class ProductsController extends YiiRestController
 	{
 		return [
 			'contentNegotiator' => [
-				'class'   => ContentNegotiator::class,
+				'class' => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				]
 			],
 			'verbFilter' => [
-				'class'   => VerbFilter::class,
+				'class' => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
-				'class'  => JwtHttpBearerAuth::class
+				'class' => JwtHttpBearerAuth::class
 			],
 			'access' => [
-				'class'  => PermissionFilter::class
+				'class' => PermissionFilter::class
 			]
 		];
 	}
@@ -164,11 +164,12 @@ class ProductsController extends YiiRestController
 	protected function verbs(): array
 	{
 		return [
-			'list'          => ['GET'],
-			'one'           => ['GET'],
+			'list' => ['GET'],
+			'stories' => ['GET'],
+			'one' => ['GET'],
 			'ticket-status' => ['GET'],
-			'subscribe'     => ['POST'],
-			'unsubscribe'   => ['POST']
+			'connect' => ['POST'],
+			'disable' => ['POST']
 		];
 	}
 }

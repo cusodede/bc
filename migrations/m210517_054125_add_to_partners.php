@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-use yii\db\Migration;
+use app\components\db\Migration;
 use app\models\partners\Partners;
 
 /**
@@ -15,7 +15,17 @@ class m210517_054125_add_to_partners extends Migration
 	{
 		$this->addColumn(Partners::tableName(), 'inn', $this->string(12)->notNull()->after('name')->comment('ИНН партнера'));
 		$this->createIndex('idx-partners-inn', Partners::tableName(), 'inn', true);
-		$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
+
+		switch ($this->db->driverName) {
+			case 'mysql':
+				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull()->comment('Дата обновления партнера'));
+			break;
+			case 'pgsql':
+				$this->addColumn(Partners::tableName(), 'updated_at', $this->timestamp()->comment('Дата обновления партнера'));
+				$this->createOnUpdateTrigger(Partners::tableName());
+			break;
+		}
+
 		$this->createIndex('idx-partners-name', Partners::tableName(), 'name');
 	}
 

@@ -9,11 +9,13 @@ use yii\validators\Validator;
  * Class PhoneNumberValidator
  * Валидатор телефонных номеров
  */
-class PhoneNumberValidator extends Validator {
+class PhoneNumberValidator extends Validator
+{
 	/**
 	 * @inheritDoc
 	 */
-	public function validateAttribute($model, $attribute):void {
+	public function validateAttribute($model, $attribute): void
+	{
 		$validatedValue = $model->$attribute;
 		if (is_array($validatedValue)) {
 			$errors = [];
@@ -24,8 +26,8 @@ class PhoneNumberValidator extends Validator {
 			}
 			if ([] !== $errors) {
 				$this->addError($model, $attribute, (1 === count($errors))
-					?implode(', ', $errors)." не является корректным телефонным номером"
-					:implode(', ', $errors)." не являются корректными телефонными номерами");
+					? implode(', ', $errors) . " не является корректным телефонным номером"
+					: implode(', ', $errors) . " не являются корректными телефонными номерами");
 			}
 		} elseif (!Phones::isValidNumber($validatedValue)) $this->addError($model, $attribute, "$validatedValue не является корректным телефонным номером");
 	}

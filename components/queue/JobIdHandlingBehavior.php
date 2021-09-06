@@ -26,7 +26,7 @@ class JobIdHandlingBehavior extends Behavior
 	{
 		return [
 			Queue::EVENT_BEFORE_EXEC => 'initId',
-			Queue::EVENT_AFTER_EXEC  => 'unsetId',
+			Queue::EVENT_AFTER_EXEC => 'unsetId',
 			Queue::EVENT_AFTER_ERROR => 'unsetId',
 		];
 	}

@@ -27,8 +27,10 @@ use yii\db\ActiveRecord;
  * @property-read int $done количество импортированных строк
  * @property-read int $percent процент импортированных строк
  * @property-read int $errorCount количество строк с ошибкой импорта
+ * @property array $errorMessages Массив ошибок, собранных при импорте
  */
-class ImportModel extends Model {
+class ImportModel extends Model
+{
 	use FileStorageTrait;
 
 	/**
@@ -38,7 +40,7 @@ class ImportModel extends Model {
 	/**
 	 * @var mixed $importFile атрибут загрузки файла
 	 */
-	public $importFile;
+	public mixed $importFile = null;
 	/**
 	 * правила соответствия полей
 	 * @var array $mappingRules
@@ -66,6 +68,11 @@ class ImportModel extends Model {
 	public int $importChunkSize = 100;
 
 	/**
+	 * @var array Массив ошибок, собранных при импорте
+	 */
+	public array $errorMessages = [];
+
+	/**
 	 * @var string|null $_filename Имя загруженного файла в локальной ФС
 	 */
 	private ?string $_filename;
@@ -78,7 +85,8 @@ class ImportModel extends Model {
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['skipRows'], 'integer'],
 			[['domain'], 'default', 'value' => time()],
@@ -90,8 +98,9 @@ class ImportModel extends Model {
 	/**
 	 * @inheritDoc
 	 */
-	public function init():void {
-		$this->domain = $this->domain??time();//валидатор не валидирует?
+	public function init(): void
+	{
+		$this->domain = $this->domain ?? time();//валидатор не валидирует?
 	}
 
 	/**
@@ -99,7 +108,8 @@ class ImportModel extends Model {
 	 * @throws Exception
 	 * @noinspection BadExceptionsProcessingInspection
 	 */
-	private function loadXls():array {
+	private function loadXls(): array
+	{
 		try {
 			$reader = new Xlsx();
 			$reader->setReadDataOnly(true);
@@ -108,7 +118,7 @@ class ImportModel extends Model {
 			$spreadsheet->setActiveSheetIndex(0);
 			return $spreadsheet->getActiveSheet()->toArray(null, false);
 		} catch (Throwable $t) {
-			throw new Exception('Формат файла не поддерживается. Ошибка '.$t->getMessage());
+			throw new Exception('Формат файла не поддерживается. Ошибка ' . $t->getMessage());
 		}
 	}
 
@@ -117,13 +127,14 @@ class ImportModel extends Model {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function preload():bool {
+	public function preload(): bool
+	{
 		$dataArray = $this->loadXls();
 		$dataArray = array_slice($dataArray, $this->skipRows);
 		if ($this->skipEmptyRows) {
 			$dataArray = array_filter($dataArray);//ignore empty rows
 		}
-		$dataArray = array_map(function($row) {
+		$dataArray    = array_map(function($row) {
 			return [
 				'data' => serialize(array_map("trim", $row)),
 				'domain' => $this->domain,
@@ -135,19 +146,34 @@ class ImportModel extends Model {
 	}
 
 	/**
+	 * @param string|resource $value
+	 * @return mixed
+	 */
+	private function unserialize(mixed $value): mixed
+	{
+		if (is_resource($value) && 'stream' === get_resource_type($value)) {
+			$result = stream_get_contents($value);
+			fseek($value, 0);//не забываем перемотать кассету
+		} else {
+			$result = $value;
+		}
+		return unserialize($result, ['allowed_classes' => false]);
+	}
+
+	/**
 	 * @param-out array $messages
-	 * @param array $messages
 	 * @return bool
 	 * @throws Throwable
 	 * todo: добавить правило, разрешающее скипать существующие данные
 	 */
-	public function import(array &$messages = []):bool {
+	public function import(): bool
+	{
 		/** @var Import $data */
 		if ([] === $data = Import::find()->where(['domain' => $this->domain, 'processed' => Import::NOT_PROCESSED])->limit($this->importChunkSize)->all()) {
 			return true;
 		}
 		foreach ($data as $importRecord) {
-			$importRow = unserialize($importRecord->data, ['allowed_classes' => false]);
+			$importRow        = $this->unserialize($importRecord->data);
 			$mappedColumnData = [];
 			foreach ($importRow as $columnIndex => $value) {
 				/** @var array $currentRule */
@@ -161,7 +187,7 @@ class ImportModel extends Model {
 						ArrayHelper::getValue($currentRule, 'foreign.attribute', new Exception('Foreign attribute parameter is required')) => $value
 					])
 				) {
-					$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key'))?$foreignModel->primaryKey:$foreignModel->$return;
+					$value = (null === $return = ArrayHelper::getValue($currentRule, 'foreign.key')) ? $foreignModel->primaryKey : $foreignModel->$return;
 				}
 				$mappedColumnData[$currentRule['attribute']] = $value;
 
@@ -173,7 +199,7 @@ class ImportModel extends Model {
 			} else {
 				$importRecord->processed = Import::PROCESSED_ERROR;
 				$importRecord->save();
-				$messages[] = $errors;
+				$this->errorMessages[] = $errors;
 			}
 
 		}
@@ -188,12 +214,13 @@ class ImportModel extends Model {
 	 * @param array $errors
 	 * @return ActiveRecord|null
 	 */
-	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []):?ActiveRecord {
+	private static function addInstance(string $class, array $searchCondition, ?array $fields = null, bool $forceUpdate = false, array &$errors = []): ?ActiveRecord
+	{
 		/** @var ActiveRecord $class */
 		$instance = $class::find()->where($searchCondition)->one();
-		$instance = $instance??new $class();
+		$instance = $instance ?? new $class();
 		if ($instance->isNewRecord || $forceUpdate) {
-			$instance->load($fields??$searchCondition, '');
+			$instance->load($fields ?? $searchCondition, '');
 			if (!$instance->save()) {
 				$errors = $instance->errors;
 				return null;
@@ -205,7 +232,8 @@ class ImportModel extends Model {
 	/**
 	 * Подчищаем обработанные данные
 	 */
-	public function clear():void {
+	public function clear(): void
+	{
 		Import::deleteAll(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED]);
 	}
 
@@ -213,7 +241,8 @@ class ImportModel extends Model {
 	 * @return string|null
 	 * @throws Throwable
 	 */
-	public function getFilename():?string {
+	public function getFilename(): ?string
+	{
 		if (null !== $lastFileName = ArrayHelper::getValue($this->files(['importFile']), 0)) {
 			/** @var FileStorage $lastFileName */
 			return $lastFileName->path;
@@ -224,7 +253,8 @@ class ImportModel extends Model {
 	/**
 	 * @return int
 	 */
-	public function getCount():int {
+	public function getCount(): int
+	{
 		if (null === $this->_count) {
 			$this->_count = (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain])->count();
 		}
@@ -234,21 +264,24 @@ class ImportModel extends Model {
 	/**
 	 * @return float
 	 */
-	public function getPercent():float {
+	public function getPercent(): float
+	{
 		return (int)(($this->done / $this->count) * 100);
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getDone():int {
+	public function getDone(): int
+	{
 		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => [Import::PROCESSED, Import::PROCESSED_ERROR]])->count();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getErrorCount():int {
+	public function getErrorCount(): int
+	{
 		return (int)Import::find()->where(['model' => $this->model, 'domain' => $this->domain, 'processed' => Import::PROCESSED_ERROR])->count();
 	}
 

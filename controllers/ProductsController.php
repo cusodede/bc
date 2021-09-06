@@ -36,7 +36,7 @@ class ProductsController extends DefaultController
 		$searchModel = new ProductsJournalSearch();
 
 		return $this->render('journal', [
-			'searchModel'  => $searchModel,
+			'searchModel' => $searchModel,
 			'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
 		]);
 	}
@@ -63,5 +63,19 @@ class ProductsController extends DefaultController
 	public function getViewPath(): string
 	{
 		return '@app/views/products';
+	}
+
+	/**
+	 * Показать всех абонентов выбранного продукта.
+	 */
+	public function actionViewAbonents(): string
+	{
+		$params      = Yii::$app->request->queryParams;
+		/** @var ProductsSearch $searchModel */
+		$searchModel = $this->searchModel;
+
+		return $this->renderAjax('modal/view-abonents', [
+			'dataProvider' => $searchModel->searchAbonents($params)
+		]);
 	}
 }

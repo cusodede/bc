@@ -19,7 +19,8 @@ use yii\base\Model;
  * @property string $email
  * @property bool $restore
  */
-class LoginForm extends Model {
+class LoginForm extends Model
+{
 	public ?string $login = null;
 	public ?string $password = null;
 	public bool $rememberMe = true;
@@ -31,16 +32,17 @@ class LoginForm extends Model {
 	/**
 	 * @return array the validation rules.
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			[['login', 'password'], 'required'],
 			['rememberMe', 'boolean'],
-			[['password'], function(string $attribute):void {
+			[['password'], function(string $attribute): void {
 				if (!$this->hasErrors() && (null === $this->user || false === $this->user->validatePassword($this->password))) {
 					$this->addError($attribute, 'Неправильные логин или пароль.');
 				}
 			}],
-			[['login'], function(string $attribute):void {
+			[['login'], function(string $attribute): void {
 				if (!$this->hasErrors() && null !== $this->user && $this->user->deleted) {
 					$this->addError($attribute, 'Пользователь заблокирован');
 				}
@@ -50,7 +52,8 @@ class LoginForm extends Model {
 	/**
 	 * @return array
 	 */
-	public function attributeLabels():array {
+	public function attributeLabels(): array
+	{
 		return [
 			'login' => 'Логин',
 			'password' => 'Пароль',
@@ -62,8 +65,9 @@ class LoginForm extends Model {
 	 * Logs in a user using the provided username and password.
 	 * @return bool whether the user is logged in successfully
 	 */
-	public function doLogin():bool {
-		return ($this->validate() && Yii::$app->user->login($this->user, $this->rememberMe?DateHelper::SECONDS_IN_MONTH:0));
+	public function doLogin(): bool
+	{
+		return ($this->validate() && Yii::$app->user->login($this->user, $this->rememberMe ? DateHelper::SECONDS_IN_MONTH : 0));
 	}
 
 	/**
@@ -72,7 +76,8 @@ class LoginForm extends Model {
 	 * @param string|null $userAgent
 	 * @return null|UsersTokens
 	 */
-	public function getToken(?string $userIP, ?string $userAgent):?UsersTokens {
+	public function getToken(?string $userIP, ?string $userAgent): ?UsersTokens
+	{
 		if ($this->validate()) {
 			if ($this->user->is_pwd_outdated) {
 				$this->addError('password', 'Пароль пользователя просрочен и должен быть изменён.');
@@ -94,9 +99,10 @@ class LoginForm extends Model {
 	/**
 	 * @return Users|null
 	 */
-	public function getUser():?Users {
+	public function getUser(): ?Users
+	{
 		if (null === $this->_user) {
-			$this->_user = Users::findByLogin($this->login);
+			$this->_user = Users::findByUnidentifiedLogin($this->login);
 		}
 		return $this->_user;
 	}

@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
+use app\models\sys\users\Users;
 use yii\data\ActiveDataProvider;
-use app\models\sys\users\active_record\Users;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 
 /**
@@ -12,7 +12,8 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
  * @property null|string $user
  * @property null|string $collection
  */
-final class PermissionsSearch extends Permissions {
+final class PermissionsSearch extends Permissions
+{
 
 	public ?string $user = null;
 	public ?string $collection = null;
@@ -20,7 +21,8 @@ final class PermissionsSearch extends Permissions {
 	/**
 	 * @inheritDoc
 	 */
-	public function rules():array {
+	public function rules(): array
+	{
 		return [
 			['id', 'integer'],
 			['priority', 'integer', 'min' => 0, 'max' => 100],
@@ -32,7 +34,8 @@ final class PermissionsSearch extends Permissions {
 	 * @param array $params
 	 * @return ActiveDataProvider
 	 */
-	public function search(array $params):ActiveDataProvider {
+	public function search(array $params): ActiveDataProvider
+	{
 		$query = Permissions::find()->distinct()->active();
 
 		$dataProvider = new ActiveDataProvider([
@@ -42,7 +45,9 @@ final class PermissionsSearch extends Permissions {
 		$this->setSort($dataProvider);
 		$this->load($params);
 
-		if (!$this->validate()) return $dataProvider;
+		if (!$this->validate()) {
+			return $dataProvider;
+		}
 
 		$query->joinWith(['relatedUsers', 'relatedPermissionsCollections']);
 		$this->filterData($query);
@@ -54,21 +59,23 @@ final class PermissionsSearch extends Permissions {
 	 * @param $query
 	 * @return void
 	 */
-	private function filterData($query):void {
-		$query->andFilterWhere([self::tableName().'.id' => $this->id])
-			->andFilterWhere([self::tableName().'.priority' => $this->priority])
-			->andFilterWhere(['like', self::tableName().'.name', $this->name])
-			->andFilterWhere(['like', self::tableName().'.controller', $this->controller])
-			->andFilterWhere(['like', self::tableName().'.action', $this->action])
-			->andFilterWhere([self::tableName().'.verb' => $this->verb])
-			->andFilterWhere(['like', Users::tableName().'.username', $this->user])
-			->andFilterWhere(['like', PermissionsCollections::tableName().'.name', $this->collection]);
+	private function filterData($query): void
+	{
+		$query->andFilterWhere([self::tableName() . '.id' => $this->id])
+			->andFilterWhere([self::tableName() . '.priority' => $this->priority])
+			->andFilterWhere(['like', self::tableName() . '.name', $this->name])
+			->andFilterWhere(['like', self::tableName() . '.controller', $this->controller])
+			->andFilterWhere(['like', self::tableName() . '.action', $this->action])
+			->andFilterWhere([self::tableName() . '.verb' => $this->verb])
+			->andFilterWhere(['or', ['like', Users::tableName() . '.name', $this->user], ['like', Users::tableName() . '.surname', $this->user]])
+			->andFilterWhere(['like', PermissionsCollections::tableName() . '.name', $this->collection]);
 	}
 
 	/**
 	 * @param $dataProvider
 	 */
-	private function setSort($dataProvider):void {
+	private function setSort($dataProvider): void
+	{
 		$dataProvider->setSort([
 			'defaultOrder' => ['id' => SORT_ASC],
 			'attributes' => ['id', 'name', 'controller', 'action', 'verb', 'priority']

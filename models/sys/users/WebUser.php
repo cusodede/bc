@@ -15,22 +15,25 @@ use yii\web\User;
  *
  * @property Users $identity
  */
-class WebUser extends User {
+class WebUser extends User
+{
 
 	/**
 	 * Вернуть id оригинального пользователя,
 	 * из под которого авторизовались под другим пользователем
 	 * @return null|int null, если текущий пользователь и есть оригинальный
 	 */
-	public function getOriginalUserId():?int {
-		return $this->isLoginAsAnotherUser()?(int)Yii::$app->request->cookies->get('fear')->value:null;
+	public function getOriginalUserId(): ?int
+	{
+		return $this->isLoginAsAnotherUser() ? (int)Yii::$app->request->cookies->get('fear')->value : null;
 
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isLoginAsAnotherUser():bool {
+	public function isLoginAsAnotherUser(): bool
+	{
 		return Yii::$app->request->cookies->has('fear');
 	}
 
@@ -38,7 +41,8 @@ class WebUser extends User {
 	 * Вернуться в родную учетную запись
 	 * @return void
 	 */
-	public function loginBackToOriginUser():void {
+	public function loginBackToOriginUser(): void
+	{
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
 			throw new DomainException("Вы не авторизованы");
@@ -58,7 +62,8 @@ class WebUser extends User {
 	 * @param int $userId
 	 * @throws Throwable
 	 */
-	public function loginAsAnotherUser(int $userId):void {
+	public function loginAsAnotherUser(int $userId): void
+	{
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
 			throw new DomainException("Вы не авторизованы");
@@ -88,7 +93,8 @@ class WebUser extends User {
 	 * @param bool $destroySession
 	 * @return bool
 	 */
-	public function logout($destroySession = true):bool {
+	public function logout($destroySession = true): bool
+	{
 		$isLogout = parent::logout($destroySession);
 		if ($isLogout) {
 			Yii::$app->response->cookies->remove('fear');

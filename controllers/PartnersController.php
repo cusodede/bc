@@ -34,7 +34,7 @@ class PartnersController extends DefaultController
 	 */
 	public function behaviors(): array
 	{
-		$parent = parent::behaviors();
+		$parent                     = parent::behaviors();
 		$parent['access']['except'] = ['get-logo'];
 
 		return $parent;

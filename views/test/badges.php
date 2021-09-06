@@ -18,11 +18,11 @@ BootstrapAsset::register($this);
 	'emptyText' => ['один', 'два', 'три'],
 	'visible' => 2,
 	'options' => static function($key) {
-		return ['style' => 'background:'.((0 === $key % 2)?'red':'green')];
+		return ['style' => 'background:' . ((0 === $key % 2) ? 'red' : 'green')];
 	},
 	'addon' => static fn($visible, $hidden) => "{$hidden} не показано",
 	'addonOptions' => static function($key) {
-		return ['style' => 'background:'.((0 === $key % 2)?'red':'green')];
+		return ['style' => 'background:' . ((0 === $key % 2) ? 'red' : 'green')];
 	},
 //	'urlScheme' => ['users/view', 'id' => 'id'],
 	'tooltip' => static function($key, $users) {

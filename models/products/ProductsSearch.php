@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 /**
  * Поисковая модель продуктов
@@ -15,18 +16,11 @@ use yii\helpers\ArrayHelper;
  */
 class ProductsSearch extends Products
 {
-	/**
-	 * @var string|null
-	 */
 	public ?string $category_id = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $trial = null;
-	/**
-	 * @var bool|null
-	 */
 	public ?bool $active = null;
+	public ?int $limit = null;
+	public ?int $offset = null;
 
 	/**
 	 * @return array[]
@@ -34,7 +28,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -49,7 +43,7 @@ class ProductsSearch extends Products
 	{
 		// Сортировка и навигация для GraphQL
 		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+		$sort       = ArrayHelper::getValue($params, $this->formName() . '.sort');
 
 		$query = Products::find()->active();
 
@@ -64,7 +58,7 @@ class ProductsSearch extends Products
 		} else {
 			$dataProvider->setSort([
 				'defaultOrder' => ['id' => SORT_ASC],
-				'attributes'   => ['id', 'name'],
+				'attributes' => ['id', 'name'],
 			]);
 		}
 
@@ -77,9 +71,9 @@ class ProductsSearch extends Products
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
 		$query->andFilterWhere([
-			'products.id'          => $this->id,
-			'products.type_id'     => $this->type_id,
-			'products.partner_id'  => $this->partner_id,
+			'products.id' => $this->id,
+			'products.type_id' => $this->type_id,
+			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
 		$query->andFilterWhere(['like', 'products.name', $this->name]);
@@ -91,6 +85,45 @@ class ProductsSearch extends Products
 		if (null !== $this->active) {
 			$query->whereActivePeriod($this->active);
 		}
+
+		if (null !== $this->limit) {
+			$query->limit = $this->limit;
+		}
+
+		if (null !== $this->offset) {
+			$query->offset = $this->offset;
+		}
+
+		return $dataProvider;
+	}
+
+	/**
+	 * @throws NotFoundHttpException
+	 */
+	public function searchAbonents(array $params): ActiveDataProvider
+	{
+		$model = Products::findOne($params['id']);
+		if (null === $model) {
+			throw new NotFoundHttpException();
+		}
+
+		$query = $model->getRelatedAbonents();
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => 5,
+			],
+		]);
+
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
+
+		$dataProvider->setSort([
+			'attributes' => ['created_at', 'status_id']
+		]);
 
 		return $dataProvider;
 	}

@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property int $abonent_id
  * @property int $product_id
+ * @property int $created_at [timestamp]
  *
  * @property ProductsJournal[] $relatedProductsJournal
  * @property BillingJournal[] $relatedBillingJournal
@@ -56,7 +57,7 @@ class RelAbonentsToProducts extends ActiveRecord
 	public function attributeLabels(): array
 	{
 		return [
-			'id'         => 'ID',
+			'id' => 'ID',
 			'abonent_id' => 'Abonent ID',
 			'product_id' => 'Product ID'
 		];

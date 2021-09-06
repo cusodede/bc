@@ -22,7 +22,8 @@ use yii\helpers\ArrayHelper;
  * @property UsersTokens[] $relatedChildTokens
  * @property-read UsersTokens|null $relatedMainParentToken
  */
-class UsersTokens extends ActiveRecordUsersTokens {
+class UsersTokens extends ActiveRecordUsersTokens
+{
 	use ActiveRecordTrait;
 
 	/**
@@ -39,7 +40,8 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function behaviors():array {
+	public function behaviors(): array
+	{
 		return ArrayHelper::merge(parent::behaviors(), [
 			[
 				'class' => TimestampBehavior::class,
@@ -56,7 +58,8 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	 * Получение самого верхнего родительского токена.
 	 * @return self
 	 */
-	public function getRelatedMainParentToken():self {
+	public function getRelatedMainParentToken(): self
+	{
 		$token = $this;
 		while (null !== $parentToken = $token->relatedParentToken) {
 			$token = $parentToken;
@@ -69,7 +72,8 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	 * Проверяем актуальность ключа доступа.
 	 * @return bool
 	 */
-	public function isValid():bool {
+	public function isValid(): bool
+	{
 		return (null === $this->valid) || DateHelper::unix_timestamp($this->valid) > time();
 	}
 
@@ -78,7 +82,8 @@ class UsersTokens extends ActiveRecordUsersTokens {
 	 * @return int|null
 	 * @throws Exception
 	 */
-	public static function getIdByType(?string $type):?int {
+	public static function getIdByType(?string $type): ?int
+	{
 		return ArrayHelper::getValue(self::TOKEN_TYPES, $type);
 	}
 }

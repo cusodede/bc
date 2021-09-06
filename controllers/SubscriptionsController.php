@@ -50,7 +50,7 @@ class SubscriptionsController extends DefaultController
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$errors = [];
+		$errors  = [];
 		$posting = $model->createModelFromPost($errors, null, ['product']);//todo: релейшены можно вычислять из свойств модели
 		if (true === $posting) {/* Модель была успешно прогружена */
 			return $this->redirect('index');
@@ -80,7 +80,7 @@ class SubscriptionsController extends DefaultController
 		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
 			return $this->asJson($model->validateModelFromPost());
 		}
-		$errors = [];
+		$errors  = [];
 		$posting = $model->updateModelFromPost($errors, null, ['product']);
 
 		if (true === $posting) {/* Модель была успешно прогружена */

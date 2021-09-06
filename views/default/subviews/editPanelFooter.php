@@ -15,7 +15,7 @@ use yii\web\View;
 ?>
 
 <?= Html::submitButton('Сохранить', [
-		'class' => $model->isNewRecord?'btn btn-success float-right':'btn btn-primary float-right',
-		'form' => is_object($form)?$form->id:$form
+		'class' => $model->isNewRecord ? 'btn btn-success float-right' : 'btn btn-primary float-right',
+		'form' => is_object($form) ? $form->id : $form
 	]
 ) ?>
