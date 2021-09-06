@@ -121,11 +121,10 @@ $config = [
 		],
 		'response' => [
 			'on beforeSend' => static function (Event $event) {
-				/** @var Response $response */
-				$response = $event->sender;
-
 				$user = Users::Current();
 				if ($user->is_pwd_outdated && 'site/update-password' !== Yii::$app->request->pathInfo) {
+					/** @var Response $response */
+					$response = $event->sender;
 					$response->redirect(SiteController::to('update-password'));
 				}
 			}
