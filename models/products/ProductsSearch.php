@@ -20,6 +20,7 @@ class ProductsSearch extends Products
 	public ?bool $active = null;
 	public ?int $limit = null;
 	public ?int $offset = null;
+	public ?int $abonent_id = null;
 
 	/**
 	 * @return array[]
@@ -27,7 +28,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset', 'abonent_id'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -69,20 +70,21 @@ class ProductsSearch extends Products
 
 		$query->joinWith(['relatedPartner', 'relatedSubscription']);
 
-		if (null !== ($abonent_id = ArrayHelper::getValue($params, 'abonent_id'))) {
-			$query->joinWith(['relatedAbonents']);
-			$query->andFilterWhere(
-				['relation_abonents_to_products.abonent_id' => $abonent_id]
-			);
-		}
-
 		$query->andFilterWhere([
 			'products.id' => $this->id,
 			'products.type_id' => $this->type_id,
 			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
+
 		$query->andFilterWhere(['like', 'products.name', $this->name]);
+
+		if (null !== $this->abonent_id) {
+			$query->joinWith(['relatedAbonents']);
+			$query->andFilterWhere(
+				['relation_abonents_to_products.abonent_id' => $this->abonent_id]
+			);
+		}
 
 		if (null !== $this->trial) {
 			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);

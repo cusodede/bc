@@ -37,7 +37,9 @@ class AbonentsController extends DefaultController
 		if (null === $model) {
 			throw new NotFoundHttpException();
 		}
-		$dataProvider = (new ProductsSearch())->search(['abonent_id' => $id]);
+
+		$searchModel = new ProductsSearch();
+		$dataProvider = $searchModel->search([$searchModel->formName() => ['abonent_id' => $id]]);
 
 		return $this->renderAjax('modal/view-products', [
 			'dataProvider' => $dataProvider,
