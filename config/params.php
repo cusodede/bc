@@ -10,6 +10,9 @@ use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use cusodede\jwt\Jwt;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use yii\httpclient\Client;
 
 return [
 	'bsVersion' => '4',
@@ -63,9 +66,19 @@ return [
 	],
 	'vet-expert' => [
 		'connector' => [
-			'baseUrl'  => 'https://erp.vetexpert.ru/beeline',
-			'login'    => 'beeline',
-			'password' => 'cY_LCw6-puS86CSgWZ22MV2dhNt'
+			'baseUrl'        => 'https://erp.vetexpert.ru/beeline',
+			'login'          => 'beeline',
+			'password'       => 'cY_LCw6-puS86CSgWZ22MV2dhNt',
+			'requestConfig'  => [
+				'format' => Client::FORMAT_JSON
+			],
+			'responseConfig' => [
+				'format' => Client::FORMAT_JSON
+			],
+		],
+		'signatureOptions' => [
+			'signer' => Sha256::class,
+			'key'    => InMemory::plainText('c580aa408b75157b1c77cea26a11d99b77c1e4abe6b8ec050358f4e54557e4fc')
 		]
 	],
 	'ucp' => [
