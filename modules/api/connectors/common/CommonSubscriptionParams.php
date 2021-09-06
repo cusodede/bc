@@ -14,12 +14,12 @@ use yii\base\BaseObject;
  * Для удобства накручивания валидации при инициализации атрибутов, а также для формирования body-параметров для API.
  *
  * Class CommonSubscriptionParams
- * @package app\modules\api\connectors\vetexpert
+ * @package app\modules\api\connectors\common
  *
  * @property string $phone
  * @property string $email
  * @property string $firstName
- * @property string|null $middleName
+ * @property string $middleName
  * @property string $lastName
  * @property string $subscriptionTo
  */
@@ -38,9 +38,9 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	 */
 	private string $_firstName = '';
 	/**
-	 * @var string|null
+	 * @var string
 	 */
-	private ?string $_middleName = null;
+	private string $_middleName = '';
 	/**
 	 * @var string
 	 */
@@ -48,14 +48,14 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	/**
 	 * @var string
 	 */
-	private string $_subscriptionTo = '';
+	private string $_expireDate = '';
 
 	/**
 	 * @param string $phone
 	 */
 	public function setPhone(string $phone): void
 	{
-		if (!Phones::isValidNumber($phone) || (null === $formattedPhone = Phones::nationalFormat($this->_phone))) {
+		if (!Phones::isValidNumber($phone) || (null === $formattedPhone = Phones::nationalFormat($phone))) {
 			throw new InvalidArgumentException('Некорректное значение телефонного номера.');
 		}
 
@@ -103,17 +103,17 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	}
 
 	/**
-	 * @param string|null $middleName
+	 * @param string $middleName
 	 */
-	public function setMiddleName(?string $middleName = null): void
+	public function setMiddleName(string $middleName): void
 	{
 		$this->_middleName = $middleName;
 	}
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	public function getMiddleName(): ?string
+	public function getMiddleName(): string
 	{
 		return $this->_middleName;
 	}
@@ -137,17 +137,17 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	/**
 	 * @param string $date
 	 */
-	public function setSubscriptionTo(string $date): void
+	public function setExpireDate(string $date): void
 	{
-		$this->_subscriptionTo = date_create($date)->format('d.m.Y');
+		$this->_expireDate = date_create($date)->format('d.m.Y');
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getSubscriptionTo(): string
+	public function getExpireDate(): string
 	{
-		return $this->_subscriptionTo;
+		return $this->_expireDate;
 	}
 
 	/**
@@ -156,12 +156,12 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	public function toArray(): array
 	{
 		return [
-			'phone' => $this->_phone,
-			'email' => $this->_email,
-			'first_name' => $this->_firstName,
-			'last_name' => $this->_lastName,
-			'middle_name' => $this->_middleName,
-			'subscription_to' => $this->_subscriptionTo
+			'phone'           => $this->_phone,
+			'email'           => $this->_email,
+			'first_name'      => $this->_firstName,
+			'last_name'       => $this->_lastName,
+			'middle_name'     => $this->_middleName,
+			'subscription_to' => $this->_expireDate
 		];
 	}
 
@@ -172,10 +172,10 @@ class CommonSubscriptionParams extends BaseObject implements Arrayable
 	public static function createInstance(Abonents $abonent): self
 	{
 		return new static([
-			'phone' => $abonent->phone,
-			'lastName' => $abonent->surname,
+			'phone'      => $abonent->phone,
+			'lastName'   => $abonent->surname,
 			'middleName' => $abonent->patronymic,
-			'firstName' => $abonent->name
+			'firstName'  => $abonent->name
 		]);
 	}
 }

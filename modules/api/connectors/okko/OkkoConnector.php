@@ -5,7 +5,7 @@ namespace app\modules\api\connectors\okko;
 
 use app\components\helpers\Utils;
 use app\modules\api\connectors\BaseHttpConnector;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use yii\httpclient\Client;
 use yii\httpclient\Exception as HttpClientException;
 use yii\httpclient\RequestEvent;
