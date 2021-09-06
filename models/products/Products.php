@@ -64,7 +64,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedAbonents(): ActiveQuery
 	{
@@ -72,7 +72,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedPartner(): ActiveQuery
 	{
@@ -80,7 +80,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedUser(): ActiveQuery
 	{
@@ -119,26 +119,6 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getPaymentShortView(): string
-	{
-		$price = (int)$this->price;
-		switch ($this->payment_period) {
-			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
-				$price .= ' ₽/ мес.';
-			break;
-			case EnumProductsPaymentPeriods::TYPE_DAILY:
-				$price .= ' ₽/ день';
-			break;
-			default:
-				$price .= ' ₽';
-		}
-
-		return $price;
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function getIsSubscription(): bool
@@ -146,6 +126,9 @@ class Products extends ActiveRecordProducts
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}
 
+	/**
+	 * @return ActiveQuery
+	 */
 	public function getRelatedSubscription(): ActiveQuery
 	{
 		return $this->hasOne(Subscriptions::class, ['product_id' => 'id']);
@@ -197,6 +180,14 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
+	 * @return string|null
+	 */
+	public function findFirstConnectDate(): ?string
+	{
+		return $this->actualStatus?->findFirstConnectionDate();
+	}
+
+	/**
 	 * @return ProductsActiveQuery
 	 * @throws InvalidConfigException
 	 */
@@ -206,7 +197,7 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return ActiveQuery
 	 */
 	public function getRelatedProductsToAbonents(): ActiveQuery
 	{

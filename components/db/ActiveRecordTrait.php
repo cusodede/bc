@@ -264,8 +264,8 @@ trait ActiveRecordTrait
 	 */
 	public static function Upsert(array $attributes): static
 	{
-		if (null === $model = self::find()->where($attributes)->one()) {
-			$model = new self();
+		if (null === $model = static::find()->where($attributes)->one()) {
+			$model = new static();
 			$model->load($attributes, '');
 			$model->save();
 		}
