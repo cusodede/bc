@@ -45,12 +45,12 @@ class AbonentsController extends DefaultController
 		if (Yii::$app->request->isAjax) {
 			return $this->renderAjax('modal/view-products', [
 				'dataProvider' => $dataProvider,
-				'phone' => $model->phone,
+				'model' => $model,
 			]);
 		}
 		return $this->render('view-products', [
 			'dataProvider' => $dataProvider,
-			'phone' => $model->phone,
+			'model' => $model,
 		]);
 
 

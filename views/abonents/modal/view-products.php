@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var string $phone
+ * @var Abonents $model
  * @var ActiveDataProvider $dataProvider
  */
 
-use app\models\products\Products;
+use app\models\abonents\Abonents;use app\models\products\Products;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\data\ActiveDataProvider;
@@ -16,9 +16,10 @@ use yii\helpers\Html;
 use yii\web\View;
 
 $this->title = 'Продукты абонента';
-
+$modelName = $model->formName();
 ?>
 <?php Modal::begin([
+	'id' => "{$modelName}-modal-view-products-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
 	'title' => BadgeWidget::widget([
 		'items' => 'Все активные продукты абонента',
@@ -35,8 +36,8 @@ $this->title = 'Продукты абонента';
 		[
 			'attribute' => 'name',
 			'format' => 'raw',
-			'value' => static function(Products $item) use ($phone) {
-				return Html::a($item->name, ['products/journal', 'ProductsJournalSearch' => ['searchAbonentPhone' => $phone]]);
+			'value' => static function(Products $item) use ($model) {
+				return Html::a($item->name, ['products/journal', 'ProductsJournalSearch' => ['searchAbonentPhone' => $model->phone]]);
 			},
 		],
 		'price',
