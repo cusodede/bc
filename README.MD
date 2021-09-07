@@ -1,9 +1,22 @@
+# Конфигурация
+
+Production-конфиги лежат в `/config`.
+
+Для перекрытия какого-то конфигурационного файла создайте его копию в `/config/local/` (например, `/config/local/db.php` для хранения локальных настроек подключения к БД).
+
 # Установка
 ~~~
-composer create-project pozitronik/bc %yourappname%
+git clone %repo_url% bc
 ~~~
-подключаем БД в db.php (шаблон конфига в db.php.sample)
+где `%repo_url%` - адрес репозитория проекта.
+
+Подключаем БД в db.php
 ~~~
+cd bc
+composer install
+composer migrations
+~~~
+
 cd %yourappname%
 yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations
 yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations
