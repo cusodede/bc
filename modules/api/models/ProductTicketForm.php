@@ -49,13 +49,20 @@ abstract class ProductTicketForm extends Model
 				'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['productId' => 'id']
 			],
 			[['phone'], PhoneNumberValidator::class],
-			[['phone'],
-				'exist', 'skipOnError' => true, 'targetClass' => Abonents::class, 'targetAttribute' => ['phone' => 'phone']
-			],
-			[['productId'], 'validateProductActivity', 'skipOnError' => true]
+			[['phone'], function () {
+				if (null === $this->abonent) {
+					$this->addError('phone', 'Некорректный номер');
+				}
+			}],
+			[['productId'], 'validateProductActivity', 'skipOnError' => true, 'when' => static function (self $model) {
+				return !$model->hasErrors('phone');
+			}]
 		];
 	}
 
+	/**
+	 * Проверка на доступность управления услугой.
+	 */
 	abstract public function validateProductActivity(): void;
 
 	/**
@@ -63,7 +70,7 @@ abstract class ProductTicketForm extends Model
 	 */
 	public function getAbonent(): ?Abonents
 	{
-		return $this->_abonent ?? $this->_abonent = Abonents::findByPhone($this->phone);
+		return $this->_abonent ??= Abonents::findByPhone($this->phone);
 	}
 
 	/**
@@ -72,10 +79,6 @@ abstract class ProductTicketForm extends Model
 	 */
 	public function getProduct(): ?Products
 	{
-		if ((null === $this->_product) && null !== $this->abonent) {
-			$this->_product = $this->abonent->findExistentProductById($this->productId);
-		}
-
-		return $this->_product;
+		return $this->_product ??= $this->abonent->findExistentProductById($this->productId);
 	}
 }
