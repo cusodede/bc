@@ -32,9 +32,7 @@ class AbonentsController extends DefaultController
 	 */
 	public function actionViewProducts(int $id): string
 	{
-		$model = Abonents::findOne($id);
-
-		if (null === $model) {
+		if (null === $model = Abonents::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
 
