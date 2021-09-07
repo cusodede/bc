@@ -76,6 +76,13 @@ $config = [
 		'migrate' => [
 			'class' => MigrateController::class,
 			'templateFile' => '@app/migrations/template/default_migration_template.php',
+			'generatorTemplateFiles' => [
+				'create_table' => '@app/migrations/template/createTableMigration.php',
+				'drop_table' => '@app/migrations/template/dropTableMigration.php',
+				'add_column' => '@app/migrations/template/addColumnMigration.php',
+				'drop_column' => '@app/migrations/template/dropColumnMigration.php',
+				'create_junction' => '@app/migrations/template/createTableMigration.php',
+			],
 			'migrationNamespaces' => [
 				'app\modules\history\migrations',// <== именно неймспейс, не путь
 				'app\modules\status\migrations',
