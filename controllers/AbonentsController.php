@@ -43,16 +43,9 @@ class AbonentsController extends DefaultController
 		$dataProvider = $searchModel->search([$searchModel->formName() => ['abonent_id' => $id]]);
 
 		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/view-products', [
-				'dataProvider' => $dataProvider,
-				'model' => $model,
-			]);
+			return $this->renderAjax('modal/view-products', compact('dataProvider', 'model'));
 		}
-		return $this->render('view-products', [
-			'dataProvider' => $dataProvider,
-			'model' => $model,
-		]);
-
+		return $this->render('view-products', compact('dataProvider', 'model'));
 
 	}
 }
