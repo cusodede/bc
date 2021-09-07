@@ -28,7 +28,6 @@ class AbonentsController extends DefaultController
 
 	/**
 	 * Показать все продукты абонента.
-	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
 	public function actionViewProducts(int $id): string
 	{
