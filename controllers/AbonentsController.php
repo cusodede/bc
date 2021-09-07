@@ -7,6 +7,7 @@ use app\components\web\DefaultController;
 use app\models\abonents\AbonentsSearch;
 use app\models\abonents\Abonents;
 use app\models\products\ProductsSearch;
+use Yii;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -41,9 +42,17 @@ class AbonentsController extends DefaultController
 		$searchModel = new ProductsSearch();
 		$dataProvider = $searchModel->search([$searchModel->formName() => ['abonent_id' => $id]]);
 
-		return $this->renderAjax('modal/view-products', [
+		if (Yii::$app->request->isAjax) {
+			return $this->renderAjax('modal/view-products', [
+				'dataProvider' => $dataProvider,
+				'phone' => $model->phone,
+			]);
+		}
+		return $this->render('view-products', [
 			'dataProvider' => $dataProvider,
-			'phone' => $model['phone'],
+			'phone' => $model->phone,
 		]);
+
+
 	}
 }
