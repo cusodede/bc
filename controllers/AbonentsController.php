@@ -28,6 +28,9 @@ class AbonentsController extends DefaultController
 
 	/**
 	 * Показать все продукты абонента.
+	 * @param int $id
+	 * @return string
+	 * @throws NotFoundHttpException
 	 */
 	public function actionViewProducts(int $id): string
 	{
