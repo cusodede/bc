@@ -75,6 +75,7 @@ $config = [
 	'controllerMap' => [
 		'migrate' => [
 			'class' => MigrateController::class,
+			'useTablePrefix' => false,
 			'templateFile' => '@app/migrations/template/default_migration_template.php',
 			'generatorTemplateFiles' => [
 				'create_table' => '@app/migrations/template/createTableMigration.php',
