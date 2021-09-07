@@ -7,9 +7,9 @@ if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTO
 }
 
 use app\assets\SmartAdminThemeAssets;
+use app\components\bootstrap\CheckPasswordOutdated;
 use app\components\queue\DbQueue;
 use app\components\queue\JobIdHandlingBehavior;
-use app\controllers\SiteController;
 use app\models\sys\users\Users;
 use app\models\sys\users\WebUser;
 use app\modules\api\ApiModule;
@@ -29,7 +29,6 @@ use odannyc\Yii2SSE\LibSSE;
 use pozitronik\filestorage\FSModule;
 use pozitronik\grid_config\GridConfigModule;
 use pozitronik\sys_exceptions\SysExceptionsModule;
-use yii\base\Event;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap4\BootstrapPluginAsset;
 use yii\caching\DummyCache;
@@ -41,7 +40,6 @@ use yii\mutex\MysqlMutex;
 use yii\mutex\PgsqlMutex;
 use yii\swiftmailer\Mailer;
 use yii\web\JsonParser;
-use yii\web\Response;
 
 $params      = require __DIR__ . '/params.php';
 $db          = require __DIR__ . '/db.php';
@@ -52,7 +50,7 @@ $config = [
 	'name' => 'Product Platform',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log', 'history', 'productTicketsQueue'],
+	'bootstrap' => ['log', 'history', 'productTicketsQueue', CheckPasswordOutdated::class],
 	'homeUrl' => '/users/profile',//<== строка, не массив
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
@@ -118,16 +116,6 @@ $config = [
 			'parsers' => [
 				'application/json' => JsonParser::class
 			]
-		],
-		'response' => [
-			'on beforeSend' => static function (Event $event) {
-				$user = Users::Current();
-				if ($user->is_pwd_outdated && 'site/update-password' !== Yii::$app->request->pathInfo) {
-					/** @var Response $response */
-					$response = $event->sender;
-					$response->redirect(SiteController::to('update-password'));
-				}
-			}
 		],
 		'cache' => [
 			'class' => YII_ENV_DEV ? DummyCache::class : FileCache::class,
