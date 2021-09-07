@@ -46,8 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				'template' => '<div class="btn-group">{view-abonents}</div>',
 				'buttons' => [
 					'view-abonents' => static function(string $url, Model $model) {
-						return Html::ajaxModalLink('<i class="fas fa-arrow-circle-up"></i>', $url, [
-							'class' => ['btn btn-sm btn-outline-primary']
+						return Html::a('<i class="fas fa-arrow-circle-up"></i>',
+							['products/journal', 'ProductsJournalSearch' => ['searchProductId' => $model->id]],
+							['class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
 				],
