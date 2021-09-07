@@ -21,7 +21,7 @@ use yii\base\BaseObject;
  * @property string $firstName
  * @property string $middleName
  * @property string $lastName
- * @property string $subscriptionTo
+ * @property string $expireDate
  */
 class CommonSubscriptionParams extends BaseObject implements Arrayable
 {

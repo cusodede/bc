@@ -34,8 +34,8 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	{
 		$subscriptionParams = CommonSubscriptionParams::createInstance($this->_ticket->relatedAbonent);
 
-		$expireDate                         = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
-		$subscriptionParams->subscriptionTo = $expireDate;
+		$expireDate                     = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
+		$subscriptionParams->expireDate = $expireDate;
 
 		$this->_apiConnector->makeSubscribe($subscriptionParams);
 
