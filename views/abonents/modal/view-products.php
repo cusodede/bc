@@ -15,7 +15,6 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\web\View;
 
-$this->title = 'Продукты абонента';
 $modelName = $model->formName();
 ?>
 <?php Modal::begin([
