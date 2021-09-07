@@ -15,14 +15,6 @@ git clone %repo_url% bc
 cd bc
 composer install
 composer migrations
-~~~
-
-cd %yourappname%
-yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations
-yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations
-yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations
-yii migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations
-yii migrate
 yii service/init
 ~~~
 
