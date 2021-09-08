@@ -6,6 +6,8 @@ namespace app\models\products\active_record;
 use app\components\db\ActiveRecordTrait;
 use app\models\abonents\Abonents;
 use app\models\abonents\RelAbonentsToProducts;
+use app\models\contracts\active_record\RelContractsToProducts;
+use app\models\contracts\Contracts;
 use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
 use app\models\revshare_rates\RevShareRates;
@@ -135,5 +137,21 @@ class Products extends ActiveRecord
 	public function getRelatedAbonentsToProducts(): ActiveQuery
 	{
 		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedProductToContract(): ActiveQuery
+	{
+		return $this->hasMany(RelContractsToProducts::class, ['product_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedContracts(): ActiveQuery
+	{
+		return $this->hasMany(Contracts::class, ['id' => 'contract_id'])->via('relatedProductToContract');
 	}
 }
