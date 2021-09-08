@@ -139,4 +139,4 @@ public function actionProfile(int $id):?string {
 5. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
-хосты mysql postgres в локальный hosts с ip 127.0.0.1
+хосты mysql postgres chrome в локальный hosts с ip 127.0.0.1

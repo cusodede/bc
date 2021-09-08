@@ -28,8 +28,8 @@ services:
       - "${MYSQL_PORT}:3306"
     environment:
       MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_USERNAME: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     restart: always
     volumes:
       - ${PROJECT_PATH}/tests/_data:/var/www/tests/_data
@@ -44,8 +44,8 @@ services:
       - "${POSTGRES_PORT}:5432"
     environment:
       POSTGRES_DATABASE: ${DB_NAME}
-      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USERNAME: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ${POSTGRES_PATH}:/var/lib/postgresql/data
     networks:
