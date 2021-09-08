@@ -142,7 +142,7 @@ class Products extends ActiveRecord
 	/**
 	 * @return ActiveQuery
 	 */
-	public function getRelatedProductToContract(): ActiveQuery
+	public function getRelatedContractsToProducts(): ActiveQuery
 	{
 		return $this->hasMany(RelContractsToProducts::class, ['product_id' => 'id']);
 	}
