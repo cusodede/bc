@@ -7,7 +7,6 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use Exception;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 
 /**
  * Поисковая модель продуктов
@@ -21,6 +20,7 @@ class ProductsSearch extends Products
 	public ?bool $active = null;
 	public ?int $limit = null;
 	public ?int $offset = null;
+	public ?int $abonent_id = null;
 
 	/**
 	 * @return array[]
@@ -28,7 +28,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset', 'abonent_id'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -76,7 +76,15 @@ class ProductsSearch extends Products
 			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
+
 		$query->andFilterWhere(['like', 'products.name', $this->name]);
+
+		if (null !== $this->abonent_id) {
+			$query->joinWith(['relatedAbonents']);
+			$query->andFilterWhere(
+				['relation_abonents_to_products.abonent_id' => $this->abonent_id]
+			);
+		}
 
 		if (null !== $this->trial) {
 			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);
@@ -93,37 +101,6 @@ class ProductsSearch extends Products
 		if (null !== $this->offset) {
 			$query->offset = $this->offset;
 		}
-
-		return $dataProvider;
-	}
-
-	/**
-	 * @throws NotFoundHttpException
-	 */
-	public function searchAbonents(array $params): ActiveDataProvider
-	{
-		$model = Products::findOne($params['id']);
-		if (null === $model) {
-			throw new NotFoundHttpException();
-		}
-
-		$query = $model->getRelatedAbonents();
-
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-			'pagination' => [
-				'pageSize' => 5,
-			],
-		]);
-
-		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		if (null !== $pagination) {
-			$dataProvider->setPagination($pagination);
-		}
-
-		$dataProvider->setSort([
-			'attributes' => ['created_at', 'status_id']
-		]);
 
 		return $dataProvider;
 	}

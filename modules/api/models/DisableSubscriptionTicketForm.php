@@ -9,6 +9,9 @@ namespace app\modules\api\models;
  */
 class DisableSubscriptionTicketForm extends ProductTicketForm
 {
+	/**
+	 * {@inheritDoc}
+	 */
 	public function validateProductActivity(): void
 	{
 		if ((null === $this->product) || (null === $this->product->actualStatus) || $this->product->actualStatus->isDisabled) {
