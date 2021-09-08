@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use app\controllers\BillingJournalController;
 use app\controllers\ContractsController;
+use app\controllers\NotificationTemplatesController;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\SiteController;
@@ -62,6 +63,11 @@ use yii\web\View;
 			'label' => 'Договоры',
 			'url' => [ContractsController::to('index')],
 			'iconClass' => 'fa-file-alt'
+		],
+		[
+			'label' => 'Шаблоны уведомлений',
+			'url' => [NotificationTemplatesController::to('index')],
+			'iconClass' => 'fa-envelope-open-text'
 		],
 		[
 			'label' => 'Пользователи',
