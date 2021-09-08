@@ -133,7 +133,10 @@ public function actionProfile(int $id):?string {
 
 ## Запуск тестов
 1. Создать базу для тестов
-2. cp tests\.env.sample tests\.env
+2. Добавить переменные окружения для тестов, или создать из cp .env.example .env
 3. Указать в env файле коннекты к тестовой бд
 4. vendor/bin/codecept build (при изменении списка модулей или их конфигов в yml файлах - надо повторно билдить)
-5. vendor/bin/codecept run
+5. vendor/bin/codecept run или composer test
+
+Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
+хосты mysql postgres в локальный hosts с ip 127.0.0.1
