@@ -71,6 +71,6 @@ class CheckPasswordOutdated implements BootstrapInterface
 	 */
 	private function validatePathInfo(Application $app): bool
 	{
-		return !in_array($app->request->pathInfo, ['site/update-password', 'site/login'], true);
+		return !in_array($app->request->pathInfo, ['site/update-password', 'site/logout'], true);
 	}
 }
