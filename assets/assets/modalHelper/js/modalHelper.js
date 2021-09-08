@@ -108,3 +108,24 @@ $('.el-ajax-modal').on('click', function (e) {
 	e.preventDefault();
 	AjaxModal($(this).data('ajax-url'))
 });
+
+/**
+ * Обработчик события изменения типа при создании шаблона уведомления.
+ * Для сообщения по email нужна тема, а для sms нет.
+ */
+document.addEventListener('modalIsReady', function() {
+	// эта логика нужна при редактировании шаблона, так как тип может отличатся от дефолта
+	let val = $('#notificationtemplates-type').val();
+	if (val == 1) {
+		$('.field-notificationtemplates-subject').show();
+	} else {
+		$('.field-notificationtemplates-subject').hide();
+	}
+	document.getElementById('notificationtemplates-type').addEventListener('change', function() {
+		if (this.value == 1) {
+			$('.field-notificationtemplates-subject').show();
+		} else {
+			$('.field-notificationtemplates-subject').hide();
+		}
+	});
+}, false);
