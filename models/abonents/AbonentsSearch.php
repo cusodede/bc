@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\abonents;
 
+use app\components\helpers\ArrayHelper;
+use Throwable;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
@@ -55,14 +57,18 @@ class AbonentsSearch extends Abonents
 	}
 
 	/**
+	 * @param array $params
+	 * @return array
 	 * @throws NotFoundHttpException
+	 * @throws Throwable
 	 */
 	public function searchProducts(array $params): array
 	{
-		$model = Abonents::findOne($params['id']);
-		if (null === $model) {
+		$id = ArrayHelper::getValue($params, 'id');
+		if (null === $id || null === $model = Abonents::findOne($id)) {
 			throw new NotFoundHttpException();
 		}
+
 		$query = $model->getRelatedProducts();
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);

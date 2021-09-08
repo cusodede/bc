@@ -31,14 +31,10 @@ class AbonentsController extends DefaultController
 	 */
 	public function actionViewProducts(): string
 	{
-		$params      = Yii::$app->request->queryParams;
 		$searchModel = $this->searchModel;
 
-		['dataProvider' => $dataProvider, 'model' => $model] = $searchModel->searchProducts($params);
+		['dataProvider' => $dataProvider, 'model' => $model] = $searchModel->searchProducts(Yii::$app->request->queryParams);
 
-		return $this->renderAjax('modal/view-products', [
-			'dataProvider' => $dataProvider,
-			'phone' => $model['phone'],
-		]);
+		return $this->renderAjax('modal/view-products', ['dataProvider' => $dataProvider, 'phone' => $model['phone']]);
 	}
 }

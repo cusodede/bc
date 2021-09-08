@@ -5,6 +5,7 @@ use app\controllers\BillingJournalController;
 use app\controllers\ContractsController;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
+use app\controllers\RevShareController;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\modules\history\HistoryModule;
@@ -57,6 +58,11 @@ use yii\web\View;
 			'label' => 'Абоненты',
 			'url' => [AbonentsController::to('index')],
 			'iconClass' => 'fa-phone'
+		],
+		[
+			'label' => 'Ставки рефшеринга',
+			'url' => [RevShareController::to('index')],
+			'iconClass' => 'fa-percentage'
 		],
 		[
 			'label' => 'Договоры',
