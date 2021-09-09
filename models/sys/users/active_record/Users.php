@@ -200,12 +200,4 @@ class Users extends ActiveRecord
 		}
 		return $saved;
 	}
-
-	/**
-	 * @return ActiveQuery
-	 */
-	public function getRelatedPartner(): ActiveQuery
-	{
-		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
-	}
 }
