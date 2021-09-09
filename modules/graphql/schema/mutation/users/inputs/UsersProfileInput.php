@@ -36,6 +36,10 @@ class UsersProfileInput extends InputObjectType
 					'type' => Type::string(),
 					'description' => 'Телефон в формате +79999999999',
 				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Идентификатор партнёра',
+				],
 			]
 		]);
 	}
