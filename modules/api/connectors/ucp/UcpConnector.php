@@ -1,55 +1,51 @@
-<?php /** @noinspection PropertyAnnotationInspection - атрибуты инициализируются не в самом конструкторе, а в методах, дёргаемых конструктором. Странно, но ладно. */
+<?php
 declare(strict_types = 1);
 
 namespace app\modules\api\connectors\ucp;
 
 use Yii;
-use Throwable;
-use yii\helpers\ArrayHelper;
+use app\components\helpers\ArrayHelper;
 use app\modules\api\connectors\BaseHttpConnector;
 use yii\base\InvalidConfigException;
 use yii\httpclient\Exception as HttpClientException;
 use RuntimeException;
-use Exception;
+use Throwable;
 
 /**
  * Class UcpConnector
  * @package app\modules\api\connectors\ucp
  *
  * @property-read array $dataServices
- * @property-read string $token
  * @property-read array $authServices
+ * @property-read string $token
  */
 class UcpConnector extends BaseHttpConnector
 {
+	private const AUTHORIZATION_HEADER_NAME = 'bauth-token';
+
 	/**
 	 * Url сервиса аутентификации.
 	 * @var string
 	 */
-	private string $authService;
+	private string $_authService;
 
 	/**
 	 * Url сервиса данных.
 	 * @var string
 	 */
-	private string $dataService;
-
-	/**
-	 * @var string
-	 */
-	private string $authToken;
+	private string $_dataService;
 
 	/**
 	 * getenv('UCP_LOGIN')
-	 * @var string
+	 * @var string|null
 	 */
-	private string $login;
+	private ?string $_login;
 
 	/**
 	 * getenv('UCP_PASSWORD')
-	 * @var string
+	 * @var string|null
 	 */
-	private string $password;
+	private ?string $_password;
 
 	/**
 	 * Сервисы UCP, никто не знает, как формируются эти URL, пока оставлю тут.
@@ -68,19 +64,60 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	public function __construct(array $config)
 	{
-		$params         = ArrayHelper::getValue(Yii::$app->params, 'ucp.dev');
-		$this->login    = ArrayHelper::getValue($config, 'login');
-		$this->password = ArrayHelper::getValue($config, 'password');
+		$params = ArrayHelper::getValue(Yii::$app->params, 'ucp.dev');
 
-		if (null === $params || null === $this->login || null === $this->password) {
+		$this->_login    = ArrayHelper::remove($params, 'login');
+		$this->_password = ArrayHelper::remove($params, 'password');
+
+		if (null === $params || null === $this->_login || null === $this->_password) {
 			throw new InvalidConfigException('Не заданы параметры коннектора');
 		}
 
 		parent::__construct($params, $config);
 
-		$this->setAuthService($this->getAuthServices());
-		$this->setAuthToken($this->getToken());
-		$this->setDataService($this->getDataServices());
+		$this->initAuthService();
+		$this->initDataService();
+	}
+
+	/**
+	 * Получение информации по абоненту.
+	 * @param string $service Сервис UCP, смотри константы.
+	 * @param string $uid Телефонный номер абонента или его uid, зависит от сервиса.
+	 * @return array
+	 * @throws HttpClientException
+	 * @throws Throwable
+	 */
+	public function getSubscriberInfo(string $service, string $uid): array
+	{
+		$this->get($this->_dataService . $service . $uid, null, [static::AUTHORIZATION_HEADER_NAME => $this->token]);
+
+		$data = $this->extractResponseData('data');
+		if (null === $data) {
+			throw new RuntimeException('Ошибка получения информации от источников данных ' . $this->response->toString());
+		}
+
+		//TODO wrap response in handler class
+		return $data;
+	}
+
+	/**
+	 * Инициализация сервиса для получения токена авторизации.
+	 * @throws HttpClientException
+	 * @throws Throwable
+	 */
+	private function initAuthService(): void
+	{
+		$this->_authService = ArrayHelper::getRandomItem($this->getAuthServices());
+	}
+
+	/**
+	 * Инициализация сервиса источника данных.
+	 * @throws HttpClientException
+	 * @throws Throwable
+	 */
+	private function initDataService(): void
+	{
+		$this->_dataService = ArrayHelper::getRandomItem($this->getDataServices());
 	}
 
 	/**
@@ -91,44 +128,11 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	private function getAuthServices(): array
 	{
-		$response = $this->getClient()
-			->get('/serviceinfo', ['path' => 'ucp:bauth'], [], ['sslVerifyPeer' => false])
-			->send();
+		$this->get('/serviceinfo', ['path' => 'ucp:bauth'], [], [CURLOPT_SSL_VERIFYPEER => false]);
 
-		$services = $response->isOk ? ArrayHelper::getValue($response->data, 'ucp.bauth') : null;
-		if (null === $services) {
-			throw new RuntimeException('Ошибка получения сервисов аутентификации ' . $response->toString());
-		}
-		return $services;
-	}
-
-	/**
-	 * Время жизни токена, в спецификации не нашёл, оставим 3 минуты.
-	 * @return string
-	 */
-	private function getToken(): string
-	{
-		return Yii::$app->cache->getOrSet(
-			'api:ucp:token',
-			function(): string {
-				$response = $this->getClient()
-					->createRequest()
-					->setMethod('post')
-					->setUrl(
-						$this->authService . '/login?'
-						. http_build_query(['sys' => 'bauth', 'login' => $this->login, 'password' => $this->password])
-					)
-					->send();
-
-				$token = $response->isOk ? ArrayHelper::getValue($response->data, 'token') : null;
-				if (null === $token) {
-					throw new RuntimeException(
-						'Запрос на получение токена от UCP выполнился с ошибкой: '
-						. $response->toString()
-					);
-				}
-				return $token;
-			}, 180
+		return $this->extractResponseData(
+			'ucp.bauth',
+			new RuntimeException('Ошибка получения сервисов аутентификации ' . $this->response->toString())
 		);
 	}
 
@@ -140,82 +144,31 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	private function getDataServices(): array
 	{
-		$response = $this->getClient()
-			->get('/serviceinfo', ['path' => 'ucp:ucp_query'], ['bauth-token' => $this->authToken])
-			->send();
+		$this->get('/serviceinfo', ['path' => 'ucp:ucp_query'], [static::AUTHORIZATION_HEADER_NAME => $this->token]);
 
-		$services = $response->isOk ? ArrayHelper::getValue($response->data, 'ucp.ucp_query') : null;
-		if (null === $services) {
-			throw new RuntimeException('Ошибка получения сервисов источников данных ' . $response->toString());
-		}
-		return $services;
+		return $this->extractResponseData(
+			'ucp.ucp_query',
+			new RuntimeException('Ошибка получения сервисов источников данных ' . $this->response->toString())
+		);
 	}
 
 	/**
-	 * Получение информации по абоненту.
-	 * @param string $service Сервис UCP, смотри константы.
-	 * @param string $uid Телефонный номер абонента или его uid, зависит от сервиса.
-	 * @return array
-	 * @throws HttpClientException
-	 * @throws InvalidConfigException
-	 * @throws Exception
+	 * Время жизни токена, в спецификации не нашёл, оставим 3 минуты.
+	 * @return string
 	 */
-	public function getSubscriberInfo(string $service, string $uid): array
+	private function getToken(): string
 	{
-		$response = $this->getClient()
-			->createRequest()
-			->setMethod('get')
-			->setUrl($this->dataService . $service . $uid)
-			->setHeaders(['bauth-token' => $this->authToken])
-			->send();
+		return Yii::$app->cache->getOrSet(
+			'api:ucp:token',
+			function(): string {
+				$this->post([rtrim($this->_authService, '/') . '/login', 'sys' => 'bauth', 'login' => $this->_login, 'password' => $this->_password]);
 
-		$data = $response->isOk ? ArrayHelper::getValue($response->data, 'data') : null;
-		if (null === $data) {
-			throw new RuntimeException('Ошибка получения информации от источников данных ' . $response->toString());
-		}
-
-		return $response->data;
-	}
-
-	/**
-	 * @param array $authServices
-	 * @throws Exception
-	 */
-	private function setAuthService(array $authServices): void
-	{
-		$this->authService = ArrayHelper::getValue($authServices, array_rand($authServices));
-	}
-
-	/**
-	 * @param string $authToken
-	 */
-	private function setAuthToken(string $authToken): void
-	{
-		$this->authToken = $authToken;
-	}
-
-	/**
-	 * @param array $dataServices
-	 * @throws Exception
-	 */
-	private function setDataService(array $dataServices): void
-	{
-		$this->dataService = ArrayHelper::getValue($dataServices, array_rand($dataServices));
-	}
-
-	/**
-	 * @param string $login
-	 */
-	public function setLogin(string $login): void
-	{
-		$this->login = $login;
-	}
-
-	/**
-	 * @param string $password
-	 */
-	public function setPassword(string $password): void
-	{
-		$this->password = $password;
+				return $this->extractResponseData(
+					'token',
+					new RuntimeException('Запрос на получение токена от UCP выполнился с ошибкой: ' . $this->response->toString())
+				);
+			},
+			180
+		);
 	}
 }

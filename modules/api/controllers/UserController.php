@@ -11,7 +11,7 @@ use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -54,13 +54,14 @@ class UserController extends Controller
 	/**
 	 * Сброс пароля.
 	 * @return void
-	 * @throws HttpException
+	 * @throws BadRequestHttpException
+	 * @throws NotFoundHttpException
 	 */
 	public function actionRestorePassword(): void
 	{
 		$user = Users::findByRestoreCode(Yii::$app->request->post('code'));
 		if (null === $user) {
-			throw new BadRequestHttpException();
+			throw new NotFoundHttpException('Некорректный код восстановления.');
 		}
 
 		$form = new UpdatePasswordForm(compact('user'));
@@ -76,14 +77,18 @@ class UserController extends Controller
 	 * Проверка действительности кода восстановления пароль. HTTP 200 в случае прохождения валидации, 500 - если код невалидный.
 	 * @param string $code
 	 * @return void
-	 * @throws HttpException
+	 * @throws BadRequestHttpException
+	 * @throws NotFoundHttpException
 	 */
 	public function actionCheckRestorePasswordCode(string $code): void
 	{
 		$user = Users::findByRestoreCode($code);
+		if (null === $user) {
+			throw new NotFoundHttpException('Некорректный код восстановления.');
+		}
 
-		if ((null === $user) || $user->isExpiredRestoreCode()) {
-			throw new HttpException(500);
+		if ($user->isExpiredRestoreCode()) {
+			throw new BadRequestHttpException('Код восстановления просрочен.');
 		}
 	}
 

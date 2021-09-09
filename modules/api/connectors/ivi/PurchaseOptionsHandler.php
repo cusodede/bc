@@ -33,8 +33,8 @@ class PurchaseOptionsHandler
 		$this->_purchasesCollection        = new PurchaseCollection();
 		$this->_purchasesOptionsCollection = new PurchaseOptionsCollection();
 
-		$this->configurePurchasesCollection();
-		$this->configurePurchasesOptionsCollection();
+		$this->initPurchasesCollection();
+		$this->initPurchasesOptionsCollection();
 	}
 
 	/**
@@ -53,7 +53,10 @@ class PurchaseOptionsHandler
 		return $this->_purchasesOptionsCollection;
 	}
 
-	private function configurePurchasesCollection(): void
+	/**
+	 * Инициализация коллекции параметров подключенных услуг.
+	 */
+	private function initPurchasesCollection(): void
 	{
 		$data = ArrayHelper::remove($this->_data, 'purchases', []);
 		foreach ($data as $itemData) {
@@ -61,7 +64,10 @@ class PurchaseOptionsHandler
 		}
 	}
 
-	private function configurePurchasesOptionsCollection(): void
+	/**
+	 * Инициализация коллекции параметров услуг, доступных для подключения.
+	 */
+	private function initPurchasesOptionsCollection(): void
 	{
 		$data = ArrayHelper::remove($this->_data, 'purchase_options', []);
 		foreach ($data as $itemData) {
