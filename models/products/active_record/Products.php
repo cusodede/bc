@@ -4,10 +4,12 @@ declare(strict_types = 1);
 namespace app\models\products\active_record;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\partners\active_record\Partners;
+use app\models\abonents\Abonents;
+use app\models\abonents\RelAbonentsToProducts;
+use app\models\partners\Partners;
 use app\models\products\EnumProductsPaymentPeriods;
-use app\models\refsharing_rates\RevShare;
-use app\models\sys\users\active_record\Users;
+use app\models\revshare_rates\RevShareRates;
+use app\models\sys\users\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use Yii;
@@ -30,8 +32,10 @@ use Yii;
  * @property string $created_at Дата создания продукта
  * @property string $updated_at Дата обновления партнера
  *
- * @property Partners $relatedPartner
- * @property Users $relatedUser
+ * @property-read Partners $relatedPartner
+ * @property-read Users $relatedUser
+ * @property-read Abonents[] $relatedAbonents Список связанных абонентов с продуктом.
+ * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
  */
 class Products extends ActiveRecord
 {
@@ -107,5 +111,29 @@ class Products extends ActiveRecord
 	public function getRelatedUser(): ActiveQuery
 	{
 		return $this->hasOne(Users::class, ['id' => 'user_id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedRevShare(): ActiveQuery
+	{
+		return $this->hasMany(RevShareRates::class, ['product_id' => 'id']);
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonents(): ActiveQuery
+	{
+		return $this->hasMany(Abonents::class, ['id' => 'abonent_id'])->via('relatedAbonentsToProducts');
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedAbonentsToProducts(): ActiveQuery
+	{
+		return $this->hasMany(RelAbonentsToProducts::class, ['product_id' => 'id']);
 	}
 }

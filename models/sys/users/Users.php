@@ -34,6 +34,7 @@ use yii\web\IdentityInterface;
  * @property-read UsersTokens[] $relatedUsersTokens связанные с моделью пользователя модели токенов.
  * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
  * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
+ * @property-read string|null $mainPermission главная пермиссия пользователя, (используется на фронте).
  */
 class Users extends ActiveRecordUsers implements IdentityInterface
 {
@@ -103,7 +104,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 	 */
 	public static function findByLogin(string $login): ?Users
 	{
-		return self::findOne(['login' => $login]);
+		return static::findOne(['login' => $login]);
 	}
 
 	/**
@@ -112,7 +113,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 	 */
 	public static function findByEmail(string $email): ?Users
 	{
-		return self::findOne(['email' => $email]);
+		return static::findOne(['email' => $email]);
 	}
 
 	/**
@@ -121,7 +122,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 	 */
 	public static function findByRestoreCode(string $restoreCode): ?Users
 	{
-		return self::findOne(['restore_code' => $restoreCode]);
+		return static::findOne(['restore_code' => $restoreCode]);
 	}
 
 	/**
@@ -130,8 +131,10 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 	 */
 	public static function findByPhoneNumber(string $phoneNumber): ?Users
 	{
-		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) return null;
-		return self::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
+		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) {
+			return null;
+		}
+		return static::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
 	}
 
 	/**
@@ -205,7 +208,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 		if (parent::beforeSave($insert)) {
 			//если пароль обновился, то пересолим
 			if ($this->isAttributeUpdated('password')) {
-				$this->salt     = self::generateSalt();
+				$this->salt     = static::generateSalt();
 				$this->password = $this->doSalt($this->password);
 			}
 
@@ -333,5 +336,23 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 		}
 
 		return false;
+	}
+
+	/**
+	 * Возвращает главную пермиссию пользователя, используется на фронте.
+	 * @return string|null
+	 * @throws Throwable
+	 */
+	public function getMainPermission(): ?string
+	{
+		if ($this->hasPermission([EnumUsersRoles::ADMIN])) {
+			return EnumUsersRoles::ADMIN;
+		}
+
+		if ($this->hasPermission([EnumUsersRoles::BEELINE_MANAGER])) {
+			return EnumUsersRoles::BEELINE_MANAGER;
+		}
+
+		return $this->hasPermission([EnumUsersRoles::PARTNER_MANAGER]) ? EnumUsersRoles::PARTNER_MANAGER : null;
 	}
 }

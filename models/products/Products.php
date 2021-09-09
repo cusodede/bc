@@ -7,8 +7,6 @@ use app\components\helpers\DateHelper;
 use app\models\products\active_query\ProductsActiveQuery;
 use app\models\products\active_record\Products as ActiveRecordProducts;
 use app\models\subscriptions\Subscriptions;
-use app\models\partners\Partners;
-use app\models\sys\users\Users;
 use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
@@ -24,8 +22,6 @@ use yii\helpers\ArrayHelper;
  * Class Products
  * @package app\models\product
  *
- * @property Partners $relatedPartner
- * @property Users $relatedUser
  * @property ProductsJournal|null $actualStatus актуальный статус продукта по абоненту.
  * @property-read ActiveRecord|null $relatedInstance
  * @property-read ActiveQuery $relatedSubscription
@@ -60,22 +56,6 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedPartner(): ActiveQuery
-	{
-		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedUser(): ActiveQuery
-	{
-		return $this->hasOne(Users::class, ['id' => 'user_id']);
-	}
-
-	/**
 	 * Получение расширенной модели продукта в зависимости от его типа.
 	 * @return ActiveRecord|null
 	 */
@@ -107,26 +87,6 @@ class Products extends ActiveRecordProducts
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getPaymentShortView(): string
-	{
-		$price = (int)$this->price;
-		switch ($this->payment_period) {
-			case EnumProductsPaymentPeriods::TYPE_MONTHLY:
-				$price .= ' ₽/ мес.';
-			break;
-			case EnumProductsPaymentPeriods::TYPE_DAILY:
-				$price .= ' ₽/ день';
-			break;
-			default:
-				$price .= ' ₽';
-		}
-
-		return $price;
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function getIsSubscription(): bool
@@ -134,6 +94,9 @@ class Products extends ActiveRecordProducts
 		return EnumProductsTypes::TYPE_SUBSCRIPTION === $this->type_id;
 	}
 
+	/**
+	 * @return ActiveQuery
+	 */
 	public function getRelatedSubscription(): ActiveQuery
 	{
 		return $this->hasOne(Subscriptions::class, ['product_id' => 'id']);
@@ -182,6 +145,14 @@ class Products extends ActiveRecordProducts
 	{
 		$now = DateHelper::lcDate();
 		return ($this->start_date <= $now || null === $this->start_date) && ($this->end_date >= $now || null === $this->end_date);
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function findFirstConnectDate(): ?string
+	{
+		return $this->actualStatus?->findFirstConnectionDate();
 	}
 
 	/**

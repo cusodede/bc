@@ -359,6 +359,10 @@ components:
             count:
               description: Количество
               type: integer
+            expireDate:
+              description: Дата окончания триального периода
+              type: string
+              nullable: true
           type: object
           nullable: true
       type: object
@@ -368,17 +372,11 @@ components:
         status:
           description: >
             Статус подписки:
-              * `1` - Подключение
-              * `2` - Продление
-              * `3` - Блокировка: недостаточно средств
-              * `4` - Блокировка: подписка отменена
-              * `5` - Отключение
+              * `0` - Отключено
+              * `1` - Подключено
           enum:
+            - 0
             - 1
-            - 2
-            - 3
-            - 4
-            - 5
           type: integer
         expireDate:
           description: Дата истечения подписки в формате ISO8601

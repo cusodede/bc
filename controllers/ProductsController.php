@@ -7,8 +7,8 @@ use app\components\web\DefaultController;
 use app\models\products\Products;
 use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
-use Yii;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 /**
  * Class ProductsController
