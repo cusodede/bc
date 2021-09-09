@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace app\modules\api\connectors;
 
-use Exception;
+use app\components\helpers\ArrayHelper;
 use yii\base\Component;
-use yii\helpers\ArrayHelper;
 use yii\httpclient\Client;
 use yii\httpclient\CurlTransport;
-use yii\httpclient\Exception as HttpClientException;
 use yii\httpclient\Response;
+use yii\httpclient\Exception as HttpClientException;
+use Throwable;
 
 /**
  * Class BaseConnector
@@ -97,12 +97,13 @@ abstract class BaseHttpConnector extends Component
 
 	/**
 	 * @param string $key
+	 * @param Throwable|null $e
 	 * @return mixed
-	 * @throws Exception
+	 * @throws Throwable
 	 */
-	protected function extractResponseData(string $key): mixed
+	protected function extractResponseData(string $key, Throwable $e = null): mixed
 	{
-		return ArrayHelper::getValue($this->response->data, $key);
+		return ArrayHelper::getValue($this->response->data, $key, $e);
 	}
 
 	/**
