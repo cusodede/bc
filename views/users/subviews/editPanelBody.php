@@ -15,6 +15,7 @@ use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use pozitronik\helpers\ArrayHelper;
 use yii\web\View;
+use app\models\partners\Partners;
 
 ?>
 
@@ -22,6 +23,15 @@ use yii\web\View;
 <?= $form->field($model, 'surname') ?>
 <?= $form->field($model, 'login') ?>
 <?= $form->field($model, 'email') ?>
+<?= $form->field($model, 'partner_id')->widget(Select2::class, [
+	'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
+	'pluginOptions' => [
+		'multiple' => false,
+		'allowClear' => true,
+		'placeholder' => 'Выберите партнера',
+		'tags' => true
+	]
+]) ?>
 <?= $form->field($model, 'phones')->widget(Select2::class, [
 	'showToggleAll' => false,
 	'options' => [

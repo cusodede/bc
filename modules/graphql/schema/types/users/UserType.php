@@ -55,6 +55,7 @@ class UserType extends BaseObjectType
 						return array_pop($phones);
 					},
 				],
+				'deleted' => Type::boolean()
 			],
 		]);
 	}
