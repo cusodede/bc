@@ -101,6 +101,7 @@ class UcpConnector extends BaseHttpConnector
 	}
 
 	/**
+	 * Инициализация сервиса для получения токена авторизации.
 	 * @throws HttpClientException
 	 * @throws Throwable
 	 */
@@ -110,6 +111,7 @@ class UcpConnector extends BaseHttpConnector
 	}
 
 	/**
+	 * Инициализация сервиса источника данных.
 	 * @throws HttpClientException
 	 * @throws Throwable
 	 */
