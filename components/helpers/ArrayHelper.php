@@ -15,7 +15,7 @@ class ArrayHelper extends VendorArrayHelper
 	 * @param array $array
 	 * @return mixed
 	 */
-	public static function getRandItem(array $array)
+	public static function getRandomItem(array $array): mixed
 	{
 		/** @var int|string $rand */
 		$rand = array_rand($array);
