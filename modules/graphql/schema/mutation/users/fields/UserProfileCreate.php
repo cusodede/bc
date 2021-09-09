@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\mutation\users\fields;
 
 use app\models\sys\users\Users;
-use app\modules\graphql\components\AuthHelper;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
 use app\modules\graphql\schema\types\common\ResponseType;
