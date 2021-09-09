@@ -17,6 +17,7 @@ use yii\httpclient\Client;
 return [
 	'bsVersion' => '4',
 	'frontUrl' => 'http://prpl.apps.k01.vimpelcom.ru',
+	'longTermTokenLogins' => ['TestMyBeeline'],
 	'searchConfig' => [
 		'Users' => [//<== алиас модели
 			'class' => Users::class,//<== FQN-название ActiveRecord-класса

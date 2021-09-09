@@ -94,7 +94,8 @@ class ProductsJournal extends ActiveRecordProductsJournal
 	 */
 	public function findFirstConnectionDate(): ?string
 	{
-		$record = self::find()
+		/** @var static $record */
+		$record = static::find()
 			->where(['rel_abonents_to_products_id' => $this->rel_abonents_to_products_id])
 			->orderBy(['created_at' => SORT_ASC])
 			->limit(1)
