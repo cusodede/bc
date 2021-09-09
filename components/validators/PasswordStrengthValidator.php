@@ -15,7 +15,7 @@ class PasswordStrengthValidator extends StrengthValidator
 	 */
 	public function init(): void
 	{
-		$this->min      = 8;
+		$this->min      = 6;
 		$this->upper    = 1;
 		$this->lower    = 1;
 		$this->digit    = 1;
