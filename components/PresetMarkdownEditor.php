@@ -35,11 +35,11 @@ class PresetMarkdownEditor
 
 	/**
 	 * Метод для использования настраиваемого пресета.
-	 * @param array $setting Массив настроек должен передаваться вида ключ => значение, где в виде значения может быть массив.
+	 * @param array $settings Массив настроек должен передаваться вида ключ => значение, где в виде значения может быть массив.
 	 * @return array
 	 */
-	public static function useCustomPreset(array $setting): array
+	public static function adjustDefaultPreset(array $settings): array
 	{
-		return ArrayHelper::merge($setting, self::$presetDefault);
+		return ArrayHelper::merge(self::$presetDefault, $settings);
 	}
 }
