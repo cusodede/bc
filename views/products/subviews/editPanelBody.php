@@ -8,7 +8,6 @@ declare(strict_types = 1);
  */
 
 use app\components\PresetMarkdownEditor;
-use app\models\refsharing_rates\RevShare;
 use kartik\form\ActiveForm;
 use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;
