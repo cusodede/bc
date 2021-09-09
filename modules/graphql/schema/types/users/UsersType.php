@@ -25,7 +25,7 @@ class UsersType extends BaseObjectType
 			'fields' => [
 				'usersList'		=> UsersListField::field(),
 				'userProfile' 	=> UserProfileField::field(),
-				'userRoles' 	=> new UserRolesField(),
+				'userRoles' 	=> new UserRolesField('Field'),
 				'usersForm'		=> new UserFromField(),
 			]
 		]);

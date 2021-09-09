@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\mutation\users\fields;
 
 use app\models\sys\users\Users;
+use app\modules\graphql\components\AuthHelper;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
 use app\modules\graphql\schema\types\common\ResponseType;
@@ -42,6 +43,10 @@ class UserProfileCreate extends BaseMutationType
 	 */
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
 	{
-		return static::save(new Users(), ArrayHelper::getValue($args, 'data', []), self::MESSAGES);
+		$user = new Users();
+		$data = ArrayHelper::getValue($args, 'data', []);
+		// Фронт не готов отправлять массив номеров.
+		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);
+		return static::save($user, $data, self::MESSAGES);
 	}
 }
