@@ -5,10 +5,11 @@ namespace app\modules\api\connectors\okko;
 
 use app\components\helpers\Utils;
 use app\modules\api\connectors\BaseHttpConnector;
-use RuntimeException;
 use yii\httpclient\Client;
 use yii\httpclient\Exception as HttpClientException;
 use yii\httpclient\RequestEvent;
+use RuntimeException;
+use Throwable;
 
 /**
  * Class OkkoConnector
@@ -35,6 +36,7 @@ class OkkoConnector extends BaseHttpConnector
 	 * @param OkkoPurchaseParams $params
 	 * @return string
 	 * @throws HttpClientException
+	 * @throws Throwable
 	 */
 	public function makeSubscribe(OkkoPurchaseParams $params): string
 	{
@@ -52,6 +54,7 @@ class OkkoConnector extends BaseHttpConnector
 	 * @param string $newValue
 	 * @return string
 	 * @throws HttpClientException
+	 * @throws Throwable
 	 */
 	public function changeSubscriberPhone(string $oldValue, string $newValue): string
 	{
