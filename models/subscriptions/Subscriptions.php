@@ -37,4 +37,23 @@ class Subscriptions extends ActiveRecordSubscriptions
 	{
 		return EnumSubscriptionTrialUnits::getScalar($this->units);
 	}
+
+	/**
+	 * @param string $date
+	 * @return string
+	 */
+	public function calculatePromoPeriodEndDate(string $date): string
+	{
+		if (0 === $this->trial_count) {
+			return $date;
+		}
+
+		$modifier = "+ $this->trial_count " .  match ($this->units) {
+			EnumSubscriptionTrialUnits::UNIT_DAYS => 'days',
+			EnumSubscriptionTrialUnits::UNIT_WEEK => 'weeks',
+			default => 'months',
+		};
+
+		return date_create($date)->modify($modifier)->format('Y-m-d H:i:s');
+	}
 }

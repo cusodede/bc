@@ -165,10 +165,11 @@ class ProductsController extends YiiRestController
 	{
 		return [
 			'list' => ['GET'],
+			'stories' => ['GET'],
 			'one' => ['GET'],
 			'ticket-status' => ['GET'],
-			'subscribe' => ['POST'],
-			'unsubscribe' => ['POST']
+			'connect' => ['POST'],
+			'disable' => ['POST']
 		];
 	}
 }
