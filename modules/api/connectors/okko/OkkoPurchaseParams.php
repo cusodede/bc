@@ -14,6 +14,7 @@ class OkkoPurchaseParams extends BaseObject implements Arrayable
 {
 	public const ACTION_NEW = 'NEW';
 	public const ACTION_PROLONG = 'PROLONG';
+	public const ACTION_DISABLE = 'EXIT';
 
 	/**
 	 * @var string Тип операции: NEW - подключение, PROLONG - продление, EXIT - отключение.
