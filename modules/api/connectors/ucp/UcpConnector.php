@@ -14,10 +14,6 @@ use Throwable;
 /**
  * Class UcpConnector
  * @package app\modules\api\connectors\ucp
- *
- * @property-read array $dataServices
- * @property-read array $authServices
- * @property-read string $token
  */
 class UcpConnector extends BaseHttpConnector
 {
@@ -89,7 +85,7 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	public function getSubscriberInfo(string $service, string $uid): array
 	{
-		$this->get($this->_dataService . $service . $uid, null, [static::AUTHORIZATION_HEADER_NAME => $this->token]);
+		$this->get($this->_dataService . $service . $uid, null, [static::AUTHORIZATION_HEADER_NAME => $this->getToken()]);
 
 		$data = $this->extractResponseData('data');
 		if (null === $data) {
@@ -145,7 +141,7 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	private function getDataServices(): array
 	{
-		$this->get('/serviceinfo', ['path' => 'ucp:ucp_query'], [static::AUTHORIZATION_HEADER_NAME => $this->token]);
+		$this->get('/serviceinfo', ['path' => 'ucp:ucp_query'], [static::AUTHORIZATION_HEADER_NAME => $this->getToken()]);
 
 		return $this->extractResponseData(
 			'ucp.ucp_query',
@@ -157,7 +153,7 @@ class UcpConnector extends BaseHttpConnector
 	 * Время жизни токена, в спецификации не нашёл, оставим 3 минуты.
 	 * @return string
 	 */
-	public function getToken(): string
+	private function getToken(): string
 	{
 		return Yii::$app->cache->getOrSet(
 			'api:ucp:token',
