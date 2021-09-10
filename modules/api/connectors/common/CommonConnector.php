@@ -58,7 +58,7 @@ abstract class CommonConnector extends BaseHttpConnector
 	 * @throws HttpClientException
 	 * @throws Throwable
 	 */
-	public function makeSubscribe(CommonSubscriptionParams $params): void
+	public function processSubscription(CommonSubscriptionParams $params): void
 	{
 		$this->post('/callback', $this->adjustParamsWithSign($params->toArray()), ['Authorization' => 'Bearer ' . $this->getToken()]);
 

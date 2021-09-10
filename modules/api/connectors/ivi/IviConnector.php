@@ -39,7 +39,8 @@ class IviConnector extends BaseHttpConnector
 		/** @var array $params */
 		$params = ArrayHelper::getValue(Yii::$app->params, 'ivi.connector', new InvalidConfigException('Не заданы параметры коннектора для ivi'));
 
-		if (null === $this->_appID = ArrayHelper::remove($params, 'appID')) {
+		$this->_appID = ArrayHelper::remove($params, 'appID');
+		if (null === $this->_appID) {
 			throw new InvalidConfigException('APP ID для ivi не задан');
 		}
 
@@ -50,12 +51,12 @@ class IviConnector extends BaseHttpConnector
 
 	/**
 	 * Получение опций покупки по абоненту. Время жизни опций покупки - один час.
-	 * @param ProductOptions $options
+	 * @param IviSubscriptionOptions $options
 	 * @return PurchaseOptionsHandler
 	 * @throws Exception
 	 * @throws Throwable
 	 */
-	public function getPurchaseOptions(ProductOptions $options): PurchaseOptionsHandler
+	public function getPurchaseOptions(IviSubscriptionOptions $options): PurchaseOptionsHandler
 	{
 		$this->get(['/billing/v1/purchase/options', 'app_version' => $options->appVersion, 'access_token' => $this->getAccessTokenByPhone($options), 'with_subscription_renewals' => true]);
 
@@ -70,21 +71,21 @@ class IviConnector extends BaseHttpConnector
 
 	/**
 	 * Создание/обновление подписки в ivi. Необходимо предварительно запросить актуальный список опций.
-	 * @param ProductOptions $options
+	 * @param IviSubscriptionOptions $options
 	 * @param PurchaseOptionsItem $purchaseOptions
 	 * @return PurchaseResultHandler
 	 * @throws Throwable
 	 * @throws Exception
 	 * @see getPurchaseOptions()
 	 */
-	public function makeSubscribe(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
+	public function processSubscription(IviSubscriptionOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
 	{
 		$postData = [
-			'app_version' => $options->appVersion,
-			'partner_id' => $options->productId,
-			'access_token' => $this->getAccessTokenByPhone($options),
+			'app_version'          => $options->appVersion,
+			'partner_id'           => $options->productId,
+			'access_token'         => $this->getAccessTokenByPhone($options),
 			'ps_extra_signed_data' => "ps_transaction_id={$options->transactionId}&sign={$purchaseOptions->getSignParam()}",
-			'sign' => $purchaseOptions->getSignParam()
+			'sign'                 => $purchaseOptions->getSignParam()
 		];
 		$postData = array_merge(
 			$postData,
@@ -105,10 +106,10 @@ class IviConnector extends BaseHttpConnector
 
 	/**
 	 * Получение токена доступа по номеру абонента.
-	 * @param ProductOptions $options
+	 * @param IviSubscriptionOptions $options
 	 * @return string
 	 */
-	private function getAccessTokenByPhone(ProductOptions $options): string
+	private function getAccessTokenByPhone(IviSubscriptionOptions $options): string
 	{
 		return $this->getAccessByParam('phone', $options->phone, $options->appVersion);
 	}

@@ -12,7 +12,7 @@ use yii\base\InvalidConfigException;
 
 /**
  * Класс для инкапсуляции параметров, используемых для взаимодействия с API ivi.
- * Class ProductOptions
+ * Class IviSubscriptionOptions
  * @package app\modules\api\connectors\ivi
  *
  * @property string|null $productId
@@ -20,7 +20,7 @@ use yii\base\InvalidConfigException;
  * @property string|null $transactionId
  * @property-read string|null $appVersion
  */
-class ProductOptions extends BaseObject
+class IviSubscriptionOptions extends BaseObject
 {
 	/**
 	 * @var string|null идентификатор продукта, выдаваемый партнером ivi.
@@ -37,7 +37,7 @@ class ProductOptions extends BaseObject
 	/**
 	 * @var string|null уникальный параметр транзакции при подключении опции в ivi (например, идентификатор из биллинга).
 	 * Обязателен при выполнении запроса на подключение/обновление подписки.
-	 * @see IviConnector::makeSubscribe()
+	 * @see IviConnector::processSubscription()
 	 */
 	private ?string $_transactionId;
 
