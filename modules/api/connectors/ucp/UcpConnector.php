@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PropertyAnnotationInspection Инициализация свойств дёргается конструктором*/
 declare(strict_types = 1);
 
 namespace app\modules\api\connectors\ucp;
