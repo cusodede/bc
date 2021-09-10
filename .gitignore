@@ -6,12 +6,6 @@
 /untracked
 /report
 
-#for tests
-/models/tests
-/tests-c/
-/config/test.sample.php
-/docker/tests
-
 /.env
 .idea/php-docker-settings.xml
 /docker/local/databases/
