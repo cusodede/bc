@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{view-abonents}</div>',
 				'buttons' => [
-					'view-abonents' => static function(string $url, Model $model) {
+					'view-abonents' => static function(string $url, Products $model) {
 						return Html::a('<i class="fas fa-arrow-circle-up"></i>',
 							['products/journal', 'ProductsJournalSearch' => ['searchProductId' => $model->id]],
 							['class' => ['btn btn-sm btn-outline-primary']

@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**

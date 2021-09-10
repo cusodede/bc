@@ -1,13 +1,13 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $model
+ * @var Subscriptions $model
  */
 
+use app\models\subscriptions\Subscriptions;
 use pozitronik\widgets\BadgeWidget;
-use yii\base\Model;
 use yii\bootstrap4\Modal;
 use yii\web\View;
 
