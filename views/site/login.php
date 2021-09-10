@@ -31,7 +31,6 @@ $this->title = 'Вход';
 
 			<div class="mt-1 ">
 				<?= Html::a('Восстановление пароля', ['site/restore-password'], ['class' => 'btn-link fa-pull-left text-left']) ?>
-				<?= Html::a('Регистрация', ['site/register'], ['class' => 'btn-link fa-pull-right text-right']) ?>
 			</div>
 		</div>
 	</div>
