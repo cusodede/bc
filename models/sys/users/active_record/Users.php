@@ -13,6 +13,7 @@ use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;
 use Throwable;
 use Yii;
+use yii\behaviors\AttributeTypecastBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -54,6 +55,16 @@ class Users extends ActiveRecord
 		return [
 			'history' => [
 				'class' => HistoryBehavior::class
+			],
+			'typecast' => [
+				'class' => AttributeTypecastBehavior::class,
+				'attributeTypes' => [
+					'is_pwd_outdated' => AttributeTypecastBehavior::TYPE_BOOLEAN,
+					'deleted' => AttributeTypecastBehavior::TYPE_BOOLEAN,
+				],
+				'typecastAfterValidate' => true,
+				'typecastBeforeSave' => true,
+				'typecastAfterFind' => true,
 			]
 		];
 	}
