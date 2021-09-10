@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\users;
 
+use app\models\partners\Partners;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseObjectType;
+use app\modules\graphql\schema\types\partners\PartnerType;
 use GraphQL\Type\Definition\Type;
 
 /**
@@ -38,6 +40,14 @@ class UserType extends BaseObjectType
 					'type' => Type::string(),
 					'description' => $user->getAttributeLabel('login'),
 				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => $user->getAttributeLabel('partner_id'),
+				],
+				'partner' => [
+					'type' => PartnerType::type(),
+					'resolve' => fn(Users $user): ?Partners => $user->relatedPartner,
+				],
 				'email' => [
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
@@ -55,6 +65,7 @@ class UserType extends BaseObjectType
 						return array_pop($phones);
 					},
 				],
+				'deleted' => Type::boolean()
 			],
 		]);
 	}

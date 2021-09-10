@@ -44,6 +44,10 @@ class UsersFilterInput extends InputObjectType
 					'type' => Type::string(),
 					'description' => 'Поиск по имени, фамилии, почте, минимум 3 символа'
 				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр по партнёру',
+				],
 			]
 		]);
 	}

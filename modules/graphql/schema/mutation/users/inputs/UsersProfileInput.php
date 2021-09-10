@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\inputs;
 
+use app\modules\graphql\schema\types\users\fields\UserRolesField;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -35,6 +36,14 @@ class UsersProfileInput extends InputObjectType
 				'phones' => [
 					'type' => Type::string(),
 					'description' => 'Телефон в формате +79999999999',
+				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Идентификатор партнёра',
+				],
+				'role' => [
+					'type' => new UserRolesField($rootName),
+					'description' => 'Роль пользователя',
 				],
 			]
 		]);

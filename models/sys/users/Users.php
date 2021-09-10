@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users;
 
+use app\models\partners\Partners;
 use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
@@ -35,6 +36,7 @@ use yii\web\IdentityInterface;
  * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
  * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
  * @property-read string|null $mainPermission главная пермиссия пользователя, (используется на фронте).
+ * @property-read Partners $relatedPartner связь с партнёром.
  */
 class Users extends ActiveRecordUsers implements IdentityInterface
 {
@@ -354,5 +356,13 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 		}
 
 		return $this->hasPermission([EnumUsersRoles::PARTNER_MANAGER]) ? EnumUsersRoles::PARTNER_MANAGER : null;
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedPartner(): ActiveQuery
+	{
+		return $this->hasOne(Partners::class, ['id' => 'partner_id']);
 	}
 }
