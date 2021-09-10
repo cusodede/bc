@@ -24,7 +24,7 @@ class UsersSearch extends ActiveRecordUsers
 	public function rules(): array
 	{
 		return [
-			[['id', 'limit', 'offset'], 'integer'],
+			[['id', 'limit', 'offset', 'partner_id'], 'integer'],
 			[['login', 'email', 'username'], 'safe'],
 			[['search'], 'string', 'min' => 3],
 		];
@@ -64,6 +64,7 @@ class UsersSearch extends ActiveRecordUsers
 
 		$query->andFilterWhere(['sys_users.id' => $this->id])
 			->andFilterWhere(['group_id' => $allowedGroups])
+			->andFilterWhere(['partner_id' => $this->partner_id])
 			->andFilterWhere(['like', 'login', $this->login])
 			->andFilterWhere(['or', ['like', 'name', $this->username], ['like', 'surname', $this->username]])
 			->andFilterWhere(['like', 'email', $this->email]);
