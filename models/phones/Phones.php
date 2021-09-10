@@ -25,11 +25,10 @@ class Phones extends PhonesAR
 	{
 		try {
 			$phoneNumber = PhoneNumberUtil::getInstance()->parse($phoneNum, 'RU', null, true);
-			return !(null === $phoneNumber) && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
+			return null !== $phoneNumber && PhoneNumberUtil::getInstance()->isValidNumber($phoneNumber);
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException) {
 			return false;
 		}
-
 	}
 
 	/**
@@ -75,8 +74,8 @@ class Phones extends PhonesAR
 	{
 		$results = [];
 		foreach (array_filter($phones) as $phone) {
-			if (null !== $formattedNumber = self::defaultFormat($phone)) {
-				$results[] = self::Upsert(['phone' => $formattedNumber])->id;
+			if (null !== $formattedNumber = static::defaultFormat($phone)) {
+				$results[] = static::Upsert(['phone' => $formattedNumber])->id;
 			}
 		}
 		return $results;
