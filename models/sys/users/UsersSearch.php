@@ -6,6 +6,7 @@ namespace app\models\sys\users;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Throwable;
 use yii\data\ActiveDataProvider;
+use yii\data\Sort;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -38,6 +39,8 @@ class UsersSearch extends ActiveRecordUsers
 	 */
 	public function search(array $params, array $allowedGroups = []): ActiveDataProvider
 	{
+		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+
 		$query = Users::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
@@ -49,10 +52,14 @@ class UsersSearch extends ActiveRecordUsers
 			$dataProvider->setPagination($pagination);
 		}
 
-		$dataProvider->setSort([
-			'defaultOrder' 	=> ['id' => SORT_ASC],
-			'attributes' 	=> ['id', 'login', 'email',]
-		]);
+		if (null !== $sort) {
+			$dataProvider->setSort(new Sort(['params' => compact('sort')]));
+		} else {
+			$dataProvider->setSort([
+				'defaultOrder' 	=> ['id' => SORT_ASC],
+				'attributes' 	=> ['id', 'login', 'email',]
+			]);
+		}
 
 		$this->load($params);
 

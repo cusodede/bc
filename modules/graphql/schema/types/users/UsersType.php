@@ -7,6 +7,7 @@ use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\users\fields\UserProfileField;
 use app\modules\graphql\schema\types\users\fields\UserRolesField;
 use app\modules\graphql\schema\types\users\fields\UsersListField;
+use app\modules\graphql\schema\types\users\fields\UserSortField;
 
 /**
  * Class SellersType
@@ -21,9 +22,10 @@ class UsersType extends BaseObjectType
 		parent::__construct([
 			'description' => 'Пользователи',
 			'fields' => [
-				'usersList' => UsersListField::field(),
-				'userProfile' => UserProfileField::field(),
-				'userRoles' => new UserRolesField()
+				'usersList' 	=> UsersListField::field(),
+				'userProfile' 	=> UserProfileField::field(),
+				'userRoles' 	=> new UserRolesField(),
+				'userSort' 		=> new UserSortField(),
 			]
 		]);
 	}
