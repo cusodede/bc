@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-use yii\db\Migration;
+use app\components\db\Migration;
 
 /**
 * Class m210909_065542_add_partner_id_to_user
