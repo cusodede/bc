@@ -24,8 +24,8 @@ class EnumUsersRoles
 	{
 		return [
 			self::ADMIN => 'Администратор',
-			self::BEELINE_MANAGER => 'Менеджер ВК',
-			self::PARTNER_MANAGER => 'Менеджер партнёра',
+			self::BEELINE_MANAGER => 'Сотрудник Beeline',
+			self::PARTNER_MANAGER => 'Сотрудник партнёра',
 		];
 	}
 }

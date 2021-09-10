@@ -80,6 +80,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			'login',
 			[
+				'attribute' => 'partner_id',
+				'value' => 'relatedPartner.name',
+				'label' => 'Партнер'
+			],
+			[
 				'class' => DataColumn::class,
 				'attribute' => 'create_date',
 				'format' => 'datetime'

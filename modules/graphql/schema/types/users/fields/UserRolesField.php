@@ -12,10 +12,10 @@ use GraphQL\Type\Definition\EnumType;
  */
 class UserRolesField extends EnumType
 {
-	public function __construct()
+	public function __construct(string $rootName)
 	{
 		parent::__construct([
-			'name' => 'UserRolesField',
+			'name' => $rootName . 'UserRolesField',
 			'values' => array_keys(EnumUsersRoles::mapData())
 		]);
 	}

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\fields;
 
-use app\modules\graphql\components\AuthHelper;
+use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
 use app\modules\graphql\schema\types\common\ResponseType;
@@ -12,12 +12,13 @@ use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class UserProfileUpdate
+ * Class UserProfileCreate
  * @package app\modules\graphql\schema\mutation\users\fields
  */
-class UserProfileUpdate extends BaseMutationType
+class UserProfileCreate extends BaseMutationType
 {
-	public const MESSAGES = ['Ошибка сохранения профиля', 'Профиль успешно сохранён'];
+
+	public const MESSAGES = ['Ошибка добавления профиля', 'Профиль успешно добавлен'];
 
 	/**
 	 * @inheritdoc
@@ -25,12 +26,12 @@ class UserProfileUpdate extends BaseMutationType
 	protected function __construct()
 	{
 		parent::__construct([
-			'name' => 'update',
-			'description' => 'Обновление профиля текущего пользователя',
+			'name' => 'create',
+			'description' => 'Добавление нового пользователя',
 			'type' => ResponseType::type(),
 			'args' => [
 				'data' => [
-					'type' => Type::nonNull(new UsersProfileInput('Update')),
+					'type' => Type::nonNull(new UsersProfileInput('Create')),
 				]
 			],
 		]);
@@ -41,7 +42,7 @@ class UserProfileUpdate extends BaseMutationType
 	 */
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
 	{
-		$user = AuthHelper::authenticate();
+		$user = new Users();
 		$data = ArrayHelper::getValue($args, 'data', []);
 		// Фронт не готов отправлять массив номеров.
 		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);

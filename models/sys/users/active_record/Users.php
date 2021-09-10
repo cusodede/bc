@@ -5,6 +5,7 @@ namespace app\models\sys\users\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\components\validators\PasswordStrengthValidator;
+use app\models\partners\Partners;
 use app\models\phones\active_record\PhonesAR;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
@@ -34,6 +35,7 @@ use yii\helpers\ArrayHelper;
  * @property string $create_date Дата регистрации
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
+ * @property int $partner_id Идентификатор партнёра
  *
  * @property-read UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  * @property-read string $username ФИО пользователя
@@ -86,7 +88,7 @@ class Users extends ActiveRecord
 			[['surname', 'name', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
-			[['daddy'], 'integer'],
+			[['daddy', 'partner_id'], 'integer'],
 			[['deleted', 'is_pwd_outdated'], 'boolean'],
 			[['deleted', 'is_pwd_outdated'], 'default', 'value' => false],
 			[['name', 'surname', 'password', 'salt', 'email'], 'string', 'max' => 255],
@@ -94,6 +96,8 @@ class Users extends ActiveRecord
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
 			}],
+			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
+			[['partner_id'], 'default', 'value' => 0],
 			[['restore_code'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
 			[['name', 'surname'], 'string', 'min' => 3],
@@ -125,7 +129,8 @@ class Users extends ActiveRecord
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
 			'deleted' => 'Флаг удаления',
-			'update_password' => 'Новый пароль'
+			'update_password' => 'Новый пароль',
+			'partner_id' => 'Партнёр'
 		];
 	}
 
@@ -204,5 +209,4 @@ class Users extends ActiveRecord
 		}
 		return $saved;
 	}
-
 }
