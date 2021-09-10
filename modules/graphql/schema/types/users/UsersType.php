@@ -8,6 +8,7 @@ use app\modules\graphql\schema\types\users\fields\UserFromField;
 use app\modules\graphql\schema\types\users\fields\UserProfileField;
 use app\modules\graphql\schema\types\users\fields\UserRolesField;
 use app\modules\graphql\schema\types\users\fields\UsersListField;
+use app\modules\graphql\schema\types\users\fields\UserSortField;
 
 /**
  * Class SellersType
@@ -26,6 +27,7 @@ class UsersType extends BaseObjectType
 				'userProfile' 	=> UserProfileField::field(),
 				'userRoles' 	=> new UserRolesField('Field'),
 				'usersForm'		=> new UserFromField(),
+				'userSort' 		=> new UserSortField(),
 			]
 		]);
 	}

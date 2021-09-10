@@ -29,8 +29,12 @@ class UsersListField extends BaseField
 				'filters' => [
 					'type' => new UsersFilterInput(),
 				],
-				'limit' => Type::nonNull(Type::int()),
-				'offset' => Type::nonNull(Type::int())
+				'sort' => [
+					'type' => new UserSortField('List'),
+					'description' => 'Сортировка: surname, -surname, created_at, -created_at',
+				],
+				'limit' => Type::int(),
+				'offset' => Type::int()
 			],
 		]);
 	}
