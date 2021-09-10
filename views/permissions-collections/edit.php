@@ -14,7 +14,7 @@ use yii\bootstrap4\ActiveForm;
 
 <?php $form = ActiveForm::begin(); ?>
 <div class="panel">
-	<div class="panel-hdr">
+	<div class="panel-heading">
 	</div>
 	<div class="panel-container show">
 		<div class="panel-content">
