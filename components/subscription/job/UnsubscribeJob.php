@@ -26,10 +26,10 @@ class UnsubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
+	 * @noinspection MissingParameterTypeDeclarationInspection Due to declaration compatibility.
 	 */
 	public function execute($queue): void
 	{
-		return;//for development purposes
 		$ticket = TicketSubscription::findOne($this->_ticketId);
 		if (null === $ticket) {
 			throw new NotFoundHttpException("Can't find the ticket by id $this->_ticketId");
@@ -37,6 +37,8 @@ class UnsubscribeJob implements RetryableJobInterface
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
 		$service->disable($ticket);
+
+		$ticket->close();
 	}
 
 	/**
@@ -49,6 +51,7 @@ class UnsubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
+	 * @noinspection MissingParameterTypeDeclarationInspection Due to declaration compatibility.
 	 */
 	public function canRetry($attempt, $error): bool
 	{

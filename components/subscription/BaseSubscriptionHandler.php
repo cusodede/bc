@@ -34,9 +34,10 @@ abstract class BaseSubscriptionHandler extends Component
 			return '';
 		}
 
-		$this->beforeSubscribe();
+//		$this->beforeSubscribe();TODO restore after tests
 
-		$expireDate = $this->connectOnPartner();
+//		$expireDate = $this->connectOnPartner();TODO restore after tests
+		$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');
 
 		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
 
