@@ -5,7 +5,7 @@ namespace app\components\subscription;
 
 use app\components\helpers\Utils;
 use app\components\subscription\exceptions\ResourceUnavailableException;
-use app\modules\api\connectors\vet_expert\SubscriptionParams;
+use app\modules\api\connectors\common\CommonSubscriptionParams;
 use app\modules\api\connectors\vet_expert\VetExpertConnector;
 
 /**
@@ -32,10 +32,10 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	 */
 	protected function connectOnPartner(): string
 	{
-		$subscriptionParams = SubscriptionParams::createInstance($this->_ticket->relatedAbonent);
+		$subscriptionParams = CommonSubscriptionParams::createInstance($this->_ticket->relatedAbonent);
 
-		$expireDate                         = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
-		$subscriptionParams->subscriptionTo = $expireDate;
+		$expireDate                     = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
+		$subscriptionParams->expireDate = $expireDate;
 
 		$this->_apiConnector->makeSubscribe($subscriptionParams);
 

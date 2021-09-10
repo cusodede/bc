@@ -20,13 +20,17 @@ trait TicketTrait
 {
 	/**
 	 * @param int $id
+	 * @throws StaleObjectException
+	 * @throws Throwable
 	 */
 	public function updateStage(int $id): void
 	{
-		$this->relatedTicket->stage_id     = $id;
-		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, [['stage_id' => $id, 'timestamp' => time()]]);
+		$this->relatedTicket->stage_id = $id;
 
-		$this->relatedTicket->save();
+		$stepData = ['stage_id' => $id, 'timestamp' => time()];
+		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, ['history' => [$stepData]]);
+
+		$this->relatedTicket->update();
 	}
 
 	/**
