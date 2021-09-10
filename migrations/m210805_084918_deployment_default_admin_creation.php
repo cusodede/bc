@@ -18,7 +18,7 @@ class m210805_084918_deployment_default_admin_creation extends Migration {
 				'username' => 'admin',
 				'login' => 'admin',
 				'password' => 'admin',
-				'is_pwd_outdated' => 1, /*require to update admin password*/
+				'is_pwd_outdated' => true, /*require to update admin password*/
 				'email' => 'admin@localhost.ru',
 				'comment' => 'Системный администратор',
 				'create_date' => new Expression('NOW()')
