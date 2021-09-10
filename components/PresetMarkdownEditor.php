@@ -40,6 +40,6 @@ class PresetMarkdownEditor
 	 */
 	public static function adjustDefaultPreset(array $settings): array
 	{
-		return ArrayHelper::merge(self::$presetDefault, $settings);
+		return ArrayHelper::merge(static::$presetDefault, $settings);
 	}
 }
