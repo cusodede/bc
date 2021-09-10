@@ -45,14 +45,16 @@ class UserType extends BaseObjectType
 				'role' => [
 					'type' => Type::string(),
 					'description' => 'Роль пользователя',
-					'resolve' => fn(Users $user): ?string => $user->mainPermission
+					'resolve' => fn(Users $user): ?string => $user->mainPermission ?? '',
 				],
 				'phones' => [
 					'type' => Type::string(),
 					'description' => 'Телефон',
-					'resolve' => function(Users $user): ?string { // Фронт не готов принимать тут массив.
+					'resolve' => function(Users $user): ?string {
+						// Фронт не готов принимать тут массив и хочет номера без плюсов
 						$phones = $user->getPhones();
-						return array_pop($phones);
+						$phone =  array_pop($phones);
+						return null === $phone ? '' : str_replace('+', '',$phone);
 					},
 				],
 			],
