@@ -5,12 +5,10 @@ namespace app\models\sys\users\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\components\validators\PasswordStrengthValidator;
-use app\models\common\RefPartnersCategories;
 use app\models\partners\Partners;
 use app\models\phones\active_record\PhonesAR;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
-use app\models\products\Products;
 use app\models\sys\users\active_record\relations\RelUsersToPhones;
 use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\helpers\DateHelper;

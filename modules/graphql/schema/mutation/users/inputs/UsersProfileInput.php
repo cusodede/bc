@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\inputs;
 
-use app\models\sys\users\EnumUsersRoles;
 use app\modules\graphql\schema\types\users\fields\UserRolesField;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;

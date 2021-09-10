@@ -128,6 +128,7 @@ class UcpConnector extends BaseHttpConnector
 	 */
 	private function getAuthServices(): array
 	{
+		/** @noinspection CurlSslServerSpoofingInspection смежная система не использует сертификат */
 		$this->get('/serviceinfo', ['path' => 'ucp:bauth'], [], [CURLOPT_SSL_VERIFYPEER => false]);
 
 		return $this->extractResponseData(
@@ -156,7 +157,7 @@ class UcpConnector extends BaseHttpConnector
 	 * Время жизни токена, в спецификации не нашёл, оставим 3 минуты.
 	 * @return string
 	 */
-	private function getToken(): string
+	public function getToken(): string
 	{
 		return Yii::$app->cache->getOrSet(
 			'api:ucp:token',
