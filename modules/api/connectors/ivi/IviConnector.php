@@ -57,13 +57,11 @@ class IviConnector extends BaseHttpConnector
 	 */
 	public function getPurchaseOptions(ProductOptions $options): PurchaseOptionsHandler
 	{
-		$response = $this->getClient()
-			->get(['/billing/v1/purchase/options', 'app_version' => $options->appVersion, 'access_token' => $this->getAccessTokenByPhone($options), 'with_subscription_renewals' => true])
-			->send();
+		$this->get(['/billing/v1/purchase/options', 'app_version' => $options->appVersion, 'access_token' => $this->getAccessTokenByPhone($options), 'with_subscription_renewals' => true]);
 
-		if (!$response->isOk || (null === $result = ArrayHelper::getValue($response->data, 'result'))) {
-			throw new RuntimeException('Ошибка при получении опций от ivi: '
-				. $response->toString());
+		$result = $this->extractResponseData('result');
+		if (null === $result) {
+			throw new RuntimeException('Ошибка при получении опций от ivi: ' . $this->response->toString());
 		}
 
 		/** @var array $result */
@@ -79,7 +77,7 @@ class IviConnector extends BaseHttpConnector
 	 * @throws Exception
 	 * @see getPurchaseOptions()
 	 */
-	public function makePurchase(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
+	public function makeSubscribe(ProductOptions $options, PurchaseOptionsItem $purchaseOptions): PurchaseResultHandler
 	{
 		$postData = [
 			'app_version' => $options->appVersion,
@@ -90,19 +88,15 @@ class IviConnector extends BaseHttpConnector
 		];
 		$postData = array_merge(
 			$postData,
-			[
-				'ps_extra_signature' => $this->getSignedParams($postData['ps_extra_signed_data'])
-			],
+			['ps_extra_signature' => $this->getSignedParams($postData['ps_extra_signed_data'])],
 			$purchaseOptions->getPurchaseParams()
 		);
 
-		$response = $this->getClient()
-			->post(["/billing/v1/purchase/ext/{$this->_appID}", 'app_version' => $options->appVersion, 'access_token' => $postData['access_token']], $postData)
-			->send();
+		$this->post(["/billing/v1/purchase/ext/{$this->_appID}", 'app_version' => $options->appVersion, 'access_token' => $postData['access_token']], $postData);
 
-		if (!$response->isOk || (null === $result = ArrayHelper::getValue($response->data, 'result'))) {
-			throw new RuntimeException('Ошибка при заведении подписки в ivi: '
-				. $response->toString());
+		$result = $this->extractResponseData('result');
+		if (null === $result) {
+			throw new RuntimeException('Ошибка при заведении подписки в ivi: ' . $this->response->toString());
 		}
 
 		/** @var array $result */
@@ -125,7 +119,7 @@ class IviConnector extends BaseHttpConnector
 	 * @param string $value значение поля для получения токена
 	 * @param string $appVersion
 	 * @return string
-	 * @noinspection PhpSameParameterValueInspection todo: если параметр всегда статичен, то заменить константой
+	 * @noinspection PhpSameParameterValueInspection доступна доп. авторизация по почте, оставлено для удобства.
 	 */
 	private function getAccessByParam(string $param, string $value, string $appVersion): string
 	{
@@ -137,12 +131,11 @@ class IviConnector extends BaseHttpConnector
 				$data['sign']        = $this->getSignedParams($data);
 				$data['app_version'] = $appVersion;
 
-				$response = $this->getClient()
-					->post("/user/access_token/{$param}/v5", $data)
-					->send();
-				if (!$response->isOk || (null === $token = ArrayHelper::getValue($response->data, 'result.access_token'))) {
-					throw new RuntimeException('Запрос на получение токена от ivi выполнился с ошибкой: '
-						. $response->toString());
+				$this->post("/user/access_token/{$param}/v5", $data);
+
+				$token = $this->extractResponseData('result.access_token');
+				if (null === $token) {
+					throw new RuntimeException('Запрос на получение токена от ivi выполнился с ошибкой: ' . $this->response->toString());
 				}
 
 				return $token;

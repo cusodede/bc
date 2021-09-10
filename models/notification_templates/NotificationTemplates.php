@@ -11,7 +11,7 @@ use app\models\notification_templates\active_record\NotificationTemplates as Act
  */
 class NotificationTemplates extends ActiveRecordNotificationTemplates
 {
-	public function dummy_todo()
+	public function dummy_todo(): void
 	{
 		// todo: add logic here
 	}

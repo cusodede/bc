@@ -78,7 +78,7 @@ class Contracts extends ActiveRecord
 	 */
 	public function getRelatedProducts(): ActiveQuery
 	{
-		return $this->hasMany(Products::class, ['id' => 'products_id'])->via('relatedContractsToProducts');
+		return $this->hasMany(Products::class, ['id' => 'product_id'])->via('relatedContractsToProducts');
 	}
 
 	/**

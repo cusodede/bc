@@ -17,11 +17,19 @@ class PurchaseResultHandler
 
 	private array $_data;
 
+	/**
+	 * @param array $data
+	 */
 	public function __construct(array $data)
 	{
 		$this->_data = $data;
 	}
 
+	/**
+	 * Проверка на успешное подключение услуги.
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function isError(): bool
 	{
 		return !in_array($this->getStatus(), [self::STATUS_OK, self::STATUS_PAYMENT_CONFIRMATION_REQUIRED], true);
