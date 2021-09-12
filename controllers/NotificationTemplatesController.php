@@ -16,6 +16,9 @@ class NotificationTemplatesController extends DefaultController
 	public string $modelSearchClass = NotificationTemplatesSearch::class;
 	public string $modelClass = NotificationTemplates::class;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getViewPath(): string
 	{
 		return '@app/views/notification_templates';

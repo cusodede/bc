@@ -16,6 +16,9 @@ class RevShareController extends DefaultController
 	public string $modelSearchClass = RevShareRatesSearch::class;
 	public string $modelClass = RevShareRates::class;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getViewPath(): string
 	{
 		return '@app/views/revshare_rates';
