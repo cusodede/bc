@@ -39,8 +39,7 @@ class IviConnector extends BaseHttpConnector
 		/** @var array $params */
 		$params = ArrayHelper::getValue(Yii::$app->params, 'ivi.connector', new InvalidConfigException('Не заданы параметры коннектора для ivi'));
 
-		$this->_appID = ArrayHelper::remove($params, 'appID');
-		if (null === $this->_appID) {
+		if (null === $this->_appID = ArrayHelper::remove($params, 'appID')) {
 			throw new InvalidConfigException('APP ID для ivi не задан');
 		}
 
