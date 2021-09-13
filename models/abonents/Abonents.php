@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\abonents;
 
 use app\models\abonents\active_record\Abonents as ActiveRecordAbonents;
+use app\models\phones\Phones;
 use app\models\products\Products;
 use Exception;
 use yii\base\InvalidConfigException;
@@ -18,6 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
  * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
  * @property-read Products[] $fullProductList todo: что это?
+ * @property-read Products[] $relatedProducts Список связанных продуктов с абонентом.
  */
 class Abonents extends ActiveRecordAbonents
 {
@@ -84,6 +86,23 @@ class Abonents extends ActiveRecordAbonents
 	 */
 	public static function findByPhone(string $phone): ?self
 	{
-		return static::findOne(['phone' => $phone]);
+		return static::findOne(['phone' => Phones::defaultFormat($phone)]);
+	}
+
+	/**
+	 * Получение ФИО пользователя
+	 * @return string
+	 */
+	public function getFullName(): string
+	{
+		return "{$this->surname} {$this->name} {$this->patronymic}";
+	}
+
+	/**
+	 * @return ActiveQuery
+	 */
+	public function getRelatedProducts(): ActiveQuery
+	{
+		return $this->hasMany(Products::class, ['id' => 'product_id'])->via('relatedAbonentsToProducts');
 	}
 }

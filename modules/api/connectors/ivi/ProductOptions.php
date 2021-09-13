@@ -37,7 +37,7 @@ class ProductOptions extends BaseObject
 	/**
 	 * @var string|null уникальный параметр транзакции при подключении опции в ivi (например, идентификатор из биллинга).
 	 * Обязателен при выполнении запроса на подключение/обновление подписки.
-	 * @see IviConnector::makePurchase()
+	 * @see IviConnector::makeSubscribe()
 	 */
 	private ?string $_transactionId;
 

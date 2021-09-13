@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\api\connectors\ivi;
 
 use app\common\CollectionInterface;
+use Exception;
 
 /**
  * Коллекция опций подписок для создания/обновления подписки.
@@ -29,6 +30,7 @@ class PurchaseOptionsCollection implements CollectionInterface
 	 * Получение объекта опций по заданному продукту.
 	 * @param string $productId идентификатор продукта в системе ivi.
 	 * @return PurchaseOptionsItem|null
+	 * @throws Exception
 	 */
 	public function extractProductPurchaseOptions(string $productId): ?PurchaseOptionsItem
 	{

@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\users;
 
+use app\models\partners\Partners;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseObjectType;
+use app\modules\graphql\schema\types\partners\PartnerType;
 use GraphQL\Type\Definition\Type;
 
 /**
@@ -38,18 +40,34 @@ class UserType extends BaseObjectType
 					'type' => Type::string(),
 					'description' => $user->getAttributeLabel('login'),
 				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => $user->getAttributeLabel('partner_id'),
+				],
+				'partner' => [
+					'type' => PartnerType::type(),
+					'resolve' => fn(Users $user): ?Partners => $user->relatedPartner,
+				],
 				'email' => [
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
 				],
+				'role' => [
+					'type' => Type::string(),
+					'description' => 'Роль пользователя',
+					'resolve' => fn(Users $user): ?string => $user->mainPermission ?? '',
+				],
 				'phones' => [
 					'type' => Type::string(),
 					'description' => 'Телефон',
-					'resolve' => function(Users $user): ?string { // Фронт не готов принимать тут массив.
+					'resolve' => function(Users $user): ?string {
+						// Фронт не готов принимать тут массив и хочет номера без плюсов
 						$phones = $user->getPhones();
-						return array_pop($phones);
+						$phone =  array_pop($phones);
+						return null === $phone ? '' : str_replace('+', '',$phone);
 					},
 				],
+				'deleted' => Type::boolean()
 			],
 		]);
 	}

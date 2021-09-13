@@ -7,6 +7,7 @@ if (file_exists($localConfig = __DIR__ . DIRECTORY_SEPARATOR . 'local' . DIRECTO
 }
 
 use app\assets\SmartAdminThemeAssets;
+use app\components\bootstrap\CheckPasswordOutdated;
 use app\components\queue\DbQueue;
 use app\components\queue\JobIdHandlingBehavior;
 use app\models\sys\users\Users;
@@ -19,6 +20,7 @@ use app\modules\graphql\GraphqlModule;
 use cusodede\jwt\Jwt;
 use kartik\dialog\DialogBootstrapAsset;
 use kartik\editable\EditableAsset;
+use kartik\markdown\Module as Markdown;
 use pozitronik\helpers\ArrayHelper;
 use pozitronik\references\ReferencesModule;
 use pozitronik\sys_exceptions\models\ErrorHandler;
@@ -48,7 +50,7 @@ $config = [
 	'name' => 'Product Platform',
 	'language' => 'ru-RU',
 	'basePath' => dirname(__DIR__),
-	'bootstrap' => ['log', 'history', 'productTicketsQueue'],
+	'bootstrap' => ['log', 'history', 'productTicketsQueue', CheckPasswordOutdated::class],
 	'homeUrl' => '/users/profile',//<== строка, не массив
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
@@ -105,7 +107,7 @@ $config = [
 			'class' => ApiModule::class
 		],
 		'markdown' => [
-			'class' => 'kartik\markdown\Module',
+			'class' => Markdown::class
 		]
 	],
 	'components' => [

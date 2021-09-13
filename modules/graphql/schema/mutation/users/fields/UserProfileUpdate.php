@@ -45,6 +45,6 @@ class UserProfileUpdate extends BaseMutationType
 		$data = ArrayHelper::getValue($args, 'data', []);
 		// Фронт не готов отправлять массив номеров.
 		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);
-		return static::save(AuthHelper::authenticate(), $data, self::MESSAGES);
+		return static::save($user, $data, self::MESSAGES);
 	}
 }

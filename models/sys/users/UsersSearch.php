@@ -6,6 +6,7 @@ namespace app\models\sys\users;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
 use Throwable;
 use yii\data\ActiveDataProvider;
+use yii\data\Sort;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -24,9 +25,10 @@ class UsersSearch extends ActiveRecordUsers
 	public function rules(): array
 	{
 		return [
-			[['id', 'limit', 'offset'], 'integer'],
+			[['id', 'limit', 'offset', 'partner_id'], 'integer'],
 			[['login', 'email', 'username'], 'safe'],
 			[['search'], 'string', 'min' => 3],
+			[['deleted'], 'boolean'],
 		];
 	}
 
@@ -38,6 +40,8 @@ class UsersSearch extends ActiveRecordUsers
 	 */
 	public function search(array $params, array $allowedGroups = []): ActiveDataProvider
 	{
+		$sort = ArrayHelper::getValue($params, $this->formName() . '.sort');
+
 		$query = Users::find()->active();
 
 		$dataProvider = new ActiveDataProvider([
@@ -49,10 +53,14 @@ class UsersSearch extends ActiveRecordUsers
 			$dataProvider->setPagination($pagination);
 		}
 
-		$dataProvider->setSort([
-			'defaultOrder' 	=> ['id' => SORT_ASC],
-			'attributes' 	=> ['id', 'login', 'email',]
-		]);
+		if (null !== $sort) {
+			$dataProvider->setSort(new Sort(['params' => compact('sort')]));
+		} else {
+			$dataProvider->setSort([
+				'defaultOrder' 	=> ['id' => SORT_ASC],
+				'attributes' 	=> ['id', 'login', 'email',]
+			]);
+		}
 
 		$this->load($params);
 
@@ -64,6 +72,8 @@ class UsersSearch extends ActiveRecordUsers
 
 		$query->andFilterWhere(['sys_users.id' => $this->id])
 			->andFilterWhere(['group_id' => $allowedGroups])
+			->andFilterWhere(['deleted' => $this->deleted])
+			->andFilterWhere(['partner_id' => $this->partner_id])
 			->andFilterWhere(['like', 'login', $this->login])
 			->andFilterWhere(['or', ['like', 'name', $this->username], ['like', 'surname', $this->username]])
 			->andFilterWhere(['like', 'email', $this->email]);

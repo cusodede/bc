@@ -43,8 +43,9 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     environment:
-      POSTGRES_DATABASE: ${DB_NAME}
-      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ${POSTGRES_PATH}:/var/lib/postgresql/data
@@ -58,8 +59,11 @@ services:
       - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/logs/php:/var/logs/php
       - ${DOCKER_FOLDER}/home/.composer:/root/.composer
+    environment:
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
     links:
       - mysql
+      - postgres
     networks:
       - backend
 
