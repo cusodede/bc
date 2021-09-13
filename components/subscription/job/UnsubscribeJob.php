@@ -26,7 +26,6 @@ class UnsubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
-	 * @noinspection MissingParameterTypeDeclarationInspection Due to declaration compatibility.
 	 */
 	public function execute($queue): void
 	{
@@ -51,7 +50,6 @@ class UnsubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
-	 * @noinspection MissingParameterTypeDeclarationInspection Due to declaration compatibility.
 	 */
 	public function canRetry($attempt, $error): bool
 	{

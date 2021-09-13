@@ -28,7 +28,6 @@ class SubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
-	 * @noinspection MissingParameterTypeDeclarationInspection According to declaration compatibility.
 	 */
 	public function execute($queue): void
 	{
@@ -71,7 +70,6 @@ class SubscribeJob implements RetryableJobInterface
 
 	/**
 	 * {@inheritdoc}
-	 * @noinspection MissingParameterTypeDeclarationInspection According to declaration compatibility.
 	 */
 	public function canRetry($attempt, $error): bool
 	{
