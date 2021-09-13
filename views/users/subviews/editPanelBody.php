@@ -21,7 +21,6 @@ use app\models\partners\Partners;
 
 <?= $form->field($model, 'name') ?>
 <?= $form->field($model, 'surname') ?>
-<?= $form->field($model, 'login') ?>
 <?= $form->field($model, 'email') ?>
 <?= $form->field($model, 'partner_id')->widget(Select2::class, [
 	'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
