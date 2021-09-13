@@ -96,8 +96,7 @@ class Users extends ActiveRecord
 				//Если пароль подсолен, валидация вернет ошибку, поэтому валидируем только при изменении.
 				return $model->isAttributeUpdated('password');
 			}],
-			[['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
-			[['partner_id'], 'default', 'value' => 0],
+			[['partner_id'], 'exist', 'skipOnError' => true, 'skipOnEmpty' => true, 'targetClass' => Partners::class, 'targetAttribute' => ['partner_id' => 'id']],
 			[['restore_code'], 'string', 'max' => 255],
 			[['login'], 'string', 'max' => 64],
 			[['name', 'surname'], 'string', 'min' => 3],
