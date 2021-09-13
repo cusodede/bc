@@ -109,6 +109,9 @@
 		],
 		"setup": [
 			"./docker/local/scripts/setup"
+		],
+		"create-test-dump": [
+			"pg_dump --schema-only --if-exists --clean --password --dbname=postgresql://prpl@localhost:5432/prpl --file=./tests/_data/dumps/base_structure.sql"
 		]
 	},
 	"extra": {

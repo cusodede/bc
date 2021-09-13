@@ -133,12 +133,13 @@ public function actionProfile(int $id):?string {
 
 ## Запуск тестов
 1. composer install
-2. Создать базу для тестов
-3. Добавить переменные окружения для тестов, или создать из cp .env.example .env
-4. Указать в env файле коннекты к тестовой бд
-5. тесты запускаем в контейнере php: docker exec -it prpl_php bash
-6. vendor/bin/codecept build (при изменении списка модулей или их конфигов в yml файлах - надо повторно билдить)
-7. vendor/bin/codecept run или composer test
+2. composer migrations && composer create-test-dump
+3. Создать базу для тестов
+4. Добавить переменные окружения для тестов, или создать из cp .env.example .env
+5. Указать в env файле коннекты к тестовой бд
+6. тесты запускаем в контейнере php: docker exec -it prpl_php bash
+7. vendor/bin/codecept build (при изменении списка модулей или их конфигов в yml файлах - надо повторно билдить)
+8. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
 хосты mysql postgres chrome в локальный hosts с ip 127.0.0.1
