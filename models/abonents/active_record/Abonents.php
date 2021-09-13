@@ -7,6 +7,7 @@ use app\components\db\ActiveRecordTrait;
 use app\models\abonents\active_query\AbonentsActiveQuery;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
+use app\models\abonents\RelAbonentsToProducts;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
