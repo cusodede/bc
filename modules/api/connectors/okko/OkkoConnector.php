@@ -38,7 +38,7 @@ class OkkoConnector extends BaseHttpConnector
 	 * @throws HttpClientException
 	 * @throws Throwable
 	 */
-	public function makeSubscribe(OkkoPurchaseParams $params): string
+	public function processSubscription(OkkoPurchaseParams $params): string
 	{
 		$this->post('/subscription', $params->toArray());
 

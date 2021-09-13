@@ -58,11 +58,11 @@ return [
 			'baseUrl' => 'https://api.ivi.ru/mobileapi'
 		],
 		'productMap' => [
-			1 => ['productId' => 101, 'appVersion' => 8424]
+			1 => ['productId' => '101', 'appVersion' => '8424']
 		],
 		'signatureOptions' => [
-			'signer'    => Jwt::RS256,
-			'signerKey' => ''
+			'signer' => Jwt::HS256,
+			'key'    => InMemory::plainText('c580aa408b75157b1c77cea26a11d99b77c1e4abe6b8ec050358f4e54557e4fc')
 		]
 	],
 	'vet-expert' => [
