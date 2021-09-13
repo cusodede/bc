@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\fields;
 
+use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
@@ -46,6 +47,9 @@ class UserProfileCreate extends BaseMutationType
 		$data = ArrayHelper::getValue($args, 'data', []);
 		// Фронт не готов отправлять массив номеров.
 		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);
+		if (null !== ($role = ArrayHelper::getValue($data, 'role'))) {
+			$data['relatedPermissions'] = Permissions::findOne(['name' => $role])->id;
+		}
 		return static::save($user, $data, self::MESSAGES);
 	}
 }
