@@ -19,6 +19,7 @@ use yii\db\ActiveQuery;
  * @property-read string|null $statusDesc
  * @property-read bool $isEnabled
  * @property-read bool $isRenewed
+ * @property-read bool $isActive
  * @property-read bool $isDisabled
  * @property-read bool $isExpired
  */
@@ -71,6 +72,14 @@ class ProductsJournal extends ActiveRecordProductsJournal
 	public function getIsRenewed(): bool
 	{
 		return EnumProductsStatuses::STATUS_RENEWED === $this->status_id;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsActive(): bool
+	{
+		return $this->isEnabled || $this->isRenewed;
 	}
 
 	/**
