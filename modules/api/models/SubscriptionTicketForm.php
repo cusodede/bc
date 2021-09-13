@@ -103,10 +103,10 @@ abstract class SubscriptionTicketForm extends Model
 		}
 
 		return TicketSubscription::find()
-			->joinWith('relatedAbonentsToProducts rel')
+			->joinWith(['relatedAbonentsToProducts rel', 'relatedTicket rel_ticket'])
 			->andWhere(['rel.product_id' => $this->productId])
 			->andWhere(['rel.abonent_id' => $this->abonent->id])
-			->orderBy(['created_at' => SORT_DESC])
+			->orderBy(['rel_ticket.created_at' => SORT_DESC])
 			->limit(1)
 			->one();
 	}
