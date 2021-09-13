@@ -40,9 +40,17 @@ class UsersFilterInput extends InputObjectType
 					'type' => Type::string(),
 					'description' => 'Электронная почта',
 				],
+				'deleted' => [
+					'type' => Type::boolean(),
+					'description' => 'Фильтр по статусу',
+				],
 				'search' => [
 					'type' => Type::string(),
 					'description' => 'Поиск по имени, фамилии, почте, минимум 3 символа'
+				],
+				'partner_id' => [
+					'type' => Type::int(),
+					'description' => 'Фильтр по партнёру',
 				],
 			]
 		]);

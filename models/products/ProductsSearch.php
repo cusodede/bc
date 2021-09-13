@@ -3,12 +3,10 @@ declare(strict_types = 1);
 
 namespace app\models\products;
 
-use app\components\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use Throwable;
-use yii\base\InvalidConfigException;
-use yii\web\NotFoundHttpException;
+use Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * Поисковая модель продуктов
@@ -22,6 +20,7 @@ class ProductsSearch extends Products
 	public ?bool $active = null;
 	public ?int $limit = null;
 	public ?int $offset = null;
+	public ?int $abonent_id = null;
 
 	/**
 	 * @return array[]
@@ -29,7 +28,7 @@ class ProductsSearch extends Products
 	public function rules(): array
 	{
 		return [
-			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset'], 'integer'],
+			[['id', 'type_id', 'partner_id', 'category_id', 'limit', 'offset', 'abonent_id'], 'integer'],
 			[['trial', 'active'], 'boolean'],
 			[['name'], 'safe'],
 		];
@@ -38,8 +37,7 @@ class ProductsSearch extends Products
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
-	 * @throws Throwable
-	 * @throws InvalidConfigException
+	 * @throws Exception
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
@@ -78,7 +76,15 @@ class ProductsSearch extends Products
 			'products.partner_id' => $this->partner_id,
 			'partners.category_id' => $this->category_id
 		]);
+
 		$query->andFilterWhere(['like', 'products.name', $this->name]);
+
+		if (null !== $this->abonent_id) {
+			$query->joinWith(['relatedAbonents']);
+			$query->andFilterWhere(
+				['relation_abonents_to_products.abonent_id' => $this->abonent_id]
+			);
+		}
 
 		if (null !== $this->trial) {
 			$query->andWhere([$this->trial ? '>' : '=', 'subscriptions.trial_count', 0]);
@@ -95,40 +101,6 @@ class ProductsSearch extends Products
 		if (null !== $this->offset) {
 			$query->offset = $this->offset;
 		}
-
-		return $dataProvider;
-	}
-
-	/**
-	 * @param array $params
-	 * @return ActiveDataProvider
-	 * @throws NotFoundHttpException
-	 * @throws Throwable
-	 */
-	public function searchAbonents(array $params): ActiveDataProvider
-	{
-		$id = ArrayHelper::getValue($params, 'id');
-		if (null === $id || null === $model = Products::findOne($id)) {
-			throw new NotFoundHttpException();
-		}
-
-		$query = $model->getRelatedAbonents();
-
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-			'pagination' => [
-				'pageSize' => 5,
-			],
-		]);
-
-		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
-		if (null !== $pagination) {
-			$dataProvider->setPagination($pagination);
-		}
-
-		$dataProvider->setSort([
-			'attributes' => ['created_at', 'status_id']
-		]);
 
 		return $dataProvider;
 	}

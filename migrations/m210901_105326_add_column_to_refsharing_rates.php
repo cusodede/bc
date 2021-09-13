@@ -1,8 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-use yii\db\Migration;
-use app\models\revshare_rates\RevShareRates;
+use app\components\db\Migration;
 
 /**
 * Class m210901_105326_add_column_to_refsharing_rates

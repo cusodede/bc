@@ -16,7 +16,7 @@ class ResourceUnavailableException extends Exception implements ExtendedThrowabl
 	 * @param string $message
 	 * @param Throwable|null $previous
 	 */
-	public function __construct($message = "", Throwable $previous = null)
+	public function __construct($message = '', Throwable $previous = null)
 	{
 		parent::__construct($message, 503, $previous);
 	}

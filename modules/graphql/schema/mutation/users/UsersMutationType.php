@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\mutation\users;
 
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\mutation\users\fields\UserProfileUpdate;
+use app\modules\graphql\schema\mutation\users\fields\UserProfileCreate;
 
 /**
  * Class UsersMutationType
@@ -21,6 +22,7 @@ class UsersMutationType extends BaseObjectType
 			'description' => 'Мутации пользователей',
 			'fields' => [
 				'updateProfile' => UserProfileUpdate::field(),
+				'createProfile' => UserProfileCreate::field(),
 			]
 		]);
 	}

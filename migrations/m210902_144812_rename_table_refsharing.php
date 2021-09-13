@@ -13,6 +13,7 @@ class m210902_144812_rename_table_refsharing extends Migration
 	 */
 	public function safeUp()
 	{
+		$this->dropForeignKey('fk_ref_share_product_id', 'refsharing_rates');
 		$this->dropTable('refsharing_rates');
 
 		$this->createTable('revshare_rates', [
