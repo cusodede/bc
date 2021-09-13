@@ -52,15 +52,14 @@ abstract class SubscriptionTicketForm extends Model
 			[['productId'],
 				'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['productId' => 'id']
 			],
-			[['productId'],
+			[['productId'], function () {
+				$subscriptionModel = $this->findLatterSubscriptionTicket();
+				if (null !== $subscriptionModel && !$subscriptionModel->isCompleted) {
+					$this->addError('productId', 'В данный момент нет возможности для обработки запроса.');
+				}
+			},
 				'skipOnError' => true, 'when' => static function (self $model) {
 					return !$model->hasErrors('phone');
-				},
-				function () {
-					$subscriptionModel = $this->findLatterSubscriptionTicket();
-					if (null !== $subscriptionModel && !$subscriptionModel->isCompleted) {
-						$this->addError('productId', 'В данный момент нет возможности для обработки запроса.');
-					}
 				}
 			],
 			[['productId'], 'validateProductJournalStatus',
