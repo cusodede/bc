@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $searchModel
+ * @var NotificationTemplatesSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
@@ -12,13 +12,13 @@ declare(strict_types = 1);
 use app\components\helpers\Html;
 use app\models\notification_templates\EnumNotificationTemplatesType;
 use app\models\notification_templates\NotificationTemplates;
+use app\models\notification_templates\NotificationTemplatesSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use kartik\select2\Select2;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
@@ -46,12 +46,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{edit}{view}</div>',
 				'buttons' => [
-					'edit' => static function(string $url, Model $model) {
+					'edit' => static function(string $url, NotificationTemplates $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'view' => static function(string $url, Model $model) {
+					'view' => static function(string $url, NotificationTemplates $model) {
 						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);

@@ -3,19 +3,19 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $searchModel
+ * @var ProductsSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
  */
 
 use app\components\helpers\Html;
+use app\models\products\ProductsSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use kartik\select2\Select2;

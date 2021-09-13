@@ -3,19 +3,20 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $searchModel
+ * @var AbonentsSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
  */
 
 use app\components\helpers\Html;
+use app\models\abonents\Abonents;
+use app\models\abonents\AbonentsSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
@@ -43,17 +44,17 @@ $this->params['breadcrumbs'][] = $this->title;
 				'class'    => ActionColumn::class,
 				'template' => '<div class="btn-group">{edit}{view}{view-products}</div>',
 				'buttons'  => [
-					'edit' => static function(string $url, Model $model) {
+					'edit' => static function(string $url, Abonents $model) {
 						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'view' => static function(string $url, Model $model) {
+					'view' => static function(string $url, Abonents $model) {
 						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
-					'view-products' => static function(string $url, Model $model) {
+					'view-products' => static function(string $url, Abonents $model) {
 						return Html::ajaxModalLink('<i class="fas fa-arrow-circle-up"></i>', $url, [
 							'class' => ['btn btn-sm btn-outline-primary']
 						]);
