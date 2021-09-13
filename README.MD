@@ -134,8 +134,8 @@ public function actionProfile(int $id):?string {
 ## Запуск тестов
 1. composer install
 2. composer migrations
-3. создаеь дамп для тестов composer create-test-dump
-4. Создать базу для тестов
+3. создаеь дамп для тестов: composer create-test-dump
+4. Создать базу для тестов (postgresql): create database test with owner root;
 5. Добавить переменные окружения для тестов, или создать из cp .env.example .env
 6. Указать в env файле коннекты к тестовой бд
 7. тесты запускаем в контейнере php: docker exec -it prpl_php bash
