@@ -132,14 +132,14 @@ public function actionProfile(int $id):?string {
 Виджет, которому на вход можно подать любой произвольный набор данных (от скалярной переменной до массива замыканий), и получить вывод в виде набора bootstrap badge. Оформление вывода можно конфигурировать: вешать на них ссылки, действия, оформление, etc.
 
 ## Запуск тестов
-1. composer install
-2. composer migrations
-3. создаеь дамп для тестов: composer create-test-dump
+1. composer/make down && composer/make build && composer/make start
+2. composer install
+3. composer migrations
 4. Создать базу для тестов (postgresql): create database test with owner root;
 5. Добавить переменные окружения для тестов, или создать из cp .env.example .env
 6. Указать в env файле коннекты к тестовой бд
-7. тесты запускаем в контейнере php: docker exec -it prpl_php bash
-8. vendor/bin/codecept build (при изменении списка модулей или их конфигов в yml файлах - надо повторно билдить)
+8. тесты запускаем в контейнере php: docker exec -it prpl_php bash
+7. создаеь дамп для тестов: composer create-test-dump
 9. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
