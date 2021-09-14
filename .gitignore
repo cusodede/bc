@@ -11,3 +11,4 @@
 /docker/local/databases/
 /docker/local/logs/
 /docker/local/home/
+tests/_data/dumps/base_structure_pgsql.sql
