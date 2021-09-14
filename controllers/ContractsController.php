@@ -16,6 +16,9 @@ class ContractsController extends DefaultController
 	public string $modelSearchClass = ContractsSearch::class;
 	public string $modelClass = Contracts::class;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getViewPath(): string
 	{
 		return '@app/views/contracts';

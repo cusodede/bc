@@ -3,13 +3,12 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Partners $model
+ * @var NotificationTemplates $model
  */
 
-use app\models\partners\Partners;
+use app\models\notification_templates\NotificationTemplates;
 use pozitronik\widgets\BadgeWidget;
 use yii\bootstrap4\Modal;
-use yii\bootstrap4\Tabs;
 use yii\web\View;
 
 $modelName = $model->formName();
@@ -25,17 +24,5 @@ $modelName = $model->formName();
 		'class' => 'modal-dialog-large',
 	]
 ]); ?>
-<?= Tabs::widget([
-	'items' => [
-		[
-			'label' => 'Инфо',
-			'content' => $this->render('../view', compact('model')),
-			'active' => true
-		],
-		[
-			'label' => 'Договор',
-			'content' => $this->render('../view-contract', compact('model'))
-		]
-	]
-]) ?>
+<?= $this->render('../view', compact('model')) ?>
 <?php Modal::end(); ?>

@@ -37,7 +37,7 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 		$expireDate                     = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
 		$subscriptionParams->expireDate = $expireDate;
 
-		$this->_apiConnector->makeSubscribe($subscriptionParams);
+		$this->_apiConnector->processSubscription($subscriptionParams);
 
 		return $expireDate;
 	}

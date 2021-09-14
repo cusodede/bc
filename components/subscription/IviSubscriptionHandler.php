@@ -7,7 +7,7 @@ use app\components\helpers\Utils;
 use app\components\subscription\exceptions\ResourceUnavailableException;
 use app\components\subscription\exceptions\SubscriptionUnavailableException;
 use app\modules\api\connectors\ivi\IviConnector;
-use app\modules\api\connectors\ivi\ProductOptions;
+use app\modules\api\connectors\ivi\IviSubscriptionOptions;
 use app\modules\api\connectors\ivi\PurchaseOptionsHandler;
 use app\modules\api\connectors\ivi\PurchaseOptionsItem;
 use DomainException;
@@ -25,9 +25,9 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	 */
 	private IviConnector $_apiConnector;
 	/**
-	 * @var ProductOptions|null
+	 * @var IviSubscriptionOptions|null
 	 */
-	private ?ProductOptions $_productOptions = null;
+	private ?IviSubscriptionOptions $_productOptions = null;
 
 	/**
 	 * IviSubscriptionHandler constructor.
@@ -77,11 +77,12 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	 */
 	private function makePurchase(): int
 	{
-		if (null === $productPurchaseOptions = $this->getProductPurchaseOptions()) {
+		$productPurchaseOptions = $this->getProductPurchaseOptions();
+		if (null === $productPurchaseOptions) {
 			throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
 		}
 
-		$result = $this->_apiConnector->makeSubscribe($this->_productOptions, $productPurchaseOptions);
+		$result = $this->_apiConnector->processSubscription($this->_productOptions, $productPurchaseOptions);
 
 		return $result->getPurchaseId();
 	}
@@ -124,11 +125,14 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 		}
 	}
 
+	/**
+	 * Инициализация параметров подключения услуги.
+	 */
 	private function initProductOptions(): void
 	{
-		$this->_productOptions = new ProductOptions([
-			'productId' => $this->_ticket->relatedProduct->id,
-			'phone' => $this->_ticket->relatedAbonent->phone,
+		$this->_productOptions = new IviSubscriptionOptions([
+			'productId'     => $this->_ticket->relatedProduct->id,
+			'phone'         => $this->_ticket->relatedAbonent->phone,
 			'transactionId' => $this->_ticket->id
 		]);
 	}

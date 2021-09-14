@@ -3,31 +3,30 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var ProductsSearch $searchModel
+ * @var NotificationTemplatesSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
  */
 
 use app\components\helpers\Html;
-use app\models\products\ProductsSearch;
+use app\models\notification_templates\EnumNotificationTemplatesType;
+use app\models\notification_templates\NotificationTemplates;
+use app\models\notification_templates\NotificationTemplatesSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
-use kartik\select2\Select2;
-use app\models\partners\Partners;
-use pozitronik\helpers\ArrayHelper;
-use app\models\products\EnumProductsTypes;
-use app\models\products\Products;
 
-$this->title                   = 'Продукты';
+$this->title                   = 'Шаблоны уведомлений';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <?= GridConfig::widget([
 	'id' => "{$modelName}-index-grid",
 	'grid' => GridView::begin([
@@ -36,54 +35,46 @@ $this->params['breadcrumbs'][] = $this->title;
 		'panel' => [
 			'heading' => '',
 		],
-		'toolbar' => false,
+		'toolbar' => [
+			['content' => Html::ajaxModalLink('Добавить шаблон', $controller::to('create'), ['class' => ['btn btn-success']])]
+		],
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '<div class="btn-group">{view-abonents}</div>',
+				'template' => '<div class="btn-group">{edit}{view}</div>',
 				'buttons' => [
-					'view-abonents' => static function(string $url, Products $model) {
-						return Html::a('<i class="fas fa-arrow-circle-up"></i>',
-							['products/journal', 'ProductsJournalSearch' => ['searchProductId' => $model->id]],
-							['class' => ['btn btn-sm btn-outline-primary']
+					'edit' => static function(string $url, NotificationTemplates $model) {
+						return Html::ajaxModalLink('<i class="fas fa-edit"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
+						]);
+					},
+					'view' => static function(string $url, NotificationTemplates $model) {
+						return Html::ajaxModalLink('<i class="fas fa-eye"></i>', $url, [
+							'class' => ['btn btn-sm btn-outline-primary']
 						]);
 					},
 				],
 			],
 			'id',
-			'name',
-			'price',
 			[
 				'filter' => Select2::widget([
 					'model' => $searchModel,
-					'attribute' => 'type_id',
-					'data' => EnumProductsTypes::mapData(),
+					'attribute' => 'type',
+					'data' => EnumNotificationTemplatesType::mapData(),
 					'pluginOptions' => [
 						'allowClear' => true,
 						'placeholder' => ''
 					]
 				]),
-				'attribute' => 'type_id',
+				'attribute' => 'type',
 				'format' => 'text',
-				'value' => static fn(Products $product) => EnumProductsTypes::getScalar($product->type_id),
+				'value' => static fn(NotificationTemplates $item) => EnumNotificationTemplatesType::getScalar($item->type),
 			],
-			[
-				'filter' => Select2::widget([
-					'model' => $searchModel,
-					'attribute' => 'partner_id',
-					'data' => ArrayHelper::map(Partners::find()->active()->all(), 'id', 'name'),
-					'pluginOptions' => [
-						'allowClear' => true,
-						'placeholder' => ''
-					]
-				]),
-				'attribute' => 'partner_id',
-				'format' => 'text',
-				'value' => 'relatedPartner.name',
-			],
+			'message_body',
+			'subject',
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'created_at',

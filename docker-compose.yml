@@ -18,31 +18,13 @@ services:
     networks:
       - backend
 
-  mysql:
-    container_name: prpl_mysql
-    image: mysql:latest
-    command: [
-        '--default-authentication-plugin=mysql_native_password'
-    ]
-    ports:
-      - "${MYSQL_PORT}:3306"
-    environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_ROOT_USERNAME: ${DB_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    restart: always
-    volumes:
-      - ${PROJECT_PATH}/tests/_data:/var/www/tests/_data
-      - ${MYSQL_PATH}:/var/lib/mysql
-    networks:
-      - backend
-
   postgres:
     container_name: prpl_postgres
     image: postgres:alpine
     ports:
       - "${POSTGRES_PORT}:5432"
     environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -61,7 +43,6 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
     links:
-      - mysql
       - postgres
     networks:
       - backend
