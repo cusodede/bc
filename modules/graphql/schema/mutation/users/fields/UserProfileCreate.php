@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\fields;
 
-use app\models\sys\permissions\Permissions;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
 use app\modules\graphql\schema\types\common\ResponseType;
+use app\services\permissions\UserPermissionsService;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
@@ -45,11 +45,8 @@ class UserProfileCreate extends BaseMutationType
 	{
 		$user = new Users();
 		$data = ArrayHelper::getValue($args, 'data', []);
-		// Фронт не готов отправлять массив номеров.
-		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);
-		if (null !== ($role = ArrayHelper::getValue($data, 'role'))) {
-			$data['relatedPermissions'] = Permissions::findOne(['name' => $role])->id;
-		}
+		$user->phones = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]); // Фронт не готов отправлять массив номеров.
+		$user->relatedPermissions = (new UserPermissionsService($user))->resetMainPermission(ArrayHelper::getValue($data, 'role'));
 		return static::save($user, $data, self::MESSAGES);
 	}
 }
