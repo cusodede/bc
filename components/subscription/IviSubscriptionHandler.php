@@ -43,18 +43,26 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function beforeSubscribe(): void
+	protected function verifySubscription(): void
 	{
-		parent::beforeSubscribe();
+		$status = Utils::doUrlHealthCheck($this->_apiConnector->baseUrl);
+		if (!$status) {
+			throw new ResourceUnavailableException();
+		}
 
 		$this->initProductOptions();
+		if (null === $this->getProductPurchaseOptions()) {
+			throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
+		}
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function connectOnPartner(): string
+	protected function activateOnPartner(): string
 	{
+		$this->initProductOptions();
+
 		$purchaseId = $this->makePurchase();
 
 		$this->_ticket->log(['purchaseId' => $purchaseId]);
@@ -107,22 +115,6 @@ class IviSubscriptionHandler extends BaseSubscriptionHandler
 	private function callPurchaseOptions(): PurchaseOptionsHandler
 	{
 		return $this->_apiConnector->getPurchaseOptions($this->_productOptions);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function serviceCheck(): void
-	{
-		$status = Utils::doUrlHealthCheck($this->_apiConnector->baseUrl);
-		if (!$status) {
-			throw new ResourceUnavailableException();
-		}
-
-		$this->initProductOptions();
-		if (null === $this->getProductPurchaseOptions()) {
-			throw new SubscriptionUnavailableException("Среди опций покупки отсутствует продукт с идентификатором {$this->_productOptions->productId}");
-		}
 	}
 
 	/**
