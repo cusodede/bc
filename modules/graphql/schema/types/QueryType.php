@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types;
 
 use app\modules\graphql\components\BaseObjectType;
+use app\modules\graphql\schema\types\abonents\AbonentsType;
 use app\modules\graphql\schema\types\partners\PartnersType;
 use app\modules\graphql\schema\types\products\ProductsType;
 use app\modules\graphql\schema\types\products_journal\ProductsJournalType;
@@ -29,6 +30,7 @@ class QueryType extends BaseObjectType
 			'products' 			=> ProductsType::root(),
 			'subscriptions' 	=> SubscriptionsType::root(),
 			'productsJournal' 	=> ProductsJournalType::root(),
+			'abonents' 			=> AbonentsType::root(),
 		];
 
 		ksort($schema, SORT_REGULAR);

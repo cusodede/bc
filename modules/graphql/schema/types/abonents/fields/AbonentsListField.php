@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\modules\graphql\schema\types\products_journal\fields;
+namespace app\modules\graphql\schema\types\abonents\fields;
 
-use app\models\products\ProductsJournalSearch;
+use app\models\abonents\AbonentsSearch;
 use app\modules\graphql\components\BaseField;
-use app\modules\graphql\schema\types\products_journal\ProductJournalType;
+use app\modules\graphql\schema\types\abonents\AbonentType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 /**
  * Журнал подписок абонента.
  */
-class ProductsJournalListField extends BaseField
+class AbonentsListField extends BaseField
 {
 	/**
 	 * @inheritdoc
@@ -21,9 +21,9 @@ class ProductsJournalListField extends BaseField
 	protected function __construct()
 	{
 		parent::__construct([
-			'name' => 'productsJournalList',
-			'type' => Type::listOf(ProductJournalType::type()),
-			'description' => 'Журнал подписок абонента',
+			'name' => 'abonentList',
+			'type' => Type::listOf(AbonentType::type()),
+			'description' => 'Список абонентов',
 		]);
 	}
 
@@ -32,9 +32,9 @@ class ProductsJournalListField extends BaseField
 	 */
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
 	{
-		$productsJournalSearch = new ProductsJournalSearch();
+		$abonentsSearch = new AbonentsSearch();
 		$filters = ArrayHelper::getValue($args, 'filters', []);
 		ArrayHelper::setValue($args, 'pagination', false);
-		return $productsJournalSearch->search([$productsJournalSearch->formName() => ArrayHelper::merge($args, $filters)])->getModels();
+		return $abonentsSearch->search([$abonentsSearch->formName() => ArrayHelper::merge($args, $filters)])->getModels();
 	}
 }

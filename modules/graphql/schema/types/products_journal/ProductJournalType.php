@@ -3,10 +3,12 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\products_journal;
 
+use app\models\abonents\Abonents;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\definition\DateTimeType;
+use app\modules\graphql\schema\types\abonents\AbonentType;
 use app\modules\graphql\schema\types\products\ProductType;
 use GraphQL\Type\Definition\Type;
 use DateTimeImmutable;
@@ -27,10 +29,13 @@ class ProductJournalType extends BaseObjectType
 					'type' => Type::string(),
 					'description' => 'Идентификатор события журнала',
 				],
-				'phone' => [
-					'type' => Type::string(),
-					'resolve' => fn(ProductsJournal $productsJournal): ?string => $productsJournal->relatedAbonent->phone,
-					'description' => 'Тут будет объект абонента, но пока просто строка',
+				'abonent' => [
+					'type' => AbonentType::type(),
+					'resolve' => fn(ProductsJournal $productsJournal): ?Abonents => $productsJournal->relatedAbonent,
+					'description' => 'Абонент',
+				],
+				'status_id' => [
+					'type' => Type::int(),
 				],
 				'product' => [
 					'type' => ProductType::type(),
