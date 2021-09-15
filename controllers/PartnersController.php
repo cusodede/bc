@@ -52,7 +52,9 @@ class PartnersController extends DefaultController
 			throw new NotFoundHttpException();
 		}
 
-		return Yii::$app->response->sendFile($partner->fileLogo->path);
+		$logoPath = $partner->fileLogo?->path ?? Yii::getAlias('@webroot/img/default-partner-logo.png');
+
+		return Yii::$app->response->sendFile($logoPath);
 	}
 
 	/**
