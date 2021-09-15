@@ -12,7 +12,7 @@ git clone %repo_url% ppl
 
 Подключаем БД в db.php
 ~~~
-cd dpl
+cd ppl
 composer install
 composer migrations
 ~~~
