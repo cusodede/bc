@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\types\abonents;
 
+use app\models\abonents\Abonents;
+use app\models\phones\Phones;
 use app\modules\graphql\components\BaseObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -33,6 +35,7 @@ class AbonentType extends BaseObjectType
 				],
 				'phone' => [
 					'type' => Type::string(),
+					'resolve' => fn(Abonents $abonents): string => null === $abonents->phone ? '' : Phones::removePlus($abonents->phone),
 				],
 				'deleted' => [
 					'type' => Type::boolean(),

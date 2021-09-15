@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\users;
 
 use app\models\partners\Partners;
+use app\models\phones\Phones;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\partners\PartnerType;
@@ -64,7 +65,7 @@ class UserType extends BaseObjectType
 						// Фронт не готов принимать тут массив и хочет номера без плюсов
 						$phones = $user->getPhones();
 						$phone =  array_pop($phones);
-						return null === $phone ? '' : str_replace('+', '',$phone);
+						return null === $phone ? '' : Phones::removePlus($phone);
 					},
 				],
 				'deleted' => Type::boolean()

@@ -79,7 +79,15 @@ class Phones extends PhonesAR
 			}
 		}
 		return $results;
-
 	}
 
+	/**
+	 * Просто удаляет плюсик в начале, на фронте номера без плюса.
+	 * @param string $phone
+	 * @return string
+	 */
+	public static function removePlus(string $phone): string
+	{
+		return str_replace('+', '',$phone);
+	}
 }
