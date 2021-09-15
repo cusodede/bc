@@ -67,7 +67,7 @@ class ProductsResource
 				->indexBy('id')
 				->all();
 		} else {
-			$products = $abonent->getFullProductList();
+			$products = $abonent->findFullProductList();
 		}
 
 		return $products;
