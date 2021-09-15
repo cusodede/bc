@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\controllers;
 
-use app\components\tickets\ProductTicketsService;
+use app\components\tickets\SubscriptionTicketService;
 use app\models\abonents\Abonents;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
@@ -40,13 +40,13 @@ class ProductsController extends YiiRestController
 	{
 		return [
 			'contentNegotiator' => [
-				'class' => ContentNegotiator::class,
+				'class'   => ContentNegotiator::class,
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				]
 			],
 			'verbFilter' => [
-				'class' => VerbFilter::class,
+				'class'   => VerbFilter::class,
 				'actions' => $this->verbs(),
 			],
 			'authenticator' => [
@@ -127,7 +127,12 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new ProductTicketsService())->createSubscribeTicket($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new SubscriptionTicketService())
+			->createSubscribeTicket(
+				$form->productId,
+				$form->abonent->id
+			)
+		];
 	}
 
 	/**
@@ -144,7 +149,12 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new ProductTicketsService())->createUnsubscribeTicket($form->productId, $form->abonent->id)];
+		return ['ticketId' => (new SubscriptionTicketService())
+			->createUnsubscribeTicket(
+				$form->productId,
+				$form->abonent->id
+			)
+		];
 	}
 
 	/**
@@ -155,7 +165,7 @@ class ProductsController extends YiiRestController
 	 */
 	public function actionTicketStatus(string $ticketId): array
 	{
-		return ProductTicketsService::getTicketStatus($ticketId);
+		return SubscriptionTicketService::getTicketStatus($ticketId);
 	}
 
 	/**

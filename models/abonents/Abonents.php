@@ -15,7 +15,6 @@ use yii\helpers\ArrayHelper;
  * Class Abonents
  * @package app\models\abonents
  *
- * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
  * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
  * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
  * @property-read Products[] $fullProductList todo: что это?
@@ -23,14 +22,6 @@ use yii\helpers\ArrayHelper;
  */
 class Abonents extends ActiveRecordAbonents
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedAbonentsToProducts(): ActiveQuery
-	{
-		return $this->hasMany(RelAbonentsToProducts::class, ['abonent_id' => 'id']);
-	}
-
 	/**
 	 * @return Products[]
 	 * @throws InvalidConfigException
