@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\controllers;
 
-use app\components\tickets\SubscriptionTicketService;
+use app\components\subscription\SubscriptionTicketService;
 use app\models\abonents\Abonents;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
@@ -127,7 +127,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new SubscriptionTicketService())
+		return ['ticketId' => SubscriptionTicketService::getInstance()
 			->createSubscribeTicket(
 				$form->productId,
 				$form->abonent->id
@@ -149,7 +149,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new SubscriptionTicketService())
+		return ['ticketId' => SubscriptionTicketService::getInstance()
 			->createUnsubscribeTicket(
 				$form->productId,
 				$form->abonent->id
@@ -165,7 +165,7 @@ class ProductsController extends YiiRestController
 	 */
 	public function actionTicketStatus(string $ticketId): array
 	{
-		return SubscriptionTicketService::getTicketStatus($ticketId);
+		return SubscriptionTicketService::getInstance()->getTicketStatus($ticketId);
 	}
 
 	/**
