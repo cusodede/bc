@@ -139,7 +139,7 @@ public function actionProfile(int $id):?string {
 5. Добавить переменные окружения для тестов, или создать из cp .env.example .env
 6. Указать в env файле коннекты к тестовой бд
 8. тесты запускаем в контейнере php: docker exec -it prpl_php bash
-7. создаеь дамп для тестов: composer create-test-dump
+7. создаем дамп для тестов: composer create-test-dump
 9. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
