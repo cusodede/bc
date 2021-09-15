@@ -135,11 +135,11 @@ public function actionProfile(int $id):?string {
 1. composer/make down && composer/make build && composer/make start
 2. composer install
 3. composer migrations
-4. Создать базу для тестов (postgresql): create database test with owner root;
 5. Добавить переменные окружения для тестов, или создать из cp .env.example .env
 6. Указать в env файле коннекты к тестовой бд
 8. тесты запускаем в контейнере php: docker exec -it prpl_php bash
-7. создаеь дамп для тестов: composer create-test-dump
+4. Создать базу для тестов: composer create-test-database
+7. создать дамп для тестов: composer create-test-dump
 9. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
