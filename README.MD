@@ -132,15 +132,15 @@ public function actionProfile(int $id):?string {
 Виджет, которому на вход можно подать любой произвольный набор данных (от скалярной переменной до массива замыканий), и получить вывод в виде набора bootstrap badge. Оформление вывода можно конфигурировать: вешать на них ссылки, действия, оформление, etc.
 
 ## Запуск тестов
+Инструкция расчитана на то, что в .env для подключения бд испольуется учетка root/password
 1. composer/make down && composer/make build && composer/make start
 2. composer install
 3. composer migrations
-5. Добавить переменные окружения для тестов, или создать из cp .env.example .env
-6. Указать в env файле коннекты к тестовой бд
-8. тесты запускаем в контейнере php: docker exec -it prpl_php bash
-4. Создать базу для тестов: composer create-test-database
+4. Добавить переменные окружения для тестов из блока #tests если .env уже есть, или создать "cp .env.example .env"
+5. тесты запускаем в контейнере php: docker exec -it prpl_php bash
+6. Создать базу для тестов: composer create-test-database
 7. создать дамп для тестов: composer create-test-dump
-9. vendor/bin/codecept run или composer test
+8. vendor/bin/codecept run или composer test
 
 Если очень хочется запускать команды локально, не в контейнере, необходимо добавить используемые в докере 
 хосты mysql postgres chrome в локальный hosts с ip 127.0.0.1
