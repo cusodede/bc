@@ -111,10 +111,10 @@
 			"./docker/local/scripts/setup"
 		],
 		"create-test-dump": [
-			"export PGPASSWORD='password' && pg_dump --schema-only --if-exists --clean -w --dbname=postgresql://root@postgres:5432/prpl --file=./tests/_data/dumps/base_structure_pgsql.sql"
+			"export $(grep -v ^\\# .env | grep  . | xargs -0) && export PGPASSWORD=$DB_PASSWORD && pg_dump --schema-only --if-exists --clean -w --dbname=postgresql://$DB_USERNAME@localhost:5432/$DB_NAME --file=./tests/_data/dumps/base_structure_pgsql.sql"
 		],
 		"create-test-database": [
-			"export PGPASSWORD='password' && psql --dbname=postgresql://root@postgres:5432/prpl -c 'create database test with owner root;'"
+			"export $(grep -v ^\\# .env | grep  . | xargs -0) && export PGPASSWORD=$TEST_DB_PASS && psql --dbname=postgresql://%TEST_DB_USER%@localhost:5432/$TEST_DB_NAME -c 'create database $TEST_DB_NAME with owner $TEST_DB_USER;'"
 		]
 	},
 	"extra": {
