@@ -31,6 +31,7 @@ class Abonents extends ActiveRecordAbonents
 		return Products::find()
 			->where(['NOT IN', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])
 			->whereActivePeriod()
+			->active()
 			->indexBy('id')
 			->all();
 	}

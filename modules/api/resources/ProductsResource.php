@@ -63,6 +63,7 @@ class ProductsResource
 		if (null === $abonent = Abonents::findByPhone($phone)) {
 			$products = Products::find()
 				->whereActivePeriod()
+				->active()
 				->indexBy('id')
 				->all();
 		} else {
