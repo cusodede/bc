@@ -132,6 +132,7 @@ public function actionProfile(int $id):?string {
 Виджет, которому на вход можно подать любой произвольный набор данных (от скалярной переменной до массива замыканий), и получить вывод в виде набора bootstrap badge. Оформление вывода можно конфигурировать: вешать на них ссылки, действия, оформление, etc.
 
 ## Запуск тестов
+Инструкция расчитана на то, что в .env для подключения бд испольуется учетка root/password
 1. composer/make down && composer/make build && composer/make start
 2. composer install
 3. composer migrations
