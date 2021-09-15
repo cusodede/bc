@@ -29,10 +29,10 @@ class UserPermissionsService
 	/**
 	 * Перезагружает главную пермиссию пользователя (может быть только одна).
 	 * Возвращает массив ВСЕХ пермиссий пользователя.
-	 * @param string|null $namePermission
+	 * @param string $namePermission
 	 * @return array
 	 */
-	public function resetMainPermission(?string $namePermission): array
+	public function resetMainPermission(string $namePermission): array
 	{
 		$permissions = ArrayHelper::getColumn($this->user->relatedPermissions, 'id');
 		$permissions = array_filter(

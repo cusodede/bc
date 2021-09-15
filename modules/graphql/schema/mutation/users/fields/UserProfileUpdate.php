@@ -53,7 +53,9 @@ class UserProfileUpdate extends BaseMutationType
 
 		$data = ArrayHelper::getValue($args, 'data', []);
 		$user->phones = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]); // Фронт не готов отправлять массив номеров.
-		$user->relatedPermissions = (new UserPermissionsService($user))->resetMainPermission(ArrayHelper::getValue($data, 'role'));
+		if (null !== ($role = ArrayHelper::getValue($data, 'role'))) {
+			$user->relatedPermissions = (new UserPermissionsService($user))->resetMainPermission($role);
+		}
 		return static::save($user, $data, self::MESSAGES);
 	}
 }

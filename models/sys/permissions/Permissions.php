@@ -205,10 +205,10 @@ class Permissions extends ActiveRecordPermissions
 
 	/**
 	 * Возвращает пермиссию по имени.
-	 * @param string|null $name
+	 * @param string $name
 	 * @return $this|null
 	 */
-	public static function findByName(?string $name): ?self
+	public static function findByName(string $name): ?self
 	{
 		return static::findOne(['name' => $name]);
 	}
