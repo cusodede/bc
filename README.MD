@@ -136,7 +136,7 @@ public function actionProfile(int $id):?string {
 1. composer/make down && composer/make build && composer/make start
 2. composer install
 3. composer migrations
-4. Добавить переменные окружения для тестов из блока #tests если .env уже есть, или создать "cp .env.example .env"
+4. Добавить переменные окружения для тестов из блока #tests в .env.example если .env уже есть, или создать "cp .env.example .env"
 5. тесты запускаем в контейнере php: docker exec -it prpl_php bash
 6. Создать базу для тестов: composer create-test-database
 7. создать дамп для тестов: composer create-test-dump
