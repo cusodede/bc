@@ -72,7 +72,6 @@ class TicketSubscription extends ActiveRecord
 		} else {
 			$this->link('relatedAbonentsToProducts', $relation);
 		}
-
 	}
 
 	/**
