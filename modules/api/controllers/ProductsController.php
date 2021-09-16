@@ -11,14 +11,14 @@ use app\modules\api\models\DisableSubscriptionTicketForm;
 use app\modules\api\resources\formatters\ProductStoryFormatter;
 use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
-use Throwable;
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\web\Response;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
+use yii\base\InvalidConfigException;
+use Throwable;
 
 /**
  * Class ProductsController
