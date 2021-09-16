@@ -53,7 +53,8 @@ abstract class BaseSubscriptionHandler extends Component
 
 				$ticket->updateStage(TicketSubscription::STAGE_CODE_CONNECT_ON_PARTNER);
 				//Пытаемся непосредственно оформить подписку.
-				$expireDate = $this->activateOnPartner();
+//				$expireDate = $this->activateOnPartner();
+				$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');//TODO не забыть убрать после тестирования
 
 				$ticket->close();
 			} catch (Throwable $e) {
