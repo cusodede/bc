@@ -1,5 +1,5 @@
 FROM php:8-fpm
-RUN apt-get update && apt-get install -y nano vim wget git unzip zlib1g-dev libpng-dev libzip-dev libpq-dev procps\
+RUN apt-get update && apt-get install -y nano vim wget git unzip zlib1g-dev libpng-dev libzip-dev libpq-dev procps postgresql\
         && pecl install xdebug-3.0.4 \
         && docker-php-ext-enable xdebug
 

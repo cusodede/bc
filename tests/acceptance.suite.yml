@@ -1,0 +1,17 @@
+actor: AcceptanceTester
+modules:
+  enabled:
+    # selenium webdriver
+    - WebDriver:
+        url: 'http://nginx:8081/'
+        browser: chrome
+        host: chrome
+        port: 4444
+    - \Helper\Acceptance
+    - Db
+    - Yii2:
+        configFile: 'config/test.php'
+        part: orm # allow to use AR methods
+        transaction: false # don't wrap test in transaction
+        cleanup: false # don't cleanup the fixtures
+        entryScript: index-test.php
