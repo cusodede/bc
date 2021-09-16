@@ -20,7 +20,7 @@ use yii\db\ActiveRecord;
  * @property string|null $name Имя абонента
  * @property string|null $patronymic Отчество абонента
  * @property string $phone Номер абонента
- * @property int $deleted Флаг активности
+ * @property bool $deleted Флаг активности
  * @property string $created_at Дата создания абонента
  * @property string $updated_at Дата обновления абонента
  *
@@ -45,7 +45,7 @@ class Abonents extends ActiveRecord
 	{
 		return [
 			[['phone'], 'required'],
-			[['deleted'], 'integer'],
+			[['deleted'], 'boolean'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['surname', 'name', 'patronymic'], 'string', 'max' => 64],
 			[['phone'], PhoneNumberValidator::class],

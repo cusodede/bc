@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $contract_number № договора
  * @property string $contract_number_nfs № контракта
  * @property string $signing_date Дата подписания договора
- * @property int $deleted Флаг активности
+ * @property bool $deleted Флаг активности
  * @property string $created_at Дата создания договора
  * @property string $updated_at Дата обновления договора
  * @property Products[] $relatedProducts Продукты договора
@@ -40,7 +40,7 @@ class Contracts extends ActiveRecord
 	{
 		return [
 			[['contract_number', 'contract_number_nfs', 'signing_date'], 'required'],
-			[['deleted'], 'integer'],
+			[['deleted'], 'boolean'],
 			[['signing_date', 'created_at', 'updated_at'], 'safe'],
 			[['contract_number', 'contract_number_nfs'], 'string', 'max' => 11],
 			[['signing_date'], 'date', 'format' => 'yyyy-mm-dd'],
