@@ -35,9 +35,7 @@ class UnsubscribeJob implements RetryableJobInterface
 		}
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
-		$service->disable($ticket);
-
-		$ticket->close();
+		$service->deactivate($ticket);
 	}
 
 	/**

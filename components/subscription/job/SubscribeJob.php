@@ -5,7 +5,6 @@ namespace app\components\subscription\job;
 
 use app\components\subscription\BaseSubscriptionHandler;
 use app\models\ticket\TicketSubscription;
-use Throwable;
 use yii\queue\RetryableJobInterface;
 use yii\web\NotFoundHttpException;
 
@@ -37,27 +36,7 @@ class SubscribeJob implements RetryableJobInterface
 		}
 
 		$service = BaseSubscriptionHandler::createInstanceByProduct($ticket->relatedProduct);
-
-		/** @noinspection BadExceptionsProcessingInspection not bad at all */
-		try {
-			$ticket->updateStage(TicketSubscription::STAGE_CODE_BILLING_DEBIT);
-			//Делаем попытку списания средств.
-
-			$ticket->updateStage(TicketSubscription::STAGE_CODE_SERVICE_CHECK);
-			//Делаем проверку на доступность подключения подписки.
-//			$service->connect($ticket, true); TODO delete after tests
-
-			$ticket->updateStage(TicketSubscription::STAGE_CODE_CONNECT_ON_PARTNER);
-			//Пытаемся непосредственно оформить подписку.
-			$service->connect($ticket);
-
-			$ticket->close();
-		} catch (Throwable $e) {
-			$ticket->markStageFailed($e);
-			$ticket->close();
-
-			throw $e;
-		}
+		$service->activate($ticket);
 	}
 
 	/**
