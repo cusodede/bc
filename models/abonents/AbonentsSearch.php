@@ -19,7 +19,7 @@ class AbonentsSearch extends Abonents
 	{
 		return [
 			[['id'], 'integer'],
-			[['name', 'surname', 'patronymic'], 'safe'],
+			[['name', 'surname', 'patronymic', 'phone'], 'safe'],
 		];
 	}
 
@@ -46,6 +46,7 @@ class AbonentsSearch extends Abonents
 		}
 
 		$query->andFilterWhere(['id' => $this->id])
+			->andFilterWhere(['like', 'phone', $this->phone])
 			->andFilterWhere(['like', 'name', $this->name])
 			->andFilterWhere(['like', 'surname', $this->surname])
 			->andFilterWhere(['like', 'patronymic', $this->patronymic]);

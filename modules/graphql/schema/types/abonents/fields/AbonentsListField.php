@@ -6,6 +6,7 @@ namespace app\modules\graphql\schema\types\abonents\fields;
 use app\models\abonents\AbonentsSearch;
 use app\modules\graphql\components\BaseField;
 use app\modules\graphql\schema\types\abonents\AbonentType;
+use app\modules\graphql\schema\types\abonents\inputs\AbonentsFilterInput;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use yii\helpers\ArrayHelper;
@@ -24,6 +25,11 @@ class AbonentsListField extends BaseField
 			'name' => 'abonentList',
 			'type' => Type::listOf(AbonentType::type()),
 			'description' => 'Список абонентов',
+			'args' => [
+				'filters' => [
+					'type' => new AbonentsFilterInput(),
+				],
+			],
 		]);
 	}
 
