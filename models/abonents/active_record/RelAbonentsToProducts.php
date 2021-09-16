@@ -5,6 +5,7 @@ namespace app\models\abonents\active_record;
 
 use app\components\db\ActiveRecordTrait;
 use app\models\billing_journal\BillingJournal;
+use app\models\abonents\Abonents;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
 use pozitronik\relations\traits\RelationsTrait;
