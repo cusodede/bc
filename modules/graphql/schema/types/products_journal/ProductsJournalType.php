@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\products_journal;
 
 use app\modules\graphql\components\BaseObjectType;
+use app\modules\graphql\schema\types\products_journal\fields\JournalStatusesListField;
 use app\modules\graphql\schema\types\products_journal\fields\ProductsJournalListField;
 
 /**
@@ -19,7 +20,8 @@ class ProductsJournalType extends BaseObjectType
 		parent::__construct([
 			'description' => 'Журнал подписок абонента',
 			'fields' => [
-				'productsJournalList' => ProductsJournalListField::field(),
+				'productsJournalList' 		=> ProductsJournalListField::field(),
+				'productsJournalStatusList' => JournalStatusesListField::field(),
 			]
 		]);
 	}
