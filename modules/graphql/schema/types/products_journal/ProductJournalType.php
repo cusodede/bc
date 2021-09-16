@@ -4,8 +4,11 @@ declare(strict_types = 1);
 namespace app\modules\graphql\schema\types\products_journal;
 
 use app\models\abonents\Abonents;
+use app\models\products\EnumProductsStatuses;
 use app\models\products\Products;
 use app\models\products\ProductsJournal;
+use app\models\subscriptions\EnumSubscriptionTrialUnits;
+use app\models\subscriptions\Subscriptions;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\definition\DateTimeType;
 use app\modules\graphql\schema\types\abonents\AbonentType;
@@ -36,6 +39,12 @@ class ProductJournalType extends BaseObjectType
 				],
 				'status_id' => [
 					'type' => Type::int(),
+				],
+				'status' => [
+					'type' => ProductJournalStatusType::type(),
+					'resolve' => fn(ProductsJournal $productsJournal): ?array => static::enumResolve(
+						EnumProductsStatuses::mapData(), $productsJournal->status_id
+					),
 				],
 				'product' => [
 					'type' => ProductType::type(),
