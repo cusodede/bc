@@ -19,7 +19,8 @@ class AbonentsType extends BaseObjectType
 		parent::__construct([
 			'description' => 'Абоненты',
 			'fields' => [
-				'productsJournalList' => AbonentsListField::field(),
+				'abonentsList' 			=> AbonentsListField::field(),
+				'abonentProductsList' 	=> AbonentProductsListField::field(),
 			]
 		]);
 	}

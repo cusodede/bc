@@ -8,6 +8,7 @@ use app\models\products\Products;
 use app\models\products\ProductsJournalSearch;
 use app\models\products\ProductsSearch;
 use yii\web\NotFoundHttpException;
+use yii\base\InvalidConfigException;
 use Yii;
 
 /**
@@ -30,6 +31,7 @@ class ProductsController extends DefaultController
 
 	/**
 	 * @return string
+	 * @throws InvalidConfigException
 	 */
 	public function actionJournal(): string
 	{
