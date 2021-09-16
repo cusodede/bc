@@ -33,13 +33,15 @@ class Phones extends PhonesAR
 
 	/**
 	 * @param string $phone
+	 * @param bool $removePlus Удалит плюсы из номера.
 	 * @return string|null
 	 */
-	public static function defaultFormat(string $phone): ?string
+	public static function defaultFormat(string $phone, bool $removePlus = false): ?string
 	{
 		try {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
-				return PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+				$phoneNumber = PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+				return (true === $removePlus) ? str_replace('+', '',$phoneNumber) : $phoneNumber;
 			}
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException) {
 			return null;
@@ -79,15 +81,5 @@ class Phones extends PhonesAR
 			}
 		}
 		return $results;
-	}
-
-	/**
-	 * Просто удаляет плюсик в начале, на фронте номера без плюса.
-	 * @param string $phone
-	 * @return string
-	 */
-	public static function removePlus(string $phone): string
-	{
-		return str_replace('+', '',$phone);
 	}
 }

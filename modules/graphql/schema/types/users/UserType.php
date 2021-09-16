@@ -65,7 +65,7 @@ class UserType extends BaseObjectType
 						// Фронт не готов принимать тут массив и хочет номера без плюсов
 						$phones = $user->getPhones();
 						$phone =  array_pop($phones);
-						return null === $phone ? '' : Phones::removePlus($phone);
+						return null === $phone ? '' : Phones::defaultFormat($phone, true);
 					},
 				],
 				'deleted' => Type::boolean()

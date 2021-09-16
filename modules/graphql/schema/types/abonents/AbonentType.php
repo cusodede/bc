@@ -35,7 +35,7 @@ class AbonentType extends BaseObjectType
 				],
 				'phone' => [
 					'type' => Type::string(),
-					'resolve' => fn(Abonents $abonents): string => null === $abonents->phone ? '' : Phones::removePlus($abonents->phone),
+					'resolve' => fn(Abonents $abonents): string => null === $abonents->phone ? '' : Phones::defaultFormat($abonents->phone, true),
 				],
 				'deleted' => [
 					'type' => Type::boolean(),
