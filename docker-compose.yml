@@ -6,6 +6,7 @@ services:
     image: nginx:latest
     ports:
       - "8080:8080"
+      - "8081:8081"
     volumes:
       - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
@@ -33,19 +34,30 @@ services:
       - backend
 
   php-8:
-    container_name: prpl_php_8
+    container_name: prpl_php
     build: ${DOCKER_FOLDER}
     volumes:
       - ${PROJECT_PATH}:/var/www
       - ${DOCKER_FOLDER}/logs/php:/var/logs/php
       - ${DOCKER_FOLDER}/home/.composer:/root/.composer
     environment:
-      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+      PHP_IDE_CONFIG: "serverName=Docker"
     links:
       - postgres
     networks:
       - backend
 
+#Selenium chrome server for acceptance testing
+  chrome:
+    image: selenium/standalone-chrome-debug
+    container_name: prpl_selenium
+    ports:
+      - 4444:4444
+      - 5900
+    networks:
+      - backend
+
+# Networks Setup
 networks:
   backend:
     name: prpl_network_backend
