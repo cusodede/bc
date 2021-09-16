@@ -35,7 +35,6 @@ use yii\web\IdentityInterface;
  * @property-read UsersTokens[] $relatedUsersTokens связанные с моделью пользователя модели токенов.
  * @property-read UsersTokens[] $relatedMainUsersTokens основные токены [доступа].
  * @property-read UsersTokens|null $relatedUnpopularUserToken редкоиспользуемый (или самый старый) токен доступа.
- * @property-read string|null $mainPermission главная пермиссия пользователя, (используется на фронте).
  * @property-read Partners $relatedPartner связь с партнёром.
  */
 class Users extends ActiveRecordUsers implements IdentityInterface
@@ -338,24 +337,6 @@ class Users extends ActiveRecordUsers implements IdentityInterface
 		}
 
 		return false;
-	}
-
-	/**
-	 * Возвращает главную пермиссию пользователя, используется на фронте.
-	 * @return string|null
-	 * @throws Throwable
-	 */
-	public function getMainPermission(): ?string
-	{
-		if ($this->hasPermission([EnumUsersRoles::ADMIN])) {
-			return EnumUsersRoles::ADMIN;
-		}
-
-		if ($this->hasPermission([EnumUsersRoles::BEELINE_MANAGER])) {
-			return EnumUsersRoles::BEELINE_MANAGER;
-		}
-
-		return $this->hasPermission([EnumUsersRoles::PARTNER_MANAGER]) ? EnumUsersRoles::PARTNER_MANAGER : null;
 	}
 
 	/**

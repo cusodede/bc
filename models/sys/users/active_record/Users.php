@@ -85,7 +85,8 @@ class Users extends ActiveRecord
 	public function rules(): array
 	{
 		return [
-			[['surname', 'name', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
+			[['surname', 'name', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
+			['login', 'default', 'value' => fn(): string => $this->email],
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
 			[['daddy', 'partner_id'], 'integer'],
