@@ -15,48 +15,31 @@ use yii\helpers\ArrayHelper;
  * Class Abonents
  * @package app\models\abonents
  *
- * @property-read RelAbonentsToProducts[] $relatedAbonentsToProducts
- * @property-read Products[] $existentProducts закрепленные за абонентом продукты с фиксацией актуального статуса по каждому из них.
- * @property-read Products[] $unrelatedProducts список не связанных с абонентом продуктов.
- * @property-read Products[] $fullProductList todo: что это?
  * @property-read Products[] $relatedProducts Список связанных продуктов с абонентом.
  */
 class Abonents extends ActiveRecordAbonents
 {
 	/**
-	 * {@inheritdoc}
-	 */
-	public function getRelatedAbonentsToProducts(): ActiveQuery
-	{
-		return $this->hasMany(RelAbonentsToProducts::class, ['abonent_id' => 'id']);
-	}
-
-	/**
 	 * @return Products[]
 	 * @throws InvalidConfigException
 	 */
-	public function getUnrelatedProducts(): array
+	public function findFullProductList(): array
 	{
-		return Products::find()
-			->where(['NOT IN', 'id', ArrayHelper::getColumn($this->relatedAbonentsToProducts, 'product_id')])
-			->whereActivePeriod()
-			->indexBy('id')
-			->all();
-	}
+		$existentProducts = $this->findExistentProducts();
 
-	/**
-	 * @return Products[]
-	 */
-	public function getFullProductList(): array
-	{
-		return $this->existentProducts + $this->unrelatedProducts;
+		return $existentProducts + Products::find()
+				->where(['NOT IN', 'id', ArrayHelper::getColumn($existentProducts, 'id')])
+				->whereActivePeriod()
+				->active()
+				->indexBy('id')
+				->all();
 	}
 
 	/**
 	 * Получение закрепленных за абонентом продуктов с фиксацией актуального статуса по каждому из них.
 	 * @return Products[]
 	 */
-	public function getExistentProducts(): array
+	public function findExistentProducts(): array
 	{
 		return ArrayHelper::index(
 			array_map(

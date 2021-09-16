@@ -14,10 +14,8 @@ use yii\web\NotFoundHttpException;
 
 /**
  * Компонент для создания отложенных задач для управления подписками.
- * Class ProductTicketsService
- * @package app\components\tickets
  */
-class ProductTicketsService
+class SubscriptionTicketService
 {
 	/**
 	 * Создание тикета на подключение подписки.

@@ -7,14 +7,14 @@ namespace app\modules\api\models;
  * Class DisableSubscriptionTicketForm
  * @package app\modules\api\models
  */
-class DisableSubscriptionTicketForm extends ProductTicketForm
+class DisableSubscriptionTicketForm extends SubscriptionTicketForm
 {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function validateProductActivity(): void
+	public function validateProductJournalStatus(): void
 	{
-		if ((null === $this->product) || (null === $this->product->actualStatus) || $this->product->actualStatus->isDisabled) {
+		if ($this->product->actualStatus?->isDisabled) {
 			$this->addError('productId', 'Отключение продукта невозможно.');
 		}
 	}

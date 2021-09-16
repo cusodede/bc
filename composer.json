@@ -59,7 +59,9 @@
 		"codeception/module-yii2": "^1.1",
 		"codeception/module-db": "^1.1",
 		"codeception/module-filesystem": "^1.0",
-		"phpmetrics/phpmetrics": "^2.7"
+		"phpmetrics/phpmetrics": "^2.7",
+		"codeception/module-rest": "^1.3.1",
+		"codeception/module-webdriver": "^1.3"
 	},
 	"config": {
 		"process-timeout": 1800,
@@ -77,7 +79,7 @@
 			"yii\\composer\\Installer::postCreateProject",
 			"yii\\composer\\Installer::postInstall"
 		],
-		"test": "phpunit",
+		"tests": "vendor/bin/codecept run",
 		"codeception": "vendor/bin/codecept run",
 		"metrics": "vendor/bin/phpmetrics --config=phpmetrics.json",
 		"migrations": [
@@ -107,6 +109,12 @@
 		],
 		"setup": [
 			"./docker/local/scripts/setup"
+		],
+		"create-test-dump": [
+			"export $(grep -v ^\\# .env | grep . | xargs -0) && export PGPASSWORD=$DB_PASSWORD && pg_dump --schema-only --if-exists --clean -w --dbname=postgresql://$DB_USERNAME@postgres:5432/$DB_NAME --file=./tests/_data/dumps/base_structure_pgsql.sql"
+		],
+		"create-test-database": [
+			"export $(grep -v ^\\# .env | grep . | xargs -0) && export PGPASSWORD=$TEST_DB_PASS && psql --dbname=postgresql://$TEST_DB_USER@postgres:5432/$TEST_DB_NAME -c 'create database $TEST_DB_NAME with owner $TEST_DB_USER;'"
 		]
 	},
 	"extra": {

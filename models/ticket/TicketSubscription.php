@@ -27,13 +27,6 @@ class TicketSubscription extends TicketSubscriptionActiveRecord
 	 */
 	public static function createTicket(TicketSubscriptionParams $params): static
 	{
-		if (null !== $params->id) {
-			$ticket = static::findOne($params->id);
-			if (null !== $ticket) {
-				return $ticket;
-			}
-		}
-
 		return Yii::$app->db->transaction(static function() use ($params) {
 			$ticket = new static(['id' => Ticket::createTicket($params)->id, 'action' => $params->action]);
 			$ticket->save();

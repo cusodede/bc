@@ -1,21 +1,21 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var Model $searchModel
+ * @var ProductsSearch $searchModel
  * @var string $modelName
  * @var ControllerTrait $controller
  * @var ActiveDataProvider $dataProvider
  */
 
 use app\components\helpers\Html;
+use app\models\products\ProductsSearch;
 use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\traits\traits\ControllerTrait;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use kartik\select2\Select2;
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'class' => ActionColumn::class,
 				'template' => '<div class="btn-group">{view-abonents}</div>',
 				'buttons' => [
-					'view-abonents' => static function(string $url, Model $model) {
+					'view-abonents' => static function(string $url, Products $model) {
 						return Html::a('<i class="fas fa-arrow-circle-up"></i>',
 							['products/journal', 'ProductsJournalSearch' => ['searchProductId' => $model->id]],
 							['class' => ['btn btn-sm btn-outline-primary']
