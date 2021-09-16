@@ -40,7 +40,7 @@ class ProductStatusChangeCase
 		$relation = RelAbonentsToProducts::findOne(['product_id' => $productId, 'abonent_id' => $abonentId]);
 
 		$config = ['expire_date' => $expireDate];
-		if ($relation->relatedLastProductsJournal?->isDisabled) {
+		if ((null === $relation->relatedLastProductsJournal) || $relation->relatedLastProductsJournal->isDisabled) {
 			$config['status_id'] = EnumProductsStatuses::STATUS_ENABLED;
 		} else {
 			$config['status_id'] = EnumProductsStatuses::STATUS_RENEWED;
