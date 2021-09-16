@@ -104,6 +104,11 @@
 		"down": [
 			"docker-compose down"
 		],
+		"full-restart": [
+			"@down",
+			"@build",
+			"@start"
+		],
 		"execute": [
 			"docker exec -ti $(or $(s), $(service)) bash"
 		],
@@ -114,7 +119,7 @@
 			"export $(grep -v ^\\# .env | grep . | xargs -0) && export PGPASSWORD=$DB_PASSWORD && pg_dump --schema-only --if-exists --clean -w --dbname=postgresql://$DB_USERNAME@postgres:5432/$DB_NAME --file=./tests/_data/dumps/base_structure_pgsql.sql"
 		],
 		"create-test-database": [
-			"export $(grep -v ^\\# .env | grep . | xargs -0) && export PGPASSWORD=$TEST_DB_PASS && psql --dbname=postgresql://$TEST_DB_USER@postgres:5432/$TEST_DB_NAME -c 'create database $TEST_DB_NAME with owner $TEST_DB_USER;'"
+			"export $(grep -v ^\\# .env | grep . | xargs -0) && export PGPASSWORD=$TEST_DB_PASS &&  createdb -h postgres -p 5432 -U $TEST_DB_USER -w -e $TEST_DB_NAME"
 		]
 	},
 	"extra": {
