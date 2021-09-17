@@ -7,7 +7,6 @@ use app\controllers\actions\swagger\SchemaAction;
 use app\controllers\actions\swagger\SwaggerUiAction;
 use app\models\core\Options;
 use app\models\site\LoginForm;
-use app\models\site\RegistrationForm;
 use app\models\site\RestorePasswordForm;
 use app\models\site\UpdatePasswordForm;
 use app\models\sys\users\Users;
@@ -173,20 +172,6 @@ class SiteController extends Controller
 			]);
 		}
 		return "Status: {$exception->statusCode}";
-	}
-
-	/**
-	 * @return string|Response
-	 */
-	public function actionRegister()
-	{
-		$registrationForm = new RegistrationForm();
-		if ($registrationForm->load(Yii::$app->request->post()) && $registrationForm->doRegister()) {
-			return $this->redirect(['site/login', 'from' => 'register']);
-		}
-		return $this->render('register', [
-			'model' => $registrationForm
-		]);
 	}
 
 	/**

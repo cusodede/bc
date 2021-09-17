@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\api\controllers;
 
-use app\components\tickets\SubscriptionTicketService;
+use app\components\subscription\SubscriptionTicketService;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\modules\api\exceptions\ValidationException;
 use app\modules\api\models\ConnectSubscriptionTicketForm;
@@ -11,14 +11,14 @@ use app\modules\api\models\DisableSubscriptionTicketForm;
 use app\modules\api\resources\formatters\ProductStoryFormatter;
 use app\modules\api\resources\ProductsResource;
 use cusodede\jwt\JwtHttpBearerAuth;
-use Throwable;
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\web\Response;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
 use yii\rest\Controller as YiiRestController;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
+use yii\base\InvalidConfigException;
+use Throwable;
 
 /**
  * Class ProductsController
@@ -99,7 +99,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new SubscriptionTicketService())
+		return ['ticketId' => SubscriptionTicketService::getInstance()
 			->createSubscribeTicket(
 				$form->productId,
 				$form->abonent->id
@@ -121,7 +121,7 @@ class ProductsController extends YiiRestController
 			throw new ValidationException($form->errors);
 		}
 
-		return ['ticketId' => (new SubscriptionTicketService())
+		return ['ticketId' => SubscriptionTicketService::getInstance()
 			->createUnsubscribeTicket(
 				$form->productId,
 				$form->abonent->id
@@ -137,7 +137,7 @@ class ProductsController extends YiiRestController
 	 */
 	public function actionTicketStatus(string $ticketId): array
 	{
-		return SubscriptionTicketService::getTicketStatus($ticketId);
+		return SubscriptionTicketService::getInstance()->getTicketStatus($ticketId);
 	}
 
 	/**

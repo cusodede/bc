@@ -13,24 +13,28 @@ use yii\helpers\ArrayHelper;
 
 /**
  * @property Ticket $relatedTicket
- * @property-read bool $isConnectNeeded
  * @property-read bool $isCompleted
  */
 trait TicketTrait
 {
+	public bool $forceSave = false;
+
 	/**
 	 * @param int $id
+	 * @param bool $forceSave
 	 * @throws StaleObjectException
 	 * @throws Throwable
 	 */
-	public function updateStage(int $id): void
+	public function updateStage(int $id, bool $forceSave = null): void
 	{
 		$this->relatedTicket->stage_id = $id;
 
 		$stepData = ['stage_id' => $id, 'timestamp' => time()];
 		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, ['history' => [$stepData]]);
 
-		$this->relatedTicket->update();
+		if ($this->forceSaveIsTrue($forceSave)) {
+			$this->relatedTicket->update();
+		}
 	}
 
 	/**
@@ -39,27 +43,31 @@ trait TicketTrait
 	 * @throws StaleObjectException
 	 * @throws Throwable
 	 */
-	public function log(array $data, bool $forceSave = true): void
+	public function log(array $data, bool $forceSave = null): void
 	{
 		$this->relatedTicket->journal_data = ArrayHelper::merge($this->relatedTicket->journal_data, $data);
-		if ($forceSave) {
+
+		if ($this->forceSaveIsTrue($forceSave)) {
 			$this->relatedTicket->update(true, ['journal_data']);
 		}
 	}
 
 	/**
 	 * @param ExtendedThrowable|null $e
-	 * @throws Throwable
+	 * @param bool $forceSave
 	 * @throws StaleObjectException
+	 * @throws Throwable
 	 */
-	public function markStageFailed(?Throwable $e = null): void
+	public function markStageFailed(?Throwable $e = null, bool $forceSave = null): void
 	{
 		$this->relatedTicket->status = Ticket::STATUS_ERROR;
 		if (null !== $e) {
 			$this->log(['error' => $this->transformException($e)], false);
 		}
 
-		$this->relatedTicket->update();
+		if ($this->forceSaveIsTrue($forceSave)) {
+			$this->relatedTicket->update();
+		}
 	}
 
 	/**
@@ -131,5 +139,14 @@ trait TicketTrait
 	public function extractErrorDescriptionFromJournal(): ?string
 	{
 		return ArrayHelper::getValue($this->relatedTicket->journal_data, 'error.userMessage');
+	}
+
+	/**
+	 * @param bool|null $localStatus
+	 * @return bool
+	 */
+	private function forceSaveIsTrue(bool $localStatus = null): bool
+	{
+		return $localStatus ?? $this->forceSave;
 	}
 }

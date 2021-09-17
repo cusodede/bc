@@ -3,12 +3,15 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\schema\mutation\users\fields;
 
+use app\models\sys\users\Users;
 use app\modules\graphql\components\AuthHelper;
 use app\modules\graphql\components\BaseMutationType;
 use app\modules\graphql\schema\mutation\users\inputs\UsersProfileInput;
 use app\modules\graphql\schema\types\common\ResponseType;
+use app\services\permissions\UserPermissionsService;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -29,6 +32,7 @@ class UserProfileUpdate extends BaseMutationType
 			'description' => 'Обновление профиля текущего пользователя',
 			'type' => ResponseType::type(),
 			'args' => [
+				'id' => Type::int(),
 				'data' => [
 					'type' => Type::nonNull(new UsersProfileInput('Update')),
 				]
@@ -41,10 +45,17 @@ class UserProfileUpdate extends BaseMutationType
 	 */
 	public static function resolve(mixed $root = null, array $args = [], mixed $context = null, ?ResolveInfo $resolveInfo = null): array
 	{
-		$user = AuthHelper::authenticate();
+		$user = (null === ($id = ArrayHelper::getValue($args, 'id')) ? AuthHelper::authenticate() : Users::findOne($id));
+
+		if (null === $user) {
+			throw new Exception("Не найдена модель для обновления.");
+		}
+
 		$data = ArrayHelper::getValue($args, 'data', []);
-		// Фронт не готов отправлять массив номеров.
-		$data['phones'] = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]);
+		$user->phones = ArrayHelper::merge($user->phones, [ArrayHelper::getValue($data, 'phones', [])]); // Фронт не готов отправлять массив номеров.
+		if (null !== ($role = ArrayHelper::getValue($data, 'role'))) {
+			$user->relatedPermissions = (new UserPermissionsService($user))->resetMainPermission($role);
+		}
 		return static::save($user, $data, self::MESSAGES);
 	}
 }

@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
  * @property int $type Тип ставки
  * @property float $rate Процентная ставка
  * @property int $condition_value Пороговое значение для активации ставки
- * @property int $deleted Флаг активности
+ * @property bool $deleted Флаг активности
  * @property string $created_at Дата создания договора
  * @property string $updated_at Дата обновления договора
  * @property int $product_id ID продукта
@@ -41,9 +41,10 @@ class RevShareRates extends ActiveRecord
 	{
 		return [
 			[['type', 'rate', 'condition_value'], 'required'],
-			[['type', 'condition_value', 'deleted'], 'integer'],
+			[['type', 'condition_value'], 'integer'],
 			[['created_at', 'updated_at'], 'safe'],
 			[['rate'], 'number'],
+			[['deleted'], 'boolean'],
 			[['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
 		];
 	}

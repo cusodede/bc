@@ -19,7 +19,7 @@ use app\models\products\active_record\Products;
  * @property string $phone Телефон поддержки партнера
  * @property string $email Почтовый адрес поддержки партнера
  * @property int $category_id id категории партнера
- * @property int $deleted Флаг активности
+ * @property bool $deleted Флаг активности
  * @property string $updated_at Дата обновления партнера
  * @property string $comment Комментарий
  *
@@ -46,7 +46,8 @@ class Partners extends ActiveRecord
 		return [
 			[['name', 'inn', 'category_id'], 'required', 'message' => 'Заполните {attribute} партнера!'],
 			[['created_at', 'updated_at'], 'safe'],
-			[['deleted', 'category_id'], 'integer'],
+			[['category_id'], 'integer'],
+			[['deleted'], 'boolean'],
 			[['comment'], 'string'],
 			[['name'], 'string', 'max' => 64, 'min' => 3],
 			[['inn'], 'string', 'max' => 12],

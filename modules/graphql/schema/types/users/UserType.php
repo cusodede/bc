@@ -8,6 +8,7 @@ use app\models\phones\Phones;
 use app\models\sys\users\Users;
 use app\modules\graphql\components\BaseObjectType;
 use app\modules\graphql\schema\types\partners\PartnerType;
+use app\services\permissions\UserPermissionsService;
 use GraphQL\Type\Definition\Type;
 
 /**
@@ -56,7 +57,7 @@ class UserType extends BaseObjectType
 				'role' => [
 					'type' => Type::string(),
 					'description' => 'Роль пользователя',
-					'resolve' => fn(Users $user): ?string => $user->mainPermission ?? '',
+					'resolve' => fn(Users $user): string => (new UserPermissionsService($user))->getMainPermission() ?? '',
 				],
 				'phones' => [
 					'type' => Type::string(),

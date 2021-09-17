@@ -202,4 +202,14 @@ class Permissions extends ActiveRecordPermissions
 			$this->controller = substr($this->controller, strlen($this->module) + 2); //@foo/bar => bar
 		}
 	}
+
+	/**
+	 * Возвращает пермиссию по имени.
+	 * @param string $name
+	 * @return $this|null
+	 */
+	public static function findByName(string $name): ?self
+	{
+		return static::findOne(['name' => $name]);
+	}
 }
