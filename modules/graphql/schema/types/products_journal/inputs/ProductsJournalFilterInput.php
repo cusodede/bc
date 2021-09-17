@@ -7,7 +7,7 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Филтрация для истории операций
+ * Фильтрация для истории операций
  */
 class ProductsJournalFilterInput extends InputObjectType
 {
