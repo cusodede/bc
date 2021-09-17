@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace app\models\products;
 
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * Class ProductsJournalSearch
@@ -38,12 +40,19 @@ class ProductsJournalSearch extends ProductsJournal
 	/**
 	 * @param array $params
 	 * @return ActiveDataProvider
+	 * @throws InvalidConfigException
 	 */
 	public function search(array $params): ActiveDataProvider
 	{
+		$pagination = ArrayHelper::getValue($params, $this->formName() . '.pagination');
+
 		$query = ProductsJournal::find()->alias('pj')->joinWith(['relatedAbonent ra', 'relatedProduct rp']);
 
 		$dataProvider = new ActiveDataProvider(['query' => $query]);
+
+		if (null !== $pagination) {
+			$dataProvider->setPagination($pagination);
+		}
 
 		$dataProvider->setSort([
 			'defaultOrder' => ['created_at' => SORT_DESC],
