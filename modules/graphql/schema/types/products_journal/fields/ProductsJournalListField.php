@@ -5,6 +5,7 @@ namespace app\modules\graphql\schema\types\products_journal\fields;
 
 use app\models\products\ProductsJournalSearch;
 use app\modules\graphql\components\BaseField;
+use app\modules\graphql\schema\types\products_journal\inputs\ProductsJournalFilterInput;
 use app\modules\graphql\schema\types\products_journal\ProductJournalType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -24,6 +25,11 @@ class ProductsJournalListField extends BaseField
 			'name' => 'productsJournalList',
 			'type' => Type::listOf(ProductJournalType::type()),
 			'description' => 'История операций подписок абонента',
+			'args' => [
+				'filters' => [
+					'type' => new ProductsJournalFilterInput(),
+				],
+			],
 		]);
 	}
 

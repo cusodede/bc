@@ -25,6 +25,14 @@ class ProductsJournalSearch extends ProductsJournal
 	 * @var string|null телефон абонента для поиска.
 	 */
 	public ?string $searchAbonentPhone = null;
+	/**
+	 * @var int|null идентификатор партнёра.
+	 */
+	public ?int $partnerId = null;
+	/**
+	 * @var array|null идентификаторы статусов.
+	 */
+	public ?array $statusIds = null;
 
 	/**
 	 * @return array[]
@@ -33,7 +41,8 @@ class ProductsJournalSearch extends ProductsJournal
 	{
 		return [
 			[['id', 'searchAbonentPhone'], 'string'],
-			[['status_id', 'searchProductId', 'searchProductTypeId'], 'integer']
+			[['status_id', 'searchProductId', 'searchProductTypeId', 'partnerId'], 'integer'],
+			[['statusIds'], 'safe']
 		];
 	}
 
@@ -67,10 +76,11 @@ class ProductsJournalSearch extends ProductsJournal
 
 		$query->andFilterWhere([
 			'pj.id' => $this->id,
-			'pj.status_id' => $this->status_id,
+			'pj.status_id' => $this->statusIds ?? $this->status_id,
 			'ra.phone' => $this->searchAbonentPhone,
 			'rp.id' => $this->searchProductId,
-			'rp.type_id' => $this->searchProductTypeId
+			'rp.type_id' => $this->searchProductTypeId,
+			'rp.partner_id' => $this->partnerId
 		]);
 
 		return $dataProvider;
