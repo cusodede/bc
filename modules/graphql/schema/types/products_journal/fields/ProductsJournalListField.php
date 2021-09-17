@@ -23,7 +23,7 @@ class ProductsJournalListField extends BaseField
 		parent::__construct([
 			'name' => 'productsJournalList',
 			'type' => Type::listOf(ProductJournalType::type()),
-			'description' => 'Журнал подписок абонента',
+			'description' => 'История операций подписок абонента',
 		]);
 	}
 

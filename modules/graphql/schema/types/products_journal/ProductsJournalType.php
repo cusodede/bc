@@ -18,7 +18,7 @@ class ProductsJournalType extends BaseObjectType
 	public function __construct()
 	{
 		parent::__construct([
-			'description' => 'Журнал подписок абонента',
+			'description' => 'История операций абонента',
 			'fields' => [
 				'productsJournalList' 		=> ProductsJournalListField::field(),
 				'productsJournalStatusList' => JournalStatusesListField::field(),

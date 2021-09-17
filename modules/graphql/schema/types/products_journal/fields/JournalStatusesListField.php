@@ -23,7 +23,7 @@ class JournalStatusesListField extends BaseField
 		parent::__construct([
 			'name' => 'productJournalStatusesList',
 			'type' => Type::listOf(ProductJournalStatusType::type()),
-			'description' => 'Список статусов журнала продуктов',
+			'description' => 'Список статусов истории операций',
 			'args' => [
 				'filters' => [
 					'type' => new JournalStatusesFilterInput(),
