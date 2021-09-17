@@ -443,7 +443,7 @@ ij_javascript_wrap_comments = false
 [{*.ctp,*.hphp,*.inc,*.module,*.php,*.php4,*.php5,*.phtml}]
 ij_continuation_indent_size = 4
 ij_visual_guides = none
-ij_php_align_assignments = true
+ij_php_align_assignments = false
 ij_php_align_class_constants = false
 ij_php_align_group_field_declarations = false
 ij_php_align_inline_comments = false

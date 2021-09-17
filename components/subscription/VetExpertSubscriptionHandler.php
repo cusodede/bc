@@ -30,25 +30,25 @@ class VetExpertSubscriptionHandler extends BaseSubscriptionHandler
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function connectOnPartner(): string
+	protected function verifySubscription(): void
 	{
-		$subscriptionParams = CommonSubscriptionParams::createInstance($this->_ticket->relatedAbonent);
-
-		$expireDate                     = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
-		$subscriptionParams->expireDate = $expireDate;
-
-		$this->_apiConnector->processSubscription($subscriptionParams);
-
-		return $expireDate;
+		if (!Utils::doUrlHealthCheck($this->_apiConnector->baseUrl)) {
+			throw new ResourceUnavailableException();
+		}
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function serviceCheck(): void
+	protected function activateOnPartner(): string
 	{
-		if (!Utils::doUrlHealthCheck($this->_apiConnector->baseUrl)) {
-			throw new ResourceUnavailableException();
-		}
+		$subscriptionParams = CommonSubscriptionParams::createInstance($this->_ticket->relatedAbonent);
+
+		$expireDate = $this->_ticket->relatedSucceedBilling->calculateNewPaymentDate();
+		$subscriptionParams->expireDate = $expireDate;
+
+		$this->_apiConnector->processSubscription($subscriptionParams);
+
+		return $expireDate;
 	}
 }

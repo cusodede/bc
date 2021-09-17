@@ -3,10 +3,13 @@ declare(strict_types = 1);
 
 namespace app\components\subscription;
 
+use app\components\helpers\DateHelper;
 use app\models\products\Products;
 use app\models\ticket\TicketSubscription;
-use InvalidArgumentException;
 use yii\base\Component;
+use InvalidArgumentException;
+use Throwable;
+use yii\db\StaleObjectException;
 
 /**
  * Class BaseSubscriptionHandler
@@ -23,23 +26,50 @@ abstract class BaseSubscriptionHandler extends Component
 	 * Подключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
 	 * @param TicketSubscription $ticket
-	 * @param bool $serviceCheck
-	 * @return string
+	 * @return string дата истечения срока действия подписки.
+	 * @throws StaleObjectException
+	 * @throws Throwable
 	 */
-	public function connect(TicketSubscription $ticket, bool $serviceCheck = false): string
+	public function activate(TicketSubscription $ticket): string
 	{
 		$this->_ticket = $ticket;
-		if ($serviceCheck) {
-			$this->serviceCheck();
-			return '';
+
+		if (($expireDate = $ticket->findLastProductJournal()?->expire_date) > DateHelper::lcDate()) {
+			//Если абонент повторно активирует подписку, у которой еще не истек срок действия с момента последнего подключения,
+			//то просто фиксируем в журнале статус подключения с текущей датой окончания подписки.
+			$ticket->close();
+		} else {
+			/** @noinspection BadExceptionsProcessingInspection not bad at all */
+			try {
+				$ticket->updateStage(TicketSubscription::STAGE_CODE_ABONENT_VERIFICATION);
+				//Делаем проверку на доступность подключения подписки.
+
+				$ticket->updateStage(TicketSubscription::STAGE_CODE_SERVICE_VERIFICATION);
+				//Делаем проверку на доступность подключения подписки.
+//				$this->verifySubscription();TODO не забыть убрать после тестирования
+
+				$ticket->updateStage(TicketSubscription::STAGE_CODE_BILLING_DEBIT);
+				//Делаем попытку списания средств.
+
+				$ticket->updateStage(TicketSubscription::STAGE_CODE_CONNECT_ON_PARTNER);
+				//Пытаемся непосредственно оформить подписку.
+//				$expireDate = $this->activateOnPartner();
+				$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');//TODO не забыть убрать после тестирования
+
+				$ticket->close();
+			} catch (Throwable $e) {
+				$ticket->markStageFailed($e);
+				$ticket->close();
+
+				throw $e;
+			}
 		}
 
-//		$this->beforeSubscribe();TODO restore after tests
-
-//		$expireDate = $this->connectOnPartner();TODO restore after tests
-		$expireDate = date_create('+ 1 month')->format('Y-m-d H:i:s');
-
-		$this->_ticket->relatedAbonentsToProducts->enable($expireDate);
+		ProductStatusChangeCase::getInstance()->activate(
+			$ticket->relatedProduct->id,
+			$ticket->relatedAbonent->id,
+			$expireDate
+		);
 
 		return $expireDate;
 	}
@@ -48,41 +78,41 @@ abstract class BaseSubscriptionHandler extends Component
 	 * Отключение подписки по продукту для заданного абонента.
 	 * При успешном выполнении операции - фиксируем новый статус в журнале статусов.
 	 * @param TicketSubscription $ticket
+	 * @return string
 	 */
-	public function disable(TicketSubscription $ticket): void
+	public function deactivate(TicketSubscription $ticket): string
 	{
 		$this->_ticket = $ticket;
 
-		$this->disableOnPartner();
+		$this->deactivateOnPartner();
 
-		$this->_ticket->relatedAbonentsToProducts->disable();
+		$ticket->close();
+
+		ProductStatusChangeCase::getInstance()->deactivate(
+			$ticket->relatedProduct->id,
+			$ticket->relatedAbonent->id
+		);
+
+		return '';
 	}
-
-	/**
-	 * Реализация подключения подписки по продукту на стороне партнёра.
-	 * @return string новая дата окончания подписки.
-	 */
-	abstract protected function connectOnPartner(): string;
 
 	/**
 	 * Данный метод будет вызываться в случае необходимости проверки возможности подключения подписки по абоненту.
 	 * Подразумевается, что в случае непрохождения проверок, кидается exception.
 	 */
-	abstract protected function serviceCheck(): void;
+	abstract protected function verifySubscription(): void;
 
 	/**
-	 * Для различных полезных штук перед непосредственным запросом на подписку
-	 * (инициализация переиспользуемых параметров, сброс состояния при изменении входных параметров, etc.).
+	 * Реализация подключения подписки по продукту на стороне партнёра.
+	 * @return string новая дата окончания подписки.
 	 */
-	protected function beforeSubscribe(): void
-	{
-	}
+	abstract protected function activateOnPartner(): string;
 
 	/**
 	 * Реализация отключения подписки по продукту на стороне партнёра.
 	 * DEFAULT: ничего не отправляем партнеру, подписка просто протухнет, если мы ее принудительно не обновим.
 	 */
-	protected function disableOnPartner(): void
+	protected function deactivateOnPartner(): void
 	{
 	}
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace app\components\tickets;
+namespace app\components\subscription;
 
 use app\components\subscription\job\SubscribeJob;
 use app\components\subscription\job\UnsubscribeJob;
@@ -17,6 +17,23 @@ use yii\web\NotFoundHttpException;
  */
 class SubscriptionTicketService
 {
+	private static ?self $_instance = null;
+
+	/**
+	 * Singleton use.
+	 */
+	private function __construct()
+	{
+	}
+
+	/**
+	 * @return static
+	 */
+	public static function getInstance(): static
+	{
+		return self::$_instance ??= new static();
+	}
+
 	/**
 	 * Создание тикета на подключение подписки.
 	 * @param int $productId идентификатор продукта.
@@ -71,7 +88,7 @@ class SubscriptionTicketService
 	 * @return array
 	 * @throws NotFoundHttpException
 	 */
-	public static function getTicketStatus(string $ticketId): array
+	public function getTicketStatus(string $ticketId): array
 	{
 		$ticket = TicketSubscription::findOne($ticketId);
 		if (null === $ticket) {
