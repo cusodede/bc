@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $type Типа (mail, sms)
  * @property string $message_body Тело сообщения
  * @property string $subject Тема письма
- * @property int $deleted Флаг активности
+ * @property bool $deleted Флаг активности
  * @property string $created_at Дата создания шаблона
  * @property string $updated_at Дата обновления шаблона
  */
@@ -36,7 +36,8 @@ class NotificationTemplates extends ActiveRecord
     {
         return [
             [['type', 'message_body'], 'required'],
-            [['type', 'deleted'], 'integer'],
+            [['type'], 'integer'],
+            [['deleted'], 'boolean'],
             [['message_body'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['subject'], 'string', 'max' => 255],

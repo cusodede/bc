@@ -36,6 +36,7 @@ $modelName = $model->formName();
 		]
 	])
 ?>
+<?= $form->errorSummary($model) ?>
 <?= $this->render(Yii::$app->controller->viewPath . '/subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>
 <?php Modal::end(); ?>

@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $phone Телефон
  * @property string $create_date Дата регистрации
  * @property int $status Статус
- * @property int $deleted
+ * @property bool $deleted
  */
 class PhonesAR extends ActiveRecord
 {
