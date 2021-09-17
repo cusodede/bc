@@ -41,6 +41,7 @@ class Phones extends PhonesAR
 		try {
 			if (null !== $phoneNumber = PhoneNumberUtil::getInstance()->parse($phone, 'RU', null, true)) {
 				$phoneNumber = PhoneNumberUtil::getInstance()->format($phoneNumber, PhoneNumberFormat::E164);
+				/* todo: поискать формат без ведущего плюса, в дефолтной библиотеке  */
 				return true === $removePlus ? str_replace('+', '', $phoneNumber) : $phoneNumber;
 			}
 		} /** @noinspection BadExceptionsProcessingInspection */ catch (NumberParseException) {
