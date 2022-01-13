@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 
 use app\components\db\Migration;
+use app\models\sys\users\active_record\Users;
+use yii\db\Expression;
 
 /**
  * Class m180930_093408_sys_users
@@ -32,6 +34,15 @@ class m180930_093408_sys_users extends Migration {
 		$this->createIndex(self::TABLE_NAME.'_daddy', self::TABLE_NAME, 'daddy');
 		$this->createIndex(self::TABLE_NAME.'_deleted', self::TABLE_NAME, 'deleted');
 
+		$this->insert(Users::tableName(), [
+			'username' => 'admin',
+			'login' => 'admin',
+			'password' => 'admin',
+			'is_pwd_outdated' => 1, /*require to update admin password*/
+			'email' => 'admin@localhost.ru',
+			'comment' => 'Системный администратор',
+			'create_date' => new Expression('NOW()')
+		]);
 	}
 
 	/**
@@ -41,18 +52,4 @@ class m180930_093408_sys_users extends Migration {
 		$this->dropTable(self::TABLE_NAME);
 	}
 
-	/*
-	// Use up()/down() to run migration code without a transaction.
-	public function up()
-	{
-
-	}
-
-	public function down()
-	{
-		echo "m180930_093408_sys_users cannot be reverted.\n";
-
-		return false;
-	}
-	*/
 }
