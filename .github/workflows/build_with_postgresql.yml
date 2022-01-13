@@ -5,7 +5,7 @@ on:
 
 env:
   TEST_DB_DSN: "pgsql:host=127.0.0.1;port=5432;dbname=bc"
-  TEST_DB_USER: "bc
+  TEST_DB_USER: "bc"
   TEST_DB_PASS: "postgres"
 
 jobs:
