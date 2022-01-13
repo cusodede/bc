@@ -97,7 +97,7 @@
 		"tests": "vendor/bin/codecept run",
 		"tests-with-dump": [
 			"@generate-test-jwt-key",
-			"pg_dump --schema-only --if-exists --clean --password --dbname=postgresql://dpl@localhost:5432/dpl --file=./tests/_data/dumps/base_structure.sql",
+			"pg_dump --schema-only --if-exists --clean --password --dbname=postgresql://bc@localhost:5432/bc --file=./tests/_data/dumps/base_structure.sql",
 			"@tests",
 			"git checkout ./tests/_data/dumps/base_structure.sql",
 			"rm -rf ./tests/_data/jwt/*",
