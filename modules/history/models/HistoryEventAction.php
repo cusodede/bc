@@ -29,10 +29,10 @@ class HistoryEventAction extends Model {
 		self::ATTRIBUTE_DELETED => 'Deleted'
 	];
 
-	public $type;
-	public $attributeName;
-	public $attributeOldValue;
-	public $attributeNewValue;
+	public ?int $type = null;
+	public ?string $attributeName = null;
+	public mixed $attributeOldValue = null;
+	public mixed $attributeNewValue = null;
 
 	/**
 	 * {@inheritDoc}
@@ -53,5 +53,20 @@ class HistoryEventAction extends Model {
 	 */
 	public function getTypeName():?string {
 		return ArrayHelper::getValue(self::ATTRIBUTE_TYPE_NAMES, $this->type);
+	}
+
+	/**
+	 * @param mixed $attribute
+	 * @return mixed
+	 */
+	public static function convertAttributeNewValue(mixed $attribute) {
+		if (is_array($attribute)) {
+			return json_encode($attribute, JSON_PRETTY_PRINT);//fixme not json
+		}
+
+		if (is_bool($attribute)) {
+			return $attribute?'true':'false';
+		}
+		return $attribute;
 	}
 }

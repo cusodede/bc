@@ -3,7 +3,8 @@ declare(strict_types = 1);
 
 namespace app\modules\graphql\controllers;
 
-use app\modules\graphql\schema\types\Types;
+use app\modules\graphql\schema\types\MutationType;
+use app\modules\graphql\schema\types\QueryType;
 use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
@@ -40,6 +41,7 @@ class GraphqlController extends ActiveController {
 	/**
 	 * @return array
 	 * @throws Exception
+	 * @throws Throwable
 	 */
 	public function actionIndex():array {
 		$query = Yii::$app->request->get('query', Yii::$app->request->post('query'));
@@ -57,15 +59,15 @@ class GraphqlController extends ActiveController {
 		if (!empty($variables) && !is_array($variables)) {
 			try {
 				$variables = Json::decode($variables);
-			} /** @noinspection BadExceptionsProcessingInspection Это норма */ catch (Throwable $t) {
+			} catch (Throwable) {
 				$variables = null;
 			}
 		}
 
 		return GraphQL::executeQuery(
 			new Schema([
-				'query' => Types::query(),
-				'mutation' => Types::mutation(),
+				'query' => QueryType::type(),
+				'mutation' => MutationType::type(),
 			]),
 			$query,
 			null,

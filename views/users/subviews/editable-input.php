@@ -1,15 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-use kartik\editable\Editable;
-use yii\base\Model;
-use yii\bootstrap4\Html;
-
 /**
- * @var Model $model
+ * @var View $this
+ * @var Users $model
  * @var string $attribute
  * @var string $url
  */
+
+use app\models\sys\users\Users;
+use kartik\editable\Editable;
+use app\components\helpers\Html;
+use yii\web\View;
 
 ?>
 

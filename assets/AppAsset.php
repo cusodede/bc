@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
 use yii\bootstrap4\BootstrapAsset;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
@@ -24,7 +24,7 @@ class AppAsset extends AssetBundle {
 	public function init():void {
 		$this->sourcePath = __DIR__.'/assets/app/';
 		$this->css = [
-			'css/site.css',
+			'css/site.css?v=2',
 			'css/navigation.css'
 		];
 
@@ -35,7 +35,7 @@ class AppAsset extends AssetBundle {
 		];
 
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 		parent::init();
 	}

@@ -7,8 +7,8 @@ declare(strict_types = 1);
  * @var ActiveForm|string $form
  */
 use app\models\sys\permissions\active_record\PermissionsCollections;
-use kartik\form\ActiveForm;
-use yii\bootstrap4\Html;
+use yii\bootstrap4\ActiveForm;
+use app\components\helpers\Html;
 use yii\web\View;
 
 ?>

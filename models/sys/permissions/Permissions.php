@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
-use app\models\core\CacheHelper;
+use app\components\helpers\CacheHelper;
 use app\models\sys\permissions\active_record\Permissions as ActiveRecordPermissions;
 use pozitronik\helpers\ArrayHelper;
 use Throwable;
@@ -13,7 +13,6 @@ use yii\caching\TagDependency;
 /**
  * Class Permissions
  * todo:
- * 3) Генератор разрешений (консольный)
  * 4) Флаг deleted
  *
  * @property string $controllerPath "Виртуальный" путь к контроллеру, учитывающий, при необходимости, модуль.
@@ -62,12 +61,11 @@ class Permissions extends ActiveRecordPermissions {
 	/**
 	 * Возвращает значение конфига для компонента
 	 * @param string $parameter
-	 * @param mixed $default
+	 * @param mixed|null $default
 	 * @return mixed
 	 * @throws Throwable
-	 * @noinspection PhpReturnDocTypeMismatchInspection Проверено, в $default мы можем задать что угодно
 	 */
-	public static function ConfigurationParameter(string $parameter, $default = null) {
+	public static function ConfigurationParameter(string $parameter, mixed $default = null) {
 		return ArrayHelper::getValue(Yii::$app->components, self::COMPONENT_NAME.".".$parameter, $default);
 	}
 
@@ -83,7 +81,7 @@ class Permissions extends ActiveRecordPermissions {
 		/*convert to models*/
 		foreach ($permissionsConfig as $name => $permissionConfig) {
 			$permissionConfig['name'] = $name;
-			$result[] = (new self($permissionConfig))->attributes;
+			$result[] = array_filter((new self($permissionConfig))->attributes);
 		}
 		return $result;
 	}
@@ -104,8 +102,9 @@ class Permissions extends ActiveRecordPermissions {
 			//initial query
 				PermissionsCollections::find()
 					->alias('cols')
-					->innerJoinWith('relatedUsersToPermissionsCollections users_to_cols')
+					->joinWith('relatedUsersToPermissionsCollections users_to_cols')
 					->where(['users_to_cols.user_id' => $user_id])
+					->orWhere(['cols.default' => true])/*всегда добавляем права из коллекций с галкой default*/
 					->union(
 					//recursive query
 						PermissionsCollections::find()
@@ -172,7 +171,7 @@ class Permissions extends ActiveRecordPermissions {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getControllerPath():?string {
 		return (null === $this->module)?$this->controller:"@{$this->module}/{$this->controller}";
@@ -185,7 +184,7 @@ class Permissions extends ActiveRecordPermissions {
 		$this->module = null;
 		$this->controller = $controllerPath;/*by default*/
 		/*Если контроллер пришёл в виде @foo/bar - foo указывает на модуль*/
-		if ((false !== $path = explode('/', $this->controller)) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
+		if ((!empty($path = explode('/', $this->controller))) && (false !== $matches = preg_grep('/^@(\w+)/', $path)) && 1 === count($matches)) {
 			/** @var array $matches */
 			$this->module = substr($matches[0], 1);
 			$this->controller = substr($this->controller, strlen($this->module) + 2); //@foo/bar => bar

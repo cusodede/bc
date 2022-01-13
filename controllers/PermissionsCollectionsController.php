@@ -12,8 +12,8 @@ use app\models\sys\permissions\PermissionsCollectionsSearch;
  */
 class PermissionsCollectionsController extends DefaultController {
 
-	public string $modelClass = PermissionsCollections::class;
-	public string $modelSearchClass = PermissionsCollectionsSearch::class;
+	public ?string $modelClass = PermissionsCollections::class;
+	public ?string $modelSearchClass = PermissionsCollectionsSearch::class;
 	public bool $enablePrototypeMenu = false;
 
 	/**

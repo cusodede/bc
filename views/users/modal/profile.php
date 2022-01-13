@@ -16,7 +16,8 @@ use yii\web\View;
 	'id' => "{$model->formName()}-modal-profile-{$model->id}",
 	'size' => Modal::SIZE_LARGE,
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?= $this->render('../profile', [

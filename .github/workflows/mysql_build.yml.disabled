@@ -1,0 +1,92 @@
+name: CI with MySQL
+on:
+  pull_request:
+    branches: [ master ]
+
+env:
+  TEST_DB_DSN: "mysql:host=127.0.0.1;dbname=bc;port=33306"
+  TEST_DB_USER: "root"
+  TEST_DB_PASS: "password"
+  MYSQL_HOST: 127.0.0.1
+  MYSQL_DATABASE: "bc"
+  MYSQL_USER: bc
+  MYSQL_PASSWORD: bc
+  MYSQL_ROOT_PASSWORD: "password"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        ports:
+          - 33306:3306
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_DATABASE: "bc"
+          MYSQL_USER: bc
+          MYSQL_PASSWORD: bc
+          MYSQL_ROOT_PASSWORD: "password"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: 6
+
+      - name: Set dirs
+        run: |
+          mkdir web/assets
+          chmod 777 web/assets
+          chmod 777 runtime
+          chmod 777 .git/HEAD
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer:v2
+          extensions: imagick, mysql, opcache
+          ini-values: opcache.enable=1, opcache.enable_cli=1, apc.enable_cli=1
+        env:
+          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+      - name: Set up MySQL
+        run: sudo systemctl start mysql
+      - name: Check MySQL
+        run: mysql -h127.0.0.1 --port 33306 -uroot -ppassword -e 'CREATE DATABASE IF NOT EXISTS bc;'
+      - name: Check php and composer
+        run: php -v && composer --version
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install composer dependencies
+        run: composer install
+      - name: CP CONFIG
+        run: cp config/db.env.php config/db.php
+      - name: Install migrations
+        run: composer migrations
+      - name: Dump migration
+        run: mysqldump -h127.0.0.1 -uroot -ppassword --port 33306 bc --no-data > tests/_data/dumps/base_structure.sql
+      - name: Generate JWT test keys
+        run: |
+          ssh-keygen -t rsa -b 4096 -m PEM -f ./tests/_data/jwt/jwt.key -N '' -q <<<y >/dev/null 2>&1
+          openssl rsa -in ./tests/_data/jwt/jwt.key -pubout -outform PEM -out ./tests/_data/jwt/jwt.key.pub
+      - name: Prepare test
+        run: cp tests/.env.ci tests/.env
+      - name: Permissions for folder
+        run: |
+          mkdir runtime/logs
+          chmod -R 777 runtime/*
+      - name: Run tests
+        run: composer tests
+        env:
+          JWT_KEY_PATH: ${{ secrets.JWT_KEY_PATH }}
+          JWT_KEY_PUB_PATH: ${{ secrets.JWT_KEY_PUB_PATH }}
+          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}

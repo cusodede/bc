@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
 use yii\web\AssetBundle;
 
 /**
@@ -26,7 +26,7 @@ class PermissionsCollectionsAsset extends AssetBundle {
 		];
 
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 		parent::init();
 	}

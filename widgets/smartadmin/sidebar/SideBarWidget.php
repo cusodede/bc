@@ -13,6 +13,8 @@ use yii\widgets\Menu;
  * @package app\widgets
  *
  * Виджет для отрисовки панели навигации
+ *
+ * @property bool $ignoreLogo
  */
 class SideBarWidget extends YiiBaseWidget {
 	/**
@@ -21,13 +23,15 @@ class SideBarWidget extends YiiBaseWidget {
 	 */
 	public array $items = [];
 
+	public bool $ignoreLogo = false;
+
 	/**
 	 * @inheritDoc
 	 */
 	public function run():string {
 		$this->items = self::prepareItems($this->items);
 		$this->items = self::clearItems($this->items);
-		return $this->render('main', ['items' => $this->items]);
+		return $this->render('main', ['items' => $this->items, 'ignoreLogo' => $this->ignoreLogo]);
 	}
 
 	/**

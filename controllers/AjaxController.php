@@ -58,7 +58,8 @@ class AjaxController extends Controller {
 				$ARClass,
 				$term,
 				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.limit", SearchWidget::DEFAULT_LIMIT),
-				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.attributes"));
+				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.attributes"),
+				ArrayHelper::getValue(Yii::$app, "params.searchConfig.{$alias}.method", SearchWidget::DEFAULT_METHOD));
 		}
 		return [];
 	}

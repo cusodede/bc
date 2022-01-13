@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\widgets\smartadmin\cropper;
 
+use yii\base\InvalidConfigException;
 use yii\bootstrap4\Html;
 use yii\widgets\InputWidget;
 
@@ -39,12 +40,19 @@ class CropperWidget extends InputWidget {
 	 */
 	public ?string $modalId = null;
 
-	public function init():void {
+    /**
+     * @return void
+     * @throws InvalidConfigException
+     */
+    public function init():void {
 		parent::init();
 		CropperWidgetAsset::register($this->view);
 	}
 
-	public function run():string {
+    /**
+     * @return string
+     */
+    public function run():string {
 		$options = json_encode([
 			'fileInputName' => Html::getInputName($this->model, $this->attribute),
 			'imageId' => "#{$this->imageId}",

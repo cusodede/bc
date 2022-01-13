@@ -7,11 +7,11 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use pozitronik\widgets\BadgeWidget;
+use app\widgets\badgewidget\BadgeWidget;
 use yii\bootstrap4\Modal;
-use yii\web\JsExpression;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
+
 ?>
 <?php Modal::begin([
 	'id' => "{$model->formName()}-modal-edit-{$model->id}",
@@ -25,16 +25,15 @@ use yii\bootstrap4\ActiveForm;
 		'form' => "{$model->formName()}-modal-edit"
 	]),//post button outside the form
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(
 	[
 		'id' => "{$model->formName()}-modal-edit",
 		'enableAjaxValidation' => true,
-		'options' => [
-			"onsubmit" => new JsExpression("formSubmitAjax(event)")
-		]
+
 	]) ?>
 <?= $this->render('../subviews/editPanelBody', compact('model', 'form')) ?>
 <?php ActiveForm::end(); ?>

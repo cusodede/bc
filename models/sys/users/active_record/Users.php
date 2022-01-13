@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\models\sys\users\active_record;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\phones\active_record\PhonesAR;
 use app\models\phones\PhoneNumberValidator;
 use app\models\phones\Phones;
 use app\models\sys\users\active_record\relations\RelUsersToPhones;
@@ -32,13 +31,17 @@ use yii\helpers\ArrayHelper;
  * @property int $daddy ID зарегистрировавшего/проверившего пользователя
  * @property bool $deleted Флаг удаления
  *
- * @property-read UsersTokens[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
+ * @property-read UsersTokensAR[] $relatedUsersTokens Связанные с моделью пользователя модели токенов
  * @property RelUsersToPhones[] $relatedUsersToPhones Связь к промежуточной таблице к телефонным номерам
- * @property PhonesAR[] $relatedPhones Телефонные номера пользователя (таблица)
+ * @property Phones[] $relatedPhones Телефонные номера пользователя (таблица)
  * @property string[] $phones Виртуальный атрибут: телефонные номера в строковом массиве, используется для редактирования
  */
 class Users extends ActiveRecord {
 	use ActiveRecordTrait;
+
+	public const SCENARIO_ADDITIONAL_ACCOUNT = 1;
+	public const SCENARIO_ADDITIONAL_ACCOUNT_FOR_SELLER_MINI = 2;
+	public const SCENARIO_ADDITIONAL_ACCOUNT_FOR_SUPPORT_PERSON = 3;
 
 	private ?array $_phones = null;
 
@@ -65,7 +68,8 @@ class Users extends ActiveRecord {
 	 */
 	public function rules():array {
 		return [
-			[['username', 'login', 'password', 'email'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
+			['email', 'required', 'on' => self::SCENARIO_DEFAULT],
+			[['username', 'login', 'password'], 'required'],//Не ставим create_date как required, поле заполнится default-валидатором (а если нет - отвалится при инсерте в базу)
 			[['comment'], 'string'],
 			[['create_date'], 'safe'],
 			[['daddy'], 'integer'],
@@ -76,12 +80,16 @@ class Users extends ActiveRecord {
 			[['login'], 'string', 'max' => 64],
 			[['login'], 'unique'],
 			[['email'], 'unique'],
-			[['daddy'], 'default', 'value' => Yii::$app->user->id],
+			[['daddy'], 'default', 'value' => fn() => Yii::$app->user->id??null],
 			[['create_date'], 'default', 'value' => DateHelper::lcDate()],//default-валидатор срабатывает только на незаполненные атрибуты, его нельзя использовать как обработчик любых изменений атрибута
 			['phones', PhoneNumberValidator::class, 'when' => function() {
 				[] !== array_filter($this->phones);
 			}],
-			['relatedPhones', 'safe']
+			['relatedPhones', 'safe'],
+
+			[['login', 'username', 'password', 'comment', 'email', 'phones'], 'required', 'on' => self::SCENARIO_ADDITIONAL_ACCOUNT],
+			[['login', 'username', 'password', 'comment', 'phones'], 'required', 'on' => self::SCENARIO_ADDITIONAL_ACCOUNT_FOR_SELLER_MINI],
+			[['login', 'username', 'comment', 'phones'], 'required', 'on' => self::SCENARIO_ADDITIONAL_ACCOUNT_FOR_SUPPORT_PERSON]
 		];
 	}
 
@@ -102,7 +110,8 @@ class Users extends ActiveRecord {
 			'create_date' => 'Дата регистрации',
 			'daddy' => 'ID зарегистрировавшего/проверившего пользователя',
 			'deleted' => 'Флаг удаления',
-			'update_password' => 'Новый пароль'
+			'update_password' => 'Новый пароль',
+			'phones' => 'Телефоны'
 		];
 	}
 
@@ -110,7 +119,7 @@ class Users extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedUsersTokens():ActiveQuery {
-		return $this->hasMany(UsersTokens::class, ['user_id' => 'id']);
+		return $this->hasMany(UsersTokensAR::class, ['user_id' => 'id']);
 	}
 
 	/**
@@ -124,14 +133,14 @@ class Users extends ActiveRecord {
 	 * @return ActiveQuery
 	 */
 	public function getRelatedPhones():ActiveQuery {
-		return $this->hasMany(PhonesAR::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
+		return $this->hasMany(Phones::class, ['id' => 'phone_id'])->via('relatedUsersToPhones');
 	}
 
 	/**
 	 * @param mixed $relatedPhones
 	 * @throws Throwable
 	 */
-	public function setRelatedPhones($relatedPhones):void {
+	public function setRelatedPhones(mixed $relatedPhones):void {
 		RelUsersToPhones::linkModels($this, $relatedPhones);
 	}
 
@@ -148,7 +157,7 @@ class Users extends ActiveRecord {
 	/**
 	 * @param mixed $phones
 	 */
-	public function setPhones($phones):void {
+	public function setPhones(mixed $phones):void {
 		$this->_phones = (array)$phones;
 	}
 
@@ -157,14 +166,11 @@ class Users extends ActiveRecord {
 	 */
 	public function save($runValidation = true, $attributeNames = null):bool {
 		if (true === $saved = parent::save($runValidation, $attributeNames)) {
-			/*
-			 * Это не очень красиво, и я предполагал сделать это через релейшен-атрибуты, проверяемые в
-			 * \app\components\db\ActiveRecordTrait::createModel(mappedParams)
-			 * Вышло так, пусть будет. По крайней мере, выглядит логично.
-			*/
-			$this->relatedPhones = Phones::add($this->_phones);
+			/**
+			 * Привязать телефоны к пользователю нужно сразу
+			 **/
+			RelUsersToPhones::linkModels($this, Phones::add($this->_phones), false, false);
 		}
 		return $saved;
 	}
-
 }

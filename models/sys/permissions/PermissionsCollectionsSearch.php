@@ -24,6 +24,9 @@ class PermissionsCollectionsSearch extends PermissionsCollections {
 		];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function attributeLabels():array {
 		return parent::attributeLabels() + [
 				'name' => 'Название',

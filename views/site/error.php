@@ -6,7 +6,8 @@ declare(strict_types = 1);
  * @var HttpException $exception
  */
 
-use yii\bootstrap4\Html;
+use app\controllers\SiteController;
+use app\components\helpers\Html;
 use yii\web\View;
 use yii\web\HttpException;
 
@@ -20,7 +21,9 @@ $this->title = 'Ошибка';
 			<p><?= nl2br(Html::encode($exception->getMessage())) ?></p>
 			<div><i class="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></i></div>
 			<div class="mt-5">
-				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
+				<?= Yii::$app->user->isGuest
+					?Html::link('Авторизоваться', SiteController::to('login'), ['class' => 'btn-link'])
+					:Html::link('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
 			</div>
 		</div>
 	</div>

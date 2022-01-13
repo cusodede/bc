@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 
 use app\models\sys\users\Users;
-use pozitronik\widgets\BadgeWidget;
+use app\widgets\badgewidget\BadgeWidget;
 use yii\bootstrap4\Modal;
 use yii\web\View;
 
@@ -21,7 +21,8 @@ $modelName = $model->formName();
 		'subItem' => 'id'
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?= $this->render('../view', compact('model')) ?>

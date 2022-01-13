@@ -13,7 +13,7 @@ use pozitronik\helpers\ArrayHelper;
 
 /**
  * Class HistoryEvent
- * Расшифровка событий ежжи
+ * Расшифровка событий ежи
  *
  * @property int $eventType Что произошло. Добавление/изменение/удаление/свой тип
  * @property null|string $eventTypeName Строковое название события, null - по умолчанию
@@ -28,15 +28,17 @@ use pozitronik\helpers\ArrayHelper;
  * @property TimelineEntry $timelineEntry
  */
 class HistoryEvent extends Model implements HistoryEventInterface {
-	public $eventType;
-	public $eventCaption;
-	public $eventIcon;
-	public $eventTime;
-	public $objectName;
-	public $subject;
+	public ?int $eventType = null;
+	public ?string $eventCaption = null;
+	public ?string $eventIcon = null;
+	public ?string $eventTime = null;
+	public ?string $objectName = null;
+	public ?int $subject = null;
+	public mixed $actionsFormatter = null;
+	public ?array $actions = null;
+	/* seems to be unused
 	public $subjectId;
-	public $actions;
-	public $actionsFormatter;
+	*/
 
 	/**
 	 * Converts log event to timeline entry

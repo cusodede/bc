@@ -19,6 +19,7 @@ function LoadModal(dataUrl, modalDivId) {
  * @param {string} modalContainerId
  */
 function AjaxModal(dataUrl, modalDivId, modalContainerId) {
+	if (undefined === dataUrl) return;
 	let modalContainerDiv;
 	if (undefined === modalContainerId) {
 		modalContainerId = 'modal-ajax-div';
@@ -31,13 +32,42 @@ function AjaxModal(dataUrl, modalDivId, modalContainerId) {
 		$('body').prepend(modalContainerDiv);
 	}
 	modalContainerDiv.addClass('preloading');
-	modalContainerDiv.load(dataUrl, function() {
-		$('#' + modalDivId).modal('show');
+	modalContainerDiv.load(dataUrl, function(response, status, xhr) {
+		if ('error' === status) {
+			if (302 === xhr.status) {//Контроллер ответил редиректом на ajax-запрос
+				window.location = decodeURIComponent(dataUrl);
+				return true;
+			} else {
+				modalContainerDiv.html(response);
+				$('#modal-error').modal('show');
+			}
+		} else {
+			modalDiv = (undefined === modalDivId)
+				?modalContainerDiv.find('.modal:first')
+				:$('#' + modalDivId)
+			modalDiv.modal('show');
+		}
+
 		modalContainerDiv.removeClass('preloading');
 		document.dispatchEvent(new Event('modalIsReady'));
+
+		/**
+		 * Добавляем на все ajax-формы внутри модалки обработчики модального постинга
+		 */
+		let modalForm = modalDiv.find('form');
+		modalForm.on('beforeSubmit', function(e) {
+			formSubmitAjax(e);
+			return false;
+		});
+
 	}).show();
 }
 
+/**
+ * Собственный обработчик аяксового постинга
+ * @param {object} event Событие, на которое подвешен метод
+ * @returns {boolean} Всегда false - чтобы блокировать любую дальнейшую обработку (может и не надо).
+ */
 function formSubmitAjax(event) {
 	var form = jQuery(event.target);
 	var self = this;
@@ -51,21 +81,9 @@ function formSubmitAjax(event) {
 			processData: false,
 			contentType: false,
 			context: this,
-			beforeSend: function(xhr, settings) {
-				jQuery(self.element).triggerHandler('AjaxBeforeSubmit', [xhr, settings]);
-			},
 			success: function(data, status, xhr) {
-				var contentType = xhr.getResponseHeader('content-type') || '';
-				if (contentType.indexOf('html') > -1) {
-					// Assume form contains errors if html
-					this.injectHtml(data);
-					status = false;
-				}
-				jQuery(self.element).triggerHandler('AjaxSubmit', [data, status, xhr, this.selector]);
+				status = processErrors(data, xhr);
 			},
-			complete: function(xhr, textStatus) {
-				jQuery(self.element).triggerHandler('AjaxSubmitComplete', [xhr, textStatus]);
-			}
 		});
 	} else {
 		// Convert form to ajax submit
@@ -74,25 +92,62 @@ function formSubmitAjax(event) {
 			url: form.attr('action'),
 			data: form.serialize(),
 			context: this,
-			beforeSend: function(xhr, settings) {
-				jQuery(self.element).triggerHandler('AjaxBeforeSubmit', [xhr, settings]);
-			},
 			success: function(data, status, xhr) {
-				var contentType = xhr.getResponseHeader('content-type') || '';
-				if (contentType.indexOf('html') > -1) {
-					// Assume form contains errors if html
-					this.injectHtml(data);
-					status = false;
-				}
-				jQuery(self.element).triggerHandler('AjaxSubmit', [data, status, xhr, this.selector]);
+				status = processErrors(data, xhr);
 			},
-			complete: function(xhr, textStatus) {
-				jQuery(self.element).triggerHandler('AjaxSubmitComplete', [xhr, textStatus]);
-			}
 		});
 	}
 	event.preventDefault();
-	// event.stopImmediatePropagation();
+	event.stopImmediatePropagation();
 	return false;
 
 };
+
+/**
+ * Добавляем на все ajax-ссылки обработчики загрузки модальных окон
+ */
+$('.el-ajax-modal').on('click', function(event) {
+	event.preventDefault();
+	AjaxModal($(this).data('ajax-url'), $(this).data('modal-id'))
+
+});
+
+/**
+ * Разбирает массив ошибок валидации в data, отображая их во всплывающем toast-сообщении
+ * @param {array} data Массив ошибок валидации
+ * @param {object} xhr XMLHttpRequest-объект
+ * @returns {boolean} Успех валидации
+ */
+function processErrors(data, xhr) {
+	status = true;
+	var contentType = xhr.getResponseHeader('content-type') || '';
+	if (contentType.indexOf('html') > -1) {// Assume form contains errors if html
+		toastr.error(data, 'Ошибка');
+		status = false;
+	} else if (contentType.indexOf('json') > -1) {//Assume form contains errors in json format
+		status = false;
+		var ul = $('<div>');
+		for (const [key, value] of Object.entries(data)) {
+			value.forEach((errorBlock) => ul.append($('<span>', {class: 'error-title'}).text(errorBlock)));
+		}
+		toastr.options = {
+			// "closeButton": false,
+			"debug": false,
+			"newestOnTop": false,
+			"progressBar": false,
+			"positionClass": "toast-top-right",
+			"preventDuplicates": true,
+			// "onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": 0,
+			"extendedTimeOut": 0,
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		};
+		toastr.error(ul, 'Ошибка');
+	}
+	return status;
+}

@@ -7,155 +7,145 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\GridHelperAsset;
 use app\assets\ModalHelperAsset;
+use app\components\grid\ActionColumn;
+use app\components\grid\widgets\toolbar_filter_widget\ToolbarFilterWidget;
+use app\components\helpers\Html;
+use app\components\helpers\TemporaryHelper;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\UsersController;
-use app\models\core\TemporaryHelper;
-use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsSearch;
-use app\models\sys\users\Users;
+use app\widgets\badgewidget\BadgeWidget;
 use kartik\editable\Editable;
-use kartik\grid\ActionColumn;
 use kartik\grid\DataColumn;
 use kartik\grid\EditableColumn;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
-use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
-use kartik\select2\Select2;
 
 ModalHelperAsset::register($this);
+GridHelperAsset::register($this);
+
+$id = 'permissions-index-grid';
 ?>
 <?= GridConfig::widget([
-	'id' => 'permissions-index-grid',
+	'id' => $id,
 	'grid' => GridView::begin([
+		'id' => $id,
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'filterOnFocusOut' => false,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']).")":" (нет разрешений)"),
+			'heading' => false,
 		],
-		'summary' => null !== $searchModel?Html::a('Новое разрешение', PermissionsController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
-		]):null,
-		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новое разрешение', PermissionsController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsController::to('create')."', 'Permissions-modal-create-new');event.preventDefault();")
-		]),
+		'replaceTags' => [
+			'{optionsBtn}' => ToolbarFilterWidget::widget(['content' => '{options}']),
+			'{totalCount}' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']):"Нет разрешений",
+			'{newRecord}' => ToolbarFilterWidget::widget([
+				'label' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']):"Нет разрешений",
+				'content' => Html::link('Новая запись', PermissionsController::to('create'), ['class' => 'btn btn-success'])
+			]),
+			'{filterBtn}' => ToolbarFilterWidget::widget(['content' => Html::button("<i class='fa fa-filter'></i>", ['onclick' => new JsExpression('setFakeGridFilter("#'.$id.'")'), 'class' => 'btn btn-info'])]),
+			'{collectionsLink}' => ToolbarFilterWidget::widget(['content' => Html::link('Редактор групп', PermissionsCollectionsController::to('index'), ['class' => 'btn btn-info'])])
+		],
 		'toolbar' => [
-			[
-				'content' => Html::a("Редактор групп разрешений", PermissionsCollectionsController::to('index'), ['class' => 'btn float-left btn-info'])
-			]
+			'{filterBtn}'
 		],
+		'panelBeforeTemplate' => '{optionsBtn}{newRecord}{collectionsLink}{toolbarContainer}{before}<div class="clearfix"></div>',
+		'summary' => null,
+		'showOnEmpty' => true,
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{delete}',
-				'buttons' => [
-					'edit' => static function(string $url, Permissions $model) {
-						return Html::a('<i class="fa fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-				],
+				'template' => '<div class="btn-group">{edit}{delete}</div>',
 			],
 			'id',
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_TEXT
-					];
-				},
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editDefault')
+					],
+					'inputType' => Editable::INPUT_TEXT
+				],
 				'attribute' => 'name',
 				'format' => 'text'
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_SPIN,
-						'options' => [
-							'pluginOptions' => [
-								'min' => Permissions::PRIORITY_MIN,
-								'max' => Permissions::PRIORITY_MAX
-							]
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editDefault')
+					],
+					'inputType' => Editable::INPUT_SPIN,
+					'options' => [
+						'pluginOptions' => [
+							'min' => Permissions::PRIORITY_MIN,
+							'max' => Permissions::PRIORITY_MAX
 						]
-					];
-				},
+					]
+				],
 				'attribute' => 'priority',
 				'format' => 'text'
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_SELECT2,
-						'options' => [
-							'data' => TemporaryHelper::GetControllersList(Permissions::ConfigurationParameter(Permissions::CONTROLLER_DIRS)),
-							'pluginOptions' => [
-								'multiple' => false,
-								'allowClear' => true,
-								'placeholder' => '',
-								'tags' => true
-							]
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editDefault')
+					],
+					'inputType' => Editable::INPUT_SELECT2,
+					'options' => [
+						'data' => TemporaryHelper::GetControllersList(Permissions::ConfigurationParameter(Permissions::CONTROLLER_DIRS)),
+						'pluginOptions' => [
+							'multiple' => false,
+							'allowClear' => true,
+							'placeholder' => '',
+							'tags' => true
 						]
-					];
-				},
+					]
+				],
 				'attribute' => 'controller',
 				'format' => 'text'
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editAction'),
-						],
-						'inputType' => Editable::INPUT_TEXT
-					];
-				},
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editAction'),
+					],
+					'inputType' => Editable::INPUT_TEXT
+				],
 				'attribute' => 'action',
 				'format' => 'text'
 			],
 			[
 				'class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_SELECT2,
-						'options' => [
-							'data' => TemporaryHelper::VERBS,
-							'pluginOptions' => [
-								'multiple' => false,
-								'allowClear' => true,
-								'placeholder' => '',
-								'tags' => true
-							]
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editDefault')
+					],
+					'inputType' => Editable::INPUT_SELECT2,
+					'options' => [
+						'data' => TemporaryHelper::VERBS,
+						'pluginOptions' => [
+							'multiple' => false,
+							'allowClear' => true,
+							'placeholder' => '',
+							'tags' => true
 						]
-					];
-				},
+					]
+				],
 				'filter' => Select2::widget([
 					'model' => $searchModel,
 					'attribute' => 'verb',
@@ -172,14 +162,12 @@ ModalHelperAsset::register($this);
 				'attribute' => 'module'
 			],
 			['class' => EditableColumn::class,
-				'editableOptions' => static function(Permissions $permission, int $key, int $index) {
-					return [
-						'formOptions' => [
-							'action' => PermissionsController::to('editDefault')
-						],
-						'inputType' => Editable::INPUT_TEXTAREA,
-					];
-				},
+				'editableOptions' => static fn(Permissions $permission, int $key, int $index) => [
+					'formOptions' => [
+						'action' => PermissionsController::to('editDefault')
+					],
+					'inputType' => Editable::INPUT_TEXTAREA,
+				],
 				'attribute' => 'comment',
 				'format' => 'text'
 			],
@@ -187,38 +175,22 @@ ModalHelperAsset::register($this);
 				'class' => DataColumn::class,
 				'attribute' => 'collection',
 				'label' => 'Входит в группы',
-				'value' => static function(Permissions $permission) {
-					return BadgeWidget::widget([
-						'items' => $permission->relatedPermissionsCollections,
-						'subItem' => 'name',
-						'options' => function($mapAttributeValue, PermissionsCollections $item) {
-							$url = PermissionsCollectionsController::to('edit', ['id' => $item->id]);
-							return [//навешиваем модальный просмотр
-								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
-							];
-						},
-						'urlScheme' => [PermissionsCollectionsController::to('edit'), 'id' => 'id']
-					]);
-				},
+				'value' => static fn(Permissions $permission) => BadgeWidget::widget([
+					'items' => $permission->relatedPermissionsCollections,
+					'subItem' => 'name',
+					'urlScheme' => [PermissionsCollectionsController::to('edit'), 'id' => 'id']
+				]),
 				'format' => 'raw'
 			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'user',
 				'label' => 'Назначено пользователям',
-				'value' => static function(Permissions $permission) {
-					return BadgeWidget::widget([
-						'items' => $permission->relatedUsers,
-						'subItem' => 'username',
-						'options' => function($mapAttributeValue, Users $item) {
-							$url = UsersController::to('view', ['id' => $item->id]);
-							return [//навешиваем модальный просмотр
-								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-view-{$item->id}');event.preventDefault();")
-							];
-						},
-						'urlScheme' => [UsersController::to('view'), 'id' => 'id']
-					]);
-				},
+				'value' => static fn(Permissions $permission) => BadgeWidget::widget([
+					'items' => $permission->relatedUsers,
+					'subItem' => 'username',
+					'urlScheme' => [UsersController::to('view'), 'id' => 'id']
+				]),
 				'format' => 'raw'
 			]
 		]

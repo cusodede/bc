@@ -7,7 +7,8 @@ declare(strict_types = 1);
  */
 
 use app\assets\LoginAsset;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
+use app\controllers\SiteController;
 use yii\web\View;
 
 LoginAsset::register($this);
@@ -36,11 +37,22 @@ LoginAsset::register($this);
 				<div class="d-flex align-items-center container p-0">
 					<div
 						class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0">
-						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-							<img src="/img/theme/logo-bee.png" alt="<?= Yii::$app->name ?>" aria-roledescription="logo">
+						<a href="/" class="page-logo-link press-scale-down d-flex align-items-center">
+							<img src="/img/theme/logo.png" alt="<?= Yii::$app->name ?>" aria-roledescription="logo">
 							<span class="page-logo-text mr-1"><?= Yii::$app->name ?></span>
 						</a>
 					</div>
+					<?php if (Yii::$app->user->id): ?>
+						<div class="ml-auto">
+							<?= Html::link('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
+								'class' => "header-icon d-inline-block",
+								'data-toggle' => "tooltip",
+								'data-placement' => "bottom",
+								'title' => "",
+								'data-original-title' => "Выйти из системы"
+							]) ?>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 			<div class="flex-1"

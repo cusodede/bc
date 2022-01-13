@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\modules\history\behaviors;
 
+use app\components\Options;
 use app\modules\history\models\ActiveRecordHistory;
 use yii\base\Behavior;
 use yii\base\Event;
@@ -20,13 +21,13 @@ use yii\helpers\ArrayHelper;
  *        'relationAttributeName',//имя атрибута модели, хранящего значение
  *        'modelRelatedAttributeName'//имя атрибута базовой модели, значение которого хранится в этой модели (опционально, если не задано, используется имя текущего класса)
  *    ]
+ * @property callable $afterUpdate Функция для полного переопределения работы метода
  */
 class HistoryBehavior extends Behavior {
-	private const DISABLE = false;
 
-	public $relations = [];
-	public $isRelation;
-	public $afterUpdate;
+	public array $relations = [];
+	public ?array $isRelation = null;
+	public mixed $afterUpdate = null;//php 8.0 не умеет типизировать callable
 
 	/**
 	 *
@@ -53,7 +54,7 @@ class HistoryBehavior extends Behavior {
 	 * {@inheritDoc}
 	 */
 	public function events():array {
-		return self::DISABLE?[]:[
+		return Options::getValue(Options::ENABLE_INTERNAL_HISTORY)?[
 			ActiveRecord::EVENT_AFTER_INSERT => function(Event $event) {
 				/** @var ActiveRecord $model */
 				[$model, $attributes, $relation] = $this->getModelData();
@@ -77,7 +78,7 @@ class HistoryBehavior extends Behavior {
 				[$model, $attributes, $relation] = $this->getModelData();
 				ActiveRecordHistory::push($model, $attributes, [], $relation, $event);
 			}
-		];
+		]:[];
 	}
 
 }

@@ -21,6 +21,7 @@ use yii\bootstrap4\ActiveForm;
 			<?= $this->render('subviews/editPanelBody', compact('model', 'form')) ?>
 		</div>
 		<div class="panel-content">
+			<?= $form->errorSummary($model) ?>
 			<?= $this->render('subviews/editPanelFooter', compact('model', 'form')) ?>
 			<div class="clearfix"></div>
 		</div>

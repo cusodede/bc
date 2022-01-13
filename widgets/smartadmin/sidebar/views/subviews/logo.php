@@ -1,12 +1,18 @@
 <?php
 declare(strict_types = 1);
+
+/**
+ * @var View $this
+ */
+
 use yii\bootstrap4\Html;
+use yii\web\View;
 
 ?>
 
 <div class="page-logo">
 	<?= Html::a(
-		Html::img('/img/theme/logo-bee.png', [/*todo: вынести в стили*/
+		Html::img('/img/theme/logo.png', [/*todo: вынести в стили*/
 			'aria-roledescription' => 'logo',
 			'alt' => Yii::$app->name
 		]).

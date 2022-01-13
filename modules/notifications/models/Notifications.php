@@ -124,12 +124,12 @@ class Notifications extends ActiveRecord {
 	/**
 	 * Отправка дефолтного текстового сообщения
 	 * @param string $message
-	 * @param null|int|int[] $receivers
+	 * @param int|int[]|null $receivers
 	 * @param int|null $initiator
 	 * @throws Exception
 	 * @throws ForbiddenHttpException
 	 */
-	public static function message(string $message, $receivers = null, ?int $initiator = null):void {
+	public static function message(string $message, array|int $receivers = null, ?int $initiator = null):void {
 		if (null === $receivers) $receivers = Users::Current()->id;
 		$receivers = (array)$receivers;
 		$insertData = [];
@@ -144,7 +144,10 @@ class Notifications extends ActiveRecord {
 		if ([] !== $insertData) {
 			Yii::$app->db->createCommand(Yii::$app->db->createCommand()
 					->batchInsert(self::tableName(), ['type', 'initiator', 'receiver', 'comment'], $insertData)
-					->rawSql." ON DUPLICATE KEY UPDATE `id` = `id`")
+					->rawSql.match (Yii::$app->db->driverName) {
+					'mysql' => " ON DUPLICATE KEY UPDATE `id` = `id`",
+					'pgsql' => " ON CONFLICT (id) DO UPDATE SET id = ".static::tableName().".id"
+				})
 				->execute();
 		}
 	}

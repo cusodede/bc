@@ -11,7 +11,7 @@ declare(strict_types = 1);
 use app\models\site\UpdatePasswordForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 
 $this->title = 'Смена пароля';
 ?>
@@ -30,10 +30,6 @@ $this->title = 'Смена пароля';
 			<?= Html::submitButton('Сменить пароль', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 
 			<?php ActiveForm::end(); ?>
-
-			<div class="text-right mt-1">
-				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
-			</div>
 		</div>
 	</div>
 </div>

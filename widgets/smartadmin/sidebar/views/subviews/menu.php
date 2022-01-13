@@ -2,10 +2,12 @@
 declare(strict_types = 1);
 
 /**
+ * @var View $this
  * @var array $items
  */
 
 use app\widgets\smartadmin\menu\MenuWidget;
+use yii\web\View;
 
 ?>
 

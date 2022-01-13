@@ -10,7 +10,7 @@ use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
 use yii\web\View;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 
 ?>
 
@@ -20,12 +20,12 @@ use yii\bootstrap4\Html;
 				<div class="row no-gutters row-grid">
 					<div class="col-4">
 						<div class="d-flex flex-column align-items-center justify-content-center p-4">
-							<?= Html::img(UsersController::to('logo-get'), [
+							<?= Html::img(UsersController::to('logo-get', ['id' => $model->id]), [
 								'class' => "rounded-circle shadow-2 img-thumbnail user-logo",
 								'style' => "width: 160px; height: 160px",
 							]) ?>
 							<h5 class="mb-0 fw-700 text-center mt-3">
-								<?= Users::Current()->username ?>
+								<?= $model->username ?>
 							</h5>
 						</div>
 					</div>
@@ -56,13 +56,13 @@ use yii\bootstrap4\Html;
 					</div>
 					<div class="col-12">
 						<div class="p-3 text-center">
-							<?= Html::a("<i class='fal fa-fw fa-image-polaroid'></i> Загрузить фото", "#", [
+							<?= Html::link("<i class='fal fa-fw fa-image-polaroid'></i> Загрузить фото", "#", [
 								"data-toggle" => "modal",
 								"data-target" => "#cropperModal",
 								"class" => "btn-link font-weight-bold"
 							]) ?>
 							<span class="text-primary d-inline-block mx-3">●</span>
-							<?= Html::a("<i class='fal fa-fw fa-lock'></i> Обновить пароль", SiteController::to('update-password'), [
+							<?= Html::link("<i class='fal fa-fw fa-lock'></i> Обновить пароль", SiteController::to('update-password'), [
 								"class" => "btn-link font-weight-bold"
 							]) ?>
 						</div>

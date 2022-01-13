@@ -3,24 +3,24 @@ declare(strict_types = 1);
 
 namespace app\controllers;
 
-use app\models\core\Options;
+use app\components\web\ErrorAction;
+use app\controllers\actions\swagger\SchemaAction;
+use app\controllers\actions\swagger\SwaggerUiAction;
+use app\components\Options;
 use app\models\site\LoginForm;
 use app\models\site\RegistrationForm;
 use app\models\site\RestorePasswordForm;
 use app\models\site\UpdatePasswordForm;
+use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\models\sys\users\Users;
-use pozitronik\traits\traits\ControllerTrait;
 use pozitronik\helpers\ArrayHelper;
-use pozitronik\sys_options\models\SysOptions;
 use Throwable;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\ErrorAction;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
-use yii2mod\swagger\SwaggerUIRenderer;
-use yii2mod\swagger\OpenAPIRenderer;
 
 /**
  * @SWG\Swagger(
@@ -31,7 +31,7 @@ use yii2mod\swagger\OpenAPIRenderer;
  * )
  */
 class SiteController extends Controller {
-	use ControllerTrait;
+	use ControllerPermissionsTrait;
 
 	public $layout = 'login';
 
@@ -44,18 +44,12 @@ class SiteController extends Controller {
 				'class' => ErrorAction::class
 			],
 			'docs' => [
-				'class' => SwaggerUIRenderer::class,
-				'restUrl' => self::to('json-schema', [], true),
+				'class' => SwaggerUiAction::class,
+				'schemaUrl' => Url::to(['docs-schema'])
 			],
-			'json-schema' => [
-				'class' => OpenAPIRenderer::class,
-				'cache' => null,
-				// Тhe list of directories that contains the swagger annotations.
-				'scanDir' => [
-					Yii::getAlias('@app/controllers/api'),
-					Yii::getAlias('@app/definitions'),
-				],
-			],
+			'docs-schema' => [
+				'class' => SchemaAction::class
+			]
 		];
 	}
 
@@ -68,22 +62,24 @@ class SiteController extends Controller {
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->doLogin()) {
 			if ($model->user->is_pwd_outdated) {
-				return $this->redirect('update-password');
+				return $this->redirect(static::to('update-password'));
 			}
 			return $this->redirect(Yii::$app->homeUrl);
 		}
+		/** @noinspection UnusedParameterInspection todo */
 		return $this->render('login', [
 			'login' => $model,
 			'from' => $from /*unused, на будущее*/
 		]);
 	}
 
+
 	/**
 	 * logout
 	 */
 	public function actionLogout():void {
 		Yii::$app->user->logout();
-		$this->redirect('index');
+		$this->redirect('/');
 	}
 
 	/**
@@ -136,16 +132,16 @@ class SiteController extends Controller {
 	 * @return string|Response
 	 */
 	public function actionResetPassword(?string $code = null) {
-		if (null === $code) return $this->redirect('restore-password');
+		if (null === $code) return $this->redirect(static::to('restore-password'));
 
 		/*Проверка наличия пользователя с указанным кодом восстановления*/
-		if (null === $restoredUser = Users::findByRestoreCode($code)) return $this->redirect('restore-password');
+		if (null === $restoredUser = Users::findByRestoreCode($code)) return $this->redirect(static::to('restore-password'));
 
 		$resetPasswordForm = new UpdatePasswordForm([/*UpdatePasswordForm отвечает и за сброс*/
 			'user' => $restoredUser,
 		]);
 		if ($resetPasswordForm->load(Yii::$app->request->post()) && $resetPasswordForm->doUpdate(false)) {/*Данные пришли в посте и сброшены успешно*/
-			return $this->redirect(['site/login', 'from' => 'reset']);
+			return $this->redirect(static::to('login', ['from' => 'reset']));
 		}
 
 		return $this->render('reset-password', [
@@ -182,7 +178,7 @@ class SiteController extends Controller {
 	public function actionRegister() {
 		$registrationForm = new RegistrationForm();
 		if ($registrationForm->load(Yii::$app->request->post()) && $registrationForm->doRegister()) {
-			return $this->redirect(['site/login', 'from' => 'register']);
+			return $this->redirect(static::to('login', ['from' => 'register']));
 		}
 		return $this->render('register', [
 			'model' => $registrationForm
@@ -196,10 +192,7 @@ class SiteController extends Controller {
 	public function actionOptions():string {
 		$this->layout = 'main';
 		return $this->render('options', [
-			'boolOptions' => [
-				'ASSETS_PUBLISHOPTIONS_FORCECOPY' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', Options::ASSETS_PUBLISHOPTIONS_FORCECOPY),
-				'GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION' => SysOptions::getStatic('GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION', Options::GRANT_TYPE_ISSUE_IGNORE_TOKEN_VALIDATION),
-			],
+			'boolOptions' => Options::boolOptions(),
 			'optionsLabels' => Options::OPTIONS_LABELS
 		]);
 	}

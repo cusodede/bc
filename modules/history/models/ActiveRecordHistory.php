@@ -41,6 +41,15 @@ use yii\db\ActiveRecord;
  * @property bool $storeShortClassNames Сохранять короткие/полные имена классов. Если параметр задан в конфиге модуля, то загрузится из конфига
  */
 class ActiveRecordHistory extends History {
+	/**
+	 * @var array|null Хранилка десериализованных старых атрибутов
+	 */
+	protected ?array $_oldAttributes = null;
+
+	/**
+	 * @var array|null Хранилка десериализованных новых атрибутов
+	 */
+	protected ?array $_newAttributes = null;
 
 	/**
 	 * @var null|array the functions used to serialize and unserialize values. Defaults to null, meaning
@@ -49,10 +58,10 @@ class ActiveRecordHistory extends History {
 	 * a two-element array. The first element specifies the serialization function, and the second the deserialization
 	 * function.
 	 */
-	public $serializer;
+	public ?array $serializer = null;
 
-	private $_loadedModel;
-	public $storeShortClassNames = false;
+	private ?ActiveRecord $_loadedModel = null;
+	public bool $storeShortClassNames = false;
 
 	/**
 	 * Shorthand to get string identifier of stored class name (short/full class name)
@@ -84,7 +93,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => null,
 				'operation_identifier' => "Console operation"
@@ -97,7 +106,7 @@ class ActiveRecordHistory extends History {
 				'old_attributes' => $log->serialize($oldAttributes),
 				'new_attributes' => $log->serialize($newAttributes),
 				'relation_model' => null === $relationModel?null:$log->getStoredClassName($relationModel),
-				'event' => null === $event?null:$event->name,
+				'event' => $event?->name,
 				'scenario' => $model->scenario,
 				'delegate' => self::ensureDelegate(),
 				'operation_identifier' => Yii::$app->request->csrfToken
@@ -154,6 +163,7 @@ class ActiveRecordHistory extends History {
 	 * @throws ReflectionException
 	 * @throws Throwable
 	 * @throws UnknownClassException
+	 * @noinspection PhpIncompatibleReturnTypeInspection - мы можем конкретизировать тип
 	 */
 	public function getLoadedModel():?ActiveRecord {
 		return $this->_loadedModel??ReflectionHelper::LoadClassByName(self::ExpandClassName($this->model_class), null, false);
@@ -168,12 +178,12 @@ class ActiveRecordHistory extends History {
 
 	/**
 	 * @param null|string $key
-	 * @param mixed $default
+	 * @param mixed|null $default
 	 * @return mixed
 	 * @throws Throwable
 	 */
-	private function getModelRules(?string $key = null, $default = null) {
-		$behaviors = $this->loadedModel->behaviors();
+	private function getModelRules(?string $key = null, mixed $default = null) {
+		$behaviors = $this?->loadedModel?->behaviors()??[];
 		$keys = ArrayHelper::array_find_deep($behaviors, HistoryBehavior::class);
 		array_pop($keys);
 		if (null !== $key) $keys[] = $key;
@@ -293,7 +303,7 @@ class ActiveRecordHistory extends History {
 	 * @throws Throwable
 	 * @throws UnknownClassException
 	 */
-	private function SubstituteAttributeValue(string $attributeName, $attributeValue) {
+	private function SubstituteAttributeValue(string $attributeName, mixed $attributeValue) {
 		if (null === $this->loadedModel) return $attributeValue;
 		if (null === $attributeConfig = $this->getModelRules("attributes.{$attributeName}")) return $attributeValue;
 		if (false === $attributeConfig) return false;//не показывать атрибут
@@ -350,8 +360,9 @@ class ActiveRecordHistory extends History {
 
 	/**
 	 * @param int $level
-	 * @return $this|null
+	 * @return self|null
 	 * @throws InvalidConfigException
+	 * @noinspection PhpIncompatibleReturnTypeInspection - мы конкретизируем возвращаемое значение
 	 */
 	private function getHistoryLevelRecord(int $level):?self {
 		if ($level < 1) return null;
@@ -467,8 +478,7 @@ class ActiveRecordHistory extends History {
 				break;
 			}
 			$currentStepRecords = $this->getStepHistory($modelHistoryStepsIdentifiers[$currentHistoryLevel]);
-			/** @noinspection PhpUnusedLocalVariableInspection */
-			foreach ($currentStepRecords as $key => $historyData) {
+			foreach ($currentStepRecords as $historyData) {
 
 				foreach ($historyData->attributesNew as $attributeName => $attributeValue) {//откатываем добавленные атрибуты
 					if ((null === $currentVal = (ArrayHelper::getValue($resultModelData, $attributeName))) || is_scalar($currentVal)) {
@@ -550,8 +560,7 @@ class ActiveRecordHistory extends History {
 		$modelHistory = self::find()->where(['model_class' => $this->getStoredClassName($this->loadedModel), 'model_key' => $this->loadedModel->primaryKey])->joinWith(['relHistoryTags'])->orderBy(['id' => SORT_DESC])->all();
 		$result = 0;
 		$oi = '';
-		/** @noinspection PhpUnusedLocalVariableInspection */
-		foreach ($modelHistory as $key => $value) {
+		foreach ($modelHistory as $value) {
 			if ($value->tag === $tag) return $result;
 			if ($oi !== $value->operation_identifier) {
 				$oi = $value->operation_identifier;
@@ -571,39 +580,48 @@ class ActiveRecordHistory extends History {
 	}
 
 	/**
-	 * @param string $value
+	 * @param string|mixed $value
 	 * @return mixed
 	 */
-	protected function unserialize(string $value) {
-		return (null === $this->serializer)?unserialize($value, ['allowed_classes' => true]):call_user_func($this->serializer[1], $value);
+	protected function unserialize(mixed $value) {
+		if (is_resource($value) && 'stream' === get_resource_type($value)) {
+			$serialized = stream_get_contents($value);
+			fseek($value, 0);
+		} else {
+			$serialized = $value;
+		}
+		return (null === $this->serializer)?unserialize($serialized, ['allowed_classes' => true]):call_user_func($this->serializer[1], $serialized);
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function getAttributesOld() {
-		return $this->unserialize($this->old_attributes);
+		if (null === $this->_oldAttributes) $this->_oldAttributes = $this->unserialize($this->old_attributes);
+		return $this->_oldAttributes;
 	}
 
 	/**
 	 * @param mixed $attributesOld
 	 */
-	public function setAttributesOld($attributesOld):void {
+	public function setAttributesOld(mixed $attributesOld):void {
 		$this->old_attributes = $this->serialize($attributesOld);
+		$this->_oldAttributes = null;
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function getAttributesNew() {
-		return $this->unserialize($this->new_attributes);
+		if (null === $this->_newAttributes) $this->_newAttributes = $this->unserialize($this->new_attributes);
+		return $this->_newAttributes;
 	}
 
 	/**
 	 * @param mixed $attributesNew
 	 */
-	public function setAttributesNew($attributesNew):void {
+	public function setAttributesNew(mixed $attributesNew):void {
 		$this->new_attributes = $this->serialize($attributesNew);
+		$this->_newAttributes = null;
 	}
-
 }

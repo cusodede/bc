@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\permissions\active_record\relations;
 
 use app\models\sys\permissions\active_record\PermissionsCollections;
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -26,6 +27,17 @@ class RelPermissionsCollectionsToPermissionsCollections extends ActiveRecord {
 	 */
 	public static function tableName():string {
 		return 'sys_relation_permissions_collections_to_permissions_collections';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
 	}
 
 	/**

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-use yii\db\Migration;
+use app\components\db\Migration;
 
 /**
-* Class m210603_090218_add_type_id_to_users_tokens_table
-*/
+ * Class m210603_090218_add_type_id_to_users_tokens_table
+ */
 class m210603_090218_add_type_id_to_users_tokens_table extends Migration {
 	/**
 	 * {@inheritdoc}

@@ -11,7 +11,7 @@ declare(strict_types = 1);
 use app\models\site\RestorePasswordForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 
 $this->title = 'Восстановление пароля';
 ?>
@@ -28,7 +28,7 @@ $this->title = 'Восстановление пароля';
 			<?php ActiveForm::end(); ?>
 
 			<div class="text-right mt-1">
-				<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link']) ?>
+				<?= Html::link('Назад', '/', ['class' => 'btn-link']) ?>
 			</div>
 		</div>
 	</div>

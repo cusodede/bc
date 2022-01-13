@@ -21,7 +21,8 @@ use yii\bootstrap4\ActiveForm;
 		'form' => "{$model->formName()}-modal-update-password"
 	]),
 	'options' => [
-		'class' => 'modal-dialog-large',
+		'tabindex' => false, // important for Select2 to work properly
+		'class' => 'modal-dialog-large'
 	]
 ]); ?>
 <?php $form = ActiveForm::begin(['id' => "{$model->formName()}-modal-update-password"]); ?>

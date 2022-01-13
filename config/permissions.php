@@ -1,6 +1,9 @@
 <?php
 declare(strict_types = 1);
 
+/*При наличии одноимённого файла в подкаталоге /local конфигурация будет взята оттуда*/
+if (file_exists($localConfig = __DIR__.DIRECTORY_SEPARATOR.'local'.DIRECTORY_SEPARATOR.basename(__FILE__))) return require $localConfig;
+
 use app\models\sys\permissions\Permissions;
 
 return [
@@ -14,12 +17,17 @@ return [
 	 */
 	'controllerDirs' => [
 		'@app/controllers' => '',
-		'@app/controllers/api' => 'api',
+		'@app/modules/api/controllers' => '@api',
 		'@app/modules/history/controllers' => '@history',/*@ - указываем, что это модуль*/
+		'@app/modules/import/controllers' => '@import',
+		'@vendor/pozitronik/yii2-references/src/controllers' => '@references',
+		'@vendor/pozitronik/yii2-exceptionslogger/src/controllers' => '@sysexceptions',
+		'@vendor/pozitronik/yii2-dbmon/src/controllers' => '@db',
+		'@vendor/pozitronik/yii2-filestorage/src/controllers' => '@filestorage',
 	],
 	'grantAll' => [1],/*User ids, that receive all permissions by default*/
 	'grant' => [/*перечисление прямых назначений*/
-		1 => ['login_as_another_user', 'some_other_permission']
+		1 => ['login_as_another_user']
 	],
 	'permissions' => [//параметры контроллер-экшен-etc в этой конфигурации не поддерживаются
 		'system' => [
@@ -27,6 +35,6 @@ return [
 		],
 		'login_as_another_user' => [
 			'comment' => 'Разрешение авторизоваться под другим пользователем',
-		]
+		],
 	]
 ];

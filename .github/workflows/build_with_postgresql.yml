@@ -1,0 +1,110 @@
+name: CI with PostgreSQL
+on:
+  pull_request:
+    branches: [ master ]
+
+env:
+  TEST_DB_DSN: "pgsql:host=127.0.0.1;port=5432;dbname=bc"
+  TEST_DB_USER: "bc"
+  TEST_DB_PASS: "postgres"
+
+jobs:
+  build:
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        php:
+#          - 8.0
+          - 8.1
+
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_DB: bc
+          POSTGRES_USER: bc
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: 6
+
+      - name: Set dirs
+        run: |
+          mkdir web/assets
+          chmod 777 web/assets
+          chmod 777 runtime
+          chmod 777 .git/HEAD
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          extensions: imagick, pdo_pgsql, opcache
+          ini-values: opcache.enable=1, opcache.enable_cli=1, apc.enable_cli=1
+        env:
+          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+
+      - name: Check php and composer
+        run: php -v && composer --version
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install composer dependencies
+        run: composer install
+
+      - name: CP CONFIG
+        run: cp config/db.env.php config/db.php
+
+      - name: Install migrations
+        run: composer migrations
+
+#      - name: Dump migration
+#        run: pg_dump --schema-only --if-exists --clean --dbname=postgresql://bc:postgres@127.0.0.1:5432/bc --file=./tests/_data/dumps/base_structure.sql
+
+#      - name: Generate JWT test keys
+#        run: |
+#          ssh-keygen -t rsa -b 4096 -m PEM -f ./tests/_data/jwt/jwt.key -N '' -q <<<y >/dev/null 2>&1
+#          openssl rsa -in ./tests/_data/jwt/jwt.key -pubout -outform PEM -out ./tests/_data/jwt/jwt.key.pub
+
+#      - name: Prepare test
+#        run: cp tests/.env.ci tests/.env
+
+      - name: Permissions for folder
+        run: |
+          mkdir runtime/logs
+          chmod -R 777 runtime/*
+
+#      - name: Run tests
+#        run: composer tests
+#        env:
+#          JWT_KEY_PATH: ${{ secrets.JWT_KEY_PATH }}
+#          JWT_KEY_PUB_PATH: ${{ secrets.JWT_KEY_PUB_PATH }}
+#          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}

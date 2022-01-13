@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace app\modules\status\models\traits;
 
-use app\models\sys\users\Users;
 use app\modules\status\models\Status;
 use app\modules\status\models\StatusModel;
 use app\modules\status\models\StatusRulesModel;
 use pozitronik\helpers\ReflectionHelper;
 use ReflectionException;
 use Throwable;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownClassException;
 use yii\db\ActiveQuery;
@@ -29,9 +29,12 @@ use yii\helpers\ArrayHelper;
  * @property-read string $className
  *
  * @property-read null|Status $relStatus Релейшен к таблице статусов. Используем только для чтения, для записи обращаемся к Status::setCurrentStatus - там учитываются создатель и делегат. Если они не будут нужны, можно и через свойство.
+ * @method static array status_config() В этом методе статусы для модели
  */
 trait StatusesTrait {
-	private $_className;
+	/*При наличии в модели атрибута с этим именем, идентификатор статуса будет сохраняться в нём*/
+	public string $_ownStatusAttributeName = 'status';
+	private ?string $_className = null;
 
 	/**
 	 * @return string
@@ -54,7 +57,7 @@ trait StatusesTrait {
 
 		return array_filter($fwdStatuses, function(StatusModel $statusModel) {
 			/** @var ActiveRecord $this */
-			return $statusModel->isAllowed($this, Users::Current());
+			return $statusModel->isAllowed($this, Yii::$app->user->identity??null);//?-> не прокатывает
 		}, ARRAY_FILTER_USE_BOTH);
 	}
 
@@ -89,6 +92,11 @@ trait StatusesTrait {
 	public function setCurrentStatusId(int $status):?bool {
 		if (in_array($status, ArrayHelper::getColumn($this->availableStatuses, 'id'), true)) {
 			/** @var ActiveRecord $this */
+			if ($this->hasAttribute($this->_ownStatusAttributeName)) {//у модели собственный атрибут статуса
+				$this->{$this->_ownStatusAttributeName} = $status;
+				return true;
+			}
+
 			$this->on(ActiveRecord::EVENT_AFTER_UPDATE, function($event) {//отложим связывание после сохранения
 				return Status::setCurrentStatus($event->data[0], $event->data[1]);
 			}, [$this, $status]);
@@ -107,13 +115,17 @@ trait StatusesTrait {
 	 * @throws Throwable
 	 */
 	public function getCurrentStatus():?StatusModel {
-		if (null === $status = $this->relStatus) {
-			if (null === $currentStatus = StatusRulesModel::getInitialStatus($this->className)) {
-				return null;
-			}
-			return $currentStatus;
+		/** @var ActiveRecord $this */
+		if ($this->hasAttribute($this->_ownStatusAttributeName)) {//у модели собственный атрибут статуса
+			return (null === $this->{$this->_ownStatusAttributeName})
+				?StatusRulesModel::getInitialStatus($this->className)
+				:StatusRulesModel::getStatus($this->className, $this->{$this->_ownStatusAttributeName});
 		}
-		return StatusRulesModel::getStatus($this->className, $status->status);
+
+		return (null === $status = $this->relStatus)
+			?StatusRulesModel::getInitialStatus($this->className)
+			:StatusRulesModel::getStatus($this->className, $status->status);
+
 	}
 
 	/**

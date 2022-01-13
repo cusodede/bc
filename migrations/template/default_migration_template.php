@@ -13,7 +13,7 @@ if (!empty($namespace)) {
 	echo "\nnamespace {$namespace};\n";
 }
 ?>
-use yii\db\Migration;
+use app\components\db\Migration;
 
 /**
 * Class <?= $className . "\n" ?>
@@ -23,7 +23,7 @@ class <?= $className ?> extends Migration {
 	 * {@inheritdoc}
 	 */
 	public function safeUp() {
-
+		/*todo: проверь, не сломает ли миграция совместимость между релизами (см. RELEASE.MD)*/
 	}
 
 	/**

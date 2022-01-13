@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\widgets\selectmodelwidget;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
 use yii\web\AssetBundle;
 
 /**
@@ -15,12 +15,14 @@ class SelectModelWidgetAssets extends AssetBundle {
 	 */
 	public function init():void {
 		$this->sourcePath = __DIR__.'/assets';
-//		$this->css = ['css/select_model.css'];
+		$this->css = [
+			'css/select_model.css'
+		];
 		$this->js = [
 			'js/select_model.js'
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 		parent::init();
 	}

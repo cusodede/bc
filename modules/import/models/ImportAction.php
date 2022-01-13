@@ -22,23 +22,22 @@ class ImportAction extends Action {
 	 * @throws Throwable
 	 */
 	public function run():string {
-
-		$importModel = new ImportModel([
+		$importJob = new ImportJob([
 			'model' => $this->modelClass,
 			'skipRows' => $this->skipRows,
-			'skipEmptyRows' => $this->skipEmptyRows
+			'skipEmptyRows' => $this->skipEmptyRows,
 		]);
 
-		if (([] !== $importModel->uploadAttribute('importFile')) && $importModel->preload()) {
+		if (([] !== $importJob->uploadAttribute('importFile') && $importJob->register())) {//todo: просто сразу редиректить
 			return $this->controller->render('@app/modules/import/views/preload-done', [
 				'controller' => get_class($this->controller),
-				'model' => $importModel
+				'job' => $importJob
 			]);
 		}
 
 		return $this->controller->render('@app/modules/import/views/import', [
 			'controller' => get_class($this->controller),
-			'model' => $importModel
+			'model' => $importJob
 		]);
 	}
 }

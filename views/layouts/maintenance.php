@@ -8,7 +8,7 @@ declare(strict_types = 1);
  */
 
 use app\assets\AppAsset;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 use yii\web\View;
 
 AppAsset::register($this);

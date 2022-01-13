@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace app\components\db;
 
+use app\components\helpers\TemporaryHelper;
 use app\models\sys\permissions\traits\ActiveRecordPermissionsTrait;
+use DomainException;
 use pozitronik\filestorage\traits\FileStorageTrait;
 use pozitronik\helpers\ArrayHelper;
 use pozitronik\traits\traits\ActiveRecordTrait as VendorActiveRecordTrait;
@@ -14,6 +16,7 @@ use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
 use yii\db\Exception as DbException;
 use yii\bootstrap4\ActiveForm;
+use yii\db\StaleObjectException;
 use yii\db\Transaction;
 
 /**
@@ -33,11 +36,11 @@ trait ActiveRecordTrait {
 
 	/**
 	 * По (int)$pk|(string)$pk пытается вернуть соответствующую ActiveRecord-модель
-	 * @param string|ActiveRecordInterface $className
+	 * @param null|string|ActiveRecordInterface $className
 	 * @param int|string|ActiveRecordInterface $model
 	 * @return ActiveRecordInterface|null
 	 */
-	public static function ensureModel($className, $model):?ActiveRecordInterface {
+	public static function ensureModel(null|string|ActiveRecordInterface $className, int|string|ActiveRecordInterface $model):?ActiveRecordInterface {
 		if (is_string($model) && is_numeric($model)) {
 			$model = (int)$model;
 		}
@@ -51,11 +54,10 @@ trait ActiveRecordTrait {
 	/**
 	 * @inheritDoc
 	 * @param ActiveRecordInterface|int|string $model the model to be linked with the current one.
+	 * @noinspection ParameterDefaultValueIsNotNullInspection - для совместимости с методом фреймворка
 	 */
 	public function link($name, $model, $extraColumns = []):void {
-		/** @noinspection PhpMultipleClassDeclarationsInspection
-		 * parent всегда будет ссылаться на BaseActiveRecord, но у нас нет способа это пометить
-		 */
+		/* @noinspection PhpMultipleClassDeclarationsInspection parent всегда будет ссылаться на BaseActiveRecord, но у нас нет способа это пометить */
 		parent::link($name, self::ensureModel($this->$name, $model), $extraColumns);
 	}
 
@@ -95,7 +97,7 @@ trait ActiveRecordTrait {
 					try {
 						/** @see FileStorageTrait::uploadAttributes() */
 						$this->uploadAttributes();
-					} /** @noinspection BadExceptionsProcessingInspection Это нормально */ catch (Throwable $e) {
+					} catch (Throwable) {
 						$transaction->rollBack();
 						return false;
 					}
@@ -208,14 +210,14 @@ trait ActiveRecordTrait {
 	/**
 	 * Если модель с текущими атрибутами есть - вернуть её. Если нет - создать и вернуть.
 	 * @param array $attributes
+	 * @param bool $saveNew Сохранять ли вновь созданную модель
 	 * @return static
-	 * TODO: нелогичное название. upsert подразумевает "если нет - создать, если есть - обновить"
 	 */
-	public static function Upsert(array $attributes):self {
-		if (null === $model = self::find()->where($attributes)->one()) {
-			$model = new self();
+	public static function Upsert(array $attributes, bool $saveNew = true):static {
+		if (null === $model = static::find()->where($attributes)->one()) {
+			$model = new static();
 			$model->load($attributes, '');
-			$model->save();
+			if ($saveNew) $model->save();
 		}
 		return $model;
 	}
@@ -223,11 +225,31 @@ trait ActiveRecordTrait {
 	/**
 	 * Возвращает существующую запись в ActiveRecord-модели, найденную по условию, если же такой записи нет - возвращает новую модель
 	 * @param array|string $searchCondition
-	 * @return ActiveRecord|self
 	 */
-	public static function getInstance($searchCondition):self {
+	public static function getInstance($searchCondition):static {
 		$instance = static::find()->where($searchCondition)->one();
+		/** @var static $instance */
 		return $instance??new static();
 	}
 
+	/**
+	 * @param bool $runValidation
+	 * @param array|null $attributeNames
+	 * @return static
+	 */
+	public function assertSave(bool $runValidation = true, ?array $attributeNames = null):static {
+		if (false === $this->save($runValidation, $attributeNames)) {
+			throw new DomainException("Не получилось сохранить запись. ".TemporaryHelper::Errors2String($this->getErrors()));
+		}
+		return $this;
+	}
+
+	/**
+	 * @throws StaleObjectException
+	 */
+	public function assertDelete():void {
+		if (false === $this->delete()) {
+			throw new DomainException("Не получилось удалить запись. ".TemporaryHelper::Errors2String($this->getErrors()));
+		}
+	}
 }

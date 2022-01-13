@@ -20,16 +20,16 @@
 		"php": "~8.0",
 		"yiisoft/yii2": "dev-master",
 		"yiisoft/yii2-bootstrap4": "~2.0.10",
-		"pozitronik/yii2-users-options": "dev-master",
-		"pozitronik/yii2-options": "dev-master",
-		"pozitronik/yii2-references": "dev-master",
-		"pozitronik/yii2-exceptionslogger": "dev-master",
-		"pozitronik/yii2-badgewidget": "dev-master",
-		"pozitronik/yii2-cachedwidget": "dev-master",
-		"pozitronik/yii2-filestorage": "dev-master",
-		"pozitronik/yii2-grid-config": "dev-master",
-		"pozitronik/yii2-relations": "dev-master",
-		"pozitronik/yii2-dbmon": "dev-master",
+		"pozitronik/yii2-users-options": "dev-dev",
+		"pozitronik/yii2-options": "dev-dev",
+		"pozitronik/yii2-references": "dev-dev",
+		"pozitronik/yii2-exceptionslogger": "dev-dev",
+		"pozitronik/yii2-badgewidget": "dev-dev",
+		"pozitronik/yii2-cachedwidget": "dev-dev",
+		"pozitronik/yii2-filestorage": "dev-dev",
+		"pozitronik/yii2-grid-config": "dev-dev",
+		"pozitronik/yii2-relations": "dev-dev",
+		"pozitronik/yii2-dbmon": "dev-dev",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "dev-master",
 		"kartik-v/yii2-editable": "dev-master",
@@ -37,14 +37,29 @@
 		"odannyc/yii2-sse": "dev-master",
 		"cusodede/yii2-multi-select-widget": "dev-master",
 		"simialbi/yii2-rest-client": "dev-master",
-		"yii2mod/yii2-swagger": "dev-master",
 		"webonyx/graphql-php": "dev-master",
 		"kartik-v/yii2-widget-datetimepicker": "dev-master",
 		"kartik-v/yii2-widget-datepicker": "dev-master",
-		"moonlandsoft/yii2-phpexcel": "dev-master",
 		"giggsey/libphonenumber-for-php": "^8.12",
-		"yiisoft/yii2-queue": "^2.0",
-		"cusodede/yii2-jwt": "dev-master"
+		"yiisoft/yii2-queue": "dev-master",
+		"cusodede/yii2-jwt": "dev-master",
+		"kartik-v/yii2-number": "dev-master",
+		"zircote/swagger-php": "dev-master",
+		"opentracing/opentracing": "^1.0",
+		"kartik-v/yii2-password": "dev-master",
+		"kartik-v/yii2-date-range": "dev-master",
+		"kartik-v/yii2-bootstrap4-dropdown": "dev-master",
+		"enqueue/fs": "^0.10.9",
+		"enqueue/amqp-lib": "^0.10.9",
+		"phpoffice/phpspreadsheet": "^1.18",
+		"wbraganca/yii2-dynamicform": "*",
+		"box/spout": "^3.3",
+		"promphp/prometheus_client_php": "^2.4",
+		"aws/aws-sdk-php": "^3.208",
+		"yiisoft/cache": "^1.0.1",
+		"yiisoft/cache-file": "^1.0.1",
+		"kidzen/yii2-dynamicform": "*",
+		"kartik-v/yii2-widget-depdrop": "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
@@ -58,13 +73,18 @@
 		"codeception/module-db": "^1.1",
 		"codeception/module-filesystem": "^1.0",
 		"vlucas/phpdotenv": "^4",
-		"codeception/module-rest": "^1.3.1"
+		"codeception/module-rest": "^1.3.1",
+		"phpmetrics/phpmetrics": "^2.7",
+		"nesbot/carbon": "^2.55.2"
 	},
 	"config": {
 		"process-timeout": 1800,
 		"fxp-asset": {
 			"enabled": false
-		}
+		},
+		"github-protocols": [
+			"https"
+		]
 	},
 	"scripts": {
 		"post-install-cmd": [
@@ -75,13 +95,37 @@
 			"yii\\composer\\Installer::postInstall"
 		],
 		"tests": "vendor/bin/codecept run",
+		"tests-with-dump": [
+			"@generate-test-jwt-key",
+			"pg_dump --schema-only --if-exists --clean --password --dbname=postgresql://dpl@localhost:5432/dpl --file=./tests/_data/dumps/base_structure.sql",
+			"@tests",
+			"git checkout ./tests/_data/dumps/base_structure.sql",
+			"rm -rf ./tests/_data/jwt/*",
+			"git checkout ./tests/_data/jwt/.gitignore"
+		],
+		"generate-test-jwt-key": [
+			"ssh-keygen -t rsa -b 4096 -m PEM -f ./tests/_data/jwt/jwt.key -N \"\"",
+			"openssl rsa -in ./tests/_data/jwt/jwt.key -pubout -outform PEM -out ./tests/_data/jwt/jwt.key.pub"
+		],
 		"migrations": [
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-users-options/migrations --interactive=0",
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-options/migrations --interactive=0",
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-exceptionslogger/migrations --interactive=0",
 			"php yii migrate --migrationPath=@vendor/pozitronik/yii2-filestorage/migrations --interactive=0",
 			"php yii migrate --interactive=0"
-		]
+		],
+		"initialize": [
+			"composer migrations",
+			"php yii service/init"
+		],
+		"metrics": "vendor/bin/phpmetrics --config=phpmetrics.json",
+		"build": "docker-compose up -d --build",
+		"start": "docker-compose up -d",
+		"stop": "docker-compose stop",
+		"restart": "docker-compose restart",
+		"down": "docker-compose down",
+		"execute": "docker exec -ti $(or $(s), $(service)) bash",
+		"setup": "./docker/scripts/setup"
 	},
 	"extra": {
 		"yii\\composer\\Installer::postCreateProject": {
@@ -105,11 +149,11 @@
 			"url": "https://asset-packagist.org"
 		},
 		{
-			"type": "github",
+			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-multi-select-widget.git"
 		},
 		{
-			"type": "github",
+			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-jwt"
 		}
 	]
