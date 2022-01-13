@@ -28,11 +28,16 @@ class m180930_093408_sys_users extends Migration {
 			'deleted' => $this->boolean()->defaultValue(false)->comment('Флаг удаления')
 		]);
 
+		$this->addColumn(self::TABLE_NAME, 'is_pwd_outdated', $this->boolean()->notNull()->defaultValue(false)->after('salt')->comment('Ожидается смена пароля'));
+		$this->addColumn(self::TABLE_NAME, 'restore_code', $this->string('40')->null()->after('salt')->comment('Код восстановления'));
+
 		$this->createIndex(self::TABLE_NAME.'_username', self::TABLE_NAME, 'username');
 		$this->createIndex(self::TABLE_NAME.'_login', self::TABLE_NAME, 'login', true);
 		$this->createIndex(self::TABLE_NAME.'_email', self::TABLE_NAME, 'email', true);
 		$this->createIndex(self::TABLE_NAME.'_daddy', self::TABLE_NAME, 'daddy');
 		$this->createIndex(self::TABLE_NAME.'_deleted', self::TABLE_NAME, 'deleted');
+
+		$this->createIndex(self::TABLE_NAME.'_is_pwd_outdated', self::TABLE_NAME, 'is_pwd_outdated');
 
 		$this->insert(Users::tableName(), [
 			'username' => 'admin',
