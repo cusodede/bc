@@ -86,25 +86,25 @@ jobs:
       - name: Install migrations
         run: composer migrations
 
-      - name: Dump migration
-        run: pg_dump --schema-only --if-exists --clean --dbname=postgresql://bc:postgres@127.0.0.1:5432/bc --file=./tests/_data/dumps/base_structure.sql
+#      - name: Dump migration
+#        run: pg_dump --schema-only --if-exists --clean --dbname=postgresql://bc:postgres@127.0.0.1:5432/bc --file=./tests/_data/dumps/base_structure.sql
 
       - name: Generate JWT test keys
         run: |
           ssh-keygen -t rsa -b 4096 -m PEM -f ./tests/_data/jwt/jwt.key -N '' -q <<<y >/dev/null 2>&1
           openssl rsa -in ./tests/_data/jwt/jwt.key -pubout -outform PEM -out ./tests/_data/jwt/jwt.key.pub
 
-      - name: Prepare test
-        run: cp tests/.env.ci tests/.env
+#      - name: Prepare test
+#        run: cp tests/.env.ci tests/.env
 
       - name: Permissions for folder
         run: |
           mkdir runtime/logs
           chmod -R 777 runtime/*
 
-      - name: Run tests
-        run: composer tests
-        env:
-          JWT_KEY_PATH: ${{ secrets.JWT_KEY_PATH }}
-          JWT_KEY_PUB_PATH: ${{ secrets.JWT_KEY_PUB_PATH }}
-          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+#      - name: Run tests
+#        run: composer tests
+#        env:
+#          JWT_KEY_PATH: ${{ secrets.JWT_KEY_PATH }}
+#          JWT_KEY_PUB_PATH: ${{ secrets.JWT_KEY_PUB_PATH }}
+#          COMPOSER_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
