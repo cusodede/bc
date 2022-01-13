@@ -1,5 +1,5 @@
 {
-	"name": "pozitronik/bc",
+	"name": "cusodede/bc",
 	"description": "BeelineCab project frame",
 	"keywords": [
 		"yii2",
@@ -7,12 +7,12 @@
 		"basic",
 		"project template"
 	],
-	"homepage": "https://github.com/pozitronik/bc",
+	"homepage": "https://github.com/cusodede/bc",
 	"type": "project",
 	"license": "proprietary",
 	"support": {
-		"issues": "https://github.com/pozitronik/bc/issues?state=open",
-		"source": "https://github.com/pozitronik/bc"
+		"issues": "https://github.com/cusodede/bc/issues?state=open",
+		"source": "https://github.com/cusodede/bc"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
