@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\components\web\DefaultController;
+use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
 use Throwable;
@@ -24,15 +25,13 @@ class UsersController extends DefaultController {
 
 	/**
 	 * Поисковая модель пользователя
-	 * @var string
 	 */
-	public string $modelSearchClass = UsersSearch::class;
+	public ?string $modelSearchClass = UsersSearch::class;
 
 	/**
 	 * Модель пользователя
-	 * @var string
 	 */
-	public string $modelClass = Users::class;
+	public ?string $modelClass = Users::class;
 
 	public bool $enablePrototypeMenu = false;
 
@@ -44,7 +43,10 @@ class UsersController extends DefaultController {
 		return '@app/views/users';
 	}
 
-	public function behaviors():array {
+    /**
+     * @return array
+     */
+    public function behaviors():array {
 		return ArrayHelper::merge(parent::behaviors(), [
 			[
 				'class' => ContentNegotiator::class,
@@ -52,6 +54,10 @@ class UsersController extends DefaultController {
 				'formats' => [
 					'application/json' => Response::FORMAT_JSON,
 				],
+			],
+			'access' => [
+				'class' => PermissionFilter::class,
+				'except' => ['login-back', 'logo-get']
 			]
 		]);
 	}
@@ -141,8 +147,8 @@ class UsersController extends DefaultController {
 
 	/**
 	 * Вернуться в свою учетную запись
-	 *
 	 * @return Response
+	 * @throws ForbiddenHttpException
 	 */
 	public function actionLoginBack():Response {
 		Yii::$app->user->loginBackToOriginUser();

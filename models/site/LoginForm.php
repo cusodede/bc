@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\models\site;
 
-use app\models\sys\users\active_record\UsersTokens;
 use app\models\sys\users\Users;
+use app\models\sys\users\UsersTokens;
 use pozitronik\helpers\DateHelper;
 use Yii;
 use yii\base\Model;
@@ -20,8 +20,8 @@ use yii\base\Model;
  * @property bool $restore
  */
 class LoginForm extends Model {
-	public $login;
-	public $password;
+	public ?string $login = null;
+	public ?string $password = null;
 	public bool $rememberMe = true;
 	public bool $restore = false;
 

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\widgets\search;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
 use yii\web\AssetBundle;
 use app\assets\AppAsset;
 
@@ -21,7 +21,7 @@ class SearchWidgetAssets extends AssetBundle {
 		$this->css = ['css/search.css'];
 //		$this->js = ['js/search.js'];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 		parent::init();
 	}

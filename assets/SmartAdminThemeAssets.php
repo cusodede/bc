@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\assets;
 
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
 
@@ -26,13 +26,14 @@ class SmartAdminThemeAssets extends AssetBundle {
 			'css/notifications/toastr/toastr.css'
 		];
 		$this->js = [
+			'js/init.js',
 			'js/vendors.bundle.js',
 			'js/app.bundle.js',
+			'js/app.config.js',
 			'js/notifications/toastr/toastr.js',
-			'js/init.js'
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 
 		parent::init();

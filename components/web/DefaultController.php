@@ -4,22 +4,24 @@ declare(strict_types = 1);
 namespace app\components\web;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\core\prototypes\EditableFieldAction;
+use app\components\helpers\ArrayHelper;
 use app\models\sys\permissions\filters\PermissionFilter;
 use app\models\sys\permissions\traits\ControllerPermissionsTrait;
 use app\modules\import\models\ImportAction;
-use app\modules\import\models\ProcessImportAction;
+use app\modules\import\models\ImportStatusAction;
 use pozitronik\helpers\ControllerHelper;
+use pozitronik\helpers\ReflectionHelper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionException;
 use Throwable;
 use Yii;
+use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownClassException;
 use yii\db\ActiveRecord;
 use yii\filters\AjaxFilter;
 use yii\filters\ContentNegotiator;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -31,7 +33,6 @@ use yii\web\Response;
  * @property string $modelClass Модель, обслуживаемая контроллером
  * @property string $modelSearchClass Поисковая модель, обслуживаемая контроллером
  * @property bool $enablePrototypeMenu Включать ли контроллер в меню списка прототипов
- * @property array $mappingRules Настройки параметров импорта
  *
  * @property-read ActiveRecord $searchModel
  * @property-read ActiveRecord|ActiveRecordTrait $model
@@ -39,28 +40,41 @@ use yii\web\Response;
 class DefaultController extends Controller {
 	use ControllerPermissionsTrait;
 
+	/**
+	 * @var string название поля с первичным ключом.
+	 * Конечно ключ может быть составным, но пока таких случаев не встречалось
+	 */
+	protected string $primaryColumnName = 'id';
+
+	/**
+	 * Название контроллера
+	 */
 	protected const DEFAULT_TITLE = null;
 
 	/**
-	 * @var string $modelClass
+	 * Дефолтные названия экшенов
 	 */
-	public string $modelClass;
+	protected const ACTION_TITLES = [
+		'view' => 'Просмотр',
+		'edit' => 'Редактирование',
+		'create' => 'Создание',
+		'import' => 'Загрузка',
+		'import-status' => 'Статус загрузки'
+	];
+
 	/**
-	 * @var string $modelSearchClass
+	 * @var string|null $modelClass
 	 */
-	public string $modelSearchClass;
+	public ?string $modelClass = null;
+	/**
+	 * @var string|null $modelSearchClass
+	 */
+	public ?string $modelSearchClass = null;
 
 	/**
 	 * @var bool enablePrototypeMenu
 	 */
 	public bool $enablePrototypeMenu = true;
-
-	/**
-	 * @return array
-	 */
-	public function getMappingRules():array {
-		return [];
-	}
 
 	/**
 	 * @return string
@@ -73,13 +87,14 @@ class DefaultController extends Controller {
 	 * @inheritDoc
 	 */
 	public function beforeAction($action):bool {
-		$this->view->title = static::DEFAULT_TITLE??($this->view->title??$this->id);
+		$this->view->title = $this->view->title??ArrayHelper::getValue(static::ACTION_TITLES, $action->id, self::Title());
 		if (!isset($this->view->params['breadcrumbs'])) {
 			if ($this->defaultAction === $action->id) {
-				$this->view->params['breadcrumbs'][] = $this->id;
+				$this->view->params['breadcrumbs'][] = self::Title();
 			} else {
-				$this->view->params['breadcrumbs'][] = ['label' => $this->defaultAction, 'url' => $this::to($this->defaultAction)];
-				$this->view->params['breadcrumbs'][] = $action->id;
+				$actionForUrl = Yii::$app->id !== $this->module->id?'/'.$this->module->id.$this::to($this->defaultAction):$this::to($this->defaultAction);
+				$this->view->params['breadcrumbs'][] = ['label' => self::Title(), 'url' => $actionForUrl];
+				$this->view->params['breadcrumbs'][] = ['label' => $this->view->title];
 			}
 
 		}
@@ -115,15 +130,14 @@ class DefaultController extends Controller {
 		return ArrayHelper::merge(parent::actions(), [
 			'editAction' => [
 				'class' => EditableFieldAction::class,
-				'modelClass' => $this->modelClass,
+				'modelClass' => $this->modelClass
 			],
 			'import' => [
 				'class' => ImportAction::class,
 				'modelClass' => $this->modelClass
 			],
-			'process-import' => [
-				'class' => ProcessImportAction::class,
-				'mappingRules' => $this->mappingRules
+			'import-status' => [
+				'class' => ImportStatusAction::class
 			]
 		]);
 	}
@@ -141,7 +155,10 @@ class DefaultController extends Controller {
 		/** @var RecursiveDirectoryIterator $file */
 		foreach ($files as $file) {
 			/** @var self $model */
-			if ($file->isFile() && ('php' === $file->getExtension()) && (null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class])) && $model->enablePrototypeMenu) {
+			if ($file->isFile()
+				&& ('php' === $file->getExtension())
+				&& (null !== $model = ControllerHelper::LoadControllerClassFromFile($file->getRealPath(), null, [self::class]))
+				&& $model->enablePrototypeMenu) {
 				$items[] = [
 					'label' => $model->id,
 					'url' => [$model::to($model->defaultAction)],
@@ -160,7 +177,7 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @return ActiveRecord|ActiveRecordTrait
+	 * @return ActiveRecord
 	 */
 	public function getModel():ActiveRecord {
 		return (new $this->modelClass());
@@ -174,21 +191,52 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @return string
+	 * @return string|Response
 	 * @throws InvalidConfigException
+	 * @throws ReflectionException
+	 * @throws UnknownClassException
 	 * @noinspection PhpPossiblePolymorphicInvocationInspection
 	 */
-	public function actionIndex():string {
+	public function actionIndex() {
 		$params = Yii::$app->request->queryParams;
 		$searchModel = $this->searchModel;
+		$viewParams = [
+			'searchModel' => $searchModel,
+			'dataProvider' => $searchModel->search($params),
+			'controller' => $this,
+			'modelName' => $this->model->formName()
+		];
+		return Yii::$app->request->isAjax
+			?$this->viewExists($this->viewPath.'modal/index')/*если модальной вьюхи для индекса не найдено - редирект*/
+				?$this->renderAjax('modal/index', $viewParams)
+				:$this->redirect(static::to('index'))/*параметры неважны - редирект произойдёт в modalHelper.js*/
+			:$this->render('index', $viewParams);
+	}
 
-		return $this->render('index', [
-				'searchModel' => $searchModel,
-				'dataProvider' => $searchModel->search($params),
-				'controller' => $this,
-				'modelName' => $this->model->formName()
-			]
-		);
+	/**
+	 * Проверяет, существует ли указанная вьюха. Для того, чтобы не дублировать закрытый метод фреймворка, хачим его
+	 * через рефлексию.
+	 * @param string $view
+	 * @return bool
+	 * @throws UnknownClassException
+	 * @throws ReflectionException
+	 */
+	protected function viewExists(string $view):bool {
+		if (null === $findViewFileReflectionMethod = ReflectionHelper::setAccessible($this->view, 'findViewFile')) return false;
+		try {
+			return file_exists($findViewFileReflectionMethod->invoke($this->view, $view));
+		} catch (InvalidCallException) {
+			return false;
+		}
+	}
+
+	/**
+	 * Текущий запрос - ajax-валидация формы?
+	 * Метод делается публичной статикой, он нужен не только в наследниках
+	 * @return bool
+	 */
+	public static function isAjaxValidationRequest():bool {
+		return null !== Yii::$app->request->post('ajax');
 	}
 
 	/**
@@ -197,17 +245,10 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionView(int $id):string {
-		if (null === $model = $this->model::findOne($id)) {
-			throw new NotFoundHttpException();
-		}
-		if (Yii::$app->request->isAjax) {
-			return $this->renderAjax('modal/view', [
-				'model' => $model
-			]);
-		}
-		return $this->render('view', [
-			'model' => $model
-		]);
+		if (null === $model = $this->model::findOne($id)) throw new NotFoundHttpException();
+		return Yii::$app->request->isAjax
+			?$this->renderAjax('modal/view', compact('model'))
+			:$this->render('view', compact('model'));
 	}
 
 	/**
@@ -216,12 +257,10 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionEdit(int $id) {
-		if (null === $model = $this->model::findOne($id)) {
-			throw new NotFoundHttpException();
-		}
+		if (null === $model = $this->model::findOne($id)) throw new NotFoundHttpException();
 
 		/** @var ActiveRecordTrait $model */
-		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+		if (static::isAjaxValidationRequest()) {
 			return $this->asJson($model->validateModelFromPost());
 		}
 		$errors = [];
@@ -236,8 +275,8 @@ class DefaultController extends Controller {
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
-			?$this->renderAjax('modal/edit', ['model' => $model])
-			:$this->render('edit', ['model' => $model]);
+			?$this->renderAjax('modal/edit', compact('model'))
+			:$this->render('edit', compact('model'));
 	}
 
 	/**
@@ -246,7 +285,7 @@ class DefaultController extends Controller {
 	 */
 	public function actionCreate() {
 		$model = $this->model;
-		if (Yii::$app->request->post('ajax')) {/* запрос на ajax-валидацию формы */
+		if (static::isAjaxValidationRequest()) {
 			return $this->asJson($model->validateModelFromPost());
 		}
 		$errors = [];
@@ -260,8 +299,8 @@ class DefaultController extends Controller {
 		}
 		/* Постинга не было */
 		return (Yii::$app->request->isAjax)
-			?$this->renderAjax('modal/create', ['model' => $model])
-			:$this->render('create', ['model' => $model]);
+			?$this->renderAjax('modal/create', compact('model'))
+			:$this->render('create', compact('model'));
 	}
 
 	/**
@@ -270,9 +309,7 @@ class DefaultController extends Controller {
 	 * @throws Throwable
 	 */
 	public function actionDelete(int $id):Response {
-		if (null === $model = $this->model::findOne($id)) {
-			throw new NotFoundHttpException();
-		}
+		if (null === $model = $this->model::findOne($id)) throw new NotFoundHttpException();
 		/** @var ActiveRecordTrait $model */
 		$model->safeDelete();
 		return $this->redirect('index');
@@ -300,13 +337,18 @@ class DefaultController extends Controller {
 			if ($concatFields) {
 				// добавляем название таблицы перед каждым полем
 				$concatFieldsArray = preg_filter('/^/', "{$tableName}.", explode(',', $concatFields));
-				// создаем CONCAT() функцию. Формат: CONCAT(tableName.surname,' ',tableName. name)
+				// CONCAT возвращает пустое значение если хотя бы одно из полей NULL
+				$concatFieldsArray = array_map(static function($item) {
+					return 'COALESCE('.$item.", '')";
+				}, $concatFieldsArray);
+				// пихаем COALESCE в  CONCAT() функцию.
+				// Конечный формат: SELECT DISTINCT `table`.`id`, CONCAT(COALESCE(table.a, ''), ' ', COALESCE(table.b, ''), ' ',COALESCE(table.c, '')) AS `text`
 				$textFields = 'CONCAT('.implode(",' ',", $concatFieldsArray).')';
 			} else {
 				$textFields = "{$tableName}.{$column}";
 			}
 			$data = $this->model::find()
-				->select(["{$tableName}.id", "{$textFields} as text"])
+				->select(["{$tableName}.{$this->primaryColumnName} as id", "{$textFields} as text"])
 				->where(['like', "{$tableName}.{$column}", "%$term%", false])
 				->active()
 				->distinct()

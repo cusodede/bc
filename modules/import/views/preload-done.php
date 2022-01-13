@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 /**
  * @var View $this
- * @var ImportModel $model
+ * @var ImportJob $job
  * @var ControllerTrait $controller
  */
 
-use app\modules\import\models\ImportModel;
+use app\components\helpers\Html;
+use app\modules\import\models\ImportJob;
 use pozitronik\traits\traits\ControllerTrait;
-use yii\bootstrap4\Html;
 use yii\web\View;
 
 ?>
@@ -17,15 +17,11 @@ use yii\web\View;
 <div class="panel">
 	<div class="panel-container">
 		<div class="panel-content bg-success">
-			Файл успешно импортирован в промежуточную таблицу. Импорт содержит <?= $model->count ?> записей.
-		</div>
-		<div class="panel-content bg-info">
-			Нажмите "Далее" для экспорта в основные таблицы.<br/>
+			Файл успешно поставлен в очередь импорта. Следить за прогрессом загрузки
+			<?= Html::link('можно по ссылке', $controller::to('import-status', ['domain' => $job->domain, 'modelClass' => $job->model]), [], Html::NO) ?>
 		</div>
 		<div class="panel-content">
-			<?= Html::a('Далее', $controller::to('process-import', ['domain' => $model->domain, 'modelClass' => $model->model]), [
-				'class' => 'btn btn-success pull-right',
-			]) ?>
+			<?= Html::link('Загрузить ещё что-нибудь', $controller::to('import'), ['class' => 'btn btn-success pull-right'], Html::NO) ?>
 			<div class="clearfix"></div>
 		</div>
 	</div>

@@ -1,0 +1,25 @@
+{
+	"includes": [
+		"."
+	],
+	"exclude": [
+		"tests", "vendor", "migrations"
+	],
+	"report": {
+		"html": "report/",
+		"csv": "report/report.csv",
+		"json": "report/report.json",
+		"violations": "report/violations.xml"
+	},
+	"groups": [
+	],
+	"plugins": {
+		"git": {
+			"binary": "git"
+		}
+	},
+	"extensions": [
+		"php",
+		"php8"
+	]
+}

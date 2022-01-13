@@ -13,7 +13,7 @@ use app\controllers\SiteController;
 use app\models\site\UpdatePasswordForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 
 $this->title = 'Смена пароля';
 ?>
@@ -32,7 +32,7 @@ $this->title = 'Смена пароля';
 			</div>
 			<?= Html::submitButton('Сменить пароль', ['class' => 'btn btn-primary btn-lg btn-block', 'name' => 'login-button']) ?>
 			<?php ActiveForm::end(); ?>
-			<?= Html::a('Назад', Yii::$app->homeUrl, ['class' => 'btn-link mar-lft']) ?>
+			<?= Html::link('Назад', '/', ['class' => 'btn-link mar-lft']) ?>
 		</div>
 	</div>
 </div>

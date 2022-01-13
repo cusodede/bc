@@ -1,0 +1,9 @@
+.toolbar-widget {
+	display: block;
+	float: left;
+	margin: 0px 4px;
+}
+
+.toolbar-widget .label-padding {
+	height: 1.5em;
+}

@@ -36,7 +36,7 @@ if (themeSettings.themeURL && !document.getElementById('mytheme')) {
  **/
 var saveSettings = function() {
 	themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item) {
-		return /^(nav|header|footer|mod|display)-/i.test(item);
+		return /^(nav|header|footer|mod|display|layout)-/i.test(item);
 	}).join(' ');
 	if (document.getElementById('mytheme')) {
 		themeSettings.themeURL = document.getElementById('mytheme').getAttribute("href");

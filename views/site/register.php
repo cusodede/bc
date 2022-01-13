@@ -11,7 +11,7 @@ declare(strict_types = 1);
 use app\models\site\RegistrationForm;
 use yii\web\View;
 use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 
 $this->title = 'Вход';
 ?>

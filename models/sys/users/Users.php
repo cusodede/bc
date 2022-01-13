@@ -6,6 +6,7 @@ namespace app\models\sys\users;
 use app\models\phones\Phones;
 use app\models\sys\permissions\traits\UsersPermissionsTrait;
 use app\models\sys\users\active_record\Users as ActiveRecordUsers;
+use DomainException;
 use Exception;
 use pozitronik\filestorage\models\FileStorage;
 use pozitronik\filestorage\traits\FileStorageTrait;
@@ -27,6 +28,7 @@ use yii\web\IdentityInterface;
  * @property mixed $avatar Картинка аватара пользователя (атрибут для загрузки)
  * @property-read null|FileStorage $fileAvatar Запись об актуальном файле аватара в файловом хранилище
  * @property-read string $currentAvatarUrl Шорткат для получения ссылки на актуальный файл аватарки
+ * @property UsersRemoteSystemsTokens|null dolAccessToken
  */
 class Users extends ActiveRecordUsers implements IdentityInterface {
 	use UsersPermissionsTrait;
@@ -37,8 +39,11 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public const DEFAULT_PASSWORD = 'Qq123456';
 
 	/*файловые атрибуты*/
-	public $avatar;
+	public mixed $avatar = null;
 
+	/**
+	 * @return array
+	 */
 	public function rules():array {
 		return array_merge(parent::rules(), [
 			[['avatar'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
@@ -62,7 +67,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 * @throws ForbiddenHttpException
 	 */
 	public static function Current():self {
-		if (null === $user = Yii::$app->user->identity) {
+		if (null === $user = Yii::$app->user->identity??null) {
 			throw new ForbiddenHttpException('Пользователь не авторизован');
 		}
 		return $user;
@@ -74,6 +79,17 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	 */
 	public static function findByLogin(string $login):?Users {
 		return self::findOne(['login' => $login]);
+	}
+
+	/**
+	 * @param string $login
+	 * @return Users
+	 */
+	public static function getByLogin(string $login):Users {
+		if ($find = self::findByLogin($login)) {
+			return $find;
+		}
+		throw new DomainException("Не получилось найти пользователя");
 	}
 
 	/**
@@ -99,6 +115,17 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	public static function findByPhoneNumber(string $phoneNumber):?Users {
 		if (null === $formattedNumber = Phones::defaultFormat($phoneNumber)) return null;
 		return self::find()->joinWith(['relatedPhones'])->where(['phones.phone' => $formattedNumber])->one();
+	}
+
+	/**
+	 * @param string $phoneNumber
+	 * @return Users
+	 */
+	public static function getByPhoneNumber(string $phoneNumber):Users {
+		if (null === $existent = self::findByPhoneNumber($phoneNumber)) {
+			throw new DomainException("Не получилось найти пользователя по номеру телефона");
+		}
+		return $existent;
 	}
 
 	/**
@@ -133,8 +160,32 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 	}
 
 	/**
+	 * При создании менеджера, продавца и т.д
+	 * может потребоваться создание
+	 * связанной учетной записи пользователя
+	 * @param string $login
+	 * @param string $username
+	 * @param string $comment
+	 * @param string|null $email
+	 * @return static
+	 */
+	public static function createAdditionalAccount(string $login, string $username, string $comment, ?string $email):self {
+		$user = new Users([
+			'login' => $login,
+			'username' => $username,
+			'password' => self::DEFAULT_PASSWORD,
+			'comment' => $comment,
+			'email' => $email,
+			'phones' => $login
+		]);
+		$user->scenario = self::SCENARIO_ADDITIONAL_ACCOUNT;
+		return $user;
+	}
+
+
+	/**
 	 * @param null|string $password
-	 * @return string
+	 * @return string|null
 	 */
 	private function doSalt(?string $password):?string {
 		return null === $password?null:sha1($password.$this->salt);
@@ -159,7 +210,7 @@ class Users extends ActiveRecordUsers implements IdentityInterface {
 
 	/**
 	 * @return string
-	 * todo: unused
+	 * Не используется, но нужно для имплементации IdentityInterface
 	 */
 	public function getAuthKey():string {
 		return md5($this->id.md5($this->login));

@@ -19,13 +19,14 @@ OptionsAsset::register($this);
 
 <div class="hpanel">
 	<div class="panel-hdr">
+		<h5>Настройки системы</h5>
 	</div>
 	<div class="panel-container show">
 		<div class="panel-content">
 			<?php foreach ($boolOptions as $name => $value): ?>
 				<?php $id = md5($name) ?>
 				<div class="row">
-					<div class="col-md-1">
+					<div class="col-md-2">
 						<?= SwitchInput::widget([
 							'name' => $name,
 							'tristate' => false,

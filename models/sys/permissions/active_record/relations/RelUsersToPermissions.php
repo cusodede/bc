@@ -5,6 +5,7 @@ namespace app\models\sys\permissions\active_record\relations;
 
 use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\users\Users;
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -27,6 +28,17 @@ class RelUsersToPermissions extends ActiveRecord {
 	 */
 	public static function tableName():string {
 		return 'sys_relation_users_to_permissions';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
 	}
 
 	/**

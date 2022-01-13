@@ -7,8 +7,8 @@ declare(strict_types = 1);
  * @var ActiveForm $form
  */
 
-use app\models\core\prototypes\ActiveFieldMap;
-use kartik\form\ActiveForm;
+use app\components\widgets\ActiveFieldMap;
+use yii\bootstrap4\ActiveForm;
 use yii\base\Model;
 use yii\web\View;
 
@@ -18,7 +18,7 @@ use yii\web\View;
 	<?php if ($model->isAttributeRequired($attribute)): ?>
 		<div class="row">
 			<div class="col-md-12">
-				<?= $form->field($model, $attribute)->widget(ActiveFieldMap::class) ?>
+				<?= $form->field($model, $attribute)->widget(ActiveFieldMap::class)->label(false) ?>
 			</div>
 		</div>
 	<?php endif ?>

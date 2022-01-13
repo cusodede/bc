@@ -1,6 +1,12 @@
 <?php
 declare(strict_types = 1);
 
+/**
+ * @var View $this
+ */
+
+use yii\web\View;
+
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
 use yii\bootstrap4\Html;

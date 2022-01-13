@@ -1,13 +1,18 @@
-/composer.lock
 /vendor
 /web/assets/
 /web/uploads/
 /.phpunit.result.cache
 /config/local/
 /untracked
-
-#for tests
-/models/tests
-/tests-c/
-/config/test.sample.php
-codeception.yml
+/docker/env/dol_api.env
+/docker/env/db.env
+/docker/env/jwt.env
+/docker/env/nsis_rabbit_mq.env
+/docker/env/recaptcha.env
+/docker/env/minio.env
+/docker/local/storage/minio/.minio.sys/
+/web/exports/
+/docker/php/php.ini
+/.env
+/docker/local/storage/minio/test/
+/docker/local/redis/dump.rdb

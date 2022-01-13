@@ -8,74 +8,97 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\GridHelperAsset;
 use app\assets\ModalHelperAsset;
+use app\components\grid\ActionColumn;
+use app\components\grid\widgets\toolbar_filter_widget\ToolbarFilterWidget;
+use app\components\helpers\Html;
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
 use app\models\sys\users\UsersSearch;
-use kartik\grid\ActionColumn;
+use app\widgets\badgewidget\BadgeWidget;
 use kartik\grid\DataColumn;
+use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
-use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
 use yii\web\JsExpression;
 use yii\web\View;
-use kartik\grid\GridView;
-use yii\bootstrap4\Html;
 
 ModalHelperAsset::register($this);
+GridHelperAsset::register($this);
+
+$id = 'users-index-grid';
 ?>
 
 <?= GridConfig::widget([
-	'id' => 'users-index-grid',
+	'id' => $id,
 	'grid' => GridView::begin([
+		'id' => $id,
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'filterOnFocusOut' => false,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']).")":" (нет пользователей)"),
+			'heading' => false,
 		],
-		'summary' => null !== $searchModel?Html::a('Новый пользователь', UsersController::to('create'), [
-			'class' => 'btn btn-success summary-content',
-			'onclick' => new JsExpression("AjaxModal('".UsersController::to('create')."', 'Users-modal-create-new');event.preventDefault();")
-		]):null,
+		'replaceTags' => [
+			'{optionsBtn}' => ToolbarFilterWidget::widget(['content' => '{options}']),
+			'{totalCount}' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']):"Нет пользователей",
+			'{newRecord}' => ToolbarFilterWidget::widget([
+				'label' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']):"Нет пользователей",
+				'content' => Html::link('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success'])
+			]),
+			'{filterBtn}' => ToolbarFilterWidget::widget(['content' => Html::button("<i class='fa fa-filter'></i>", ['onclick' => new JsExpression('setFakeGridFilter("#'.$id.'")'), 'class' => 'btn btn-info'])]),
+		],
+		'toolbar' => [
+			'{filterBtn}'
+		],
+		'panelBeforeTemplate' => '{optionsBtn}{newRecord}{toolbarContainer}{before}<div class="clearfix"></div>',
+		'summary' => null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новый пользователь', UsersController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".UsersController::to('create')."', 'Users-modal-create-new');event.preventDefault();")
-		]),
-		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{view}{update-password}{login-as-another-user}',
+				'template' => '<div class="btn-group">{edit}{view}{update-password}{login-as-another-user}</div>',
 				'buttons' => [
-					'edit' => static function(string $url, Users $model) {
-						return Html::a('<i class="fas fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-					'view' => static function(string $url, Users $model) {
-						return Html::a('<i class="fas fa-eye"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-view-{$model->id}');event.preventDefault();")
-						]);
-					},
-					'update-password' => static function(string $url, Users $model) {
-						return Html::a('<i class="fas fa-lock"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-update-password-{$model->id}');event.preventDefault();")
-						]);
-					},
-					'login-as-another-user' => static function(string $url, Users $model) {/*todo: вытащить в виджет кнопку авторизации и кнопку выхода*/
-						return (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')
-							?Html::a('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]))
-							:Html::a('<i class="fas fa-question-square"></i>', '#', ['title' => 'Не поддерживается (не сконфигурирован WebUser?)']));
-					}
+					'update-password' => static fn(string $url) => Html::link('<i class="fas fa-lock"></i>', $url, [
+							'class' => 'btn btn-sm btn-outline-primary',
+							'data' => [
+								'trigger' => 'hover',
+								'toggle' => 'tooltip',
+								'placement' => 'top',
+								'original-title' => 'Обновить пароль'
+							]
+						]
+					),
+					'login-as-another-user' => /*todo: вытащить в виджет кнопку авторизации и кнопку выхода*/ static fn(string $url, Users $model) => (method_exists(Yii::$app->user, 'isLoginAsAnotherUser')
+						?Html::link('<i class="fas fa-sign-in-alt"></i>', UsersController::to('login-as-another-user', ['userId' => $model->id]), [
+							'class' => 'btn btn-sm btn-outline-primary',
+							'data' => [
+								'trigger' => 'hover',
+								'toggle' => 'tooltip',
+								'placement' => 'top',
+								'original-title' => 'Авторизоваться под пользователем'
+							]
+						],
+							Html::NO
+						)
+						:Html::link('<i class="fas fa-question-square"></i>', '#', ['title' => 'Не поддерживается (не сконфигурирован WebUser?)', 'class' => ['btn btn-sm btn-outline-primary']], Html::NO))
 				],
 			],
 			'id',
-			'username',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'username',
+				'format' => 'raw',
+				'value' => static fn(Users $user) => BadgeWidget::widget([
+					'items' => $user->username,
+					'innerPrefix' => $user->isAllPermissionsGranted()?'<i class="fas fa-crown color-danger-500" title="All permissions granted via config"></i>':false
+				])
+			],
 			'login',
 			[
 				'class' => DataColumn::class,
@@ -87,24 +110,21 @@ ModalHelperAsset::register($this);
 				'attribute' => 'relatedPhones',
 				'label' => 'Телефоны',
 				'format' => 'raw',
-				'value' => static function(Users $user) {
-					return BadgeWidget::widget([
-						'items' => $user->relatedPhones,
-						'subItem' => 'phone'
-					]);
-				}
+				'value' => static fn(Users $user) => BadgeWidget::widget([
+					'items' => $user->relatedPhones,
+					'subItem' => 'phone'
+				])
 			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'allUserPermission',
 				'label' => 'Доступы',
 				'format' => 'raw',
-				'value' => static function(Users $user) {
-					return BadgeWidget::widget([
-						'items' => $user->allPermissions(),
-						'subItem' => 'name'
-					]);
-				}
+				'value' => static fn(Users $user) => BadgeWidget::widget([
+					'items' => $user->allPermissions(),
+					'subItem' => 'name',
+					'innerPrefix' => $user->isAllPermissionsGranted()?'<i class="fas fa-crown color-danger-500" title="All permissions granted via config"></i>':false
+				])
 			]
 		]
 	])

@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\commands;
 
-use app\models\core\prototypes\PHPDocParser;
-use app\models\core\prototypes\SwaggerConverter;
+use app\components\prototypes\PHPDocParser;
+use app\components\prototypes\SwaggerConverter;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -48,7 +48,7 @@ class SwaggerController extends Controller {
 	private function fromModel(string $path):void {
 		try {
 			$fileContents = file($path);
-		} /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $t) {
+		} catch (Throwable) {
 			$fileContents = false;
 		}
 		if (false !== $fileContents) {

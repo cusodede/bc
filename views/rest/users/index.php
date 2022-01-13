@@ -8,18 +8,17 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\components\grid\ActionColumn;
+use app\components\helpers\Html;
 use app\controllers\UsersController;
 use app\models\sys\users\Users;
-use kartik\grid\ActionColumn;
+use app\widgets\badgewidget\BadgeWidget;
 use kartik\grid\DataColumn;
+use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
-use pozitronik\widgets\BadgeWidget;
 use simialbi\yii2\rest\RestDataProvider;
-use yii\web\JsExpression;
 use yii\web\View;
-use kartik\grid\GridView;
-use yii\bootstrap4\Html;
 
 ModalHelperAsset::register($this);
 ?>
@@ -29,11 +28,11 @@ ModalHelperAsset::register($this);
 	'grid' => GridView::begin([
 		'dataProvider' => $dataProvider,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']).")":" (нет пользователей)"),
+			'heading' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['пользователь', 'пользователя', 'пользователей']):"Нет пользователей",
 		],
-		'summary' => Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success summary-content']),
+		'summary' => Html::link('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success summary-content']),
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success']),
+		'emptyText' => Html::link('Новый пользователь', UsersController::to('create'), ['class' => 'btn btn-success']),
 		'toolbar' => false,
 		'export' => false,
 		'resizableColumns' => true,
@@ -41,14 +40,7 @@ ModalHelperAsset::register($this);
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}',
-				'buttons' => [
-					'edit' => static function(string $url, Users $model) {
-						return Html::a('<i class="fa fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-				],
+				'template' => '<div class="btn-group">{edit}</div>',
 			],
 			'id',
 			'username',
@@ -62,12 +54,10 @@ ModalHelperAsset::register($this);
 				'class' => DataColumn::class,
 				'attribute' => 'allUserPermission',
 				'format' => 'raw',
-				'value' => static function(Users $user) {
-					return BadgeWidget::widget([
-						'items' => $user->allPermissions(),
-						'subItem' => 'name'
-					]);
-				}
+				'value' => static fn(Users $user) => BadgeWidget::widget([
+					'items' => $user->allPermissions(),
+					'subItem' => 'name'
+				])
 			]
 		]
 	])

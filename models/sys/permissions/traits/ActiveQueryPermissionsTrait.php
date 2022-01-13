@@ -3,8 +3,11 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\traits;
 
+use app\components\db\ActiveQuery;
+use app\components\Options;
 use app\models\sys\users\Users;
 use Throwable;
+use yii\db\ActiveQueryInterface;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -14,13 +17,16 @@ use yii\web\ForbiddenHttpException;
 trait ActiveQueryPermissionsTrait {
 	/**
 	 * Возвращает область видимости пользователя $user для модели $modelClass (если та реализует метод self::scope);
-	 * @param string|object|null $modelObjectOrClass
+	 * @param object|string|null $modelObjectOrClass
 	 * @param ?Users $user
-	 * @return $this
+	 * @return self|ActiveQuery
 	 * @throws ForbiddenHttpException
 	 * @throws Throwable
 	 */
-	public function scope($modelObjectOrClass = null, ?Users $user = null):self {
+	public function scope(object|string $modelObjectOrClass = null, ?Users $user = null):self {
+		if (Options::getValue(Options::SCOPE_IGNORE_ENABLE)) return $this;
+
+		/** @var ActiveQueryInterface $this */
 		$modelObjectOrClass = $modelObjectOrClass??$this->modelClass;
 		if (method_exists($modelObjectOrClass, 'scope')) {
 			$user = $user??Users::Current();

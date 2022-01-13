@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions;
 
-use app\models\core\CacheHelper;
+use app\components\helpers\CacheHelper;
 use app\models\sys\permissions\active_record\PermissionsCollections as ActiveRecordPermissionsCollections;
 use pozitronik\helpers\ArrayHelper;
 use Yii;

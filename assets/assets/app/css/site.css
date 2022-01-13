@@ -115,3 +115,80 @@ a.desc:after {
 .form-group .ms-container {
 	width: 100%
 }
+
+.select2-container--krajee-bs4 .select2-selection--multiple .select2-search--inline {
+	display: inline-block;
+}
+
+input::placeholder {
+	text-overflow: ellipsis;
+}
+
+.select2-container .select2-search--inline {
+	float: none !important;
+}
+
+.subheader-title-custom {
+	margin: -2px 0 0 -1px !important;
+}
+
+.subheader .subheader-title-custom {
+	font-weight: 300;
+	font-size: 1.275rem;
+}
+
+.kv-table-header, .kv-table-footer {
+	background: white !important;
+}
+
+/*Не прячем активный элемент в навигации*/
+li.breadcrumb-item.active, li.breadcrumb-item.active:hover {
+	max-width: unset !important;
+	text-overflow: unset !important;
+	white-space: nowrap;
+	overflow: hidden;
+	display: block;
+	font-weight: bold;
+	color: black
+}
+
+li.breadcrumb-item {
+	font-size: large;
+}
+
+/*Не скрываем кнопку меню в вертикальном режиме*/
+.nav-function-top .page-header .dropdown-icon-menu {
+	display: block !important;
+}
+
+/*Добавляем высоты меню переключения стилей*/
+.dropdown-icon-menu:hover > ul {
+	height: 15.25rem !important;
+}
+
+/*Кнопка переключения лейаута, кнопка вертикального меню и их стилизация при переключении*/
+body.layout-composed a[data-action="toggle"][data-class="layout-composed"],
+body.nav-function-top a[data-action="toggle"][data-class="nav-function-top"] {
+	background: #505050;
+	border-color: #363636 !important;
+	-webkit-box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.37);
+	box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.37);
+	color: #fff !important;
+}
+
+/*Кнопка переключения режима бокового меню блокируется в режиме верхнего меню*/
+body.nav-function-top a[data-action="toggle"][data-class="nav-function-hidden"] {
+	background: #505050;
+	-webkit-filter: grayscale(80%);
+	filter: grayscale(80%);
+	opacity: 0.80;
+	cursor: not-allowed;
+}
+
+/*Скрываем иконки в пунктах меню в горизонтальном режиме, оставляя их в самом меню*/
+body.nav-function-top .nav-menu ul li i {
+	display: none;
+}
+.page-inner {
+	overflow: hidden;
+}

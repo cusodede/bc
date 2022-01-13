@@ -11,14 +11,8 @@ use app\assets\ModalHelperAsset;
 use app\controllers\SiteController;
 use app\controllers\UsersController;
 use app\widgets\search\SearchWidget;
-use pozitronik\helpers\Utils;
-use yii\bootstrap4\Html;
-use yii\helpers\ArrayHelper;
+use app\components\helpers\Html;
 use yii\web\View;
-
-if (true === (bool)ArrayHelper::getValue(Yii::$app, 'user.identity.is_pwd_outdated')) {
-	Yii::$app->response->redirect(SiteController::to('update-password'));
-}
 
 AppAsset::register($this);
 ModalHelperAsset::register($this);
@@ -33,9 +27,8 @@ ModalHelperAsset::register($this);
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="msapplication-tap-highlight" content="no">
-	<meta name="commit" content="<?= Utils::LastCommit() ?>">
 	<?= Html::csrfMetaTags() ?>
-	<title><?= $this->title ?> [<?= Utils::LastCommit() ?>]</title>
+	<title><?= $this->title ?></title>
 	<?php $this->head(); ?>
 </head>
 
@@ -47,12 +40,28 @@ ModalHelperAsset::register($this);
 		<?= $this->render('subviews/sidebar') ?>
 		<div class="page-content-wrapper">
 			<header class="page-header" role="banner">
-				<div class="hidden-md-down dropdown-icon-menu position-relative">
-					<a href="#" class="header-btn btn js-waves-off" data-action="toggle"
-					   data-class="nav-function-hidden" title="Скрыть меню">
-						<i class="ni ni-menu"></i>
+				<div class="dropdown-icon-menu position-relative">
+					<a href="#" class="header-btn btn js-waves-off" title="Настройки вида">
+						<i class="fa fa-ellipsis-v-alt"></i>
 					</a>
 					<ul>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Скрыть меню">
+								<i class="ni ni-menu"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="layout-composed" title="Убрать отступы">
+								<i class="ni ni-size-fullscreen"></i>
+							</a>
+						</li>
+
+						<li>
+							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-top" title="Меню наверх">
+								<i class="fa fa-ellipsis-h-alt"></i>
+							</a>
+						</li>
+
 						<li>
 							<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify"
 							   title="Свернуть меню">
@@ -65,15 +74,14 @@ ModalHelperAsset::register($this);
 								<i class="ni ni-lock-nav"></i>
 							</a>
 						</li>
+
 					</ul>
 				</div>
-				<div class="subheader fa-pull-left mb-0 mr-2">
-					<h1 class="subheader-title">
-						<?= $this->title ?>
-					</h1>
-				</div>
-				<div class="subheader fa-pull-left mb-0">
-					<?= $this->render('subviews/breadcrumbs') ?>
+
+				<div class="d-flex flex-column">
+					<div class="subheader mb-0">
+						<?= $this->render('subviews/breadcrumbs') ?>
+					</div>
 				</div>
 
 				<div class="ml-auto d-flex">
@@ -82,7 +90,7 @@ ModalHelperAsset::register($this);
 					</div>
 					<div>
 						<?php if (method_exists(Yii::$app->user, 'isLoginAsAnotherUser') && Yii::$app->user->isLoginAsAnotherUser()): ?>
-							<?= Html::a('<i class="fal fa-eye-slash"></i>', UsersController::to('login-back'), [
+							<?= Html::link('<i class="fal fa-eye-slash"></i>', UsersController::to('login-back'), [
 								'class' => "header-icon d-inline-block",
 								'data-toggle' => "tooltip",
 								'data-placement' => "bottom",
@@ -91,7 +99,7 @@ ModalHelperAsset::register($this);
 							]) ?>
 						<?php endif; ?>
 
-						<?= Html::a('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
+						<?= Html::link('<i class="fal fa-sign-out"></i>', SiteController::to('logout'), [
 							'class' => "header-icon d-inline-block",
 							'data-toggle' => "tooltip",
 							'data-placement' => "bottom",

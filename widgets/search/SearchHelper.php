@@ -3,8 +3,9 @@ declare(strict_types = 1);
 
 namespace app\widgets\search;
 
-use app\models\core\TemporaryHelper;
+use app\components\helpers\TemporaryHelper;
 use Exception;
+use yii\base\Model;
 use yii\base\UnknownPropertyException;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -20,13 +21,61 @@ class SearchHelper {
 	public const SEARCH_TYPE_LIKE_ENDING = 'like%';
 
 	/**
-	 * @param string $modelClass
+	 * Возвращает список всех аттрибутов поисковой модели, вычисленный через rules()
+	 * @param string|Model $modelClass
+	 * @return array
+	 */
+	public static function GetSearchAttributes(string|Model $modelClass):array {
+		$model = (is_string($modelClass))
+			?new $modelClass()
+			:$modelClass;
+		$searchFields = [[]];
+		foreach ($model->rules() as $rule) {
+			$searchFields[] = (array)$rule[0];
+		}
+		return array_merge(...$searchFields);
+	}
+
+	/**
+	 * Возвращает значения всех аттрибутов поисковой модели, вычисленный через rules()
+	 * @param string|Model $modelClass
+	 * @return array
+	 */
+	public static function GetSearchAttributesValues(string|Model $modelClass):array {
+		$model = (is_string($modelClass))
+			?new $modelClass()
+			:$modelClass;
+		$result = [];
+		foreach (static::GetSearchAttributes($model) as $attribute) {
+			$result[$attribute] = $model->$attribute;
+		}
+		return $result;
+	}
+
+	/**
+	 * @param string|Model $modelClass
+	 * @return array
+	 */
+	public static function GetSafeAttributesValues(string|Model $modelClass):array {
+		$model = (is_string($modelClass))
+			?new $modelClass()
+			:$modelClass;
+		$result = [];
+		foreach ($model->safeAttributes() as $attribute) {
+			$result[$attribute] = $model->$attribute;
+		}
+		return $result;
+	}
+
+	/**
+	 * @param string|Model $modelClass
 	 * @return array
 	 * @throws Exception
 	 */
-	private static function AssumeSearchAttributes(string $modelClass):array {
-		/** @var ActiveRecord $model */
-		$model = new $modelClass();
+	private static function AssumeSearchAttributes(string|Model $modelClass):array {
+		$model = (is_string($modelClass))
+			?new $modelClass()
+			:$modelClass;
 		$searchFields = [[]];
 		foreach ($model->rules() as $rule) {
 			if ('string' === ArrayHelper::getValue($rule, '1')) {
@@ -47,12 +96,13 @@ class SearchHelper {
 	 *    ]
 	 * где searchType - одна из SEARCH_TYPE_* - констант.
 	 * Если параметр не задан, атрибуты подхватываются из правил валидации модели (все строковые атрибуты)
+	 * @param string $method
 	 * @return array
 	 * @throws UnknownPropertyException
 	 */
-	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null):array {
+	public static function Search(string $modelClass, ?string $term, int $limit = SearchWidget::DEFAULT_LIMIT, ?array $searchAttributes = null, string $method = SearchWidget::DEFAULT_METHOD):array {
 		/*В модели можно полностью переопределить поиск*/
-		if (method_exists($modelClass, 'search')) return $modelClass::search($term, $limit, $searchAttributes);
+		if (method_exists($modelClass, $method)) return $modelClass::$method($term, $limit, $searchAttributes);
 
 		if (null === $searchAttributes) $searchAttributes = self::AssumeSearchAttributes($modelClass);
 

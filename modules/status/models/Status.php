@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace app\modules\status\models;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\sys\users\Users;
 use ReflectionClass;
 use Throwable;
 use Yii;
@@ -39,6 +38,7 @@ class Status extends ActiveRecord {
 	public function rules():array {
 		return [
 			[['model_key', 'status', 'daddy', 'delegate'], 'integer'],
+			['daddy', 'default', 'value' => Yii::$app->user->identity->id??null],
 			[['status'], 'required'],
 			[['at'], 'safe'],
 			[['model_name'], 'string', 'max' => 255],
@@ -103,9 +103,11 @@ class Status extends ActiveRecord {
 			$currentStatus->load($attributes, '');
 		}
 		$currentStatus->status = $status;
-		$currentStatus->daddy = !Yii::$app->user->isGuest?Users::Current()->id:null;
-		/* не используется, осталось из TWS, может быть появится и у нас такой
-		 * $currentStatus->delegate = (false === $delegateId = Yii::$app->cache->get(Delegation::RELOGIN_PREFIX.Yii::$app->user->id))?null:$delegateId;*/
+
+		/**
+		 * не используется, осталось из TWS, может быть появится и у нас такой
+		 * $currentStatus->delegate = (false === $delegateId = Yii::$app->cache->get(Delegation::RELOGIN_PREFIX.Yii::$app->user->id))?null:$delegateId;
+		 */
 		return ($currentStatus->isNewRecord)?$currentStatus->save():(1 === $currentStatus->update());
 	}
 }

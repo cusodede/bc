@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace app\commands;
 
-use app\models\core\Service;
-use app\models\core\TemporaryHelper;
+use app\components\Service;
+use app\components\helpers\TemporaryHelper;
 use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
 use pozitronik\helpers\ControllerHelper;

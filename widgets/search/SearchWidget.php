@@ -17,6 +17,8 @@ use yii\web\JsExpression;
  */
 class SearchWidget extends Widget {
 	public const DEFAULT_LIMIT = 5;
+	public const DEFAULT_METHOD = 'search';
+	public const MAX_PENDING_REQUESTS = 25;//количество параллельных фоновых запросов поиска
 	public const DEFAULT_TEMPLATE_VIEW = 'template';
 
 	/**
@@ -65,7 +67,8 @@ class SearchWidget extends Widget {
 				],
 				'remote' => [
 					'url' => AjaxController::to('search')."?term=QUERY&alias={$alias}",
-					'wildcard' => 'QUERY'
+					'wildcard' => 'QUERY',
+					'maxPendingRequests' => self::MAX_PENDING_REQUESTS
 				]
 			];
 		}

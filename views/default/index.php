@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 declare(strict_types = 1);
 
 /**
@@ -9,57 +9,58 @@ declare(strict_types = 1);
  * @var ActiveDataProvider $dataProvider
  */
 
+use app\assets\GridHelperAsset;
 use app\assets\ModalHelperAsset;
-use app\models\core\TemporaryHelper;
+use app\components\grid\ActionColumn;
+use app\components\grid\widgets\toolbar_filter_widget\ToolbarFilterWidget;
+use app\components\helpers\Html;
+use app\components\helpers\TemporaryHelper;
 use kartik\grid\GridView;
-use pozitronik\traits\traits\ControllerTrait;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
+use pozitronik\traits\traits\ControllerTrait;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\grid\ActionColumn;
-use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
 
 ModalHelperAsset::register($this);
+GridHelperAsset::register($this);
+
+$id = "{$modelName}-index-grid";
 ?>
 <?= GridConfig::widget([
-	'id' => "{$modelName}-index-grid",
+	'id' => $id,
 	'grid' => GridView::begin([
+		'id' => $id,
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'filterOnFocusOut' => false,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['запись', 'записи', 'записей']).")":" (нет записей)"),
+			'heading' => false,
 		],
-		'summary' => null !== $searchModel?Html::a('Новая запись', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]):null,
+		'replaceTags' => [
+			'{optionsBtn}' => ToolbarFilterWidget::widget(['content' => '{options}']),
+			'{totalCount}' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['запись', 'записи', 'записей']):"Нет записей",
+			'{newRecord}' => ToolbarFilterWidget::widget([
+				'label' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['запись', 'записи', 'записей']):"Нет записей",
+				'content' => Html::link('Новая запись', $controller::to('create'), ['class' => 'btn btn-success'])
+			]),
+			'{filterBtn}' => ToolbarFilterWidget::widget(['content' => Html::button("<i class='fa fa-filter'></i>", ['onclick' => new JsExpression('setFakeGridFilter("#'.$id.'")'), 'class' => 'btn btn-info'])]),
+		],
+		'toolbar' => [
+			'{filterBtn}'
+		],
+		'panelBeforeTemplate' => '{optionsBtn}{newRecord}{toolbarContainer}{before}<div class="clearfix"></div>',
+		'summary' => null,
 		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новая запись', $controller::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".$controller::to('create')."', '{$modelName}-modal-create-new');event.preventDefault();")
-		]),
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => array_merge(TemporaryHelper::GuessDataProviderColumns($dataProvider), [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}{view}',
-				'buttons' => [
-					'edit' => static function(string $url, Model $model) use ($modelName) {
-						return Html::a('<i class="fa fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-					'view' => static function(string $url, Model $model) use ($modelName) {
-						return Html::a('<i class="fa fa-eye"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$modelName}-modal-view-{$model->id}');event.preventDefault();")
-						]);
-					},
-				],
+				'template' => '<div class="btn-group">{edit}{view}</div>',
 			]
 		]),
 	])

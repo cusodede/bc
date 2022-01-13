@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\users\active_record\relations;
 
+use app\modules\history\behaviors\HistoryBehavior;
 use pozitronik\relations\traits\RelationsTrait;
 use yii\db\ActiveRecord;
 
@@ -21,6 +22,17 @@ class RelUsersToPhones extends ActiveRecord {
 	 */
 	public static function tableName():string {
 		return 'relation_users_to_phones';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors():array {
+		return [
+			'history' => [
+				'class' => HistoryBehavior::class
+			]
+		];
 	}
 
 	/**

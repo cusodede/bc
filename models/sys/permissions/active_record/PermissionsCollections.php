@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string|null $name Название группы доступа
  * @property string|null $comment Описание группы доступа
+ * @property bool $default Флаг использования группы по умолчанию
  *
  * @property RelPermissionsCollectionsToPermissions[] $relatedPermissionsCollectionsToPermissions Связь к промежуточной таблице к правам доступа
  * @property RelPermissionsCollectionsToPermissionsCollections[] $relatedPermissionsCollectionsToPermissionsCollections Связь к промежуточной таблице к ВКЛЮЧЁННЫМ группам доступа
@@ -64,6 +65,7 @@ class PermissionsCollections extends ActiveRecord {
 			[['name'], 'string', 'max' => 128],
 			[['name'], 'unique'],
 			[['name'], 'required'],
+			[['default'], 'boolean'],
 			[['relatedPermissions', 'relatedUsers', 'relatedSlavePermissionsCollections'], 'safe']
 		];
 	}
@@ -76,6 +78,7 @@ class PermissionsCollections extends ActiveRecord {
 			'id' => 'ID',
 			'name' => 'Название',
 			'comment' => 'Комментарий',
+			'default' => 'По умолчанию',
 			'relatedUsers' => 'Присвоено пользователям',
 			'relatedPermissions' => 'Доступы',
 			'relatedSlavePermissionsCollections' => 'Включённые группы доступов',
@@ -108,7 +111,7 @@ class PermissionsCollections extends ActiveRecord {
 	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissions($relatedPermissions):void {
+	public function setRelatedPermissions(mixed $relatedPermissions):void {
 		if (empty($relatedPermissions)) {
 			RelPermissionsCollectionsToPermissions::clearLinks($this);
 		} else {
@@ -141,12 +144,12 @@ class PermissionsCollections extends ActiveRecord {
 			->alias('users')
 			->innerJoin('t', 't.user_id = users.id')
 			->withQuery(
-				//initial query
+			//initial query
 				RelUsersToPermissionsCollections::find()
 					->alias('users_to_cols')
 					->select(['users_to_cols.collection_id', 'users_to_cols.user_id'])
 					->union(
-						//recursive query
+					//recursive query
 						RelPermissionsCollectionsToPermissionsCollections::find()
 							->alias('cols_to_cols')
 							->select(['cols_to_cols.slave_id', 't.user_id'])
@@ -184,7 +187,7 @@ class PermissionsCollections extends ActiveRecord {
 	 * @param mixed $relatedSlavePermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedSlavePermissionsCollections($relatedSlavePermissionsCollections):void {
+	public function setRelatedSlavePermissionsCollections(mixed $relatedSlavePermissionsCollections):void {
 		if (empty($relatedSlavePermissionsCollections)) {
 			RelPermissionsCollectionsToPermissionsCollections::clearLinks($this);
 		} else {

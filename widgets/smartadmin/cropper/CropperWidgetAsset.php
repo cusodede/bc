@@ -4,7 +4,8 @@ declare(strict_types = 1);
 namespace app\widgets\smartadmin\cropper;
 
 use app\assets\SmartAdminThemeAssets;
-use pozitronik\sys_options\models\SysOptions;
+use app\components\Options;
+use Throwable;
 use yii\web\AssetBundle as YiiAssetBundle;
 
 /**
@@ -12,7 +13,11 @@ use yii\web\AssetBundle as YiiAssetBundle;
  * @package app\widgets\smartadmin\cropper\assets
  */
 class CropperWidgetAsset extends YiiAssetBundle {
-	public function init():void {
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    public function init():void {
 		$this->depends = [
 			SmartAdminThemeAssets::class
 		];
@@ -26,7 +31,7 @@ class CropperWidgetAsset extends YiiAssetBundle {
 			'js/cropper-actions.js',
 		];
 		$this->publishOptions = [
-			'forceCopy' => SysOptions::getStatic('ASSETS_PUBLISHOPTIONS_FORCECOPY', false)
+			'forceCopy' => Options::getValue(Options::ASSETS_PUBLISHOPTIONS_FORCECOPY)
 		];
 
 		parent::init();

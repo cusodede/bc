@@ -11,12 +11,10 @@ use app\models\sys\permissions\Permissions;
 use app\models\sys\permissions\PermissionsCollections;
 use app\models\sys\users\Users;
 use cusodede\multiselect\MultiSelectListBox;
-use kartik\form\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use kartik\select2\Select2;
 use pozitronik\helpers\ArrayHelper;
 use yii\web\View;
-
-$this->registerCss(".ms-container {width:100%}");
 
 ?>
 
@@ -40,13 +38,14 @@ $this->registerCss(".ms-container {width:100%}");
 		<?= $form->field($model, 'phones')->widget(Select2::class, [
 			'showToggleAll' => false,
 			'options' => [
-				'placeholder' => 'Введите один или несколько телефонных номеров',
+				'placeholder' => '',
 				'multiple' => true
 			],
 			'pluginOptions' => [
 				'tags' => true,
 				'tokenSeparators' => [',', ' '],
-				'maximumInputLength' => 12
+				'maximumInputLength' => 12,
+				'minimumInputLength' => 10
 			]
 		]) ?>
 	</div>

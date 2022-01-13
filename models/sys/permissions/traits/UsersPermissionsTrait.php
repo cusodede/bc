@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace app\models\sys\permissions\traits;
 
-use app\models\core\CacheHelper;
+use app\components\helpers\CacheHelper;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissions;
 use app\models\sys\permissions\active_record\relations\RelUsersToPermissionsCollections;
 use app\models\sys\permissions\Permissions;
@@ -12,9 +12,11 @@ use pozitronik\helpers\ArrayHelper;
 use Throwable;
 use Yii;
 use yii\base\Action;
+use yii\base\InvalidConfigException;
 use yii\caching\TagDependency;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\Controller;
 
 /**
  * Class Permissions
@@ -62,7 +64,10 @@ trait UsersPermissionsTrait {
 				}
 			}
 			return ($logic === Permissions::LOGIC_NOT)?true:$result;
-		}, null, new TagDependency(['tags' => CacheHelper::MethodSignature('Users::hasPermission', ['id' => $this->id])]));//тег ставится на все варианты запроса ролей пользователя для сброса скопом
+		}, null, new TagDependency(['tags' => [
+			CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id]),
+			CacheHelper::MethodSignature('Users::hasPermission', ['id' => $this->id]),
+		]]));//тег ставится на все варианты запроса ролей пользователя для сброса скопом
 
 	}
 
@@ -99,14 +104,14 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissions
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissions($relatedPermissions):void {
+	public function setRelatedPermissions(mixed $relatedPermissions):void {
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissions)) {
 			RelUsersToPermissions::clearLinks($this);
 		} else {
 			RelUsersToPermissions::linkModels($this, $relatedPermissions);
 		}
-		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id])]);
+		$this->invalidateUserTag('Users::allPermissions');
 	}
 
 	/**
@@ -127,14 +132,14 @@ trait UsersPermissionsTrait {
 	 * @param mixed $relatedPermissionsCollections
 	 * @throws Throwable
 	 */
-	public function setRelatedPermissionsCollections($relatedPermissionsCollections):void {
+	public function setRelatedPermissionsCollections(mixed $relatedPermissionsCollections):void {
 		/** @var ActiveRecord $this */
 		if (empty($relatedPermissionsCollections)) {
 			RelUsersToPermissionsCollections::clearLinks($this);
 		} else {
 			RelUsersToPermissionsCollections::linkModels($this, $relatedPermissionsCollections);
 		}
-		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature('Users::allPermissions', ['id' => $this->id])]);
+		$this->invalidateUserTag('Users::allPermissions');
 	}
 
 	/**
@@ -188,6 +193,37 @@ trait UsersPermissionsTrait {
 	 */
 	public function isAllPermissionsGranted():bool {
 		return in_array($this->id, Permissions::ConfigurationParameter(Permissions::GRANT_ALL, []), true);
+	}
+
+	/**
+	 * Проверяет доступность url
+	 * @param string $url
+	 * @return bool
+	 * @throws Throwable
+	 * @throws InvalidConfigException
+	 */
+	public function hasUrlPermission(string $url):bool {
+		/** @var Controller $controller */
+		[$controller, $actionId] = Yii::$app->createController($url);
+		if (null === $controller) return false;//url не принадлежит приложению, мы не можем его проверить, и по нашей логике "запрещено всё, что не разрешено", в доступе отказывается.
+		if (false === $actionId = strtok($actionId, '?')) $actionId = null;//strip GET vars from action id
+		return $this->hasControllerPermission($controller->id, $actionId, null, $controller->module->id);
+	}
+
+	/**
+	 * Если мы попытаемся инвалидировать тег для нового пользователя, то обломимся: id будет null, тег не будет корректен.
+	 * В этом случае мы отложим сброс кеша до сохранения.
+	 * @param string $methodSignature
+	 * @throws Throwable
+	 */
+	protected function invalidateUserTag(string $methodSignature):void {
+		if ($this->isNewRecord) {
+			$this->on(self::EVENT_AFTER_INSERT, function($event) {//отложим сброс кеша до сохранения
+				$this->invalidateUserTag($event->data[0]);
+			}, [$methodSignature]);
+			return;
+		}
+		TagDependency::invalidate(Yii::$app->cache, [CacheHelper::MethodSignature($methodSignature, ['id' => $this->id])]);
 	}
 
 }

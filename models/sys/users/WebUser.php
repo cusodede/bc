@@ -7,6 +7,7 @@ use DomainException;
 use Throwable;
 use Yii;
 use yii\web\Cookie;
+use yii\web\ForbiddenHttpException;
 use yii\web\User;
 
 /**
@@ -24,7 +25,6 @@ class WebUser extends User {
 	 */
 	public function getOriginalUserId():?int {
 		return $this->isLoginAsAnotherUser()?(int)Yii::$app->request->cookies->get('fear')->value:null;
-
 	}
 
 	/**
@@ -37,14 +37,17 @@ class WebUser extends User {
 	/**
 	 * Вернуться в родную учетную запись
 	 * @return void
+	 * @throws ForbiddenHttpException
 	 */
 	public function loginBackToOriginUser():void {
 		$webUser = Yii::$app->user;
 		if ($webUser->isGuest) {
 			throw new DomainException("Вы не авторизованы");
 		}
-
-		if (null === $existentUser = Users::findIdentity($id = $this->getOriginalUserId())) {
+		if (null === ($id = $this->getOriginalUserId())) {
+			throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
+		}
+		if (null === $existentUser = Users::findIdentity($id)) {
 			throw new DomainException("Пользователь с id $id не найден");
 		}
 

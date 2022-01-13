@@ -1,3 +1,14 @@
+<?php
+declare(strict_types = 1);
+
+/**
+ * @var View $this
+ */
+
+use yii\web\View;
+
+?>
+
 <p id="js-color-profile" class="d-none">
 	<span class="color-primary-50"></span>
 	<span class="color-primary-100"></span>

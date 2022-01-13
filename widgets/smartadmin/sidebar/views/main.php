@@ -4,6 +4,7 @@ declare(strict_types = 1);
 /**
  * @var View $this
  * @var array $items
+ * @var bool $ignoreLogo
  */
 
 use yii\web\View;
@@ -14,7 +15,7 @@ use yii\web\View;
 	<nav id="js-primary-nav" class="primary-nav js-list-filter" role="navigation"
 		 style="overflow: hidden; width: auto; height: 100%;">
 		<?= $this->render('subviews/nav-filter') ?>
-		<?= $this->render('subviews/info-card') ?>
+		<?= $ignoreLogo?'':$this->render('subviews/info-card') ?>
 		<?= $this->render('subviews/menu', compact('items')) ?>
 	</nav>
 </aside>

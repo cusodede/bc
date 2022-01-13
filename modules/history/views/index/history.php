@@ -10,6 +10,7 @@ declare(strict_types = 1);
  * @var ActiveRecord $model
  */
 
+use app\modules\history\HistoryModule;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\web\View;
@@ -25,7 +26,7 @@ use yii\widgets\LinkPager;
 		'pageSize' => 1,
 		'pageParam' => 'level',
 		'pageSizeParam' => false,
-//		'route' => HistoryModule::to(['/index/history', 'for' => $for, 'id' => $id])//todo: не знаю как, нет времени фиксить
+		'route' => HistoryModule::to(['/index/history', 'for' => $for, 'id' => $id])//todo: не знаю как, нет времени фиксить
 	]),
 	'hideOnSinglePage' => false
 ]) ?>

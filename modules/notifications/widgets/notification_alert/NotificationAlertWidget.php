@@ -51,9 +51,10 @@ class NotificationAlertWidget extends Alert {
 
 	public Notifications $notification;
 	public int $type = self::TYPE_PRIMARY;
-	public $icon;
-	public $acknowledgeButton;
-	public $dismissButton;
+
+	public null|false|string $icon = null;
+	public null|false|string $acknowledgeButton = null;
+	public null|false|string $dismissButton = null;
 
 	public $closeButton = false;
 
@@ -70,7 +71,12 @@ class NotificationAlertWidget extends Alert {
 		$this->view->registerJs("$('#{$this->id}').show()");
 	}
 
-	private function getBody():string {
+    /**
+     * @return string
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
+    private function getBody():string {
 		return Html::tag('div',
 			$this->getIcon().
 			$this->getMessage().

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 declare(strict_types = 1);
 
 /**
@@ -7,9 +7,9 @@ declare(strict_types = 1);
  * @var ActiveForm|string $form
  */
 
-use kartik\form\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use yii\base\Model;
-use yii\bootstrap4\Html;
+use app\components\helpers\Html;
 use yii\web\View;
 
 ?>

@@ -42,26 +42,34 @@ class SelectModelWidget extends Select2 {
 	public const DATA_MODE_AJAX = 1;//данные прогружаются аяксовым поиском
 
 	//private $data = [];//calculated/evaluated/received data array
-	private $ajaxPluginOptions = [];//calculated select2 ajax parameters
-	/** @var ActiveRecordInterface $_selectModel */
-	protected $_selectModel;
+	private array $ajaxPluginOptions = [];//calculated select2 ajax parameters
+	/** @var ActiveRecord|null $_selectModel */
+	protected ?ActiveRecord $_selectModel = null;
 
-	public $pkName;//primary key name for selectModel
-	public $selectModelClass;
-	public $selectionQuery;
-	public $exclude = [];
-	public $mapAttribute = 'name';
-	public $searchAttribute;
-	public $concatFields;
-	public $ajaxMinimumInputLength = 1;
-	public $ajaxSearchUrl;
+	public ?string $pkName;//primary key name for selectModel
+	public ?string $selectModelClass = null;
+	public ?ActiveQuery $selectionQuery = null;
+	public array $exclude = [];
+	public string $mapAttribute = 'name';
+	public ?string $searchAttribute = null;
+	public ?string $concatFields = null;
+	public int $ajaxMinimumInputLength = 1;
+	public ?string $ajaxSearchUrl = null;
 
-	public $loadingMode = self::DATA_MODE_LOAD;
-	public $multiple = true;//alias of pluginOptions['multiple']
-	public $jsPrefix = '';
+	public int $loadingMode = self::DATA_MODE_LOAD;
+	public bool $multiple = true;//alias of pluginOptions['multiple']
+	public string $jsPrefix = '';
 	public $data = [];//required initialization
 	public $value = [];//required initialization
-	public $dataOptions = 'dataOptions';
+	public string $dataOptions = 'dataOptions';
+
+	/**
+	 * @var string|string[]|false|null
+	 * string|array - см. Select2::$initValueText
+	 * null - попытаться вычислить изначальный текст по данным
+	 * false - не вычислять изначальный текст, оставить пустым (аналогично ''/[] при multiple false/true)
+	 */
+	public $initValueText;
 
 	/**
 	 * При AJAX-загрузке отображаемые данные будут отображаться согласно логике, вшитой в Select2 - из initValueText (см. Select2::$initValueText).
@@ -105,20 +113,15 @@ class SelectModelWidget extends Select2 {
 	private function initData($filterValue = null):void {
 		if ([] === $this->data) {
 			if (null === $this->selectionQuery) $this->selectionQuery = $this->_selectModel::find();
-			if (is_array($this->exclude) && [] !== $this->exclude) {
+			if ([] !== $this->exclude) {
 				if ($this->exclude[0] instanceof ActiveRecordInterface) {
 					$this->exclude = ArrayHelper::getColumn($this->exclude, $this->pkName);
 				}
 				$this->selectionQuery->andWhere(['not in', $this->pkName, $this->exclude]);
 			}
 
-			if (null !== $filterValue) {
-				if (is_array($filterValue)) {
-					$this->selectionQuery->andWhere(['in', $this->pkName, $filterValue]);
-				} else {
-					$this->selectionQuery->andWhere(['id' => $filterValue]);
-				}
-			}
+			$this->selectionQuery->andFilterWhere(['id' => $filterValue]);
+
 			$this->data = ArrayHelper::map($this->selectionQuery->all(), $this->pkName, $this->mapAttribute);
 		}
 	}
@@ -129,7 +132,11 @@ class SelectModelWidget extends Select2 {
 	 */
 	public function getSelectModel():ActiveRecordInterface {
 		if (null !== $this->_selectModel) return $this->_selectModel;
-		$this->_selectModel = Yii::createObject($this->selectModelClass);
+		/**
+		 * @var ActiveRecord $model
+		 */
+		$model = Yii::createObject($this->selectModelClass);
+		$this->_selectModel = $model;
 		if (!($this->_selectModel instanceof ActiveRecordInterface)) {
 			throw new InvalidConfigException("{$this->selectModel} must be a instance of ActiveRecordInterface");
 		}

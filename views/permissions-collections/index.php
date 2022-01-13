@@ -8,114 +8,98 @@ declare(strict_types = 1);
  */
 
 use app\assets\ModalHelperAsset;
+use app\assets\PermissionsCollectionsAsset;
+use app\components\grid\ActionColumn;
+use app\components\grid\widgets\toolbar_filter_widget\ToolbarFilterWidget;
+use app\components\helpers\Html;
 use app\controllers\PermissionsCollectionsController;
 use app\controllers\PermissionsController;
 use app\controllers\UsersController;
-use app\models\sys\permissions\active_record\Permissions;
 use app\models\sys\permissions\active_record\PermissionsCollections;
 use app\models\sys\permissions\PermissionsCollectionsSearch;
-use app\models\sys\users\Users;
-use kartik\grid\ActionColumn;
+use app\widgets\badgewidget\BadgeWidget;
 use kartik\grid\DataColumn;
 use kartik\grid\GridView;
 use pozitronik\grid_config\GridConfig;
 use pozitronik\helpers\Utils;
-use pozitronik\widgets\BadgeWidget;
 use yii\data\ActiveDataProvider;
-use yii\bootstrap4\Html;
 use yii\web\JsExpression;
 use yii\web\View;
-use app\assets\PermissionsCollectionsAsset;
 
 PermissionsCollectionsAsset::register($this);
 ModalHelperAsset::register($this);
+
+$id = 'permissions-collections-index-grid';
+
 ?>
 <?= GridConfig::widget([
-	'id' => 'permissions-collections-index-grid',
+	'id' => $id,
 	'grid' => GridView::begin([
+		'id' => $id,
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'filterOnFocusOut' => false,
 		'panel' => [
-			'heading' => $this->title.(($dataProvider->totalCount > 0)?" (".Utils::pluralForm($dataProvider->totalCount, ['группа', 'группы', 'групп']).")":" (нет групп)"),
+			'heading' => false,
+		],
+		'replaceTags' => [
+			'{optionsBtn}' => ToolbarFilterWidget::widget(['content' => '{options}']),
+			'{totalCount}' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']):"Нет разрешений",
+			'{newRecord}' => ToolbarFilterWidget::widget([
+				'label' => ($dataProvider->totalCount > 0)?Utils::pluralForm($dataProvider->totalCount, ['разрешение', 'разрешения', 'разрешений']):"Нет разрешений",
+				'content' => Html::link('Новая запись', PermissionsController::to('create'), ['class' => 'btn btn-success'])
+			]),
+			'{filterBtn}' => ToolbarFilterWidget::widget(['content' => Html::button("<i class='fa fa-filter'></i>", ['onclick' => new JsExpression('setFakeGridFilter("#'.$id.'")'), 'class' => 'btn btn-info'])]),
+			'{collectionsLink}' => ToolbarFilterWidget::widget(['content' => Html::link("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn btn-info'])])
 		],
 		'toolbar' => [
-			[
-				'content' => Html::a("Редактор разрешений", PermissionsController::to('index'), ['class' => 'btn float-left btn-info'])
-			]
+			'{filterBtn}'
 		],
-		'summary' => null !== $searchModel?Html::a('Новая группа', PermissionsCollectionsController::to('create'), [
-			'class' => 'btn btn-success summary-content',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsCollectionsController::to('create')."', 'PermissionsCollections-modal-create-new');event.preventDefault();")
-		]):null,
-		'showOnEmpty' => true,
-		'emptyText' => Html::a('Новая группа', PermissionsCollectionsController::to('create'), [
-			'class' => 'btn btn-success',
-			'onclick' => new JsExpression("AjaxModal('".PermissionsCollectionsController::to('create')."', 'PermissionsCollections-modal-create-new');event.preventDefault();")
-		]),
+		'panelBeforeTemplate' => '{optionsBtn}{newRecord}{collectionsLink}{toolbarContainer}{before}<div class="clearfix"></div>',
+		'emptyText' => Html::link('Новая группа', PermissionsCollectionsController::to('create'), ['class' => 'btn btn-success']),
 		'export' => false,
 		'resizableColumns' => true,
 		'responsive' => true,
 		'columns' => [
 			[
 				'class' => ActionColumn::class,
-				'template' => '{edit}',
-				'buttons' => [
-					'edit' => static function(string $url, PermissionsCollections $model) {
-						return Html::a('<i class="fa fa-edit"></i>', $url, [
-							'onclick' => new JsExpression("AjaxModal('$url', '{$model->formName()}-modal-edit-{$model->id}');event.preventDefault();")
-						]);
-					},
-				],
+				'template' => '<div class="btn-group">{edit}</div>',
 			],
 			'id',
+			[
+				'class' => DataColumn::class,
+				'attribute' => 'default',
+				'format' => 'boolean'
+			],
 			'name',
 			'comment',
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'permission',
 				'label' => 'Включённые доступы',
-				'value' => static function(PermissionsCollections $collections) {
-					return BadgeWidget::widget([//прямые
+				'value' => //прямые
+				//вдобавок к модалке оставляем ссылку для прямого перехода
+				//через группы
+					static fn(PermissionsCollections $collections) => BadgeWidget::widget([//прямые
 							'items' => $collections->relatedPermissions,
 							'subItem' => 'name',
-							'options' => function($mapAttributeValue, Permissions $item) {
-								$url = PermissionsController::to('edit', ['id' => $item->id]);
-								return [//навешиваем модальный редактор
-									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
-								];
-							},
 							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']//вдобавок к модалке оставляем ссылку для прямого перехода
 						]).BadgeWidget::widget([//через группы
 							'items' => $collections->relatedPermissionsViaSlaveGroups,
 							'subItem' => 'name',
-							'options' => function($mapAttributeValue, Permissions $item) {
-								$url = PermissionsController::to('edit', ['id' => $item->id]);
-								return [//навешиваем модальный редактор
-									'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-edit-{$item->id}');event.preventDefault();")
-								];
-							},
 							'urlScheme' => [PermissionsController::to('edit'), 'id' => 'id']
-						]);
-				},
+						]),
 				'format' => 'raw'
 			],
 			[
 				'class' => DataColumn::class,
 				'attribute' => 'relatedUsers',
 				'format' => 'raw',
-				'value' => static function(PermissionsCollections $collections) {
-					return BadgeWidget::widget([
-						'items' => $collections->relatedUsersRecursively,
-						'subItem' => 'username',
-						'options' => function($mapAttributeValue, Users $item) {
-							$url = UsersController::to('view', ['id' => $item->id]);
-							return [//навешиваем модальный просмотр
-								'onclick' => new JsExpression("AjaxModal('$url', '{$item->formName()}-modal-view-{$item->id}');event.preventDefault();")
-							];
-						},
-						'urlScheme' => [UsersController::to('view'), 'id' => 'id']
-					]);
-				}
+				'value' => static fn(PermissionsCollections $collections) => BadgeWidget::widget([
+					'items' => $collections->relatedUsersRecursively,
+					'subItem' => 'username',
+					'urlScheme' => [UsersController::to('view'), 'id' => 'id']
+				])
 			]
 		]
 	])

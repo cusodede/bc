@@ -14,8 +14,8 @@ use yii\base\Model;
  * @property int $user
  */
 class TimelineEntry extends Model {
-	public $time;
-	public $caption;
-	public $content;
-	public $user;
+	public ?string $time;
+	public ?string $caption;
+	public ?string $content;
+	public ?int $user;
 }

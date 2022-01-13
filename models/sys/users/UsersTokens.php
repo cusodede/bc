@@ -4,8 +4,7 @@ declare(strict_types = 1);
 namespace app\models\sys\users;
 
 use app\components\db\ActiveRecordTrait;
-use app\models\sys\users\active_record\UsersTokens as ActiveRecordUsersTokens;
-use app\modules\api\tokenizers\RefreshTokenType;
+use app\models\sys\users\active_record\UsersTokensAR as ActiveRecordUsersTokens;
 use cusodede\jwt\JwtHttpBearerAuth;
 use Exception;
 use pozitronik\helpers\DateHelper;
@@ -29,7 +28,6 @@ class UsersTokens extends ActiveRecordUsersTokens {
 		HttpHeaderAuth::class => 1,
 		HttpBearerAuth::class => 2,
 		JwtHttpBearerAuth::class => 3,
-		RefreshTokenType::class => 4
 	];
 
 	/**
@@ -41,9 +39,7 @@ class UsersTokens extends ActiveRecordUsersTokens {
 				'class' => TimestampBehavior::class,
 				'createdAtAttribute' => 'created',
 				'updatedAtAttribute' => 'created',
-				'value' => static function($event) {
-					return DateHelper::from_unix_timestamp(time());
-				}
+				'value' => static fn() => DateHelper::from_unix_timestamp(time()),
 			]
 		]);
 	}
