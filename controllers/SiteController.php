@@ -4,8 +4,6 @@ declare(strict_types = 1);
 namespace app\controllers;
 
 use app\components\web\ErrorAction;
-use app\controllers\actions\swagger\SchemaAction;
-use app\controllers\actions\swagger\SwaggerUiAction;
 use app\components\Options;
 use app\models\site\LoginForm;
 use app\models\site\RegistrationForm;
@@ -43,13 +41,6 @@ class SiteController extends Controller {
 			'error' => [
 				'class' => ErrorAction::class
 			],
-			'docs' => [
-				'class' => SwaggerUiAction::class,
-				'schemaUrl' => Url::to(['docs-schema'])
-			],
-			'docs-schema' => [
-				'class' => SchemaAction::class
-			]
 		];
 	}
 
