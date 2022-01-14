@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "716feea4e75fd51426ef0d589d8aed10",
+    "content-hash": "fb9d80024e7551f7c9ea0a1b2b76aeec",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.209.4",
+            "version": "3.209.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "784e5ccc1b544db5018a41fc4dbfeda4c7d436b3"
+                "reference": "9e833ab2b98ab004e0a98ad473212bdfdd7dbc43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/784e5ccc1b544db5018a41fc4dbfeda4c7d436b3",
-                "reference": "784e5ccc1b544db5018a41fc4dbfeda4c7d436b3",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9e833ab2b98ab004e0a98ad473212bdfdd7dbc43",
+                "reference": "9e833ab2b98ab004e0a98ad473212bdfdd7dbc43",
                 "shasum": ""
             },
             "require": {
@@ -143,16 +143,16 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.209.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.209.5"
             },
-            "time": "2022-01-12T19:14:37+00:00"
+            "time": "2022-01-13T19:22:21+00:00"
         },
         {
             "name": "bower-asset/inputmask",
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "git@github.com:RobinHerbots/Inputmask.git",
+                "url": "https://github.com/RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -359,6 +359,64 @@
                 "source": "https://github.com/cebe/markdown"
             },
             "time": "2018-03-26T11:24:36+00:00"
+        },
+        {
+            "name": "cusodede/yii2-default-controller",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cusodede/yii2-default-controller.git",
+                "reference": "24f076d7aebef1f4a40903377fb8833bb035842a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cusodede/yii2-default-controller/zipball/24f076d7aebef1f4a40903377fb8833bb035842a",
+                "reference": "24f076d7aebef1f4a40903377fb8833bb035842a",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-grid": "dev-master",
+                "php": ">=8.0",
+                "pozitronik/yii2-badgewidget": "dev-dev",
+                "pozitronik/yii2-grid-config": "dev-dev",
+                "pozitronik/yii2-traits": "dev-dev"
+            },
+            "require-dev": {
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap": "~2.0.10",
+                "yiisoft/yii2-bootstrap4": "~2.0.10"
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "cusodede\\web\\default_controller\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Shevelev",
+                    "email": "AYuShevelev@beeline.ru"
+                },
+                {
+                    "name": "Michaei Krasnopeev",
+                    "email": "MKrasnopeev@beeline.ru"
+                }
+            ],
+            "description": "Default Controller",
+            "keywords": [
+                "default controller",
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "source": "https://github.com/cusodede/yii2-default-controller/tree/master",
+                "issues": "https://github.com/cusodede/yii2-default-controller/issues"
+            },
+            "time": "2022-01-14T11:17:53+00:00"
         },
         {
             "name": "cusodede/yii2-jwt",
@@ -4128,12 +4186,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pozitronik/yii2-helpers.git",
-                "reference": "a272825801a89ba982a9c8bac1b36589b09ff3f9"
+                "reference": "53c054139814e8f4c355c3e1fa1021989d79bbf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pozitronik/yii2-helpers/zipball/a272825801a89ba982a9c8bac1b36589b09ff3f9",
-                "reference": "a272825801a89ba982a9c8bac1b36589b09ff3f9",
+                "url": "https://api.github.com/repos/pozitronik/yii2-helpers/zipball/53c054139814e8f4c355c3e1fa1021989d79bbf0",
+                "reference": "53c054139814e8f4c355c3e1fa1021989d79bbf0",
                 "shasum": ""
             },
             "require": {
@@ -4168,7 +4226,7 @@
                 "issues": "https://github.com/pozitronik/yii2-helpers/issues",
                 "source": "https://github.com/pozitronik/yii2-helpers/tree/dev"
             },
-            "time": "2022-01-10T12:04:31+00:00"
+            "time": "2022-01-13T15:59:03+00:00"
         },
         {
             "name": "pozitronik/yii2-options",
@@ -6651,12 +6709,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "637e6643009db02ffaeb891d022fe06cfe1211e3"
+                "reference": "d09c709792b798611db0a3c652e57cbee1ac57ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/637e6643009db02ffaeb891d022fe06cfe1211e3",
-                "reference": "637e6643009db02ffaeb891d022fe06cfe1211e3",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d09c709792b798611db0a3c652e57cbee1ac57ae",
+                "reference": "d09c709792b798611db0a3c652e57cbee1ac57ae",
                 "shasum": ""
             },
             "require": {
@@ -6766,7 +6824,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-08T09:32:19+00:00"
+            "time": "2022-01-14T10:52:01+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",
@@ -7366,7 +7424,7 @@
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
+                "url": "git@github.com:twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -8254,9 +8312,6 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
-            },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -11564,6 +11619,7 @@
         "pozitronik/yii2-grid-config": 20,
         "pozitronik/yii2-relations": 20,
         "pozitronik/yii2-dbmon": 20,
+        "cusodede/yii2-default-controller": 20,
         "yiisoft/yii2-swiftmailer": 20,
         "kartik-v/yii2-widget-typeahead": 20,
         "kartik-v/yii2-editable": 20,
@@ -11589,5 +11645,5 @@
         "php": "~8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

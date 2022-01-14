@@ -30,6 +30,7 @@
 		"pozitronik/yii2-grid-config": "dev-dev",
 		"pozitronik/yii2-relations": "dev-dev",
 		"pozitronik/yii2-dbmon": "dev-dev",
+		"cusodede/yii2-default-controller": "dev-master",
 		"yiisoft/yii2-swiftmailer": "dev-master",
 		"kartik-v/yii2-widget-typeahead": "dev-master",
 		"kartik-v/yii2-editable": "dev-master",
@@ -158,6 +159,10 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/cusodede/yii2-jwt"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/cusodede/yii2-default-controller"
 		}
 	]
 }
