@@ -11,6 +11,7 @@ use app\modules\s3\models\cloud_storage\CloudStorageSearch;
 use app\modules\s3\models\S3;
 use app\modules\s3\S3Module;
 use pozitronik\helpers\ArrayHelper;
+use pozitronik\helpers\ControllerHelper;
 use Throwable;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -45,7 +46,7 @@ class TestController extends DefaultController {
 		/** @var CloudStorage $model */
 		$model = $this->model;
 		$s3 = new S3();
-		if (static::isAjaxValidationRequest()) {
+		if (ControllerHelper::IsAjaxValidationRequest()) {
 			return $this->asJson($model->validateModelFromPost());
 		}
 		if (true === Yii::$app->request->isPost && true === $model->load(Yii::$app->request->post())) {
@@ -82,7 +83,7 @@ class TestController extends DefaultController {
 		$s3 = new S3();
 
 		/** @var ActiveRecordTrait $model */
-		if (static::isAjaxValidationRequest()) {
+		if (ControllerHelper::IsAjaxValidationRequest()) {
 			return $this->asJson($model->validateModelFromPost());
 		}
 		if (true === Yii::$app->request->isPost) {

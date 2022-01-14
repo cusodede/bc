@@ -366,12 +366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cusodede/yii2-default-controller.git",
-                "reference": "24f076d7aebef1f4a40903377fb8833bb035842a"
+                "reference": "0c18211246da35c53944bc307167c3a2c4c2c660"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cusodede/yii2-default-controller/zipball/24f076d7aebef1f4a40903377fb8833bb035842a",
-                "reference": "24f076d7aebef1f4a40903377fb8833bb035842a",
+                "url": "https://api.github.com/repos/cusodede/yii2-default-controller/zipball/0c18211246da35c53944bc307167c3a2c4c2c660",
+                "reference": "0c18211246da35c53944bc307167c3a2c4c2c660",
                 "shasum": ""
             },
             "require": {
@@ -416,7 +416,7 @@
                 "source": "https://github.com/cusodede/yii2-default-controller/tree/master",
                 "issues": "https://github.com/cusodede/yii2-default-controller/issues"
             },
-            "time": "2022-01-14T11:17:53+00:00"
+            "time": "2022-01-14T11:28:19+00:00"
         },
         {
             "name": "cusodede/yii2-jwt",
