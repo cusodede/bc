@@ -84,7 +84,10 @@
 		},
 		"github-protocols": [
 			"https"
-		]
+		],
+		"allow-plugins": {
+			"yiisoft/yii2-composer": true
+		}
 	},
 	"scripts": {
 		"post-install-cmd": [

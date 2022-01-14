@@ -1,0 +1,28 @@
+global:
+  scrape_interval:     30s
+  evaluation_interval: 30s
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ '127.0.0.1:9090' ]
+
+  - job_name: 'bc-contracts'
+    metrics_path: '/metrics/contracts'
+    static_configs:
+      - targets: [ 'bc_nginx:8080' ]
+
+  - job_name: "bc-minio"
+    metrics_path: /minio/v2/metrics/cluster
+    static_configs:
+      - targets: [ "bc_minio:9004" ]
+
+  - job_name: 'bc-postgres-exporter'
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'bc_postgres_exporter:9187' ]
+
+  - job_name: 'bc-redis-exporter'
+    static_configs:
+      - targets: [ "bc_redis_exporter:9121" ]

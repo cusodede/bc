@@ -1,0 +1,208 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: bc_nginx
+    image: nginx:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - ${WEB_ROOT_PATH}:/var/www
+      - ${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d
+      - ${DOCKER_FOLDER}/nginx/include:/etc/nginx/include
+      - ${WEB_ROOT_PATH}/logs:/var/www/logs
+      - ${WEB_ROOT_PATH}/logs/nginx:/var/www/logs/nginx
+    links:
+      - php-8
+    networks:
+      - backend
+
+#  mysql:
+#    container_name: bc_mysql
+#    restart: always
+#    image: mysql:latest
+#    command: [
+#        '--character-set-server=utf8',
+#        '--collation-server=utf8_general_ci',
+#        '--default-authentication-plugin=mysql_native_password'
+#    ]
+#    ports:
+#      - "3307:3306"
+#    environment:
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+#      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#    volumes:
+#      - ${MYSQL_PATH}:/var/lib/mysql
+#      - ${WEB_ROOT_PATH}:/var/www
+#    networks:
+#      - backend
+
+  postgres:
+    container_name: bc_postgres
+    image: postgres:12.8
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ${POSTGRES_PATH}:/var/lib/postgresql/data
+      - ${POSTGRES_PATH}/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ${WEB_ROOT_PATH}:/var/www
+      - ./docker/databases/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '3'
+          memory: 4G
+
+#  postgres_exporter:
+#    container_name: bc_postgres_exporter
+#    image: prometheuscommunity/postgres-exporter:v0.10.0
+#    environment:
+#      DATA_SOURCE_URI: "postgres:5432/postgres?sslmode=disable"
+#      DATA_SOURCE_USER: ${DB_USERNAME}
+#      DATA_SOURCE_PASS: ${DB_PASSWORD}
+#      PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
+#    volumes:
+#      - ./docker/queries.yaml:/etc/postgres_exporter/queries.yaml:ro
+#    ports:
+#      - "9187:9187"
+#    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.2'
+#          memory: 500M
+#    networks:
+#      - backend
+
+  php-8:
+    container_name: bc_php
+    build: ./docker/
+    volumes:
+      - ${WEB_ROOT_PATH}:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      YII_DEBUG: ${YII_DEBUG}
+      YII_ENV_DEV: ${YII_ENV_DEV}
+      YII_ENV: ${YII_ENV}
+      MYSQL_DSN: ${MYSQL_DSN}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_USERNAME: ${MYSQL_ROOT_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+    env_file:
+      - ./docker/env/nsis_rabbit_mq.env
+      - ./docker/env/db.env
+      - ./docker/env/jwt.env
+      - ./docker/env/recaptcha.env
+      - ./docker/env/minio.env
+#    links:
+#      - mysql
+    networks:
+      - backend
+
+#  rabbitmq:
+#    container_name: bc_rabbit
+#    image: rabbitmq:3.9-management-alpine
+#    hostname: bc-rabbit
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    volumes:
+#      - ${DOCKER_FOLDER}/rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+#      - ${DOCKER_FOLDER}/rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@bc-rabbit
+#      - ${DOCKER_FOLDER}/rabbitmq/logs:/var/log/rabbitmq/logs
+#    networks:
+#      - backend
+
+#  prometheus:
+#    container_name: bc_prometheus
+#    image: prom/prometheus
+#    hostname: prometheus
+#    ports:
+#      - "9090:9090"
+#    command:
+#      - "--config.file=/etc/prometheus/prometheus.yml"
+#    volumes:
+#      - ${DOCKER_FOLDER}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#    networks:
+#      - backend
+
+#  grafana:
+#    container_name: bc_grafana
+#    image: grafana/grafana:8.2.3
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      GF_DEFAULT_INSTANCE_NAME: "BC"
+#      GF_PLUGIN_GRAFANA_IMAGE_RENDERER_RENDERING_IGNORE_HTTPS_ERRORS: "true"
+#    volumes:
+#      - ${DOCKER_FOLDER}/grafana/conf/grafana.ini:/etc/grafana/grafana.ini
+#      - ${DOCKER_FOLDER}/grafana/public/dashboards/bc.json:/usr/share/grafana/public/dashboards/bc.json
+#    networks:
+#      - backend
+#    restart: always
+
+#  minio:
+#    container_name: bc_minio
+#    image: minio/minio
+#    ports:
+#      - "9004:9004"
+#      - "9005:9005"
+#    volumes:
+#      - ${DOCKER_FOLDER}/local/storage/minio:/data
+#    env_file:
+#      - ./docker/env/minio.env
+#    user: "${UID}:${GID}"
+#    command: server --console-address ":9005" --address ":9004" /data
+#    networks:
+#      - backend
+
+#  redis:
+#    container_name: bc_redis
+#    image: redis:6.2.6
+#    command: redis-server --include /data/redis.conf
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - ${DOCKER_FOLDER}/local/redis:/data
+#    environment:
+#      - REDIS_REPLICATION_MODE=master
+#    networks:
+#      - backend
+
+#  redis-exporter:
+#    container_name: bc_redis_exporter
+#    image: oliver006/redis_exporter:v1.32.0
+#    ports:
+#      - "9121:9121"
+#    command: ["--redis.addr", "redis://bc_redis:6379"]
+#    networks:
+#      - backend
+
+# Networks Setup
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${DOCKER_SUBNET}
